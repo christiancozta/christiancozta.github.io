@@ -572,7 +572,7 @@
       const ctx = canvas.getContext('2d');
       ctx.drawImage(bitmap, 0, 0, width, height);
 
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', quality));
       return { blob, width, height };
     }
 
