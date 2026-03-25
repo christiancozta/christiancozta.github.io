@@ -3,772 +3,272 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galeria Automática para Notion</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Galeria</title>
 
   <style>
-    :root{
-      --bg:#fafaf9;
-      --card:#ffffff;
-      --text:#373530;
-      --muted:#787774;
-      --line:#e7e5e4;
-      --soft:#f5f5f4;
-      --accent:#111827;
-      --ok:#166534;
-      --danger:#b91c1c;
-      --shadow:0 10px 30px rgba(0,0,0,.06);
-      --radius:22px;
-    }
-
     *{
-      box-sizing:border-box;
       margin:0;
       padding:0;
+      box-sizing:border-box;
     }
 
     html,body{
       width:100%;
-      min-height:100%;
-      font-family:Inter,Arial,Helvetica,sans-serif;
-      background:var(--bg);
-      color:var(--text);
+      height:100%;
+      background:transparent;
+      overflow:hidden;
+      font-family:Arial, Helvetica, sans-serif;
     }
 
     body{
-      padding:22px;
-    }
-
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .head{
-      padding:22px 22px 12px;
-    }
-
-    h1{
-      font-size:28px;
-      line-height:1.05;
-      font-weight:800;
-      letter-spacing:-.03em;
-    }
-
-    .sub{
-      margin-top:8px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.55;
-      max-width:760px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      padding:0 22px 22px;
-    }
-
-    .panel{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-      padding:16px;
-    }
-
-    .panel h2{
-      font-size:15px;
-      font-weight:800;
-      margin-bottom:12px;
-    }
-
-    .field{
       display:flex;
-      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .gallery{
+      position:relative;
+      width:100%;
+      aspect-ratio:1 / 1;
+      overflow:hidden;
+      background:transparent;
+    }
+
+    .slide{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      transition:opacity .7s ease;
+      pointer-events:none;
+    }
+
+    .slide.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .slide img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .nav{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:38px;
+      height:38px;
+      border:none;
+      border-radius:999px;
+      background:rgba(255,255,255,.18);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      color:#ffffff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:background .2s ease, opacity .2s ease, transform .2s ease;
+      opacity:.65;
+      z-index:5;
+    }
+
+    .nav:hover{
+      opacity:1;
+      background:rgba(255,255,255,.28);
+    }
+
+    .nav:active{
+      transform:translateY(-50%) scale(.97);
+    }
+
+    .nav.prev{
+      left:10px;
+    }
+
+    .nav.next{
+      right:10px;
+    }
+
+    .nav svg{
+      width:18px;
+      height:18px;
+      display:block;
+    }
+
+    .dots{
+      position:absolute;
+      left:50%;
+      bottom:10px;
+      transform:translateX(-50%);
+      display:flex;
       gap:7px;
-      margin-bottom:12px;
+      z-index:5;
     }
 
-    .label{
-      font-size:12px;
-      font-weight:700;
-      color:var(--muted);
+    .dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:rgba(255,255,255,.45);
+      transition:transform .2s ease, background .2s ease;
     }
 
-    .input{
-      width:100%;
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:14px;
-      padding:12px 14px;
-      font:inherit;
-      color:var(--text);
-      outline:none;
-      transition:.18s ease;
-    }
-
-    .input:focus{
-      border-color:#cfcfc9;
-      box-shadow:0 0 0 4px rgba(0,0,0,.04);
-    }
-
-    .dropzone{
-      border:2px dashed #d6d3d1;
-      border-radius:20px;
-      background:var(--soft);
-      min-height:260px;
-      padding:22px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      transition:.18s ease;
-      cursor:pointer;
-    }
-
-    .dropzone.drag{
-      border-color:#6b7280;
-      background:#f1f5f9;
-    }
-
-    .drop-inner{
-      max-width:420px;
-    }
-
-    .drop-title{
-      font-size:20px;
-      font-weight:800;
-      letter-spacing:-.02em;
-    }
-
-    .drop-text{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .drop-mini{
-      margin-top:12px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .btn-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
-
-    .btn{
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--text);
-      border-radius:14px;
-      padding:12px 14px;
-      font:inherit;
-      font-weight:700;
-      cursor:pointer;
-      transition:.18s ease;
-    }
-
-    .btn:hover{
-      background:#fafafa;
-    }
-
-    .btn-primary{
-      background:var(--accent);
-      border-color:var(--accent);
-      color:#fff;
-    }
-
-    .btn-primary:hover{
-      opacity:.94;
-    }
-
-    .btn-danger{
-      color:var(--danger);
-    }
-
-    .note{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.55;
-    }
-
-    .status{
-      margin-top:12px;
-      padding:11px 12px;
-      border-radius:14px;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      font-size:13px;
-      line-height:1.5;
-    }
-
-    .status.ok{
-      background:#f0fdf4;
-      color:var(--ok);
-      border-color:#bbf7d0;
-    }
-
-    .status.err{
-      background:#fef2f2;
-      color:var(--danger);
-      border-color:#fecaca;
-    }
-
-    .results{
-      padding:0 22px 22px;
-    }
-
-    .results-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-
-    .results-head h2{
-      font-size:16px;
-      font-weight:800;
-    }
-
-    .count{
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .hero{
-      width:100%;
-      aspect-ratio:16/9;
-      border-radius:22px;
-      overflow:hidden;
-      background:#ffffff;
-      margin-bottom:16px;
-      border:1px solid var(--line);
-    }
-
-    .hero-image{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      background:#ffffff;
-    }
-
-    .hero-empty{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      color:var(--muted);
-      font-size:14px;
-      padding:20px;
-    }
-
-    .list{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:14px;
-    }
-
-    .item{
-      border:1px solid var(--line);
-      background:#fff;
-      border-radius:18px;
-      overflow:hidden;
-      cursor:pointer;
-      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-    }
-
-    .item:hover{
-      transform:translateY(-2px);
-      box-shadow:0 10px 24px rgba(0,0,0,.06);
-      border-color:#d6d3d1;
-    }
-
-    .item.active{
-      border-color:#111827;
-      box-shadow:0 10px 24px rgba(0,0,0,.08);
-    }
-
-    .thumb{
-      aspect-ratio:1/1;
-      background:#ffffff;
-      display:block;
-      width:100%;
-      object-fit:cover;
-    }
-
-    .body{
-      padding:12px;
-    }
-
-    .name{
-      font-size:13px;
-      font-weight:700;
-      line-height:1.35;
-      word-break:break-word;
-    }
-
-    .meta{
-      margin-top:6px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .hidden{
-      display:none;
-    }
-
-    @media (max-width:900px){
-      .grid{
-        grid-template-columns:1fr;
-      }
+    .dot.active{
+      background:rgba(255,255,255,.95);
+      transform:scale(1.15);
     }
 
     @media (max-width:640px){
-      body{
-        padding:12px;
+      .nav{
+        width:34px;
+        height:34px;
       }
 
-      .head{
-        padding:16px 16px 10px;
+      .nav.prev{
+        left:8px;
       }
 
-      .grid,.results{
-        padding-left:16px;
-        padding-right:16px;
-        padding-bottom:16px;
+      .nav.next{
+        right:8px;
       }
 
-      h1{
-        font-size:24px;
+      .dots{
+        bottom:8px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="head">
-        <h1>Galeria automática para Notion</h1>
-        <p class="sub">Arraste imagens, envie para a Cloudinary e exiba sua galeria automaticamente. A imagem principal troca sozinha e as miniaturas ficam salvas no navegador.</p>
-      </div>
+  <div class="gallery" id="gallery">
+    <button class="nav prev" id="prevBtn" aria-label="Imagem anterior">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M14.5 5L8 12L14.5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
-      <div class="grid">
-        <section class="panel">
-          <h2>1. Configuração</h2>
+    <button class="nav next" id="nextBtn" aria-label="Próxima imagem">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9.5 5L16 12L9.5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
-          <div class="field">
-            <label class="label" for="cloudName">Cloud name</label>
-            <input id="cloudName" class="input" value="dxhnb6ehy" />
-          </div>
-
-          <div class="field">
-            <label class="label" for="uploadPreset">Unsigned upload preset</label>
-            <input id="uploadPreset" class="input" value="notion_gallery" />
-          </div>
-
-          <div class="field">
-            <label class="label" for="folder">Pasta na Cloudinary</label>
-            <input id="folder" class="input" value="notion-galeria" />
-          </div>
-
-          <div class="btn-row">
-            <button class="btn btn-primary" id="saveConfig">Salvar configuração</button>
-            <button class="btn" id="testConfig">Testar endpoint</button>
-          </div>
-
-          <p class="note" style="margin-top:12px">
-            O preset precisa estar como <strong>unsigned</strong> na Cloudinary.
-          </p>
-
-          <div id="configStatus" class="status">Configuração pronta para teste.</div>
-        </section>
-
-        <section class="panel">
-          <h2>2. Upload</h2>
-
-          <input id="fileInput" type="file" accept="image/*" multiple class="hidden" />
-
-          <div id="dropzone" class="dropzone">
-            <div class="drop-inner">
-              <div class="drop-title">Arraste as imagens aqui</div>
-              <div class="drop-text">ou clique para escolher arquivos. O sistema otimiza, envia para a Cloudinary e atualiza a galeria automaticamente.</div>
-              <div class="drop-mini">JPG, PNG ou WebP. Recomendado: até 1600px de largura.</div>
-            </div>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn" id="pickFiles">Escolher arquivos</button>
-            <button class="btn btn-danger" id="clearResults">Limpar galeria</button>
-          </div>
-
-          <div id="uploadStatus" class="status">Nenhum upload iniciado.</div>
-        </section>
-      </div>
-
-      <div class="results">
-        <div class="results-head">
-          <h2>Galeria automática</h2>
-          <div class="count" id="count">0 imagens</div>
-        </div>
-
-        <div class="hero" id="hero">
-          <div class="hero-empty">Sua imagem principal aparecerá aqui após o primeiro upload.</div>
-          <img id="heroImage" class="hero-image hidden" src="" alt="Imagem principal da galeria">
-        </div>
-
-        <div id="list" class="list"></div>
-      </div>
-    </div>
+    <div class="dots" id="dots"></div>
   </div>
 
   <script>
-    const KEYS = {
-      cloudName: 'uploader_cloud_name',
-      uploadPreset: 'uploader_upload_preset',
-      folder: 'uploader_folder',
-      results: 'uploader_results'
-    };
+    const images = [
+      "https://res.cloudinary.com/dxhnb6ehy/image/upload/v1774426113/1_lpmhtq.png",
+      "https://res.cloudinary.com/dxhnb6ehy/image/upload/v1774426113/3_lrxuk1.png",
+      "https://res.cloudinary.com/dxhnb6ehy/image/upload/v1774426113/2_tnmy6o.png"
+    ];
 
-    const cloudNameEl = document.getElementById('cloudName');
-    const uploadPresetEl = document.getElementById('uploadPreset');
-    const folderEl = document.getElementById('folder');
-    const configStatusEl = document.getElementById('configStatus');
-    const uploadStatusEl = document.getElementById('uploadStatus');
-    const saveConfigBtn = document.getElementById('saveConfig');
-    const testConfigBtn = document.getElementById('testConfig');
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('fileInput');
-    const pickFilesBtn = document.getElementById('pickFiles');
-    const clearResultsBtn = document.getElementById('clearResults');
-    const listEl = document.getElementById('list');
-    const countEl = document.getElementById('count');
-    const heroImageEl = document.getElementById('heroImage');
-    const heroEl = document.getElementById('hero');
+    const gallery = document.getElementById("gallery");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const dotsWrap = document.getElementById("dots");
 
-    let results = JSON.parse(localStorage.getItem(KEYS.results) || '[]');
-    let slideshowIndex = 0;
-    let slideshowInterval = null;
+    let current = 0;
+    let timer = null;
+    const intervalMs = 3000;
 
-    function setStatus(el, text, type='') {
-      el.textContent = text;
-      el.className = 'status' + (type ? ' ' + type : '');
-    }
+    function createSlides() {
+      images.forEach((src, index) => {
+        const slide = document.createElement("div");
+        slide.className = "slide" + (index === 0 ? " active" : "");
 
-    function saveConfig() {
-      localStorage.setItem(KEYS.cloudName, cloudNameEl.value.trim());
-      localStorage.setItem(KEYS.uploadPreset, uploadPresetEl.value.trim());
-      localStorage.setItem(KEYS.folder, folderEl.value.trim());
-      setStatus(configStatusEl, 'Configuração salva no navegador.', 'ok');
-    }
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `Imagem ${index + 1}`;
+        img.loading = index === 0 ? "eager" : "lazy";
+        img.decoding = "async";
 
-    function loadConfig() {
-      cloudNameEl.value = localStorage.getItem(KEYS.cloudName) || cloudNameEl.value || 'dxhnb6ehy';
-      uploadPresetEl.value = localStorage.getItem(KEYS.uploadPreset) || uploadPresetEl.value || 'notion_gallery';
-      folderEl.value = localStorage.getItem(KEYS.folder) || folderEl.value || 'notion-galeria';
+        slide.appendChild(img);
+        gallery.insertBefore(slide, dotsWrap);
 
-      if (cloudNameEl.value && uploadPresetEl.value) {
-        setStatus(configStatusEl, 'Configuração carregada. Pode enviar imagens.', 'ok');
-      }
-    }
-
-    function getConfig() {
-      return {
-        cloudName: cloudNameEl.value.trim(),
-        uploadPreset: uploadPresetEl.value.trim(),
-        folder: folderEl.value.trim()
-      };
-    }
-
-    function validateConfig() {
-      const { cloudName, uploadPreset } = getConfig();
-      if (!cloudName || !uploadPreset) {
-        setStatus(configStatusEl, 'Faltam campos obrigatórios: cloud name e upload preset.', 'err');
-        return false;
-      }
-      return true;
-    }
-
-    async function testEndpoint() {
-      if (!validateConfig()) return;
-
-      const { cloudName } = getConfig();
-      const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-      try {
-        await fetch(url, { method: 'OPTIONS' });
-        setStatus(configStatusEl, 'Endpoint encontrado. Se o preset estiver certo, o upload deve funcionar.', 'ok');
-      } catch (e) {
-        setStatus(configStatusEl, 'Não consegui alcançar o endpoint. Confira cloud name e conexão.', 'err');
-      }
-    }
-
-    function formatBytes(bytes) {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
-      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-    }
-
-    function saveResults() {
-      localStorage.setItem(KEYS.results, JSON.stringify(results));
-    }
-
-    function updateCount() {
-      countEl.textContent = `${results.length} ${results.length === 1 ? 'imagem' : 'imagens'}`;
-    }
-
-    function escapeHtml(str='') {
-      return String(str)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    function showHeroEmpty() {
-      heroImageEl.classList.add('hidden');
-      heroImageEl.src = '';
-
-      let empty = heroEl.querySelector('.hero-empty');
-      if (!empty) {
-        empty = document.createElement('div');
-        empty.className = 'hero-empty';
-        empty.textContent = 'Sua imagem principal aparecerá aqui após o primeiro upload.';
-        heroEl.appendChild(empty);
-      }
-    }
-
-    function hideHeroEmpty() {
-      const empty = heroEl.querySelector('.hero-empty');
-      if (empty) empty.remove();
-      heroImageEl.classList.remove('hidden');
-    }
-
-    function updateHeroImage() {
-      if (!results.length) {
-        showHeroEmpty();
-        return;
-      }
-
-      if (slideshowIndex >= results.length) {
-        slideshowIndex = 0;
-      }
-
-      hideHeroEmpty();
-      heroImageEl.src = results[slideshowIndex].url;
-      heroImageEl.alt = results[slideshowIndex].name || 'Imagem principal da galeria';
-
-      document.querySelectorAll('.item').forEach((item, index) => {
-        item.classList.toggle('active', index === slideshowIndex);
-      });
-    }
-
-    function startSlideshow() {
-      if (slideshowInterval) {
-        clearInterval(slideshowInterval);
-        slideshowInterval = null;
-      }
-
-      if (!results.length) {
-        showHeroEmpty();
-        return;
-      }
-
-      updateHeroImage();
-
-      if (results.length === 1) {
-        return;
-      }
-
-      slideshowInterval = setInterval(() => {
-        slideshowIndex = (slideshowIndex + 1) % results.length;
-        updateHeroImage();
-      }, 3000);
-    }
-
-    async function optimizeImage(file, maxWidth = 1600, quality = 0.82) {
-      const bitmap = await createImageBitmap(file);
-      const ratio = bitmap.width > maxWidth ? maxWidth / bitmap.width : 1;
-      const width = Math.round(bitmap.width * ratio);
-      const height = Math.round(bitmap.height * ratio);
-
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, width, height);
-      ctx.drawImage(bitmap, 0, 0, width, height);
-
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
-      return { blob, width, height };
-    }
-
-    async function uploadToCloudinary(file) {
-      const { cloudName, uploadPreset, folder } = getConfig();
-      const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-      const optimized = await optimizeImage(file);
-
-      const form = new FormData();
-      form.append('file', optimized.blob, file.name.replace(/\.[^.]+$/, '') + '.jpg');
-      form.append('upload_preset', uploadPreset);
-      if (folder) form.append('folder', folder);
-
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        body: form
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || 'Falha no upload');
-      }
-
-      const data = await res.json();
-
-      return {
-        url: data.secure_url,
-        width: optimized.width,
-        height: optimized.height,
-        sentBytes: optimized.blob.size
-      };
-    }
-
-    function renderResults() {
-      updateCount();
-
-      if (!results.length) {
-        listEl.innerHTML = '';
-        startSlideshow();
-        return;
-      }
-
-      listEl.innerHTML = results.map((item, index) => `
-        <article class="item ${index === slideshowIndex ? 'active' : ''}" data-index="${index}">
-          <img class="thumb" src="${item.url}" alt="${escapeHtml(item.name)}" loading="lazy">
-          <div class="body">
-            <div class="name">${escapeHtml(item.name)}</div>
-            <div class="meta">${escapeHtml(item.sizeText)} • ${escapeHtml(item.width + '×' + item.height)}</div>
-          </div>
-        </article>
-      `).join('');
-
-      document.querySelectorAll('.item').forEach(card => {
-        card.addEventListener('click', () => {
-          slideshowIndex = Number(card.dataset.index);
-          updateHeroImage();
-          startSlideshow();
+        const dot = document.createElement("div");
+        dot.className = "dot" + (index === 0 ? " active" : "");
+        dot.addEventListener("click", () => {
+          goTo(index);
+          restartAuto();
         });
+        dotsWrap.appendChild(dot);
       });
-
-      updateHeroImage();
-      startSlideshow();
     }
 
-    async function handleFiles(files) {
-      if (!validateConfig()) return;
+    function getSlides() {
+      return Array.from(document.querySelectorAll(".slide"));
+    }
 
-      const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
-      if (!arr.length) {
-        setStatus(uploadStatusEl, 'Nenhuma imagem válida foi selecionada.', 'err');
-        return;
-      }
+    function getDots() {
+      return Array.from(document.querySelectorAll(".dot"));
+    }
 
-      setStatus(uploadStatusEl, `Preparando ${arr.length} arquivo(s)...`);
+    function updateUI() {
+      const slides = getSlides();
+      const dots = getDots();
 
-      let ok = 0;
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === current);
+      });
 
-      for (let i = 0; i < arr.length; i++) {
-        const file = arr[i];
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === current);
+      });
+    }
 
-        try {
-          setStatus(uploadStatusEl, `Enviando ${i + 1} de ${arr.length}: ${file.name}`);
+    function goTo(index) {
+      current = (index + images.length) % images.length;
+      updateUI();
+    }
 
-          const uploaded = await uploadToCloudinary(file);
+    function next() {
+      goTo(current + 1);
+    }
 
-          results.unshift({
-            name: file.name,
-            url: uploaded.url,
-            sizeText: formatBytes(uploaded.sentBytes),
-            width: uploaded.width,
-            height: uploaded.height
-          });
+    function prev() {
+      goTo(current - 1);
+    }
 
-          slideshowIndex = 0;
-          saveResults();
-          renderResults();
-          ok++;
-        } catch (e) {
-          console.error(e);
-          setStatus(uploadStatusEl, `Erro ao enviar ${file.name}. Confira cloud name e preset unsigned.`, 'err');
-        }
-      }
+    function startAuto() {
+      if (images.length <= 1) return;
+      stopAuto();
+      timer = setInterval(next, intervalMs);
+    }
 
-      if (ok === arr.length) {
-        setStatus(uploadStatusEl, `${ok} arquivo(s) enviados com sucesso.`, 'ok');
-      } else {
-        setStatus(uploadStatusEl, `${ok} de ${arr.length} arquivo(s) enviados. Alguns falharam.`, ok ? 'ok' : 'err');
+    function stopAuto() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
       }
     }
 
-    saveConfigBtn.addEventListener('click', saveConfig);
-    testConfigBtn.addEventListener('click', testEndpoint);
-    pickFilesBtn.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+    function restartAuto() {
+      stopAuto();
+      startAuto();
+    }
 
-    clearResultsBtn.addEventListener('click', () => {
-      results = [];
-      slideshowIndex = 0;
-      saveResults();
-      renderResults();
-      setStatus(uploadStatusEl, 'Galeria apagada do navegador.', 'ok');
+    prevBtn.addEventListener("click", () => {
+      prev();
+      restartAuto();
     });
 
-    ['dragenter', 'dragover'].forEach(evt => {
-      dropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.add('drag');
-      });
+    nextBtn.addEventListener("click", () => {
+      next();
+      restartAuto();
     });
 
-    ['dragleave', 'drop'].forEach(evt => {
-      dropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        e.stopPropagation();
-        dropzone.classList.remove('drag');
-      });
-    });
+    gallery.addEventListener("mouseenter", stopAuto);
+    gallery.addEventListener("mouseleave", startAuto);
+    gallery.addEventListener("touchstart", stopAuto, { passive:true });
+    gallery.addEventListener("touchend", startAuto, { passive:true });
 
-    dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
-    dropzone.addEventListener('click', () => fileInput.click());
-
-    loadConfig();
-    renderResults();
+    createSlides();
+    startAuto();
   </script>
 </body>
 </html>
