@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uploader de Imagens para Notion</title>
+  <title>Galeria Automática para Notion</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -253,6 +253,36 @@
       color:var(--muted);
     }
 
+    .hero{
+      width:100%;
+      aspect-ratio:16/9;
+      border-radius:22px;
+      overflow:hidden;
+      background:#ffffff;
+      margin-bottom:16px;
+      border:1px solid var(--line);
+    }
+
+    .hero-image{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      background:#ffffff;
+    }
+
+    .hero-empty{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      padding:20px;
+    }
+
     .list{
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -260,22 +290,35 @@
     }
 
     .item{
-      border:none;
+      border:1px solid var(--line);
       background:#fff;
       border-radius:18px;
       overflow:hidden;
+      cursor:pointer;
+      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+
+    .item:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 24px rgba(0,0,0,.06);
+      border-color:#d6d3d1;
+    }
+
+    .item.active{
+      border-color:#111827;
+      box-shadow:0 10px 24px rgba(0,0,0,.08);
     }
 
     .thumb{
       aspect-ratio:1/1;
-      background:none;
+      background:#ffffff;
       display:block;
       width:100%;
       object-fit:cover;
     }
 
     .body{
-      padding:0;
+      padding:12px;
     }
 
     .name{
@@ -289,33 +332,6 @@
       margin-top:6px;
       font-size:12px;
       color:var(--muted);
-    }
-
-    .linkbox{
-      margin-top:10px;
-      display:flex;
-      gap:8px;
-    }
-
-    .url{
-      flex:1;
-      min-width:0;
-      padding:10px 11px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      font-size:12px;
-      color:#444;
-      background:#fafafa;
-    }
-
-    .copy{
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#fff;
-      font-size:12px;
-      font-weight:700;
-      cursor:pointer;
     }
 
     .hidden{
@@ -353,8 +369,8 @@
   <div class="wrap">
     <div class="card">
       <div class="head">
-        <h1>Uploader para galeria do Notion</h1>
-        <p class="sub">Arraste imagens, envie para a Cloudinary e copie os links prontos. Já está preenchido com sua configuração.</p>
+        <h1>Galeria automática para Notion</h1>
+        <p class="sub">Arraste imagens, envie para a Cloudinary e exiba sua galeria automaticamente. A imagem principal troca sozinha e as miniaturas ficam salvas no navegador.</p>
       </div>
 
       <div class="grid">
@@ -382,7 +398,7 @@
           </div>
 
           <p class="note" style="margin-top:12px">
-            Se o preset estiver realmente como <strong>unsigned</strong>, o upload funciona.
+            O preset precisa estar como <strong>unsigned</strong> na Cloudinary.
           </p>
 
           <div id="configStatus" class="status">Configuração pronta para teste.</div>
@@ -396,14 +412,14 @@
           <div id="dropzone" class="dropzone">
             <div class="drop-inner">
               <div class="drop-title">Arraste as imagens aqui</div>
-              <div class="drop-text">ou clique para escolher arquivos. O sistema otimiza no navegador, envia e devolve os links prontos.</div>
+              <div class="drop-text">ou clique para escolher arquivos. O sistema otimiza, envia para a Cloudinary e atualiza a galeria automaticamente.</div>
               <div class="drop-mini">JPG, PNG ou WebP. Recomendado: até 1600px de largura.</div>
             </div>
           </div>
 
           <div class="btn-row">
             <button class="btn" id="pickFiles">Escolher arquivos</button>
-            <button class="btn btn-danger" id="clearResults">Limpar resultados</button>
+            <button class="btn btn-danger" id="clearResults">Limpar galeria</button>
           </div>
 
           <div id="uploadStatus" class="status">Nenhum upload iniciado.</div>
@@ -412,8 +428,13 @@
 
       <div class="results">
         <div class="results-head">
-          <h2>Links gerados</h2>
-          <div class="count" id="count">0 imagens enviadas</div>
+          <h2>Galeria automática</h2>
+          <div class="count" id="count">0 imagens</div>
+        </div>
+
+        <div class="hero" id="hero">
+          <div class="hero-empty">Sua imagem principal aparecerá aqui após o primeiro upload.</div>
+          <img id="heroImage" class="hero-image hidden" src="" alt="Imagem principal da galeria">
         </div>
 
         <div id="list" class="list"></div>
@@ -442,8 +463,12 @@
     const clearResultsBtn = document.getElementById('clearResults');
     const listEl = document.getElementById('list');
     const countEl = document.getElementById('count');
+    const heroImageEl = document.getElementById('heroImage');
+    const heroEl = document.getElementById('hero');
 
     let results = JSON.parse(localStorage.getItem(KEYS.results) || '[]');
+    let slideshowIndex = 0;
+    let slideshowInterval = null;
 
     function setStatus(el, text, type='') {
       el.textContent = text;
@@ -509,45 +534,7 @@
     }
 
     function updateCount() {
-      countEl.textContent = `${results.length} ${results.length === 1 ? 'imagem enviada' : 'imagens enviadas'}`;
-    }
-
-    function renderResults() {
-      updateCount();
-
-      if (!results.length) {
-        listEl.innerHTML = '';
-        return;
-      }
-
-      listEl.innerHTML = results.map((item, index) => `
-        <article class="item">
-          <img class="thumb" src="${item.url}" alt="${escapeHtml(item.name)}" loading="lazy">
-          <div class="body">
-            <div class="name">${escapeHtml(item.name)}</div>
-            <div class="meta">${escapeHtml(item.sizeText)} • ${escapeHtml(item.width + '×' + item.height)}</div>
-            <div class="linkbox">
-              <input class="url" value="${item.url}" readonly>
-              <button class="copy" data-copy="${index}">Copiar</button>
-            </div>
-          </div>
-        </article>
-      `).join('');
-
-      document.querySelectorAll('[data-copy]').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const idx = Number(btn.dataset.copy);
-          try {
-            await navigator.clipboard.writeText(results[idx].url);
-            const old = btn.textContent;
-            btn.textContent = 'Copiado';
-            setTimeout(() => btn.textContent = old, 1200);
-          } catch {
-            btn.textContent = 'Erro';
-            setTimeout(() => btn.textContent = 'Copiar', 1200);
-          }
-        });
-      });
+      countEl.textContent = `${results.length} ${results.length === 1 ? 'imagem' : 'imagens'}`;
     }
 
     function escapeHtml(str='') {
@@ -557,6 +544,67 @@
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#039;');
+    }
+
+    function showHeroEmpty() {
+      heroImageEl.classList.add('hidden');
+      heroImageEl.src = '';
+
+      let empty = heroEl.querySelector('.hero-empty');
+      if (!empty) {
+        empty = document.createElement('div');
+        empty.className = 'hero-empty';
+        empty.textContent = 'Sua imagem principal aparecerá aqui após o primeiro upload.';
+        heroEl.appendChild(empty);
+      }
+    }
+
+    function hideHeroEmpty() {
+      const empty = heroEl.querySelector('.hero-empty');
+      if (empty) empty.remove();
+      heroImageEl.classList.remove('hidden');
+    }
+
+    function updateHeroImage() {
+      if (!results.length) {
+        showHeroEmpty();
+        return;
+      }
+
+      if (slideshowIndex >= results.length) {
+        slideshowIndex = 0;
+      }
+
+      hideHeroEmpty();
+      heroImageEl.src = results[slideshowIndex].url;
+      heroImageEl.alt = results[slideshowIndex].name || 'Imagem principal da galeria';
+
+      document.querySelectorAll('.item').forEach((item, index) => {
+        item.classList.toggle('active', index === slideshowIndex);
+      });
+    }
+
+    function startSlideshow() {
+      if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+      }
+
+      if (!results.length) {
+        showHeroEmpty();
+        return;
+      }
+
+      updateHeroImage();
+
+      if (results.length === 1) {
+        return;
+      }
+
+      slideshowInterval = setInterval(() => {
+        slideshowIndex = (slideshowIndex + 1) % results.length;
+        updateHeroImage();
+      }, 3000);
     }
 
     async function optimizeImage(file, maxWidth = 1600, quality = 0.82) {
@@ -570,9 +618,12 @@
       canvas.height = height;
 
       const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
       ctx.drawImage(bitmap, 0, 0, width, height);
 
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', quality));
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
       return { blob, width, height };
     }
 
@@ -607,6 +658,37 @@
       };
     }
 
+    function renderResults() {
+      updateCount();
+
+      if (!results.length) {
+        listEl.innerHTML = '';
+        startSlideshow();
+        return;
+      }
+
+      listEl.innerHTML = results.map((item, index) => `
+        <article class="item ${index === slideshowIndex ? 'active' : ''}" data-index="${index}">
+          <img class="thumb" src="${item.url}" alt="${escapeHtml(item.name)}" loading="lazy">
+          <div class="body">
+            <div class="name">${escapeHtml(item.name)}</div>
+            <div class="meta">${escapeHtml(item.sizeText)} • ${escapeHtml(item.width + '×' + item.height)}</div>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('.item').forEach(card => {
+        card.addEventListener('click', () => {
+          slideshowIndex = Number(card.dataset.index);
+          updateHeroImage();
+          startSlideshow();
+        });
+      });
+
+      updateHeroImage();
+      startSlideshow();
+    }
+
     async function handleFiles(files) {
       if (!validateConfig()) return;
 
@@ -636,6 +718,7 @@
             height: uploaded.height
           });
 
+          slideshowIndex = 0;
           saveResults();
           renderResults();
           ok++;
@@ -659,9 +742,10 @@
 
     clearResultsBtn.addEventListener('click', () => {
       results = [];
+      slideshowIndex = 0;
       saveResults();
       renderResults();
-      setStatus(uploadStatusEl, 'Resultados apagados do navegador.', 'ok');
+      setStatus(uploadStatusEl, 'Galeria apagada do navegador.', 'ok');
     });
 
     ['dragenter', 'dragover'].forEach(evt => {
