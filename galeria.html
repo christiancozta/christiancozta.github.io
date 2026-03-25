@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uploader de Imagens para Notion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fafaf9;
+      --card:#ffffff;
+      --text:#373530;
+      --muted:#787774;
+      --line:#e7e5e4;
+      --soft:#f5f5f4;
+      --accent:#111827;
+      --ok:#166534;
+      --danger:#b91c1c;
+      --shadow:0 10px 30px rgba(0,0,0,.06);
+      --radius:22px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+      font-family:Inter,Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    body{
+      padding:22px;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .head{
+      padding:22px 22px 12px;
+    }
+
+    h1{
+      font-size:28px;
+      line-height:1.05;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+
+    .sub{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+      max-width:760px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      padding:0 22px 22px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:16px;
+    }
+
+    .panel h2{
+      font-size:15px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      margin-bottom:12px;
+    }
+
+    .label{
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .input{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      font:inherit;
+      color:var(--text);
+      outline:none;
+      transition:.18s ease;
+    }
+
+    .input:focus{
+      border-color:#cfcfc9;
+      box-shadow:0 0 0 4px rgba(0,0,0,.04);
+    }
+
+    .dropzone{
+      border:2px dashed #d6d3d1;
+      border-radius:20px;
+      background:var(--soft);
+      min-height:260px;
+      padding:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      transition:.18s ease;
+      cursor:pointer;
+    }
+
+    .dropzone.drag{
+      border-color:#6b7280;
+      background:#f1f5f9;
+    }
+
+    .drop-inner{
+      max-width:420px;
+    }
+
+    .drop-title{
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+
+    .drop-text{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .drop-mini{
+      margin-top:12px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      background:#fafafa;
+    }
+
+    .btn-primary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:#fff;
+    }
+
+    .btn-primary:hover{
+      opacity:.94;
+    }
+
+    .btn-danger{
+      color:var(--danger);
+    }
+
+    .note{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .status{
+      margin-top:12px;
+      padding:11px 12px;
+      border-radius:14px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .status.ok{
+      background:#f0fdf4;
+      color:var(--ok);
+      border-color:#bbf7d0;
+    }
+
+    .status.err{
+      background:#fef2f2;
+      color:var(--danger);
+      border-color:#fecaca;
+    }
+
+    .results{
+      padding:0 22px 22px;
+    }
+
+    .results-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .results-head h2{
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .count{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .list{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:14px;
+    }
+
+    .item{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+    }
+
+    .thumb{
+      aspect-ratio:1/1;
+      background:#f3f4f6;
+      display:block;
+      width:100%;
+      object-fit:cover;
+    }
+
+    .body{
+      padding:12px;
+    }
+
+    .name{
+      font-size:13px;
+      font-weight:700;
+      line-height:1.35;
+      word-break:break-word;
+    }
+
+    .meta{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .linkbox{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+    }
+
+    .url{
+      flex:1;
+      min-width:0;
+      padding:10px 11px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      font-size:12px;
+      color:#444;
+      background:#fafafa;
+    }
+
+    .copy{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    @media (max-width:900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      body{
+        padding:12px;
+      }
+
+      .head{
+        padding:16px 16px 10px;
+      }
+
+      .grid,.results{
+        padding-left:16px;
+        padding-right:16px;
+        padding-bottom:16px;
+      }
+
+      h1{
+        font-size:24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="head">
+        <h1>Uploader para galeria do Notion</h1>
+        <p class="sub">Arraste imagens, envie para a Cloudinary e copie os links prontos. Já está preenchido com sua configuração.</p>
+      </div>
+
+      <div class="grid">
+        <section class="panel">
+          <h2>1. Configuração</h2>
+
+          <div class="field">
+            <label class="label" for="cloudName">Cloud name</label>
+            <input id="cloudName" class="input" value="dxhnb6ehy" />
+          </div>
+
+          <div class="field">
+            <label class="label" for="uploadPreset">Unsigned upload preset</label>
+            <input id="uploadPreset" class="input" value="notion_gallery" />
+          </div>
+
+          <div class="field">
+            <label class="label" for="folder">Pasta na Cloudinary</label>
+            <input id="folder" class="input" value="notion-galeria" />
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="saveConfig">Salvar configuração</button>
+            <button class="btn" id="testConfig">Testar endpoint</button>
+          </div>
+
+          <p class="note" style="margin-top:12px">
+            Se o preset estiver realmente como <strong>unsigned</strong>, o upload funciona.
+          </p>
+
+          <div id="configStatus" class="status">Configuração pronta para teste.</div>
+        </section>
+
+        <section class="panel">
+          <h2>2. Upload</h2>
+
+          <input id="fileInput" type="file" accept="image/*" multiple class="hidden" />
+
+          <div id="dropzone" class="dropzone">
+            <div class="drop-inner">
+              <div class="drop-title">Arraste as imagens aqui</div>
+              <div class="drop-text">ou clique para escolher arquivos. O sistema otimiza no navegador, envia e devolve os links prontos.</div>
+              <div class="drop-mini">JPG, PNG ou WebP. Recomendado: até 1600px de largura.</div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" id="pickFiles">Escolher arquivos</button>
+            <button class="btn btn-danger" id="clearResults">Limpar resultados</button>
+          </div>
+
+          <div id="uploadStatus" class="status">Nenhum upload iniciado.</div>
+        </section>
+      </div>
+
+      <div class="results">
+        <div class="results-head">
+          <h2>Links gerados</h2>
+          <div class="count" id="count">0 imagens enviadas</div>
+        </div>
+
+        <div id="list" class="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const KEYS = {
+      cloudName: 'uploader_cloud_name',
+      uploadPreset: 'uploader_upload_preset',
+      folder: 'uploader_folder',
+      results: 'uploader_results'
+    };
+
+    const cloudNameEl = document.getElementById('cloudName');
+    const uploadPresetEl = document.getElementById('uploadPreset');
+    const folderEl = document.getElementById('folder');
+    const configStatusEl = document.getElementById('configStatus');
+    const uploadStatusEl = document.getElementById('uploadStatus');
+    const saveConfigBtn = document.getElementById('saveConfig');
+    const testConfigBtn = document.getElementById('testConfig');
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const pickFilesBtn = document.getElementById('pickFiles');
+    const clearResultsBtn = document.getElementById('clearResults');
+    const listEl = document.getElementById('list');
+    const countEl = document.getElementById('count');
+
+    let results = JSON.parse(localStorage.getItem(KEYS.results) || '[]');
+
+    function setStatus(el, text, type='') {
+      el.textContent = text;
+      el.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function saveConfig() {
+      localStorage.setItem(KEYS.cloudName, cloudNameEl.value.trim());
+      localStorage.setItem(KEYS.uploadPreset, uploadPresetEl.value.trim());
+      localStorage.setItem(KEYS.folder, folderEl.value.trim());
+      setStatus(configStatusEl, 'Configuração salva no navegador.', 'ok');
+    }
+
+    function loadConfig() {
+      cloudNameEl.value = localStorage.getItem(KEYS.cloudName) || cloudNameEl.value || 'dxhnb6ehy';
+      uploadPresetEl.value = localStorage.getItem(KEYS.uploadPreset) || uploadPresetEl.value || 'notion_gallery';
+      folderEl.value = localStorage.getItem(KEYS.folder) || folderEl.value || 'notion-galeria';
+
+      if (cloudNameEl.value && uploadPresetEl.value) {
+        setStatus(configStatusEl, 'Configuração carregada. Pode enviar imagens.', 'ok');
+      }
+    }
+
+    function getConfig() {
+      return {
+        cloudName: cloudNameEl.value.trim(),
+        uploadPreset: uploadPresetEl.value.trim(),
+        folder: folderEl.value.trim()
+      };
+    }
+
+    function validateConfig() {
+      const { cloudName, uploadPreset } = getConfig();
+      if (!cloudName || !uploadPreset) {
+        setStatus(configStatusEl, 'Faltam campos obrigatórios: cloud name e upload preset.', 'err');
+        return false;
+      }
+      return true;
+    }
+
+    async function testEndpoint() {
+      if (!validateConfig()) return;
+
+      const { cloudName } = getConfig();
+      const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+      try {
+        await fetch(url, { method: 'OPTIONS' });
+        setStatus(configStatusEl, 'Endpoint encontrado. Se o preset estiver certo, o upload deve funcionar.', 'ok');
+      } catch (e) {
+        setStatus(configStatusEl, 'Não consegui alcançar o endpoint. Confira cloud name e conexão.', 'err');
+      }
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    function saveResults() {
+      localStorage.setItem(KEYS.results, JSON.stringify(results));
+    }
+
+    function updateCount() {
+      countEl.textContent = `${results.length} ${results.length === 1 ? 'imagem enviada' : 'imagens enviadas'}`;
+    }
+
+    function renderResults() {
+      updateCount();
+
+      if (!results.length) {
+        listEl.innerHTML = '';
+        return;
+      }
+
+      listEl.innerHTML = results.map((item, index) => `
+        <article class="item">
+          <img class="thumb" src="${item.url}" alt="${escapeHtml(item.name)}" loading="lazy">
+          <div class="body">
+            <div class="name">${escapeHtml(item.name)}</div>
+            <div class="meta">${escapeHtml(item.sizeText)} • ${escapeHtml(item.width + '×' + item.height)}</div>
+            <div class="linkbox">
+              <input class="url" value="${item.url}" readonly>
+              <button class="copy" data-copy="${index}">Copiar</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const idx = Number(btn.dataset.copy);
+          try {
+            await navigator.clipboard.writeText(results[idx].url);
+            const old = btn.textContent;
+            btn.textContent = 'Copiado';
+            setTimeout(() => btn.textContent = old, 1200);
+          } catch {
+            btn.textContent = 'Erro';
+            setTimeout(() => btn.textContent = 'Copiar', 1200);
+          }
+        });
+      });
+    }
+
+    function escapeHtml(str='') {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    async function optimizeImage(file, maxWidth = 1600, quality = 0.82) {
+      const bitmap = await createImageBitmap(file);
+      const ratio = bitmap.width > maxWidth ? maxWidth / bitmap.width : 1;
+      const width = Math.round(bitmap.width * ratio);
+      const height = Math.round(bitmap.height * ratio);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(bitmap, 0, 0, width, height);
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+      return { blob, width, height };
+    }
+
+    async function uploadToCloudinary(file) {
+      const { cloudName, uploadPreset, folder } = getConfig();
+      const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+      const optimized = await optimizeImage(file);
+
+      const form = new FormData();
+      form.append('file', optimized.blob, file.name.replace(/\.[^.]+$/, '') + '.jpg');
+      form.append('upload_preset', uploadPreset);
+      if (folder) form.append('folder', folder);
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        body: form
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Falha no upload');
+      }
+
+      const data = await res.json();
+
+      return {
+        url: data.secure_url,
+        width: optimized.width,
+        height: optimized.height,
+        sentBytes: optimized.blob.size
+      };
+    }
+
+    async function handleFiles(files) {
+      if (!validateConfig()) return;
+
+      const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+      if (!arr.length) {
+        setStatus(uploadStatusEl, 'Nenhuma imagem válida foi selecionada.', 'err');
+        return;
+      }
+
+      setStatus(uploadStatusEl, `Preparando ${arr.length} arquivo(s)...`);
+
+      let ok = 0;
+
+      for (let i = 0; i < arr.length; i++) {
+        const file = arr[i];
+
+        try {
+          setStatus(uploadStatusEl, `Enviando ${i + 1} de ${arr.length}: ${file.name}`);
+
+          const uploaded = await uploadToCloudinary(file);
+
+          results.unshift({
+            name: file.name,
+            url: uploaded.url,
+            sizeText: formatBytes(uploaded.sentBytes),
+            width: uploaded.width,
+            height: uploaded.height
+          });
+
+          saveResults();
+          renderResults();
+          ok++;
+        } catch (e) {
+          console.error(e);
+          setStatus(uploadStatusEl, `Erro ao enviar ${file.name}. Confira cloud name e preset unsigned.`, 'err');
+        }
+      }
+
+      if (ok === arr.length) {
+        setStatus(uploadStatusEl, `${ok} arquivo(s) enviados com sucesso.`, 'ok');
+      } else {
+        setStatus(uploadStatusEl, `${ok} de ${arr.length} arquivo(s) enviados. Alguns falharam.`, ok ? 'ok' : 'err');
+      }
+    }
+
+    saveConfigBtn.addEventListener('click', saveConfig);
+    testConfigBtn.addEventListener('click', testEndpoint);
+    pickFilesBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+    clearResultsBtn.addEventListener('click', () => {
+      results = [];
+      saveResults();
+      renderResults();
+      setStatus(uploadStatusEl, 'Resultados apagados do navegador.', 'ok');
+    });
+
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropzone.addEventListener(evt, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('drag');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+      dropzone.addEventListener(evt, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('drag');
+      });
+    });
+
+    dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    loadConfig();
+    renderResults();
+  </script>
+</body>
+</html>
