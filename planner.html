@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2TRV — Christian da Costa</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #111111;
+      --gray-1:  #f7f7f5;
+      --gray-2:  #e9e9e7;
+      --gray-3:  #b0b0ad;
+      --gray-4:  #6b6b68;
+      --white:   #ffffff;
+      --red-fds: #e57373;
+      --red-fer: #c62828;
+      --font:    'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body { font-family: var(--font); background: var(--white); color: var(--black); min-height: 100vh; font-size: 14px; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Header ── */
+    .site-header {
+      border-bottom: 1px solid var(--gray-2);
+      padding: 32px 40px 8px 32px;  /* top=32px igual à margem lateral esquerda */
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .site-title { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--black); }
+    .header-meta { font-size: 12px; color: var(--gray-3); }
+
+    /* ── Hero ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 280px 1fr 240px;
+      border-bottom: 2px solid var(--black);
+    }
+
+    /* Perfil */
+    .profile-card {
+      border-right: 1px solid var(--gray-2);
+      padding: 16px 32px 36px;      /* topo reduzido */
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .profile-logo {
+      display: flex; justify-content: center; margin-bottom: 14px;
+    }
+    .profile-logo svg { width: 90px; height: 90px; }
+    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+    .profile-info {
+      border-left: 3px solid var(--black); padding-left: 12px;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .profile-info span { font-size: 13px; color: var(--gray-4); line-height: 1.5; }
+
+    /* Centro: relógio + calendário */
+    .center-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Relógio */
+    .clock-section {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 10px 20px;       /* ↓ só padding vertical reduzido */
+      gap: 4px;
+      border-right: 1px solid var(--gray-2);
+    }
+    .clock-time {
+      font-size: 34px; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--black); font-variant-numeric: tabular-nums; line-height: 1;
+    }
+    .clock-date { font-size: 13px; color: var(--gray-4); text-transform: lowercase; text-align: center; }
+
+    /* Calendário */
+    .cal-section {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 10px 14px;       /* ↓ só padding vertical reduzido */
+      gap: 5px;
+    }
+    .cal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%;
+    }
+    .cal-month-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black);
+    }
+    .cal-nav {
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-4); font-size: 13px; padding: 0 3px; line-height: 1;
+      transition: color 0.15s;
+    }
+    .cal-nav:hover { color: var(--black); }
+
+    .cal-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 1px; width: 100%;
+    }
+    .cal-dow {
+      font-size: 9px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--gray-3);
+      text-align: center; padding: 2px 0;
+      border: 1px solid transparent;
+    }
+    .cal-day {
+      font-size: 10px; text-align: center; padding: 2px 0;
+      border-radius: 2px; cursor: default;
+      color: var(--gray-4);
+      border: 1px solid var(--gray-2);
+      transition: background 0.1s;
+    }
+    .cal-day.other-month { color: var(--gray-2); border-color: transparent; }
+
+    /* Dia útil normal */
+    .cal-day.working { color: var(--black); }
+
+    /* Fim de semana */
+    .cal-day.weekend { color: var(--red-fds); border-color: #fde8e8; }
+
+    /* Feriado / recesso / suspensão */
+    .cal-day.holiday { color: var(--red-fer); font-weight: 600; border-color: #fbc8c8; background: #fff5f5; }
+
+    /* Hoje */
+    .cal-day.today {
+      background: var(--black) !important;
+      color: var(--white) !important;
+      font-weight: 700; border-color: var(--black) !important;
+    }
+
+    /* Legenda do calendário */
+    .cal-legend {
+      display: flex; gap: 10px; width: 100%;
+      font-size: 9px; color: var(--gray-4); margin-top: 2px;
+    }
+    .cal-legend span { display: flex; align-items: center; gap: 3px; }
+    .cal-legend .dot-fer { color: var(--red-fer); font-size: 10px; }
+    .cal-legend .dot-fds { color: var(--red-fds); font-size: 10px; }
+
+    /* Links Rápidos */
+    .quick-links {
+      border-left: 1px solid var(--gray-2); padding: 36px 28px;
+      display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    }
+    .quick-links a {
+      font-size: 13px; color: var(--gray-4); padding: 4px 0;
+      border-bottom: 1px solid transparent; transition: color 0.15s, border-color 0.15s;
+    }
+    .quick-links a:hover { color: var(--black); border-bottom-color: var(--black); }
+    .quick-links a.bold { font-weight: 600; color: var(--black); }
+
+    /* ── Contador de Dias Úteis (dentro do bloco do calendário) ── */
+    .counter-widget {
+      border-top: 1px solid var(--gray-2);
+      width: 100%;
+      padding: 12px 16px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      background: var(--gray-1);
+    }
+    .counter-heading {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gray-4);
+    }
+    .counter-tabs { display: flex; }
+    .ctab {
+      font-size: 11px; font-family: var(--font);
+      padding: 4px 12px; cursor: pointer;
+      border: 1px solid var(--gray-2); background: var(--white);
+      color: var(--gray-4); transition: all 0.15s;
+    }
+    .ctab:first-child { border-radius: 3px 0 0 3px; }
+    .ctab:last-child  { border-radius: 0 3px 3px 0; margin-left: -1px; }
+    .ctab.active { background: var(--black); color: var(--white); border-color: var(--black); z-index: 1; }
+    .ctab:not(.active):hover { background: var(--gray-2); color: var(--black); }
+
+    .counter-panel { display: flex; flex-direction: column; gap: 8px; }
+    .counter-panel[hidden] { display: none; }
+
+    .counter-row { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
+    .counter-row label {
+      display: flex; flex-direction: column; gap: 2px;
+      font-size: 10px; color: var(--gray-4); font-weight: 500;
+    }
+    .counter-row input {
+      font-family: var(--font); font-size: 12px;
+      border: 1px solid var(--gray-2); border-radius: 3px;
+      padding: 4px 6px; color: var(--black); background: var(--white);
+      transition: border-color 0.15s; outline: none;
+    }
+    .counter-row input:focus { border-color: var(--black); }
+    input[type="number"] { width: 76px; }
+    input[type="date"]   { width: 130px; }
+
+    .calc-btn {
+      font-family: var(--font); font-size: 11px; font-weight: 600;
+      padding: 5px 12px; background: var(--black); color: var(--white);
+      border: none; border-radius: 3px; cursor: pointer; transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+    .calc-btn:hover { opacity: 0.8; }
+
+    .counter-result {
+      font-size: 12px; color: var(--black);
+      padding: 6px 10px; border-left: 3px solid var(--black);
+      background: var(--white); border-radius: 0 3px 3px 0;
+      display: none;
+    }
+    .counter-result.show { display: block; }
+    .counter-result strong { font-weight: 700; }
+    .counter-result .warn { color: var(--gray-4); font-size: 10px; margin-top: 1px; }
+
+    /* ── Main / Projetos ── */
+    .main { padding: 48px 40px; }
+    .section-title {
+      font-family: Georgia, 'Times New Roman', serif; font-style: italic;
+      font-size: 26px; font-weight: 400; color: var(--black); margin-bottom: 24px;
+    }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 280px)); gap: 16px;
+    }
+    .project-card {
+      border: 1px solid var(--gray-2); border-radius: 6px; overflow: hidden;
+      cursor: pointer; transition: border-color 0.15s, transform 0.15s; background: var(--white);
+    }
+    .project-card:hover { border-color: var(--black); transform: translateY(-2px); }
+    .project-cover {
+      height: 110px; background: #000000;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cover-icon { font-size: 30px; opacity: 0.5; filter: brightness(0) invert(1); }
+    .project-body { padding: 14px 16px; }
+    .project-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; background: var(--gray-1); border: 1px solid var(--gray-2);
+      color: var(--gray-4); padding: 2px 8px; border-radius: 3px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid var(--gray-2); padding: 16px 40px;
+      font-size: 12px; color: var(--gray-3); display: flex; justify-content: space-between;
+    }
+
+    /* ── Responsivo ── */
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; }
+      .center-section { grid-template-columns: 1fr 1fr; }
+      .quick-links { border-left: none; border-top: 1px solid var(--gray-2); }
+      .profile-card { border-right: none; border-bottom: 1px solid var(--gray-2); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .main, .counter-band, .site-header, .site-footer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cabeçalho -->
+<header class="site-header">
+  <span class="site-title">2TRV</span>
+  <span class="header-meta">2ª Turma Recursal · TJPR</span>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+
+  <!-- Perfil -->
+  <div class="profile-card">
+    <!-- Logo centralizado em relação ao nome -->
+    <div class="profile-logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <circle cx="50" cy="50" r="48" fill="#000"/>
+        <circle cx="50" cy="50" r="44" fill="#fff"/>
+        <text x="50" y="38" text-anchor="middle" font-family="'Inter',system-ui,sans-serif"
+              font-weight="900" font-size="20" fill="#000" letter-spacing="-0.5">2TRV</text>
+        <line x1="50" y1="45" x2="50" y2="74" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+        <line x1="38" y1="74" x2="62" y2="74" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+        <line x1="24" y1="50" x2="76" y2="50" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="28" y1="50" x2="24" y2="60" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="28" y1="50" x2="32" y2="60" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M21 60 L27 60 L30 68 L18 68 Z" fill="#000"/>
+        <line x1="72" y1="50" x2="68" y2="60" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="72" y1="50" x2="76" y2="60" stroke="#000" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M65 60 L79 60 L82 68 L70 68 Z" fill="#000"/>
+      </svg>
+    </div>
+    <h1 class="profile-name">Christian da Costa</h1>
+    <div class="profile-info">
+      <span>2ª Turma Recursal</span>
+      <span>Matrícula: 20.855</span>
+      <span>R. Mauá 920, Alto da Glória,</span>
+      <span>Curitiba, 80030-901</span>
+      <span>Telefone: (41) 3210-7417</span>
+    </div>
+  </div>
+
+  <!-- Relógio + Calendário -->
+  <div class="center-section">
+
+    <div class="clock-section">
+      <div class="clock-time" id="clock">00:00:00</div>
+      <div class="clock-date" id="clock-date">carregando...</div>
+    </div>
+
+    <div class="cal-section">
+      <div class="cal-header">
+        <button class="cal-nav" id="cal-prev">&#8592;</button>
+        <span class="cal-month-label" id="cal-label">—</span>
+        <button class="cal-nav" id="cal-next">&#8594;</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><b class="dot-fer">●</b> feriado / recesso</span>
+        <span><b class="dot-fds">●</b> fim de semana</span>
+      </div>
+
+      <!-- Contador — somente no bloco do calendário -->
+      <div class="counter-widget">
+        <div class="counter-heading">Dias Úteis — TJ/PR</div>
+        <div class="counter-tabs">
+          <button class="ctab active" id="tab-prazo">Calcular prazo</button>
+          <button class="ctab" id="tab-contar">Contar dias</button>
+        </div>
+        <div id="panel-prazo" class="counter-panel">
+          <div class="counter-row">
+            <label>Início <input type="date" id="p-start"></label>
+            <label>Dias úteis <input type="number" id="p-days" min="1" max="999" placeholder="ex: 15"></label>
+          </div>
+          <div class="counter-row">
+            <button class="calc-btn" onclick="calcPrazo()">Calcular</button>
+          </div>
+          <div id="prazo-result" class="counter-result"></div>
+        </div>
+        <div id="panel-contar" class="counter-panel" hidden>
+          <div class="counter-row">
+            <label>Início <input type="date" id="c-start"></label>
+            <label>Fim <input type="date" id="c-end"></label>
+          </div>
+          <div class="counter-row">
+            <button class="calc-btn" onclick="calcContar()">Calcular</button>
+          </div>
+          <div id="contar-result" class="counter-result"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Links Rápidos -->
+  <div class="quick-links">
+    <a href="https://tjpr-my.sharepoint.com/" target="_blank">SharePoint</a>
+    <a href="https://word.cloud.microsoft/" target="_blank">Word Online</a>
+    <a href="https://www.tjpr.jus.br/enunciados-turmas-recursais" target="_blank">Enunciados TR</a>
+    <a href="https://www.legisweb.com.br/legislacao/?id=279523" target="_blank">Lei 18.413/14 (Custas)</a>
+    <a href="https://www.planalto.gov.br/ccivil_03/leis/l9099.htm" target="_blank">Lei 9.099/95 (JEC)</a>
+    <a href="https://portal.tjpr.jus.br/jurisprudencia/" target="_blank">Jurisprudência</a>
+    <a href="https://www.tjpr.jus.br/documents/d/sedoc/regimento-interno-texto-compilado-ate-a-er-41-2025" target="_blank" class="bold">Regimento Interno TJPR</a>
+    <a href="https://portal.tjpr.jus.br/pesquisa_athos/publico/ajax_concursos.do;jsessionid=fbb52b09ccecc35f491d6cb75f67?tjpr.url.crypto=8a6c53f8698c7ff7801c49a82351569545dd27fb68d84af89c7272766cd6fc9f207f2c8bd0e975bfa49155609824839a8bf440087b6b30641a2fb19108057b53eef286ec70184c6e" target="_blank" class="bold">Regimento Interno TR</a>
+  </div>
+
+</section>
+
+<!-- Projetos -->
+<main class="main">
+  <section>
+    <h2 class="section-title">Projetos</h2>
+    <div class="projects-grid">
+
+      <a class="project-card" href="#">
+        <div class="project-cover"><span class="cover-icon">⚖️</span></div>
+        <div class="project-body">
+          <div class="project-title">Regência Judiciária Automatizada</div>
+          <div class="project-tags"><span class="tag">Projeto</span></div>
+        </div>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="project-cover"><span class="cover-icon">📂</span></div>
+        <div class="project-body">
+          <div class="project-title">Banco de Modelos</div>
+          <div class="project-tags"><span class="tag">Projeto</span><span class="tag">RJA</span></div>
+        </div>
+      </a>
+
+      <a class="project-card" href="#">
+        <div class="project-cover"><span class="cover-icon">📖</span></div>
+        <div class="project-body">
+          <div class="project-title">Study</div>
+          <div class="project-tags"><span class="tag">Projeto</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<!-- Rodapé -->
+<footer class="site-footer">
+  <span>2TRV · Christian da Costa</span>
+  <span id="footer-date"></span>
+</footer>
+
+<script>
+/* ──────────────────────────────────────────
+   DADOS: dias não úteis (não-fim-de-semana)
+   Fonte: 04_calendario_2025_2026.txt
+   ────────────────────────────────────────── */
+const FERIADOS = {
+  // === 2025 ===
+  // Janeiro — recesso / suspensão de prazos
+  "2025-01-01":"Confraternização Universal",
+  "2025-01-02":"Recesso",
+  "2025-01-03":"Recesso",
+  "2025-01-06":"Recesso",
+  "2025-01-07":"Suspensão de prazos",
+  "2025-01-08":"Suspensão de prazos",
+  "2025-01-09":"Suspensão de prazos",
+  "2025-01-10":"Suspensão de prazos",
+  "2025-01-13":"Suspensão de prazos",
+  "2025-01-14":"Suspensão de prazos",
+  "2025-01-15":"Suspensão de prazos",
+  "2025-01-16":"Suspensão de prazos",
+  "2025-01-17":"Suspensão de prazos",
+  "2025-01-20":"Suspensão de prazos",
+  // Março
+  "2025-03-03":"Véspera de Carnaval",
+  "2025-03-04":"Carnaval",
+  // Abril
+  "2025-04-17":"Quinta-feira Santa",
+  "2025-04-18":"Paixão de Cristo",
+  "2025-04-21":"Tiradentes",
+  // Maio
+  "2025-05-01":"Dia do Trabalho",
+  "2025-05-02":"Suspensão do expediente",
+  // Junho
+  "2025-06-19":"Corpus Christi",
+  "2025-06-20":"Suspensão",
+  // Setembro
+  "2025-09-08":"Padroeira de Curitiba",
+  // Outubro
+  "2025-10-27":"Suspensão do expediente",
+  "2025-10-28":"Dia do Funcionário Público",
+  // Novembro
+  "2025-11-20":"Consciência Negra",
+  "2025-11-21":"Suspensão do expediente",
+  // Dezembro
+  "2025-12-18":"Dia da Justiça",
+  "2025-12-19":"Emancipação Política do Paraná",
+  "2025-12-22":"Recesso",
+  "2025-12-23":"Recesso",
+  "2025-12-24":"Véspera de Natal",
+  "2025-12-25":"Natal",
+  "2025-12-26":"Recesso",
+  "2025-12-29":"Recesso",
+  "2025-12-30":"Recesso",
+  "2025-12-31":"Véspera de Ano Novo",
+
+  // === 2026 ===
+  // Janeiro — recesso / suspensão de prazos
+  "2026-01-01":"Confraternização Universal",
+  "2026-01-02":"Recesso",
+  "2026-01-05":"Recesso",
+  "2026-01-06":"Recesso",
+  "2026-01-07":"Suspensão de prazos",
+  "2026-01-08":"Suspensão de prazos",
+  "2026-01-09":"Suspensão de prazos",
+  "2026-01-12":"Suspensão de prazos",
+  "2026-01-13":"Suspensão de prazos",
+  "2026-01-14":"Suspensão de prazos",
+  "2026-01-15":"Suspensão de prazos",
+  "2026-01-16":"Suspensão de prazos",
+  "2026-01-19":"Suspensão de prazos",
+  "2026-01-20":"Suspensão de prazos",
+  // Fevereiro
+  "2026-02-16":"Véspera de Carnaval",
+  "2026-02-17":"Carnaval",
+  // Abril
+  "2026-04-02":"Quinta-feira Santa",
+  "2026-04-03":"Paixão de Cristo",
+  "2026-04-20":"Suspensão de Expediente",
+  "2026-04-21":"Tiradentes",
+  // Maio
+  "2026-05-01":"Dia do Trabalho",
+  // Junho
+  "2026-06-04":"Corpus Christi",
+  "2026-06-05":"Suspensão de Expediente",
+  // Setembro
+  "2026-09-07":"Independência do Brasil",
+  "2026-09-08":"Padroeira de Curitiba",
+  // Outubro
+  "2026-10-12":"Nossa Senhora Aparecida",
+  "2026-10-30":"Dia do Funcionário Público",
+  // Novembro
+  "2026-11-02":"Finados",
+  "2026-11-20":"Consciência Negra",
+  // Dezembro
+  "2026-12-18":"Dia da Justiça",
+  "2026-12-24":"Véspera de Natal",
+  "2026-12-25":"Natal",
+  "2026-12-31":"Véspera de Ano Novo",
+};
+
+/* Formata Date para "YYYY-MM-DD" sem deslocar fuso */
+function toISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+/* Verifica se uma data (string ISO) é dia útil no TJ/PR */
+function isDiaUtil(iso) {
+  const d = new Date(iso + 'T12:00:00');
+  const dow = d.getDay();
+  if (dow === 0 || dow === 6) return false;   // fim de semana
+  if (FERIADOS[iso]) return false;            // feriado/recesso/suspensão
+  return true;
+}
+
+/* ── Relógio ao vivo ── */
+const WEEKDAYS = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const MONTHS   = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const MONTHS_S = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+
+function updateClock() {
+  const n = new Date();
+  const hms = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+  const ds  = `${WEEKDAYS[n.getDay()]}, ${n.getDate()} de ${MONTHS[n.getMonth()]} de ${n.getFullYear()}`;
+  document.getElementById('clock').textContent      = hms;
+  document.getElementById('clock-date').textContent = ds;
+  document.getElementById('footer-date').textContent = ds;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ── Calendário mini ── */
+const TODAY    = new Date();
+let calYear  = TODAY.getFullYear();
+let calMonth = TODAY.getMonth();
+
+function renderCalendar() {
+  document.getElementById('cal-label').textContent = `${MONTHS_S[calMonth]} ${calYear}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  ['D','S','T','Q','Q','S','S'].forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-dow';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const firstDay    = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+
+  // Dias do mês anterior
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const el = document.createElement('div');
+    el.className = 'cal-day other-month';
+    el.textContent = daysInPrev - i;
+    grid.appendChild(el);
+  }
+
+  // Dias do mês atual
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el  = document.createElement('div');
+    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dow = new Date(iso + 'T12:00:00').getDay();
+    const isToday = (d === TODAY.getDate() && calMonth === TODAY.getMonth() && calYear === TODAY.getFullYear());
+
+    if (isToday) {
+      el.className = 'cal-day today';
+    } else if (FERIADOS[iso]) {
+      el.className = 'cal-day holiday';
+      el.title = FERIADOS[iso];           // tooltip com a razão
+    } else if (dow === 0 || dow === 6) {
+      el.className = 'cal-day weekend';
+    } else {
+      el.className = 'cal-day working';
+    }
+
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+
+  // Dias do mês seguinte
+  const total = firstDay + daysInMonth;
+  const rem   = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let d = 1; d <= rem; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day other-month';
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+}
+
+document.getElementById('cal-prev').addEventListener('click', () => {
+  if (--calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+});
+document.getElementById('cal-next').addEventListener('click', () => {
+  if (++calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+});
+renderCalendar();
+
+/* ── Tabs do contador ── */
+document.getElementById('tab-prazo').addEventListener('click', () => {
+  document.getElementById('tab-prazo').classList.add('active');
+  document.getElementById('tab-contar').classList.remove('active');
+  document.getElementById('panel-prazo').hidden  = false;
+  document.getElementById('panel-contar').hidden = true;
+});
+document.getElementById('tab-contar').addEventListener('click', () => {
+  document.getElementById('tab-contar').classList.add('active');
+  document.getElementById('tab-prazo').classList.remove('active');
+  document.getElementById('panel-contar').hidden = false;
+  document.getElementById('panel-prazo').hidden  = true;
+});
+
+/* Formata ISO → DD/MM/AAAA */
+function fmtBR(iso) {
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+/* Nomeia o dia da semana de um ISO */
+function nomeDia(iso) {
+  return WEEKDAYS[new Date(iso + 'T12:00:00').getDay()];
+}
+
+/* ── Calcular prazo: início + Nº dias úteis → data final ── */
+/* Conta a partir do dia SEGUINTE à data de início (CPC art. 224) */
+function calcPrazo() {
+  const startVal = document.getElementById('p-start').value;
+  const nDias    = parseInt(document.getElementById('p-days').value, 10);
+  const res      = document.getElementById('prazo-result');
+
+  if (!startVal || isNaN(nDias) || nDias < 1) {
+    res.innerHTML = '<span class="warn">Preencha a data de início e o número de dias úteis.</span>';
+    res.classList.add('show'); return;
+  }
+
+  let d = new Date(startVal + 'T12:00:00');
+  let count = 0;
+  let isoFinal = '';
+  const MAX_ITER = 3000;
+  let iter = 0;
+
+  while (count < nDias && iter < MAX_ITER) {
+    d.setDate(d.getDate() + 1);
+    iter++;
+    isoFinal = toISO(d);
+    if (isDiaUtil(isoFinal)) count++;
+  }
+
+  if (iter >= MAX_ITER) {
+    res.innerHTML = '<span class="warn">Período fora do intervalo do calendário (2025–2026).</span>';
+  } else {
+    res.innerHTML = `
+      <strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}<br>
+      <span class="warn">${nDias} dia${nDias>1?'s':''} útei${nDias>1?'s':'l'} a partir de ${fmtBR(startVal)}</span>
+    `;
+  }
+  res.classList.add('show');
+}
+
+/* ── Contar dias úteis entre duas datas ── */
+/* Conta os dias úteis do dia SEGUINTE ao início até o fim inclusive */
+function calcContar() {
+  const startVal = document.getElementById('c-start').value;
+  const endVal   = document.getElementById('c-end').value;
+  const res      = document.getElementById('contar-result');
+
+  if (!startVal || !endVal) {
+    res.innerHTML = '<span class="warn">Preencha as duas datas.</span>';
+    res.classList.add('show'); return;
+  }
+  if (endVal < startVal) {
+    res.innerHTML = '<span class="warn">A data de fim deve ser posterior à data de início.</span>';
+    res.classList.add('show'); return;
+  }
+
+  let d = new Date(startVal + 'T12:00:00');
+  const end = new Date(endVal + 'T12:00:00');
+  let count = 0;
+
+  d.setDate(d.getDate() + 1); // começa a contar no dia seguinte
+  while (d <= end) {
+    if (isDiaUtil(toISO(d))) count++;
+    d.setDate(d.getDate() + 1);
+  }
+
+  res.innerHTML = `
+    <strong>${count} dia${count!==1?'s':''} útei${count!==1?'s':'l'}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}<br>
+    <span class="warn">Contagem conforme calendário TJ/PR 2025–2026</span>
+  `;
+  res.classList.add('show');
+}
+
+/* Pré-preenche data de início com hoje */
+const todayISO = toISO(TODAY);
+document.getElementById('p-start').value = todayISO;
+document.getElementById('c-start').value = todayISO;
+</script>
+
+</body>
+</html>
