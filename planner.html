@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2TRV — Christian da Costa</title>
+  <title>Christian da Costa</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -22,10 +22,7 @@
       --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --shadow-sm: 0 1px 2px rgba(15, 15, 15, 0.04);
       --shadow-md: 0 8px 24px rgba(15, 15, 15, 0.06);
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 10px;
-      --container: 1440px;
+      --container: 1680px;
     }
 
     html {
@@ -66,11 +63,8 @@
       z-index: 30;
     }
 
-    .site-title {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--black);
+    .header-right-only {
+      justify-content: flex-end;
     }
 
     .header-meta {
@@ -79,14 +73,13 @@
     }
 
     .hero-wrap {
-      padding: 18px 18px 0;
+      padding: 12px 12px 0;
     }
 
     .hero {
       display: grid;
       grid-template-columns: minmax(250px, 300px) minmax(0, 1fr) minmax(220px, 280px);
       border: 1px solid var(--gray-2);
-      border-radius: 24px;
       overflow: hidden;
       background: var(--card-bg);
       box-shadow: var(--shadow-sm);
@@ -115,8 +108,8 @@
     }
 
     .profile-name {
-      font-size: clamp(28px, 3.2vw, 34px);
-      line-height: 1.08;
+      font-size: clamp(34px, 3.4vw, 46px);
+      line-height: 1.02;
       font-weight: 800;
       margin-bottom: 18px;
       letter-spacing: -0.03em;
@@ -156,7 +149,7 @@
     }
 
     .clock-time {
-      font-size: clamp(40px, 5vw, 60px);
+      font-size: clamp(30px, 3vw, 40px);
       font-weight: 800;
       letter-spacing: -0.04em;
       color: var(--black);
@@ -202,7 +195,6 @@
       border: none;
       width: 28px;
       height: 28px;
-      border-radius: 8px;
       cursor: pointer;
       color: var(--gray-4);
       font-size: 13px;
@@ -237,7 +229,6 @@
       font-size: 11px;
       text-align: center;
       padding: 6px 0;
-      border-radius: 8px;
       cursor: default;
       color: var(--gray-4);
       border: 1px solid transparent;
@@ -311,7 +302,6 @@
       display: inline-flex;
       align-self: flex-start;
       background: #f1f1ef;
-      border-radius: 10px;
       padding: 3px;
     }
 
@@ -323,7 +313,6 @@
       border: none;
       background: transparent;
       color: var(--gray-4);
-      border-radius: 8px;
       transition: background 0.15s, color 0.15s, box-shadow 0.15s;
     }
 
@@ -365,7 +354,6 @@
       font-family: var(--font);
       font-size: 12px;
       border: 1px solid var(--gray-2);
-      border-radius: 10px;
       padding: 8px 10px;
       color: var(--black);
       background: var(--white);
@@ -389,7 +377,6 @@
       background: var(--black);
       color: var(--white);
       border: none;
-      border-radius: 10px;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.15s;
       white-space: nowrap;
@@ -406,7 +393,6 @@
       padding: 10px 12px;
       border: 1px solid var(--gray-2);
       background: var(--white);
-      border-radius: 12px;
       display: none;
     }
 
@@ -435,7 +421,6 @@
       font-size: 13px;
       color: var(--gray-4);
       padding: 8px 10px;
-      border-radius: 10px;
       transition: background 0.15s, color 0.15s, transform 0.15s;
     }
 
@@ -445,13 +430,8 @@
       transform: translateX(2px);
     }
 
-    .quick-links a.bold {
-      font-weight: 700;
-      color: var(--black);
-    }
-
     .main {
-      padding: 32px 18px 48px;
+      padding: 24px 12px 40px;
     }
 
     .section-card {
@@ -476,7 +456,6 @@
 
     .project-card {
       border: 1px solid var(--gray-2);
-      border-radius: 18px;
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
@@ -527,16 +506,14 @@
       border: 1px solid #ecece8;
       color: var(--gray-4);
       padding: 3px 9px;
-      border-radius: 999px;
     }
 
     .site-footer-wrap {
-      padding: 0 18px 20px;
+      padding: 0 12px 16px;
     }
 
     .site-footer {
       border: 1px solid var(--gray-2);
-      border-radius: 18px;
       background: rgba(255,255,255,0.7);
       padding: 14px 18px;
       font-size: 12px;
@@ -602,10 +579,6 @@
     }
 
     @media (max-width: 640px) {
-      .header-meta {
-        display: none;
-      }
-
       .profile-card,
       .clock-section,
       .cal-section {
@@ -618,7 +591,7 @@
       }
 
       .clock-time {
-        font-size: 34px;
+        font-size: 28px;
       }
 
       .quick-links {
@@ -649,8 +622,7 @@
 <body>
   <div class="app-shell">
 
-    <header class="site-header">
-      <span class="site-title">2TRV</span>
+    <header class="site-header header-right-only">
       <span class="header-meta">2ª Turma Recursal · TJPR</span>
     </header>
 
@@ -747,8 +719,8 @@
           <a href="https://www.legisweb.com.br/legislacao/?id=279523" target="_blank" rel="noopener noreferrer">Lei 18.413/14 (Custas)</a>
           <a href="https://www.planalto.gov.br/ccivil_03/leis/l9099.htm" target="_blank" rel="noopener noreferrer">Lei 9.099/95 (JEC)</a>
           <a href="https://portal.tjpr.jus.br/jurisprudencia/" target="_blank" rel="noopener noreferrer">Jurisprudência</a>
-          <a href="https://www.tjpr.jus.br/documents/d/sedoc/regimento-interno-texto-compilado-ate-a-er-41-2025" target="_blank" rel="noopener noreferrer" class="bold">Regimento Interno TJPR</a>
-          <a href="https://portal.tjpr.jus.br/pesquisa_athos/publico/ajax_concursos.do;jsessionid=fbb52b09ccecc35f491d6cb75f67?tjpr.url.crypto=8a6c53f8698c7ff7801c49a82351569545dd27fb68d84af89c7272766cd6fc9f207f2c8bd0e975bfa49155609824839a8bf440087b6b30641a2fb19108057b53eef286ec70184c6e" target="_blank" rel="noopener noreferrer" class="bold">Regimento Interno TR</a>
+          <a href="https://www.tjpr.jus.br/documents/d/sedoc/regimento-interno-texto-compilado-ate-a-er-41-2025" target="_blank" rel="noopener noreferrer">Regimento Interno TJPR</a>
+          <a href="https://portal.tjpr.jus.br/pesquisa_athos/publico/ajax_concursos.do;jsessionid=fbb52b09ccecc35f491d6cb75f67?tjpr.url.crypto=8a6c53f8698c7ff7801c49a82351569545dd27fb68d84af89c7272766cd6fc9f207f2c8bd0e975bfa49155609824839a8bf440087b6b30641a2fb19108057b53eef286ec70184c6e" target="_blank" rel="noopener noreferrer">Regimento Interno TR</a>
         </div>
 
       </section>
