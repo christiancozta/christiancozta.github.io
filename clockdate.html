@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Relógio Responsivo</title>
+<title>Relógio</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +78,7 @@ body{
 }
 
 .date{
-    margin-top:0.4em;
+    margin-top:8px;
     font-family:Helvetica, Arial, sans-serif;
     font-weight:600;
     line-height:1.15;
@@ -136,28 +136,18 @@ function atualizarConteudo(){
 }
 
 function ajustarTamanho(){
-    const w = widget.clientWidth;
-    const h = widget.clientHeight;
-
-    if(!w || !h) return;
-
-    /* ANCORADO NA LARGURA: melhor para coluna do Notion */
-    const baseClock = w * 0.16;
-    const clockSize = Math.max(16, Math.min(baseClock, 140));
-    clock.style.fontSize = clockSize + 'px';
-
+    const clockSize = 64;
+    const dateSize = 19;
     const colonWidth = clockSize * 0.34;
+
+    clock.style.fontSize = clockSize + 'px';
     elC1.style.width = colonWidth + 'px';
     elC2.style.width = colonWidth + 'px';
-
-    const dateSize = clockSize * 0.30
     dateEl.style.fontSize = dateSize + 'px';
-
-    const gap = Math.max(4, Math.min(w * 0.02, 10));
-    dateEl.style.marginTop = gap + 'px';
+    dateEl.style.marginTop = '8px';
 
     while(
-        (clock.scrollWidth > widget.clientWidth * 0.96 || clock.scrollHeight > h * 0.95) &&
+        (clock.scrollWidth > widget.clientWidth * 0.96 || clock.scrollHeight > widget.clientHeight * 0.95) &&
         parseFloat(clock.style.fontSize) > 14
     ){
         const next = parseFloat(clock.style.fontSize) - 1;
@@ -167,7 +157,7 @@ function ajustarTamanho(){
     }
 
     while(
-        (dateEl.scrollWidth > widget.clientWidth * 0.94 || dateEl.scrollHeight > h * 0.15) &&
+        (dateEl.scrollWidth > widget.clientWidth * 0.94 || dateEl.scrollHeight > widget.clientHeight * 0.15) &&
         parseFloat(dateEl.style.fontSize) > 9
     ){
         dateEl.style.fontSize = (parseFloat(dateEl.style.fontSize) - 1) + 'px';
@@ -191,11 +181,7 @@ function iniciarRelogioSincronizado(){
 
     setTimeout(() => {
         atualizarConteudo();
-
-        setInterval(() => {
-            atualizarConteudo();
-        }, 1000);
-
+        setInterval(atualizarConteudo, 1000);
     }, espera);
 }
 
