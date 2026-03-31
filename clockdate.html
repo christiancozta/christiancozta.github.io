@@ -52,7 +52,7 @@ body{
 .clock{
     font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif !important;
     font-weight:800;
-    line-height:0.9;
+    line-height:0.88;
     letter-spacing:0.02em;
     color:#373530;
     white-space:nowrap;
@@ -78,13 +78,13 @@ body{
 }
 
 .date{
-    margin-top:8px;
+    margin-top:6px;
     font-family:Helvetica, Arial, sans-serif;
     font-weight:600;
-    line-height:1.15;
+    line-height:1.05;
     color:#787774;
     text-wrap:balance;
-    max-width:94%;
+    max-width:88%;
 }
 </style>
 </head>
@@ -136,31 +136,45 @@ function atualizarConteudo(){
 }
 
 function ajustarTamanho(){
-    const clockSize = 64;
-    const dateSize = 19;
-    const colonWidth = clockSize * 0.34;
+    const baseClock = 48;
+    const baseDate = 15;
+    const minClock = 14;
+    const minDate = 9;
+
+    let clockSize = baseClock;
+    let dateSize = baseDate;
 
     clock.style.fontSize = clockSize + 'px';
-    elC1.style.width = colonWidth + 'px';
-    elC2.style.width = colonWidth + 'px';
     dateEl.style.fontSize = dateSize + 'px';
-    dateEl.style.marginTop = '8px';
+    dateEl.style.marginTop = '6px';
+
+    elC1.style.width = (clockSize * 0.34) + 'px';
+    elC2.style.width = (clockSize * 0.34) + 'px';
 
     while(
-        (clock.scrollWidth > widget.clientWidth * 0.96 || clock.scrollHeight > widget.clientHeight * 0.95) &&
-        parseFloat(clock.style.fontSize) > 14
+        (
+            clock.scrollWidth > widget.clientWidth * 0.92 ||
+            dateEl.scrollWidth > widget.clientWidth * 0.88 ||
+            (clock.scrollHeight + dateEl.scrollHeight + 6) > widget.clientHeight * 0.72
+        ) &&
+        clockSize > minClock
     ){
-        const next = parseFloat(clock.style.fontSize) - 1;
-        clock.style.fontSize = next + 'px';
-        elC1.style.width = (next * 0.34) + 'px';
-        elC2.style.width = (next * 0.34) + 'px';
+        clockSize -= 1;
+        dateSize = Math.max(minDate, Math.round(clockSize * 0.31));
+
+        clock.style.fontSize = clockSize + 'px';
+        dateEl.style.fontSize = dateSize + 'px';
+
+        elC1.style.width = (clockSize * 0.34) + 'px';
+        elC2.style.width = (clockSize * 0.34) + 'px';
     }
 
     while(
-        (dateEl.scrollWidth > widget.clientWidth * 0.94 || dateEl.scrollHeight > widget.clientHeight * 0.15) &&
-        parseFloat(dateEl.style.fontSize) > 9
+        dateEl.scrollWidth > widget.clientWidth * 0.88 &&
+        dateSize > minDate
     ){
-        dateEl.style.fontSize = (parseFloat(dateEl.style.fontSize) - 1) + 'px';
+        dateSize -= 1;
+        dateEl.style.fontSize = dateSize + 'px';
     }
 }
 
@@ -181,7 +195,11 @@ function iniciarRelogioSincronizado(){
 
     setTimeout(() => {
         atualizarConteudo();
-        setInterval(atualizarConteudo, 1000);
+
+        setInterval(() => {
+            atualizarConteudo();
+        }, 1000);
+
     }, espera);
 }
 
