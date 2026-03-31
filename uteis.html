@@ -41,8 +41,6 @@ body{
     text-align:center;
     overflow:hidden;
 }
-
-/* Título */
 .title{
     font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     font-weight:800;
@@ -51,8 +49,6 @@ body{
     color:#373530;
     white-space:nowrap;
 }
-
-/* Tabs */
 .tabs{
     display:flex;
     gap:0;
@@ -83,8 +79,6 @@ body{
     border-color:#373530;
     z-index:1;
 }
-
-/* Painéis */
 .panel{ display:flex; flex-direction:column; width:100%; }
 .panel[hidden]{ display:none; }
 
@@ -122,8 +116,6 @@ body{
 .field input::placeholder{
     color:#9B9A97;
 }
-
-/* Botão calcular */
 .calc-btn{
     appearance:none;
     border:1px solid rgba(55,53,48,0.15);
@@ -144,7 +136,6 @@ body{
 }
 .calc-btn:active{ transform:scale(0.98); }
 
-/* Resultado */
 .result{
     font-family:Helvetica, Arial, sans-serif;
     color:#373530;
@@ -174,10 +165,9 @@ body{
 
     <div class="tabs" id="tabs">
       <button class="tab active" id="tab-prazo">Calcular prazo</button>
-      <button class="tab"        id="tab-contar">Contar dias</button>
+      <button class="tab" id="tab-contar">Contar dias</button>
     </div>
 
-    <!-- Painel 1: início + N dias → data final -->
     <div class="panel" id="panel-prazo">
       <div class="field-row" id="row-prazo">
         <div class="field" id="f-start1">
@@ -193,7 +183,6 @@ body{
       <div class="result" id="prazo-result"></div>
     </div>
 
-    <!-- Painel 2: duas datas → N dias úteis -->
     <div class="panel" id="panel-contar" hidden>
       <div class="field-row" id="row-contar">
         <div class="field" id="f-start2">
@@ -213,7 +202,6 @@ body{
 </div>
 
 <script>
-/* ── Dados: dias não úteis TJ/PR 2025–2026 ── */
 const FERIADOS = {
   "2025-01-01":"Confraternização Universal",
   "2025-01-02":"Recesso","2025-01-03":"Recesso","2025-01-06":"Recesso",
@@ -252,8 +240,7 @@ const FERIADOS = {
   "2026-12-25":"Natal","2026-12-31":"Véspera de Ano Novo",
 };
 
-const WEEKDAYS = ['domingo','segunda-feira','terça-feira','quarta-feira',
-                  'quinta-feira','sexta-feira','sábado'];
+const WEEKDAYS = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
 
 function toISO(d){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -263,13 +250,13 @@ function isDiaUtil(iso){
   return dow!==0 && dow!==6 && !FERIADOS[iso];
 }
 function fmtBR(iso){
-  const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`;
+  const [y,m,d]=iso.split('-');
+  return `${d}/${m}/${y}`;
 }
 function nomeDia(iso){
   return WEEKDAYS[new Date(iso+'T12:00:00').getDay()];
 }
 
-/* Tabs */
 document.getElementById('tab-prazo').addEventListener('click',()=>{
   document.getElementById('tab-prazo').classList.add('active');
   document.getElementById('tab-contar').classList.remove('active');
@@ -277,6 +264,7 @@ document.getElementById('tab-prazo').addEventListener('click',()=>{
   document.getElementById('panel-contar').hidden=true;
   ajustarTamanho();
 });
+
 document.getElementById('tab-contar').addEventListener('click',()=>{
   document.getElementById('tab-contar').classList.add('active');
   document.getElementById('tab-prazo').classList.remove('active');
@@ -285,123 +273,153 @@ document.getElementById('tab-contar').addEventListener('click',()=>{
   ajustarTamanho();
 });
 
-/* Calcular prazo: início + N → data final (CPC art. 224) */
 function calcPrazo(){
   const startVal=document.getElementById('p-start').value;
   const nDias=parseInt(document.getElementById('p-days').value,10);
   const res=document.getElementById('prazo-result');
+
   if(!startVal||isNaN(nDias)||nDias<1){
     res.innerHTML='<span class="sub">Preencha a data de início e o número de dias.</span>';
-    res.classList.add('show'); return;
+    res.classList.add('show');
+    return;
   }
+
   let d=new Date(startVal+'T12:00:00');
   let count=0, isoFinal='', iter=0;
-  while(count<nDias&&iter<3000){ d.setDate(d.getDate()+1); iter++; isoFinal=toISO(d); if(isDiaUtil(isoFinal)) count++; }
+
+  while(count<nDias&&iter<3000){
+    d.setDate(d.getDate()+1);
+    iter++;
+    isoFinal=toISO(d);
+    if(isDiaUtil(isoFinal)) count++;
+  }
+
   if(iter>=3000){
     res.innerHTML='<span class="sub">Período fora do intervalo do calendário (2025–2026).</span>';
   } else {
-    res.innerHTML=`<strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}`+
-      `<span class="sub">${nDias} dia${nDias>1?'s':''} útei${nDias>1?'s':'l'} a partir de ${fmtBR(startVal)}</span>`;
+    res.innerHTML=`<strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}`
+      + `<span class="sub">${nDias} dia${nDias>1?'s':''} útei${nDias>1?'s':'l'} a partir de ${fmtBR(startVal)}</span>`;
   }
+
   res.classList.add('show');
   ajustarTamanho();
 }
 
-/* Contar dias úteis entre datas */
 function calcContar(){
   const startVal=document.getElementById('c-start').value;
   const endVal=document.getElementById('c-end').value;
   const res=document.getElementById('contar-result');
-  if(!startVal||!endVal){ res.innerHTML='<span class="sub">Preencha as duas datas.</span>'; res.classList.add('show'); return; }
-  if(endVal<startVal){ res.innerHTML='<span class="sub">A data de fim deve ser posterior ao início.</span>'; res.classList.add('show'); return; }
+
+  if(!startVal||!endVal){
+    res.innerHTML='<span class="sub">Preencha as duas datas.</span>';
+    res.classList.add('show');
+    return;
+  }
+
+  if(endVal<startVal){
+    res.innerHTML='<span class="sub">A data de fim deve ser posterior ao início.</span>';
+    res.classList.add('show');
+    return;
+  }
+
   let d=new Date(startVal+'T12:00:00');
   const end=new Date(endVal+'T12:00:00');
   let count=0;
+
   d.setDate(d.getDate()+1);
-  while(d<=end){ if(isDiaUtil(toISO(d))) count++; d.setDate(d.getDate()+1); }
-  res.innerHTML=`<strong>${count} dia${count!==1?'s':''} útei${count!==1?'s':'l'}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}`+
-    `<span class="sub">Conforme calendário TJ/PR 2025–2026</span>`;
+  while(d<=end){
+    if(isDiaUtil(toISO(d))) count++;
+    d.setDate(d.getDate()+1);
+  }
+
+  res.innerHTML=`<strong>${count} dia${count!==1?'s':''} útei${count!==1?'s':'l'}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}`
+    + `<span class="sub">Conforme calendário TJ/PR 2025–2026</span>`;
   res.classList.add('show');
   ajustarTamanho();
 }
 
-/* Data de início = hoje */
 const hoje=toISO(new Date());
 document.getElementById('p-start').value=hoje;
 document.getElementById('c-start').value=hoje;
 
-/* ── Tamanho responsivo ── */
 const widget=document.getElementById('widget');
 
 function ajustarTamanho(){
-  const w=widget.clientWidth;
-  const h=widget.clientHeight;
-  if(!w||!h) return;
+  const titleEl = document.getElementById('title');
+  const tabsEl = document.getElementById('tabs');
 
-  /* Título */
-  const titleEl=document.getElementById('title');
-  const titleSize=Math.max(12, Math.min(w*0.065, 22));
-  titleEl.style.fontSize=titleSize+'px';
-  titleEl.style.marginBottom=(titleSize*0.55)+'px';
+  const titleSize = 19;
+  const uiSize = 13;
+  const labelSize = 13;
+  const resultSize = 13;
 
-  /* Tabs */
-  const tabSize=Math.max(10, Math.min(w*0.038, 13));
-  const tabPadV=Math.max(5, Math.min(w*0.016, 8));
-  const tabPadH=Math.max(8, Math.min(w*0.028, 14));
+  titleEl.style.fontSize = titleSize + 'px';
+  titleEl.style.marginBottom = '10px';
+
   document.querySelectorAll('.tab').forEach(t=>{
-    t.style.fontSize=tabSize+'px';
-    t.style.padding=`${tabPadV}px ${tabPadH}px`;
-    t.style.borderRadius='';
+    t.style.fontSize = uiSize + 'px';
+    t.style.padding = '7px 12px';
   });
-  document.querySelector('.tab:first-child').style.borderRadius='8px 0 0 8px';
-  document.querySelector('.tab:last-child').style.borderRadius='0 8px 8px 0';
-  const tabsEl=document.getElementById('tabs');
-  tabsEl.style.marginBottom=(titleSize*0.65)+'px';
-
-  /* Campos */
-  const labelSize=Math.max(9, Math.min(w*0.030, 11));
-  const inputSize=Math.max(10, Math.min(w*0.036, 13));
-  const inputPadV=Math.max(4, Math.min(w*0.014, 7));
-  const inputPadH=Math.max(6, Math.min(w*0.020, 10));
-  const fieldGap=Math.max(3, Math.min(w*0.012, 8));
-  const rowGap=Math.max(6, Math.min(w*0.022, 12));
+  document.querySelector('.tab:first-child').style.borderRadius = '8px 0 0 8px';
+  document.querySelector('.tab:last-child').style.borderRadius = '0 8px 8px 0';
+  tabsEl.style.marginBottom = '12px';
 
   document.querySelectorAll('.field-label').forEach(l=>{
-    l.style.fontSize=labelSize+'px';
-    l.style.marginBottom=(labelSize*0.3)+'px';
+    l.style.fontSize = labelSize + 'px';
+    l.style.marginBottom = '4px';
   });
+
   document.querySelectorAll('.field input').forEach(i=>{
-    i.style.fontSize=inputSize+'px';
-    i.style.padding=`${inputPadV}px ${inputPadH}px`;
-    i.style.borderRadius='8px';
+    i.style.fontSize = uiSize + 'px';
+    i.style.padding = '7px 10px';
+    i.style.borderRadius = '8px';
   });
-  document.querySelectorAll('input[type="date"]').forEach(i=>{ i.style.width=Math.max(90, Math.min(w*0.28, 148))+'px'; });
-  document.querySelectorAll('input[type="number"]').forEach(i=>{ i.style.width=Math.max(60, Math.min(w*0.18, 90))+'px'; });
+
+  document.querySelectorAll('input[type="date"]').forEach(i=>{
+    i.style.width = '148px';
+  });
+
+  document.querySelectorAll('input[type="number"]').forEach(i=>{
+    i.style.width = '90px';
+  });
 
   document.querySelectorAll('.field-row').forEach(r=>{
-    r.style.gap=rowGap+'px';
-    r.style.marginBottom=(rowGap*0.6)+'px';
-    r.style.alignItems='flex-end';
+    r.style.gap = '10px';
+    r.style.marginBottom = '8px';
+    r.style.alignItems = 'flex-end';
   });
-  document.querySelectorAll('.field').forEach(f=>{ f.style.gap=fieldGap+'px'; });
 
-  /* Botão calcular */
-  const btnSize=Math.max(10, Math.min(w*0.036, 13));
-  const btnPadV=Math.max(4, Math.min(w*0.014, 7));
-  const btnPadH=Math.max(8, Math.min(w*0.028, 14));
+  document.querySelectorAll('.field').forEach(f=>{
+    f.style.gap = '4px';
+  });
+
   document.querySelectorAll('.calc-btn').forEach(b=>{
-    b.style.fontSize=btnSize+'px';
-    b.style.padding=`${btnPadV}px ${btnPadH}px`;
+    b.style.fontSize = uiSize + 'px';
+    b.style.padding = '7px 12px';
   });
 
-  /* Resultado */
-  const resSize=Math.max(10, Math.min(w*0.038, 13));
-  const resPadV=Math.max(5, Math.min(w*0.018, 9));
-  const resPadH=Math.max(8, Math.min(w*0.024, 12));
   document.querySelectorAll('.result').forEach(r=>{
-    r.style.fontSize=resSize+'px';
-    r.style.padding=`${resPadV}px ${resPadH}px`;
-    r.style.borderLeftWidth=Math.max(2, Math.min(w*0.005, 3))+'px';
+    r.style.fontSize = resultSize + 'px';
+    r.style.padding = '8px 10px';
+    r.style.borderLeftWidth = '2px';
+  });
+
+  while(
+    (titleEl.scrollWidth > widget.clientWidth * 0.94 || titleEl.scrollHeight > widget.clientHeight * 0.12) &&
+    parseFloat(titleEl.style.fontSize) > 12
+  ){
+    titleEl.style.fontSize = (parseFloat(titleEl.style.fontSize) - 1) + 'px';
+  }
+
+  document.querySelectorAll('.tab').forEach(t=>{
+    while(
+      (tabsEl.scrollWidth > widget.clientWidth * 0.98 || tabsEl.scrollHeight > widget.clientHeight * 0.12) &&
+      parseFloat(t.style.fontSize) > 10
+    ){
+      document.querySelectorAll('.tab').forEach(tab=>{
+        tab.style.fontSize = (parseFloat(tab.style.fontSize) - 1) + 'px';
+      });
+    }
   });
 }
 
