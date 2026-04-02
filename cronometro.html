@@ -40,76 +40,66 @@ body{
 .widget{
     width:100%;
     height:100%;
-    padding:1% 1%;
+    padding:1%;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     text-align:center;
-    overflow:hidden;
-    border:0;
     border-radius:16px;
 }
 
+/* 🔥 TÍTULO ESTILO NOTION */
 .title{
-    font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif !important;
+    font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
     font-weight:800;
-    line-height:0.95;
-    letter-spacing:0.02em;
+    line-height:1.1;
+    letter-spacing:-0.02em;
     color:#373530;
     white-space:nowrap;
     max-width:94%;
 }
 
+/* 🔥 CRONÔMETRO */
 .timer{
-    margin-top:8px;
     font-family:Helvetica, Arial, sans-serif;
     font-weight:400;
     line-height:1.5;
     letter-spacing:0.02em;
-    color:#9B9A97;
-    white-space:nowrap;
+    color:#787774;
     display:flex;
     align-items:center;
     justify-content:center;
-    flex-wrap:nowrap;
     font-variant-numeric:tabular-nums;
-    font-feature-settings:"tnum";
 }
 
+/* números */
 .time-part{
-    display:inline-block;
     width:2.2ch;
     text-align:center;
 }
 
 .colon{
-    display:inline-block;
-    text-align:center;
     width:0.34em;
 }
 
+/* 🔥 BOTÕES */
 .controls{
-    margin-top:12px;
     display:flex;
     gap:8px;
-    align-items:center;
     justify-content:center;
     flex-wrap:wrap;
-    max-width:94%;
 }
 
 button{
-    appearance:none;
     border:1px solid rgba(55,53,48,0.15);
     background:transparent;
     color:#787774;
     font-family:Helvetica, Arial, sans-serif;
     font-weight:600;
-    line-height:1;
     border-radius:10px;
     cursor:pointer;
-    transition:background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    transition:all 0.15s ease;
 }
 
 button:hover{
@@ -126,6 +116,7 @@ button:active{
 <body>
 <div class="container">
     <div class="widget" id="widget">
+
         <div class="title" id="title">Cronômetro</div>
 
         <div class="timer" id="timer">
@@ -140,6 +131,7 @@ button:active{
             <button id="startPause">Iniciar</button>
             <button id="reset">Zerar</button>
         </div>
+
     </div>
 </div>
 
@@ -163,23 +155,19 @@ let running = false;
 
 function formatarTempo(ms){
     const totalSeconds = Math.floor(ms / 1000);
-    const horas = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-    const minutos = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const segundos = String(totalSeconds % 60).padStart(2, '0');
-
-    elH.textContent = horas;
-    elM.textContent = minutos;
-    elS.textContent = segundos;
+    elH.textContent = String(Math.floor(totalSeconds / 3600)).padStart(2,'0');
+    elM.textContent = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2,'0');
+    elS.textContent = String(totalSeconds % 60).padStart(2,'0');
 }
 
-function atualizarCronometro(){
+function atualizar(){
     const atual = Date.now() - startTime + elapsedTime;
     formatarTempo(atual);
 }
 
 function iniciar(){
     startTime = Date.now();
-    timerInterval = setInterval(atualizarCronometro, 100);
+    timerInterval = setInterval(atualizar, 100);
     running = true;
     startPauseBtn.textContent = 'Pausar';
 }
@@ -187,14 +175,12 @@ function iniciar(){
 function pausar(){
     elapsedTime += Date.now() - startTime;
     clearInterval(timerInterval);
-    timerInterval = null;
     running = false;
     startPauseBtn.textContent = 'Iniciar';
 }
 
 function zerar(){
     clearInterval(timerInterval);
-    timerInterval = null;
     startTime = 0;
     elapsedTime = 0;
     running = false;
@@ -202,317 +188,50 @@ function zerar(){
     startPauseBtn.textContent = 'Iniciar';
 }
 
-startPauseBtn.addEventListener('click', () => {
-    if(running){
-        pausar();
-    }else{
-        iniciar();
-    }
-});
+startPauseBtn.onclick = () => running ? pausar() : iniciar();
+resetBtn.onclick = zerar;
 
-resetBtn.addEventListener('click', zerar);
-
-function ajustarTamanho(){
-    const titleSize = 19;
-    const timerSize = 72;
-    const buttonSize = 13;
-    const buttonPadY = 7;
-    const buttonPadX = 12;
-
-    titleEl.style.fontSize = titleSize + 'px';
-    timerEl.style.fontSize = timerSize + 'px';
-
-    Array.from(controlsEl.querySelectorAll('button')).forEach(btn => {
-        btn.style.fontSize = buttonSize + 'px';
-        btn.style.padding = `${buttonPadY}px ${buttonPadX}px`;
-    });
-
-    timerEl.style.marginTop = '8px';
-    controlsEl.style.marginTop = '12px';
-    controlsEl.style.gap = '8px';
-
-    while(
-        (titleEl.scrollWidth > widget.clientWidth * 0.92 || titleEl.scrollHeight > widget.clientHeight * 0.22) &&
-        parseFloat(titleEl.style.fontSize) > 12
-    ){
-        titleEl.style.fontSize = (parseFloat(titleEl.style.fontSize) - 1) + 'px';
-    }
-
-    while(
-        (timerEl.scrollWidth > widget.clientWidth * 0.94 || timerEl.scrollHeight > widget.clientHeight * 0.26) &&
-        parseFloat(timerEl.style.fontSize) > 12
-    ){
-        timerEl.style.fontSize = (parseFloat(timerEl.style.fontSize) - 1) + 'px';
-    }
-
-    while(
-        (controlsEl.scrollWidth > widget.clientWidth * 0.94 || controlsEl.scrollHeight > widget.clientHeight * 0.18) &&
-        parseFloat(startPauseBtn.style.fontSize || buttonSize) > 9
-    ){
-        Array.from(controlsEl.querySelectorAll('button')).forEach(btn => {
-            btn.style.fontSize = (parseFloat(btn.style.fontSize) - 1) + 'px';
-        });
-    }
-}
-
-new ResizeObserver(() => {
-    ajustarTamanho();
-}).observe(widget);
-
-window.addEventListener('load', () => {
-    formatarTempo(0);
-    ajustarTamanho();
-});
-
-window.addEventListener('resize', ajustarTamanho);
-</script>
-</body>
-</html>    justify-content:center;
-}
-
-.widget{
-    width:100%;
-    height:100%;
-    padding:1% 1%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    overflow:hidden;
-    border:0px;
-    border-radius:16px;
-}
-
-.title{
-    font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif !important;
-    font-weight:800;
-    line-height:0.95;
-    letter-spacing:0.02em;
-    color:#373530;
-    white-space:nowrap;
-    max-width:94%;
-}
-
-.timer{
-    margin-top:0.22em;
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:400;
-    line-height:1.5;
-    letter-spacing:0.02em;
-    color:#9B9A97;
-    white-space:nowrap;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:nowrap;
-    font-variant-numeric:tabular-nums;
-    font-feature-settings:"tnum";
-}
-
-.time-part{
-    display:inline-block;
-    width:2.2ch;
-    text-align:center;
-}
-
-.colon{
-    display:inline-block;
-    text-align:center;
-    width:0.34em;
-}
-
-.controls{
-    margin-top:0.55em;
-    display:flex;
-    gap:8px;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    max-width:94%;
-}
-
-button{
-    appearance:none;
-    border:1px solid rgba(55,53,48,0.15);
-    background:transparent;
-    color:#787774;
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:600;
-    line-height:1;
-    border-radius:10px;
-    cursor:pointer;
-    transition:background 0.15s ease, color 0.15s ease, transform 0.1s ease;
-}
-
-button:hover{
-    background:rgba(55,53,48,0.05);
-    color:#373530;
-}
-
-button:active{
-    transform:scale(0.98);
-}
-</style>
-</head>
-
-<body>
-<div class="container">
-    <div class="widget" id="widget">
-        <div class="title" id="title">Cronômetro</div>
-
-        <div class="timer" id="timer">
-            <span class="time-part" id="h">00</span>
-            <span class="colon">:</span>
-            <span class="time-part" id="m">00</span>
-            <span class="colon">:</span>
-            <span class="time-part" id="s">00</span>
-        </div>
-
-        <div class="controls" id="controls">
-            <button id="startPause">Iniciar</button>
-            <button id="reset">Zerar</button>
-        </div>
-    </div>
-</div>
-
-<script>
-const widget = document.getElementById('widget');
-const titleEl = document.getElementById('title');
-const timerEl = document.getElementById('timer');
-const controlsEl = document.getElementById('controls');
-
-const elH = document.getElementById('h');
-const elM = document.getElementById('m');
-const elS = document.getElementById('s');
-
-const startPauseBtn = document.getElementById('startPause');
-const resetBtn = document.getElementById('reset');
-
-let startTime = 0;
-let elapsedTime = 0;
-let timerInterval = null;
-let running = false;
-
-function formatarTempo(ms){
-    const totalSeconds = Math.floor(ms / 1000);
-    const horas = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-    const minutos = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const segundos = String(totalSeconds % 60).padStart(2, '0');
-
-    elH.textContent = horas;
-    elM.textContent = minutos;
-    elS.textContent = segundos;
-}
-
-function atualizarCronometro(){
-    const atual = Date.now() - startTime + elapsedTime;
-    formatarTempo(atual);
-}
-
-function iniciar(){
-    startTime = Date.now();
-    timerInterval = setInterval(atualizarCronometro, 100);
-    running = true;
-    startPauseBtn.textContent = 'Pausar';
-}
-
-function pausar(){
-    elapsedTime += Date.now() - startTime;
-    clearInterval(timerInterval);
-    timerInterval = null;
-    running = false;
-    startPauseBtn.textContent = 'Iniciar';
-}
-
-function zerar(){
-    clearInterval(timerInterval);
-    timerInterval = null;
-    startTime = 0;
-    elapsedTime = 0;
-    running = false;
-    formatarTempo(0);
-    startPauseBtn.textContent = 'Iniciar';
-}
-
-startPauseBtn.addEventListener('click', () => {
-    if(running){
-        pausar();
-    }else{
-        iniciar();
-    }
-});
-
-resetBtn.addEventListener('click', zerar);
-
+/* 🔥 RESPONSIVO AJUSTADO */
 function ajustarTamanho(){
     const w = widget.clientWidth;
     const h = widget.clientHeight;
 
     if(!w || !h) return;
 
-    const baseTitle = w * 0.15;
-    const titleSize = Math.max(15, Math.min(baseTitle, 52));
+    /* título estilo Notion */
+    const titleSize = Math.max(22, Math.min(w * 0.22, 64));
     titleEl.style.fontSize = titleSize + 'px';
 
-    const baseTimer = w * 0.12;
-    const timerSize = Math.max(14, Math.min(baseTimer, 96));
+    /* cronômetro */
+    const timerSize = Math.max(18, Math.min(w * 0.12, 96));
     timerEl.style.fontSize = timerSize + 'px';
 
-    const buttonSize = Math.max(10, Math.min(w * 0.038, 14));
-    const buttonPadY = Math.max(6, Math.min(w * 0.018, 9));
-    const buttonPadX = Math.max(10, Math.min(w * 0.03, 14));
+    /* botões */
+    const buttonSize = Math.max(11, Math.min(w * 0.045, 15));
+    const py = Math.max(6, Math.min(w * 0.02, 10));
+    const px = Math.max(10, Math.min(w * 0.03, 14));
 
-    Array.from(controlsEl.querySelectorAll('button')).forEach(btn => {
+    document.querySelectorAll('button').forEach(btn=>{
         btn.style.fontSize = buttonSize + 'px';
-        btn.style.padding = `${buttonPadY}px ${buttonPadX}px`;
+        btn.style.padding = `${py}px ${px}px`;
     });
 
-    const titleGap = Math.max(4, Math.min(w * 0.01, 8));
-    const controlsGapTop = Math.max(8, Math.min(w * 0.03, 16));
-    const controlsGap = Math.max(6, Math.min(w * 0.02, 10));
+    /* espaçamento refinado */
+    const gapTop = Math.max(10, Math.min(w * 0.03, 18));
+    const gapControls = Math.max(12, Math.min(w * 0.04, 22));
 
-    timerEl.style.marginTop = titleGap + 'px';
-    controlsEl.style.marginTop = controlsGapTop + 'px';
-    controlsEl.style.gap = controlsGap + 'px';
-
-    while(
-        (titleEl.scrollWidth > widget.clientWidth * 0.92 || titleEl.scrollHeight > h * 0.22) &&
-        parseFloat(titleEl.style.fontSize) > 12
-    ){
-        titleEl.style.fontSize = (parseFloat(titleEl.style.fontSize) - 1) + 'px';
-    }
-
-    while(
-        (timerEl.scrollWidth > widget.clientWidth * 0.94 || timerEl.scrollHeight > h * 0.26) &&
-        parseFloat(timerEl.style.fontSize) > 12
-    ){
-        timerEl.style.fontSize = (parseFloat(timerEl.style.fontSize) - 1) + 'px';
-    }
-
-    while(
-        (controlsEl.scrollWidth > widget.clientWidth * 0.94 || controlsEl.scrollHeight > h * 0.18) &&
-        parseFloat(startPauseBtn.style.fontSize || buttonSize) > 9
-    ){
-        Array.from(controlsEl.querySelectorAll('button')).forEach(btn => {
-            btn.style.fontSize = (parseFloat(btn.style.fontSize) - 1) + 'px';
-            const py = Math.max(5, parseFloat(btn.style.paddingTop || buttonPadY) - 0.3);
-            const px = Math.max(8, parseFloat(btn.style.paddingLeft || buttonPadX) - 0.5);
-            btn.style.padding = `${py}px ${px}px`;
-        });
-    }
+    timerEl.style.marginTop = gapTop + 'px';
+    controlsEl.style.marginTop = gapControls + 'px';
 }
 
-new ResizeObserver(() => {
-    ajustarTamanho();
-}).observe(widget);
+new ResizeObserver(ajustarTamanho).observe(widget);
 
-window.addEventListener('load', () => {
+window.onload = ()=>{
     formatarTempo(0);
     ajustarTamanho();
-});
+};
 
-window.addEventListener('resize', ajustarTamanho);
+window.onresize = ajustarTamanho;
 </script>
 </body>
 </html>
