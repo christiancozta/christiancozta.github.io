@@ -1,201 +1,375 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Contador de Dias Úteis — TJ/PR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
+:root{
+  --text:#373530;
+  --muted:#787774;
+  --muted-2:#9B9A97;
+  --border:rgba(55,53,48,0.14);
+  --border-strong:rgba(55,53,48,0.22);
+  --bg:transparent;
+
+  --title-size:24px;
+  --tab-size:14px;
+  --label-size:12px;
+  --input-size:14px;
+  --button-size:14px;
+  --result-size:15px;
+  --sub-size:12px;
+
+  --radius:6px;
+  --radius-group:7px;
+
+  --space-1:6px;
+  --space-2:10px;
+  --space-3:14px;
+  --space-4:18px;
+  --space-5:24px;
+  --space-6:32px;
+
+  --control-height:40px;
+  --date-width:148px;
+  --number-width:92px;
+  --button-width:auto;
+}
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
+
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:transparent;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
 }
+
 body{
-    font-family:Helvetica, Arial, sans-serif;
-    color:#373530;
+  font-family:Helvetica, Arial, sans-serif;
+  color:var(--text);
 }
+
 .container{
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
 .widget{
-    width:100%;
-    height:100%;
-    padding:4% 5%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    overflow:hidden;
+  width:100%;
+  height:100%;
+  padding:24px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  gap:var(--space-4);
 }
+
 .title{
-    font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    font-weight:800;
-    line-height:0.95;
-    letter-spacing:0.02em;
-    color:#373530;
-    white-space:nowrap;
+  font-family:'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-weight:800;
+  font-size:var(--title-size);
+  line-height:1;
+  letter-spacing:0.01em;
+  color:var(--text);
+  white-space:nowrap;
 }
-.tabs{
-    display:flex;
-    gap:0;
-    flex-shrink:0;
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
 }
-.tab{
-    appearance:none;
-    border:1px solid rgba(55,53,48,0.15);
-    background:transparent;
-    color:#787774;
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:600;
-    line-height:1;
-    cursor:pointer;
-    transition:background 0.15s ease, color 0.15s ease, transform 0.1s ease;
-    white-space:nowrap;
+
+.tabs,
+.layout-switch{
+  display:flex;
+  flex-shrink:0;
 }
-.tab:first-child{ border-radius:8px 0 0 8px; }
-.tab:last-child { border-radius:0 8px 8px 0; margin-left:-1px; }
-.tab:hover:not(.active){
-    background:rgba(55,53,48,0.05);
-    color:#373530;
+
+.tab,
+.layout-btn,
+.calc-btn{
+  appearance:none;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-family:Helvetica, Arial, sans-serif;
+  font-weight:600;
+  line-height:1;
+  cursor:pointer;
+  transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+  white-space:nowrap;
 }
-.tab:active{ transform:scale(0.98); }
-.tab.active{
-    background:#373530;
-    color:#ffffff;
-    border-color:#373530;
-    z-index:1;
+
+.tab,
+.layout-btn{
+  height:36px;
+  padding:0 14px;
+  font-size:var(--tab-size);
 }
-.panel{ display:flex; flex-direction:column; width:100%; }
-.panel[hidden]{ display:none; }
+
+.tab:first-child,
+.layout-btn:first-child{
+  border-radius:var(--radius-group) 0 0 var(--radius-group);
+}
+
+.tab:last-child,
+.layout-btn:last-child{
+  border-radius:0 var(--radius-group) var(--radius-group) 0;
+  margin-left:-1px;
+}
+
+.tab:hover:not(.active),
+.layout-btn:hover:not(.active),
+.calc-btn:hover{
+  background:rgba(55,53,48,0.05);
+  color:var(--text);
+}
+
+.tab.active,
+.layout-btn.active{
+  background:var(--text);
+  color:#fff;
+  border-color:var(--text);
+  z-index:1;
+}
+
+.tab:active,
+.layout-btn:active,
+.calc-btn:active{
+  transform:scale(0.985);
+}
+
+.panel{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  align-items:center;
+  gap:var(--space-3);
+}
+
+.panel[hidden]{
+  display:none;
+}
 
 .field-row{
-    display:flex;
-    align-items:flex-end;
-    flex-wrap:wrap;
-    justify-content:center;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  width:100%;
+}
+
+.widget.widget--vertical .field-row{
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
 }
 
 .field{
-    display:flex;
-    flex-direction:column;
-    flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:var(--space-1);
+  flex-shrink:0;
 }
+
+.widget.widget--vertical .field{
+  width:min(100%, 260px);
+}
+
 .field-label{
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:600;
-    color:#9B9A97;
-    line-height:1;
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:var(--label-size);
+  font-weight:600;
+  color:var(--muted-2);
+  line-height:1.1;
 }
+
 .field input{
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:400;
-    color:#373530;
-    background:transparent;
-    border:1px solid rgba(55,53,48,0.18);
-    border-radius:8px;
-    outline:none;
-    transition:border-color 0.15s ease;
-    width:100%;
+  width:100%;
+  height:var(--control-height);
+  padding:0 12px;
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:var(--input-size);
+  font-weight:400;
+  color:var(--text);
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  outline:none;
+  transition:border-color 0.15s ease, background 0.15s ease;
 }
+
 .field input:focus{
-    border-color:rgba(55,53,48,0.55);
+  border-color:var(--border-strong);
+  background:rgba(55,53,48,0.02);
 }
+
 .field input::placeholder{
-    color:#9B9A97;
+  color:var(--muted-2);
 }
+
+input[type="date"]{
+  width:var(--date-width);
+}
+
+input[type="number"]{
+  width:var(--number-width);
+}
+
+.widget.widget--vertical input[type="date"],
+.widget.widget--vertical input[type="number"]{
+  width:100%;
+}
+
 .calc-btn{
-    appearance:none;
-    border:1px solid rgba(55,53,48,0.15);
-    background:transparent;
-    color:#787774;
-    font-family:Helvetica, Arial, sans-serif;
-    font-weight:600;
-    line-height:1;
-    border-radius:8px;
-    cursor:pointer;
-    transition:background 0.15s ease, color 0.15s ease, transform 0.1s ease;
-    white-space:nowrap;
-    flex-shrink:0;
+  height:var(--control-height);
+  padding:0 16px;
+  font-size:var(--button-size);
+  border-radius:var(--radius);
+  align-self:flex-end;
+  color:var(--muted);
 }
-.calc-btn:hover{
-    background:rgba(55,53,48,0.05);
-    color:#373530;
+
+.widget.widget--vertical .calc-btn{
+  width:min(100%, 260px);
+  align-self:center;
+  justify-content:center;
 }
-.calc-btn:active{ transform:scale(0.98); }
 
 .result{
-    font-family:Helvetica, Arial, sans-serif;
-    color:#373530;
-    border-left:2px solid #373530;
-    line-height:1.4;
-    display:none;
-    width:100%;
+  display:none;
+  width:min(100%, 520px);
+  text-align:left;
+  font-family:Helvetica, Arial, sans-serif;
+  font-size:var(--result-size);
+  color:var(--text);
+  border-left:2px solid var(--text);
+  padding:10px 12px;
+  line-height:1.45;
 }
-.result.show{ display:block; }
+
+.result.show{
+  display:block;
+}
+
 .result strong{
-    font-family:'Inter', system-ui, sans-serif;
-    font-weight:800;
-    color:#373530;
+  font-family:'Inter', system-ui, sans-serif;
+  font-weight:800;
+  color:var(--text);
 }
+
 .result .sub{
-    display:block;
-    color:#787774;
-    margin-top:0.15em;
+  display:block;
+  margin-top:4px;
+  font-size:var(--sub-size);
+  color:var(--muted);
+}
+
+@media (max-width: 640px), (max-height: 420px){
+  :root{
+    --title-size:22px;
+    --tab-size:13px;
+    --label-size:11px;
+    --input-size:13px;
+    --button-size:13px;
+    --result-size:14px;
+    --sub-size:11px;
+    --control-height:38px;
+    --date-width:138px;
+    --number-width:84px;
+  }
+
+  .widget{
+    padding:18px 18px;
+    gap:14px;
+  }
+
+  .topbar{
+    gap:10px;
+  }
+
+  .field-row{
+    gap:12px;
+  }
+
+  .result{
+    width:min(100%, 100%);
+  }
 }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="widget" id="widget">
+  <div class="widget widget--horizontal" id="widget">
 
-    <div class="title" id="title"></div>
+    <div class="title">Contador de Dias Úteis</div>
 
-    <div class="tabs" id="tabs">
-      <button class="tab active" id="tab-prazo">Calcular prazo</button>
-      <button class="tab" id="tab-contar">Contar dias</button>
+    <div class="topbar">
+      <div class="tabs" id="tabs">
+        <button class="tab active" id="tab-prazo" type="button">Calcular prazo</button>
+        <button class="tab" id="tab-contar" type="button">Contar dias</button>
+      </div>
+
+      <div class="layout-switch" aria-label="Alternar orientação">
+        <button class="layout-btn active" id="btn-horizontal" type="button">Horizontal</button>
+        <button class="layout-btn" id="btn-vertical" type="button">Vertical</button>
+      </div>
     </div>
 
     <div class="panel" id="panel-prazo">
       <div class="field-row" id="row-prazo">
-        <div class="field" id="f-start1">
-          <span class="field-label" id="lbl-start1">Início</span>
+        <div class="field">
+          <span class="field-label">Início</span>
           <input type="date" id="p-start">
         </div>
-        <div class="field" id="f-days">
-          <span class="field-label" id="lbl-days">Dias úteis</span>
+
+        <div class="field">
+          <span class="field-label">Dias úteis</span>
           <input type="number" id="p-days" min="1" max="999" placeholder="ex: 15">
         </div>
-        <button class="calc-btn" id="btn-prazo" onclick="calcPrazo()">Calcular</button>
+
+        <button class="calc-btn" id="btn-prazo" type="button">Calcular</button>
       </div>
+
       <div class="result" id="prazo-result"></div>
     </div>
 
     <div class="panel" id="panel-contar" hidden>
       <div class="field-row" id="row-contar">
-        <div class="field" id="f-start2">
-          <span class="field-label" id="lbl-start2">Início</span>
+        <div class="field">
+          <span class="field-label">Início</span>
           <input type="date" id="c-start">
         </div>
-        <div class="field" id="f-end">
-          <span class="field-label" id="lbl-end">Fim</span>
+
+        <div class="field">
+          <span class="field-label">Fim</span>
           <input type="date" id="c-end">
         </div>
-        <button class="calc-btn" id="btn-contar" onclick="calcContar()">Calcular</button>
+
+        <button class="calc-btn" id="btn-contar" type="button">Calcular</button>
       </div>
+
       <div class="result" id="contar-result"></div>
     </div>
 
@@ -241,195 +415,140 @@ const FERIADOS = {
   "2026-12-25":"Natal","2026-12-31":"Véspera de Ano Novo",
 };
 
-const WEEKDAYS = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const WEEKDAYS = [
+  "domingo","segunda-feira","terça-feira","quarta-feira",
+  "quinta-feira","sexta-feira","sábado"
+];
+
+const widget = document.getElementById("widget");
 
 function toISO(d){
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
+
 function isDiaUtil(iso){
-  const dow = new Date(iso+'T12:00:00').getDay();
-  return dow!==0 && dow!==6 && !FERIADOS[iso];
+  const dow = new Date(iso + "T12:00:00").getDay();
+  return dow !== 0 && dow !== 6 && !FERIADOS[iso];
 }
+
 function fmtBR(iso){
-  const [y,m,d]=iso.split('-');
+  const [y,m,d] = iso.split("-");
   return `${d}/${m}/${y}`;
 }
+
 function nomeDia(iso){
-  return WEEKDAYS[new Date(iso+'T12:00:00').getDay()];
+  return WEEKDAYS[new Date(iso + "T12:00:00").getDay()];
 }
 
-document.getElementById('tab-prazo').addEventListener('click',()=>{
-  document.getElementById('tab-prazo').classList.add('active');
-  document.getElementById('tab-contar').classList.remove('active');
-  document.getElementById('panel-prazo').hidden=false;
-  document.getElementById('panel-contar').hidden=true;
-  ajustarTamanho();
-});
+function setTab(mode){
+  const prazo = mode === "prazo";
 
-document.getElementById('tab-contar').addEventListener('click',()=>{
-  document.getElementById('tab-contar').classList.add('active');
-  document.getElementById('tab-prazo').classList.remove('active');
-  document.getElementById('panel-contar').hidden=false;
-  document.getElementById('panel-prazo').hidden=true;
-  ajustarTamanho();
-});
+  document.getElementById("tab-prazo").classList.toggle("active", prazo);
+  document.getElementById("tab-contar").classList.toggle("active", !prazo);
+
+  document.getElementById("panel-prazo").hidden = !prazo;
+  document.getElementById("panel-contar").hidden = prazo;
+}
+
+function setLayout(mode){
+  const horizontal = mode === "horizontal";
+
+  widget.classList.toggle("widget--horizontal", horizontal);
+  widget.classList.toggle("widget--vertical", !horizontal);
+
+  document.getElementById("btn-horizontal").classList.toggle("active", horizontal);
+  document.getElementById("btn-vertical").classList.toggle("active", !horizontal);
+}
 
 function calcPrazo(){
-  const startVal=document.getElementById('p-start').value;
-  const nDias=parseInt(document.getElementById('p-days').value,10);
-  const res=document.getElementById('prazo-result');
+  const startVal = document.getElementById("p-start").value;
+  const nDias = parseInt(document.getElementById("p-days").value, 10);
+  const res = document.getElementById("prazo-result");
 
-  if(!startVal||isNaN(nDias)||nDias<1){
-    res.innerHTML='<span class="sub">Preencha a data de início e o número de dias.</span>';
-    res.classList.add('show');
+  if(!startVal || isNaN(nDias) || nDias < 1){
+    res.innerHTML = '<span class="sub">Preencha a data de início e o número de dias.</span>';
+    res.classList.add("show");
     return;
   }
 
-  let d=new Date(startVal+'T12:00:00');
-  let count=0, isoFinal='', iter=0;
+  let d = new Date(startVal + "T12:00:00");
+  let count = 0;
+  let isoFinal = "";
+  let iter = 0;
 
-  while(count<nDias&&iter<3000){
-    d.setDate(d.getDate()+1);
+  while(count < nDias && iter < 3000){
+    d.setDate(d.getDate() + 1);
     iter++;
-    isoFinal=toISO(d);
-    if(isDiaUtil(isoFinal)) count++;
+    isoFinal = toISO(d);
+
+    if(isDiaUtil(isoFinal)){
+      count++;
+    }
   }
 
-  if(iter>=3000){
-    res.innerHTML='<span class="sub">Período fora do intervalo do calendário (2025–2026).</span>';
-  } else {
-    res.innerHTML=`<strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}`
-      + `<span class="sub">${nDias} dia${nDias>1?'s':''} útei${nDias>1?'s':'l'} a partir de ${fmtBR(startVal)}</span>`;
+  if(iter >= 3000){
+    res.innerHTML = '<span class="sub">Período fora do intervalo do calendário (2025–2026).</span>';
+  }else{
+    res.innerHTML =
+      `<strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}` +
+      `<span class="sub">${nDias} dia${nDias > 1 ? "s" : ""} útei${nDias > 1 ? "s" : "l"} a partir de ${fmtBR(startVal)}</span>`;
   }
 
-  res.classList.add('show');
-  ajustarTamanho();
+  res.classList.add("show");
 }
 
 function calcContar(){
-  const startVal=document.getElementById('c-start').value;
-  const endVal=document.getElementById('c-end').value;
-  const res=document.getElementById('contar-result');
+  const startVal = document.getElementById("c-start").value;
+  const endVal = document.getElementById("c-end").value;
+  const res = document.getElementById("contar-result");
 
-  if(!startVal||!endVal){
-    res.innerHTML='<span class="sub">Preencha as duas datas.</span>';
-    res.classList.add('show');
+  if(!startVal || !endVal){
+    res.innerHTML = '<span class="sub">Preencha as duas datas.</span>';
+    res.classList.add("show");
     return;
   }
 
-  if(endVal<startVal){
-    res.innerHTML='<span class="sub">A data de fim deve ser posterior ao início.</span>';
-    res.classList.add('show');
+  if(endVal < startVal){
+    res.innerHTML = '<span class="sub">A data de fim deve ser posterior ao início.</span>';
+    res.classList.add("show");
     return;
   }
 
-  let d=new Date(startVal+'T12:00:00');
-  const end=new Date(endVal+'T12:00:00');
-  let count=0;
+  let d = new Date(startVal + "T12:00:00");
+  const end = new Date(endVal + "T12:00:00");
+  let count = 0;
 
-  d.setDate(d.getDate()+1);
-  while(d<=end){
-    if(isDiaUtil(toISO(d))) count++;
-    d.setDate(d.getDate()+1);
-  }
+  d.setDate(d.getDate() + 1);
 
-  res.innerHTML=`<strong>${count} dia${count!==1?'s':''} útei${count!==1?'s':'l'}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}`
-    + `<span class="sub">Conforme calendário TJ/PR 2025–2026</span>`;
-  res.classList.add('show');
-  ajustarTamanho();
-}
-
-const hoje=toISO(new Date());
-document.getElementById('p-start').value=hoje;
-document.getElementById('c-start').value=hoje;
-
-const widget=document.getElementById('widget');
-
-function ajustarTamanho(){
-  const titleEl = document.getElementById('title');
-  const tabsEl = document.getElementById('tabs');
-
-  const titleSize = 19;
-  const uiSize = 13;
-  const labelSize = 13;
-  const resultSize = 13;
-
-  titleEl.style.fontSize = titleSize + 'px';
-  titleEl.style.marginBottom = '10px';
-
-  document.querySelectorAll('.tab').forEach(t=>{
-    t.style.fontSize = uiSize + 'px';
-    t.style.padding = '7px 12px';
-  });
-  document.querySelector('.tab:first-child').style.borderRadius = '8px 0 0 8px';
-  document.querySelector('.tab:last-child').style.borderRadius = '0 8px 8px 0';
-  tabsEl.style.marginBottom = '12px';
-
-  document.querySelectorAll('.field-label').forEach(l=>{
-    l.style.fontSize = labelSize + 'px';
-    l.style.marginBottom = '4px';
-  });
-
-  document.querySelectorAll('.field input').forEach(i=>{
-    i.style.fontSize = uiSize + 'px';
-    i.style.padding = '7px 10px';
-    i.style.borderRadius = '8px';
-  });
-
-  document.querySelectorAll('input[type="date"]').forEach(i=>{
-    i.style.width = '148px';
-  });
-
-  document.querySelectorAll('input[type="number"]').forEach(i=>{
-    i.style.width = '90px';
-  });
-
-  document.querySelectorAll('.field-row').forEach(r=>{
-    r.style.gap = '24px';
-    r.style.marginBottom = '8px';
-    r.style.alignItems = 'flex-end';
-    r.style.justifyContent = 'center';
-
-  });
-
-  document.querySelectorAll('.field').forEach(f=>{
-    f.style.gap = '4px';
-  });
-
-  document.querySelectorAll('.calc-btn').forEach(b=>{
-    b.style.fontSize = uiSize + 'px';
-    b.style.padding = '7px 12px';
-  });
-
-  document.querySelectorAll('.result').forEach(r=>{
-    r.style.fontSize = resultSize + 'px';
-    r.style.padding = '8px 10px';
-    r.style.borderLeftWidth = '2px';
-  });
-
-  while(
-    (titleEl.scrollWidth > widget.clientWidth * 0.94 || titleEl.scrollHeight > widget.clientHeight * 0.12) &&
-    parseFloat(titleEl.style.fontSize) > 12
-  ){
-    titleEl.style.fontSize = (parseFloat(titleEl.style.fontSize) - 1) + 'px';
-  }
-
-  document.querySelectorAll('.tab').forEach(t=>{
-    while(
-      (tabsEl.scrollWidth > widget.clientWidth * 0.98 || tabsEl.scrollHeight > widget.clientHeight * 0.12) &&
-      parseFloat(t.style.fontSize) > 10
-    ){
-      document.querySelectorAll('.tab').forEach(tab=>{
-        tab.style.fontSize = (parseFloat(tab.style.fontSize) - 1) + 'px';
-      });
+  while(d <= end){
+    if(isDiaUtil(toISO(d))){
+      count++;
     }
-  });
+    d.setDate(d.getDate() + 1);
+  }
+
+  res.innerHTML =
+    `<strong>${count} dia${count !== 1 ? "s" : ""} útei${count !== 1 ? "s" : "l"}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}` +
+    `<span class="sub">Conforme calendário TJ/PR 2025–2026</span>`;
+
+  res.classList.add("show");
 }
 
-new ResizeObserver(()=>{ ajustarTamanho(); }).observe(widget);
-window.addEventListener('load',()=>{ ajustarTamanho(); });
-window.addEventListener('resize', ajustarTamanho);
-ajustarTamanho();
+document.getElementById("tab-prazo").addEventListener("click", () => setTab("prazo"));
+document.getElementById("tab-contar").addEventListener("click", () => setTab("contar"));
+
+document.getElementById("btn-horizontal").addEventListener("click", () => setLayout("horizontal"));
+document.getElementById("btn-vertical").addEventListener("click", () => setLayout("vertical"));
+
+document.getElementById("btn-prazo").addEventListener("click", calcPrazo);
+document.getElementById("btn-contar").addEventListener("click", calcContar);
+
+const hoje = toISO(new Date());
+document.getElementById("p-start").value = hoje;
+document.getElementById("c-start").value = hoje;
+
+setTab("prazo");
+setLayout("horizontal");
 </script>
 </body>
 </html>
