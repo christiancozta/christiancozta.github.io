@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>12-A, 9099/95</title>
-
+<title>Contador de Dias Úteis — TJ/PR</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -13,23 +12,36 @@
   --muted:#787774;
   --muted-2:#9B9A97;
   --border:rgba(55,53,48,0.14);
+  --border-strong:rgba(55,53,48,0.22);
 
-  --title:20px;
-  --tab:14px;
-  --label:10px;
-  --input:12px;
-  --result:14px;
-  --sub:10px;
+  /* mantidos conforme seu ajuste preferido */
+  --title-size:24px;
+  --tab-size:14px;
+  --label-size:12px;
+  --input-size:14px;
+  --button-size:14px;
+  --result-size:15px;
+  --sub-size:12px;
 
   --radius:6px;
+  --radius-group:7px;
+
+  --control-height:40px;
+  --date-width:148px;
+  --number-width:92px;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 html,body{
   width:100%;
   height:100%;
   overflow:hidden;
+  background:transparent;
 }
 
 body{
@@ -48,19 +60,23 @@ body{
 .widget{
   width:100%;
   height:100%;
-  padding:24px;
+  padding:24px 28px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:18px;
   position:relative;
+  overflow:hidden;
 }
 
 .title{
-  font-family:'Inter';
-  font-size:var(--title);
+  font-family:'Inter', system-ui, sans-serif;
+  font-size:var(--title-size);
   font-weight:800;
+  line-height:1;
+  letter-spacing:0.01em;
+  white-space:nowrap;
 }
 
 .tabs{
@@ -68,31 +84,63 @@ body{
 }
 
 .tab{
-  font-size:var(--tab);
-  padding:8px 14px;
+  appearance:none;
   border:1px solid var(--border);
   background:transparent;
+  color:var(--muted);
+  font-size:var(--tab-size);
+  font-weight:600;
+  height:36px;
+  padding:0 14px;
   cursor:pointer;
+  transition:background .15s ease, color .15s ease, transform .08s ease;
 }
 
-.tab:first-child{border-radius:6px 0 0 6px;}
-.tab:last-child{border-radius:0 6px 6px 0;margin-left:-1px;}
+.tab:first-child{
+  border-radius:var(--radius-group) 0 0 var(--radius-group);
+}
+
+.tab:last-child{
+  border-radius:0 var(--radius-group) var(--radius-group) 0;
+  margin-left:-1px;
+}
 
 .tab.active{
-  background:#373530;
-  color:white;
+  background:var(--text);
+  color:#fff;
+  border-color:var(--text);
+}
+
+.tab:hover:not(.active){
+  background:rgba(55,53,48,0.05);
+  color:var(--text);
+}
+
+.panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  gap:14px;
+}
+
+.panel[hidden]{
+  display:none;
 }
 
 .field-row{
   display:flex;
-  gap:14px;
   align-items:flex-end;
   justify-content:center;
+  gap:14px;
+  width:100%;
+  flex-wrap:wrap;
 }
 
 .widget--vertical .field-row{
   flex-direction:column;
   align-items:center;
+  gap:12px;
 }
 
 .widget--center .field-row{
@@ -105,174 +153,454 @@ body{
   gap:4px;
 }
 
+.widget--vertical .field{
+  width:min(100%, 260px);
+}
+
 .field-label{
-  font-size:var(--label);
+  font-size:var(--label-size);
+  font-weight:600;
+  color:var(--muted-2);
+  line-height:1.1;
+}
+
+.field input{
+  height:var(--control-height);
+  padding:0 12px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  outline:none;
+  font-size:var(--input-size);
+  color:var(--text);
+  background:transparent;
+  transition:border-color .15s ease, background .15s ease;
+}
+
+.field input:focus{
+  border-color:var(--border-strong);
+  background:rgba(55,53,48,0.02);
+}
+
+.field input::placeholder{
   color:var(--muted-2);
 }
 
-input{
-  height:38px;
-  padding:0 10px;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  font-size:var(--input);
+input[type="date"]{
+  width:var(--date-width);
+}
+
+input[type="number"]{
+  width:var(--number-width);
+}
+
+.widget--vertical input[type="date"],
+.widget--vertical input[type="number"]{
+  width:100%;
 }
 
 .calc-btn{
-  height:38px;
-  padding:0 14px;
+  appearance:none;
+  height:var(--control-height);
+  padding:0 16px;
   border:1px solid var(--border);
   border-radius:var(--radius);
+  background:transparent;
+  color:var(--muted);
+  font-size:var(--button-size);
+  font-weight:600;
   cursor:pointer;
-  font-size:var(--input);
+  transition:background .15s ease, color .15s ease, transform .08s ease;
+}
+
+.calc-btn:hover{
+  background:rgba(55,53,48,0.05);
+  color:var(--text);
+}
+
+.widget--vertical .calc-btn{
+  width:min(100%, 260px);
 }
 
 .result{
   display:none;
-  font-size:var(--result);
-  border-left:2px solid #373530;
-  padding:8px 10px;
-  width:100%;
-  max-width:420px;
+  width:min(100%, 520px);
+  text-align:left;
+  font-size:var(--result-size);
+  line-height:1.45;
+  border-left:2px solid var(--text);
+  padding:10px 12px;
 }
 
-.result.show{display:block;}
-
-.sub{
+.result.show{
   display:block;
-  font-size:var(--sub);
+}
+
+.result strong{
+  font-family:'Inter', system-ui, sans-serif;
+  font-weight:800;
+}
+
+.result .sub{
+  display:block;
+  margin-top:4px;
+  font-size:var(--sub-size);
   color:var(--muted);
 }
 
-/* BOTÃO DISCRETO */
+/* seletor discreto de orientação: menor */
 .layout-switch{
   position:absolute;
-  right:12px;
-  bottom:12px;
+  right:10px;
+  bottom:10px;
   display:flex;
-  gap:4px;
-  padding:4px;
-  border:1px solid rgba(0,0,0,0.08);
+  align-items:center;
+  gap:2px;
+  padding:3px;
+  border:1px solid rgba(55,53,48,0.08);
   border-radius:999px;
-  background:rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.62);
   backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  z-index:20;
+  pointer-events:auto;
 }
 
 .layout-btn{
-  width:24px;
-  height:24px;
+  appearance:none;
+  width:18px;
+  height:18px;
   border:none;
   background:transparent;
-  border-radius:50%;
+  color:var(--muted);
+  border-radius:999px;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  opacity:0.6;
+  opacity:.68;
+  transition:background .15s ease, opacity .15s ease, transform .08s ease;
+  padding:0;
+  pointer-events:auto;
+}
+
+.layout-btn:hover{
+  background:rgba(55,53,48,0.05);
+  opacity:1;
 }
 
 .layout-btn.active{
-  background:rgba(0,0,0,0.1);
+  background:rgba(55,53,48,0.10);
   opacity:1;
+}
+
+.layout-btn:active{
+  transform:scale(.95);
 }
 
 .dots{
   display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .dots span{
-  width:4px;
-  height:4px;
+  width:3px;
+  height:3px;
+  border-radius:999px;
   background:currentColor;
-  border-radius:50%;
+  display:block;
 }
 
-.dots--row{gap:3px;}
-.dots--column{flex-direction:column;gap:3px;}
-.dots--center{justify-content:center;}
+.dots--row{
+  flex-direction:row;
+  gap:2px;
+}
+
+.dots--center{
+  flex-direction:row;
+}
+
+.dots--column{
+  flex-direction:column;
+  gap:2px;
+}
+
+@media (max-width: 640px), (max-height: 420px){
+  :root{
+    --title-size:22px;
+    --tab-size:13px;
+    --label-size:11px;
+    --input-size:13px;
+    --button-size:13px;
+    --result-size:14px;
+    --sub-size:11px;
+    --control-height:38px;
+    --date-width:138px;
+    --number-width:84px;
+  }
+
+  .widget{
+    padding:18px;
+    gap:14px;
+  }
+
+  .field-row{
+    gap:12px;
+  }
+
+  .layout-switch{
+    right:8px;
+    bottom:8px;
+  }
+}
+
+@media (max-width: 420px){
+  .layout-switch{
+    width:auto;
+    height:auto;
+  }
+
+  .layout-btn{
+    width:17px;
+    height:17px;
+  }
+
+  .dots span{
+    width:2.5px;
+    height:2.5px;
+  }
+}
 </style>
 </head>
-
 <body>
 <div class="container">
-<div class="widget widget--horizontal" id="widget">
+  <div class="widget widget--horizontal" id="widget">
 
-<div class="title">12-A, 9099-95</div>
+    <div class="title">Contador de Dias Úteis</div>
 
-<div class="tabs">
-<button class="tab active" id="tab-prazo">Calcular prazo</button>
-<button class="tab" id="tab-contar">Contar dias</button>
-</div>
+    <div class="tabs">
+      <button class="tab active" id="tab-prazo" type="button">Calcular prazo</button>
+      <button class="tab" id="tab-contar" type="button">Contar dias</button>
+    </div>
 
-<div id="panel-prazo">
-<div class="field-row">
-<div class="field">
-<span class="field-label">Início</span>
-<input type="date" id="p-start">
-</div>
+    <div class="panel" id="panel-prazo">
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Início</span>
+          <input type="date" id="p-start">
+        </div>
 
-<div class="field">
-<span class="field-label">Dias úteis</span>
-<input type="number" id="p-days" placeholder="ex: 15">
-</div>
+        <div class="field">
+          <span class="field-label">Dias úteis</span>
+          <input type="number" id="p-days" min="1" max="999" placeholder="ex: 15">
+        </div>
 
-<button class="calc-btn" onclick="calcPrazo()">Calcular</button>
-</div>
+        <button class="calc-btn" id="btn-prazo" type="button">Calcular</button>
+      </div>
 
-<div class="result" id="prazo-result"></div>
-</div>
+      <div class="result" id="prazo-result"></div>
+    </div>
 
-<div id="panel-contar" hidden>
-<div class="field-row">
-<div class="field">
-<span class="field-label">Início</span>
-<input type="date" id="c-start">
-</div>
+    <div class="panel" id="panel-contar" hidden>
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Início</span>
+          <input type="date" id="c-start">
+        </div>
 
-<div class="field">
-<span class="field-label">Fim</span>
-<input type="date" id="c-end">
-</div>
+        <div class="field">
+          <span class="field-label">Fim</span>
+          <input type="date" id="c-end">
+        </div>
 
-<button class="calc-btn" onclick="calcContar()">Calcular</button>
-</div>
+        <button class="calc-btn" id="btn-contar" type="button">Calcular</button>
+      </div>
 
-<div class="result" id="contar-result"></div>
-</div>
+      <div class="result" id="contar-result"></div>
+    </div>
 
-<!-- BOTÃO NOVO -->
-<div class="layout-switch">
-<button class="layout-btn active" onclick="setLayout('horizontal')">
-<div class="dots dots--row"><span></span><span></span><span></span></div>
-</button>
+    <div class="layout-switch" aria-label="Alternar orientação do layout">
+      <button class="layout-btn active" id="btn-layout-horizontal" type="button" title="Modo horizontal">
+        <span class="dots dots--row"><span></span><span></span><span></span></span>
+      </button>
 
-<button class="layout-btn" onclick="setLayout('center')">
-<div class="dots dots--center"><span></span></div>
-</button>
+      <button class="layout-btn" id="btn-layout-center" type="button" title="Modo centralizado">
+        <span class="dots dots--center"><span></span></span>
+      </button>
 
-<button class="layout-btn" onclick="setLayout('vertical')">
-<div class="dots dots--column"><span></span><span></span><span></span></div>
-</button>
-</div>
+      <button class="layout-btn" id="btn-layout-vertical" type="button" title="Modo vertical">
+        <span class="dots dots--column"><span></span><span></span><span></span></span>
+      </button>
+    </div>
 
-</div>
+  </div>
 </div>
 
 <script>
-function setLayout(mode){
-  const w=document.getElementById('widget');
-  w.classList.remove('widget--horizontal','widget--vertical','widget--center');
+const FERIADOS = {
+  "2025-01-01":"Confraternização Universal",
+  "2025-01-02":"Recesso","2025-01-03":"Recesso","2025-01-06":"Recesso",
+  "2025-01-07":"Suspensão de prazos","2025-01-08":"Suspensão de prazos",
+  "2025-01-09":"Suspensão de prazos","2025-01-10":"Suspensão de prazos",
+  "2025-01-13":"Suspensão de prazos","2025-01-14":"Suspensão de prazos",
+  "2025-01-15":"Suspensão de prazos","2025-01-16":"Suspensão de prazos",
+  "2025-01-17":"Suspensão de prazos","2025-01-20":"Suspensão de prazos",
+  "2025-03-03":"Véspera de Carnaval","2025-03-04":"Carnaval",
+  "2025-04-17":"Quinta-feira Santa","2025-04-18":"Paixão de Cristo","2025-04-21":"Tiradentes",
+  "2025-05-01":"Dia do Trabalho","2025-05-02":"Suspensão do expediente",
+  "2025-06-19":"Corpus Christi","2025-06-20":"Suspensão",
+  "2025-09-08":"Padroeira de Curitiba",
+  "2025-10-27":"Suspensão do expediente","2025-10-28":"Dia do Funcionário Público",
+  "2025-11-20":"Consciência Negra","2025-11-21":"Suspensão do expediente",
+  "2025-12-18":"Dia da Justiça","2025-12-19":"Emancipação Política do Paraná",
+  "2025-12-22":"Recesso","2025-12-23":"Recesso","2025-12-24":"Véspera de Natal",
+  "2025-12-25":"Natal","2025-12-26":"Recesso",
+  "2025-12-29":"Recesso","2025-12-30":"Recesso","2025-12-31":"Véspera de Ano Novo",
+  "2026-01-01":"Confraternização Universal",
+  "2026-01-02":"Recesso","2026-01-05":"Recesso","2026-01-06":"Recesso",
+  "2026-01-07":"Suspensão de prazos","2026-01-08":"Suspensão de prazos",
+  "2026-01-09":"Suspensão de prazos","2026-01-12":"Suspensão de prazos",
+  "2026-01-13":"Suspensão de prazos","2026-01-14":"Suspensão de prazos",
+  "2026-01-15":"Suspensão de prazos","2026-01-16":"Suspensão de prazos",
+  "2026-01-19":"Suspensão de prazos","2026-01-20":"Suspensão de prazos",
+  "2026-02-16":"Véspera de Carnaval","2026-02-17":"Carnaval",
+  "2026-04-02":"Quinta-feira Santa","2026-04-03":"Paixão de Cristo",
+  "2026-04-20":"Suspensão de Expediente","2026-04-21":"Tiradentes",
+  "2026-05-01":"Dia do Trabalho",
+  "2026-06-04":"Corpus Christi","2026-06-05":"Suspensão de Expediente",
+  "2026-09-07":"Independência do Brasil","2026-09-08":"Padroeira de Curitiba",
+  "2026-10-12":"Nossa Senhora Aparecida","2026-10-30":"Dia do Funcionário Público",
+  "2026-11-02":"Finados","2026-11-20":"Consciência Negra",
+  "2026-12-18":"Dia da Justiça","2026-12-24":"Véspera de Natal",
+  "2026-12-25":"Natal","2026-12-31":"Véspera de Ano Novo"
+};
 
-  if(mode==='horizontal') w.classList.add('widget--horizontal');
-  if(mode==='vertical') w.classList.add('widget--vertical');
-  if(mode==='center') w.classList.add('widget--center');
+const WEEKDAYS = [
+  "domingo","segunda-feira","terça-feira","quarta-feira",
+  "quinta-feira","sexta-feira","sábado"
+];
 
-  document.querySelectorAll('.layout-btn').forEach(b=>b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+const widget = document.getElementById("widget");
+
+function toISO(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 
-/* restante do JS mantido igual */
-</script>
+function isDiaUtil(iso){
+  const dow = new Date(iso + "T12:00:00").getDay();
+  return dow !== 0 && dow !== 6 && !FERIADOS[iso];
+}
 
+function fmtBR(iso){
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function nomeDia(iso){
+  return WEEKDAYS[new Date(iso + "T12:00:00").getDay()];
+}
+
+function setTab(mode){
+  const prazo = mode === "prazo";
+  document.getElementById("tab-prazo").classList.toggle("active", prazo);
+  document.getElementById("tab-contar").classList.toggle("active", !prazo);
+  document.getElementById("panel-prazo").hidden = !prazo;
+  document.getElementById("panel-contar").hidden = prazo;
+}
+
+function setLayout(mode){
+  widget.classList.remove("widget--horizontal","widget--center","widget--vertical");
+  widget.classList.add(`widget--${mode}`);
+
+  document.getElementById("btn-layout-horizontal").classList.toggle("active", mode === "horizontal");
+  document.getElementById("btn-layout-center").classList.toggle("active", mode === "center");
+  document.getElementById("btn-layout-vertical").classList.toggle("active", mode === "vertical");
+}
+
+function calcPrazo(){
+  const startVal = document.getElementById("p-start").value;
+  const nDias = parseInt(document.getElementById("p-days").value, 10);
+  const res = document.getElementById("prazo-result");
+
+  if(!startVal || isNaN(nDias) || nDias < 1){
+    res.innerHTML = '<span class="sub">Preencha a data de início e o número de dias.</span>';
+    res.classList.add("show");
+    return;
+  }
+
+  let d = new Date(startVal + "T12:00:00");
+  let count = 0;
+  let isoFinal = "";
+  let iter = 0;
+
+  while(count < nDias && iter < 3000){
+    d.setDate(d.getDate() + 1);
+    iter++;
+    isoFinal = toISO(d);
+    if(isDiaUtil(isoFinal)) count++;
+  }
+
+  if(iter >= 3000){
+    res.innerHTML = '<span class="sub">Período fora do intervalo do calendário (2025–2026).</span>';
+  } else {
+    res.innerHTML =
+      `<strong>${fmtBR(isoFinal)}</strong> — ${nomeDia(isoFinal)}` +
+      `<span class="sub">${nDias} dia${nDias > 1 ? "s" : ""} útei${nDias > 1 ? "s" : "l"} a partir de ${fmtBR(startVal)}</span>`;
+  }
+
+  res.classList.add("show");
+}
+
+function calcContar(){
+  const startVal = document.getElementById("c-start").value;
+  const endVal = document.getElementById("c-end").value;
+  const res = document.getElementById("contar-result");
+
+  if(!startVal || !endVal){
+    res.innerHTML = '<span class="sub">Preencha as duas datas.</span>';
+    res.classList.add("show");
+    return;
+  }
+
+  if(endVal < startVal){
+    res.innerHTML = '<span class="sub">A data de fim deve ser posterior ao início.</span>';
+    res.classList.add("show");
+    return;
+  }
+
+  let d = new Date(startVal + "T12:00:00");
+  const end = new Date(endVal + "T12:00:00");
+  let count = 0;
+
+  d.setDate(d.getDate() + 1);
+  while(d <= end){
+    if(isDiaUtil(toISO(d))) count++;
+    d.setDate(d.getDate() + 1);
+  }
+
+  res.innerHTML =
+    `<strong>${count} dia${count !== 1 ? "s" : ""} útei${count !== 1 ? "s" : "l"}</strong> entre ${fmtBR(startVal)} e ${fmtBR(endVal)}` +
+    `<span class="sub">Conforme calendário TJ/PR 2025–2026</span>`;
+
+  res.classList.add("show");
+}
+
+document.getElementById("tab-prazo").addEventListener("click", () => setTab("prazo"));
+document.getElementById("tab-contar").addEventListener("click", () => setTab("contar"));
+
+document.getElementById("btn-layout-horizontal").addEventListener("click", () => setLayout("horizontal"));
+document.getElementById("btn-layout-center").addEventListener("click", () => setLayout("center"));
+document.getElementById("btn-layout-vertical").addEventListener("click", () => setLayout("vertical"));
+
+document.getElementById("btn-prazo").addEventListener("click", calcPrazo);
+document.getElementById("btn-contar").addEventListener("click", calcContar);
+
+const hoje = toISO(new Date());
+document.getElementById("p-start").value = hoje;
+document.getElementById("c-start").value = hoje;
+
+setTab("prazo");
+setLayout("horizontal");
+</script>
 </body>
 </html>
