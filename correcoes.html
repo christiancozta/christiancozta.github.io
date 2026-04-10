@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alternância diária</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --text:#373530;
+  --muted:#787774;
+  --muted-2:#9B9A97;
+  --border:rgba(55,53,48,0.14);
+  --border-strong:rgba(55,53,48,0.22);
+  --chip-bg:rgba(55,53,48,0.045);
+  --chip-off:rgba(55,53,48,0.08);
+
+  --title-size:24px;
+  --tab-size:14px;
+  --label-size:12px;
+  --input-size:14px;
+  --button-size:14px;
+  --result-size:15px;
+  --pair-size:15px;
+  --sub-size:12px;
+  --mini-size:11px;
+
+  --radius:6px;
+  --radius-group:7px;
+  --control-height:40px;
+  --date-width:148px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html,body{ width:100%; height:100%; overflow:hidden; background:transparent; }
+body{ font-family:Helvetica, Arial, sans-serif; color:var(--text); }
+
+.container{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.widget{
+  width:100%;
+  height:100%;
+  padding:24px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  position:relative;
+  overflow:hidden;
+}
+
+.title{
+  font-family:'Inter', system-ui, sans-serif;
+  font-size:var(--title-size);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+
+.tabs{ display:flex; }
+.tab{
+  appearance:none;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-size:var(--tab-size);
+  font-weight:600;
+  height:36px;
+  padding:0 14px;
+  cursor:pointer;
+  transition:background .15s ease, color .15s ease;
+}
+.tab:first-child{ border-radius:var(--radius-group) 0 0 var(--radius-group); }
+.tab:last-child{ border-radius:0 var(--radius-group) var(--radius-group) 0; margin-left:-1px; }
+.tab.active{ background:var(--text); color:#fff; border-color:var(--text); }
+.tab:hover:not(.active){ background:rgba(55,53,48,.05); color:var(--text); }
+
+.panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  gap:12px;
+}
+.panel[hidden]{ display:none; }
+
+.field-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:14px;
+  width:100%;
+  flex-wrap:wrap;
+}
+.widget--vertical .field-row{ flex-direction:column; align-items:center; gap:12px; }
+.widget--center .field-row{ justify-content:center; }
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.widget--vertical .field{ width:min(100%, 260px); }
+.field-label{
+  font-size:var(--label-size);
+  font-weight:600;
+  color:var(--muted-2);
+  line-height:1.1;
+}
+.field input{
+  height:var(--control-height);
+  padding:0 12px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  outline:none;
+  font-size:var(--input-size);
+  color:var(--text);
+  background:transparent;
+  transition:border-color .15s ease, background .15s ease;
+}
+.field input:focus{ border-color:var(--border-strong); background:rgba(55,53,48,.02); }
+input[type="date"]{ width:var(--date-width); }
+.widget--vertical input[type="date"]{ width:100%; }
+
+.btn{
+  appearance:none;
+  height:var(--control-height);
+  padding:0 16px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:transparent;
+  color:var(--muted);
+  font-size:var(--button-size);
+  font-weight:600;
+  cursor:pointer;
+  transition:background .15s ease, color .15s ease, transform .08s ease;
+}
+.btn:hover{ background:rgba(55,53,48,.05); color:var(--text); }
+.btn:active{ transform:scale(.98); }
+.widget--vertical .btn{ width:min(100%, 260px); }
+
+.nav-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.date-pill{
+  min-height:36px;
+  padding:0 12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:var(--button-size);
+  color:var(--text);
+  background:transparent;
+  min-width:170px;
+}
+
+.result{
+  display:none;
+  width:min(100%, 540px);
+  text-align:left;
+  border-left:2px solid var(--text);
+  padding:10px 12px;
+}
+.result.show{ display:block; }
+.result strong{
+  font-family:'Inter', system-ui, sans-serif;
+  font-size:var(--result-size);
+  font-weight:800;
+}
+.result .sub{
+  display:block;
+  margin-top:4px;
+  font-size:var(--sub-size);
+  color:var(--muted);
+}
+.pairs{ margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.pair{
+  font-size:var(--pair-size);
+  line-height:1.35;
+}
+.pair b{
+  font-family:'Inter', system-ui, sans-serif;
+  font-weight:700;
+}
+
+.chips-wrap{
+  width:min(100%, 540px);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.chips-title{
+  font-size:var(--label-size);
+  font-weight:600;
+  color:var(--muted-2);
+}
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.chip{
+  appearance:none;
+  border:1px solid var(--border);
+  background:var(--chip-bg);
+  color:var(--text);
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:var(--button-size);
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s ease, color .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.chip:hover{ background:rgba(55,53,48,.07); }
+.chip.off{
+  background:transparent;
+  color:var(--muted);
+  border-style:dashed;
+  border-color:rgba(55,53,48,.18);
+  opacity:.88;
+}
+.chip.off::before{ content:"× "; }
+
+.help{
+  width:min(100%, 540px);
+  font-size:var(--mini-size);
+  line-height:1.4;
+  color:var(--muted);
+}
+
+.layout-switch{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:2px;
+  padding:3px;
+  border:1px solid rgba(55,53,48,0.08);
+  border-radius:999px;
+  background:rgba(255,255,255,0.62);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  z-index:20;
+}
+.layout-btn{
+  appearance:none;
+  width:18px;
+  height:18px;
+  border:none;
+  background:transparent;
+  color:var(--muted);
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  opacity:.68;
+  transition:background .15s ease, opacity .15s ease, transform .08s ease;
+  padding:0;
+}
+.layout-btn:hover{ background:rgba(55,53,48,.05); opacity:1; }
+.layout-btn.active{ background:rgba(55,53,48,.10); opacity:1; }
+.layout-btn:active{ transform:scale(.95); }
+.dots{ display:flex; align-items:center; justify-content:center; }
+.dots span{ width:3px; height:3px; border-radius:999px; background:currentColor; display:block; }
+.dots--row{ flex-direction:row; gap:2px; }
+.dots--center{ flex-direction:row; }
+.dots--column{ flex-direction:column; gap:2px; }
+
+@media (max-width: 640px), (max-height: 420px){
+  :root{
+    --title-size:22px;
+    --tab-size:13px;
+    --label-size:11px;
+    --input-size:13px;
+    --button-size:13px;
+    --result-size:14px;
+    --pair-size:14px;
+    --sub-size:11px;
+    --mini-size:10px;
+    --control-height:38px;
+    --date-width:138px;
+  }
+  .widget{ padding:18px; gap:14px; }
+  .field-row{ gap:12px; }
+  .layout-switch{ right:8px; bottom:8px; }
+  .date-pill{ min-width:156px; }
+}
+
+@media (max-width: 420px){
+  .layout-btn{ width:17px; height:17px; }
+  .dots span{ width:2.5px; height:2.5px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="widget widget--horizontal" id="widget">
+    <div class="title">Alternância diária</div>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-hoje" type="button">Escala</button>
+      <button class="tab" id="tab-equipe" type="button">Equipe</button>
+    </div>
+
+    <div class="panel" id="panel-hoje">
+      <div class="nav-row">
+        <button class="btn" id="prev-day" type="button">◀</button>
+        <div class="date-pill" id="date-pill"></div>
+        <button class="btn" id="next-day" type="button">▶</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <span class="field-label">Data-base</span>
+          <input type="date" id="base-date">
+        </div>
+
+        <div class="field">
+          <span class="field-label">Visualizar</span>
+          <input type="date" id="view-date">
+        </div>
+
+        <button class="btn" id="btn-hoje" type="button">Hoje</button>
+      </div>
+
+      <div class="result show" id="scale-result"></div>
+
+      <div class="chips-wrap">
+        <div class="chips-title">Assessores ativos no dia</div>
+        <div class="chips" id="advisor-chips"></div>
+      </div>
+
+      <div class="help">Toque em um assessor para tirar temporariamente da rotação. A escala do dia é recalculada na hora, pulando esse nome sem quebrar a alternância.</div>
+    </div>
+
+    <div class="panel" id="panel-equipe" hidden>
+      <div class="result show" id="team-result"></div>
+      <div class="chips-wrap">
+        <div class="chips-title">Ativar ou desativar assessor</div>
+        <div class="chips" id="advisor-chips-team"></div>
+      </div>
+      <div class="help">A ordem dos assessores é sempre alfabética. A rotação gira um passo por dia a partir da data-base.</div>
+    </div>
+
+    <div class="layout-switch" aria-label="Alternar orientação do layout">
+      <button class="layout-btn active" id="btn-layout-horizontal" type="button" title="Modo horizontal">
+        <span class="dots dots--row"><span></span><span></span><span></span></span>
+      </button>
+      <button class="layout-btn" id="btn-layout-center" type="button" title="Modo centralizado">
+        <span class="dots dots--center"><span></span></span>
+      </button>
+      <button class="layout-btn" id="btn-layout-vertical" type="button" title="Modo vertical">
+        <span class="dots dots--column"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const widget = document.getElementById('widget');
+const FERIADOS = {
+  '2025-01-01':'Confraternização Universal',
+  '2025-01-02':'Recesso','2025-01-03':'Recesso','2025-01-06':'Recesso',
+  '2025-01-07':'Suspensão de prazos','2025-01-08':'Suspensão de prazos',
+  '2025-01-09':'Suspensão de prazos','2025-01-10':'Suspensão de prazos',
+  '2025-01-13':'Suspensão de prazos','2025-01-14':'Suspensão de prazos',
+  '2025-01-15':'Suspensão de prazos','2025-01-16':'Suspensão de prazos',
+  '2025-01-17':'Suspensão de prazos','2025-01-20':'Suspensão de prazos',
+  '2025-03-03':'Véspera de Carnaval','2025-03-04':'Carnaval',
+  '2025-04-17':'Quinta-feira Santa','2025-04-18':'Paixão de Cristo','2025-04-21':'Tiradentes',
+  '2025-05-01':'Dia do Trabalho','2025-05-02':'Suspensão do expediente',
+  '2025-06-19':'Corpus Christi','2025-06-20':'Suspensão',
+  '2025-09-08':'Padroeira de Curitiba',
+  '2025-10-27':'Suspensão do expediente','2025-10-28':'Dia do Funcionário Público',
+  '2025-11-20':'Consciência Negra','2025-11-21':'Suspensão do expediente',
+  '2025-12-18':'Dia da Justiça','2025-12-19':'Emancipação Política do Paraná',
+  '2025-12-22':'Recesso','2025-12-23':'Recesso','2025-12-24':'Véspera de Natal',
+  '2025-12-25':'Natal','2025-12-26':'Recesso',
+  '2025-12-29':'Recesso','2025-12-30':'Recesso','2025-12-31':'Véspera de Ano Novo',
+  '2026-01-01':'Confraternização Universal',
+  '2026-01-02':'Recesso','2026-01-05':'Recesso','2026-01-06':'Recesso',
+  '2026-01-07':'Suspensão de prazos','2026-01-08':'Suspensão de prazos',
+  '2026-01-09':'Suspensão de prazos','2026-01-12':'Suspensão de prazos',
+  '2026-01-13':'Suspensão de prazos','2026-01-14':'Suspensão de prazos',
+  '2026-01-15':'Suspensão de prazos','2026-01-16':'Suspensão de prazos',
+  '2026-01-19':'Suspensão de prazos','2026-01-20':'Suspensão de prazos',
+  '2026-02-16':'Véspera de Carnaval','2026-02-17':'Carnaval',
+  '2026-04-02':'Quinta-feira Santa','2026-04-03':'Paixão de Cristo',
+  '2026-04-20':'Suspensão de Expediente','2026-04-21':'Tiradentes',
+  '2026-05-01':'Dia do Trabalho',
+  '2026-06-04':'Corpus Christi','2026-06-05':'Suspensão de Expediente',
+  '2026-09-07':'Independência do Brasil','2026-09-08':'Padroeira de Curitiba',
+  '2026-10-12':'Nossa Senhora Aparecida','2026-10-30':'Dia do Funcionário Público',
+  '2026-11-02':'Finados','2026-11-20':'Consciência Negra',
+  '2026-12-18':'Dia da Justiça','2026-12-24':'Véspera de Natal',
+  '2026-12-25':'Natal','2026-12-31':'Véspera de Ano Novo'
+};
+
+
+const state = {
+  baseDate: '2026-04-08',
+  viewDate: toISO(new Date()),
+  estagiarios: ['Carol', 'Lucas', 'Tamires'],
+  assessores: ['Christian', 'Isa', 'Luara', 'Luiza'],
+  disabledAssessores: new Set()
+};
+
+function toISO(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function fromISO(iso){
+  return new Date(iso + 'T12:00:00');
+}
+
+function formatLongDate(iso){
+  const d = fromISO(iso);
+  return d.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function sortAssessores(arr){
+  return [...arr].sort((a,b)=>a.localeCompare(b, 'pt-BR', { sensitivity:'base' }));
+}
+
+function isBusinessDay(iso){
+  const day = fromISO(iso).getDay();
+  return day !== 0 && day !== 6 && !FERIADOS[iso];
+}
+
+function findNearestBusinessDay(iso, direction = 1){
+  let cursor = iso;
+  let guard = 0;
+  while(!isBusinessDay(cursor) && guard < 370){
+    cursor = addDays(cursor, direction >= 0 ? 1 : -1);
+    guard++;
+  }
+  return cursor;
+}
+
+function countBusinessDaysBetween(baseISO, targetISO){
+  if(baseISO === targetISO) return 0;
+
+  const forward = fromISO(targetISO) > fromISO(baseISO);
+  let cursor = baseISO;
+  let count = 0;
+  let guard = 0;
+
+  while(cursor !== targetISO && guard < 2000){
+    cursor = addDays(cursor, forward ? 1 : -1);
+    if(isBusinessDay(cursor)) count += forward ? 1 : -1;
+    guard++;
+  }
+
+  return count;
+}
+
+function nextBusinessDay(iso){
+  let cursor = iso;
+  let guard = 0;
+  do{
+    cursor = addDays(cursor, 1);
+    guard++;
+  }while(!isBusinessDay(cursor) && guard < 370);
+  return cursor;
+}
+
+function previousBusinessDay(iso){
+  let cursor = iso;
+  let guard = 0;
+  do{
+    cursor = addDays(cursor, -1);
+    guard++;
+  }while(!isBusinessDay(cursor) && guard < 370);
+  return cursor;
+}
+
+function getAssessoresAtivos(){
+  return sortAssessores(state.assessores.filter(nome => !state.disabledAssessores.has(nome)));
+}
+
+function rotateList(list, steps){
+  if(!list.length) return [];
+  const size = list.length;
+  const normalized = ((steps % size) + size) % size;
+  return list.map((_, i) => list[(i + normalized) % size]);
+}
+
+function gerarEscala(dataISO){
+  const ativos = getAssessoresAtivos();
+  const res = { dataISO, ativos, pares: [], aviso: '' };
+
+  if(!ativos.length){
+    res.aviso = 'Nenhum assessor ativo.';
+    return res;
+  }
+
+  const passos = diffDays(state.baseDate, dataISO);
+  const rotacao = rotateList(ativos, passos);
+
+  res.pares = state.estagiarios.map((estag, i) => ({
+    estag,
+    assessor: rotacao[i % rotacao.length]
+  }));
+
+  if(ativos.length < state.estagiarios.length){
+    res.aviso = 'Há menos assessores ativos do que estagiários; por isso houve repetição no dia.';
+  }
+
+  return res;
+}
+
+function renderScale(){
+  const result = document.getElementById('scale-result');
+  const datePill = document.getElementById('date-pill');
+  const escala = gerarEscala(state.viewDate);
+
+  datePill.textContent = formatLongDate(state.viewDate);
+
+  if(!escala.ativos.length){
+    result.innerHTML = `<strong>Sem escala disponível</strong><span class="sub">Ative ao menos um assessor para gerar os pares.</span>`;
+    return;
+  }
+
+  const paresHTML = escala.pares.map(p => `<div class="pair"><b>${p.estag}</b> — ${p.assessor}</div>`).join('');
+  result.innerHTML = `
+    <strong>${escala.pares.length} pareamento${escala.pares.length !== 1 ? 's' : ''}</strong>
+    <span class="sub">Base: ${formatLongDate(state.baseDate)} · rotação alfabética dos assessores ativos</span>
+    <div class="pairs">${paresHTML}</div>
+    ${escala.aviso ? `<span class="sub">${escala.aviso}</span>` : ''}
+  `;
+}
+
+function renderAdvisorChips(containerId){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  sortAssessores(state.assessores).forEach(nome => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip' + (state.disabledAssessores.has(nome) ? ' off' : '');
+    btn.textContent = nome;
+    btn.title = state.disabledAssessores.has(nome) ? 'Reativar assessor' : 'Desativar assessor temporariamente';
+    btn.addEventListener('click', () => {
+      if(state.disabledAssessores.has(nome)) state.disabledAssessores.delete(nome);
+      else state.disabledAssessores.add(nome);
+      syncAll();
+    });
+    container.appendChild(btn);
+  });
+}
+
+function renderTeamPanel(){
+  const box = document.getElementById('team-result');
+  const ativos = getAssessoresAtivos();
+  const inativos = sortAssessores(state.assessores.filter(nome => state.disabledAssessores.has(nome)));
+
+  box.innerHTML = `
+    <strong>${state.estagiarios.length} estagiário${state.estagiarios.length !== 1 ? 's' : ''} · ${ativos.length} assessor${ativos.length !== 1 ? 'es' : ''} ativo${ativos.length !== 1 ? 's' : ''}</strong>
+    <span class="sub">Estagiários: ${state.estagiarios.join(', ')}</span>
+    <span class="sub">Assessores ativos: ${ativos.length ? ativos.join(', ') : 'nenhum'}</span>
+    ${inativos.length ? `<span class="sub">Assessores fora da rotação: ${inativos.join(', ')}</span>` : ''}
+  `;
+}
+
+function syncInputs(){
+  document.getElementById('base-date').value = state.baseDate;
+  document.getElementById('view-date').value = state.viewDate;
+}
+
+function syncAll(){
+  syncInputs();
+  renderScale();
+  renderAdvisorChips('advisor-chips');
+  renderAdvisorChips('advisor-chips-team');
+  renderTeamPanel();
+}
+
+function setTab(mode){
+  const escala = mode === 'hoje';
+  document.getElementById('tab-hoje').classList.toggle('active', escala);
+  document.getElementById('tab-equipe').classList.toggle('active', !escala);
+  document.getElementById('panel-hoje').hidden = !escala;
+  document.getElementById('panel-equipe').hidden = escala;
+}
+
+function setLayout(mode){
+  widget.classList.remove('widget--horizontal','widget--center','widget--vertical');
+  widget.classList.add(`widget--${mode}`);
+  document.getElementById('btn-layout-horizontal').classList.toggle('active', mode === 'horizontal');
+  document.getElementById('btn-layout-center').classList.toggle('active', mode === 'center');
+  document.getElementById('btn-layout-vertical').classList.toggle('active', mode === 'vertical');
+}
+
+document.getElementById('tab-hoje').addEventListener('click', ()=>setTab('hoje'));
+document.getElementById('tab-equipe').addEventListener('click', ()=>setTab('equipe'));
+
+document.getElementById('btn-layout-horizontal').addEventListener('click', ()=>setLayout('horizontal'));
+document.getElementById('btn-layout-center').addEventListener('click', ()=>setLayout('center'));
+document.getElementById('btn-layout-vertical').addEventListener('click', ()=>setLayout('vertical'));
+
+document.getElementById('base-date').addEventListener('change', (e)=>{
+  if(e.target.value) state.baseDate = e.target.value;
+  syncAll();
+});
+
+document.getElementById('view-date').addEventListener('change', (e)=>{
+  if(e.target.value) state.viewDate = e.target.value;
+  syncAll();
+});
+
+document.getElementById('btn-hoje').addEventListener('click', ()=>{
+  state.viewDate = toISO(new Date());
+  syncAll();
+});
+
+document.getElementById('prev-day').addEventListener('click', ()=>{
+  const d = fromISO(state.viewDate);
+  d.setDate(d.getDate() - 1);
+  state.viewDate = toISO(d);
+  syncAll();
+});
+
+document.getElementById('next-day').addEventListener('click', ()=>{
+  const d = fromISO(state.viewDate);
+  d.setDate(d.getDate() + 1);
+  state.viewDate = toISO(d);
+  syncAll();
+});
+
+setTab('hoje');
+setLayout('horizontal');
+syncAll();
+</script>
+</body>
+</html>
