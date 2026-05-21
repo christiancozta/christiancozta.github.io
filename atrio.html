@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Christian da Costa — Autoria do ecossistema ATRIO</title>
+<title>ATRIO — Christian da Costa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -849,6 +849,360 @@ img,svg{display:block;max-width:100%}
   }
 }
 
+
+/* ─────────────────────────────────────────────
+   HOTFIX V4 · CONSOLIDAÇÃO DE BLOCOS
+   corrige arredondamento, fundo, bordas e espaçamentos
+   ───────────────────────────────────────────── */
+
+/* Regra-base para aparência de bloco */
+.section .sec-num,
+.section .sec-title,
+.section .sec-stamp,
+.exec-card,
+.tese-pole,
+.flow-step,
+.principle,
+.comp,
+.author-l,
+.author-r,
+.contact-row,
+.lvl-row .lvl-label,
+.lvl-row .lvl-item{
+  border-radius:20px !important;
+  overflow:hidden;
+}
+
+/* Estrutura de seções */
+.section{
+  padding:28px 0 0 !important;
+}
+.sec-head{
+  display:grid !important;
+  grid-template-columns:140px 1fr 220px !important;
+  gap:18px !important;
+  padding:0 32px !important;
+  border:none !important;
+}
+.sec-num,
+.sec-title,
+.sec-stamp{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.045) !important;
+}
+
+/* Seções escuras: cabeçalhos claros com texto escuro */
+.comps .sec-num,
+.comps .sec-title,
+.comps .sec-stamp,
+.author .sec-num,
+.author .sec-title,
+.author .sec-stamp{
+  background:#F7F3ED !important;
+  color:var(--ink) !important;
+  box-shadow:none !important;
+}
+.comps .sec-title h2,
+.comps .sec-title h2 em,
+.comps .sec-title .k,
+.comps .sec-stamp b,
+.comps .sec-stamp .kk,
+.author .sec-title h2,
+.author .sec-title h2 em,
+.author .sec-title .k,
+.author .sec-stamp b,
+.author .sec-stamp .kk{
+  color:inherit !important;
+}
+.comps .sec-title h2 em,
+.author .sec-title h2 em,
+.comps .sec-title .k,
+.author .sec-title .k,
+.comps .sec-stamp .kk,
+.author .sec-stamp .kk{
+  color:var(--terra) !important;
+}
+
+/* Entrada executiva */
+.exec{
+  padding:28px 32px 14px !important;
+  background:var(--paper) !important;
+}
+.exec-grid,
+.use-cases{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:18px !important;
+}
+.exec-card{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.045) !important;
+}
+.proof-strip{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:14px !important;
+  margin-top:16px !important;
+}
+
+/* TESE */
+.tese{
+  padding:36px 32px 12px !important;
+  background:var(--paper) !important;
+}
+.tese-grid{
+  gap:56px !important;
+}
+.tese-poles{
+  display:grid !important;
+  grid-template-columns:1fr 1fr 1fr !important;
+  gap:18px !important;
+  background:transparent !important;
+  border:none !important;
+}
+.tese-pole{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.04) !important;
+  padding:24px 22px !important;
+}
+.tese-pole:last-child{
+  background:var(--ink) !important;
+  color:var(--paper) !important;
+}
+
+/* ARQUITETURA */
+.arch{
+  background:var(--bone) !important;
+  margin:22px 32px 0 !important;
+  padding:34px 32px 36px !important;
+  border-radius:24px !important;
+}
+.arch-lede{
+  margin-bottom:32px !important;
+}
+.atrio-flow{
+  display:grid !important;
+  grid-template-columns:1.1fr .8fr 1fr 1fr 1fr 1.1fr !important;
+  gap:18px !important;
+  margin:0 0 36px !important;
+}
+.atrio-flow .flow-step{
+  background:var(--paper) !important;
+}
+.levels{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:18px !important;
+  border:none !important;
+  background:transparent !important;
+}
+.lvl-row{
+  display:grid !important;
+  grid-template-columns:190px 1fr !important;
+  gap:18px !important;
+  border:none !important;
+}
+.lvl-row .lvl-label{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.04) !important;
+  padding:26px !important;
+  gap:10px !important;
+}
+.lvl-row .lvl-items{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:18px !important;
+}
+.lvl-row .lvl-items.one{
+  grid-template-columns:1fr !important;
+}
+.lvl-item{
+  background:var(--paper) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.04) !important;
+  padding:26px !important;
+  gap:10px !important;
+}
+
+/* COMPONENTES */
+.comps{
+  padding-bottom:26px !important;
+}
+.comps-body{
+  padding:34px 32px 24px !important;
+}
+.comp-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,1fr) !important;
+  gap:18px !important;
+  border:none !important;
+}
+.comp{
+  border:none !important;
+  background:rgba(252,252,252,.065) !important;
+  box-shadow:0 20px 44px rgba(0,0,0,.16) !important;
+  padding:32px !important;
+}
+.comp:first-child{
+  grid-column:1 / -1 !important;
+  background:rgba(252,252,252,.09) !important;
+}
+.comp-head{
+  border:none !important;
+  margin-bottom:18px !important;
+  padding-bottom:0 !important;
+}
+.comp-io{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:10px !important;
+  border:none !important;
+}
+.comp-io .ic{
+  background:rgba(252,252,252,.06) !important;
+  border:none !important;
+  border-radius:14px !important;
+}
+.comp-limit{
+  border:none !important;
+  padding-left:0 !important;
+}
+
+/* GOVERNANÇA */
+.gov{
+  padding:34px 32px 36px !important;
+}
+.flow-row{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:18px !important;
+  border:none !important;
+  background:transparent !important;
+  margin-bottom:28px !important;
+}
+.flow-step{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.045) !important;
+  padding:24px 22px !important;
+}
+.principles{
+  display:grid !important;
+  grid-template-columns:1fr 1fr 1fr !important;
+  gap:18px !important;
+  border:none !important;
+}
+.principle{
+  background:var(--cream) !important;
+  border:none !important;
+  box-shadow:0 14px 34px rgba(11,10,8,.045) !important;
+  padding:24px 22px !important;
+}
+
+/* AUTORIA */
+.author-body{
+  padding:34px 32px !important;
+  display:grid !important;
+  grid-template-columns:1.1fr 1fr !important;
+  gap:18px !important;
+}
+.author-l,
+.author-r{
+  background:rgba(252,252,252,.055) !important;
+  border:none !important;
+  padding:28px 32px !important;
+}
+.contact-rows{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important;
+  border:none !important;
+}
+.contact-row{
+  background:rgba(252,252,252,.055) !important;
+  border:none !important;
+  padding:16px 18px !important;
+}
+.cc-mark-block,
+.author-close{
+  border:none !important;
+}
+
+/* Footer */
+.footer{
+  border:none !important;
+}
+
+/* Responsividade */
+@media (max-width:1200px){
+  .exec-grid,
+  .use-cases,
+  .proof-strip{
+    grid-template-columns:repeat(2,1fr) !important;
+  }
+  .atrio-flow{
+    grid-template-columns:repeat(3,1fr) !important;
+  }
+}
+@media (max-width:900px){
+  .sec-head{
+    grid-template-columns:80px 1fr !important;
+    padding:0 22px !important;
+  }
+  .sec-stamp{
+    display:none !important;
+  }
+  .sec-num{
+    font-size:52px !important;
+    padding:18px !important;
+  }
+  .exec,
+  .gov,
+  .tese,
+  .comps-body,
+  .author-body{
+    padding-left:22px !important;
+    padding-right:22px !important;
+  }
+  .arch{
+    margin:18px 22px 0 !important;
+    padding:30px 22px !important;
+  }
+  .exec-grid,
+  .use-cases,
+  .proof-strip,
+  .tese-poles,
+  .atrio-flow,
+  .flow-row,
+  .principles,
+  .comp-grid{
+    grid-template-columns:1fr !important;
+  }
+  .lvl-row{
+    grid-template-columns:1fr !important;
+  }
+  .lvl-row .lvl-items{
+    grid-template-columns:1fr !important;
+  }
+  .author-body{
+    grid-template-columns:1fr !important;
+  }
+  .author-l,
+  .author-r{
+    padding:24px 22px !important;
+  }
+  .comp-io{
+    grid-template-columns:1fr !important;
+  }
+  .comp:first-child{
+    grid-column:auto !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1385,7 +1739,7 @@ img,svg{display:block;max-width:100%}
 
     <div class="author-r">
       <div class="contact-rows">
-        <div class="contact-row"><span class="k">LinkedIn</span><a class="v" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">/in/christiandcosta</a></div>
+        <div class="contact-row"><span class="k">LinkedIn</span><a class="v" href="https://www.linkedin.com/in/christiancosta" target="_blank" rel="noopener">/in/christiancosta</a></div>
         <div class="contact-row"><span class="k">E-mail</span><a class="v" href="mailto:christian@atrio.cc">christian@atrio.cc</a></div>
         <div class="contact-row"><span class="k">Base</span><span class="v">Brasil · disponibilidade estratégica para São Paulo</span></div>
         <div class="contact-row"><span class="k">Origem</span><span class="v">Turma Recursal · ambiente decisório real</span></div>
