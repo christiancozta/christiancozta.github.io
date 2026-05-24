@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATRIO · Arquitetura Recursal via Inteligência Orquestrada</title>
+<meta name="author" content="Christian da Costa">
+<meta name="description" content="Dossiê do ecossistema ATRIO — arquitetura jurídico-decisória assistida por IA, com governança humana e rastreabilidade declarada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--folha);color:var(--tinta);-webkit-font-smoothing:antialiased;overflow-x:hidden;max-width:100vw;}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ── TOKENS ── */
+:root{
+  --folha:      #FCFCFC;
+  --papel:      #F2F0EC;
+  --osso:       #E4E2DD;
+  --terra:      #A63A23;
+  --terra-fade: #D89478;
+  --fumaca:     #3D3A35;
+  --carvao:     #1A1815;
+  --tinta:      #0A0A0A;
+
+  --serif: 'Fraunces','EB Garamond',Georgia,'Times New Roman',serif;
+  --sans:  'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:  'JetBrains Mono','IBM Plex Mono','Courier New',Courier,monospace;
+
+  --s1: 8px;
+  --s2: 14px;
+  --s3: 24px;
+  --s4: 36px;
+  --s5: 56px;
+  --s6: 64px;
+  --s7: 96px;
+}
+
+/* ── STRIP ── */
+.strip{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:var(--folha);
+  border-bottom:1px solid var(--tinta);
+  padding:14px 40px;
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+  gap:16px;
+  overflow:hidden;
+}
+.strip .l{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--fumaca);
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+}
+.strip .l .brand{color:var(--terra);}
+.strip nav{
+  display:flex;gap:0;justify-content:center;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.1em;
+  color:var(--fumaca);overflow:hidden;
+}
+.strip nav a{
+  padding:4px 10px;white-space:nowrap;color:var(--fumaca);
+  border-left:1px solid var(--osso);
+  transition:color .15s;
+}
+.strip nav a:first-child{border-left:none;}
+.strip nav a:hover{color:var(--terra);}
+.strip .r{
+  justify-self:end;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--fumaca);
+  white-space:nowrap;
+}
+.strip .r .contato{
+  color:var(--terra);border-bottom:1px solid var(--terra);
+  padding-bottom:1px;margin-left:14px;cursor:pointer;
+}
+
+/* ── HERO ── */
+.hero{
+  background:var(--carvao);color:var(--folha);
+  min-height:100vh;position:relative;overflow:hidden;
+  padding:var(--s6) 40px var(--s5);padding-top:120px;
+  display:grid;grid-template-rows:auto 1fr auto;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(to right,rgba(166,58,35,.04) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(166,58,35,.04) 1px,transparent 1px);
+  background-size:96px 96px;pointer-events:none;
+}
+.hero-meta{
+  position:relative;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  padding-bottom:14px;border-bottom:1px solid rgba(252,252,252,.18);
+  font-family:var(--serif);font-size:13px;
+  font-variation-settings:"opsz" 24;color:rgba(252,252,252,.7);
+}
+.hero-meta .mk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra-fade);margin-bottom:5px;
+}
+.hero-meta .mv{line-height:1.35;}
+.hero-meta .mv.it{font-style:italic;}
+.hero-center{position:relative;padding:var(--s7) 0 var(--s4);}
+.hero-title{
+  font-family:var(--serif);
+  font-variation-settings:"opsz" 144;font-weight:500;
+  font-size:clamp(72px,18vw,220px);line-height:.82;letter-spacing:-.055em;
+  color:var(--terra);overflow-wrap:break-word;
+}
+.hero-sub{
+  margin-top:14px;
+  font-family:var(--serif);font-style:italic;
+  font-variation-settings:"opsz" 96;font-weight:400;
+  font-size:clamp(20px,2.6vw,32px);color:#C88670;
+  letter-spacing:-.005em;line-height:1.15;
+}
+.hero-bottom{
+  position:relative;
+  border-top:2px solid var(--terra);padding-top:var(--s3);
+  display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:end;
+}
+.hero-lede-k{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra-fade);margin-bottom:6px;
+}
+.hero-lede p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;font-weight:400;
+  font-size:20px;line-height:1.4;color:var(--folha);margin:0;max-width:580px;
+}
+.hero-lede em{color:var(--terra-fade);font-style:italic;}
+.hero-author{text-align:right;}
+.hero-author .ak{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra-fade);margin-bottom:6px;
+}
+.hero-author .an{
+  font-family:var(--serif);font-size:18px;color:var(--folha);
+  font-variation-settings:"opsz" 48;line-height:1.25;
+}
+.hero-author .al{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:rgba(252,252,252,.55);font-variation-settings:"opsz" 24;margin-top:2px;
+}
+
+/* ── FÓLIO E CABEÇALHO DE SEÇÃO ── */
+.folio{
+  display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--tinta);
+  padding-bottom:8px;margin-bottom:var(--s5);
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--fumaca);
+}
+.folio .fn{color:var(--terra);}
+.folio .fp{opacity:.75;}
+.folio-dark{
+  border-bottom-color:rgba(252,252,252,.22);
+  color:rgba(252,252,252,.6);
+}
+.folio-dark .fn{color:var(--terra);}
+.folio-dark .fp{color:rgba(252,252,252,.6);}
+.sec-heading{
+  display:grid;grid-template-columns:1fr auto;gap:48px;
+  align-items:flex-end;margin-bottom:var(--s4);
+}
+.eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;
+  color:var(--terra);margin-bottom:14px;
+}
+.sec-heading h2{
+  font-family:var(--serif);font-variation-settings:"opsz" 144;font-weight:400;
+  font-size:clamp(38px,4.4vw,58px);line-height:1.0;letter-spacing:-.035em;
+  color:var(--tinta);margin:0;
+}
+.sec-heading h2 em{color:var(--terra);font-style:italic;font-weight:400;}
+.sec-dark .sec-heading h2{color:var(--folha);}
+.sec-num-right{
+  font-family:var(--serif);font-variation-settings:"opsz" 144;font-weight:300;
+  font-size:clamp(72px,9vw,128px);line-height:.85;
+  color:var(--terra);letter-spacing:-.055em;text-align:right;align-self:flex-end;
+}
+
+/* ── SEÇÕES CLARAS ── */
+.sec{padding:var(--s5) 40px var(--s6);}
+.sec-alt{background:var(--papel);}
+
+/* ── CORPO PRINCIPAL: coluna + marginalia ── */
+.sec-body{
+  display:grid;grid-template-columns:1fr 280px;gap:56px;align-items:start;
+}
+.marginalia{
+  border-top:1px solid var(--terra);padding-top:14px;
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  font-variation-settings:"opsz" 24;line-height:1.55;color:var(--fumaca);
+}
+.marginalia .mk{
+  font-family:var(--mono);font-style:normal;font-size:9px;
+  letter-spacing:0.16em;color:var(--terra);display:block;margin-bottom:8px;
+}
+.prose p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:18px;line-height:1.55;color:var(--tinta);margin-bottom:18px;
+}
+.prose p:last-child{margin-bottom:0;}
+.prose em{color:var(--terra);font-style:italic;}
+
+/* ── § 01: APRESENTAÇÃO + TRAÇÃO ── */
+.apres-grid{
+  display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;
+  margin-bottom:var(--s5);
+}
+.apres-side{
+  border-right:1px solid var(--osso);padding-right:var(--s3);
+  display:flex;flex-direction:column;gap:var(--s4);
+}
+.apres-side .label{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);margin-bottom:4px;
+}
+.apres-side .value{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  font-variation-settings:"opsz" 24;color:var(--fumaca);line-height:1.45;
+}
+
+/* pull-out de contexto institucional — flutua à direita dentro da prose */
+.pullout-contexto{
+  float:right;
+  width:260px;
+  margin:6px 0 18px 28px;
+  padding:18px 20px;
+  background:rgba(166,58,35,.05);
+  border-left:2px solid var(--terra);
+}
+.pullout-contexto .pk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra);display:block;margin-bottom:10px;
+}
+.pullout-contexto p{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  font-variation-settings:"opsz" 24;color:var(--fumaca);
+  line-height:1.5;margin:0;
+}
+
+/* tração: bloco de métricas */
+.tracao{
+  margin-top:var(--s5);padding-top:var(--s4);
+  border-top:1px solid var(--tinta);
+}
+.tracao-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;
+  color:var(--terra);margin-bottom:var(--s3);
+}
+.tracao-head{
+  font-family:var(--serif);font-variation-settings:"opsz" 144;font-weight:400;
+  font-size:clamp(32px,3.5vw,48px);line-height:1.0;letter-spacing:-.03em;
+  color:var(--tinta);margin-bottom:var(--s3);
+}
+.tracao-head em{color:var(--terra);font-style:italic;}
+.metricas{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;
+  border-top:2px solid var(--terra);margin-bottom:var(--s4);
+}
+.metrica{padding:var(--s3) var(--s3) var(--s3) 0;}
+.metrica + .metrica{border-left:1px solid var(--osso);padding-left:var(--s3);}
+.metrica .mv{
+  font-family:var(--serif);font-variation-settings:"opsz" 144;font-weight:500;
+  font-size:clamp(28px,3.5vw,44px);line-height:.9;letter-spacing:-.04em;
+  color:var(--terra);display:block;margin-bottom:6px;
+}
+.metrica .mv.principal{font-size:clamp(36px,5vw,60px);}
+.metrica .mk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--fumaca);display:block;margin-bottom:4px;
+}
+.metrica .md{
+  font-family:var(--serif);font-style:italic;font-size:13px;
+  font-variation-settings:"opsz" 24;color:var(--fumaca);line-height:1.4;
+}
+.tracao-body{
+  display:grid;grid-template-columns:1fr 280px;gap:56px;align-items:start;
+}
+.tracao-prose p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:17px;line-height:1.55;color:var(--tinta);margin-bottom:16px;
+}
+.tracao-prose p:last-child{margin-bottom:0;}
+.tracao-prose em{color:var(--terra);font-style:italic;}
+
+/* ── § 02: TESE ── */
+.tese-cols{
+  display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-bottom:var(--s5);
+}
+.tese-cols p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:18px;line-height:1.55;color:var(--tinta);margin-bottom:18px;
+}
+.tese-cols p:last-child{margin-bottom:0;}
+.tese-cols em{color:var(--terra);font-style:italic;}
+.polos{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  padding-top:var(--s4);border-top:1px solid var(--tinta);
+}
+.polo{padding:var(--s3) var(--s3) var(--s3) 0;}
+.polo + .polo{border-left:1px solid var(--osso);padding-left:var(--s3);}
+.polo .pn{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);display:block;margin-bottom:8px;
+}
+.polo .pt{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:22px;letter-spacing:-.02em;color:var(--tinta);
+  display:block;margin-bottom:10px;line-height:1.1;
+}
+.polo.atrio .pt{color:var(--terra);font-style:italic;}
+.polo p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:14px;line-height:1.55;color:var(--fumaca);
+}
+.polo p em{color:var(--terra-fade);font-style:italic;}
+
+/* ── § 03: BLOCOS DE COMPONENTE ── */
+.comp-linha{ margin-bottom:var(--s2); }
+.comp-linha-1{ display:block; }
+.comp-linha-2{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s2); }
+
+.comp-bloco{
+  background:#EDECEA;   /* cinza ligeiramente mais escuro que --folha */
+  padding:var(--s4);
+  margin-bottom:var(--s2);
+}
+.comp-bloco-full{ margin-bottom:var(--s3); }
+
+.comp-bloco-header{
+  display:flex; align-items:flex-start; gap:var(--s3);
+  margin-bottom:var(--s3);
+}
+.comp-svg{ width:52px; height:52px; flex-shrink:0; }
+
+.comp-bloco-titles{ display:flex; flex-direction:column; gap:4px; }
+.comp-nome{
+  font-family:var(--serif); font-variation-settings:"opsz" 96; font-weight:500;
+  font-size:28px; letter-spacing:-0.03em; line-height:1; color:var(--tinta);
+}
+.comp-arch{
+  font-family:var(--serif); font-style:italic; font-size:14px;
+  font-variation-settings:"opsz" 24; color:var(--terra); line-height:1.4;
+}
+.comp-bloco-meta{
+  display:flex; gap:10px; align-items:baseline; margin-top:4px;
+}
+.comp-nivel{
+  font-family:var(--mono); font-size:9px; letter-spacing:0.14em; color:var(--fumaca);
+}
+.comp-cat{
+  font-family:var(--serif); font-style:italic; font-size:13px;
+  font-variation-settings:"opsz" 24; color:var(--fumaca);
+}
+
+.comp-desc{
+  font-family:var(--serif); font-variation-settings:"opsz" 48;
+  font-size:15px; line-height:1.55; color:var(--tinta); margin-bottom:var(--s3);
+}
+
+.comp-io-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s3);
+  border-top:1px solid var(--osso); padding-top:var(--s2);
+}
+.cio-k{
+  font-family:var(--mono); font-size:9px; letter-spacing:0.14em;
+  color:var(--terra); margin-bottom:4px;
+}
+.cio-v{
+  font-family:var(--serif); font-size:13px; color:var(--fumaca);
+  font-variation-settings:"opsz" 24; line-height:1.45;
+}
+
+/* Princípio III solto na §03 */
+.principio-solto{
+  margin-top:var(--s4);
+  padding:var(--s3) var(--s4);
+  border-left:2px solid var(--terra);
+}
+.principio-solto .pk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);display:block;margin-bottom:6px;
+}
+.principio-solto .pt{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:20px;letter-spacing:-.02em;color:var(--tinta);
+  display:block;margin-bottom:8px;
+}
+.principio-solto .pd{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:16px;line-height:1.5;color:var(--fumaca);
+}
+
+/* Princípio III solto na §03 */
+.sec-modular-preto{ background:var(--tinta); }
+.sec-modular-preto .folio-dark{ border-bottom-color:rgba(252,252,252,.2); }
+.sec-modular-preto .modulo{ border-left-color:var(--terra); }
+.sec-modular-preto .sec-heading h2{ color:var(--folha); }
+
+.lens-dark{
+  border-left-color:var(--terra);
+  color:rgba(252,252,252,.85);
+}
+.lens.lens-dark{
+  color:rgba(252,252,252,.88);
+}
+.lens-dark strong{ color:var(--terra); }
+
+/* ── § 03: ARQUITETURA (legado, manter para arch-lede) ── */
+.arch-lede{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;font-style:italic;
+  font-size:22px;line-height:1.4;color:var(--tinta);max-width:780px;margin-bottom:var(--s4);
+}
+
+/* costura §02→§03 + legenda da metáfora arquitetônica */
+.arch-intro{
+  display:grid;grid-template-columns:1fr 280px;gap:56px;align-items:start;
+  margin-bottom:var(--s4);padding-bottom:var(--s4);
+  border-bottom:1px solid var(--osso);
+}
+.arch-intro p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:17px;line-height:1.55;color:var(--tinta);margin:0 0 14px;
+}
+.arch-intro p:last-child{margin-bottom:0;}
+.arch-intro em{color:var(--terra);font-style:italic;}
+.arch-intro aside{
+  border-top:1px solid var(--terra);padding-top:14px;
+}
+.arch-intro aside .pk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra);display:block;margin-bottom:10px;
+}
+.arch-intro aside p{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  font-variation-settings:"opsz" 24;color:var(--fumaca);
+  line-height:1.55;margin:0;
+}
+
+.levels{margin-top:var(--s2);}
+.lvl-row{
+  display:grid;grid-template-columns:170px 1fr;
+  padding:var(--s3) 0;border-top:1px solid var(--osso);
+  align-items:start;gap:0;
+}
+.lvl-label{
+  padding-right:var(--s3);border-right:1px solid var(--osso);
+}
+.lvl-label .ln{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);display:block;margin-bottom:4px;
+}
+.lvl-label .ll{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;font-weight:500;
+  font-size:16px;color:var(--tinta);
+}
+.lvl-items{
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-left:var(--s4);gap:var(--s3);
+}
+.lvl-items.one{grid-template-columns:1fr;}
+.lvl-item .cn{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:18px;letter-spacing:-.02em;color:var(--tinta);
+  display:block;margin-bottom:6px;
+}
+.lvl-item .cn small{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:var(--terra);font-weight:400;
+}
+.lvl-item p{
+  font-family:var(--serif);font-variation-settings:"opsz" 24;
+  font-size:14px;line-height:1.5;color:var(--fumaca);
+}
+
+/* ── § 04: COMPONENTES (modular escura) ── */
+.sec-modular{
+  background:var(--carvao);color:var(--folha);
+  padding:var(--s5) 40px var(--s6);
+}
+.selo-vivo{
+  display:flex;align-items:center;gap:14px;margin-bottom:var(--s4);
+  padding:14px 18px;
+  border:1px solid rgba(216,148,120,.35);background:rgba(166,58,35,.06);
+}
+.selo-vivo p{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:var(--terra-fade);font-variation-settings:"opsz" 24;line-height:1.4;margin:0;
+}
+.selo-vivo .ver{color:var(--folha);font-style:normal;}
+.modulo{
+  padding:24px 0 24px 28px;border-left:2px solid var(--terra);margin-bottom:18px;
+}
+.modulo-head{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:10px;flex-wrap:wrap;
+}
+.modulo-name{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:32px;line-height:1;letter-spacing:-.035em;color:var(--folha);
+}
+.modulo-role{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:var(--terra-fade);font-variation-settings:"opsz" 24;
+}
+.modulo-addr{
+  margin-left:auto;font-family:var(--mono);font-size:9px;
+  letter-spacing:0.14em;color:rgba(252,252,252,.55);
+}
+.modulo-addr .aid{color:var(--terra);}
+.modulo-fn{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:15px;line-height:1.5;color:var(--folha);margin:0 0 14px;
+}
+.modulo-fn em{color:var(--terra-fade);font-style:italic;}
+.modulo-io{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+  padding-top:14px;border-top:1px solid rgba(252,252,252,.18);
+}
+.io-k{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra-fade);margin-bottom:4px;
+}
+.io-v{
+  font-family:var(--serif);font-size:13px;color:rgba(252,252,252,.85);
+  font-variation-settings:"opsz" 24;line-height:1.45;
+}
+.modulo-limite{
+  margin:18px 0 0;padding-left:14px;border-left:1px solid var(--terra);
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:rgba(252,252,252,.75);font-variation-settings:"opsz" 24;line-height:1.45;
+}
+.modular-pull{margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid rgba(252,252,252,.18);}
+.modular-pull p{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;
+  font-size:clamp(22px,2.6vw,32px);line-height:1.32;
+  color:var(--folha);font-style:italic;font-weight:400;max-width:920px;
+}
+.modular-pull .em{color:var(--terra-fade);}
+.modular-pull .src{
+  margin-top:18px;font-family:var(--mono);font-size:10px;
+  letter-spacing:0.14em;color:rgba(252,252,252,.45);
+}
+
+/* ── § 05: LEITURA APLICADA ── */
+.lentes{display:flex;flex-direction:column;gap:var(--s3);}
+.lens{
+  padding:18px 22px;
+  border-left:3px solid var(--terra);
+  font-family:var(--serif);font-size:16px;
+  font-variation-settings:"opsz" 48;line-height:1.55;color:var(--tinta);
+}
+.lens strong{
+  font-family:var(--mono);font-weight:500;font-size:10px;
+  letter-spacing:0.12em;color:var(--terra);
+  display:block;margin-bottom:8px;font-style:normal;
+}
+
+/* ── § 06: OPERAÇÃO E GOVERNANÇA ── */
+.flow-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  border-top:1px solid var(--tinta);margin-bottom:var(--s4);
+}
+.flow-step{padding:var(--s3) var(--s3) var(--s3) 0;}
+.flow-step + .flow-step{border-left:1px solid var(--osso);padding-left:var(--s3);}
+.flow-step .sn{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);display:block;margin-bottom:6px;
+}
+.flow-step .sn b{font-weight:500;}
+.flow-step .st{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:20px;letter-spacing:-.02em;color:var(--tinta);
+  display:block;margin-bottom:8px;
+}
+.flow-step .sd{
+  font-family:var(--serif);font-variation-settings:"opsz" 24;
+  font-size:14px;line-height:1.5;color:var(--fumaca);
+}
+.principles{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;
+  border-top:2px solid var(--terra);
+  max-width:1400px;
+  margin:0 auto;
+}
+.principle{text-align:left;}
+.principle{padding:var(--s3) var(--s3) var(--s3) 0;}
+.principle + .principle{border-left:1px solid var(--osso);padding-left:var(--s3);}
+.principle .pk{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.14em;
+  color:var(--terra);display:block;margin-bottom:6px;
+}
+.principle .pt{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:18px;letter-spacing:-.02em;color:var(--tinta);
+  display:block;margin-bottom:8px;
+}
+.principle .pd{
+  font-family:var(--serif);font-variation-settings:"opsz" 24;
+  font-size:14px;line-height:1.5;color:var(--fumaca);
+}
+
+/* ── § 07: AUTORIA ── */
+.author-body{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;
+}
+.author-l{
+  padding-right:var(--s5);border-right:1px solid rgba(252,252,252,.18);
+}
+.author-bio p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:18px;line-height:1.55;color:var(--folha);margin-bottom:18px;
+}
+.author-bio em{color:var(--terra-fade);font-style:italic;}
+
+/* frase poética como epígrafe de abertura da §06 — agora em coluna única, largura cheia */
+.author-epigraph{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-style:italic;
+  font-size:24px;line-height:1.4;color:var(--folha);
+  margin:0 0 var(--s5);padding-bottom:var(--s4);
+  border-bottom:1px solid rgba(252,252,252,.18);
+  width:100%;
+  max-width:none;
+}
+.author-epigraph em{color:var(--terra-fade);font-style:italic;}
+
+/* placeholder de mini-bio — visualmente discreto, claramente identificado como pendente */
+.author-bio-pending{
+  padding:14px 18px;margin-bottom:var(--s3);
+  border:1px dashed rgba(216,148,120,.35);
+  background:rgba(166,58,35,.04);
+}
+.author-bio-pending .abp-k{
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;
+  color:var(--terra-fade);display:block;margin-bottom:8px;
+}
+.author-bio-pending .abp-v{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:rgba(252,252,252,.5);font-variation-settings:"opsz" 24;
+  line-height:1.5;margin:0;
+}
+.cc-mark-block{
+  display:flex;align-items:flex-start;gap:24px;
+  margin-top:var(--s4);padding-top:var(--s4);
+  border-top:1px solid rgba(252,252,252,.18);
+}
+.cc-mark-svg{width:64px;height:auto;flex-shrink:0;overflow:visible;}
+.cc-mark-text .cn{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;
+  color:var(--terra-fade);margin-bottom:6px;
+}
+.cc-mark-text .cd{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  color:rgba(252,252,252,.6);font-variation-settings:"opsz" 24;line-height:1.5;
+}
+.author-r{padding-left:var(--s5);}
+.contact-rows{display:flex;flex-direction:column;border-top:1px solid rgba(252,252,252,.18);}
+.contact-row{
+  display:grid;grid-template-columns:140px 1fr;
+  border-bottom:1px solid rgba(252,252,252,.18);
+  align-items:baseline;padding:12px 0;
+}
+.contact-row .k{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--terra-fade);
+}
+.contact-row .v{
+  font-family:var(--serif);font-size:15px;color:var(--folha);
+  font-variation-settings:"opsz" 24;
+}
+.contact-row a.v{
+  border-bottom:none;padding-bottom:1px;
+  display:inline-block;word-break:break-all;
+}
+.author-close{
+  margin-top:var(--s3);padding-top:var(--s3);
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:16px;line-height:1.55;color:rgba(252,252,252,.75);
+}
+.author-close em{color:var(--terra-fade);font-style:italic;}
+
+/* ── FOOTER ── */
+.footer{
+  background:var(--carvao);color:rgba(252,252,252,.55);
+  border-top:1px solid rgba(252,252,252,.18);
+  padding:24px 40px;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  font-family:var(--serif);font-size:13px;font-variation-settings:"opsz" 24;
+}
+.footer .l{font-style:italic;}
+.footer .l .brand{color:var(--terra-fade);}
+.footer .c{color:var(--folha);text-align:center;}
+.footer .r{justify-self:end;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;}
+.footer .r a{color:var(--terra-fade);border-bottom:1px solid var(--terra-fade);padding-bottom:1px;}
+
+/* ── RESPONSIVO ── */
+@media (max-width:1099px){
+  .hero,.sec,.sec-alt,.sec-modular,.sec-modular-preto,.footer{
+    padding-left:32px;padding-right:32px;
+  }
+  .strip{padding:12px 24px;}
+  .sec-body{grid-template-columns:1fr 220px;gap:40px;}
+  .tracao-body{grid-template-columns:1fr 220px;gap:40px;}
+  .pullout-contexto{width:220px;margin-left:20px;}
+  .arch-intro{grid-template-columns:1fr 220px;gap:40px;}
+}
+@media (max-width:899px){
+  .strip{grid-template-columns:auto 1fr auto;padding:10px 18px;gap:8px;}
+  .strip .l span:last-child{display:none;}
+  .strip nav{font-size:8px;}
+  .strip nav a{padding:3px 6px;}
+  .strip .r span{display:none;}
+  .hero{padding-left:24px;padding-right:24px;padding-top:88px;}
+  .hero-meta{grid-template-columns:1fr 1fr;gap:18px 24px;}
+  .hero-bottom{grid-template-columns:1fr;gap:28px;}
+  .hero-author{text-align:left;}
+  .sec,.sec-alt,.sec-modular,.sec-modular-preto{padding-left:24px;padding-right:24px;}
+  .sec-heading{grid-template-columns:1fr;gap:14px;}
+  .sec-num-right{font-size:64px;text-align:left;order:-1;margin-bottom:-10px;}
+  .sec-body{grid-template-columns:1fr;gap:32px;}
+  .tracao-body{grid-template-columns:1fr;gap:32px;}
+  .apres-grid{grid-template-columns:1fr;gap:32px;}
+  .apres-side{border-right:none;border-bottom:1px solid var(--osso);padding-right:0;padding-bottom:var(--s3);}
+  .pullout-contexto{float:none;width:auto;margin:0 0 var(--s3) 0;}
+  .arch-intro{grid-template-columns:1fr;gap:24px;}
+  .author-epigraph{font-size:19px;max-width:none;}
+  .metricas{grid-template-columns:1fr 1fr;}
+  .tese-cols{grid-template-columns:1fr;}
+  .polos{grid-template-columns:1fr;}
+  .polo{border-left:none;border-bottom:1px solid var(--osso);padding-left:0;padding-bottom:var(--s3);}
+  .polo + .polo{border-left:none;}
+  .lvl-row{grid-template-columns:1fr;}
+  .lvl-label{border-right:none;border-bottom:1px solid var(--osso);padding-right:0;padding-bottom:var(--s2);}
+  .lvl-items{grid-template-columns:1fr;padding-left:0;margin-top:var(--s2);}
+  .modulo-addr{margin-left:0;}
+  .modulo-io{grid-template-columns:1fr;gap:14px;}
+  .comp-linha-2{grid-template-columns:1fr;}
+  .comp-io-grid{grid-template-columns:1fr;gap:14px;}
+  .flow-row{grid-template-columns:1fr 1fr;}
+  .flow-step{border-bottom:1px solid var(--osso);}
+  .principles{grid-template-columns:1fr;}
+  .principle + .principle{border-left:none;padding-left:0;border-top:1px solid var(--osso);}
+  .author-body{grid-template-columns:1fr;}
+  .author-l{padding-right:0;border-right:none;border-bottom:1px solid rgba(252,252,252,.18);padding-bottom:var(--s4);}
+  .author-r{padding-left:0;padding-top:var(--s4);}
+  .footer{grid-template-columns:1fr;gap:10px;text-align:center;padding-left:24px;padding-right:24px;}
+  .footer .r{justify-self:center;}
+}
+@media (max-width:599px){
+  .strip{padding:8px 14px;}
+  .strip nav{display:none;}
+  .strip .r .contato{margin-left:8px;}
+  .hero,.sec,.sec-alt,.sec-modular,.sec-modular-preto,.footer{padding-left:18px;padding-right:18px;}
+  .hero{padding-top:80px;}
+  .hero-meta{grid-template-columns:1fr;}
+  .sec-num-right{font-size:48px;}
+  .metricas{grid-template-columns:1fr;}
+  .metrica + .metrica{border-left:none;padding-left:0;border-top:1px solid var(--osso);}
+  .flow-row{grid-template-columns:1fr;}
+  .comp-bloco{padding:var(--s3);}
+  .comp-bloco-header{gap:var(--s2);}
+  .comp-svg{width:40px;height:40px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── STRIP ── -->
+<header class="strip">
+  <div class="l">
+    <span class="brand">ATRIO</span>
+    
+  </div>
+  <nav>
+    <a href="#oque">§01 APRES.</a>
+    <a href="#tese">§02 TESE</a>
+    <a href="#arquitetura">§03 ARQ.</a>
+    <a href="#leitura">§04 LEITURA</a>
+    <a href="#governanca">§05 OPER.</a>
+    <a href="#autoria">§06 AUTORIA</a>
+  </nav>
+  <div class="r">
+    CURITIBA · 2026
+    <a class="contato" href="#autoria">CONTATO →</a>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-meta">
+    <div>
+      <div class="mk">SISTEMA</div>
+      <div class="mv">ATRIO · 2026</div>
+    </div>
+    <div>
+      <div class="mk">PRINCÍPIOS</div>
+      <div class="mv it">governança e rastreabilidade</div>
+    </div>
+    <div>
+      <div class="mk">CATEGORIA</div>
+      <div class="mv">arquitetura modular</div>
+    </div>
+    <div>
+      <div class="mk">ESTADO</div>
+      <div class="mv it">operacional · dossiê consolidado</div>
+    </div>
+  </div>
+
+  <div class="hero-center">
+    <h1 class="hero-title">ATRIO</h1>
+    <p class="hero-sub">Arquitetura Recursal via Inteligência Orquestrada</p>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-lede">
+      <p>O ATRIO traduz complexidade jurídica em <em>arquitetura operacional</em> — governada, rastreável e humanamente supervisionada.</p>
+    </div>
+    <div class="hero-author">
+      <div class="ak">AUTOR</div>
+      <div class="an">Christian da Costa</div>
+      <div class="al">Curitiba · Brasil</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── § 01: APRESENTAÇÃO + TRAÇÃO ── -->
+<section id="oque" class="sec">
+
+  <div class="folio">
+    <span><span class="fn">§ 01</span> &nbsp;·&nbsp; APRESENTAÇÃO · DOCUMENTO-MATRIZ</span>
+    <span class="fp">DOSSIÊ ATRIO · PÁG. 02 / 06</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow">APRESENTAÇÃO · DOCUMENTO-MATRIZ</div>
+      <h2>O que é o <em>ATRIO</em></h2>
+    </div>
+    <div class="sec-num-right">01</div>
+  </div>
+
+  <div class="apres-grid">
+    <div class="apres-side">
+      <div>
+        <div class="label">Origem</div>
+        <div class="value">Rotina jurídica real, em ambiente decisório de alto volume.</div>
+      </div>
+      <div>
+        <div class="label">Estrutura</div>
+        <div class="value">Cinco sistemas: CORPUS, RATIO, LUX, VIS, VEU — orquestrados pelo ATRIO.</div>
+      </div>
+      <div>
+        <div class="label">Distinção</div>
+        <div class="value">Não é coleção de prompts. É arquitetura modular de trabalho jurídico.</div>
+      </div>
+      <div>
+        <div class="label">Uso</div>
+        <div class="value">Documento-matriz. Apresenta a arquitetura central do sistema.</div>
+      </div>
+    </div>
+    <div class="prose">
+      <aside class="pullout-contexto">
+        <span class="pk">CONTEXTO INSTITUCIONAL</span>
+        <p>Turma Recursal estadual, matéria cível, alto volume processual. Ambiente decisório de alta densidade, exigência permanente de técnica recursal e padronização responsável.</p>
+      </aside>
+      <p>O <strong>ATRIO</strong> é uma <em>infraestrutura jurídico-operacional</em> assistida por IA, concebida e construída do zero a partir de uma rotina jurídica real — marcada por alto volume decisório, diversidade processual, necessidade de padronização responsável e controle técnico da produção textual.</p>
+      <p>Mais do que um conjunto de prompts ou artefatos isolados, o ATRIO organiza uma arquitetura modular de trabalho jurídico: <strong>CORPUS</strong> estrutura a base documental; <strong>RATIO</strong> conduz fluxos de análise decisória; <strong>LUX</strong> opera revisão textual; <strong>VIS</strong> realiza auditoria lógico-jurídica; <strong>VEU</strong> apoia o tratamento de dados pessoais.</p>
+      <p>Esses sistemas não funcionam como automação substitutiva da decisão humana. Operam como <em>infraestrutura de suporte, rastreabilidade e governança</em> — preservando a autoridade do operador e expondo limites, pendências e validações necessárias.</p>
+    </div>
+  </div>
+
+  <!-- TRAÇÃO: comprimida junto com a apresentação -->
+  <div class="tracao">
+    <div class="tracao-eyebrow">MÉTRICAS · EVIDÊNCIAS INICIAIS</div>
+    <div class="tracao-head">Primeiro ciclo de operação ampliada — <em>sinal mensurável na conversão do fluxo recursal em votos</em></div>
+
+    <div class="metricas">
+      <div class="metrica">
+        <span class="mk">MELHORA RELATIVA</span>
+        <span class="mv principal">+15,2%</span>
+        <span class="md">na conversão decisória — indicador central de tração</span>
+      </div>
+      <div class="metrica">
+        <span class="mk">CONVERSÃO FINAL</span>
+        <span class="mv">53,9%</span>
+        <span class="md">votos por despacho no ciclo ampliado (mar–abr 2026)</span>
+      </div>
+      <div class="metrica">
+        <span class="mk">GANHO ABSOLUTO</span>
+        <span class="mv">+7,1 pp</span>
+        <span class="md">jan./fev. 2026: 46,8% → mar./abr. 2026: 53,9%</span>
+      </div>
+      <div class="metrica">
+        <span class="mk">ESCALA DO CICLO</span>
+        <span class="mv">424</span>
+        <span class="md">votos produzidos no primeiro ciclo ampliado</span>
+      </div>
+    </div>
+
+    <div class="tracao-body">
+      <div class="tracao-prose">
+        <p>No primeiro ciclo analisado, entre março e abril de 2026, o sistema esteve associado a 424 votos produzidos e 53,9% de conversão decisória. Em relação ao bimestre pré-implantação, a conversão passou de 46,8% para 53,9%, representando ganho absoluto de 7,1 pontos percentuais e <em>melhora relativa de 15,2%</em>.</p>
+        <p>Os dados indicam tração operacional inicial, sem pretensão de isolar causalidade estatística. A análise considera apenas registros com despacho preenchido e classifica como votos os encaminhamentos decisórios, inclusive hipóteses de não conhecimento do recurso. O comparativo foi ajustado pelo calendário operacional interno.</p>
+      </div>
+      <aside class="marginalia">
+        <span class="mk">NOTA METODOLÓGICA</span>
+        O indicador mede conversão voto/despacho, não tempo por voto, complexidade ou qualidade jurídica diretamente. É suficiente para evidência inicial de produto em ambiente real.
+      </aside>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── § 02: TESE ── -->
+<section id="tese" class="sec sec-alt">
+
+  <div class="folio">
+    <span><span class="fn">§ 02</span> &nbsp;·&nbsp; TESE · PONTO DE PARTIDA</span>
+    <span class="fp">DOSSIÊ ATRIO · PÁG. 03 / 06</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow">TESE · PONTO DE PARTIDA</div>
+      <h2>Entre dois polos insuficientes,<br>uma <em>terceira via</em></h2>
+    </div>
+    <div class="sec-num-right">02</div>
+  </div>
+
+  <div class="tese-cols">
+    <div>
+      <p>A discussão sobre IA no Direito tem se organizado, com frequência, entre dois polos insuficientes: o entusiasmo que confunde fluência com fundamento, e o ceticismo que rejeita a tecnologia em bloco. O ATRIO se constrói <em>fora desse eixo</em>.</p>
+      <p>É um ecossistema de IA aplicada à decisão jurídica, em arquitetura própria, voltado ao <em>suporte decisório</em> em ambiente judicial — sem substituição da autoridade humana e sem produção autônoma de conclusão jurisdicional.</p>
+    </div>
+    <div>
+      <p>O traço distintivo está na recusa da automação opaca de uma IA que decide silenciosamente. Codifica-se uma arquitetura de suporte com travas formais de avanço, marcadores explícitos de validação e gates de qualidade.</p>
+      <p>Assim, o ATRIO admite incerteza em vez de fabricar plausibilidade. A inteligência artificial deixa de ser centro decisório e passa a operar como <em>infraestrutura</em> de organização, controle e refinamento.</p>
+    </div>
+  </div>
+
+  <div class="polos">
+    <div class="polo">
+      <span class="pn">POLO A</span>
+      <span class="pt">Entusiasmo opaco</span>
+      <p>A IA como caixa-única para resumir, fundamentar, revisar e decidir. Funções distintas se contaminam; o texto fica limpo, o método invisível.</p>
+    </div>
+    <div class="polo">
+      <span class="pn">POLO B</span>
+      <span class="pt">Rejeição em bloco</span>
+      <p>A automação como inimigo do rigor jurídico. Reduz a discussão a uma escolha binária e descarta o ganho operacional possível sob governança.</p>
+    </div>
+    <div class="polo atrio">
+      <span class="pn">ATRIO</span>
+      <span class="pt">Arquitetura de suporte</span>
+      <p>Onde o mercado oferece <em>aceleração</em>, o ATRIO oferece <em>arquitetura</em>. Fases declaradas, controle humano vinculante, rastreabilidade.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── § 03: ARQUITETURA + COMPONENTES (fusão) ── -->
+<section id="arquitetura" class="sec">
+
+  <div class="folio">
+    <span><span class="fn">§ 03</span> &nbsp;·&nbsp; ARQUITETURA · CINCO SISTEMAS</span>
+    <span class="fp">DOSSIÊ ATRIO · PÁG. 04 / 06</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow">ARQUITETURA SIMBÓLICA · CINCO SISTEMAS</div>
+      <h2>Cada componente é um <em>elemento</em><br>da arquitetura clássica</h2>
+    </div>
+    <div class="sec-num-right">03</div>
+  </div>
+
+  <!-- costura §02→§03 + legenda da metáfora -->
+  <div class="arch-intro">
+    <div>
+      <p>Essa infraestrutura toma forma concreta. Os cinco sistemas do ATRIO se organizam como elementos de uma <em>arquitetura clássica</em> — cada componente assume a função que seu correspondente edificado cumpre na construção.</p>
+      <p>A metáfora não é decorativa: traduz, em referência visual estável, uma decisão de método. O que <em>funda</em> a base documental é coluna; o que <em>opera</em> a análise decisória é frontão; o que <em>delimita</em> e o que <em>cobre</em> recebem, cada um, seu lugar próprio.</p>
+    </div>
+    <aside>
+      <span class="pk">CHAVE DE LEITURA</span>
+      <p>Pórtico, coluna, frontão, quina, vértice e anteparo nomeiam funções estruturais — não estilos. Cada elemento responde a uma pergunta diferente sobre o sistema: o que sustenta, o que opera, o que filtra, o que protege.</p>
+    </aside>
+  </div>
+
+  <!-- ATRIO: cabeçalho orquestrador — largura total, fundo ligeiramente mais escuro -->
+  <div class="comp-bloco comp-bloco-full">
+    <div class="comp-bloco-header">
+      <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+        <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+        <path d="M26 28H70V68H60V38H36V68H26Z" fill="var(--terra)"/>
+      </svg>
+      <div class="comp-bloco-titles">
+        <span class="comp-nome">ATRIO</span>
+        <span class="comp-arch">pórtico · U invertido em linha</span>
+        <div class="comp-bloco-meta">
+          <span class="comp-nivel">NÍVEL 0</span>
+          <span class="comp-cat">Vestíbulo</span>
+        </div>
+      </div>
+    </div>
+    <p class="comp-desc">Governa a passagem entre componentes e preserva o operador humano como centro de decisão. Acima dos cinco sistemas, o ATRIO opera como instância de orquestração — não executa, distribui.</p>
+    <div class="comp-io-grid">
+      <div><div class="cio-k">ENTRADA</div><div class="cio-v">Caso, intenção e escopo declarados pelo operador.</div></div>
+      <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Roteamento entre componentes, gates de validação, marcadores formais de pendência.</div></div>
+      <div><div class="cio-k">SAÍDA</div><div class="cio-v">Entrega validada, auditável fim a fim, com responsabilidade humana preservada.</div></div>
+    </div>
+  </div>
+
+  <!-- Linha 1: CORPUS (largura total) -->
+  <div class="comp-linha comp-linha-1">
+    <div class="comp-bloco">
+      <div class="comp-bloco-header">
+        <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+          <g fill="var(--terra)"><rect x="31" y="28" width="34" height="8"/><rect x="38" y="36" width="20" height="26"/><rect x="31" y="62" width="34" height="8"/></g>
+        </svg>
+        <div class="comp-bloco-titles">
+          <span class="comp-nome">CORPUS</span>
+          <span class="comp-arch">coluna · capitel, fuste e base integrados</span>
+          <div class="comp-bloco-meta">
+            <span class="comp-nivel">NÍVEL 1</span>
+            <span class="comp-cat">Fundação</span>
+          </div>
+        </div>
+      </div>
+      <p class="comp-desc">Funda a base documental. Captura, estrutura e indexa material jurídico bruto. Sustenta tudo o que opera acima — sem CORPUS, o sistema rebaixa o grau de confiança sem fabricar plausibilidade.</p>
+      <div class="comp-io-grid">
+        <div><div class="cio-k">ENTRADA</div><div class="cio-v">Acórdãos, ementas, peças, modelos, portais de jurisprudência.</div></div>
+        <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Scraping, ETL, enriquecimento, retrieval e indexação rastreável.</div></div>
+        <div><div class="cio-k">SAÍDA</div><div class="cio-v">Insumos prontos para RATIO, LUX, VIS e VEU.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Linha 2: RATIO + LUX -->
+  <div class="comp-linha comp-linha-2">
+    <div class="comp-bloco">
+      <div class="comp-bloco-header">
+        <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+          <g fill="var(--terra)"><polygon points="28,60 68,60 48,28"/><rect x="28" y="64" width="40" height="5"/></g>
+        </svg>
+        <div class="comp-bloco-titles">
+          <span class="comp-nome">RATIO</span>
+          <span class="comp-arch">frontão · triângulo sobre entablamento</span>
+          <div class="comp-bloco-meta">
+            <span class="comp-nivel">NÍVEL 2</span>
+            <span class="comp-cat">Operação</span>
+          </div>
+        </div>
+      </div>
+      <p class="comp-desc">Opera por módulos especializados em espécies recursais. Fases obrigatórias sequenciais, travas formais de avanço, marcadores explícitos de validação pendente e gates de qualidade.</p>
+      <div class="comp-io-grid">
+        <div><div class="cio-k">ENTRADA</div><div class="cio-v">Caso, peças, hipótese decisória do operador.</div></div>
+        <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Admissibilidade, matriz contrafactual, parecer/minuta, validações, pendências.</div></div>
+        <div><div class="cio-k">SAÍDA</div><div class="cio-v">Entrega escaneável: status, pendência impeditiva, risco relevante, próxima ação permitida.</div></div>
+      </div>
+    </div>
+    <div class="comp-bloco">
+      <div class="comp-bloco-header">
+        <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+          <path d="M28 28H68V40H42V68H28Z" fill="var(--terra)"/>
+        </svg>
+        <div class="comp-bloco-titles">
+          <span class="comp-nome">LUX</span>
+          <span class="comp-arch">quina · bloco em L sobre canto</span>
+          <div class="comp-bloco-meta">
+            <span class="comp-nivel">NÍVEL 2</span>
+            <span class="comp-cat">Operação</span>
+          </div>
+        </div>
+      </div>
+      <p class="comp-desc">Correção, clareza e adequação ao estilo. Opera depois do RATIO, sobre o output deste ou sobre texto avulso. Corrige forma; não cria fundamento, não altera conclusão.</p>
+      <div class="comp-io-grid">
+        <div><div class="cio-k">ENTRADA</div><div class="cio-v">Output do RATIO ou texto avulso submetido pelo operador.</div></div>
+        <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Texto com marcações, lista de alterações relevantes, versão final limpa.</div></div>
+        <div><div class="cio-k">SAÍDA</div><div class="cio-v">Três camadas: marcado, diff e final — perfil de estilo opcional.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Linha 3: VIS + VEU -->
+  <div class="comp-linha comp-linha-2">
+    <div class="comp-bloco">
+      <div class="comp-bloco-header">
+        <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+          <path d="M28 68V28L48 48L68 28V68Z" fill="var(--terra)"/>
+        </svg>
+        <div class="comp-bloco-titles">
+          <span class="comp-nome">VIS</span>
+          <span class="comp-arch">vértice em M · duas hastes unidas por vértice</span>
+          <div class="comp-bloco-meta">
+            <span class="comp-nivel">NÍVEL 3</span>
+            <span class="comp-cat">Especializado</span>
+          </div>
+        </div>
+      </div>
+      <p class="comp-desc">Lugar intermediário entre auditoria jurídica e leitura estrutural: torna visível a arquitetura argumentativa. Isola problemas de lógica e fundamentação sem reconstruir todo o fluxo decisório.</p>
+      <div class="comp-io-grid">
+        <div><div class="cio-k">ENTRADA</div><div class="cio-v">Texto jurídico avulso, finalizado ou em revisão.</div></div>
+        <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Análise de coerência, contradições, lacunas e aderência entre fundamentos e conclusão.</div></div>
+        <div><div class="cio-k">SAÍDA</div><div class="cio-v">Relatório de lacunas e pontos de fragilidade, sem reconstrução do fluxo decisório.</div></div>
+      </div>
+    </div>
+    <div class="comp-bloco">
+      <div class="comp-bloco-header">
+        <svg class="comp-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="none" stroke="var(--terra)" stroke-width="1.5"/>
+          <g fill="var(--terra)"><rect x="24" y="28" width="48" height="8"/><path d="M24 41L72 41Q72 69 48 69Q24 69 24 41Z"/></g>
+        </svg>
+        <div class="comp-bloco-titles">
+          <span class="comp-nome">VEU</span>
+          <span class="comp-arch">anteparo · entablamento e arco comprimido</span>
+          <div class="comp-bloco-meta">
+            <span class="comp-nivel">NÍVEL 3</span>
+            <span class="comp-cat">Especializado</span>
+          </div>
+        </div>
+      </div>
+      <p class="comp-desc">Faz tudo o que LUX faz em estética textual — e acrescenta função própria: apoio à conformidade com a LGPD mediante identificação, ocultação, substituição ou marcação de dados pessoais e informações sensíveis.</p>
+      <div class="comp-io-grid">
+        <div><div class="cio-k">ENTRADA</div><div class="cio-v">Texto com PII ou dados sensíveis a serem tratados.</div></div>
+        <div><div class="cio-k">OPERAÇÃO</div><div class="cio-v">Detecção, pseudonimização, marcação e alertas de exposição indevida.</div></div>
+        <div><div class="cio-k">SAÍDA</div><div class="cio-v">Versão tratada e lista auditável dos dados identificados.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Princípio III — solto, após VIS e VEU -->
+  <div class="principio-solto">
+    <span class="pk">PREMISSA</span>
+    <span class="pt">Separação funcional</span>
+    <p class="pd">Análise, redação, revisão e tratamento de dados não se contaminam. Um modelo capaz de escrever bem não deve, por isso, decidir.</p>
+  </div>
+
+</section>
+<section id="leitura" class="sec-modular sec-modular-preto">
+
+  <div class="folio folio-dark">
+    <span><span class="fn">§ 04</span> &nbsp;·&nbsp; LEITURA APLICADA · SERVICE DELIVERY JURÍDICO</span>
+    <span class="fp">DOSSIÊ ATRIO · PÁG. 05 / 06</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow" style="color:var(--terra);">LEITURA APLICADA · COORDENAÇÃO DE QUALIDADE E OPERAÇÃO</div>
+      <h2>Qualidade de peça e <em>operação massificada</em><br>tratadas como uma só engenharia</h2>
+    </div>
+    <div class="sec-num-right">04</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:56px;align-items:start;">
+    <div>
+      <p style="font-family:var(--serif);font-variation-settings:'opsz' 48;font-size:18px;line-height:1.55;color:var(--folha);margin-bottom:var(--s4);">A cadeira de Coordenação de Qualidade e Operação Jurídica exige duas profundidades simultâneas: <em style="color:var(--terra-fade);font-style:italic;">jurídica</em> e <em style="color:var(--terra-fade);font-style:italic;">de operação</em>. O ATRIO é, em essência, a tradução de uma na outra — qualidade verificável em volume, sem perda de critério técnico.</p>
+      <div class="lentes lentes-dark">
+        <div class="lens lens-dark">
+          <strong>QUALIDADE COMO ARQUITETURA, NÃO COMO INSPEÇÃO CASO A CASO</strong>
+          Controlar a qualidade das peças em volume não se faz por revisão individual: faz-se por sistema. No TJ-PR, controle de qualidade de minutas e votos com ciclo de feedback estruturado para equipe de sete e uniformização de teses ativas. No ATRIO, gates de qualidade, marcadores explícitos de validação pendente e travas formais de avanço — cada erro identificado fecha o loop com o desenho do sistema. <em style="color:var(--terra-fade);">Melhoria de tese vira melhoria de prompt</em>; melhoria de prompt vira melhoria de peça. É a cadeira que liga tecnologia e cliente operada como engenharia, não como revisão final.
+        </div>
+        <div class="lens lens-dark">
+          <strong>CONTENCIOSO DE CONSUMIDOR EM ESCALA, CONDUZIDO POR MÉTRICA</strong>
+          Contencioso massificado de consumidor (CDC) como espinha técnica da prática recursal — passagem prévia por escritório de massa e milhares de recursos inominados em matéria consumerista nas Turmas Recursais. Carteira operada por KPI: conversão voto/despacho de <em style="color:var(--terra-fade);">60 a 66% ao mês contra média de 50% do gabinete</em>, 2.000 processos saneados em 90 dias, 1.192 processos triados com diretrizes antecipadas em 56% do acervo, integração massiva de 33.000 execuções fiscais. SLA, dashboard de produtividade, controladoria de prazos e distribuições montados quando a ferramenta pronta não existia — planilha que não existia foi construída; processo que não estava documentado foi documentado.
+        </div>
+        <div class="lens lens-dark">
+          <strong>JURÍDICO E OPERAÇÃO NA MESMA MEDIDA · AI-FIRST POR PRÁTICA</strong>
+          Manual de procedimentos, taxonomia funcional multinível, matriz de competências por cargo, base indexada de 728 ementas de referência, corpus de 115 mil julgados do TJPR — o advogado que constrói planilha, não o que tolera planilha. O ATRIO é construção autoral em IA jurídica concebida na rotina real, com versionamento documentado e mecanismos de eval sobre casos concretos: não competir com a IA, <em style="color:var(--terra-fade);">operar a IA</em>. Coordenação direta de sete colaboradores e interlocução com magistrados em escalation, ajuste de rota e onboarding temático compõem a maturidade exigida pelo contato com Head Jurídico de cliente em situações de fricção.
+        </div>
+      </div>
+    </div>
+    <aside class="marginalia" style="border-top-color:var(--terra);color:rgba(252,252,252,.7);">
+      <span class="mk">PONTOS DE ENCONTRO</span>
+      Contencioso de consumidor em alta escala, coordenação por métrica, controle de qualidade tratado como sistema, loop entre erro identificado e melhoria de produto, fluência em IA aplicada à operação jurídica e maturidade institucional para escalation técnico com cliente enterprise.
+    </aside>
+  </div>
+
+</section>
+
+<!-- ── § 05: OPERAÇÃO E GOVERNANÇA ── -->
+<section id="governanca" class="sec">
+
+  <div class="folio">
+    <span><span class="fn">§ 05</span> &nbsp;·&nbsp; OPERAÇÃO · QUATRO ESTÁGIOS</span>
+    <span class="fp">DOSSIÊ ATRIO · PÁG. 06 / 06</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow">OPERAÇÃO · QUATRO ESTÁGIOS</div>
+      <h2>O método é parte da entrega.<br><em>O operador permanece no centro</em></h2>
+    </div>
+    <div class="sec-num-right">05</div>
+  </div>
+
+  <div class="flow-row">
+    <div class="flow-step">
+      <span class="sn"><b>01</b> &nbsp;SISTEMA</span>
+      <span class="st">Processa</span>
+      <span class="sd">RATIO orquestra análise; LUX refina; VIS e VEU operam em paralelo, com escopo declarado.</span>
+    </div>
+    <div class="flow-step">
+      <span class="sn"><b>02</b> &nbsp;PENDÊNCIAS</span>
+      <span class="st">Exposição</span>
+      <span class="sd">Marcadores formais expõem o que ficou em aberto. Nada validado silenciosamente; nada escondido por conveniência.</span>
+    </div>
+    <div class="flow-step">
+      <span class="sn"><b>03</b> &nbsp;ENTREGA</span>
+      <span class="st">Auditável</span>
+      <span class="sd">Cada documento vem acompanhado do registro do que foi validado, inferido e do que permanece em aberto.</span>
+    </div>
+    <div class="flow-step">
+      <span class="sn"><b>04</b> &nbsp;OPERADOR</span>
+      <span class="st">Decide</span>
+      <span class="sd">Valida, ajusta e assume a entrega. A automação é instrumento; a autoridade decisória permanece humana.</span>
+    </div>
+  </div>
+
+  <div class="principles">
+    <div class="principle">
+      <span class="pk">PRINCÍPIO I</span>
+      <span class="pt">Governança humana vinculante</span>
+      <p class="pd">A decisão judicial é ato de autoridade institucional. Sistemas que substituem essa decisão não a aceleram — a desestruturam.</p>
+    </div>
+    <div class="principle">
+      <span class="pk">PRINCÍPIO II</span>
+      <span class="pt">Rastreabilidade declarada</span>
+      <p class="pd">A exposição da incerteza é estrutural, não acidental. Toda saída é auditável quanto ao que foi validado e ao que permanece em aberto.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── § 06: AUTORIA E CONTATO ── -->
+<section id="autoria" class="sec-modular sec-dark" style="padding-top:var(--s5);">
+
+  <div class="folio folio-dark">
+    <span><span class="fn">§ 06</span> &nbsp;·&nbsp; AUTOR · MÉTODO · POSIÇÃO</span>
+    <span class="fp">DOSSIÊ ATRIO</span>
+  </div>
+
+  <div class="sec-heading">
+    <div>
+      <div class="eyebrow" style="color:var(--terra);">AUTOR · MÉTODO · POSIÇÃO</div>
+      <h2>Autor, método<br><em>e posição declarada</em></h2>
+    </div>
+    <div class="sec-num-right">06</div>
+  </div>
+
+  <p class="author-epigraph">
+    Preservar a responsabilidade humana sob automação não é nostalgia: é desenho. A força do ATRIO não está em prometer decisão automática, mas em construir uma infraestrutura em que a decisão humana possa circular com mais <em>clareza, controle e responsabilidade</em>.
+  </p>
+
+  <div class="author-body">
+    <div class="author-l">
+
+      <!-- MINI-BIO · nota do autor -->
+      <div class="author-bio">
+        <p>Christian da Costa, advogado inscrito na OAB/PR sob nº 89.297, mestre em Direito pela UFPR. Entre 2021 e 2026, atuei no Tribunal de Justiça do Paraná, como Assessor Jurídico e Chefe de Gabinete em Turmas Recursais e Execuções Fiscais — coordenei equipe, estruturei rotinas e operei carteira de alto volume sob exigência decisória constante. O ATRIO foi concebido nesse ambiente, como construção autoral e independente da estrutura institucional. Hoje, recoloco-me na fronteira entre <em>Direito</em> e <em>arquitetura jurídica aplicada</em>.</p>
+      </div>
+
+      
+    </div>
+
+    <div class="author-r">
+      <div class="contact-rows">
+        <div class="contact-row">
+          <span class="k">LinkedIn</span>
+          <a class="v" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">/in/christiandcosta</a>
+        </div>
+        <div class="contact-row">
+          <span class="k">E-mail</span>
+          <a class="v" href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
+        </div>
+        <div class="contact-row">
+          <span class="k">Base</span>
+          <span class="v">Curitiba · Brasil</span>
+        </div>
+        <div class="contact-row">
+          <span class="k">Mobilidade</span>
+          <span class="v">São Paulo, Rio de Janeiro ou remoto</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="l">
+    <span class="brand">ATRIO</span> &nbsp;·&nbsp; Arquitetura Recursal via Inteligência Orquestrada
+  </div>
+  <div class="c">Christian da Costa · 2026</div>
+  <div class="r">
+    <a href="#">Topo ↑</a>
+  </div>
+</footer>
+
+</body>
+</html>
