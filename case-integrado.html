@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CASE INTEGRADO · Da operação bruta à inteligência orquestrada</title>
+<meta name="author" content="Christian da Costa">
+<meta name="description" content="Página inicial do conjunto — Case Integrado: Vara de Execuções Fiscais, Turma Recursal da Fazenda Pública e Turma Recursal Cível articuladas em sequência de método.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#9C9A95;}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ── TOKENS ── */
+:root{
+  --folha:   #FCFCFC;
+  --papel:   #F2F0EC;
+  --osso:    #E4E2DD;
+  --tinta:   #0A0A0A;
+  --fumaca:  #3D3A35;
+  --carvao:  #1A1815;
+
+  --navy:        #002060;
+  --navy-soft:   #2B4A8C;
+  --navy-fade:   #6B82B0;
+
+  --regencia:      #B8871B;
+  --regencia-soft: #C9A552;
+  --regencia-fade: #DFC48A;
+
+  --terra:      #A63A23;
+  --terra-soft: #C25E45;
+  --terra-fade: #D89478;
+
+  --serif: 'Fraunces','EB Garamond',Georgia,'Times New Roman',serif;
+  --sans:  'Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  --mono:  'JetBrains Mono','IBM Plex Mono','Courier New',Courier,monospace;
+
+  --s1: 8px;
+  --s2: 14px;
+  --s3: 22px;
+  --s4: 32px;
+  --s5: 48px;
+}
+
+/* ── PÁGINA A4 ── */
+@page { size:A4; margin:0; }
+
+.page{
+  width:210mm;
+  height:297mm;
+  margin:24px auto;
+  background:var(--folha);
+  color:var(--tinta);
+  padding:15mm 16mm 11mm;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 1px 2px rgba(0,0,0,.10), 0 18px 50px rgba(0,0,0,.22);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.page::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(to right,rgba(0,32,96,.035) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(0,32,96,.035) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;
+}
+
+/* ── TOPO · FOLIO ── */
+.folio{
+  position:relative;
+  display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--tinta);
+  padding-bottom:7px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;color:var(--fumaca);
+}
+.folio .fn{color:var(--navy);font-weight:500;}
+.folio .fp{opacity:.75;}
+
+/* ── META ── */
+.meta{
+  position:relative;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  padding:11px 0 10px;
+  border-bottom:1px solid var(--osso);
+  margin-bottom:var(--s3);
+}
+.meta .mk{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.16em;
+  color:var(--navy);margin-bottom:3px;
+}
+.meta .mv{
+  font-family:var(--serif);font-size:11.5px;
+  font-variation-settings:"opsz" 24;color:var(--fumaca);line-height:1.3;
+}
+.meta .mv.it{font-style:italic;}
+
+/* ── CENTRO ── */
+.center{
+  position:relative;
+  flex:1;
+  display:flex;flex-direction:column;
+}
+
+.eyebrow{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;
+  color:var(--navy);margin-bottom:10px;
+}
+.title{
+  font-family:var(--serif);
+  font-variation-settings:"opsz" 144;font-weight:500;
+  font-size:48px;line-height:.92;letter-spacing:-.035em;
+  color:var(--navy);margin-bottom:12px;
+}
+.title em{font-style:italic;font-weight:400;color:var(--navy-soft);}
+.subtitle{
+  font-family:var(--serif);font-style:italic;
+  font-variation-settings:"opsz" 96;font-weight:400;
+  font-size:15.5px;line-height:1.35;color:var(--fumaca);
+  max-width:560px;margin-bottom:var(--s3);
+}
+
+/* frase-mãe */
+.mother{
+  border-left:2px solid var(--navy);
+  padding:4px 0 4px 16px;
+  margin-bottom:var(--s3);
+}
+.mother .mk{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;
+  color:var(--navy);margin-bottom:5px;
+}
+.mother p{
+  font-family:var(--serif);font-style:italic;
+  font-variation-settings:"opsz" 96;font-weight:400;
+  font-size:17px;line-height:1.35;color:var(--tinta);max-width:600px;
+}
+
+/* corpo */
+.body-grid{
+  display:grid;grid-template-columns:1fr 230px;gap:32px;align-items:start;
+  margin-bottom:var(--s3);
+}
+.prose p{
+  font-family:var(--serif);font-variation-settings:"opsz" 48;
+  font-size:12.5px;line-height:1.55;color:var(--tinta);margin-bottom:9px;
+}
+.prose p:last-child{margin-bottom:0;}
+.prose strong{font-weight:600;}
+.prose strong.reg{color:var(--regencia);}
+.prose strong.atr{color:var(--terra);}
+.prose strong.nav{color:var(--navy);}
+
+/* diagrama lateral · sequência */
+.diagram{
+  border-top:1px solid var(--navy);
+  padding-top:12px;
+}
+.diagram .dk{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;
+  color:var(--navy);margin-bottom:10px;
+}
+.step{
+  border:1px solid var(--navy);
+  padding:8px 10px;
+  background:rgba(0,32,96,.025);
+}
+.step .sn{
+  font-family:var(--mono);font-size:7.5px;letter-spacing:0.18em;
+  color:var(--navy);display:block;margin-bottom:3px;
+}
+.step .st{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:14px;letter-spacing:-.015em;color:var(--tinta);
+  display:block;line-height:1.05;margin-bottom:3px;
+}
+.step .sd{
+  font-family:var(--serif);font-style:italic;
+  font-variation-settings:"opsz" 24;font-size:10px;
+  color:var(--fumaca);line-height:1.3;
+}
+.step.reg{border-color:var(--regencia);background:rgba(184,135,27,.05);}
+.step.reg .sn{color:var(--regencia);}
+.step.atr{border-color:var(--terra);background:rgba(166,58,35,.05);}
+.step.atr .sn{color:var(--terra);}
+.arrow{
+  display:flex;justify-content:center;align-items:center;
+  height:16px;position:relative;
+}
+.arrow::before{
+  content:"";display:block;
+  width:1px;height:10px;background:var(--navy);
+}
+.arrow::after{
+  content:"";display:block;position:absolute;
+  width:0;height:0;
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-top:5px solid var(--navy);
+  margin-top:10px;
+}
+
+/* ── MÉTRICAS DE DESTAQUE ── */
+.metrics-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:var(--s3);
+}
+.metric-card{
+  border:1px solid;
+  padding:14px 16px 12px;
+  position:relative;
+}
+.metric-card.reg{
+  border-color:var(--regencia);
+  background:rgba(184,135,27,.05);
+}
+.metric-card.atr{
+  border-color:var(--terra);
+  background:rgba(166,58,35,.05);
+}
+.mc-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid;padding-bottom:6px;margin-bottom:8px;
+}
+.metric-card.reg .mc-head{border-color:rgba(184,135,27,.4);}
+.metric-card.atr .mc-head{border-color:rgba(166,58,35,.4);}
+.mc-name{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;font-weight:500;
+  font-size:18px;letter-spacing:-.02em;line-height:1;
+}
+.metric-card.reg .mc-name{color:var(--regencia);}
+.metric-card.atr .mc-name{color:var(--terra);}
+.mc-tag{
+  font-family:var(--mono);font-size:7.5px;letter-spacing:0.18em;
+  color:var(--fumaca);
+}
+.mc-grid{
+  display:grid;grid-template-columns:auto 1fr;gap:10px 12px;
+  align-items:baseline;
+}
+.mc-grid .v{
+  font-family:var(--serif);font-variation-settings:"opsz" 144;font-weight:500;
+  font-size:22px;line-height:1;letter-spacing:-.03em;
+  white-space:nowrap;
+}
+.metric-card.reg .mc-grid .v{color:var(--regencia);}
+.metric-card.atr .mc-grid .v{color:var(--terra);}
+.mc-grid .k{
+  font-family:var(--mono);font-size:7.5px;letter-spacing:0.16em;
+  color:var(--fumaca);display:block;margin-bottom:2px;
+}
+.mc-grid .d{
+  font-family:var(--serif);font-variation-settings:"opsz" 24;
+  font-size:10.5px;line-height:1.35;color:var(--fumaca);
+}
+.mc-foot{
+  margin-top:8px;padding-top:6px;border-top:1px dashed;
+  font-family:var(--serif);font-style:italic;
+  font-variation-settings:"opsz" 24;font-size:10.5px;line-height:1.35;
+}
+.metric-card.reg .mc-foot{border-color:rgba(184,135,27,.35);color:var(--regencia);}
+.metric-card.atr .mc-foot{border-color:rgba(166,58,35,.35);color:var(--terra);}
+
+/* ── RODAPÉ DE LEITURA ── */
+.read-foot{
+  position:relative;
+  padding-top:var(--s3);
+  border-top:2px solid var(--navy);
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;
+}
+.read-foot .rk{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;
+  color:var(--navy);margin-bottom:5px;
+}
+.read-foot .rv{
+  font-family:var(--serif);font-variation-settings:"opsz" 96;
+  font-style:italic;font-size:16px;line-height:1.35;color:var(--tinta);
+  max-width:520px;
+}
+.read-foot .rv em{color:var(--navy);}
+.read-foot .author{text-align:right;}
+.read-foot .author .ak{
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.18em;
+  color:var(--navy);margin-bottom:3px;
+}
+.read-foot .author .an{
+  font-family:var(--serif);font-size:13px;color:var(--tinta);
+  font-variation-settings:"opsz" 24;line-height:1.25;
+}
+.read-foot .author .al{
+  font-family:var(--serif);font-style:italic;font-size:10.5px;
+  color:var(--fumaca);font-variation-settings:"opsz" 24;margin-top:2px;
+}
+
+/* ── BASE · PAGE-FOOT ── */
+.page-foot{
+  position:relative;
+  margin-top:12px;padding-top:7px;
+  border-top:1px solid var(--osso);
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:0.14em;color:var(--fumaca);
+}
+.page-foot .brand{color:var(--navy);font-weight:500;}
+
+/* ── PRINT ── */
+@media print{
+  html,body{background:#fff;}
+  .page{margin:0;box-shadow:none;width:210mm;height:297mm;}
+}
+</style>
+</head>
+<body>
+
+<article class="page">
+
+  <!-- FOLIO -->
+  <div class="folio">
+    <span><span class="fn">§ 00</span> &nbsp;·&nbsp; CASE INTEGRADO · PÁGINA INICIAL</span>
+    <span class="fp">CHRISTIAN DA COSTA · 2026</span>
+  </div>
+
+  <!-- META -->
+  <div class="meta">
+    <div>
+      <div class="mk">CONJUNTO</div>
+      <div class="mv">Estruturado · Regência · ATRIO</div>
+    </div>
+    <div>
+      <div class="mk">EIXO</div>
+      <div class="mv it">método antes da máquina</div>
+    </div>
+    <div>
+      <div class="mk">PERÍODO</div>
+      <div class="mv">ago/2025 — mai/2026</div>
+    </div>
+    <div>
+      <div class="mk">ESTADO</div>
+      <div class="mv it">operacional · evidência mensurada</div>
+    </div>
+  </div>
+
+  <!-- CENTRO -->
+  <div class="center">
+
+    <div class="eyebrow">CASE INTEGRADO · APRESENTAÇÃO</div>
+    <h1 class="title">Da operação bruta<br>à <em>inteligência orquestrada</em></h1>
+    <p class="subtitle">Case integrado de arquitetura jurídica, governança de acervo e IA aplicada em ambiente recursal de alto volume.</p>
+
+    <div class="mother">
+      <span class="mk">FRASE-MÃE</span>
+      <p>Antes da inteligência artificial, foi necessário construir a <em style="color:var(--navy);">inteligência da operação</em>.</p>
+    </div>
+
+    <div class="body-grid">
+      <div class="prose">
+        <p>Entre <strong class="nav">agosto e outubro de 2025</strong>, em ambiente recursal de alto volume, foi estruturada uma fundação operacional voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+        <p>Essa base permitiu consolidar a <strong class="reg">Regência Recursal</strong>, método de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e <em>quality gates</em>.</p>
+        <p>Sobre essa fundação, o <strong class="atr">ATRIO</strong> foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
+      </div>
+
+      <aside class="diagram" aria-label="Sequência de método">
+        <span class="dk">SEQUÊNCIA DE MÉTODO</span>
+
+        <div class="step">
+          <span class="sn">CAMPO · ESTRUTURADO</span>
+          <span class="st">Vara de Execuções Fiscais</span>
+          <span class="sd">laboratório operacional</span>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+
+        <div class="step reg">
+          <span class="sn">MÉTODO · REGÊNCIA</span>
+          <span class="st">TR · Fazenda Pública</span>
+          <span class="sd">taxonomia e governança do acervo</span>
+        </div>
+        <div class="arrow" aria-hidden="true"></div>
+
+        <div class="step atr">
+          <span class="sn">SISTEMA · ATRIO</span>
+          <span class="st">TR · Cível</span>
+          <span class="sd">arquitetura orquestrada por IA</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- MÉTRICAS DE DESTAQUE -->
+    <div class="metrics-row">
+
+      <div class="metric-card reg">
+        <div class="mc-head">
+          <span class="mc-name">Regência</span>
+          <span class="mc-tag">CONSOLIDAÇÃO · 30 DIAS</span>
+        </div>
+        <div class="mc-grid">
+          <span class="v">1.192</span>
+          <div>
+            <span class="k">PROCESSOS TRIADOS</span>
+            <span class="d">com diretrizes antecipadas e priorização operacional</span>
+          </div>
+          <span class="v">56%</span>
+          <div>
+            <span class="k">DO ACERVO</span>
+            <span class="d">previsibilidade restabelecida sob taxonomia funcional</span>
+          </div>
+        </div>
+        <div class="mc-foot">Saneamento de 2.000 processos em 90 dias na sequência operacional.</div>
+      </div>
+
+      <div class="metric-card atr">
+        <div class="mc-head">
+          <span class="mc-name">ATRIO</span>
+          <span class="mc-tag">PRIMEIRO CICLO · MAR–ABR/2026</span>
+        </div>
+        <div class="mc-grid">
+          <span class="v">+15,2%</span>
+          <div>
+            <span class="k">MELHORA RELATIVA</span>
+            <span class="d">na conversão decisória voto/despacho — indicador central de tração</span>
+          </div>
+          <span class="v">53,9%</span>
+          <div>
+            <span class="k">CONVERSÃO FINAL</span>
+            <span class="d">contra 46,8% pré-implantação · ganho absoluto de 7,1 pp</span>
+          </div>
+        </div>
+        <div class="mc-foot">424 votos produzidos no primeiro ciclo ampliado sob arquitetura orquestrada.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RODAPÉ DE LEITURA -->
+  <div class="read-foot">
+    <div>
+      <div class="rk">CHAVE DE LEITURA</div>
+      <p class="rv">A sequência importa: a IA <em>não inaugura</em> o método. Ela se apoia nele.</p>
+    </div>
+    <div class="author">
+      <div class="ak">AUTOR</div>
+      <div class="an">Christian da Costa</div>
+      <div class="al">Curitiba · Brasil</div>
+    </div>
+  </div>
+
+  <!-- PAGE FOOT -->
+  <div class="page-foot">
+    <span><span class="brand">CASE INTEGRADO</span> &nbsp;·&nbsp; Da operação bruta à inteligência orquestrada</span>
+    <span>PÁG. 01 / 01 · A4</span>
+  </div>
+
+</article>
+
+</body>
+</html>
