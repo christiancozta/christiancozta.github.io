@@ -371,20 +371,20 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
 @media(max-width:700px){.footer-grid{grid-template-columns:1fr;}.close-actions .btn{width:100%;}}
 
 /* ---- PLANTA-MÃE · GAVETA ---- */
-.pm-handle{position:fixed;left:0;top:70%;transform:translateY(-50%);z-index:var(--z-handle);
+.pm-handle{position:fixed;right:0;left:auto;top:70%;transform:translateY(-50%);z-index:var(--z-handle);
   display:flex;flex-direction:column;align-items:center;gap:12px;writing-mode:vertical-rl;
-  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-left:0;
-  border-radius:0 12px 12px 0;padding:18px 9px;font-family:var(--mono);font-size:10px;
+  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-right:0;
+  border-radius:12px 0 0 12px;padding:18px 9px;font-family:var(--mono);font-size:10px;
   letter-spacing:.24em;text-transform:uppercase;box-shadow:0 14px 44px rgba(0,0,0,.28);
-  transition:background .25s,padding-left .25s var(--ease-quint);}
-.pm-handle:hover{background:var(--graph);padding-left:13px;}
+  transition:background .25s,padding-right .25s var(--ease-quint);}
+.pm-handle:hover{background:var(--graph);padding-right:13px;}
 .pm-handle .glyph{color:var(--terra);font-size:13px;writing-mode:horizontal-tb;}
 .pm-backdrop{position:fixed;inset:0;background:rgba(10,11,13,.55);backdrop-filter:blur(2px);
   z-index:var(--z-backdrop);opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;}
 .pm-backdrop.open{opacity:1;visibility:visible;}
-.pm-drawer{position:fixed;top:0;left:0;height:100%;width:min(420px,88vw);background:var(--ink);
-  color:var(--cloud);z-index:var(--z-drawer);transform:translateX(-100%);visibility:hidden;
-  transition:transform .5s var(--ease-expo),visibility .5s;overflow-y:auto;border-right:1px solid var(--dline);}
+.pm-drawer{position:fixed;top:0;right:0;left:auto;height:100%;width:min(420px,88vw);background:var(--ink);
+  color:var(--cloud);z-index:var(--z-drawer);transform:translateX(100%);visibility:hidden;
+  transition:transform .5s var(--ease-expo),visibility .5s;overflow-y:auto;border-left:1px solid var(--dline);border-right:0;}
 .pm-drawer.open{transform:none;visibility:visible;}
 .pm-inner{padding:clamp(22px,4vw,30px);display:flex;flex-direction:column;gap:var(--s-3);}
 .pm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;}
@@ -402,13 +402,12 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
 .pm-card--key .a{color:rgba(255,255,255,.92);}
 .pm-card--key .a b{color:#fff;}
 @media(max-width:760px){
-  .pm-handle{left:16px;bottom:16px;top:auto;transform:none;writing-mode:horizontal-tb;
+  .pm-handle{right:16px;left:auto;bottom:16px;top:auto;transform:none;writing-mode:horizontal-tb;
     flex-direction:row;border-radius:var(--r-pill);border:1px solid var(--dline);padding:11px 17px;}
-  .pm-handle:hover{padding-left:17px;}
+  .pm-handle:hover{padding-right:17px;}
   .pm-handle .glyph{writing-mode:horizontal-tb;}
   .pm-drawer{width:100vw;}
 }
-
 /* ---- 5 · REDUCED MOTION ---- */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
