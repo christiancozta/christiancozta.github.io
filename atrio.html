@@ -4,792 +4,941 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ATRIO — Arquitetura de Raciocínio via Inteligência Orquestrada</title>
-<meta name="description" content="ATRIO — arquitetura modular de IA jurídica construída em gabinete recursal. Memória governada, raciocínio faseado, confronto crítico e refinamento sob controle do operador." />
+<meta name="description" content="ATRIO — arquitetura modular de IA jurídica para memória documental governada, formulação decisória, confronto crítico e refinamento sob controle humano. LGPD-by-design, base de 115.114 decisões da 2ª Turma Recursal do TJPR." />
+<meta name="theme-color" content="#0A0B0D" />
+<link rel="icon" href="atrio-oficial.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  :root{
-    --white:#FFFFFF;
-    --cold:#FFFFFF;      /* page ground */
-    --cold2:#FFFFFF;     /* secondary ground */
-    --gray:#E5E2DC;      /* hairlines, borders */
-    --ink:#0C0C0C;
-    --graph:#111110;     /* graphite surface for dark blocks */
-    --terra:#A63A23;
-    --blood:#8A140A;
-    --cream:#F0EBE4;     /* text on graphite */
-    --mut:#6B6B6B;
-    --mut2:#8C8881;      /* tertiary on light */
-    --rule:rgba(12,12,12,.12);
-    --rule2:rgba(12,12,12,.07);
-    --idx-col:rgba(12,12,12,.13);   /* quiet ink numerals; terra reserved for the rule bar */
-    --idx-size:clamp(120px,13vw,196px);
-    --serif:'Fraunces',serif;
-    --sans:'IBM Plex Sans',sans-serif;
-    --mono:'IBM Plex Mono',monospace;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:var(--sans);background:var(--white);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;font-weight:400;}
+/* ============================================================
+   ATRIO — landing autoral
+   Camadas: 1 tokens · 2 base/reset · 3 layout · 4 componentes · 5 utilitários
+   Paleta fria. Sem !important. Serifa com restrição; mono carrega dado.
+   ============================================================ */
 
-  /* ---------- MODULE MARK (geometric icon system, borderless, editorial) ---------- */
-  .mk-ico{display:inline-block;color:var(--ink);line-height:0;}
-  .mk-ico svg{display:block;width:100%;height:100%;fill:currentColor;}
-  .wrap{max-width:1240px;margin:0 auto;padding:0 56px;}
-  a{color:inherit;text-decoration:none;}
-  ::selection{background:var(--terra);color:var(--white);}
+/* ---------- 1 · TOKENS ---------- */
+:root{
+  /* paleta fria */
+  --paper:#FAFBFC;     /* branco frio — fundo padrão  */
+  --surface:#F0F2F4;   /* cinza-claro frio — seções alternadas */
+  --cloud:#E8ECEF;     /* claro frio — texto/linhas sobre escuro */
+  --white:#FFFFFF;
+  --ink:#0A0B0D;       /* preto levemente frio */
+  --graph:#121417;     /* grafite frio */
+  --graph2:#16191D;
+  --mut:#656A70;       /* cinza médio frio — AA sobre paper/surface */
+  --mut2:#9499A0;      /* cinza frio — só decorativo/large */
+  --terra:#A63A23;     /* acento — preservado */
+  --blood:#8A140A;
 
-  /* reveal */
-  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease;}
-  .rv.in{opacity:1;transform:none;}
-  @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none;}}
+  /* hairlines (--cloud em rgb = 232,236,239 sobre escuro) */
+  --line:rgba(10,11,13,.12);
+  --line2:rgba(10,11,13,.07);
+  --dline:rgba(232,236,239,.16);
+  --dline2:rgba(232,236,239,.08);
 
-  .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--mut);}
-  .lbl b{color:var(--terra);font-weight:500;}
+  /* escala de espaçamento — base 8px */
+  --s-1:4px; --s-2:8px; --s-3:16px; --s-4:24px; --s-5:32px;
+  --s-6:48px; --s-7:64px; --s-8:96px; --s-9:128px;
+  --section-y:clamp(72px,9vw,112px);
+  --wrap:1240px;
 
-  /* ---------- NAV ---------- */
-  nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray);}
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;}
-  nav .brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.3em;font-weight:500;}
-  nav .brand svg{width:22px;height:22px;display:block;}
-  nav .links{display:flex;gap:0;align-items:stretch;height:60px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);}
-  nav .links a{display:flex;align-items:center;height:100%;padding:0 14px;transition:color .2s ease,background .2s ease;}
-  nav .links a:hover{color:var(--terra);}
-  nav .links a.active{background:var(--blood);color:var(--white);}
-  nav .links a.active:hover{color:var(--white);}
-  nav .alt{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);border:1px solid var(--terra);padding:6px 14px;transition:background .25s,color .25s;}
-  nav .alt:hover{background:var(--terra);color:var(--white);}
+  /* raios */
+  --r:14px; --r-lg:20px; --r-xl:24px; --r-pill:999px;
 
-  /* ---------- HERO ---------- */
-  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:128px 0 72px;background:var(--white);}
-  .hero .meta{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:16px;margin-bottom:10px;gap:20px;}
-  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(84px,14vw,196px);line-height:.82;letter-spacing:-.02em;margin-left:-.04em;}
-  .hero h1 .o{color:var(--terra);}
-  .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:clamp(32px,5vw,72px);align-items:end;margin-top:clamp(26px,3vw,46px);}
-  .hero-lead{display:flex;flex-direction:column;min-width:0;}
-  .hero .tagline{font-size:clamp(21px,1.7vw,22px);font-weight:300;letter-spacing:normal;}
-  .hero .hphrase{margin-top:28px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(28px,3.5vw,50px);line-height:1.15;color:var(--terra);max-width:680px;letter-spacing:-.01em;}
-  .hero .hcredit{margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);}
-  .hero .hcredit b{color:var(--ink);font-weight:500;}
-  /* exploded architecture stack — self-contained column, never overlaps wordmark */
-  .archviz{position:relative;width:300px;height:320px;flex:0 0 auto;}
-  .iso-stack{position:absolute;left:0;top:0;width:176px;height:100%;}
-  .slab{position:absolute;left:22px;width:150px;height:100px;transform:rotateX(57deg) rotateZ(45deg);border:1px solid var(--ink);background:#fff;--sc:#e6e3dd;--se:#d8d4cd;box-shadow:0 2px 0 var(--sc),0 4px 0 var(--sc),0 6px 0 var(--sc),0 8px 0 var(--sc),0 10px 0 var(--sc),0 12px 0 var(--se),0 22px 20px rgba(12,12,12,.08);}
-  .slab.core{border-color:var(--terra);background:#fff;--sc:#ead8d2;--se:#dcc0b6;}
-  .slab.s1{top:212px;}
-  .slab.s2{top:152px;}
-  .slab.s3{top:92px;}
-  .slab.s4{top:32px;}
-  .iso-legend{position:absolute;right:0;top:28px;display:flex;flex-direction:column;gap:22px;width:122px;}
-  .iso-legend .lg{display:flex;align-items:flex-start;gap:9px;border-top:1px solid var(--ink);padding-top:8px;}
-  .iso-legend .lg .txt{display:flex;flex-direction:column;gap:3px;}
-  .iso-legend .lmk{width:15px;height:15px;flex:0 0 15px;margin-top:1px;color:var(--ink);}
-  .iso-legend .lg.core .lmk{color:var(--terra);}
-  .iso-legend .ln{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
-  .iso-legend .nm{font-family:var(--mono);font-size:13px;letter-spacing:.22em;color:var(--ink);}
-  .iso-legend .lg.core .nm{color:var(--terra);}
-  @media(max-width:1040px){.archviz{display:none;}.hero-grid{grid-template-columns:1fr;}}
+  /* sombra */
+  --shadow:0 28px 80px rgba(10,11,13,.22);
+  --shadow-sm:0 14px 44px rgba(10,11,13,.10);
 
-  /* ---------- SELO DE AUTORIA (marca pessoal — constante nas duas páginas) ---------- */
-  .idcard{position:absolute;top:88px;right:0;z-index:5;width:clamp(258px,25vw,322px);background:#181310;color:#ECEEE8;padding:26px 30px 24px;}
-  .idtop{display:flex;align-items:center;gap:18px;}
-  .idsym{width:auto;height:48px;display:block;flex:0 0 auto;}
-  .idname{display:flex;flex-direction:column;line-height:.98;font-family:var(--serif);}
-  .idname .a{font-weight:300;font-size:25px;letter-spacing:.005em;}
-  .idname .b{font-weight:600;font-size:25px;letter-spacing:.005em;}
-  .idcontacts{margin-top:20px;padding-top:16px;border-top:1px solid rgba(236,238,232,.18);display:flex;flex-direction:column;gap:7px;}
-  .idcontacts a{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:rgba(236,238,232,.66);transition:color .25s;word-break:break-all;}
-  .idcontacts a:hover{color:#fff;}
-  @media(max-width:900px){.idcard{position:static;width:auto;margin:0 0 6px;padding:24px 28px;}}
+  /* tipografia */
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
 
-  /* ---------- SECTION MASTHEAD ---------- */
-  section.s{padding:118px 0;}
-  .shead{position:relative;display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr;column-gap:clamp(40px,5vw,82px);align-items:start;margin-bottom:64px;padding-top:32px;}
-  /* one reading datum: soft hairline across + terra emphasis bar at the origin */
-  .shead::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--rule);}
-  .shead::after{content:"";position:absolute;top:-1px;left:0;width:clamp(200px,21vw,300px);height:3px;background:var(--terra);transform:scaleX(0);transform-origin:left;transition:transform .85s cubic-bezier(.2,.7,.15,1) .08s;}
-  .shead.in::after{transform:scaleX(1);}
-  .smark{position:relative;}
-  .smark .n{position:relative;z-index:1;display:block;font-family:var(--serif);font-weight:500;font-size:var(--idx-size);line-height:.74;letter-spacing:-.045em;margin-left:-.05em;color:var(--idx-col);}
-  .smark .n::after{content:attr(data-n);position:absolute;left:0;top:0;z-index:-1;color:rgba(12,12,12,.05);transform:translate(0,0);transition:transform .85s cubic-bezier(.2,.7,.15,1) .14s;}
-  .shead.in .smark .n::after{transform:translate(7px,8px);}
-  .sbody{display:flex;flex-direction:column;}
-  .sbody .kick{font-family:var(--mono);font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--terra);font-weight:500;line-height:1;padding-top:3px;}
-  .shead h2{font-family:var(--serif);font-weight:500;font-size:clamp(44px,5.4vw,76px);line-height:1.02;letter-spacing:-.012em;max-width:820px;margin-top:24px;color:var(--ink);text-wrap:balance;}
-  .shead .ssub{margin-top:22px;font-size:clamp(17px,1.55vw,20px);font-weight:300;line-height:1.55;max-width:54ch;color:var(--ink);}
+  /* easing */
+  --ease-quint:cubic-bezier(.22,1,.36,1);
+  --ease-expo:cubic-bezier(.16,1,.3,1);
 
-  .prose{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr 1fr;column-gap:clamp(40px,5vw,82px);row-gap:36px;}
-  .prose .lead{font-size:16px;font-weight:400;line-height:1.7;color:var(--mut);}
-  .prose .body{font-size:16px;color:var(--mut);line-height:1.7;display:flex;flex-direction:column;gap:16px;}
-  .prose .body b{color:var(--ink);font-weight:500;}
+  /* z-index semântico */
+  --z-base:1;
+  --z-handle:70;
+  --z-sticky:80;
+  --z-backdrop:90;
+  --z-drawer:100;
+}
 
-  @media (prefers-reduced-motion: reduce){
-    .shead::after{transform:scaleX(1);transition:none;}
-    .shead.in .smark .n::after{transition:none;}
-  }
+/* ---------- 2 · BASE / RESET ---------- */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;background:var(--ink);-webkit-text-size-adjust:100%;}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
+svg{display:block;}
+img{max-width:100%;display:block;}
+h1,h2,h3{text-wrap:balance;}
+p{text-wrap:pretty;}
+::selection{background:var(--terra);color:var(--cloud);}
+:focus-visible{outline:2px solid var(--terra);outline-offset:3px;border-radius:2px;}
 
-  /* ---------- MÉTODO ---------- */
-  .metodo{background:var(--white);padding:118px 0;}
-  /* fluxo em cards encadeados — ecoa as lâminas da arquitetura, não caixas comuns */
-  .flow{margin-top:72px;display:flex;flex-direction:column;gap:16px;}
-  .flow-main{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;}
-  .fcard{flex:1 1 190px;min-width:168px;background:var(--white);border:1px solid var(--gray);border-top:2px solid var(--ink);padding:22px 22px 22px;display:flex;flex-direction:column;gap:7px;transition:transform .35s ease,border-color .35s ease;}
-  .fcard:hover{transform:translateY(-3px);border-top-color:var(--ink);}
-  .fcard.mod{border-top-color:var(--terra);}
-  .fcard.mod:hover{border-top-color:var(--blood);}
-  .fcard .fi{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--mut);}
-  .fcard .fn{font-family:var(--serif);font-weight:500;font-size:23px;line-height:1.04;letter-spacing:-.01em;color:var(--ink);}
-  .fcard .fr{font-size:12.5px;font-weight:300;color:var(--mut);}
-  .fcard .fm{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--terra);font-weight:500;padding-top:14px;}
-  .farrow{display:flex;align-items:center;flex:0 0 16px;color:var(--gray);font-family:var(--mono);font-size:14px;}
-  /* peer cross-link — ECHO e ATRIO como pares, não pai-filho */
-  .pair{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr;column-gap:clamp(40px,5vw,82px);margin-top:56px;}
-  .pair-in{grid-column:2;border-top:1px solid var(--ink);padding-top:28px;max-width:680px;}
-  .pair-in .pl{font-family:var(--serif);font-weight:500;font-size:clamp(26px,3vw,40px);line-height:1.18;letter-spacing:-.01em;color:var(--ink);}
-  .pair-in .pl em{font-style:normal;color:var(--terra);}
-  .pair-in .plink{margin-top:26px;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);border-bottom:1px solid var(--gray);padding-bottom:5px;transition:color .25s,border-color .25s;}
-  .pair-in .plink:hover{color:var(--terra);border-color:var(--terra);}
-  @media(max-width:900px){.pair{grid-template-columns:1fr;}.pair-in{grid-column:1;}}
+/* ---------- 3 · LAYOUT ---------- */
+.wrap{width:min(var(--wrap),calc(100% - 72px));margin:0 auto;}
+.section{padding:var(--section-y) 0;background:var(--paper);position:relative;}
+.section.surface{background:var(--surface);}
+.section.dark{background:var(--ink);color:var(--cloud);overflow:hidden;}
+.section.dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(135deg,rgba(232,236,239,.035) 0 1px,transparent 1px 14px);}
+.section .wrap{position:relative;z-index:var(--z-base);}
+@media(max-width:980px){.wrap{width:min(100% - 44px,var(--wrap));}}
 
-  /* ---------- ARQUITETURA 2x2 ---------- */
-  .arch{display:grid;grid-template-columns:1fr 1fr;background:var(--white);border:1px solid var(--gray);margin-top:6px;}
-  .mcard{position:relative;display:flex;flex-direction:column;padding:76px 64px 64px;background:var(--white);}
-  .mcard.r{border-left:1px solid var(--gray);}
-  .mcard.top{border-bottom:1px solid var(--gray);}
-  .mc-ico{position:absolute;top:74px;right:60px;width:38px;height:38px;color:var(--ink);opacity:.92;}
-  .mcard.core .mc-ico{color:var(--terra);}
-  .mcard .mk{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--mut);}
-  .mcard.core .mk{color:var(--terra);}
-  .mcard h3{font-family:var(--serif);font-weight:500;font-size:clamp(44px,4.6vw,72px);line-height:1;letter-spacing:-.01em;margin-top:14px;}
-  .mcard .mf{margin-top:14px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:500;}
-  .mcard .mq{margin-top:38px;font-family:var(--serif);font-size:clamp(21px,2vw,27px);line-height:1.35;font-weight:500;max-width:440px;text-wrap:pretty;}
-  .mcard .mio{margin-top:42px;margin-bottom:56px;display:flex;flex-direction:column;gap:10px;max-width:440px;}
-  .mcard .mio p{font-size:14.5px;line-height:1.65;color:var(--mut);display:grid;grid-template-columns:88px 1fr;gap:14px;}
-  .mcard .mio span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);font-weight:500;padding-top:3px;}
-  .mcard .more{margin-top:auto;align-self:flex-start;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:none;border:none;border-bottom:1px solid var(--gray);padding:0 0 6px;cursor:pointer;transition:color .25s,border-color .25s;}
-  .mcard .more:hover{color:var(--terra);border-color:var(--terra);}
+/* below-the-fold render perf */
+.cv{content-visibility:auto;contain-intrinsic-size:auto 900px;}
 
-  /* ---------- DRAWER (detalhamento) ---------- */
-  .drawer{position:fixed;inset:0;z-index:90;visibility:hidden;}
-  .drawer.open{visibility:visible;}
-  .drawer .veil{position:absolute;inset:0;background:rgba(12,12,12,.42);opacity:0;transition:opacity .35s ease;}
-  .drawer.open .veil{opacity:1;}
-  .drawer .panel{position:absolute;top:0;right:0;bottom:0;width:min(640px,94vw);background:var(--white);border-left:1px solid var(--ink);overflow-y:auto;padding:36px 64px 96px;transform:translateX(48px);opacity:0;transition:transform .4s ease,opacity .4s ease;}
-  .drawer.open .panel{transform:none;opacity:1;}
-  @media (prefers-reduced-motion: reduce){.drawer .veil,.drawer .panel{transition:none;}}
-  .drawer .x{position:sticky;top:0;display:block;margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);background:var(--white);border:none;cursor:pointer;padding:8px 0 12px 16px;z-index:2;}
-  .drawer .x:hover{color:var(--terra);}
-  .drawer .dcontent{margin-top:28px;}
-  .drawer .dk{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--mut);}
-  .drawer .dk.core{color:var(--terra);}
-  .drawer h3{font-family:var(--serif);font-weight:500;font-size:clamp(44px,5vw,64px);line-height:1;letter-spacing:-.01em;margin-top:14px;}
-  .drawer .df{margin-top:14px;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:500;}
-  .drawer .dbody{margin-top:38px;display:flex;flex-direction:column;gap:16px;font-size:15.5px;color:var(--mut);line-height:1.75;}
-  .drawer .dbody b{color:var(--ink);font-weight:500;}
-  .drawer dl{margin-top:46px;border-top:1px solid var(--ink);}
-  .drawer dl .row{display:grid;grid-template-columns:130px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--gray);}
-  .drawer dt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:500;padding-top:3px;}
-  .drawer dd{font-size:14px;line-height:1.7;color:var(--ink);}
+/* section head */
+.head{display:grid;grid-template-columns:212px 1fr;gap:clamp(28px,5vw,52px);align-items:start;margin-bottom:var(--s-7);}
+.index{font-family:var(--serif);font-size:clamp(84px,11vw,150px);line-height:.76;font-weight:650;
+  letter-spacing:-.06em;color:rgba(10,11,13,.10);font-optical-sizing:auto;}
+.dark .index{color:rgba(232,236,239,.12);}
+.head-body{border-top:1px solid var(--line);padding-top:var(--s-4);position:relative;}
+.head-body::before{content:"";position:absolute;top:-1px;left:0;width:180px;height:3px;background:var(--terra);}
+.dark .head-body{border-color:var(--dline);}
+.head h2{font-family:var(--serif);font-size:clamp(38px,5vw,68px);font-weight:620;line-height:1;
+  letter-spacing:-.04em;margin-top:var(--s-4);max-width:18ch;font-optical-sizing:auto;}
+.head .sub{margin-top:var(--s-4);max-width:60ch;font-size:clamp(16px,1.3vw,19px);line-height:1.6;color:var(--mut);font-weight:300;}
+.dark .head .sub{color:rgba(232,236,239,.7);}
+@media(max-width:900px){.head{grid-template-columns:1fr;gap:var(--s-4);margin-bottom:var(--s-6);}.index{font-size:clamp(64px,22vw,108px);}}
 
-  /* ---------- PRINCÍPIOS ---------- */
-  .pr-grid{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr 1fr;column-gap:clamp(40px,5vw,82px);}
-  .pr-col h4{font-family:var(--serif);font-style:italic;font-weight:500;font-size:19px;color:var(--terra);border-top:1px solid var(--rule);padding-top:16px;margin-bottom:16px;}
-  .pr-col p{font-size:16px;color:var(--mut);line-height:1.7;}
-  .pr-col p b{color:var(--ink);font-weight:500;}
-  .pr-closing{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr;column-gap:clamp(40px,5vw,82px);margin-top:64px;}
-  .pr-closing p{font-size:16px;font-weight:400;max-width:680px;line-height:1.7;}
-  .pr-phrase{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr;column-gap:clamp(40px,5vw,82px);margin-top:64px;}
-  .pr-phrase p{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(26px,3.2vw,44px);line-height:1.25;letter-spacing:-.01em;}
-  .pr-phrase p b{font-style:italic;font-weight:500;color:var(--terra);}
+/* ---------- 4 · COMPONENTES ---------- */
 
-  /* ---------- EVIDÊNCIAS ---------- */
-  .ev-band{background:var(--white);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:118px 0;}
-  .ev-layout{display:grid;grid-template-columns:clamp(200px,21vw,300px) minmax(0,1fr) minmax(0,1fr);column-gap:clamp(40px,5vw,82px);align-items:start;}
-  .ev-cards{display:flex;flex-direction:column;gap:1px;background:var(--white);border:1px solid var(--ink);}
-  .evc{background:var(--white);color:var(--ink);padding:30px 32px 28px;position:relative;}
-  .evc + .evc{border-top:1px solid var(--gray);}
-  .evc .v{font-family:var(--serif);font-weight:500;font-size:clamp(34px,3.3vw,50px);line-height:1;letter-spacing:-.01em;text-wrap:pretty;}
-  .evc .v i{font-style:normal;color:var(--terra);}
-  .evc .k{font-size:13px;font-weight:300;color:var(--mut);margin-top:13px;line-height:1.55;}
-  .ev-text{display:flex;flex-direction:column;gap:16px;font-size:16px;color:var(--mut);line-height:1.7;}
-  .ev-text .lead{color:var(--mut);}
-  .ev-text b{color:var(--ink);font-weight:500;}
+/* labels / eyebrow / botões */
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--terra);}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);}
+.eyebrow::before{content:"";width:8px;height:8px;background:var(--terra);display:inline-block;}
+.dark .eyebrow{color:rgba(232,236,239,.62);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid currentColor;
+  border-radius:var(--r-pill);padding:13px 19px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:500;transition:background .25s,color .25s,border-color .25s,transform .25s var(--ease-quint);}
+.btn:hover{transform:translateY(-1px);}
+.btn.primary{background:var(--terra);border-color:var(--terra);color:var(--white);}
+.btn.primary:hover{background:var(--blood);border-color:var(--blood);}
+.btn.light{color:var(--cloud);border-color:rgba(232,236,239,.34);}
+.btn.light:hover{background:var(--cloud);color:var(--ink);border-color:var(--cloud);}
 
-  /* ---------- AUTOR ---------- */
-  .about{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr 1fr;column-gap:clamp(40px,5vw,82px);}
-  .about .aname{font-family:var(--serif);font-size:clamp(38px,4vw,58px);font-weight:500;line-height:1.05;}
-  .about .aid{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:19px;color:var(--mut);line-height:1.8;}
-  .about .atext{font-size:16px;color:var(--mut);line-height:1.7;display:flex;flex-direction:column;gap:16px;}
-  .about .atext b{color:var(--ink);font-weight:500;}
-  .about .lead{color:var(--mut);}
-  .alinks{display:grid;grid-template-columns:clamp(200px,21vw,300px) 1fr;column-gap:clamp(40px,5vw,82px);margin-top:64px;}
-  .alinks .row{display:flex;flex-wrap:wrap;gap:16px 36px;}
-  .alinks a{font-size:13.5px;font-weight:500;letter-spacing:.02em;border-bottom:1px solid var(--gray);padding:0 0 5px;transition:color .25s,border-color .25s;}
-  .alinks a:hover{color:var(--terra);border-color:var(--terra);}
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease-quint),transform .7s var(--ease-quint);}
+.rv.in{opacity:1;transform:none;}
+.rv.stagger{opacity:1;transform:none;}
+.rv.stagger>*{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease-quint),transform .6s var(--ease-quint);}
+.rv.stagger.in>*{opacity:1;transform:none;}
+.rv.stagger.in>*:nth-child(2){transition-delay:.06s;}
+.rv.stagger.in>*:nth-child(3){transition-delay:.12s;}
+.rv.stagger.in>*:nth-child(4){transition-delay:.18s;}
+.rv.stagger.in>*:nth-child(5){transition-delay:.24s;}
+.rv.stagger.in>*:nth-child(6){transition-delay:.30s;}
 
-  /* ---------- FECHAMENTO ---------- */
-  .close{padding:152px 0 138px;text-align:center;background:var(--white);color:var(--ink);border-top:1px solid var(--rule);}
-  .close .cphrase{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.4vw,80px);line-height:1.1;letter-spacing:-.01em;color:var(--ink);}
-  .close .cphrase em{font-style:italic;color:var(--terra);}
-  .close .csub{margin-top:30px;font-family:var(--mono);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--mut);}
-  .close .cta{margin-top:50px;display:inline-flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--white);background:var(--ink);padding:16px 32px;border:1px solid var(--ink);transition:background .25s,color .25s,border-color .25s;}
-  .close .cta:hover{background:var(--terra);border-color:var(--terra);color:var(--white);}
-  .close .cta .ar{font-size:14px;}
+/* svg symbols holder */
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden;}
+.mark{width:100%;height:100%;fill:currentColor;}
 
-  /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--gray);padding:44px 0 60px;background:var(--white);}
-  footer .frow{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
-  footer .frow a{color:var(--ink);border-bottom:1px solid var(--gray);padding-bottom:2px;transition:color .25s,border-color .25s;}
-  footer .frow a:hover{color:var(--terra);border-color:var(--terra);}
-  footer .fnote{margin-top:36px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--mut);max-width:660px;line-height:1.8;text-transform:none;}
+/* ---- NAV ---- */
+.nav{position:fixed;z-index:var(--z-sticky);top:14px;left:0;right:0;pointer-events:none;}
+.nav .bar{height:52px;display:flex;align-items:center;justify-content:space-between;
+  border:1px solid rgba(232,236,239,.14);background:rgba(10,11,13,.78);backdrop-filter:blur(18px);
+  color:var(--cloud);border-radius:var(--r-pill);padding:0 9px 0 18px;pointer-events:auto;box-shadow:0 16px 44px rgba(0,0,0,.18);}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.28em;font-weight:500;}
+.brand-mark{width:21px;height:21px;color:var(--terra);}
+.nav-links{display:flex;align-items:center;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(232,236,239,.62);}
+.nav-links a{padding:9px 11px;border-radius:var(--r-pill);transition:color .2s,background .2s;}
+.nav-links a:hover{color:var(--cloud);}
+.nav-links a.active{background:var(--terra);color:#fff;}
+.nav-cta{margin-left:8px;color:var(--cloud);border-color:rgba(232,236,239,.28);padding:9px 13px;font-size:9.5px;}
+@media(max-width:1000px){.nav-links{display:none;}.nav .bar{border-radius:26px;}}
 
-  @media(max-width:900px){
-    .wrap{padding:0 28px;}
-    section.s,.metodo,.ev-band{padding:84px 0;}
-    .hero h1{font-size:clamp(72px,19vw,150px);}
-    .shead,.prose,.pr-grid,.pr-closing,.pr-phrase,.about,.alinks{grid-template-columns:1fr;gap:22px;}
-    .smark .n{font-size:clamp(86px,22vw,120px);}
-    .arch{grid-template-columns:1fr;}
-    .ev-layout{grid-template-columns:1fr;gap:34px;}
-    .evc{padding:26px 26px 24px;}
-    .mcard{padding:52px 26px;}
-    .mcard.r{border-left:none;}
-    .mc-ico{top:50px;right:26px;width:32px;height:32px;}
-    .arch{border-left:none;border-right:none;}
-    .mcard{border-bottom:1px solid var(--gray);}
-    .mcard:last-child{border-bottom:none;}
-    .drawer .panel{padding:24px 28px 80px;}
-    .ev-grid{grid-template-columns:1fr;}
-    .prose>div:empty,.pr-grid>div:empty,.pr-closing>div:empty,.pr-phrase>div:empty,.about>div:empty,.alinks>div:empty,.ev-layout>div:empty{display:none;}
-    nav .links{display:none;}
-  }
+/* ---- HERO ---- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
+  background:var(--ink);color:var(--cloud);padding:112px 0 76px;}
+.hero::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(rgba(232,236,239,.035) 1px,transparent 1px),
+             linear-gradient(90deg,rgba(232,236,239,.035) 1px,transparent 1px);
+  background-size:68px 68px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.72) 58%,rgba(0,0,0,.22));}
+.hero::after{content:"";position:absolute;width:56vw;height:56vw;border-radius:50%;
+  border:1px solid rgba(166,58,35,.18);right:-20vw;bottom:-30vw;box-shadow:inset 0 0 0 1px rgba(232,236,239,.04);}
+.hero .wrap{position:relative;z-index:var(--z-base);width:min(1320px,calc(100% - 72px));}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;
+  padding-bottom:20px;border-bottom:1px solid rgba(232,236,239,.18);}
+.hero-title{font-family:var(--serif);font-weight:650;font-size:clamp(78px,14.2vw,206px);line-height:.8;
+  letter-spacing:-.058em;margin:26px 0 0 -.055em;color:var(--cloud);font-optical-sizing:auto;
+  font-variation-settings:"SOFT" 0,"WONK" 0;}
+.hero-title .t{color:var(--terra);}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,330px);
+  gap:clamp(36px,4.4vw,60px);align-items:center;margin-top:clamp(40px,6vw,68px);}
+.hero-lead{max-width:960px;}
+.hero-kicker{font-family:var(--serif);font-size:clamp(30px,3.6vw,54px);font-weight:600;line-height:1.04;
+  letter-spacing:-.035em;max-width:16ch;color:var(--cloud);}
+.hero-kicker em{font-style:italic;color:var(--terra);}
+.hero-define{margin-top:var(--s-4);max-width:60ch;font-family:var(--mono);font-size:clamp(11.5px,1vw,13px);
+  letter-spacing:.04em;line-height:1.6;color:rgba(232,236,239,.82);text-transform:none;}
+.hero-define b{color:var(--terra);font-weight:500;}
+.hero-copy{margin-top:var(--s-4);max-width:78ch;color:rgba(232,236,239,.72);
+  font-size:clamp(15px,1.1vw,17px);font-weight:300;line-height:1.7;}
+.hero-copy b{color:var(--cloud);font-weight:500;}
+.hero-synthesis{margin-top:var(--s-4);max-width:74ch;border-left:2px solid var(--terra);padding-left:16px;
+  font-size:14.4px;line-height:1.66;color:rgba(232,236,239,.66);font-weight:300;}
+.hero-synthesis span{display:block;margin-bottom:5px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:500;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:var(--s-5);}
 
-  /* ---------- TIPOGRAFIA · FRAUNCES ----------
-     Substitui Cormorant Garamond por Fraunces, preservando IBM Plex Sans e IBM Plex Mono.
-     Ajustes discretos para evitar títulos superdimensionados. */
-  .hero h1,
-  .smark .n,
-  .shead h2,
-  .fcard .fn,
-  .mcard .mk,
-  .mcard h3,
-  .mcard .mq,
-  .drawer .dk,
-  .drawer h3,
-  .pr-col h4,
-  .pr-phrase p,
-  .evc .v,
-  .about .aname,
-  .about .aid,
-  .close .cphrase,
-  .hero .hphrase,
-  .pair-in .pl{
-    font-optical-sizing:auto;
-    font-variation-settings:"SOFT" 0, "WONK" 0;
-  }
+.hero-panel{width:100%;max-width:330px;justify-self:end;border:1px solid rgba(232,236,239,.18);border-radius:var(--r-lg);
+  overflow:hidden;background:linear-gradient(180deg,rgba(232,236,239,.06),rgba(232,236,239,.02));box-shadow:var(--shadow);}
+.hero-panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;
+  border-bottom:1px solid rgba(232,236,239,.14);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(232,236,239,.58);}
+.hero-panel-head span:last-child{color:var(--terra);}
+.hero-step{display:grid;grid-template-columns:34px 1fr 30px;gap:12px;align-items:center;
+  padding:14px 14px;border-bottom:1px solid rgba(232,236,239,.09);}
+.hero-step:last-child{border-bottom:0;}
+.hero-step .no{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--terra);}
+.hero-step .name{font-family:var(--serif);font-size:22px;font-weight:650;line-height:1;letter-spacing:-.03em;color:var(--cloud);}
+.hero-step .desc{display:block;margin-top:5px;font-size:11.4px;line-height:1.42;color:rgba(232,236,239,.56);font-weight:300;}
+.hero-step .icon{width:30px;height:30px;color:rgba(232,236,239,.9);}
+.hero-step:nth-child(2) .icon,.hero-step:nth-child(3) .icon{color:var(--terra);}
+@media(max-width:1000px){.hero .wrap{width:min(100% - 44px,var(--wrap));}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-panel{justify-self:stretch;max-width:560px;}.hero-top{display:block;}.hero-top .label{display:block;margin-top:10px;}}
+@media(max-width:620px){.hero{padding-top:104px;}.hero-actions .btn{width:100%;}}
 
-  .hero h1{
-    font-weight:650;
-    font-size:clamp(72px,12vw,166px);
-    line-height:.84;
-    letter-spacing:-.045em;
-  }
+/* ---- SPLIT (problema/resposta) ---- */
+.split{display:grid;grid-template-columns:212px 1fr 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
+.split .lead{font-size:clamp(18px,1.6vw,24px);line-height:1.35;font-family:var(--serif);font-weight:600;letter-spacing:-.015em;}
+.split .text{font-size:16px;line-height:1.75;color:var(--mut);display:flex;flex-direction:column;gap:16px;max-width:62ch;}
+.split .text b{color:var(--ink);font-weight:500;}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:var(--s-4);}}
 
-  .shead h2{
-    font-weight:600;
-    font-size:clamp(40px,4.8vw,68px);
-    line-height:1.02;
-    letter-spacing:-.03em;
-  }
+.signal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:var(--s-7);}
+.signal{background:var(--surface);padding:var(--s-5);min-height:204px;display:flex;flex-direction:column;}
+.signal .sno{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--terra);font-weight:500;}
+.signal .st{font-family:var(--serif);font-size:26px;line-height:1.08;font-weight:620;letter-spacing:-.025em;margin-top:16px;}
+.signal .sp{font-size:14px;line-height:1.65;color:var(--mut);margin-top:14px;}
+@media(max-width:860px){.signal-grid{grid-template-columns:1fr;}}
 
-  .smark .n{
-    font-weight:650;
-    letter-spacing:-.055em;
-  }
+.answer-band{margin-top:var(--s-7);border-radius:var(--r-xl);overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;background:var(--ink);color:var(--cloud);}
+.answer-band .big{padding:clamp(34px,5vw,46px);font-family:var(--serif);font-size:clamp(36px,5vw,68px);font-weight:650;line-height:.98;letter-spacing:-.045em;}
+.answer-band .big em{font-style:normal;color:var(--terra);}
+.answer-band .side{padding:clamp(34px,5vw,46px);border-left:1px solid rgba(232,236,239,.16);font-size:15px;line-height:1.75;color:rgba(232,236,239,.7);}
+.answer-band .side b{color:var(--cloud);font-weight:500;}
+@media(max-width:860px){.answer-band{grid-template-columns:1fr;}.answer-band .side{border-left:0;border-top:1px solid rgba(232,236,239,.16);}}
 
-  .hero .hphrase{
-    font-weight:500;
-    font-size:clamp(26px,3.05vw,44px);
-    line-height:1.16;
-  }
+/* ---- ARQUITETURA · módulos fora de tabela ---- */
+.arch-flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:var(--s-5);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);}
+.arch-flow .node{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-pill);padding:8px 14px;background:var(--white);color:var(--ink);}
+.arch-flow .node b{color:var(--terra);font-weight:500;}
+.arch-flow .arrow{color:var(--terra);}
 
-  .mcard h3{
-    font-weight:650;
-    font-size:clamp(40px,4.1vw,64px);
-    line-height:.98;
-    letter-spacing:-.035em;
-  }
+.modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3);align-items:start;}
+.module{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);
+  padding:clamp(24px,3vw,32px);display:flex;flex-direction:column;gap:var(--s-4);position:relative;overflow:hidden;}
+.module::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--terra);opacity:.85;}
+.m-head{display:grid;grid-template-columns:1fr auto;gap:var(--s-3);align-items:start;}
+.m-id .m-num{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--terra);font-weight:500;}
+.m-id .m-name{display:block;margin-top:8px;font-family:var(--serif);font-size:clamp(34px,3.4vw,50px);font-weight:650;line-height:.92;letter-spacing:-.04em;}
+.m-id .m-role{display:block;margin-top:10px;font-family:var(--mono);font-size:9.6px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
+.m-mark{width:56px;height:56px;color:var(--ink);flex-shrink:0;}
+.module--core .m-mark{color:var(--terra);}
+.m-claim{font-family:var(--serif);font-size:clamp(19px,1.6vw,22px);line-height:1.26;font-weight:560;letter-spacing:-.01em;color:var(--ink);max-width:30ch;}
+.m-desc{font-size:14px;line-height:1.65;color:var(--mut);max-width:46ch;}
 
-  .mcard .mq{
-    font-weight:500;
-    font-size:clamp(20px,1.85vw,25px);
-    line-height:1.36;
-  }
+/* faixa de spec — inline, não-tabela */
+.m-spec{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:var(--s-3) 0;}
+.m-spec .cell{display:flex;flex-direction:column;gap:5px;}
+.m-spec .k{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:500;}
+.m-spec .v{font-size:12.5px;line-height:1.4;color:var(--ink);}
 
-  .fcard .fn{
-    font-weight:600;
-    font-size:22px;
-  }
+/* acordeão */
+.m-detail{border-bottom:1px solid var(--line2);}
+.acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);
+  padding:var(--s-3) 0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);}
+.acc-trigger .acc-icon{color:var(--terra);transition:transform .3s var(--ease-quint);font-size:12px;}
+.acc-trigger[aria-expanded="true"] .acc-icon{transform:rotate(90deg);}
+.acc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease-quint);}
+.acc-panel.open{grid-template-rows:1fr;}
+.acc-panel>.acc-inner{overflow:hidden;min-height:0;}
+.acc-body{padding:var(--s-2) 0 var(--s-4);display:flex;flex-direction:column;gap:14px;font-size:13px;line-height:1.6;color:var(--mut);}
+.acc-body li{list-style:none;padding-left:18px;position:relative;}
+.acc-body li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border:1px solid var(--terra);transform:rotate(45deg);}
+.acc-body li b{color:var(--ink);font-weight:500;}
+.acc-body .meta-strip{font-family:var(--mono);font-size:10px;letter-spacing:.04em;line-height:1.7;color:var(--mut);
+  border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);text-transform:none;}
+.acc-body .meta-strip b{color:var(--terra);font-weight:500;}
+.acc-body .limits{font-size:12.5px;color:var(--mut);}
+.acc-body .limits b{color:var(--ink);}
 
-  .drawer h3{
-    font-weight:650;
-    font-size:clamp(40px,4.7vw,58px);
-  }
+/* slot de tela */
+.m-screen{display:flex;flex-direction:column;gap:8px;}
+.screen-frame{aspect-ratio:16/10;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(rgba(10,11,13,.025) 1px,transparent 1px),
+             linear-gradient(90deg,rgba(10,11,13,.025) 1px,transparent 1px),var(--surface);
+  background-size:22px 22px,22px 22px,auto;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;}
+.screen-frame .screen-name{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--mut);line-height:1.6;}
+.m-screen figcaption{font-family:var(--mono);font-size:9.6px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);}
 
-  .evc .v{
-    font-weight:650;
-  }
+.arch-symmetry{margin-top:var(--s-6);display:grid;grid-template-columns:1fr auto 1fr;gap:var(--s-4);align-items:center;
+  border:1px solid var(--line);border-radius:var(--r-xl);background:var(--white);padding:clamp(22px,3vw,30px);}
+.arch-symmetry .pole .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:500;}
+.arch-symmetry .pole p{margin-top:10px;font-size:14.5px;line-height:1.6;color:var(--mut);}
+.arch-symmetry .pole p b{color:var(--ink);font-weight:500;}
+.arch-symmetry .pivot{font-family:var(--mono);font-size:18px;color:var(--terra);}
+@media(max-width:760px){.arch-symmetry{grid-template-columns:1fr;text-align:left;}.arch-symmetry .pivot{transform:rotate(90deg);justify-self:start;}}
 
-  .close .cphrase{
-    font-weight:600;
-    font-size:clamp(36px,4.9vw,70px);
-  }
+.gov-strip{margin-top:var(--s-4);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink);border-radius:var(--r);overflow:hidden;border:1px solid var(--ink);}
+.gov-strip .gov{background:var(--ink);color:rgba(232,236,239,.78);padding:16px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+.gov-strip .gov::before{content:"";width:8px;height:8px;border:1px solid var(--terra);display:inline-block;transform:rotate(45deg);}
+@media(max-width:1000px){.modules{grid-template-columns:1fr;}}
+@media(max-width:680px){.m-spec{grid-template-columns:1fr;}.gov-strip{grid-template-columns:1fr 1fr;}}
 
+/* ---- AUTORIA TÉCNICA (build autoral) ---- */
+.authoring{display:grid;grid-template-columns:212px 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
+.authoring .prose{max-width:70ch;display:flex;flex-direction:column;gap:var(--s-4);font-size:clamp(15.5px,1.2vw,17px);line-height:1.78;color:var(--mut);}
+.authoring .prose p:first-child{font-family:var(--serif);font-size:clamp(20px,2vw,26px);line-height:1.35;color:var(--ink);font-weight:560;letter-spacing:-.01em;}
+.authoring .prose b{color:var(--ink);font-weight:600;}
+.authoring .prose .term{color:var(--terra);font-weight:500;}
+.authoring .prose .origin-beat{border-left:2px solid var(--line);padding-left:18px;color:var(--mut);font-size:15px;line-height:1.72;}
+.stack-strip{margin-top:var(--s-5);font-family:var(--mono);font-size:11px;letter-spacing:.06em;line-height:1.9;
+  color:var(--mut);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;}
+.stack-strip b{color:var(--terra);font-weight:500;}
+@media(max-width:900px){.authoring{grid-template-columns:1fr;}}
 
+/* ---- MÉTODO (fluxo) ---- */
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.step{background:var(--paper);padding:24px 20px 26px;min-height:178px;display:flex;flex-direction:column;}
+.step .num{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--terra);font-weight:500;}
+.step .title{font-family:var(--serif);font-size:23px;font-weight:620;line-height:1.08;letter-spacing:-.025em;margin-top:22px;}
+.step .small{margin-top:auto;padding-top:22px;font-size:12.5px;line-height:1.5;color:var(--mut);}
+@media(max-width:1080px){.steps{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:660px){.steps{grid-template-columns:1fr;}}
 
-  /* ---------- CONSOLIDAÇÃO EDITORIAL 2026 ---------- */
-  .tldr{margin-top:26px;border-left:2px solid currentColor;padding:0 0 0 18px;max-width:680px;color:var(--mut);font-size:15px;line-height:1.7;}
-  .tldr b{color:var(--ink);font-weight:500;}
-  .hero-flow{width:340px;max-width:100%;margin-left:auto;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:18px 0;display:flex;flex-direction:column;gap:0;}
-  .hero-flow .hstep{display:grid;grid-template-columns:64px 1fr;gap:18px;padding:14px 0;border-bottom:1px solid var(--rule2);}
-  .hero-flow .hstep:last-child{border-bottom:0;}
-  .hero-flow .hm{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--terra);font-weight:500;}
-  .hero-flow .ht{font-family:var(--serif);font-weight:600;font-size:23px;line-height:1.05;letter-spacing:-.02em;color:var(--ink);}
-  .hero-flow .hd{display:block;margin-top:4px;font-family:var(--sans);font-size:12.5px;line-height:1.45;color:var(--mut);font-weight:300;letter-spacing:0;}
-  .inline-dl{margin-top:auto;border-top:1px solid var(--ink);padding-top:16px;display:flex;flex-direction:column;gap:0;}
-  .inline-dl .row{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:10px 0;border-bottom:1px solid var(--gray);}
-  .inline-dl dt{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:500;padding-top:3px;}
-  .inline-dl dd{font-size:13.5px;line-height:1.55;color:var(--mut);}
-  .inline-dl dd b{color:var(--ink);font-weight:500;}
-  .proofgrid{margin-top:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gray);border:1px solid var(--gray);}
-  .proof{background:var(--white);padding:28px 28px 30px;min-height:210px;display:flex;flex-direction:column;gap:14px;}
-  .proof .pk{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--terra);font-weight:500;}
-  .proof .ph{font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.08;letter-spacing:-.02em;color:var(--ink);}
-  .proof .pp{font-size:14px;line-height:1.6;color:var(--mut);}
-  .mini-blueprint{margin-top:auto;border:1px solid var(--ink);display:grid;grid-template-columns:1fr 1fr 1fr;min-height:76px;}
-  .mini-blueprint span{display:flex;align-items:center;justify-content:center;border-right:1px solid var(--gray);font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);padding:10px;text-align:center;}
-  .mini-blueprint span:last-child{border-right:0;}
-  .mini-screen{margin-top:auto;border:1px solid var(--ink);padding:10px;display:flex;flex-direction:column;gap:7px;}
-  .mini-screen i{height:8px;background:var(--gray);display:block;}
-  .mini-screen i:nth-child(2){width:74%;}.mini-screen i:nth-child(3){width:52%;}.mini-screen i:nth-child(4){width:88%;}
-  .bridge-band{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:44px 0;margin-top:70px;}
-  .bridge-inner{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--gray);border:1px solid var(--gray);}
-  .bridge-card{background:var(--white);padding:30px 34px;}
-  .bridge-card .bk{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);}
-  .bridge-card .bt{margin-top:10px;font-family:var(--serif);font-weight:600;font-size:31px;line-height:1.05;letter-spacing:-.02em;}
-  .bridge-card .bp{margin-top:12px;font-size:14.5px;line-height:1.65;color:var(--mut);max-width:42ch;}
-  .bridge-card.mark .bt{color:var(--terra);}
-  .origin-signature{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:#181310;color:#ECEEE8;padding:26px 30px;margin:0 0 38px;max-width:760px;}
-  .origin-signature .idtop{display:flex;align-items:center;gap:18px;}
-  .origin-signature .idsym{height:48px;width:auto;display:block;}
-  .origin-signature .idname{display:flex;flex-direction:column;line-height:.98;font-family:var(--serif);}
-  .origin-signature .idname .a{font-weight:300;font-size:25px;letter-spacing:.005em;}
-  .origin-signature .idname .b{font-weight:600;font-size:25px;letter-spacing:.005em;}
-  .origin-signature .idcontacts{margin-top:14px;padding-top:12px;border-top:1px solid rgba(236,238,232,.18);display:flex;flex-direction:column;gap:6px;}
-  .origin-signature .idcontacts a{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:rgba(236,238,232,.66);word-break:break-all;}
-  .origin-signature .origin-role{border-left:1px solid rgba(236,238,232,.22);padding-left:24px;}
-  .origin-signature .origin-role span{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:rgba(236,238,232,.58);}
-  .origin-signature .origin-role p{margin-top:10px;font-size:14.5px;line-height:1.65;color:rgba(236,238,232,.82);}
-  .cta-row{margin-top:50px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;}
-  .close .cta.secondary{background:var(--white);color:var(--ink);border-color:var(--gray);}
-  .close .cta.secondary:hover{background:var(--ink);border-color:var(--ink);color:var(--white);}
-  @media(max-width:900px){
-    .hero-flow{margin-left:0;margin-top:36px;width:100%;}
-    .proofgrid,.bridge-inner{grid-template-columns:1fr;}
-    .origin-signature{grid-template-columns:1fr;}
-    .origin-signature .origin-role{border-left:0;border-top:1px solid rgba(236,238,232,.22);padding-left:0;padding-top:18px;}
-    .inline-dl .row{grid-template-columns:1fr;gap:4px;}
-  }
+/* ---- EVIDÊNCIAS ---- */
+.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.ev{background:var(--paper);padding:30px;min-height:200px;display:flex;flex-direction:column;}
+.ev .value{font-family:var(--serif);font-size:clamp(34px,3.6vw,52px);font-weight:650;line-height:.95;letter-spacing:-.045em;}
+.ev .value i{font-style:normal;color:var(--terra);}
+.ev .caption{margin-top:14px;color:var(--mut);font-size:13.5px;line-height:1.6;max-width:42ch;}
+.ev.feature{background:var(--ink);color:var(--cloud);grid-column:1 / -1;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:stretch;padding:clamp(30px,4vw,42px);}
+.ev.feature .caption{color:rgba(232,236,239,.74);font-size:14.5px;max-width:54ch;}
+.ev.feature .value{color:var(--cloud);}
+.ev-stack{margin-top:auto;padding-top:var(--s-4);font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;line-height:1.9;color:rgba(232,236,239,.6);}
+.ev-stack b{color:var(--terra);font-weight:500;}
+@media(max-width:980px){.evidence{grid-template-columns:1fr 1fr;}.ev.feature{grid-template-columns:1fr;}}
+@media(max-width:560px){.evidence{grid-template-columns:1fr;}}
 
+/* ---- PRINCÍPIOS ---- */
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.principle{background:var(--surface);padding:28px;min-height:200px;}
+.principle h3{font-family:var(--serif);font-size:26px;font-weight:620;line-height:1.08;letter-spacing:-.02em;}
+.principle p{font-size:14.5px;color:var(--mut);line-height:1.7;margin-top:16px;}
+.principle b{color:var(--ink);font-weight:500;}
+.quote{margin-top:var(--s-7);border-top:1px solid var(--ink);padding-top:var(--s-5);font-family:var(--serif);
+  font-size:clamp(30px,4.4vw,58px);font-weight:600;line-height:1.06;letter-spacing:-.035em;max-width:920px;}
+.quote em{font-style:italic;color:var(--terra);}
+@media(max-width:880px){.principles{grid-template-columns:1fr;}}
+
+/* ---- ORIGEM ---- */
+.origin-card{display:grid;grid-template-columns:320px 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden;}
+.origin-id{background:var(--ink);color:var(--cloud);padding:clamp(28px,4vw,36px);display:flex;flex-direction:column;justify-content:space-between;gap:var(--s-6);min-height:340px;}
+.origin-id .name{font-family:var(--serif);font-size:40px;font-weight:620;line-height:.98;letter-spacing:-.02em;}
+.origin-id .contacts{display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:rgba(232,236,239,.66);}
+.origin-id .contacts a:hover{color:var(--cloud);}
+.origin-text{background:var(--paper);padding:clamp(28px,4vw,42px);font-size:16px;color:var(--mut);line-height:1.78;display:flex;flex-direction:column;gap:var(--s-4);max-width:72ch;}
+.origin-text b{color:var(--ink);font-weight:500;}
+@media(max-width:880px){.origin-card{grid-template-columns:1fr;}.origin-id{min-height:240px;}}
+
+/* ---- FECHAMENTO / FOOTER ---- */
+.close{background:var(--ink);color:var(--cloud);padding:clamp(96px,12vw,130px) 0;text-align:center;position:relative;overflow:hidden;}
+.close::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(166,58,35,.28),transparent 45%);}
+.close .wrap{position:relative;z-index:var(--z-base);}
+.close-title{font-family:var(--serif);font-size:clamp(42px,6vw,90px);font-weight:650;line-height:1.02;letter-spacing:-.045em;}
+.close-title em{font-style:italic;color:var(--terra);}
+.close-sub{margin-top:var(--s-4);font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,236,239,.58);}
+.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:var(--s-6);}
+footer{background:var(--ink);color:rgba(232,236,239,.58);border-top:1px solid rgba(232,236,239,.12);padding:50px 0 64px;}
+.footer-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
+.footer-note{margin-top:var(--s-5);max-width:760px;font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:none;line-height:1.8;color:rgba(232,236,239,.46);}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}.close-actions .btn{width:100%;}}
+
+/* ---- PLANTA-MÃE · GAVETA ---- */
+.pm-handle{position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:var(--z-handle);
+  display:flex;flex-direction:column;align-items:center;gap:12px;writing-mode:vertical-rl;
+  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-left:0;
+  border-radius:0 12px 12px 0;padding:18px 9px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.24em;text-transform:uppercase;box-shadow:0 14px 44px rgba(0,0,0,.28);
+  transition:background .25s,padding-left .25s var(--ease-quint);}
+.pm-handle:hover{background:var(--graph);padding-left:13px;}
+.pm-handle .glyph{color:var(--terra);font-size:13px;writing-mode:horizontal-tb;}
+.pm-backdrop{position:fixed;inset:0;background:rgba(10,11,13,.55);backdrop-filter:blur(2px);
+  z-index:var(--z-backdrop);opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;}
+.pm-backdrop.open{opacity:1;visibility:visible;}
+.pm-drawer{position:fixed;top:0;left:0;height:100%;width:min(420px,88vw);background:var(--ink);
+  color:var(--cloud);z-index:var(--z-drawer);transform:translateX(-100%);visibility:hidden;
+  transition:transform .5s var(--ease-expo),visibility .5s;overflow-y:auto;border-right:1px solid var(--dline);}
+.pm-drawer.open{transform:none;visibility:visible;}
+.pm-inner{padding:clamp(22px,4vw,30px);display:flex;flex-direction:column;gap:var(--s-3);}
+.pm-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;}
+.pm-eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);}
+.pm-title{margin-top:10px;font-family:var(--serif);font-size:26px;font-weight:620;line-height:1.04;letter-spacing:-.02em;color:var(--cloud);}
+.pm-close{width:38px;height:38px;flex-shrink:0;border:1px solid var(--dline);border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;color:var(--cloud);font-size:18px;transition:background .2s,border-color .2s;}
+.pm-close:hover{background:var(--graph);border-color:var(--terra);}
+.pm-card{background:var(--cloud);color:var(--ink);border-radius:var(--r);overflow:hidden;}
+.pm-card .q{background:var(--terra);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:11px 16px;}
+.pm-card .a{padding:16px;font-size:14.5px;line-height:1.6;color:#33373D;}
+.pm-card .a b{color:var(--ink);font-weight:600;}
+.pm-card--key{background:var(--terra);color:#fff;}
+.pm-card--key .q{background:rgba(0,0,0,.18);}
+.pm-card--key .a{color:rgba(255,255,255,.92);}
+.pm-card--key .a b{color:#fff;}
+@media(max-width:760px){
+  .pm-handle{left:16px;bottom:16px;top:auto;transform:none;writing-mode:horizontal-tb;
+    flex-direction:row;border-radius:var(--r-pill);border:1px solid var(--dline);padding:11px 17px;}
+  .pm-handle:hover{padding-left:17px;}
+  .pm-handle .glyph{writing-mode:horizontal-tb;}
+  .pm-drawer{width:100vw;}
+}
+
+/* ---- 5 · REDUCED MOTION ---- */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .rv,.rv.stagger>*{opacity:1;transform:none;transition:none;}
+  .btn:hover{transform:none;}
+  .acc-panel{transition:none;}
+  .acc-trigger .acc-icon{transition:none;}
+  .pm-drawer{transition:opacity .2s ease,visibility .2s;transform:none;opacity:0;}
+  .pm-drawer.open{opacity:1;}
+  .pm-backdrop{transition:opacity .2s ease;}
+  .pm-handle{transition:none;}
+}
 </style>
 </head>
 <body>
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <symbol id="mark-atrio" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 942 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><path fill="currentColor" d="M0,0 H942 V1000 H711 V300 H571 V1000 H371 V300 H232 V1000 H0 Z"></path></svg></symbol>
+  <symbol id="mark-corpus" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 695 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><g fill="currentColor"><path d="M0,0 H318 V380 L237,500 L318,620 V1000 H0 Z"></path><path d="M695,0 H377 V380 L458,500 L377,620 V1000 H695 Z"></path></g></svg></symbol>
+  <symbol id="mark-ratio" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 1164 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><path fill="currentColor" fill-rule="evenodd" d="M582,0 L1164,1000 L0,1000 Z M520,350 L441,1000 L276,1000 Z M644,350 L888,1000 L723,1000 Z"></path></svg></symbol>
+  <symbol id="mark-cerne" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 766 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><g fill="currentColor"><path d="M0,0 L349,205 L349,795 L0,1000 L0,630 L195,500 L0,370 Z"></path><path d="M766,0 L417,205 L417,795 L766,1000 L766,630 L571,500 L766,370 Z"></path></g></svg></symbol>
+  <symbol id="mark-lux" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 720 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><defs><clipPath id="tlux"><rect x="0" y="0" width="720" height="500"></rect></clipPath><clipPath id="blux"><rect x="0" y="500" width="720" height="500"></rect></clipPath><mask id="mlux"><rect width="720" height="1000" fill="#000"></rect><g clip-path="url(#tlux)"><path fill="#fff" d="M360,274 L720,637 L360,1000 L0,637 Z"></path><path fill="#000" d="M360,477 L518,637 L360,797 L202,637 Z"></path><path fill="#fff" d="M360,0 L720,363 L360,726 L0,363 Z"></path><path fill="#000" d="M360,203 L518,363 L360,523 L202,363 Z"></path></g><g clip-path="url(#blux)"><path fill="#fff" d="M360,0 L720,363 L360,726 L0,363 Z"></path><path fill="#000" d="M360,203 L518,363 L360,523 L202,363 Z"></path><path fill="#fff" d="M360,274 L720,637 L360,1000 L0,637 Z"></path><path fill="#000" d="M360,477 L518,637 L360,797 L202,637 Z"></path></g></mask></defs><rect width="720" height="1000" fill="currentColor" mask="url(#mlux)"></rect></svg></symbol>
+</svg>
 
-<nav>
+<!-- PLANTA-MÃE · handle + gaveta -->
+<button class="pm-handle" id="pm-handle" aria-expanded="false" aria-controls="pm-drawer" aria-label="Abrir Planta-mãe — o ATRIO em cinco respostas">
+  <span class="glyph" aria-hidden="true">◇</span>Planta-mãe
+</button>
+<div class="pm-backdrop" id="pm-backdrop" hidden></div>
+<aside class="pm-drawer" id="pm-drawer" role="dialog" aria-modal="true" aria-labelledby="pm-title">
+  <div class="pm-inner">
+    <div class="pm-head">
+      <div>
+        <span class="pm-eyebrow">Planta-mãe</span>
+        <h2 class="pm-title" id="pm-title">O ATRIO em cinco respostas</h2>
+      </div>
+      <button class="pm-close" id="pm-close" aria-label="Fechar Planta-mãe">×</button>
+    </div>
+    <article class="pm-card"><div class="q">O que é</div><p class="a">Uma arquitetura modular de IA para organizar documentos, articular raciocínio jurídico, revisar formulações e refinar textos — de forma integrada ou isolada, sempre sob controle humano.</p></article>
+    <article class="pm-card"><div class="q">Por que existe</div><p class="a">Porque velocidade não garante consistência no trabalho jurídico mediado por IA. O ATRIO confere método ao percurso entre documentos, raciocínio e texto.</p></article>
+    <article class="pm-card"><div class="q">Como opera</div><p class="a">De ponta a ponta ou por módulo: CORPUS organiza a memória documental, RATIO estrutura a formulação, CERNE confronta o raciocínio e LUX refina a forma final.</p></article>
+    <article class="pm-card"><div class="q">Onde se aplica</div><p class="a">Em contextos jurídicos com volume documental, repetição, complexidade decisória, revisão qualificada e necessidade de controle do percurso argumentativo.</p></article>
+    <article class="pm-card pm-card--key"><div class="q">Quem decide</div><p class="a"><b>O juízo humano.</b> O ATRIO apoia a produção e torna seu percurso rastreável e governável.</p></article>
+  </div>
+</aside>
+
+<nav class="nav" aria-label="Navegação principal">
   <div class="wrap">
-    <a class="brand" href="#top">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M18,18 H82 V84 H70 V32 H30 V84 H18 Z M40,44 H48 V84 H40 Z M56,44 H64 V84 H56 Z" fill="#A63A23"/></svg>
-      ATRIO
-    </a>
-    <div class="links">
-      <a href="#o-que-e">O que é</a>
-      <a href="#problema">Problema</a>
-      <a href="#evidencias">Evidências</a>
-      <a href="#metodo">Como funciona</a>
-      <a href="#arquitetura">Módulos</a>
-      <a href="#autor">Origem</a>
+    <div class="bar">
+      <a class="brand" href="#top" aria-label="ATRIO — início"><span class="brand-mark"><svg class="mark"><use href="#mark-atrio"></use></svg></span>ATRIO</a>
+      <div class="nav-links">
+        <a href="#problema">Problema</a>
+        <a href="#resposta">Resposta</a>
+        <a href="#arquitetura">Arquitetura</a>
+        <a href="#autoria">Autoria</a>
+        <a href="#evidencias">Evidências</a>
+        <a href="#principios">Princípios</a>
+        <a class="btn nav-cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20ATRIO">Contato</a>
+      </div>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
-<header class="hero" id="top" data-screen-label="Hero">
+<header class="hero" id="top">
   <div class="wrap">
-    <div class="meta">
-      <span class="lbl"><b>—</b> Arquitetura de Raciocínio via Inteligência Orquestrada</span>
+    <div class="hero-top rv">
+      <span class="eyebrow">Arquitetura de Raciocínio via Inteligência Orquestrada</span>
+      <span class="label">governança do raciocínio</span>
     </div>
-    <h1 class="rv">A<span class="o">T</span>RIO</h1>
+    <h1 class="hero-title rv">A<span class="t">T</span>RIO</h1>
     <div class="hero-grid">
-      <div class="hero-lead">
-        <p class="tagline rv">Sistema recursal de IA para acervo, raciocínio, revisão crítica e decisão humana rastreável.</p>
-        <p class="hphrase rv">Antes de acelerar o jurídico, <br>é preciso governar o raciocínio</p>
-        <p class="tldr rv"><b>Em síntese.</b> O ATRIO estrutura memória documental, formulação decisória, confronto crítico e refinamento textual em um fluxo controlado pelo operador. Não substitui o juízo: torna o percurso verificável.</p>
+      <div class="hero-lead rv">
+        <p class="hero-kicker">Antes de acelerar o jurídico, <em>governe o raciocínio</em></p>
+        <p class="hero-define">Sistema recursal de IA para acervo, raciocínio, revisão crítica e <b>decisão humana rastreável</b>.</p>
+        <p class="hero-copy"><b>ATRIO é uma arquitetura modular de IA jurídica</b> para acervo, formulação decisória, confronto crítico e refinamento textual sob controle do operador. Não substitui o juízo — torna o percurso verificável.</p>
+        <p class="hero-synthesis"><span>em síntese</span> memória governada, raciocínio faseado, crítica antes da forma e decisão humana no eixo</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#arquitetura">Ver arquitetura <span aria-hidden="true">→</span></a>
+          <a class="btn light" href="mailto:christiandscosta@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20one-pager%20ATRIO">Solicitar one-pager</a>
+        </div>
       </div>
-      <div class="hero-flow rv" aria-label="Fluxo do ATRIO">
-        <div class="hstep"><span class="hm">01</span><span><span class="ht">CORPUS</span><span class="hd">memória documental governada</span></span></div>
-        <div class="hstep"><span class="hm">02</span><span><span class="ht">RATIO</span><span class="hd">formulação decisória faseada</span></span></div>
-        <div class="hstep"><span class="hm">03</span><span><span class="ht">CERNE</span><span class="hd">confronto crítico do raciocínio</span></span></div>
-        <div class="hstep"><span class="hm">04</span><span><span class="ht">LUX</span><span class="hd">refinamento formal sob limite</span></span></div>
-      </div>
+      <aside class="hero-panel rv" aria-label="Fluxo modular ATRIO">
+        <div class="hero-panel-head"><span>fluxo modular</span><span>CORPUS → LUX</span></div>
+        <div class="hero-steps">
+          <div class="hero-step"><span class="no">01</span><span><span class="name">CORPUS</span><span class="desc">memória documental governada</span></span><span class="icon"><svg class="mark"><use href="#mark-corpus"></use></svg></span></div>
+          <div class="hero-step"><span class="no">02</span><span><span class="name">RATIO</span><span class="desc">formulação decisória faseada</span></span><span class="icon"><svg class="mark"><use href="#mark-ratio"></use></svg></span></div>
+          <div class="hero-step"><span class="no">03</span><span><span class="name">CERNE</span><span class="desc">confronto crítico do raciocínio</span></span><span class="icon"><svg class="mark"><use href="#mark-cerne"></use></svg></span></div>
+          <div class="hero-step"><span class="no">04</span><span><span class="name">LUX</span><span class="desc">refinamento formal sob limite</span></span><span class="icon"><svg class="mark"><use href="#mark-lux"></use></svg></span></div>
+        </div>
+      </aside>
     </div>
   </div>
 </header>
 
-
-<!-- 01 O QUE É -->
-<section class="s" id="o-que-e" data-screen-label="01 O que é">
+<section class="section surface" id="problema">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="01">01</span></div>
-      <div class="sbody">
-        <span class="kick">O que é</span>
-        <h2>Uma arquitetura para tornar o raciocínio jurídico verificável</h2>
-        <p class="ssub">O ATRIO organiza o caminho entre acervo, análise, decisão humana, revisão crítica e forma final.</p>
-      </div>
-    </div>
-    <div class="prose rv">
-      <div></div>
-      <p class="lead">Não é uma ferramenta isolada de redação. É um sistema de operação jurídica assistida, construído para preservar lastro documental e rastro decisório.</p>
-      <div class="body">
-        <p>O sistema separa etapas que costumam se misturar: memória, formulação, confronto e refinamento. Cada etapa tem função própria, limite próprio e ponto de controle humano.</p>
-        <p><b>A promessa central não é automatizar a decisão.</b> É tornar visível o caminho pelo qual uma decisão assistida pode ser formulada, testada e revisada.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 02 PROBLEMA -->
-<section class="s" id="problema" data-screen-label="02 Problema">
-  <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="02">02</span></div>
-      <div class="sbody">
-        <span class="kick">Problema</span>
+    <div class="head rv">
+      <div class="index">01</div>
+      <div class="head-body">
+        <span class="eyebrow">Problema</span>
         <h2>O jurídico não falha apenas por falta de velocidade</h2>
-        <p class="ssub">Falha também quando acervo, linguagem, raciocínio e fluxo perdem lastro comum.</p>
+        <p class="sub">Falha quando acervo, linguagem, raciocínio e fluxo perdem lastro comum</p>
       </div>
     </div>
-    <div class="prose rv">
+    <div class="split rv">
       <div></div>
-      <p class="lead">O ATRIO nasceu de um problema concreto na rotina de gabinete judicial.</p>
-      <div class="body">
-        <p>A IA permitiu aumento de produtividade, mas não na mesma proporção em qualidade e precisão. A entrega chegava mais rápido, sem que o raciocínio que deveria sustentá-la amadurecesse junto.</p>
-        <p>O gargalo não estava apenas na redação, mas em tudo o que vem antes: <b>fundamentar, padronizar, revisar e preservar a coerência lógica do que se entrega.</b></p>
+      <p class="lead">A IA aumentou a velocidade da produção jurídica. Nem sempre aumentou, na mesma proporção, a qualidade do raciocínio que deveria sustentá-la.</p>
+      <div class="text">
+        <p>O gargalo não está apenas na redação. Está no que vem antes: <b>organizar o acervo, formular a hipótese, revisar a coerência, controlar a decisão e preservar o caminho percorrido.</b></p>
+        <p>Sem rastro e sem lastro, a minuta pode soar jurídica sem estar suficientemente fundamentada.</p>
       </div>
+    </div>
+    <div class="signal-grid rv stagger">
+      <article class="signal"><span class="sno">01</span><h3 class="st">Minuta fluente</h3><p class="sp">Texto bem escrito pode esconder fundamento frágil, lacuna decisória ou precedente sem pertinência material.</p></article>
+      <article class="signal"><span class="sno">02</span><h3 class="st">Acervo disperso</h3><p class="sp">A base documental perde força quando não é classificada, preservada, recuperável e vinculada ao percurso da decisão.</p></article>
+      <article class="signal"><span class="sno">03</span><h3 class="st">Revisão tardia</h3><p class="sp">Quando o controle humano aparece só no fim, a revisão vira chancela e não governança do raciocínio.</p></article>
     </div>
   </div>
 </section>
 
-
-<!-- 03 EVIDÊNCIAS -->
-<section class="ev-band" id="evidencias" data-screen-label="03 Evidências">
+<section class="section" id="resposta">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="03">03</span></div>
-      <div class="sbody">
-        <span class="kick">Evidências</span>
-        <h2>Construído em operação real</h2>
+    <div class="head rv">
+      <div class="index">02</div>
+      <div class="head-body">
+        <span class="eyebrow">Resposta</span>
+        <h2>Separar etapas para preservar o juízo</h2>
+        <p class="sub">O ATRIO organiza o caminho entre memória documental, elaboração, auditoria e forma final</p>
       </div>
     </div>
-    <div class="ev-layout rv">
-      <div></div>
-      <div class="ev-cards">
-        <div class="evc"><div class="v">115 mil<i>+</i></div><div class="k">Decisões localizáveis na base documental governada</div></div>
-        <div class="evc"><div class="v">Desde 2018</div><div class="k">Dados enriquecidos a partir do recorte operacional consolidado</div></div>
-        <div class="evc"><div class="v">3 fluxos</div><div class="k">Recurso Inominado, Embargos de Declaração e Mandado de Segurança</div></div>
-        <div class="evc"><div class="v">Calendário próprio</div><div class="k">Prazos em dias úteis, com feriados e suspensões do TJPR</div></div>
-      </div>
-      <div class="ev-text">
-        <p class="lead">O ATRIO foi construído a partir de uma rotina concreta de gabinete judicial: acervo volumoso, repetição temática, padronização e pressão constante por revisão qualificada.</p>
-        <p>A infraestrutura reúne base documental com mais de 115 mil decisões, dados enriquecidos desde 2018, robôs próprios de organização documental, calendário jurídico para contagem de prazos e fluxos especializados para recurso inominado, embargos de declaração e mandado de segurança.</p>
-        <p>O projeto evidencia uma capacidade específica: traduzir problema jurídico complexo em <b>arquitetura modular, com documentação, taxonomia, automação assistida e controle humano sobre os pontos decisórios.</b></p>
-      </div>
-    </div>
-    <div class="proofgrid rv" aria-label="Camadas de prova do ATRIO">
-      <div class="proof"><span class="pk">01 · caso aplicado</span><span class="ph">Operação recursal real</span><p class="pp">Base documental governada, fluxos de RI, ED e MS, calendário jurídico próprio e acervo com mais de 115 mil decisões localizáveis.</p></div>
-      <div class="proof"><span class="pk">02 · arquitetura</span><span class="ph">Fluxo com gates humanos</span><p class="pp">O caminho separa memória, formulação, confronto e refinamento, mantendo pontos de decisão sob controle do operador.</p><div class="mini-blueprint"><span>CORPUS</span><span>RATIO</span><span>CERNE/LUX</span></div></div>
-      <div class="proof"><span class="pk">03 · tela prevista</span><span class="ph">Rastro decisório verificável</span><p class="pp">Slot preparado para screenshot ou wireframe assinado de input, gate humano e saída com registro do percurso.</p><div class="mini-screen"><i></i><i></i><i></i><i></i></div></div>
+    <div class="answer-band rv">
+      <div class="big">Memória.<br>Formulação.<br>Crítica.<br><em>Forma.</em></div>
+      <div class="side"><p>O sistema separa o que costuma se misturar. Cada módulo tem função própria, limite próprio e ponto de controle humano.</p><p style="margin-top:16px"><b>A promessa central não é automatizar a decisão.</b> É tornar visível o caminho pelo qual uma decisão assistida pode ser formulada, testada e revisada.</p></div>
     </div>
   </div>
 </section>
 
-
-<!-- 04 COMO FUNCIONA -->
-<section class="metodo" id="metodo" data-screen-label="04 Como funciona">
+<section class="section surface cv" id="arquitetura">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="04">04</span></div>
-      <div class="sbody">
-        <span class="kick">Como funciona</span>
+    <div class="head rv">
+      <div class="index">03</div>
+      <div class="head-body">
+        <span class="eyebrow">Arquitetura modular</span>
+        <h2>Quatro módulos, uma cadeia governada de raciocínio</h2>
+        <p class="sub">Entradas, operações, saídas e pontos de controle — cada módulo é um bloco com função, spec e tela próprios</p>
+      </div>
+    </div>
+
+    <div class="arch-flow rv stagger" aria-label="Fluxo: CORPUS, RATIO, CERNE, LUX">
+      <span class="node"><b>01</b> CORPUS</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>02</b> RATIO</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>03</b> CERNE</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>04</b> LUX</span>
+    </div>
+
+    <div class="modules rv stagger">
+
+      <!-- 01 CORPUS (template expandido) -->
+      <article class="module">
+        <div class="m-head">
+          <div class="m-id"><span class="m-num">01</span><span class="m-name">CORPUS</span><span class="m-role">memória documental governada</span></div>
+          <span class="m-mark"><svg class="mark"><use href="#mark-corpus"></use></svg></span>
+        </div>
+        <p class="m-claim">A base entra crua e fica limpa — antes de a IA tocar em qualquer coisa.</p>
+        <p class="m-desc">Recebe o acervo, organiza, protege e dá lastro ao material que alimenta os demais módulos. É fonte e destino do pipeline: um loop fechado de conhecimento governado.</p>
+        <div class="m-spec">
+          <div class="cell"><span class="k">Entrada</span><span class="v">decisões em PDF · detecção de escaneado + OCR · 2018–2026</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">extrai → pseudonimiza → segrega segredo → inventaria → preserva</span></div>
+          <div class="cell"><span class="k">Saída</span><span class="v">base limpa por processo (.txt) · inventário auditável · cofre apartado</span></div>
+        </div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-corpus-btn" aria-expanded="false" aria-controls="acc-corpus"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-corpus" role="region" aria-labelledby="acc-corpus-btn">
+            <div class="acc-inner"><ul class="acc-body">
+              <li><b>Pseudonimização reversível na entrada.</b> Cada dado pessoal (nome, CPF, CNPJ, OAB, e-mail, telefone, endereço) vira código estável; mesma pessoa, mesmo código em todo o acervo. O mapa código→dado real vive num cofre apartado que nunca acompanha a base.</li>
+              <li><b>O CNJ é chave, não dado</b> — nunca mascarado; identifica e deduplica o processo. O hash deduplica o arquivo.</li>
+              <li><b>spaCy</b> (<code>pt_core_news_md</code>) para reconhecimento de nomes, com fallback por pista textual.</li>
+              <li><b>Segredo de justiça</b> segregado na entrada, fora do reuso; triagem conservadora.</li>
+              <li><b>Inventário</b>: uma linha por documento (hash, CNJ, classe, situação), sem dado cru — circula e é auditável. O original é preservado como dado bruto.</li>
+              <li class="meta-strip"><b>LGPD</b> · art. 13 pseudonimização · art. 11 dado sensível · art. 46 segurança · art. 6º X responsabilização · art. 12 anonimização (→ LUX)</li>
+              <li class="limits"><b>Limites assumidos:</b> detecção não é perfeita (revisão humana segue necessária) · OCR erra mais que texto nativo · identificação por contexto não é capturada · triagem de segredo pode segregar a mais.</li>
+            </ul></div>
+          </div>
+        </div>
+        <figure class="m-screen">
+          <div class="screen-frame"><span class="screen-name">painel.py · inventario.csv · árvore 00_entrada → _pseudonimizado / _cofre / _segredo</span></div>
+          <figcaption>estado da base — 2ª Turma Recursal</figcaption>
+        </figure>
+      </article>
+
+      <!-- 02 RATIO -->
+      <article class="module module--core">
+        <div class="m-head">
+          <div class="m-id"><span class="m-num">02</span><span class="m-name">RATIO</span><span class="m-role">formulação decisória faseada</span></div>
+          <span class="m-mark"><svg class="mark"><use href="#mark-ratio"></use></svg></span>
+        </div>
+        <p class="m-claim">A decisão se forma em fases — com escolha humana em cada uma.</p>
+        <p class="m-desc">Estrutura o problema, a hipótese, os fundamentos e a minuta a partir da escolha do operador. Cada fase deixa rastro; nenhuma avança sem decisão humana.</p>
+        <div class="m-spec">
+          <div class="cell"><span class="k">Entrada</span><span class="v">caso, peças, parâmetros</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">estrutura, compara, formula</span></div>
+          <div class="cell"><span class="k">Saída</span><span class="v">minuta rastreável</span></div>
+        </div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-ratio-btn" aria-expanded="false" aria-controls="acc-ratio"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-ratio" role="region" aria-labelledby="acc-ratio-btn">
+            <div class="acc-inner"><ul class="acc-body">
+              <li><b>Fases explícitas</b> — problema, hipótese, fundamentos, minuta — em vez de uma geração única e opaca.</li>
+              <li><b>Escolha do operador no eixo:</b> o módulo apresenta alternativas; a seleção é humana e fica registrada.</li>
+              <li class="limits"><b>Limite assumido:</b> a formulação assiste e organiza; não decide.</li>
+            </ul></div>
+          </div>
+        </div>
+        <figure class="m-screen">
+          <div class="screen-frame"><span class="screen-name">estrutura da formulação · fases e alternativas</span></div>
+          <figcaption>minuta rastreável</figcaption>
+        </figure>
+      </article>
+
+      <!-- 03 CERNE -->
+      <article class="module module--core">
+        <div class="m-head">
+          <div class="m-id"><span class="m-num">03</span><span class="m-name">CERNE</span><span class="m-role">confronto crítico do raciocínio</span></div>
+          <span class="m-mark"><svg class="mark"><use href="#mark-cerne"></use></svg></span>
+        </div>
+        <p class="m-claim">Tensiona a formulação antes de ela ganhar forma final.</p>
+        <p class="m-desc">Identifica lacunas, avalia riscos e confronta precedentes sem pertinência material, transformando fragilidade em achado técnico — um gate antes do acabamento.</p>
+        <div class="m-spec">
+          <div class="cell"><span class="k">Entrada</span><span class="v">formulação e hipóteses</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">audita, tensiona, qualifica</span></div>
+          <div class="cell"><span class="k">Saída</span><span class="v">achados e gate técnico</span></div>
+        </div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-cerne-btn" aria-expanded="false" aria-controls="acc-cerne"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-cerne" role="region" aria-labelledby="acc-cerne-btn">
+            <div class="acc-inner"><ul class="acc-body">
+              <li><b>Crítica antes da forma:</b> o confronto ocorre sobre o raciocínio, não sobre o texto já polido.</li>
+              <li><b>Achado técnico</b> em vez de chancela: cada fragilidade vira item revisável e rastreável.</li>
+              <li class="limits"><b>Limite assumido:</b> aponta o risco; a superação é do operador.</li>
+            </ul></div>
+          </div>
+        </div>
+        <figure class="m-screen">
+          <div class="screen-frame"><span class="screen-name">mapa de achados · lacunas, riscos e gate</span></div>
+          <figcaption>gate técnico</figcaption>
+        </figure>
+      </article>
+
+      <!-- 04 LUX -->
+      <article class="module">
+        <div class="m-head">
+          <div class="m-id"><span class="m-num">04</span><span class="m-name">LUX</span><span class="m-role">refinamento formal sob limite</span></div>
+          <span class="m-mark"><svg class="mark"><use href="#mark-lux"></use></svg></span>
+        </div>
+        <p class="m-claim">Refina a forma sem inventar fundamento — e protege o que sai.</p>
+        <p class="m-desc">Ajusta clareza, tom, coesão e acabamento sobre a estrutura já validada. Na outra ponta do fluxo, responde pela anonimização irreversível da saída.</p>
+        <div class="m-spec">
+          <div class="cell"><span class="k">Entrada</span><span class="v">peça aprovada</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">limpa, calibra, refina</span></div>
+          <div class="cell"><span class="k">Saída</span><span class="v">texto final controlado</span></div>
+        </div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-lux-btn" aria-expanded="false" aria-controls="acc-lux"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-lux" role="region" aria-labelledby="acc-lux-btn">
+            <div class="acc-inner"><ul class="acc-body">
+              <li><b>Calibra sobre estrutura validada:</b> clareza, tom e coesão sem alterar a decisão.</li>
+              <li><b>Anonimização irreversível</b> da saída (LGPD art. 12) — peça-irmã do CORPUS na outra ponta do fluxo.</li>
+              <li class="limits"><b>Limite assumido:</b> refina a forma; preserva o juízo.</li>
+            </ul></div>
+          </div>
+        </div>
+        <figure class="m-screen">
+          <div class="screen-frame"><span class="screen-name">saída calibrada · texto final controlado</span></div>
+          <figcaption>forma sob limite</figcaption>
+        </figure>
+      </article>
+
+    </div>
+
+    <div class="arch-symmetry rv">
+      <div class="pole"><span class="k">CORPUS · entrada</span><p>Pseudonimiza de forma <b>reversível</b> para que a base seja útil ao reuso.</p></div>
+      <div class="pivot" aria-hidden="true">⇄</div>
+      <div class="pole"><span class="k">LUX · saída</span><p>Anonimiza de forma <b>irreversível</b> para que o que sai seja seguro. Peças-irmãs nas duas pontas.</p></div>
+    </div>
+
+    <div class="gov-strip rv stagger">
+      <div class="gov">governança</div>
+      <div class="gov">rastreabilidade</div>
+      <div class="gov">inspecionabilidade</div>
+      <div class="gov">decisão humana</div>
+    </div>
+  </div>
+</section>
+
+<section class="section cv" id="fluxo">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">04</div>
+      <div class="head-body">
+        <span class="eyebrow">Como funciona</span>
         <h2>Cada etapa deixa rastro</h2>
+        <p class="sub">A linearidade do fluxo não é rigidez. É método para tornar o trabalho mais claro, revisável e governável</p>
       </div>
     </div>
-    <div class="prose rv">
+    <div class="steps rv stagger">
+      <article class="step"><span class="num">01</span><h3 class="title">Documento entra</h3><p class="small">O material é recebido como base de trabalho, não como texto solto.</p></article>
+      <article class="step"><span class="num">02</span><h3 class="title">CORPUS organiza</h3><p class="small">A memória documental passa a ser classificável, preservável e recuperável.</p></article>
+      <article class="step"><span class="num">03</span><h3 class="title">RATIO formula</h3><p class="small">A estrutura decisória é conduzida em fases, com escolha humana no eixo.</p></article>
+      <article class="step"><span class="num">04</span><h3 class="title">CERNE confronta</h3><p class="small">O raciocínio é tensionado antes de ganhar forma final.</p></article>
+      <article class="step"><span class="num">05</span><h3 class="title">LUX refina</h3><p class="small">A linguagem é calibrada sem invenção de fundamento.</p></article>
+      <article class="step"><span class="num">06</span><h3 class="title">Humano decide</h3><p class="small">A decisão permanece vinculada ao operador.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section surface cv" id="autoria">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">05</div>
+      <div class="head-body">
+        <span class="eyebrow">Autoria técnica</span>
+        <h2>A base nasce protegida</h2>
+        <p class="sub">Pseudonimização na entrada, cofre apartado, tudo inventariado — antes de a IA tocar em qualquer coisa</p>
+      </div>
+    </div>
+    <div class="authoring rv">
       <div></div>
-      <p class="lead">Antes, parte da organização existia apenas como memória de trabalho: um eco interno de critérios e rotinas repetidos pela prática. Com o ATRIO, esse eco passa a ser registrado e a orientar toda a arquitetura, estruturando uma metodologia operacional pautada por governança e rastreabilidade.</p>
-      <div class="body">
-        <p>A linearidade do fluxo não é rigidez. É método para tornar o trabalho mais claro, revisável e governável, <b>sem confundir apoio tecnológico com substituição do juízo humano.</b></p>
-      </div>
-    </div>
-    <div class="flow rv" role="img" aria-label="Fluxo: CORPUS, RATIO, CERNE e LUX">
-      <div class="flow-main">
-        <div class="fcard mod"><span class="fi">01</span><span class="fn">Inventário</span><span class="fr">Memória</span><span class="fm">CORPUS</span></div>
-        <span class="farrow" aria-hidden="true">→</span>
-        <div class="fcard mod"><span class="fi">02</span><span class="fn">Raciocínio</span><span class="fr">Formulação</span><span class="fm">RATIO</span></div>
-        <span class="farrow" aria-hidden="true">→</span>
-        <div class="fcard mod"><span class="fi">03</span><span class="fn">Confronto</span><span class="fr">Sustentação</span><span class="fm">CERNE</span></div>
-        <span class="farrow" aria-hidden="true">→</span>
-        <div class="fcard mod"><span class="fi">04</span><span class="fn">Refinamento</span><span class="fr">Conformidade</span><span class="fm">LUX</span></div>
-      </div>
-    </div>
-    <div class="pair rv">
-      <div class="pair-in">
-        <p class="pl">O ATRIO estrutura a aplicação digital.<br><em>O ECHO organiza o método que vem antes.</em></p>
-        <a class="plink" href="echo.html">Conhecer o ECHO <span aria-hidden="true">→</span></a>
+      <div class="prose">
+        <p>Reusar decisão judicial exige uma condição que quase nenhum sistema cumpre: tornar o dado seguro <b>antes</b> do reuso, não depois. O CORPUS faz isso na entrada.</p>
+        <p>Construí o pipeline em <span class="term">Python</span>. Cada decisão entra em PDF — com detecção de escaneado e <span class="term">OCR</span> para o que vem sem texto — e, antes de qualquer reaproveitamento, todo dado pessoal vira código estável: nome, CPF, CNPJ, OAB, e-mail, telefone, endereço. A mesma pessoa recebe sempre o mesmo código em todo o acervo, o que preserva a relação entre as peças sem expor quem é. O mapa de volta ao dado real vive num <b>cofre apartado</b>, que nunca acompanha a base. O número CNJ nunca é mascarado — é a chave que identifica e deduplica.</p>
+        <p>O reconhecimento de nomes usa <span class="term">spaCy</span>; o que corre em segredo de justiça é segregado na entrada e fica fora do reuso; cada documento que sai da captura vira uma linha de <b>inventário</b> — com hash, processo, classe e situação, sem dado cru —, de modo que o registro circula e é auditável enquanto o cofre e os originais permanecem trancados.</p>
+        <p>Nada disso é acessório. Cada peça responde a um artigo da <span class="term">LGPD</span>: pseudonimização (art. 13), dado sensível (art. 11), segurança (art. 46), responsabilização (art. 6º, X). A anonimização irreversível da saída fica com o <b>LUX</b> (art. 12) — peça-irmã na outra ponta do fluxo. O CORPUS protege o que entra; o LUX protege o que sai.</p>
+        <p class="origin-beat">A base histórica veio antes da governança. O TJPR não oferece API pública: o acervo da 2ª Turma Recursal era público no sentido jurídico, inacessível no sentido técnico. Construí o acesso do zero — em Python, com <span class="term">Selenium</span> simulando a navegação humana e capturando o conteúdo direto do <span class="term">DOM</span>, um scraper parametrizado por órgão julgador e período. O tratamento veio com <span class="term">pandas</span>: normalização, deduplicação por número de processo e enriquecimento por metadados. Essa base bruta é o que o CORPUS recebe e governa.</p>
+        <p>A base concreta: <b>115.114 decisões</b> da 2ª Turma Recursal do TJPR (2018–2026), extraídas de um sistema sem API pública e reorganizadas em acervo governado. Nenhuma etapa dependeu de equipe de TI.</p>
+        <p>Disponibilidade pública não é acessibilidade técnica — e acesso sem governança não é reuso seguro. O ATRIO resolveu as duas distâncias. Com código.</p>
+        <p class="stack-strip"><b>Python</b> · pdfplumber · <b>spaCy</b> · OCR (Tesseract) · Selenium / DOM · pandas · dedup por hash · <b>LGPD-by-design</b></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 05 MÓDULOS -->
-<section class="s" id="arquitetura" data-screen-label="05 Módulos">
+<section class="section cv" id="evidencias">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="05">05</span></div>
-      <div class="sbody">
-        <span class="kick">Módulos</span>
-        <h2>Arquitetura modular. Raciocínio governado</h2>
-        <p class="ssub">Fluxo modular de raciocínio. CORPUS sustenta a memória. LUX fecha a forma</p>
+    <div class="head rv">
+      <div class="index">06</div>
+      <div class="head-body">
+        <span class="eyebrow">Evidências</span>
+        <h2>Construído em operação real</h2>
+        <p class="sub">O ATRIO nasce de rotina recursal, acervo volumoso, revisão qualificada e pressão por padronização sem perda de critério</p>
       </div>
     </div>
-    <div class="arch rv">
-
-      <article class="mcard l top" id="corpus">
-        <span class="mc-ico mk-ico"><svg viewBox="0 0 240 240" aria-hidden="true"><rect x="20" y="20" width="80" height="40"/><rect x="140" y="20" width="80" height="40"/><rect x="20" y="20" width="40" height="200"/><rect x="180" y="20" width="40" height="200"/><rect x="20" y="180" width="200" height="40"/><rect x="100" y="60" width="40" height="120"/></svg></span>
-        <p class="mk">Memória</p>
-        <h3>CORPUS</h3>
-        <p class="mf">Base documental governada</p>
-        <p class="mq">Acervo documental que garante a lógica e segurança decisórias, preservando o registro inteligente da base fundamental ao fluxo.</p>
-        <div class="mio">
-          <p><span>Entrada</span>Bases, decisões, ementas, códigos, robôs e documentação técnica.</p>
-          <p><span>Saída</span>Memória governada, com mais de 115 mil decisões localizáveis.</p>
+    <div class="evidence rv stagger">
+      <article class="ev"><div class="value">115.114</div><p class="caption">Decisões da 2ª Turma Recursal do TJPR na base documental governada.</p></article>
+      <article class="ev"><div class="value">2018<i>–</i>2026</div><p class="caption">Recorte temporal do acervo extraído, deduplicado e enriquecido.</p></article>
+      <article class="ev"><div class="value">3 fluxos</div><p class="caption">Recurso Inominado, Embargos de Declaração e Mandado de Segurança.</p></article>
+      <article class="ev"><div class="value">Calendário próprio</div><p class="caption">Prazos em dias úteis, com feriados e suspensões do TJPR.</p></article>
+      <article class="ev feature">
+        <div>
+          <span class="eyebrow">capacidade demonstrada</span>
+          <div class="value" style="margin-top:18px">Do acervo ao rastro decisório.</div>
+          <p class="caption">Da captura à base governada: scraper em <b style="color:#fff">Selenium</b> sobre o DOM do TJPR, deduplicação por número de processo em pandas, pseudonimização reversível com spaCy e OCR na entrada, inventário auditável com hash e cofre apartado — tudo conforme a LGPD, antes de a IA tocar em qualquer coisa.</p>
         </div>
-        <dl class="inline-dl">
-          <div class="row"><dt>Função</dt><dd>Inventário e memória governada.</dd></div>
-          <div class="row"><dt>Conteúdo</dt><dd>Bases, decisões, ementas, códigos, robôs, pipelines e documentação.</dd></div>
-          <div class="row"><dt>Evolução</dt><dd>Camada RAG em desenvolvimento.</dd></div>
-        </dl>
+        <figure class="m-screen">
+          <div class="screen-frame" style="background:linear-gradient(rgba(232,236,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(232,236,239,.05) 1px,transparent 1px),var(--graph);background-size:22px 22px,22px 22px,auto;border-color:rgba(232,236,239,.18)"><span class="screen-name" style="color:rgba(232,236,239,.6)">inventario.csv · hash · CNJ · classe · situação</span></div>
+          <figcaption style="color:rgba(232,236,239,.5)">acervo governado — sem dado cru</figcaption>
+        </figure>
       </article>
-
-      <article class="mcard r top core" id="ratio">
-        <span class="mc-ico mk-ico"><svg viewBox="0 0 240 240" aria-hidden="true"><rect x="100" y="20" width="40" height="200"/><rect x="80" y="20" width="80" height="40"/><rect x="50" y="100" width="140" height="40"/><rect x="20" y="180" width="200" height="40"/></svg></span>
-        <p class="mk">Núcleo decisório</p>
-        <h3>RATIO</h3>
-        <p class="mf">Condução decisória faseada</p>
-        <p class="mq">O operador define o sentido decisório; o sistema organiza o rastro e auxilia a formulação.</p>
-        <div class="mio">
-          <p><span>Entrada</span>Peças centrais do caso: recurso, sentença, contrarrazões e certidões.</p>
-          <p><span>Saída</span>Rastro decisório organizado e minuta formulada a partir da escolha do operador.</p>
-        </div>
-        <dl class="inline-dl">
-          <div class="row"><dt>Gate</dt><dd>O operador decide se avança, bloqueia, corrige ou escolhe o caminho decisório.</dd></div>
-          <div class="row"><dt>Limite</dt><dd>Não indica jurisprudência nesta fase, para evitar precedente sem lastro.</dd></div>
-          <div class="row"><dt>Saída</dt><dd>Rastro decisório organizado e minuta formulada a partir da escolha humana.</dd></div>
-        </dl>
-      </article>
-
-      <article class="mcard l core" id="cerne">
-        <span class="mc-ico mk-ico"><svg viewBox="0 0 240 240" aria-hidden="true"><path d="M20 20 L110 20 L110 90 L75 120 L110 150 L110 220 L20 220 Z"/><path d="M220 20 L130 20 L130 90 L165 120 L130 150 L130 220 L220 220 Z"/></svg></span>
-        <p class="mk">Núcleo crítico</p>
-        <h3>CERNE</h3>
-        <p class="mf">Confronto de raciocínios</p>
-        <p class="mq">Se o RATIO conduz o percurso, o CERNE pergunta se ele se sustenta.</p>
-        <div class="mio">
-          <p><span>Entrada</span>Caminho decisório, preliminares, mérito e proposta de conclusão.</p>
-          <p><span>Saída</span>Raciocínio tensionado e caminho mais seguro para formulação.</p>
-        </div>
-        <dl class="inline-dl">
-          <div class="row"><dt>Operação</dt><dd>Confronto lógico, teste de coerência, identificação de riscos e alternativas.</dd></div>
-          <div class="row"><dt>Gate</dt><dd>O operador decide se acolhe, corrige, bloqueia ou reformula o caminho.</dd></div>
-          <div class="row"><dt>Limite</dt><dd>Não gera fundamento novo sem lastro. Não substitui a decisão humana.</dd></div>
-        </dl>
-      </article>
-
-      <article class="mcard r" id="lux">
-        <span class="mc-ico mk-ico"><svg viewBox="0 0 240 240" aria-hidden="true"><rect x="20" y="20" width="80" height="40"/><rect x="140" y="20" width="80" height="40"/><polygon points="100,60 140,60 200,220 40,220"/></svg></span>
-        <p class="mk">Forma</p>
-        <h3>LUX</h3>
-        <p class="mf">Refinamento e conformidade</p>
-        <p class="mq">O que depende de juízo permanece com o operador. A forma é calibrada pelo sistema.</p>
-        <div class="mio">
-          <p><span>Entrada</span>Minuta estruturada.</p>
-          <p><span>Saída</span>Peça pronta para emissão.</p>
-        </div>
-        <dl class="inline-dl">
-          <div class="row"><dt>Operação</dt><dd>Gramática, coesão, terminologia, ementa e polimento.</dd></div>
-          <div class="row"><dt>Limite</dt><dd>Não reabre mérito. Não fundamenta. Não inventa.</dd></div>
-          <div class="row"><dt>Saída</dt><dd>Peça calibrada para emissão.</dd></div>
-        </dl>
-      </article>
-
     </div>
   </div>
 </section>
 
-<!-- 06 CRITÉRIO -->
-<section class="s" id="principios" style="padding-top:0" data-screen-label="06 Critério">
+<section class="section surface cv" id="principios">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="06">06</span></div>
-      <div class="sbody">
-        <span class="kick">Critério</span>
+    <div class="head rv">
+      <div class="index">07</div>
+      <div class="head-body">
+        <span class="eyebrow">Critério</span>
         <h2>Controle de percurso</h2>
-        <p class="ssub">Governança e rastreabilidade: critérios transversais que o ATRIO mantém sobre todo o fluxo</p>
+        <p class="sub">Governança e rastreabilidade operam como critérios transversais sobre todo o fluxo</p>
       </div>
     </div>
-    <div class="pr-grid rv">
-      <div></div>
-      <div class="pr-col">
-        <h4>Governança</h4>
-        <p>Nenhuma etapa sensível avança sem controle do operador. A IA pode organizar, sugerir, tensionar e formular, mas não assume o juízo. <b>A decisão permanece vinculada ao operador.</b></p>
-      </div>
-      <div class="pr-col">
-        <h4>Rastreabilidade</h4>
-        <p>O caminho percorrido pelo sistema precisa permanecer visível: o que entrou, o que foi classificado, onde houve dúvida, qual alternativa foi apresentada e <b>em que ponto o operador decidiu.</b></p>
-      </div>
+    <div class="principles rv stagger">
+      <article class="principle"><h3>Governança</h3><p>Nenhuma etapa sensível avança sem controle do operador. A IA pode organizar, sugerir, tensionar e formular, mas não assume o juízo.</p></article>
+      <article class="principle"><h3>Rastreabilidade</h3><p>O caminho percorrido precisa permanecer visível: o que entrou, onde houve dúvida, qual alternativa foi apresentada e quando o operador decidiu.</p></article>
+      <article class="principle"><h3>Inspecionabilidade</h3><p>O sistema não foi pensado para esconder incerteza atrás de texto fluente, mas para expor o rastro e preservar o lastro.</p></article>
     </div>
-    <div class="pr-closing rv">
-      <div></div>
-      <p>O sistema não foi pensado para esconder incerteza atrás de texto fluente. Foi pensado para expor o rastro do raciocínio e preservar o lastro da decisão.</p>
-    </div>
-    <div class="pr-phrase rv">
-      <div></div>
-      <p><b>Rastro</b> para saber como chegou.<br/><b>Lastro</b> para saber por que chegou.</p>
-    </div>
+    <p class="quote rv"><em>Rastro</em> para saber como chegou.<br><em>Lastro</em> para saber por que chegou.</p>
   </div>
 </section>
 
-<!-- 07 ORIGEM -->
-<section class="s" id="autor" data-screen-label="07 Origem">
+<section class="section cv" id="origem">
   <div class="wrap">
-    <div class="shead rv">
-      <div class="smark"><span class="n" data-n="07">07</span></div>
-      <div class="sbody">
-        <span class="kick">Origem</span>
+    <div class="head rv">
+      <div class="index">08</div>
+      <div class="head-body">
+        <span class="eyebrow">Origem</span>
         <h2>Método, não vitrine</h2>
+        <p class="sub">Nascido em gabinete recursal, o ATRIO converte prática institucional em arquitetura documentável</p>
       </div>
     </div>
-    <div class="origin-signature rv">
-  <div class="origin-id">
-    <div class="idtop">
-      <img class="idsym" src="data:image/png;base64,..." alt="Marca Christian da Costa" />
-      <span class="idname">
-        <span class="a">Christian</span>
-        <span class="b">da Costa</span>
-      </span>
-    </div>
-    <div class="idcontacts">
-      <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a>
-      <a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
-    </div>
-  </div>
-  <div class="origin-role">
-    <span>Autoria e contexto</span>
-    <p>Arquitetura autoral construída a partir de rotina recursal, acervo volumoso, revisão qualificada e uso governado de IA jurídica.</p>
-  </div>
-</div>
-    <div class="about rv">
-      <div></div>
-      <div class="atext">
-        <p class="lead">O ATRIO não depende de uma trajetória individual para existir. É, antes de tudo, um método: um modo de governar o raciocínio jurídico que pode ser ensinado, auditado e continuado por outras mãos.</p>
-      </div>
-      <div class="atext">
-        <p>Nascido em gabinete recursal, traduz um problema institucional concreto em arquitetura: memória governada, raciocínio faseado, confronto crítico e refinamento sob controle do operador.</p>
-        <p>Mais do que um sistema, propõe a disciplina de separar o que pode ser estruturado do que deve permanecer sob juízo, e manter visível o caminho entre os dois.</p>
-        <p>É, nesse sentido, <b>uma escola de pensamento sobre como o Direito pode usar IA sem abrir mão do juízo</b>: documentada para durar e para ser continuada.</p>
-      </div>
-    </div>
-    <div class="alinks rv">
-      <div></div>
-      <div class="row">
-        <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:christiandscosta@gmail.com">E-mail</a>
+    <div class="origin-card rv">
+      <aside class="origin-id">
+        <div><span class="label">autoria</span><p class="name" style="margin-top:18px">Christian<br>da Costa</p></div>
+        <div class="contacts"><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></div>
+      </aside>
+      <div class="origin-text">
+        <p>O ATRIO não depende de uma trajetória individual para existir. É, antes de tudo, um método — <b>uma escola de pensamento sobre como o Direito pode usar IA sem abrir mão do juízo</b>: um modo de governar o raciocínio jurídico que pode ser ensinado, auditado e continuado por outras mãos.</p>
+        <p>Nascido em gabinete recursal, traduz um problema institucional concreto em arquitetura: <b>memória governada, raciocínio faseado, confronto crítico e refinamento sob controle do operador.</b></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FECHAMENTO -->
-<section class="close" id="contato" data-screen-label="Fechamento">
+<section class="close" id="contato">
   <div class="wrap">
-    <p class="cphrase rv">Não menos Direito.<br/>Não mais automação.<br/><em>Mais método.</em></p>
-    <p class="csub rv">CORPUS guarda · RATIO conduz · CERNE tensiona · LUX refina</p>
-    <div class="cta-row rv">
-      <a class="cta secondary" href="mailto:christiandscosta@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20one-pager%20ATRIO">Solicitar one-pager <span class="ar" aria-hidden="true">→</span></a>
-      <a class="cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20ATRIO">Conversar sobre o ATRIO <span class="ar" aria-hidden="true">→</span></a>
+    <p class="close-title rv">Não menos Direito.<br>Não mais automação.<br><em>Mais método</em></p>
+    <p class="close-sub rv">CORPUS guarda · RATIO conduz · CERNE tensiona · LUX refina</p>
+    <div class="close-actions rv">
+      <a class="btn light" href="mailto:christiandscosta@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20one-pager%20ATRIO">Solicitar one-pager</a>
+      <a class="btn primary" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20ATRIO">Conversar sobre o ATRIO <span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>
 
-<footer data-screen-label="Rodapé">
+<footer>
   <div class="wrap">
-    <div class="frow">
-      <span>ATRIO | Arquitetura de Raciocínio via Inteligência Orquestrada</span>
-      <a href="echo.html">ECHO</a>
-      <a href="mailto:christiandscosta@gmail.com">Conversar sobre o ATRIO</a>
+    <div class="footer-grid">
+      <span>ATRIO · Arquitetura de Raciocínio via Inteligência Orquestrada</span>
+      <div class="footer-links">
+        <a href="#arquitetura">Arquitetura</a>
+        <a href="#autoria">Autoria técnica</a>
+        <a href="#fluxo">Fluxo</a>
+        <a href="#principios">Princípios</a>
+        <a href="#origem">Origem</a>
+        <a href="mailto:christiandscosta@gmail.com">Contato</a>
+      </div>
     </div>
-    <p class="fnote">O ATRIO é portfólio técnico em consolidação. A página já diferencia método, arquitetura, evidência e autoria; screenshots reais, one-pager em PDF e domínio próprio permanecem como próximas entregas.</p>
+    <p class="footer-note">CORPUS · RATIO · CERNE · LUX. Pseudonimização reversível na entrada, anonimização irreversível na saída, inventário auditável e cofre apartado — LGPD-by-design. A decisão permanece com o juízo humano.</p>
   </div>
 </footer>
 
-
 <script>
-  (function(){
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-    },{threshold:.12});
-    document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
-  })();
-</script>
+/* reveal — IntersectionObserver, com falha segura para render headless/sem JS-scroll */
+(function(){
+  var els = document.querySelectorAll('.rv');
+  function showAll(){ els.forEach(function(el){ el.classList.add('in'); }); }
+  if(!('IntersectionObserver' in window)){ showAll(); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(el){ io.observe(el); });
+  /* salvaguarda: garante conteúdo visível mesmo sem scroll/intersecção (ex.: screenshot) */
+  setTimeout(showAll, 2500);
+})();
 
-<script>
-  /* scroll-spy: bloco vermelho-sangue no item de seção ativo */
-  (function(){
-    var ids = ['o-que-e','problema','evidencias','metodo','arquitetura','autor'];
-    var links = {};
-    document.querySelectorAll('nav .links a').forEach(function(a){
-      var h = a.getAttribute('href');
-      if(h && h.charAt(0) === '#'){ links[h.slice(1)] = a; }
+/* scrollspy */
+(function(){
+  var ids = ['problema','resposta','arquitetura','autoria','evidencias','principios'];
+  var links = {};
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var h = a.getAttribute('href');
+    if(h && h.charAt(0)==='#') links[h.slice(1)] = a;
+  });
+  function spy(){
+    var pos = window.scrollY + window.innerHeight * .34, cur = null;
+    ids.forEach(function(id){ var el = document.getElementById(id); if(el && el.offsetTop <= pos) cur = id; });
+    ids.forEach(function(id){ if(links[id]) links[id].classList.toggle('active', id === cur); });
+  }
+  spy(); window.addEventListener('scroll', spy, {passive:true}); window.addEventListener('resize', spy);
+})();
+
+/* acordeões dos módulos */
+(function(){
+  document.querySelectorAll('.acc-trigger').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if(panel) panel.classList.toggle('open', !expanded);
     });
-    function spy(){
-      var pos = window.scrollY + window.innerHeight * 0.32;
-      var cur = null;
-      ids.forEach(function(id){
-        var el = document.getElementById(id);
-        if(el && el.offsetTop <= pos){ cur = id; }
-      });
-      ids.forEach(function(id){
-        if(links[id]){ links[id].classList.toggle('active', id === cur); }
-      });
+  });
+})();
+
+/* Planta-mãe · gaveta com focus-trap, ESC e retorno de foco */
+(function(){
+  var handle = document.getElementById('pm-handle');
+  var drawer = document.getElementById('pm-drawer');
+  var backdrop = document.getElementById('pm-backdrop');
+  var closeBtn = document.getElementById('pm-close');
+  if(!handle || !drawer || !backdrop) return;
+
+  function focusables(){
+    return Array.prototype.slice.call(
+      drawer.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])')
+    );
+  }
+  function onKey(e){
+    if(e.key === 'Escape'){ e.preventDefault(); close(); return; }
+    if(e.key === 'Tab'){
+      var f = focusables(); if(!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     }
-    spy();
-    window.addEventListener('scroll', spy, {passive:true});
-    window.addEventListener('resize', spy);
-  })();
+  }
+  function open(){
+    backdrop.hidden = false;
+    /* força reflow para a transição de visibilidade do backdrop */
+    void backdrop.offsetWidth;
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+    handle.setAttribute('aria-expanded','true');
+    document.documentElement.style.overflow = 'hidden';
+    var f = focusables(); if(f.length) f[0].focus();
+    document.addEventListener('keydown', onKey);
+  }
+  function close(){
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    handle.setAttribute('aria-expanded','false');
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    window.setTimeout(function(){ backdrop.hidden = true; }, 400);
+    handle.focus();
+  }
+  handle.addEventListener('click', function(){
+    drawer.classList.contains('open') ? close() : open();
+  });
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+})();
 </script>
-
-
-
 </body>
 </html>
