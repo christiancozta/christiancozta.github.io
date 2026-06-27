@@ -6,7 +6,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ECHO · Harmonia jurídico-operacional</title>
-<meta content="ECHO é uma metodologia jurídico-operacional para transformar práticas herdadas em camadas de trabalho documentadas, transmissíveis e governáveis. Harmonia operacional antes da automação." name="description"/>
+<meta content="ECHO é uma metodologia jurídico-operacional em camadas: organiza acervo, equipe, triagem, qualidade e memória como frentes acionáveis de uma mesma operação. Harmonia como filosofia de trabalho — método antes da ferramenta." name="description"/>
 <meta content="#FAFBFC" name="theme-color"/>
 <meta content="light" name="color-scheme"/>
 <script>document.documentElement.classList.add('js');</script>
@@ -40,9 +40,9 @@
     --acc-line:rgba(251,77,38,.20);
     --grad:linear-gradient(135deg,#FB4D26 0%,#FF8A4C 100%);
 
-    --maxw:1180px;
+    --maxw:1240px;
     --gutter:clamp(20px,5vw,56px);
-    --sec-pad:clamp(96px,13vw,184px);
+    --sec-pad:clamp(72px,9vw,112px);
     --measure:62ch;
 
     --r-pill:999px;
@@ -68,9 +68,8 @@
   html{scroll-behavior:smooth;color-scheme:light;}
   body{
     font-family:var(--body);background:var(--canvas);color:var(--ink);
-    font-size:17px;line-height:1.62;font-weight:400;text-wrap:pretty;
+    font-size:16px;line-height:1.6;font-weight:400;text-wrap:pretty;zoom:90%;
     -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-    zoom:.9;
   }
   /* grão fílmico (toque tátil premium, fixo e não-interativo) */
   body::after{content:"";position:fixed;inset:0;z-index:var(--z-grain);pointer-events:none;opacity:.022;mix-blend-mode:multiply;
@@ -172,8 +171,8 @@
   .hero h1{margin-top:26px;}
   .hero .brandmark{display:block;font-family:var(--display);font-weight:700;font-size:clamp(68px,11vw,152px);
     line-height:.86;letter-spacing:-.05em;}
-  .hero .thesis{display:block;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.4vw,32px);
-    line-height:1.08;letter-spacing:-.022em;color:var(--ink);margin-top:.45em;max-width:27ch;text-wrap:balance;}
+  .hero .thesis{display:block;font-family:var(--display);font-weight:500;font-size:clamp(26px,3.5vw,47px);
+    line-height:1.03;letter-spacing:-.022em;color:var(--ink);margin-top:.22em;max-width:17ch;text-wrap:balance;}
   .hero .lead{margin-top:32px;font-size:clamp(17px,1.5vw,20px);line-height:1.55;color:var(--muted);max-width:48ch;}
   .hero .lead b{color:var(--ink);font-weight:500;}
   .hero .hcta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap;}
@@ -428,6 +427,74 @@
     .pcard:hover,.tcard:hover,.art:hover{transform:none;}
     .arow:hover,.app:hover,.def:hover{padding-left:0;}
   }
+
+  /* ---- hero: card de indicadores no lugar do painel-percurso ---- */
+  .hero .result{margin-top:0;}
+  @media(max-width:900px){.hero .result{max-width:470px;}}
+
+  /* ===================== O QUE É · gaveta à direita ===================== */
+  .intro{padding:var(--sec-pad) 0;background:var(--surface);border-top:1px solid var(--line);}
+  .intro-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(32px,5vw,72px);align-items:start;}
+  .intro-aside{position:sticky;top:104px;}
+  .intro-aside .at{margin-top:20px;font-family:var(--display);font-weight:500;font-size:clamp(31px,4.4vw,56px);line-height:.98;letter-spacing:-.03em;text-wrap:balance;}
+  .intro-aside .ax{margin-top:22px;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:var(--muted);max-width:32ch;}
+  .drawer{border-top:1px solid var(--line);}
+  .qa{border-bottom:1px solid var(--line);}
+  .qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:18px;
+    padding:clamp(20px,2.6vw,28px) 0;transition:padding-left .5s var(--ease);}
+  .qa summary::-webkit-details-marker{display:none;}
+  .qa:hover summary{padding-left:8px;}
+  .qa .qn{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--acc-deep);flex:0 0 auto;width:22px;}
+  .qa .qt{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.3vw,29px);line-height:1.04;letter-spacing:-.02em;flex:1;}
+  .qa .qi{flex:0 0 auto;width:27px;height:27px;border-radius:var(--r-pill);border:1px solid var(--line);
+    display:inline-flex;align-items:center;justify-content:center;color:var(--muted-2);background:var(--paper);
+    transition:transform .45s var(--ease),background .35s var(--ease),border-color .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease);}
+  .qa .qi svg{width:13px;height:13px;}
+  .qa[open] .qi{transform:rotate(135deg);background:var(--grad);border-color:transparent;color:#fff;box-shadow:var(--shadow-acc);}
+  .qa .qd{max-width:60ch;padding:0 45px clamp(22px,2.6vw,30px);}
+  .qa .qd p{font-size:16.5px;line-height:1.66;color:var(--muted);}
+  @media(max-width:820px){.intro-grid{grid-template-columns:1fr;gap:30px;}.intro-aside{position:static;}.qa .qd{padding-left:0;}}
+
+  /* ===================== DIAPASÃO · gaveta de 5 respostas (modelo Planta-mãe) ===================== */
+  .mae-trigger{position:fixed;left:clamp(12px,2vw,20px);top:clamp(12px,2vw,20px);z-index:var(--z-nav);
+    display:inline-flex;align-items:center;gap:11px;font-family:var(--body);font-weight:500;font-size:12px;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+    border:1px solid rgba(10,11,13,.08);border-radius:var(--r-pill);padding:9px 16px 9px 13px;cursor:pointer;
+    box-shadow:var(--shadow-soft);transition:box-shadow .35s var(--ease),border-color .35s var(--ease);}
+  .mae-trigger:hover{box-shadow:var(--shadow-lift);border-color:rgba(10,11,13,.16);}
+  .mae-trigger .dia{width:13px;height:13px;flex:0 0 13px;transform:rotate(45deg);background:var(--grad);border-radius:3px;box-shadow:var(--shadow-acc);}
+  @media(max-width:560px){.mae-trigger .mae-lbl{display:none;}.mae-trigger{padding:10px;}}
+  .mae-scrim{position:fixed;inset:0;z-index:var(--z-skip);background:rgba(10,11,13,.42);backdrop-filter:blur(3px);
+    opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease);}
+  .mae-panel{position:fixed;top:0;left:0;bottom:0;z-index:calc(var(--z-skip) + 1);width:min(92vw,460px);
+    background:var(--canvas);border-right:1px solid var(--line);box-shadow:var(--shadow-lift);
+    display:flex;flex-direction:column;transform:translateX(-102%);transition:transform .55s var(--ease-spring);
+    overflow-y:auto;overscroll-behavior:contain;}
+  body.mae-on .mae-scrim{opacity:1;visibility:visible;}
+  body.mae-on .mae-panel{transform:none;}
+  .mae-head{position:relative;padding:clamp(28px,4vw,40px) clamp(24px,4vw,36px) 22px;border-bottom:1px solid var(--line);}
+  .mae-head .mae-kick{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-deep);}
+  .mae-head .mae-kick::before{content:"";width:7px;height:7px;border-radius:var(--r-pill);background:var(--grad);}
+  .mae-head h2{margin-top:14px;font-family:var(--display);font-weight:500;font-size:clamp(25px,3.4vw,34px);line-height:1.0;letter-spacing:-.025em;}
+  .mae-x{position:absolute;top:clamp(22px,3vw,30px);right:clamp(20px,3vw,28px);width:38px;height:38px;border-radius:var(--r-pill);
+    border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease),transform .4s var(--ease);}
+  .mae-x:hover{background:var(--grad);color:#fff;border-color:transparent;transform:rotate(90deg);box-shadow:var(--shadow-acc);}
+  .mae-body{padding:8px clamp(24px,4vw,36px) 4px;}
+  .mae-qa{padding:22px 0;border-bottom:1px solid var(--line-2);}
+  .mae-qa:last-child{border-bottom:0;}
+  .mae-qa .mae-q{display:flex;align-items:baseline;gap:12px;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,24px);line-height:1.04;letter-spacing:-.02em;color:var(--ink);}
+  .mae-qa .mae-q .qnum{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--acc-deep);flex:0 0 auto;}
+  .mae-qa p{margin-top:11px;padding-left:27px;font-size:15.5px;line-height:1.62;color:var(--muted);}
+  .mae-foot{margin-top:auto;padding:24px clamp(24px,4vw,36px) clamp(28px,4vw,38px);border-top:1px solid var(--line);background:var(--surface);}
+  .mae-foot .mae-brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.2em;}
+  .mae-foot .mae-brand .dia{width:12px;height:12px;transform:rotate(45deg);background:var(--grad);border-radius:2px;}
+  .mae-links{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;}
+  .mae-links a{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--muted);
+    border:1px solid var(--line);border-radius:var(--r-pill);padding:7px 13px;background:var(--paper);transition:border-color .3s var(--ease),color .3s var(--ease);}
+  .mae-links a:hover{border-color:var(--acc-line);color:var(--acc-deep);}
+  @media (prefers-reduced-motion: reduce){.mae-panel,.mae-scrim{transition:none;}.mae-x:hover{transform:none;}}
 </style>
 </head>
 <body id="top">
@@ -451,9 +518,37 @@
 <svg aria-hidden="true" class="sym" viewbox="0 0 40 28"><use href="#echo-sym"></use></svg>
     ECHO
   </a>
-<nav aria-label="Navegação principal" class="nav-links"><a href="#metodo">Método</a><a href="#arquitetura">Camadas</a><a href="#harmonia">Harmonia</a><a href="#competencias">Competências</a><a href="#evidencias">Evidências</a><a href="#aplicacoes">Mercado</a></nav>
+<nav aria-label="Navegação principal" class="nav-links"><a href="#metodo">Método</a><a href="#harmonia">Princípios</a><a href="#evidencias">Evidências</a><a href="#aplicacoes">Mercado</a></nav>
 <a class="nav-cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20o%20ECHO">Conversar</a>
 </header>
+<!-- DIAPASÃO · gaveta de 5 respostas (modelo Planta-mãe) -->
+<button aria-controls="mae-panel" aria-expanded="false" class="mae-trigger" data-mae-open="" type="button"><span aria-hidden="true" class="dia"></span><span class="mae-lbl">O ECHO em 5 respostas</span></button>
+<div class="mae-scrim" data-mae-close=""></div>
+<aside aria-hidden="true" aria-label="O ECHO em cinco respostas" aria-modal="true" class="mae-panel" id="mae-panel" role="dialog">
+<div class="mae-head">
+<span class="mae-kick">Harmonia como método</span>
+<h2>O ECHO em cinco respostas</h2>
+<button aria-label="Fechar" class="mae-x" data-mae-close="" type="button">&times;</button>
+</div>
+<div class="mae-body">
+<div class="mae-qa"><span class="mae-q"><span class="qnum">01</span>O que é?</span><p>Um framework jurídico-operacional ágil, desenhado para transformar práticas de trabalho em procedimentos claros, documentados e transmissíveis.</p></div>
+<div class="mae-qa"><span class="mae-q"><span class="qnum">02</span>Por que existe?</span><p>Porque equipes jurídicas não precisam apenas produzir mais. Precisam saber como produzem, por que produzem assim e como preservar esse conhecimento.</p></div>
+<div class="mae-qa"><span class="mae-q"><span class="qnum">03</span>Como opera?</span><p>O ECHO observa a rotina, identifica padrões, organiza critérios, define etapas e transforma modos de trabalho em fluxo governável e previsível.</p></div>
+<div class="mae-qa"><span class="mae-q"><span class="qnum">04</span>Onde se aplica?</span><p>Estruturado para gabinete de Turma Recursal, aplica-se também a outras equipes jurídicas, núcleos de produção, revisão, triagem, gestão documental e implantação de soluções digitais.</p></div>
+<div class="mae-qa"><span class="mae-q"><span class="qnum">05</span>O que entrega?</span><p>Mais clareza sobre o trabalho, menos dependência de memória informal e maior capacidade de continuidade, treinamento, controle e escala.</p></div>
+</div>
+<div class="mae-foot">
+<a class="mae-brand" data-mae-close="" href="#top"><span aria-hidden="true" class="dia"></span> ECHO</a>
+<nav aria-label="Seções" class="mae-links">
+<a data-mae-close="" href="#problema">Problema</a>
+<a data-mae-close="" href="#metodo">Método</a>
+<a data-mae-close="" href="#harmonia">Princípios</a>
+<a data-mae-close="" href="#evidencias">Evidências</a>
+<a data-mae-close="" href="#aplicacoes">Mercado</a>
+<a data-mae-close="" href="#atrio">ATRIO</a>
+</nav>
+</div>
+</aside>
 <main id="main">
 <!-- 1 · HERO -->
 <section class="hero">
@@ -463,168 +558,66 @@
 <span class="eyebrow rv">Metodologia jurídico-operacional</span>
 <h1 class="rv">
 <span class="brandmark">ECHO</span>
-<span class="thesis">Da prática herdada ao procedimento instalado</span>
+<span class="thesis">Da prática herdada ao procedimento instalado.</span>
 </h1>
-<p class="lead rv">Metodologia autoral que converte uma rotina antes sustentada por experiência acumulada em <b>fluxo documentado</b>, <b>transmissível</b> e <b>governável</b>. Organização de acervo, equipe, triagem, qualidade e memória como frentes de uma mesma operação.</p>
+<p class="lead rv">Framework autoral que transforma prática jurídica acumulada em <b>camadas de trabalho documentadas, transmissíveis e governáveis</b> — acervo, equipe, triagem, qualidade e memória como frentes de uma mesma operação. Sem esteira única.</p>
 <div class="hcta rv">
 <a class="btn btn--primary" data-magnetic="" href="#metodo">
 <span class="btn-t">Ler o método</span>
 <span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
 </a>
-<a class="btn btn--ghost" data-magnetic="" href="#competencias">
-<span class="btn-t">Ver competências</span>
+<button class="btn btn--ghost" data-magnetic="" data-mae-open="" type="button">
+<span class="btn-t">O ECHO em 5 respostas</span>
 <span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
-</a>
+</button>
 </div>
 </div>
-<div aria-hidden="true" class="tray rv">
-<div class="tray-core">
-<div class="panel-bar"><span>Camadas de atuação</span><span class="dot"></span></div>
-<div class="spine">
-<div class="pstep"><span class="pnode"></span><span class="pi">01</span><span class="pn">Escuta</span></div>
-<div class="pstep"><span class="pnode"></span><span class="pi">02</span><span class="pn">Registro</span></div>
-<div class="pstep"><span class="pnode"></span><span class="pi">03</span><span class="pn">Papéis</span></div>
-<div class="pstep"><span class="pnode"></span><span class="pi">04</span><span class="pn">Matéria</span></div>
-<div class="pstep gate"><span class="pnode"></span><span class="pi">·</span><span class="pn">Harmonia</span></div>
-<div class="pstep"><span class="pnode"></span><span class="pi">05</span><span class="pn">Qualidade</span></div>
-<div class="pstep"><span class="pnode"></span><span class="pi">06</span><span class="pn">Memória</span></div>
-</div>
-</div>
-</div>
+<aside aria-label="Indicadores do gabinete" class="result rv">
+<span class="rk">Indicadores do gabinete · produtividade real</span>
+<p class="rbeat"><i>59,7%</i> de conversão voto/despacho</p>
+<div class="rlist"><span class="tag">+7,1 p.p. sobre a média observada</span><span class="tag">424 votos no ciclo analisado</span><span class="tag">258 votos em cinco meses</span></div>
+</aside>
 </div>
 </div>
 </section>
-<!-- PREMISSA -->
-<section aria-label="Premissa do método" class="premise">
-<div class="wrap">
-<p class="pq rv">Antes de acelerar uma rotina jurídica, é preciso perguntar: que partes da operação precisam tocar juntas para que a entrega ganhe <span class="mark">regularidade, memória e critério?</span></p>
-<div class="psub rv">
-<p>O ECHO nasce dessa pergunta. Não como software, nem como promessa de produtividade genérica. Como método de instalação: ouvir a operação, registrar critérios, organizar papéis, classificar matérias, afinar controles e fazer a rotina deixar rastro.</p>
-<p class="beat">Harmonia, aqui, não é ornamento. É arquitetura de trabalho.</p>
-</div>
-</div>
-</section>
-<!-- 2 · PROBLEMA -->
+<!-- 3 · PROBLEMA -->
 <section class="s" id="problema">
 <div class="wrap">
 <div class="mhead rv">
 <h2>O ruído não estava no esforço. Estava na falta de partitura comum.</h2>
-<p class="desc">Em estruturas jurídicas de volume, parte decisiva da entrega não está apenas no mérito. Está nas decisões anteriores: o que entra, como se classifica, quem recebe, quando avança, onde se verifica e como o aprendizado permanece.</p>
-<p class="desc">Quando esses critérios circulam apenas pela memória das pessoas, a operação até funciona, mas não se estabiliza. O ECHO foi desenhado para transformar repetição informal em método compartilhável.</p>
+<p class="desc">Em operações jurídicas de volume, parte decisiva da entrega vem de decisões anteriores ao mérito — o que entra, como se classifica, quem recebe, quando avança, onde se verifica e como o aprendizado permanece. Quando esses critérios circulam só pela memória das pessoas, a operação funciona, mas não se estabiliza.</p>
 </div>
 <div class="pgrid stagger">
 <div class="pcard">
 <span class="pn2">01</span>
 <h3>Memória oral</h3>
-<p>Saberes relevantes eram transmitidos por convivência, com risco de perda, repetição de orientações e entrada irregular de novos integrantes.</p>
+<p>Saberes críticos transmitidos por convivência — sujeitos a perda, retrabalho e entrada irregular de novos integrantes.</p>
 </div>
 <div class="pcard">
 <span class="pn2">02</span>
 <h3>Acervo sem mapa</h3>
-<p>Demandas com matérias, prazos e incidentes diferentes competiam pelo mesmo espaço operacional, sem taxonomia suficiente para orientar prioridade e distribuição.</p>
+<p>Matérias, prazos e incidentes distintos disputando o mesmo espaço, sem taxonomia que oriente prioridade e distribuição.</p>
 </div>
 <div class="pcard">
 <span class="pn2">03</span>
 <h3>Carga sem leitura fina</h3>
-<p>Quantidade não bastava para distribuir trabalho. Era preciso considerar complexidade, urgência, afinidade temática, capacidade da equipe e risco de gargalo.</p>
+<p>Distribuir por quantidade não basta: é preciso ler complexidade, urgência, afinidade temática e risco de gargalo.</p>
 </div>
 <div class="pcard">
 <span class="pn2">04</span>
 <h3>Qualidade tardia</h3>
-<p>Sem gates de entrada e conferência, vícios simples podiam consumir tempo técnico qualificado antes da verificação mínima de regularidade.</p>
+<p>Sem gates de entrada, vícios simples consomem tempo técnico qualificado antes da verificação mínima de regularidade.</p>
 </div>
 </div>
 </div>
 </section>
-<!-- 3 · MÉTODO EM OPERAÇÃO -->
+<!-- 4 · MÉTODO EM CAMADAS (Método + Arquitetura, fundidos) -->
 <section class="s gray" id="metodo">
 <div class="wrap">
 <div class="mhead rv">
 <span class="eyebrow">Método em camadas</span>
 <h2>O ECHO opera por frentes, não por uma esteira única</h2>
-<p class="desc">A metodologia pode ser lida como fluxo, mas sua força está nas camadas acionáveis. Cada frente reduz um tipo de ruído: escuta, registro, papéis, matéria, afinação, qualidade e memória.</p>
-</div>
-<div class="cases stagger">
-<article class="case">
-<div class="case-head"><span class="ci">01</span><h3>Escuta e diagnóstico</h3></div>
-<div class="ab">
-<div class="ab-col"><span class="abk">Antes</span><p>A rotina era conhecida por quem a executava, mas nem sempre estava traduzida em critérios explícitos, comparáveis e compartilháveis.</p></div>
-<div class="ab-col after"><span class="abk">Depois</span><p>Foram realizadas conversas e entrevistas em outros gabinetes para observar padrões, contrastar soluções e estruturar uma metodologia própria a partir da prática real.</p></div>
-</div>
-<div class="case-foot">
-<div class="tags"><span class="tag">Discovery operacional</span><span class="tag">Escuta comparada</span><span class="tag">Benchmark interno</span></div>
-<div class="practical"><span class="prk">Em termos práticos</span><p>Antes de desenhar o método, foi preciso ouvir o modo como o trabalho já ressoava.</p></div>
-</div>
-</article>
-<article class="case">
-<div class="case-head"><span class="ci">02</span><h3>Taxonomia e distribuição</h3></div>
-<div class="ab">
-<div class="ab-col"><span class="abk">Antes</span><p>A distribuição podia depender de leitura casuística da matéria, sem visibilidade suficiente sobre concentração temática, repetição ou complexidade.</p></div>
-<div class="ab-col after"><span class="abk">Depois</span><p>O acervo passou a ser pensado por núcleos, agrupadores e afinidades, permitindo leitura mais precisa de carga, prioridade e risco de gargalo.</p></div>
-</div>
-<div class="case-foot">
-<div class="tags"><span class="tag">Taxonomia jurídica</span><span class="tag">Capacity planning</span><span class="tag">Gestão de filas</span></div>
-<div class="practical"><span class="prk">Em termos práticos</span><p>A matéria deixa de ser apenas assunto jurídico e passa a ser unidade de gestão.</p></div>
-</div>
-</article>
-<article class="case">
-<div class="case-head"><span class="ci">03</span><h3>Harmonia de equipe</h3></div>
-<div class="ab">
-<div class="ab-col"><span class="abk">Antes</span><p>Papéis, autonomia e expectativa de entrega podiam depender de orientação oral, repetida conforme a necessidade do dia.</p></div>
-<div class="ab-col after"><span class="abk">Depois</span><p>Responsabilidades, critérios de progressão e referências de trabalho passaram a funcionar como base de entrada e coordenação da equipe.</p></div>
-</div>
-<div class="case-foot">
-<div class="tags"><span class="tag">Operating model</span><span class="tag">Onboarding</span><span class="tag">Gestão do conhecimento</span></div>
-<div class="practical"><span class="prk">Em termos práticos</span><p>A equipe ganha partitura comum sem perder autonomia técnica.</p></div>
-</div>
-</article>
-<article class="case">
-<div class="case-head"><span class="ci">04</span><h3>Afinação e qualidade</h3></div>
-<div class="ab">
-<div class="ab-col"><span class="abk">Antes</span><p>A revisão tendia a aparecer no fim, como correção de resultado, sem registrar suficientemente o percurso de aprendizagem.</p></div>
-<div class="ab-col after"><span class="abk">Depois</span><p>A rotina passou a incorporar critérios de entrada, checklists, devoluções e pontos de controle capazes de alimentar a próxima entrega.</p></div>
-</div>
-<div class="case-foot">
-<div class="tags"><span class="tag">Quality gates</span><span class="tag">QA jurídico</span><span class="tag">Melhoria contínua</span></div>
-<div class="practical"><span class="prk">Em termos práticos</span><p>A correção deixa de ser evento. Vira memória.</p></div>
-</div>
-</article>
-</div>
-</div>
-</section>
-<!-- 4 · ORIGEM -->
-<section class="s" id="origem">
-<div class="wrap">
-<div class="mhead rv">
-<h2>Um gabinete como laboratório aberto de método</h2>
-<p class="desc">A estrutura veio do trabalho concreto, mas não ficou fechada no próprio gabinete. O método foi pensado por prática, escuta e comparação.</p>
-</div>
-<div class="origin rv">
-<div class="oprose">
-<p>O ECHO foi estruturado a partir de experiência exclusivamente jurídica, em ambiente público de julgamento, durante atuação prolongada em chefia de gabinete. O ponto de partida não foi uma formação corporativa em operações, produto ou tecnologia. <b>Foi a necessidade concreta de organizar equipe, acervo, triagem, revisão e memória sob pressão de volume e prazo.</b></p>
-<p>A formulação da metodologia também envolveu entrevistas e conversas com outros gabinetes, para identificar como diferentes equipes lidavam com distribuição, rotina, controle, gargalos e transmissão de conhecimento. A escuta não serviu para copiar modelos, mas para calibrar uma estrutura própria.</p>
-</div>
-<div class="ostack">
-<div class="otile">
-<span class="ok">Escuta comparada</span>
-<p>A metodologia nasce de uma operação própria, mas é afinada pelo contraste com outras rotinas.</p>
-</div>
-<div class="otile">
-<span class="ok">Autoria operacional</span>
-<p>A linguagem veio depois. A estrutura veio antes.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- 5 · ARQUITETURA DO MÉTODO -->
-<section class="s gray" id="arquitetura">
-<div class="wrap">
-<div class="mhead rv">
-<span class="eyebrow">Arquitetura em camadas</span>
-<h2>Camadas de harmonia operacional</h2>
-<p class="desc">O ECHO não precisa ser executado como sequência rígida. Suas camadas podem ser acionadas conforme o problema: documentar, distribuir, classificar, revisar, treinar, medir ou preservar memória.</p>
-<p class="desc">A filosofia é a harmonia: cada parte da operação deve ter função, entrada, limite, critério e retorno. Quando uma parte desafina, o método mostra onde ajustar.</p>
+<p class="desc">Cada camada é uma frente que pode ser acionada sozinha — documentar, distribuir, classificar, revisar, afinar ou preservar memória. A filosofia é a harmonia: cada parte tem função, entrada, limite, critério e retorno. Quando uma desafina, o método mostra onde ajustar.</p>
 </div>
 <div class="arch stagger">
 <div class="arow">
@@ -634,8 +627,8 @@
 <span class="aq">O que precisa deixar de circular apenas por hábito?</span>
 </div>
 <div class="ar2">
-<p class="ad">Converte conhecimento tácito em documentação ativa: orientações, manuais, critérios, papéis e referências de trabalho.</p>
-<div class="tags"><span class="tag">Documentação técnica</span><span class="tag">Knowledge management</span><span class="tag">Onboarding</span><span class="tag">Padronização</span></div>
+<p class="ad">Converte conhecimento tácito em documentação ativa: orientações, manuais, critérios, papéis e referências.</p>
+<div class="tags"><span class="tag">Documentação técnica</span><span class="tag">Knowledge management</span><span class="tag">Padronização</span></div>
 </div>
 </div>
 <div class="arow">
@@ -645,8 +638,8 @@
 <span class="aq">Quem responde por cada parte da operação?</span>
 </div>
 <div class="ar2">
-<p class="ad">Define responsabilidades, níveis de autonomia, caminhos de progressão e pontos de supervisão. O trabalho deixa de ser apenas distribuído e passa a ser situado.</p>
-<div class="tags"><span class="tag">Operating model</span><span class="tag">People operations</span><span class="tag">Matriz de competências</span><span class="tag">Delegação progressiva</span></div>
+<p class="ad">Define responsabilidades, autonomia, progressão e supervisão. O trabalho deixa de ser só distribuído e passa a ser situado.</p>
+<div class="tags"><span class="tag">Operating model</span><span class="tag">People operations</span><span class="tag">Delegação progressiva</span></div>
 </div>
 </div>
 <div class="arow">
@@ -656,8 +649,8 @@
 <span class="aq">Como o acervo deve ser lido para poder ser governado?</span>
 </div>
 <div class="ar2">
-<p class="ad">Organiza matérias por núcleos, agrupadores e afinidades. A classificação jurídica passa a operar como arquitetura de informação.</p>
-<div class="tags"><span class="tag">Taxonomia jurídica</span><span class="tag">Information architecture</span><span class="tag">Matter management</span><span class="tag">Gestão de acervo</span></div>
+<p class="ad">Organiza matérias por núcleos e afinidades. A classificação jurídica passa a operar como arquitetura de informação.</p>
+<div class="tags"><span class="tag">Taxonomia jurídica</span><span class="tag">Information architecture</span><span class="tag">Matter management</span></div>
 </div>
 </div>
 <div class="arow">
@@ -667,8 +660,8 @@
 <span class="aq">Quais passagens precisam existir sem virar burocracia?</span>
 </div>
 <div class="ar2">
-<p class="ad">Estrutura entradas, triagem, análise, revisão, devolução e controle como pontos verificáveis, sem reduzir o trabalho a uma linha mecânica.</p>
-<div class="tags"><span class="tag">Workflow design</span><span class="tag">BPM</span><span class="tag">Kanban funcional</span><span class="tag">Gestão de filas</span></div>
+<p class="ad">Estrutura entrada, triagem, análise, revisão e devolução como pontos verificáveis — sem reduzir o trabalho a uma linha mecânica.</p>
+<div class="tags"><span class="tag">Workflow design</span><span class="tag">BPM</span><span class="tag">Gestão de filas</span></div>
 </div>
 </div>
 <div class="arow">
@@ -678,8 +671,8 @@
 <span class="aq">Onde o ruído deve ser corrigido antes de virar retrabalho?</span>
 </div>
 <div class="ar2">
-<p class="ad">Define critérios mínimos, checklists, requisitos processuais, prazos, conferências e quality gates para proteger o tempo técnico.</p>
-<div class="tags"><span class="tag">Quality assurance</span><span class="tag">Compliance processual</span><span class="tag">SOP / POP</span><span class="tag">Quality gates</span></div>
+<p class="ad">Define critérios mínimos, checklists, requisitos, prazos e quality gates para proteger o tempo técnico. A correção deixa de ser evento: vira memória.</p>
+<div class="tags"><span class="tag">Quality assurance</span><span class="tag">Compliance processual</span><span class="tag">SOP / POP</span></div>
 </div>
 </div>
 <div class="arow">
@@ -689,126 +682,139 @@
 <span class="aq">Como o aprendizado retorna ao sistema?</span>
 </div>
 <div class="ar2">
-<p class="ad">Impede que cada demanda seja tratada como recomeço absoluto. O que foi decidido, corrigido e estabilizado passa a alimentar a próxima entrega.</p>
-<div class="tags"><span class="tag">Melhoria contínua</span><span class="tag">Base de conhecimento</span><span class="tag">Governança de memória</span><span class="tag">Reuso qualificado</span></div>
+<p class="ad">Impede que cada demanda seja um recomeço. O que foi decidido, corrigido e estabilizado alimenta a próxima entrega.</p>
+<div class="tags"><span class="tag">Melhoria contínua</span><span class="tag">Base de conhecimento</span><span class="tag">Reuso qualificado</span></div>
 </div>
 </div>
 </div>
-</div>
-</section>
-<!-- 6 · COMPETÊNCIAS TRADUZIDAS -->
-<section class="s" id="competencias">
-<div class="wrap">
-<div class="mhead rv">
-<h2>Competências traduzidas para o mercado privado</h2>
-<p class="desc">O ECHO torna visível uma competência que o mercado reconhece: transformar operação jurídica complexa em sistema compreensível, documentável e transferível.</p>
-</div>
-<p class="beatline rv">O valor não está em vender eficiência. Está em mostrar <span class="mark">método aplicável a problemas reais.</span></p>
-<div class="trans stagger"><div class="tcard"><span class="tk">Entrevistas, comparação de rotinas e leitura de gargalos</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Discovery / Operational Research</span><span class="td">Investigação aplicada antes do desenho do processo.</span></div><div class="tcard"><span class="tk">Manuais, registros e orientações reutilizáveis</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Knowledge Management</span><span class="td">Gestão do conhecimento e documentação ativa.</span></div><div class="tcard"><span class="tk">Papéis, autonomia e expectativa de entrega</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Operating Model / People Ops</span><span class="td">Desenho de funções, responsabilidades e coordenação.</span></div><div class="tcard"><span class="tk">Matérias organizadas por núcleos e agrupadores</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Legal Taxonomy / Information Architecture</span><span class="td">Classificação jurídica aplicada à operação.</span></div><div class="tcard"><span class="tk">Distribuição por carga, afinidade e urgência</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Capacity Planning</span><span class="td">Prevenção de gargalos e balanceamento de trabalho.</span></div><div class="tcard"><span class="tk">Entrada, triagem, revisão e devolução</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Workflow Design / BPM</span><span class="td">Desenho de fluxo com pontos verificáveis.</span></div><div class="tcard"><span class="tk">Critérios mínimos antes da análise técnica</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Quality Gates / QA</span><span class="td">Controle de qualidade e redução de retrabalho.</span></div><div class="tcard"><span class="tk">Dados de produção lidos com cautela operacional</span><span class="tt"><span aria-hidden="true" class="arx">→</span> Ops Metrics</span><span class="td">Leitura de cadência, conversão e capacidade sem prometer causalidade artificial.</span></div></div>
+<p class="apps-beat rv">Seis camadas. Uma só partitura.</p>
 </div>
 </section>
-<!-- 7 · TRADUÇÃO PRÁTICA -->
+<!-- 6 · PRINCÍPIOS (Harmonia) -->
 <section class="s gray" id="harmonia">
 <div class="wrap">
 <div class="mhead center rv">
-<h2>Harmonia como método</h2>
-<p class="desc">A filosofia de trabalho do ECHO é simples: uma operação jurídica só ganha escala quando suas partes passam a tocar em conjunto, com critério suficiente para que o resultado não dependa apenas de esforço individual.</p>
+<span class="eyebrow">Filosofia de trabalho</span>
+<h2>A harmonia tem princípios</h2>
+<p class="desc">Uma operação jurídica só ganha escala quando suas partes passam a tocar em conjunto — com critério suficiente para que o resultado não dependa de esforço individual. Cinco princípios sustentam essa harmonia.</p>
 </div>
-<div class="defs stagger"><div class="def"><span class="dterm">Escuta</span><span class="dmean">significa <i>entender a rotina antes de prescrever fluxo.</i></span></div><div class="def"><span class="dterm">Critério</span><span class="dmean">significa <i>transformar decisão operacional em regra compartilhável.</i></span></div><div class="def"><span class="dterm">Proporção</span><span class="dmean">significa <i>distribuir carga considerando complexidade, urgência e capacidade.</i></span></div><div class="def"><span class="dterm">Afinação</span><span class="dmean">significa <i>corrigir ruídos antes que virem retrabalho.</i></span></div><div class="def"><span class="dterm">Memória</span><span class="dmean">significa <i>fazer cada entrega alimentar a próxima.</i></span></div></div>
+<div class="defs stagger"><div class="def"><span class="dterm">Escuta</span><span class="dmean">é <i>entender a rotina antes de prescrever fluxo.</i></span></div><div class="def"><span class="dterm">Critério</span><span class="dmean">é <i>transformar decisão operacional em regra compartilhável.</i></span></div><div class="def"><span class="dterm">Proporção</span><span class="dmean">é <i>distribuir carga por complexidade, urgência e capacidade.</i></span></div><div class="def"><span class="dterm">Afinação</span><span class="dmean">é <i>corrigir o ruído antes que ele vire retrabalho.</i></span></div><div class="def"><span class="dterm">Memória</span><span class="dmean">é <i>fazer cada entrega alimentar a próxima.</i></span></div></div>
 <div class="defs-foot rv">
-<p>Harmonia não é suavidade decorativa. É a capacidade de fazer acervo, equipe, critérios, revisão e memória operarem sem depender de improviso permanente.</p>
+<p>Harmonia não é suavidade decorativa. É a capacidade de fazer acervo, equipe, critérios, revisão e memória operarem juntos, sem depender de improviso permanente. É o que dá nome à prática: <b>regência</b> de uma operação inteira, e não execução de uma tarefa isolada.</p>
 <p class="beat">Regência recursal.</p>
 </div>
 </div>
 </section>
-<!-- 8 · ARTEFATOS -->
-<section class="s" id="artefatos">
-<div class="wrap">
-<div class="mhead rv">
-<h2>Artefatos simples, efeito estrutural</h2>
-<p class="desc">O ECHO foi materializado por instrumentos discretos, mas decisivos. A sofisticação não estava na ferramenta usada, e sim no critério que conectava manuais, mapas, matrizes, planilhas, checklists e registros de orientação.</p>
-</div>
-<div class="arts stagger"><div class="art"><span class="ah">Manual de entrada</span><span class="at2">Onboarding / Enablement</span></div><div class="art"><span class="ah">Roteiro de entrevistas</span><span class="at2">Operational Discovery</span></div><div class="art"><span class="ah">Mapa temático</span><span class="at2">Taxonomy / Matter Management</span></div><div class="art"><span class="ah">Matriz de papéis</span><span class="at2">Operating Model</span></div><div class="art"><span class="ah">Manual de afinação</span><span class="at2">SOP / QA / Compliance</span></div><div class="art"><span class="ah">Planilhas de acompanhamento</span><span class="at2">Operational Dashboard</span></div><div class="art"><span class="ah">Checklists de requisitos</span><span class="at2">Quality Gates</span></div><div class="art"><span class="ah">Registro de orientações</span><span class="at2">Knowledge Base</span></div></div>
-</div>
-</section>
-<!-- 9 · EVIDÊNCIAS -->
-<section class="s gray" id="evidencias">
+<!-- 7 · EVIDÊNCIAS -->
+<section class="s" id="evidencias">
 <div class="wrap">
 <div class="mhead rv">
 <h2>Evidência antes de promessa</h2>
-<p class="desc">O ECHO deve ser lido por provas de construção e por indicadores operacionais, sem inflar causalidade. O dado mostra cadência; a metodologia mostra o desenho que torna essa cadência governável.</p>
+<p class="desc">Cinco anos e cinco meses em chefia de gabinete, em ambiente público de julgamento de alto volume. O ECHO se lê por provas de construção e por efeitos observados — sem inflar causalidade. O dado mostra cadência; o método mostra o desenho que a torna governável.</p>
 </div>
-<div class="evi stagger">
-<div class="evcol">
-<p class="evk">Contexto aplicado</p>
-<div class="tags"><span class="tag">Órgão público jurídico</span><span class="tag">Cinco anos e cinco meses em chefia de gabinete</span><span class="tag">Coordenação de equipe em rotina de volume</span><span class="tag">Ambiente de julgamento com múltiplos incidentes e prazos</span><span class="tag">Entrevistas e conversas com outros gabinetes</span></div>
+<div class="pgrid stagger">
+<div class="pcard">
+<span class="pn2">Acervo</span>
+<h3>102 assuntos</h3>
+<p>Granularidade temática suficiente para tornar o acervo classificável e distribuível.</p>
 </div>
-<div class="evcol">
-<p class="evk">Construção material</p>
-<div class="tags"><span class="tag">Manuais internos</span><span class="tag">Papéis e responsabilidades</span><span class="tag">Mapa temático por núcleos</span><span class="tag">Critérios de balanceamento</span><span class="tag">Rotinas de triagem</span><span class="tag">Checklists de requisitos</span><span class="tag">Fluxo de revisão e devolução</span><span class="tag">Memória de orientações</span></div>
+<div class="pcard">
+<span class="pn2">Organização</span>
+<h3>10 localizadores</h3>
+<p>Pontos de leitura, distribuição e controle ao longo do fluxo.</p>
 </div>
+<div class="pcard">
+<span class="pn2">Especialidade</span>
+<h3>3 núcleos</h3>
+<p>Agrupamento por afinidade para equilibrar carga e profundidade técnica.</p>
+</div>
+<div class="pcard">
+<span class="pn2">Triagem</span>
+<h3>8 roteiros</h3>
+<p>Verificação de regularidade e pontos críticos antes do avanço da demanda.</p>
+</div>
+<div class="pcard">
+<span class="pn2">Memória</span>
+<h3>700+ referências</h3>
+<p>Base de consulta para consistência, revisão e reuso qualificado.</p>
+</div>
+<div class="pcard">
+<span class="pn2">Equipe</span>
+<h3>4 níveis de atuação</h3>
+<p>Papéis, autonomia, supervisão e progressão formalizados em matriz.</p>
+</div>
+</div>
+<div class="evcol rv" style="margin-top:clamp(28px,4vw,52px)">
+<p class="evk">Instrumentos que materializaram o método</p>
+<div class="tags"><span class="tag">Manual de entrada</span><span class="tag">Mapa temático</span><span class="tag">Matriz de papéis</span><span class="tag">Manual de afinação</span><span class="tag">Planilhas de acompanhamento</span><span class="tag">Checklists de requisitos</span></div>
 </div>
 <div class="result rv">
-<span class="rk">Indicadores e efeitos observáveis</span>
-<div class="rlist"><span class="tag">424 votos em ciclo operacional analisado</span><span class="tag">Conversão voto/despacho de 53,9%</span><span class="tag">+7,1 p.p. sobre média observada</span><span class="tag">258 votos em cinco meses</span><span class="tag">Conversão acumulada de 59,7%</span><span class="tag">Menor dependência de orientação oral</span><span class="tag">Entrada mais segura de novos integrantes</span></div>
-<p class="rbeat"><i>O dado aponta cadência.</i> O método mostra como a cadência foi sustentada.</p>
+<span class="rk">Efeitos observados</span>
+<div class="rlist"><span class="tag">Menor dependência de orientação oral</span><span class="tag">Entrada mais segura de novos integrantes</span><span class="tag">Critérios replicáveis em outros núcleos</span></div>
+<p class="rbeat"><i>Menos improviso.</i> Mais continuidade.</p>
 </div>
 </div>
 </section>
-<!-- 10 · APLICAÇÕES PROFISSIONAIS -->
-<section class="s" id="aplicacoes">
+<!-- 8 · APLICAÇÕES PROFISSIONAIS -->
+<section class="s gray" id="aplicacoes">
 <div class="wrap">
 <div class="mhead rv">
 <span class="eyebrow">Tradução para mercado</span>
 <h2>Onde o ECHO conversa com o mercado</h2>
-<p class="desc">A metodologia nasceu no jurídico público, mas sua lógica é transferível para ambientes privados que lidam com volume, repetição, risco, qualidade e conhecimento disperso.</p>
+<p class="desc">Nasceu no jurídico público, mas sua lógica é transferível a ambientes privados de volume, repetição, risco e conhecimento disperso.</p>
 </div>
+<p class="beatline rv">Cada frente reúne uma operação concreta e as <span class="mark">disciplinas de mercado que ela mobiliza.</span></p>
 <div class="apps stagger">
 <article class="app">
 <div class="app-head"><span class="apn">01</span><h3>Diagnóstico de operação jurídica</h3></div>
 <div class="app-body">
-<p class="ades">Mapeamento de fluxos, gargalos, dependências informais, pontos de retrabalho, critérios ausentes e riscos de perda de memória.</p>
+<p class="ades">Mapeamento de fluxos, gargalos, dependências informais, retrabalho e riscos de perda de memória.</p>
 <div class="deliver"><span class="dk">Entrega possível</span><p>Leitura crítica da operação e matriz de prioridade.</p></div>
+<div class="tags" style="margin-top:18px"><span class="tag">Discovery / Operational Research</span><span class="tag">Capacity Planning</span></div>
 </div>
 </article>
 <article class="app">
 <div class="app-head"><span class="apn">02</span><h3>Legal Ops e operating model</h3></div>
 <div class="app-body">
-<p class="ades">Estruturação de papéis, rotinas, indicadores iniciais, documentação mínima e governança de trabalho para áreas jurídicas em crescimento.</p>
+<p class="ades">Papéis, rotinas, indicadores iniciais, documentação mínima e governança para áreas jurídicas em crescimento.</p>
 <div class="deliver"><span class="dk">Entrega possível</span><p>Modelo operacional jurídico claro, utilizável e ajustável.</p></div>
+<div class="tags" style="margin-top:18px"><span class="tag">Operating Model / People Ops</span></div>
 </div>
 </article>
 <article class="app">
 <div class="app-head"><span class="apn">03</span><h3>Gestão de conhecimento e onboarding</h3></div>
 <div class="app-body">
-<p class="ades">Conversão de orientações dispersas em manuais, bases, roteiros de entrada e critérios de autonomia progressiva.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Entrada mais segura de novos integrantes e menor repetição de orientação oral.</p></div>
+<p class="ades">Orientações dispersas convertidas em manuais, bases, roteiros de entrada e critérios de autonomia progressiva.</p>
+<div class="deliver"><span class="dk">Entrega possível</span><p>Entrada mais segura de novos integrantes e menos orientação oral repetida.</p></div>
+<div class="tags" style="margin-top:18px"><span class="tag">Knowledge Management</span></div>
 </div>
 </article>
 <article class="app">
 <div class="app-head"><span class="apn">04</span><h3>Governança de qualidade e pré-IA</h3></div>
 <div class="app-body">
-<p class="ades">Preparação do terreno antes de automações, IA ou ferramentas digitais, com classificação, checklists, gates e controle humano nos pontos críticos.</p>
+<p class="ades">Preparar o terreno antes de automações: classificação, checklists, gates e controle humano nos pontos críticos.</p>
 <div class="deliver"><span class="dk">Entrega possível</span><p>Base mínima para escalar sem acelerar desordem.</p></div>
+<div class="tags" style="margin-top:18px"><span class="tag">Quality Gates / QA</span></div>
 </div>
 </article>
 <article class="app">
 <div class="app-head"><span class="apn">05</span><h3>Produto jurídico e legaltech</h3></div>
 <div class="app-body">
-<p class="ades">Tradução de problemas jurídicos para requisitos, taxonomias, critérios de validação, fluxos assistidos e estruturas de curadoria.</p>
+<p class="ades">Problemas jurídicos traduzidos em requisitos, taxonomias, critérios de validação e fluxos assistidos.</p>
 <div class="deliver"><span class="dk">Entrega possível</span><p>Especificação jurídica qualificada para produto, automação ou IA.</p></div>
+<div class="tags" style="margin-top:18px"><span class="tag">Legal Taxonomy / Information Architecture</span></div>
 </div>
 </article>
 </div>
 <p class="apps-beat rv">Antes de escalar, afinar o sistema.</p>
 </div>
 </section>
-<!-- 11 · RELAÇÃO COM ATRIO (faixa escura) -->
+<!-- 9 · RELAÇÃO COM ATRIO (faixa escura) -->
 <section aria-label="Relação entre ECHO e ATRIO" class="s dark" id="atrio">
 <div class="wrap">
 <div class="mhead rv">
 <h2>ECHO instala. ATRIO amplia.</h2>
-<p class="atrio-beat">O ECHO harmoniza a operação. O ATRIO amplia essa base para uma arquitetura jurídico-tecnológica assistida por IA. A relação não é de substituição: primeiro, o trabalho ganha rastro, critério e memória; depois, pode receber camadas mais complexas de automação, validação e rastreabilidade.</p>
+<p class="atrio-beat">O ECHO harmoniza a operação; o ATRIO amplia essa base para uma arquitetura jurídico-tecnológica assistida por IA. Não é substituição: primeiro o trabalho ganha rastro, critério e memória — depois pode receber camadas de automação, validação e rastreabilidade.</p>
 </div>
 <div class="acompare stagger">
 <div class="apanel lead">
@@ -831,12 +837,12 @@
 </div>
 </div>
 </section>
-<!-- 12 · FECHAMENTO / CONTATO -->
+<!-- 10 · FECHAMENTO / CONTATO -->
 <section class="close" id="contato">
 <div class="wrap">
 <p class="cphrase rv">Rastro, lastro, harmonia.</p>
 <div class="cprose rv">
-<p>O ECHO não é uma vitrine de tecnologia. É uma metodologia de instalação: transforma prática jurídica acumulada em camadas de trabalho compartilháveis.</p>
+<p>O ECHO não é uma vitrine de tecnologia. É um método de instalação: transforma prática jurídica acumulada em camadas de trabalho compartilháveis.</p>
 <p>Sua relevância para o portfolio está no que permite demonstrar: <b>capacidade de ouvir uma operação, nomear seus ruídos, construir critérios e converter experiência em método transferível.</b></p>
 </div>
 <p class="cbeat rv">Não há excesso a reivindicar. Há estrutura a mostrar.</p>
@@ -863,16 +869,15 @@
 <div class="foot-col">
 <h4>Método</h4>
 <a href="#problema">O problema</a>
-<a href="#metodo">Método em operação</a>
-<a href="#arquitetura">Arquitetura</a>
-<a href="#artefatos">Artefatos</a>
+<a href="#metodo">Método em camadas</a>
+<a href="#harmonia">Princípios</a>
+<a href="#evidencias">Evidências</a>
 </div>
 <div class="foot-col">
 <h4>Aplicação</h4>
-<a href="#competencias">Competências</a>
-<a href="#evidencias">Evidências</a>
-<a href="#aplicacoes">Aplicações</a>
+<a href="#aplicacoes">Mercado</a>
 <a href="#atrio">Relação com ATRIO</a>
+<a href="atrio.html">ATRIO (site)</a>
 </div>
 <div class="foot-col">
 <h4>Contato</h4>
@@ -905,7 +910,7 @@
   /* scrollspy via IntersectionObserver */
   (function(){
     if(!('IntersectionObserver' in window)) return;
-    var ids = ['metodo','arquitetura','competencias','evidencias','aplicacoes','atrio'];
+    var ids = ['metodo','harmonia','evidencias','aplicacoes'];
     var links = {};
     document.querySelectorAll('.nav-links a').forEach(function(a){
       var h = a.getAttribute('href');
@@ -951,6 +956,21 @@
         if(ic){ ic.style.transform = ''; }
       });
     });
+  })();
+
+  /* DIAPASÃO · gaveta de respostas (open/close + esc + scrim + links) */
+  (function(){
+    var body=document.body, panel=document.getElementById('mae-panel');
+    if(!panel) return;
+    var trigger=document.querySelector('.mae-trigger');
+    function open(){ body.classList.add('mae-on'); panel.setAttribute('aria-hidden','false');
+      if(trigger){trigger.setAttribute('aria-expanded','true');}
+      var x=panel.querySelector('.mae-x'); if(x){x.focus();} }
+    function close(){ body.classList.remove('mae-on'); panel.setAttribute('aria-hidden','true');
+      if(trigger){trigger.setAttribute('aria-expanded','false');} }
+    document.querySelectorAll('[data-mae-open]').forEach(function(b){ b.addEventListener('click',function(e){e.preventDefault();open();}); });
+    document.querySelectorAll('[data-mae-close]').forEach(function(b){ b.addEventListener('click',function(){ close(); }); });
+    document.addEventListener('keydown',function(e){ if((e.key==='Escape'||e.key==='Esc') && body.classList.contains('mae-on')){ close(); } });
   })();
 </script>
 </body>
