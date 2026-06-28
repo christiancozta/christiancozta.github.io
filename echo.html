@@ -1,977 +1,1046 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>ECHO · Harmonia jurídico-operacional</title>
-<meta content="ECHO é uma metodologia jurídico-operacional em camadas: organiza acervo, equipe, triagem, qualidade e memória como frentes acionáveis de uma mesma operação. Harmonia como filosofia de trabalho — método antes da ferramenta." name="description"/>
-<meta content="#FAFBFC" name="theme-color"/>
-<meta content="light" name="color-scheme"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ECHO — Da prática herdada ao procedimento instalado</title>
+<meta name="description" content="ECHO — metodologia jurídico-operacional que transforma rotina, equipe e acervo em procedimento documentado, transmissível e governável. Método instalado por materiais concretos: manuais, mapas, matrizes, planilhas, roteiros, checklists e registros." />
+<meta name="theme-color" content="#0B0C0E" />
+<meta property="og:title" content="ECHO — Da prática herdada ao procedimento instalado" />
+<meta property="og:description" content="Metodologia jurídico-operacional. Método instalado por acervo concreto: manuais, mapas, matrizes, planilhas, roteiros, checklists e registros." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 28'%3E%3Crect x='1' y='9' width='2' height='14' fill='%23E8ECEF' opacity='.4'/%3E%3Crect x='8' y='6' width='2' height='20' fill='%23E8ECEF' opacity='.6'/%3E%3Crect x='15' y='3' width='2' height='24' fill='%23E8ECEF' opacity='.8'/%3E%3Crect x='25' y='0' width='3.4' height='28' fill='%23FF7F50'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=ranade@400,500,700&f[]=synonym@400,500,600&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=technor@400,500,600&display=swap" rel="stylesheet" />
 <script>document.documentElement.classList.add('js');</script>
-<link crossorigin="" href="https://api.fontshare.com" rel="preconnect"/>
-<link crossorigin="" href="https://cdn.fontshare.com" rel="preconnect"/>
-<link href="https://api.fontshare.com/v2/css?f[]=ranade@400,500,700&amp;f[]=synonym@400,500,600&amp;display=swap" rel="stylesheet"/>
 <style>
-  :root{
-    /* ---- base fria ---- */
-    --ink:#0A0B0D;
-    --graph:#14161A;
-    --graph-2:#1B1E23;
-    --paper:#FFFFFF;
-    --canvas:#FAFBFC;
-    --surface:#F1F3F5;
-    --cloud:#E7EBEE;
-    --line:rgba(10,11,13,.12);
-    --line-2:rgba(10,11,13,.06);
-    --muted:#52575E;
-    --muted-2:#787E86;
-    --on-dark:#E9ECEE;
-    --on-dark-mut:rgba(233,236,238,.62);
-    --on-dark-line:rgba(233,236,238,.16);
+/* ============================================================
+   ECHO — landing autoral
+   Matriz estrutural: gramática visual do ATRIO.
+   Diferenciação: waves discretas · coral em dois tons · acervo metodológico.
+   Tipografia preservada: Ranade (display) · Synonym (corpo) · Technor (mono/técnica).
+   Camadas: 1 tokens · 2 base/reset · 3 layout · 4 componentes · 5 motion
+   ============================================================ */
 
-    /* ---- acento de alto impacto (vermelhão/coral) + gradiente ---- */
-    --acc:#FB4D26;
-    --acc-2:#FF8A4C;
-    --acc-deep:#B83A12;       /* texto pequeno AA sobre claro */
-    --acc-on-dark:#FF7A4A;
-    --acc-soft:rgba(251,77,38,.10);
-    --acc-line:rgba(251,77,38,.20);
-    --grad:linear-gradient(135deg,#FB4D26 0%,#FF8A4C 100%);
+/* ---------- 1 · TOKENS ---------- */
+:root{
+  /* base neutra fria */
+  --paper:#FAFBFC;     /* fundo padrão claro */
+  --surface:#EFF1F3;   /* seções alternadas */
+  --cloud:#E8ECEF;     /* texto/linhas sobre escuro */
+  --white:#FFFFFF;
+  --ink:#0B0C0E;       /* preto levemente frio */
+  --graph:#121417;     /* grafite frio */
+  --graph2:#171A1E;
+  --mut:#5C6168;       /* cinza médio — AA sobre paper/surface */
+  --mut2:#8E939A;      /* cinza claro — decorativo/large */
 
-    --maxw:1240px;
-    --gutter:clamp(20px,5vw,56px);
-    --sec-pad:clamp(72px,9vw,112px);
-    --measure:62ch;
+  /* coral — sinal de método · APENAS dois tons */
+  --coral-dark:#FF7F50;   /* sobre fundos escuros */
+  --coral-light:#C2472D;  /* sobre fundos claros */
 
-    --r-pill:999px;
-    --r-tray:22px;
-    --r-inner:15px;
+  /* coral aplicado por opacidade (sem novas cores) */
+  --coral-soft-l:rgba(194,71,45,.08);
+  --coral-edge-l:rgba(194,71,45,.24);
+  --coral-soft-d:rgba(255,127,80,.10);
+  --coral-edge-d:rgba(255,127,80,.28);
 
-    --ease:cubic-bezier(.16,1,.3,1);
-    --ease-spring:cubic-bezier(.32,.72,0,1);
+  /* hairlines */
+  --line:rgba(11,12,14,.12);
+  --line2:rgba(11,12,14,.07);
+  --dline:rgba(232,236,239,.16);
+  --dline2:rgba(232,236,239,.08);
 
-    --shadow-soft:0 1px 2px rgba(10,11,13,.04),0 14px 44px -16px rgba(10,11,13,.14);
-    --shadow-lift:0 2px 6px rgba(10,11,13,.06),0 34px 80px -28px rgba(10,11,13,.26);
-    --shadow-acc:0 10px 30px -8px rgba(251,77,38,.42);
+  /* escala de espaçamento — base 8px */
+  --s-1:4px; --s-2:8px; --s-3:16px; --s-4:24px; --s-5:32px;
+  --s-6:48px; --s-7:64px; --s-8:96px; --s-9:128px;
+  --section-y:clamp(78px,9.5vw,118px);
+  --wrap:1240px;
 
-    --display:'Ranade',system-ui,-apple-system,'Segoe UI',sans-serif;
-    --body:'Synonym',system-ui,-apple-system,sans-serif;
+  /* raios */
+  --r:14px; --r-lg:20px; --r-xl:24px; --r-pill:999px;
 
-    --z-grain:1;
-    --z-nav:60;
-    --z-skip:80;
-  }
+  /* sombra (tinta neutra fria) */
+  --shadow:0 28px 80px rgba(11,12,14,.20);
+  --shadow-sm:0 14px 44px rgba(11,12,14,.10);
 
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;color-scheme:light;}
-  body{
-    font-family:var(--body);background:var(--canvas);color:var(--ink);
-    font-size:16px;line-height:1.6;font-weight:400;text-wrap:pretty;zoom:90%;
-    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  }
-  /* grão fílmico (toque tátil premium, fixo e não-interativo) */
-  body::after{content:"";position:fixed;inset:0;z-index:var(--z-grain);pointer-events:none;opacity:.022;mix-blend-mode:multiply;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-  a{color:inherit;text-decoration:none;}
-  img,svg{display:block;}
-  ::selection{background:var(--acc);color:#fff;}
-  :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px;}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);}
-  section[id],.close[id]{scroll-margin-top:104px;}
-  h1,h2,h3,.brandmark,.thesis,.at,.apt,.cphrase,.dterm,.eyebrow{overflow-wrap:break-word;}
+  /* tipografia preservada do ECHO */
+  --display:'Ranade',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --body:'Synonym',system-ui,-apple-system,sans-serif;
+  --mono:'Technor',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
 
-  .skip{position:absolute;left:-999px;top:0;z-index:var(--z-skip);background:var(--ink);color:#fff;
-    font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:12px 18px;border-radius:0 0 12px 0;}
-  .skip:focus{left:12px;top:12px;}
+  /* easing */
+  --ease-quint:cubic-bezier(.22,1,.36,1);
+  --ease-expo:cubic-bezier(.16,1,.3,1);
 
-  /* rótulo-pílula (uso racionado: hero + 3 seções) */
-  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--body);font-weight:500;font-size:11px;
-    letter-spacing:.18em;text-transform:uppercase;color:var(--acc-deep);
-    background:var(--acc-soft);border:1px solid var(--acc-line);border-radius:var(--r-pill);padding:7px 15px 7px 13px;}
-  .eyebrow::before{content:"";width:7px;height:7px;border-radius:var(--r-pill);background:var(--grad);flex:0 0 7px;
-    box-shadow:0 0 0 3px var(--acc-soft);}
-  .s.dark .eyebrow{color:var(--acc-on-dark);background:rgba(251,77,38,.12);border-color:rgba(251,77,38,.28);}
+  /* z-index semântico */
+  --z-grain:1;
+  --z-base:2;
+  --z-handle:70;
+  --z-sticky:80;
+  --z-backdrop:90;
+  --z-drawer:100;
+}
 
-  /* símbolo do ECHO: sinal disperso para forma instalada */
-  .sym .b1{opacity:.24;}.sym .b2{opacity:.45;}.sym .b3{opacity:.70;}
-  .sym .form{fill:var(--acc);}
+/* ---------- 2 · BASE / RESET ---------- */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;background:var(--ink);-webkit-text-size-adjust:100%;color-scheme:light;}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.62;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+/* grão fílmico — toque tátil, fixo e não-interativo */
+body::after{content:"";position:fixed;inset:0;z-index:var(--z-grain);pointer-events:none;opacity:.02;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
+svg{display:block;}
+img{max-width:100%;display:block;}
+h1,h2,h3{text-wrap:balance;}
+p{text-wrap:pretty;}
+::selection{background:var(--coral-light);color:var(--cloud);}
+:focus-visible{outline:2px solid var(--coral-light);outline-offset:3px;border-radius:2px;}
 
-  /* ---- motion: reveal cinematográfico (gated por .js) ---- */
-  .js .rv{opacity:0;transform:translateY(26px);filter:blur(8px);
-    transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);}
-  .js .rv.in{opacity:1;transform:none;filter:none;}
-  .js .stagger > *{opacity:0;transform:translateY(24px);filter:blur(7px);
-    transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s var(--ease);}
-  .js .stagger.in > *{opacity:1;transform:none;filter:none;}
-  .js .stagger.in > *:nth-child(1){transition-delay:.04s}
-  .js .stagger.in > *:nth-child(2){transition-delay:.10s}
-  .js .stagger.in > *:nth-child(3){transition-delay:.16s}
-  .js .stagger.in > *:nth-child(4){transition-delay:.22s}
-  .js .stagger.in > *:nth-child(5){transition-delay:.28s}
-  .js .stagger.in > *:nth-child(6){transition-delay:.34s}
-  .js .stagger.in > *:nth-child(7){transition-delay:.40s}
-  .js .stagger.in > *:nth-child(8){transition-delay:.46s}
-  .js .stagger.in > *:nth-child(9){transition-delay:.52s}
-  .js .stagger.in > *:nth-child(10){transition-delay:.58s}
+/* ---------- 3 · LAYOUT ---------- */
+.wrap{width:min(var(--wrap),calc(100% - 72px));margin:0 auto;}
+.section{padding:var(--section-y) 0;background:var(--paper);position:relative;}
+.section.surface{background:var(--surface);}
+.section.dark{background:var(--ink);color:var(--cloud);overflow:hidden;}
+/* estratos horizontais discretos — cadência/topografia (≠ grid diagonal do ATRIO) */
+.section.dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background:repeating-linear-gradient(0deg,rgba(232,236,239,.032) 0 1px,transparent 1px 27px);}
+.section .wrap{position:relative;z-index:var(--z-base);}
+section[id],.close[id]{scroll-margin-top:96px;}
+@media(max-width:980px){.wrap{width:min(100% - 44px,var(--wrap));}}
 
-  /* ---- CTAs: arquitetura "button-in-button" + magnético ---- */
-  .btn{position:relative;display:inline-flex;align-items:center;gap:14px;font-family:var(--body);font-weight:500;
-    font-size:13px;letter-spacing:.05em;text-transform:uppercase;padding:8px 8px 8px 24px;border-radius:var(--r-pill);
-    white-space:nowrap;will-change:transform;
-    transition:transform .5s var(--ease),background .35s var(--ease),color .35s var(--ease),box-shadow .4s var(--ease),border-color .35s var(--ease);}
-  .btn-ic{width:36px;height:36px;border-radius:var(--r-pill);display:inline-flex;align-items:center;justify-content:center;flex:0 0 36px;
-    transition:transform .5s var(--ease),filter .35s var(--ease);}
-  .btn-ic svg{width:16px;height:16px;}
-  .btn--primary{background:var(--ink);color:var(--paper);box-shadow:var(--shadow-soft);}
-  .btn--primary .btn-ic{background:var(--grad);color:#fff;box-shadow:var(--shadow-acc),inset 0 1px 0 rgba(255,255,255,.28);}
-  .btn--primary:hover{box-shadow:var(--shadow-lift);}
-  .btn--primary:hover .btn-ic{filter:brightness(1.07) saturate(1.04);}
-  .btn--ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow-soft);}
-  .btn--ghost .btn-ic{background:var(--surface);color:var(--ink);}
-  .btn--ghost:hover{border-color:rgba(10,11,13,.22);box-shadow:var(--shadow-lift);}
-  .btn--ghost:hover .btn-ic{background:var(--acc-soft);color:var(--acc-deep);}
-  .btn--on-dark{background:rgba(233,236,238,.06);color:#fff;border:1px solid var(--on-dark-line);}
-  .btn--on-dark .btn-ic{background:var(--grad);color:#fff;box-shadow:var(--shadow-acc);}
-  .btn--on-dark:hover{background:rgba(233,236,238,.1);border-color:rgba(233,236,238,.3);}
-  .btn:active{transform:scale(.98);}
+/* below-the-fold render perf */
+.cv{content-visibility:auto;contain-intrinsic-size:auto 900px;}
 
-  /* ===================== NAV: ilha flutuante ===================== */
-  .nav{position:fixed;top:clamp(12px,2vw,20px);left:50%;transform:translateX(-50%);z-index:var(--z-nav);
-    display:flex;align-items:center;gap:6px;max-width:calc(100vw - 28px);
-    background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
-    border:1px solid rgba(10,11,13,.08);border-radius:var(--r-pill);padding:7px 7px 7px 22px;box-shadow:var(--shadow-soft);
-    transition:background .45s var(--ease),box-shadow .45s var(--ease),border-color .45s var(--ease);}
-  .nav.scrolled{background:rgba(255,255,255,.86);box-shadow:var(--shadow-lift);border-color:rgba(10,11,13,.1);}
-  .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.2em;padding-right:6px;}
-  .brand svg{width:28px;height:20px;}
-  .nav-links{display:flex;align-items:center;gap:2px;font-family:var(--body);font-weight:500;font-size:12px;
-    letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
-  .nav-links a{position:relative;padding:9px 13px;border-radius:var(--r-pill);transition:color .2s,background .25s;}
-  .nav-links a::after{content:"";position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;
-    background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);}
-  .nav-links a:hover{color:var(--ink);}
-  .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1);}
-  .nav-links a.active{color:var(--acc-deep);}
-  .nav-cta{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
-    background:var(--ink);color:var(--paper);padding:11px 19px;border-radius:var(--r-pill);white-space:nowrap;
-    transition:transform .4s var(--ease),box-shadow .35s var(--ease);box-shadow:var(--shadow-soft);}
-  .nav-cta:hover{box-shadow:var(--shadow-acc);}
-  @media(max-width:880px){.nav-links{display:none;}.nav{padding-left:20px;}}
+/* section head — índice grande (gramática ATRIO) */
+.head{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,52px);align-items:start;margin-bottom:var(--s-7);}
+.index{font-family:var(--mono);font-size:clamp(72px,9.5vw,128px);line-height:.82;font-weight:500;
+  letter-spacing:-.04em;color:rgba(11,12,14,.12);font-variant-numeric:tabular-nums;}
+.dark .index{color:rgba(232,236,239,.14);}
+.head-body{border-top:1px solid var(--line);padding-top:var(--s-4);position:relative;}
+.head-body::before{content:"";position:absolute;top:-1px;left:0;width:160px;height:3px;background:var(--coral-light);}
+.dark .head-body{border-color:var(--dline);}
+.dark .head-body::before{background:var(--coral-dark);}
+.head h2{font-family:var(--display);font-size:clamp(34px,4.6vw,60px);font-weight:500;line-height:1.02;
+  letter-spacing:-.03em;margin-top:var(--s-4);max-width:20ch;}
+.head .sub{margin-top:var(--s-4);max-width:60ch;font-size:clamp(16px,1.3vw,19px);line-height:1.6;color:var(--mut);font-weight:400;}
+.dark .head .sub{color:rgba(232,236,239,.72);}
+@media(max-width:900px){.head{grid-template-columns:1fr;gap:var(--s-3);margin-bottom:var(--s-6);}.index{font-size:clamp(60px,20vw,96px);}}
 
-  /* ===================== HERO ===================== */
-  .hero{position:relative;padding:clamp(120px,17vw,184px) 0 clamp(64px,9vw,108px);overflow:hidden;}
-  .hero::before{content:"";position:absolute;top:-12%;right:-6%;width:min(58vw,760px);height:min(58vw,760px);
-    background:radial-gradient(circle at 60% 40%,rgba(251,77,38,.20),rgba(255,138,76,.08) 38%,transparent 66%);
-    filter:blur(10px);pointer-events:none;z-index:0;}
-  .hero .wrap{position:relative;z-index:1;}
-  .hero-grid{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(0,.76fr);
-    column-gap:clamp(40px,6vw,88px);align-items:center;}
-  .hero h1{margin-top:26px;}
-  .hero .brandmark{display:block;font-family:var(--display);font-weight:700;font-size:clamp(68px,11vw,152px);
-    line-height:.86;letter-spacing:-.05em;}
-  .hero .thesis{display:block;font-family:var(--display);font-weight:500;font-size:clamp(26px,3.5vw,47px);
-    line-height:1.03;letter-spacing:-.022em;color:var(--ink);margin-top:.22em;max-width:17ch;text-wrap:balance;}
-  .hero .lead{margin-top:32px;font-size:clamp(17px,1.5vw,20px);line-height:1.55;color:var(--muted);max-width:48ch;}
-  .hero .lead b{color:var(--ink);font-weight:500;}
-  .hero .hcta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap;}
+/* ---------- 4 · COMPONENTES ---------- */
 
-  /* painel-percurso: tray double-bezel flutuante */
-  .tray{background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(241,243,245,.7));border:1px solid var(--line);
-    border-radius:var(--r-tray);padding:7px;box-shadow:var(--shadow-lift);}
-  .tray-core{background:var(--paper);border-radius:var(--r-inner);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 1px 2px rgba(10,11,13,.03);}
-  .panel-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;
-    border-bottom:1px solid var(--line-2);font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--muted-2);}
-  .panel-bar .dot{width:9px;height:9px;border-radius:var(--r-pill);background:var(--grad);box-shadow:0 0 0 4px var(--acc-soft);}
-  .spine{padding:10px 22px 16px;}
-  .pstep{position:relative;display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line-2);}
-  .pstep:last-child{border-bottom:0;}
-  .pnode{width:11px;height:11px;flex:0 0 11px;border-radius:3px;background:var(--paper);border:1.5px solid var(--ink);transition:transform .4s var(--ease);}
-  .pstep.gate .pnode{background:var(--grad);border-color:transparent;box-shadow:0 0 0 4px var(--acc-soft),var(--shadow-acc);}
-  .pi{font-family:var(--body);font-weight:500;font-size:11px;color:var(--muted-2);width:18px;flex:0 0 18px;}
-  .pn{font-family:var(--body);font-weight:500;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);}
-  .pstep.gate .pn{color:var(--acc-deep);}
-  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;row-gap:48px;}.hero .tray{max-width:470px;}}
+/* labels / eyebrow / botões (Technor) */
+.label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--coral-light);}
+.dark .label{color:var(--coral-dark);}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);font-weight:500;}
+.eyebrow::before{content:"";width:8px;height:8px;background:var(--coral-light);display:inline-block;}
+.dark .eyebrow{color:rgba(232,236,239,.64);}
+.dark .eyebrow::before{background:var(--coral-dark);}
 
-  /* ===================== PREMISSA ===================== */
-  .premise{position:relative;padding:clamp(64px,9vw,116px) 0;border-top:1px solid var(--line);
-    background:linear-gradient(180deg,var(--paper),var(--canvas));}
-  .premise .pq{font-family:var(--display);font-weight:500;font-size:clamp(27px,3.7vw,48px);line-height:1.1;
-    letter-spacing:-.022em;max-width:20ch;text-wrap:balance;}
-  .premise .pq .mark{color:var(--acc-deep);}
-  .premise .psub{margin-top:34px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,4vw,60px);align-items:end;}
-  .premise .psub p{font-size:16.5px;line-height:1.66;color:var(--muted);max-width:46ch;}
-  .premise .beat{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.1vw,28px);line-height:1.16;
-    letter-spacing:-.02em;color:var(--ink);}
-  @media(max-width:760px){.premise .psub{grid-template-columns:1fr;gap:24px;}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid currentColor;
+  border-radius:var(--r-pill);padding:13px 20px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;font-weight:500;transition:background .25s,color .25s,border-color .25s,transform .25s var(--ease-quint),box-shadow .3s var(--ease-quint);}
+.btn:hover{transform:translateY(-1px);}
+.btn:active{transform:translateY(0) scale(.99);}
+/* botão sólido sobre fundo claro: coral-light + texto branco */
+.btn.primary{background:var(--coral-light);border-color:var(--coral-light);color:var(--white);}
+.btn.primary:hover{background:#a93c25;border-color:#a93c25;box-shadow:0 14px 30px -12px rgba(194,71,45,.5);}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:var(--cloud);}
+.btn.dark:hover{background:var(--graph);border-color:var(--graph);}
+.btn.ghost{color:var(--ink);border-color:var(--line);background:var(--white);}
+.btn.ghost:hover{border-color:var(--coral-edge-l);color:var(--coral-light);}
+/* sobre fundo escuro */
+.btn.light{color:var(--cloud);border-color:rgba(232,236,239,.34);}
+.btn.light:hover{background:var(--cloud);color:var(--ink);border-color:var(--cloud);}
+/* botão sólido sobre fundo escuro: coral-dark + texto ink (nunca branco) */
+.btn.solid-d{background:var(--coral-dark);border-color:var(--coral-dark);color:var(--ink);}
+.btn.solid-d:hover{background:#ff9163;border-color:#ff9163;}
 
-  /* ===================== SEÇÕES ===================== */
-  section.s{padding:var(--sec-pad) 0;}
-  section.s.gray{background:var(--surface);}
-  section.s.dark{position:relative;background:var(--ink);color:var(--on-dark);overflow:hidden;}
-  section.s.dark::before{content:"";position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:min(80vw,900px);height:60%;
-    background:radial-gradient(ellipse at center,rgba(251,77,38,.16),transparent 65%);pointer-events:none;}
-  .mhead{position:relative;max-width:780px;margin-bottom:clamp(56px,7vw,92px);}
-  .mhead.center{margin-left:auto;margin-right:auto;text-align:center;}
-  .mhead.center .desc{margin-left:auto;margin-right:auto;}
-  .mhead h2{font-family:var(--display);font-weight:500;font-size:clamp(31px,4.5vw,58px);line-height:1.0;
-    letter-spacing:-.03em;margin-top:24px;text-wrap:balance;}
-  .mhead .desc{margin-top:24px;font-size:clamp(17px,1.5vw,20px);line-height:1.58;color:var(--muted);max-width:var(--measure);}
-  .mhead .desc + .desc{margin-top:16px;font-size:16.5px;}
-  .s.dark .mhead .desc{color:var(--on-dark-mut);}
+/* svg defs holder */
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden;}
+.sym .b1{opacity:.26;}.sym .b2{opacity:.5;}.sym .b3{opacity:.78;}
+.sym .form{fill:var(--coral-light);}
+.dark .sym .form,.nav .sym .form{fill:var(--coral-dark);}
 
-  /* problema ·registro 2x2 */
-  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-  .pcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-tray);padding:36px 34px 40px;
-    display:flex;flex-direction:column;gap:15px;box-shadow:var(--shadow-soft);transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
-  .pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);}
-  .pcard .pn2{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.04em;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:max-content;}
-  .pcard h3{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.2vw,27px);line-height:1.06;letter-spacing:-.02em;}
-  .pcard p{font-size:15.5px;line-height:1.62;color:var(--muted);max-width:42ch;}
-  @media(max-width:720px){.pgrid{grid-template-columns:1fr;}}
+/* ---- NAV (pílula flutuante, glass escuro) ---- */
+.nav{position:fixed;z-index:var(--z-sticky);top:14px;left:0;right:0;pointer-events:none;}
+.nav .bar{height:54px;display:flex;align-items:center;justify-content:space-between;
+  border:1px solid rgba(232,236,239,.14);background:rgba(11,12,14,.74);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  color:var(--cloud);border-radius:var(--r-pill);padding:0 9px 0 18px;pointer-events:auto;box-shadow:0 16px 44px rgba(0,0,0,.2);
+  transition:background .4s var(--ease-quint),box-shadow .4s var(--ease-quint);}
+.nav.scrolled .bar{background:rgba(11,12,14,.86);box-shadow:0 20px 56px rgba(0,0,0,.3);}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-size:16px;letter-spacing:.22em;font-weight:700;color:var(--cloud);}
+.brand-mark{width:30px;height:21px;}
+.nav-links{display:flex;align-items:center;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(232,236,239,.62);font-weight:500;}
+.nav-links a{padding:9px 11px;border-radius:var(--r-pill);transition:color .2s,background .2s;}
+.nav-links a:hover{color:var(--cloud);}
+.nav-links a.active{background:var(--coral-dark);color:var(--ink);}
+.nav-cta{margin-left:8px;color:var(--cloud);border-color:rgba(232,236,239,.28);padding:10px 14px;font-size:9.5px;}
+@media(max-width:1000px){.nav-links{display:none;}.nav .bar{border-radius:28px;}}
 
-  /* método em operação ·casos antes/depois */
-  .cases{margin-top:8px;display:flex;flex-direction:column;gap:18px;}
-  .case{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-tray);
-    padding:clamp(30px,4vw,52px);box-shadow:var(--shadow-soft);}
-  .case-head{display:flex;align-items:baseline;gap:18px;margin-bottom:28px;}
-  .case-head .ci{font-family:var(--display);font-weight:500;font-size:18px;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;flex:0 0 auto;}
-  .case-head h3{font-family:var(--display);font-weight:500;font-size:clamp(24px,3vw,38px);line-height:1.02;letter-spacing:-.025em;}
-  .ab{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .ab-col{background:var(--canvas);border:1px solid var(--line-2);border-radius:var(--r-inner);padding:26px 26px 30px;}
-  .ab-col.after{background:linear-gradient(180deg,rgba(251,77,38,.05),rgba(255,255,255,0));border-color:var(--acc-line);}
-  .ab-col .abk{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);}
-  .ab-col.after .abk{color:var(--acc-deep);}
-  .ab-col.after .abk::before{content:"";width:6px;height:6px;border-radius:var(--r-pill);background:var(--grad);}
-  .ab-col p{margin-top:14px;font-size:15.5px;line-height:1.62;color:var(--muted);}
-  .case-foot{margin-top:26px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:center;}
-  .practical{background:var(--acc-soft);border-radius:var(--r-inner);padding:18px 22px;}
-  .practical .prk{font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-deep);}
-  .practical p{margin-top:9px;font-family:var(--display);font-weight:500;font-size:clamp(18px,1.9vw,23px);line-height:1.2;letter-spacing:-.015em;color:var(--ink);}
-  @media(max-width:760px){.ab{grid-template-columns:1fr;}.case-foot{grid-template-columns:1fr;gap:20px;}}
+/* ---- HERO ---- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
+  background:var(--ink);color:var(--cloud);padding:118px 0 78px;}
+/* waves discretas — quase topográficas, finas, baixa opacidade */
+.hero-waves{position:absolute;inset:0;pointer-events:none;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.78) 56%,rgba(0,0,0,.18));
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.78) 56%,rgba(0,0,0,.18));}
+.hero-waves svg{width:100%;height:100%;}
+/* anel coral discreto, baixa opacidade */
+.hero::after{content:"";position:absolute;width:54vw;height:54vw;border-radius:50%;
+  border:1px solid var(--coral-edge-d);right:-19vw;bottom:-28vw;
+  box-shadow:inset 0 0 0 1px rgba(232,236,239,.04);opacity:.5;pointer-events:none;}
+.hero .wrap{position:relative;z-index:var(--z-base);width:min(1320px,calc(100% - 72px));}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;
+  padding-bottom:20px;border-bottom:1px solid rgba(232,236,239,.18);}
+.hero-title{font-family:var(--display);font-weight:700;font-size:clamp(86px,15vw,210px);line-height:.82;
+  letter-spacing:-.05em;margin:26px 0 0 -.04em;color:var(--cloud);}
+.hero-title .t{color:var(--coral-dark);}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,340px);
+  gap:clamp(36px,4.4vw,60px);align-items:start;margin-top:clamp(24px,4vw,48px);}
+.hero-lead{max-width:1080px;}
+.hero-kicker{font-family:var(--display);font-size:clamp(28px,3.6vw,50px);font-weight:500;line-height:1.05;
+  letter-spacing:-.025em;max-width:22ch;color:var(--cloud);}
+.hero-kicker em{font-style:normal;color:var(--coral-dark);}
+.hero-define{margin-top:var(--s-4);max-width:96ch;font-family:var(--mono);font-size:clamp(11.5px,1vw,13px);
+  letter-spacing:.03em;line-height:1.62;color:rgba(232,236,239,.84);text-transform:none;font-weight:400;}
+.hero-define b{color:var(--coral-dark);font-weight:500;}
+.hero-copy{margin-top:var(--s-4);max-width:88ch;color:rgba(232,236,239,.72);
+  font-size:clamp(15px,1.1vw,17px);font-weight:400;line-height:1.7;}
+.hero-copy + .hero-copy{margin-top:14px;}
+.hero-copy b{color:var(--cloud);font-weight:500;}
+.hero-tags{margin-top:var(--s-5);display:flex;flex-wrap:wrap;gap:8px 7px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(232,236,239,.6);}
+.hero-tags span{border:1px solid rgba(232,236,239,.16);border-radius:var(--r-pill);padding:7px 12px;}
+.hero-tags span.k{color:var(--coral-dark);border-color:var(--coral-edge-d);}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:var(--s-5);}
 
-  /* origem ·prosa + tiles grafite */
-  .origin{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(32px,5vw,68px);align-items:start;}
-  .origin .oprose p{font-size:16.5px;line-height:1.7;color:var(--muted);}
-  .origin .oprose p b{color:var(--ink);font-weight:500;}
-  .origin .oprose p + p{margin-top:20px;}
-  .ostack{display:flex;flex-direction:column;gap:16px;}
-  .otile{position:relative;background:var(--graph);color:var(--on-dark);padding:30px 30px 34px;border-radius:var(--r-tray);
-    box-shadow:var(--shadow-lift);overflow:hidden;}
-  .otile::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
-    background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0));
-    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;}
-  .otile .ok{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-on-dark);}
-  .otile .ok::before{content:"";width:6px;height:6px;border-radius:var(--r-pill);background:var(--grad);}
-  .otile p{margin-top:14px;font-family:var(--display);font-weight:500;font-size:clamp(20px,2.2vw,27px);line-height:1.15;letter-spacing:-.02em;}
-  @media(max-width:820px){.origin{grid-template-columns:1fr;gap:34px;}}
+.hero-panel{width:100%;max-width:340px;justify-self:end;border:1px solid rgba(232,236,239,.18);border-radius:var(--r-lg);
+  overflow:hidden;background:linear-gradient(180deg,rgba(232,236,239,.06),rgba(232,236,239,.02));box-shadow:var(--shadow);}
+.hero-panel-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;
+  border-bottom:1px solid rgba(232,236,239,.14);font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(232,236,239,.6);}
+.hero-panel-head span:last-child{color:var(--coral-dark);}
+.hero-step{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:baseline;
+  padding:15px 16px;border-bottom:1px solid rgba(232,236,239,.09);}
+.hero-step:last-child{border-bottom:0;}
+.hero-step .no{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--coral-dark);font-weight:500;}
+.hero-step .name{font-family:var(--display);font-size:21px;font-weight:500;line-height:1;letter-spacing:-.02em;color:var(--cloud);}
+.hero-step .desc{display:block;margin-top:6px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;line-height:1.4;color:rgba(232,236,239,.56);text-transform:uppercase;}
+@media(max-width:1000px){.hero .wrap{width:min(100% - 44px,var(--wrap));}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-panel{justify-self:stretch;max-width:560px;}.hero-top{display:block;}.hero-top .label{display:block;margin-top:10px;}}
+@media(max-width:620px){.hero{padding-top:108px;}.hero-actions .btn{width:100%;}}
 
-  /* arquitetura ·índice editorial de 6 camadas */
-  .arch{border-top:1px solid var(--ink);}
-  .arow{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.55fr);gap:clamp(20px,4vw,56px);
-    padding:clamp(32px,4vw,50px) 0;border-bottom:1px solid var(--line);transition:padding-left .5s var(--ease);}
-  .arow:hover{padding-left:10px;}
-  .arow .al{display:flex;flex-direction:column;gap:11px;}
-  .arow .an{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.08em;color:var(--acc-deep);}
-  .arow .an::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--grad);}
-  .arow .at{font-family:var(--display);font-weight:500;font-size:clamp(26px,3vw,40px);line-height:1;letter-spacing:-.025em;}
-  .arow .aq{font-family:var(--display);font-weight:400;font-style:italic;font-size:clamp(17px,1.7vw,21px);line-height:1.25;color:var(--acc-deep);max-width:24ch;}
-  .arow .ad{font-size:16px;line-height:1.66;color:var(--muted);max-width:52ch;}
-  .arow .ad + .tags{margin-top:20px;}
-  @media(max-width:820px){.arow{grid-template-columns:1fr;gap:18px;}.arow:hover{padding-left:0;}}
+/* ---- SPLIT (problema / decisão) ---- */
+.split{display:grid;grid-template-columns:200px 1fr 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
+.split .lead{font-size:clamp(18px,1.6vw,24px);line-height:1.36;font-family:var(--display);font-weight:500;letter-spacing:-.015em;}
+.split .text{font-size:16px;line-height:1.74;color:var(--mut);display:flex;flex-direction:column;gap:16px;max-width:62ch;}
+.split .text b{color:var(--ink);font-weight:500;}
+.dark .split .text{color:rgba(232,236,239,.72);}
+.dark .split .text b{color:var(--cloud);}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:var(--s-4);}}
 
-  /* etiquetas */
-  .tags{display:flex;flex-wrap:wrap;gap:8px;}
-  .tag{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.01em;color:var(--muted);
-    border:1px solid var(--line);border-radius:var(--r-pill);padding:6px 13px;background:var(--paper);white-space:nowrap;
-    transition:border-color .3s var(--ease),color .3s var(--ease);}
-  .gray .tag{background:var(--canvas);}
-  .tag:hover{border-color:var(--acc-line);color:var(--acc-deep);}
+/* signal-grid (registros do problema) */
+.signal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:var(--s-7);}
+.signal{background:var(--paper);padding:var(--s-5);min-height:208px;display:flex;flex-direction:column;}
+.surface .signal{background:var(--surface);}
+.signal .sno{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--coral-light);font-weight:500;}
+.signal .st{font-family:var(--display);font-size:25px;line-height:1.06;font-weight:500;letter-spacing:-.02em;margin-top:18px;}
+.signal .sp{font-size:14px;line-height:1.62;color:var(--mut);margin-top:14px;}
+@media(max-width:980px){.signal-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.signal-grid{grid-template-columns:1fr;}}
 
-  /* competências traduzidas ·cartões de tradução 2-up */
-  .beatline{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.3vw,29px);line-height:1.22;
-    letter-spacing:-.02em;color:var(--ink);max-width:32ch;margin:0 0 clamp(44px,5vw,60px);}
-  .beatline .mark{color:var(--acc-deep);}
-  .trans{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .tcard{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-tray);padding:28px 28px 32px;
-    display:flex;flex-direction:column;gap:13px;box-shadow:var(--shadow-soft);transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
-  .tcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift);}
-  .tcard .tk{font-size:13.5px;line-height:1.45;color:var(--muted-2);max-width:34ch;}
-  .tcard .tt{font-family:var(--display);font-weight:500;font-size:clamp(20px,2vw,25px);line-height:1.04;letter-spacing:-.02em;display:flex;gap:12px;align-items:baseline;}
-  .tcard .tt .arx{color:var(--acc);font-size:.8em;flex:0 0 auto;}
-  .tcard .td{font-size:14.5px;line-height:1.5;color:var(--muted);}
-  @media(max-width:680px){.trans{grid-template-columns:1fr;}}
+/* answer-band (decisão metodológica) */
+.answer-band{margin-top:var(--s-7);border-radius:var(--r-xl);overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr;background:var(--ink);color:var(--cloud);}
+.answer-band .big{padding:clamp(34px,5vw,48px);font-family:var(--display);font-size:clamp(34px,5vw,64px);font-weight:500;line-height:1.0;letter-spacing:-.04em;}
+.answer-band .big em{font-style:normal;color:var(--coral-dark);}
+.answer-band .side{padding:clamp(34px,5vw,48px);border-left:1px solid rgba(232,236,239,.16);font-size:15px;line-height:1.74;color:rgba(232,236,239,.72);display:flex;flex-direction:column;gap:18px;}
+.answer-band .side b{color:var(--cloud);font-weight:500;}
+.answer-band .force{font-family:var(--display);font-size:clamp(20px,2.1vw,26px);font-weight:500;line-height:1.16;letter-spacing:-.02em;color:#fff;}
+.answer-band .force i{font-style:normal;color:var(--coral-dark);}
+@media(max-width:860px){.answer-band{grid-template-columns:1fr;}.answer-band .side{border-left:0;border-top:1px solid rgba(232,236,239,.16);}}
 
-  /* tradução prática ·definições editoriais */
-  .defs{max-width:860px;margin:0 auto;border-top:1px solid var(--line);}
-  .def{padding:clamp(22px,3vw,32px) 0;border-bottom:1px solid var(--line);
-    display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:clamp(16px,3vw,36px);align-items:baseline;
-    transition:padding-left .5s var(--ease);}
-  .def:hover{padding-left:10px;}
-  .def .dterm{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.4vw,30px);line-height:1;letter-spacing:-.02em;color:var(--ink);}
-  .def .dmean{font-family:var(--display);font-weight:400;font-size:clamp(18px,1.9vw,24px);line-height:1.2;letter-spacing:-.01em;color:var(--muted);}
-  .def .dmean i{font-style:normal;color:var(--acc-deep);}
-  .defs-foot{max-width:860px;margin:clamp(44px,5vw,60px) auto 0;}
-  .defs-foot p{font-size:16.5px;line-height:1.66;color:var(--muted);max-width:54ch;}
-  .defs-foot .beat{margin-top:24px;font-family:var(--display);font-weight:500;font-size:clamp(25px,3vw,40px);line-height:1.05;letter-spacing:-.025em;color:var(--ink);}
-  @media(max-width:600px){.def{grid-template-columns:1fr;gap:8px;}.def:hover{padding-left:0;}}
+/* ---- ACERVO METODOLÓGICO · materiais em grid ---- */
+.acervo-flow{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:var(--s-5);
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);}
+.acervo-flow .node{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-pill);padding:8px 14px;background:var(--white);color:var(--ink);}
+.acervo-flow .node b{color:var(--coral-light);font-weight:500;}
+.surface .acervo-flow .node{background:var(--paper);}
+.acervo-flow .arrow{color:var(--coral-light);}
 
-  /* artefatos ·grade compacta 4-up */
-  .arts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-  .art{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-inner);padding:26px 24px 28px;
-    display:flex;flex-direction:column;gap:14px;min-height:166px;box-shadow:var(--shadow-soft);
-    transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
-  .art:hover{transform:translateY(-5px);box-shadow:var(--shadow-lift);}
-  .art .ah{font-family:var(--display);font-weight:500;font-size:20px;line-height:1.05;letter-spacing:-.02em;}
-  .art .at2{margin-top:auto;font-family:var(--body);font-weight:500;font-size:11.5px;letter-spacing:.03em;color:var(--acc-deep);}
-  @media(max-width:880px){.arts{grid-template-columns:1fr 1fr;}}
-  @media(max-width:460px){.arts{grid-template-columns:1fr;}}
+.materials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3);align-items:start;}
+.mat{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);
+  padding:clamp(24px,2.6vw,30px);display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden;
+  transition:transform .5s var(--ease-quint),box-shadow .5s var(--ease-quint),border-color .4s;}
+.mat::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--coral-light);opacity:.85;}
+.mat:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);border-color:var(--coral-edge-l);}
+.mat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.mat-no{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--coral-light);font-weight:500;}
+.mat-kind{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);
+  border:1px solid var(--line);border-radius:var(--r-pill);padding:5px 11px;}
+.mat-name{font-family:var(--display);font-size:clamp(24px,2.4vw,31px);font-weight:500;line-height:1;letter-spacing:-.025em;color:var(--ink);}
+.mat-spec{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line2);padding-top:16px;}
+.mat-spec .cell{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:baseline;}
+.mat-spec .k{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--coral-light);font-weight:500;}
+.mat-spec .v{font-size:13.5px;line-height:1.5;color:var(--mut);}
+.mat-read{display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--line2);padding-top:16px;margin-top:auto;}
+.mat-read .rk{flex-basis:100%;font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut2);margin-bottom:3px;}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mut);
+  border:1px solid var(--line);border-radius:var(--r-pill);padding:6px 11px;background:var(--paper);white-space:nowrap;
+  transition:border-color .3s,color .3s;text-transform:uppercase;}
+.mat:hover .tag{border-color:var(--coral-edge-l);}
+@media(max-width:980px){.materials{grid-template-columns:1fr;}}
+@media(max-width:520px){.mat-spec .cell{grid-template-columns:1fr;gap:5px;}}
 
-  /* evidências */
-  .evi{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,52px);}
-  .evcol{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-tray);padding:clamp(28px,3vw,40px);box-shadow:var(--shadow-soft);}
-  .evcol .evk{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-    padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px;width:100%;}
-  .evcol .evk::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--grad);}
-  .result{margin-top:clamp(44px,6vw,68px);position:relative;background:var(--graph);color:var(--on-dark);
-    border-radius:var(--r-tray);padding:clamp(32px,4vw,48px);box-shadow:var(--shadow-lift);overflow:hidden;}
-  .result::before{content:"";position:absolute;top:-40%;right:-10%;width:60%;height:120%;
-    background:radial-gradient(ellipse at center,rgba(251,77,38,.18),transparent 64%);pointer-events:none;}
-  .result .rk{position:relative;display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-on-dark);}
-  .result .rk::before{content:"";width:7px;height:7px;border-radius:var(--r-pill);background:var(--grad);}
-  .result .rlist{position:relative;margin-top:20px;display:flex;flex-wrap:wrap;gap:9px;}
-  .result .rlist .tag{background:rgba(233,236,238,.05);border-color:var(--on-dark-line);color:var(--on-dark);}
-  .result .rlist .tag:hover{border-color:rgba(251,77,38,.4);color:var(--acc-on-dark);}
-  .result .rbeat{position:relative;margin-top:30px;font-family:var(--display);font-weight:500;font-size:clamp(24px,3vw,38px);line-height:1.04;letter-spacing:-.025em;color:#fff;}
-  .result .rbeat i{font-style:normal;color:var(--acc-on-dark);}
-  @media(max-width:760px){.evi{grid-template-columns:1fr;gap:18px;}}
+/* ---- MÉTODO EM OPERAÇÃO · antes/depois ---- */
+.cases{display:flex;flex-direction:column;gap:var(--s-3);}
+.case{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);padding:clamp(28px,3.4vw,46px);box-shadow:var(--shadow-sm);}
+.surface .case{background:var(--paper);}
+.case-head{display:flex;align-items:baseline;gap:18px;margin-bottom:26px;}
+.case-head .ci{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:var(--coral-light);font-weight:500;flex:0 0 auto;}
+.case-head h3{font-family:var(--display);font-size:clamp(23px,3vw,36px);line-height:1.02;letter-spacing:-.025em;font-weight:500;}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ab-col{background:var(--paper);border:1px solid var(--line2);border-radius:var(--r);padding:24px 24px 28px;}
+.surface .ab-col{background:var(--surface);}
+.ab-col.after{background:var(--coral-soft-l);border-color:var(--coral-edge-l);}
+.ab-col .abk{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);font-weight:500;}
+.ab-col.after .abk{color:var(--coral-light);}
+.ab-col.after .abk::before{content:"";width:6px;height:6px;background:var(--coral-light);}
+.ab-col p{margin-top:13px;font-size:15px;line-height:1.6;color:var(--mut);}
+.ab-col.after p{color:#4a3a33;}
+.case-foot{margin-top:24px;border-top:1px solid var(--line2);padding-top:20px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+.case-foot .fk{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut2);margin-right:6px;}
+@media(max-width:760px){.ab{grid-template-columns:1fr;}}
 
-  /* aplicações ·frentes numeradas */
-  .apps{border-top:1px solid var(--ink);}
-  .app{padding:clamp(34px,4vw,52px) 0;border-bottom:1px solid var(--line);transition:padding-left .5s var(--ease);}
-  .app:hover{padding-left:10px;}
-  .app-head{display:flex;align-items:baseline;gap:18px;margin-bottom:24px;}
-  .app-head .apn{font-family:var(--display);font-weight:500;font-size:18px;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;flex:0 0 auto;}
-  .app-head h3{font-family:var(--display);font-weight:500;font-size:clamp(24px,3vw,38px);line-height:1.0;letter-spacing:-.025em;}
-  .app-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start;}
-  .app-body .ades{font-size:16.5px;line-height:1.66;color:var(--muted);max-width:52ch;}
-  .deliver{background:var(--surface);border-radius:var(--r-inner);padding:20px 24px;}
-  .deliver .dk{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc-deep);}
-  .deliver .dk::before{content:"";width:6px;height:6px;border-radius:var(--r-pill);background:var(--grad);}
-  .deliver p{margin-top:11px;font-size:15.5px;line-height:1.5;color:var(--ink);}
-  .apps-beat{margin-top:clamp(44px,5vw,60px);font-family:var(--display);font-weight:500;font-size:clamp(27px,3.5vw,46px);line-height:1.02;letter-spacing:-.03em;color:var(--ink);}
-  @media(max-width:760px){.app-body{grid-template-columns:1fr;gap:22px;}.app:hover{padding-left:0;}}
+/* ---- REGÊNCIA RECURSAL (dark) ---- */
+.regence{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
+.regence .prose{max-width:64ch;display:flex;flex-direction:column;gap:var(--s-4);font-size:clamp(15.5px,1.2vw,17px);line-height:1.76;color:rgba(232,236,239,.74);}
+.regence .prose p:first-child{font-family:var(--display);font-size:clamp(20px,2vw,26px);line-height:1.32;color:var(--cloud);font-weight:500;letter-spacing:-.01em;}
+.regence .prose b{color:var(--cloud);font-weight:500;}
+.regence-quote{margin-top:var(--s-6);border-top:1px solid var(--dline);padding-top:var(--s-5);font-family:var(--display);
+  font-size:clamp(26px,3.8vw,50px);font-weight:500;line-height:1.08;letter-spacing:-.03em;max-width:22ch;color:#fff;}
+.regence-quote em{font-style:normal;color:var(--coral-dark);}
+.regence-map{margin-top:var(--s-6);display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--dline);border:1px solid var(--dline);border-radius:var(--r);overflow:hidden;}
+.rm{background:var(--ink);padding:20px 18px;display:flex;flex-direction:column;gap:9px;}
+.rm .rmk{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-dark);font-weight:500;}
+.rm .rmv{font-family:var(--display);font-size:17px;font-weight:500;line-height:1.12;letter-spacing:-.01em;color:var(--cloud);}
+@media(max-width:900px){.regence{grid-template-columns:1fr;}.regence-map{grid-template-columns:1fr;}}
 
-  /* relação com ATRIO ·faixa escura (único bloco invertido) */
-  .atrio-beat{position:relative;font-family:var(--display);font-weight:500;font-size:clamp(17px,1.7vw,21px);line-height:1.5;color:var(--on-dark-mut);max-width:62ch;margin-top:24px;}
-  .acompare{position:relative;margin-top:clamp(48px,6vw,72px);display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-  .apanel{position:relative;background:var(--graph);border:1px solid var(--on-dark-line);border-radius:var(--r-tray);
-    padding:36px 32px 40px;display:flex;flex-direction:column;gap:18px;overflow:hidden;}
-  .apanel.lead{background:linear-gradient(180deg,rgba(251,77,38,.1),var(--graph) 60%);border-color:var(--acc-line);}
-  .apanel .apk{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--on-dark-mut);}
-  .apanel.lead .apk{color:var(--acc-on-dark);}
-  .apanel.lead .apk::before{content:"";width:7px;height:7px;border-radius:var(--r-pill);background:var(--grad);}
-  .apanel .apt{font-family:var(--display);font-weight:500;font-size:clamp(24px,2.6vw,32px);line-height:1.02;letter-spacing:-.025em;color:#fff;}
-  .apanel .tag{background:rgba(233,236,238,.05);border-color:var(--on-dark-line);color:var(--on-dark);}
-  .apanel .tag:hover{border-color:rgba(251,77,38,.4);color:var(--acc-on-dark);}
-  .atrio-foot{position:relative;margin-top:clamp(44px,5vw,60px);display:flex;flex-wrap:wrap;align-items:center;gap:22px 40px;justify-content:space-between;}
-  .atrio-foot .af{font-family:var(--display);font-weight:500;font-size:clamp(23px,2.6vw,34px);line-height:1.05;letter-spacing:-.025em;color:#fff;}
-  .atrio-foot .af i{font-style:normal;color:var(--acc-on-dark);}
-  @media(max-width:760px){.acompare{grid-template-columns:1fr;}}
+/* ---- EVIDÊNCIAS ---- */
+.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.ev{background:var(--paper);padding:30px;min-height:188px;display:flex;flex-direction:column;}
+.surface .ev{background:var(--surface);}
+.ev .value{font-family:var(--mono);font-size:clamp(32px,3.6vw,50px);font-weight:500;line-height:.96;letter-spacing:-.04em;font-variant-numeric:tabular-nums;}
+.ev .value i{font-style:normal;color:var(--coral-light);}
+.ev .caption{margin-top:14px;color:var(--mut);font-size:13px;line-height:1.55;max-width:34ch;}
+.ev .evk{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-light);font-weight:500;margin-bottom:14px;}
+.ev.feature{background:var(--ink);color:var(--cloud);grid-column:1 / -1;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:stretch;padding:clamp(30px,4vw,44px);}
+.ev.feature .value{color:#fff;}
+.ev.feature .value i{color:var(--coral-dark);}
+.ev.feature .evk{color:var(--coral-dark);}
+.ev.feature .caption{color:rgba(232,236,239,.74);font-size:14px;max-width:48ch;}
+.ev-beat{margin-top:auto;padding-top:var(--s-4);font-family:var(--display);font-size:clamp(20px,2.2vw,27px);font-weight:500;line-height:1.1;letter-spacing:-.02em;color:#fff;}
+.ev-beat i{font-style:normal;color:var(--coral-dark);}
+.ev-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;line-height:1.7;color:rgba(232,236,239,.6);border-left:1px solid var(--dline);padding-left:18px;display:flex;flex-direction:column;justify-content:center;text-transform:none;}
+@media(max-width:980px){.evidence{grid-template-columns:1fr 1fr;}.ev.feature{grid-template-columns:1fr;}.ev-note{border-left:0;border-top:1px solid var(--dline);padding-left:0;padding-top:18px;margin-top:6px;}}
+@media(max-width:560px){.evidence{grid-template-columns:1fr;}}
 
-  /* fechamento / contato */
-  .close{position:relative;padding:var(--sec-pad) 0;text-align:center;border-top:1px solid var(--line);overflow:hidden;}
-  .close::before{content:"";position:absolute;bottom:-30%;left:50%;transform:translateX(-50%);width:min(80vw,760px);height:70%;
-    background:radial-gradient(ellipse at center,rgba(251,77,38,.14),transparent 66%);pointer-events:none;}
-  .close .wrap{position:relative;z-index:1;}
-  .close .cphrase{font-family:var(--display);font-weight:500;font-size:clamp(36px,5.6vw,80px);line-height:1.0;
-    letter-spacing:-.035em;text-wrap:balance;}
-  .close .cprose{max-width:60ch;margin:32px auto 0;}
-  .close .cprose p{font-size:16.5px;line-height:1.66;color:var(--muted);}
-  .close .cprose p + p{margin-top:16px;}
-  .close .cprose b{color:var(--ink);font-weight:500;}
-  .close .cbeat{margin-top:32px;font-family:var(--display);font-weight:500;font-size:clamp(21px,2.2vw,28px);line-height:1.1;letter-spacing:-.02em;color:var(--ink);}
-  .close .cta-row{margin-top:46px;display:flex;justify-content:center;}
-  .close .cchannels{margin-top:32px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px 28px;
-    font-family:var(--body);font-weight:500;font-size:13px;letter-spacing:.02em;}
-  .close .cchannels a{color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:3px;transition:color .25s,border-color .25s;}
-  .close .cchannels a:hover{color:var(--acc-deep);border-color:var(--acc);}
+/* ---- AUTORIA E CONTINUIDADE ---- */
+.cont{display:grid;grid-template-columns:320px 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden;}
+.cont-id{background:var(--ink);color:var(--cloud);padding:clamp(28px,4vw,38px);display:flex;flex-direction:column;justify-content:space-between;gap:var(--s-6);min-height:340px;}
+.cont-id .name{font-family:var(--display);font-size:38px;font-weight:500;line-height:1;letter-spacing:-.02em;}
+.cont-id .contacts{display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:rgba(232,236,239,.66);}
+.cont-id .contacts a:hover{color:var(--coral-dark);}
+.cont-text{background:var(--paper);padding:clamp(28px,4vw,42px);font-size:16px;color:var(--mut);line-height:1.76;display:flex;flex-direction:column;gap:var(--s-4);max-width:72ch;}
+.cont-text p:first-child{font-family:var(--display);font-size:clamp(19px,1.9vw,24px);line-height:1.34;color:var(--ink);font-weight:500;letter-spacing:-.01em;}
+.cont-text b{color:var(--ink);font-weight:500;}
+@media(max-width:820px){.cont{grid-template-columns:1fr;}.cont-id{min-height:0;}}
 
-  /* ===================== FOOTER ===================== */
-  footer{border-top:1px solid var(--line);background:var(--paper);}
-  .foot-main{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,48px);
-    padding:clamp(56px,6vw,80px) 0 clamp(36px,4vw,48px);}
-  .foot-brand .fb{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.2em;}
-  .foot-brand .fb svg{width:28px;height:20px;}
-  .foot-brand p{margin-top:18px;font-size:14px;line-height:1.6;color:var(--muted);max-width:30ch;}
-  .foot-col h4{font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px;}
-  .foot-col a{display:block;font-size:14.5px;color:var(--muted);padding:5px 0;transition:color .2s;}
-  .foot-col a:hover{color:var(--acc-deep);}
-  .foot-legal{border-top:1px solid var(--line);padding:24px 0 44px;display:flex;justify-content:space-between;
-    align-items:center;flex-wrap:wrap;gap:12px;}
-  .foot-legal span{font-family:var(--body);font-weight:500;font-size:11.5px;letter-spacing:.05em;color:var(--muted-2);}
-  @media(max-width:760px){.foot-main{grid-template-columns:1fr 1fr;}}
-  @media(max-width:480px){.foot-main{grid-template-columns:1fr;}}
+.compare{margin-top:var(--s-4);display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3);}
+.cpanel{background:var(--graph);border:1px solid var(--dline);border-radius:var(--r-xl);padding:32px 30px 36px;display:flex;flex-direction:column;gap:16px;color:var(--cloud);}
+.cpanel.lead{border-color:var(--coral-edge-d);background:linear-gradient(180deg,rgba(255,127,80,.08),var(--graph) 62%);}
+.cpanel .cpk{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,236,239,.62);font-weight:500;}
+.cpanel.lead .cpk{color:var(--coral-dark);}
+.cpanel .cpt{font-family:var(--display);font-size:clamp(22px,2.5vw,30px);font-weight:500;line-height:1.04;letter-spacing:-.025em;color:#fff;}
+.cpanel .cpd{font-size:14.5px;line-height:1.62;color:rgba(232,236,239,.7);}
+.cpanel .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;}
+.cpanel .tag{background:rgba(232,236,239,.05);border-color:var(--dline);color:rgba(232,236,239,.78);}
+.cont-foot{margin-top:var(--s-6);display:flex;flex-wrap:wrap;align-items:center;gap:22px 40px;justify-content:space-between;}
+.cont-foot .cf{font-family:var(--display);font-size:clamp(22px,2.6vw,34px);font-weight:500;line-height:1.06;letter-spacing:-.025em;color:var(--ink);max-width:24ch;}
+.cont-foot .cf i{font-style:normal;color:var(--coral-light);}
+@media(max-width:760px){.compare{grid-template-columns:1fr;}}
 
-  /* ===================== REDUCED MOTION ===================== */
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    .js .rv,.js .stagger > *{opacity:1;transform:none;filter:none;transition:none;}
-    .js .stagger.in > *{transition-delay:0s;}
-    .btn,.btn-ic,.nav,.nav-cta,.pcard,.tcard,.art,.arow,.app,.def,.nav-links a::after{transition:none;}
-    .pcard:hover,.tcard:hover,.art:hover{transform:none;}
-    .arow:hover,.app:hover,.def:hover{padding-left:0;}
-  }
+/* ---- FECHAMENTO / FOOTER ---- */
+.close{background:var(--ink);color:var(--cloud);padding:clamp(96px,12vw,132px) 0;text-align:center;position:relative;overflow:hidden;}
+.close::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 122%,rgba(255,127,80,.26),transparent 46%);}
+.close .wrap{position:relative;z-index:var(--z-base);}
+.close-title{font-family:var(--display);font-size:clamp(40px,6vw,86px);font-weight:500;line-height:1.04;letter-spacing:-.04em;}
+.close-title em{font-style:normal;color:var(--coral-dark);}
+.close-sub{margin-top:var(--s-4);font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(232,236,239,.6);}
+.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:var(--s-6);}
+footer{background:var(--ink);color:rgba(232,236,239,.58);border-top:1px solid rgba(232,236,239,.12);padding:52px 0 64px;}
+.footer-grid{display:grid;grid-template-columns:1fr auto;gap:36px;align-items:start;}
+.footer-brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.22em;color:var(--cloud);}
+.footer-brand .brand-mark{width:30px;height:21px;}
+.footer-links{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+footer a{transition:color .2s;}footer a:hover{color:var(--coral-dark);}
+.footer-note{margin-top:var(--s-5);max-width:780px;font-family:var(--mono);font-size:10px;letter-spacing:.02em;text-transform:none;line-height:1.8;color:rgba(232,236,239,.46);}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}.close-actions .btn{width:100%;}}
 
-  /* ---- hero: card de indicadores no lugar do painel-percurso ---- */
-  .hero .result{margin-top:0;}
-  @media(max-width:900px){.hero .result{max-width:470px;}}
+/* ---- GAVETA LATERAL · Harmonia como método ---- */
+.dw-handle{position:fixed;right:0;left:auto;top:42%;transform:translateY(-50%);z-index:var(--z-handle);
+  display:flex;flex-direction:column;align-items:center;gap:12px;writing-mode:vertical-rl;
+  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-right:0;
+  border-radius:12px 0 0 12px;padding:18px 9px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;box-shadow:0 14px 44px rgba(0,0,0,.28);
+  transition:background .25s,padding-right .25s var(--ease-quint);}
+.dw-handle:hover{background:var(--graph);padding-right:13px;}
+.dw-handle .glyph{color:var(--coral-dark);font-size:13px;writing-mode:horizontal-tb;}
+.dw-backdrop{position:fixed;inset:0;background:rgba(11,12,14,.55);backdrop-filter:blur(2px);
+  z-index:var(--z-backdrop);opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s;}
+.dw-backdrop.open{opacity:1;visibility:visible;}
+.dw-drawer{position:fixed;top:0;right:0;left:auto;height:100%;width:min(420px,88vw);background:var(--ink);
+  color:var(--cloud);z-index:var(--z-drawer);transform:translateX(100%);visibility:hidden;
+  transition:transform .5s var(--ease-expo),visibility .5s;overflow-y:auto;border-left:1px solid var(--dline);}
+.dw-drawer.open{transform:none;visibility:visible;}
+.dw-inner{padding:clamp(22px,4vw,30px);display:flex;flex-direction:column;gap:var(--s-3);}
+.dw-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;}
+.dw-eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral-dark);}
+.dw-title{margin-top:10px;font-family:var(--display);font-size:26px;font-weight:500;line-height:1.05;letter-spacing:-.02em;color:var(--cloud);}
+.dw-close{width:38px;height:38px;flex-shrink:0;border:1px solid var(--dline);border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;color:var(--cloud);font-size:18px;transition:background .2s,border-color .2s;}
+.dw-close:hover{background:var(--graph);border-color:var(--coral-dark);}
+.dw-card{background:var(--cloud);color:var(--ink);border-radius:var(--r);overflow:hidden;}
+.dw-card .q{background:var(--coral-light);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:11px 16px;}
+.dw-card .a{padding:16px;font-size:14.5px;line-height:1.58;color:#33373D;}
+.dw-card .a b{color:var(--ink);font-weight:600;}
+.dw-card--key{background:var(--coral-light);color:#fff;}
+.dw-card--key .q{background:rgba(0,0,0,.2);}
+.dw-card--key .a{color:rgba(255,255,255,.94);}
+.dw-card--key .a b{color:#fff;}
+@media(max-width:760px){
+  .dw-handle{right:16px;left:auto;bottom:16px;top:auto;transform:none;writing-mode:horizontal-tb;
+    flex-direction:row;border-radius:var(--r-pill);border:1px solid var(--dline);padding:11px 17px;}
+  .dw-handle:hover{padding-right:17px;}
+  .dw-handle .glyph{writing-mode:horizontal-tb;}
+  .dw-drawer{width:100vw;}
+}
 
-  /* ===================== O QUE É · gaveta à direita ===================== */
-  .intro{padding:var(--sec-pad) 0;background:var(--surface);border-top:1px solid var(--line);}
-  .intro-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(32px,5vw,72px);align-items:start;}
-  .intro-aside{position:sticky;top:104px;}
-  .intro-aside .at{margin-top:20px;font-family:var(--display);font-weight:500;font-size:clamp(31px,4.4vw,56px);line-height:.98;letter-spacing:-.03em;text-wrap:balance;}
-  .intro-aside .ax{margin-top:22px;font-size:clamp(16px,1.4vw,18px);line-height:1.6;color:var(--muted);max-width:32ch;}
-  .drawer{border-top:1px solid var(--line);}
-  .qa{border-bottom:1px solid var(--line);}
-  .qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:18px;
-    padding:clamp(20px,2.6vw,28px) 0;transition:padding-left .5s var(--ease);}
-  .qa summary::-webkit-details-marker{display:none;}
-  .qa:hover summary{padding-left:8px;}
-  .qa .qn{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--acc-deep);flex:0 0 auto;width:22px;}
-  .qa .qt{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.3vw,29px);line-height:1.04;letter-spacing:-.02em;flex:1;}
-  .qa .qi{flex:0 0 auto;width:27px;height:27px;border-radius:var(--r-pill);border:1px solid var(--line);
-    display:inline-flex;align-items:center;justify-content:center;color:var(--muted-2);background:var(--paper);
-    transition:transform .45s var(--ease),background .35s var(--ease),border-color .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease);}
-  .qa .qi svg{width:13px;height:13px;}
-  .qa[open] .qi{transform:rotate(135deg);background:var(--grad);border-color:transparent;color:#fff;box-shadow:var(--shadow-acc);}
-  .qa .qd{max-width:60ch;padding:0 45px clamp(22px,2.6vw,30px);}
-  .qa .qd p{font-size:16.5px;line-height:1.66;color:var(--muted);}
-  @media(max-width:820px){.intro-grid{grid-template-columns:1fr;gap:30px;}.intro-aside{position:static;}.qa .qd{padding-left:0;}}
+/* ---------- 5 · MOTION / REVEAL ---------- */
+.js .rv{opacity:0;transform:translateY(24px);filter:blur(7px);
+  transition:opacity .8s var(--ease-quint),transform .8s var(--ease-quint),filter .8s var(--ease-quint);}
+.js .rv.in{opacity:1;transform:none;filter:none;}
+.js .rv.stagger.in{opacity:1;transform:none;filter:none;}
+.js .stagger > *{opacity:0;transform:translateY(20px);filter:blur(6px);
+  transition:opacity .7s var(--ease-quint),transform .7s var(--ease-quint),filter .7s var(--ease-quint);}
+.js .stagger.in > *{opacity:1;transform:none;filter:none;}
+.js .stagger.in > *:nth-child(2){transition-delay:.06s;}
+.js .stagger.in > *:nth-child(3){transition-delay:.12s;}
+.js .stagger.in > *:nth-child(4){transition-delay:.18s;}
+.js .stagger.in > *:nth-child(5){transition-delay:.24s;}
+.js .stagger.in > *:nth-child(6){transition-delay:.30s;}
+.js .stagger.in > *:nth-child(7){transition-delay:.36s;}
+.js .stagger.in > *:nth-child(8){transition-delay:.42s;}
+.js .stagger.in > *:nth-child(9){transition-delay:.48s;}
+.js .stagger.in > *:nth-child(10){transition-delay:.54s;}
 
-  /* ===================== DIAPASÃO · gaveta de 5 respostas (modelo Planta-mãe) ===================== */
-  .mae-trigger{position:fixed;left:clamp(12px,2vw,20px);top:clamp(12px,2vw,20px);z-index:var(--z-nav);
-    display:inline-flex;align-items:center;gap:11px;font-family:var(--body);font-weight:500;font-size:12px;
-    letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:rgba(255,255,255,.72);
-    backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
-    border:1px solid rgba(10,11,13,.08);border-radius:var(--r-pill);padding:9px 16px 9px 13px;cursor:pointer;
-    box-shadow:var(--shadow-soft);transition:box-shadow .35s var(--ease),border-color .35s var(--ease);}
-  .mae-trigger:hover{box-shadow:var(--shadow-lift);border-color:rgba(10,11,13,.16);}
-  .mae-trigger .dia{width:13px;height:13px;flex:0 0 13px;transform:rotate(45deg);background:var(--grad);border-radius:3px;box-shadow:var(--shadow-acc);}
-  @media(max-width:560px){.mae-trigger .mae-lbl{display:none;}.mae-trigger{padding:10px;}}
-  .mae-scrim{position:fixed;inset:0;z-index:var(--z-skip);background:rgba(10,11,13,.42);backdrop-filter:blur(3px);
-    opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease);}
-  .mae-panel{position:fixed;top:0;left:0;bottom:0;z-index:calc(var(--z-skip) + 1);width:min(92vw,460px);
-    background:var(--canvas);border-right:1px solid var(--line);box-shadow:var(--shadow-lift);
-    display:flex;flex-direction:column;transform:translateX(-102%);transition:transform .55s var(--ease-spring);
-    overflow-y:auto;overscroll-behavior:contain;}
-  body.mae-on .mae-scrim{opacity:1;visibility:visible;}
-  body.mae-on .mae-panel{transform:none;}
-  .mae-head{position:relative;padding:clamp(28px,4vw,40px) clamp(24px,4vw,36px) 22px;border-bottom:1px solid var(--line);}
-  .mae-head .mae-kick{display:inline-flex;align-items:center;gap:9px;font-family:var(--body);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-deep);}
-  .mae-head .mae-kick::before{content:"";width:7px;height:7px;border-radius:var(--r-pill);background:var(--grad);}
-  .mae-head h2{margin-top:14px;font-family:var(--display);font-weight:500;font-size:clamp(25px,3.4vw,34px);line-height:1.0;letter-spacing:-.025em;}
-  .mae-x{position:absolute;top:clamp(22px,3vw,30px);right:clamp(20px,3vw,28px);width:38px;height:38px;border-radius:var(--r-pill);
-    border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;
-    display:inline-flex;align-items:center;justify-content:center;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease),transform .4s var(--ease);}
-  .mae-x:hover{background:var(--grad);color:#fff;border-color:transparent;transform:rotate(90deg);box-shadow:var(--shadow-acc);}
-  .mae-body{padding:8px clamp(24px,4vw,36px) 4px;}
-  .mae-qa{padding:22px 0;border-bottom:1px solid var(--line-2);}
-  .mae-qa:last-child{border-bottom:0;}
-  .mae-qa .mae-q{display:flex;align-items:baseline;gap:12px;font-family:var(--display);font-weight:500;font-size:clamp(19px,2.2vw,24px);line-height:1.04;letter-spacing:-.02em;color:var(--ink);}
-  .mae-qa .mae-q .qnum{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.06em;color:var(--acc-deep);flex:0 0 auto;}
-  .mae-qa p{margin-top:11px;padding-left:27px;font-size:15.5px;line-height:1.62;color:var(--muted);}
-  .mae-foot{margin-top:auto;padding:24px clamp(24px,4vw,36px) clamp(28px,4vw,38px);border-top:1px solid var(--line);background:var(--surface);}
-  .mae-foot .mae-brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.2em;}
-  .mae-foot .mae-brand .dia{width:12px;height:12px;transform:rotate(45deg);background:var(--grad);border-radius:2px;}
-  .mae-links{margin-top:16px;display:flex;flex-wrap:wrap;gap:7px;}
-  .mae-links a{font-family:var(--body);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--muted);
-    border:1px solid var(--line);border-radius:var(--r-pill);padding:7px 13px;background:var(--paper);transition:border-color .3s var(--ease),color .3s var(--ease);}
-  .mae-links a:hover{border-color:var(--acc-line);color:var(--acc-deep);}
-  @media (prefers-reduced-motion: reduce){.mae-panel,.mae-scrim{transition:none;}.mae-x:hover{transform:none;}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  .js .rv,.js .stagger>*{opacity:1;transform:none;filter:none;transition:none;}
+  .btn:hover{transform:none;}
+  .mat:hover{transform:none;}
+  .dw-drawer{transition:opacity .2s ease,visibility .2s;transform:none;opacity:0;}
+  .dw-drawer.open{opacity:1;}
+  .dw-backdrop{transition:opacity .2s ease;}
+  .dw-handle{transition:none;}
+}
 </style>
 </head>
 <body id="top">
-<a class="skip" href="#main">Pular para o conteúdo</a>
-<div aria-hidden="true" id="nav-sentinel" style="position:absolute;top:0;height:1px;width:1px;"></div>
-<!-- defs reutilizáveis: símbolo ECHO + seta -->
-<svg aria-hidden="true" height="0" style="position:absolute" width="0">
-<symbol id="echo-sym" viewbox="0 0 40 28">
-<rect class="b1" fill="currentColor" height="14" width="2" x="1" y="9"></rect>
-<rect class="b2" fill="currentColor" height="20" width="2" x="8" y="6"></rect>
-<rect class="b3" fill="currentColor" height="24" width="2" x="15" y="3"></rect>
-<rect class="form" height="28" width="3.4" x="25" y="0"></rect>
-</symbol>
-<symbol fill="none" id="arw" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewbox="0 0 24 24">
-<path d="M5 12h13"></path><path d="m12.5 6 6 6-6 6"></path>
-</symbol>
+
+<a class="skip" href="#main" style="position:absolute;left:-999px;top:0;z-index:200;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:12px 18px;border-radius:0 0 12px 0;">Pular para o conteúdo</a>
+<div id="nav-sentinel" aria-hidden="true" style="position:absolute;top:0;height:1px;width:1px;"></div>
+
+<!-- defs reutilizáveis: símbolo ECHO (sinal disperso → forma instalada) + seta -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <symbol id="echo-sym" viewBox="0 0 40 28">
+    <rect class="b1" x="1"  y="9"  width="2"   height="14" fill="currentColor"/>
+    <rect class="b2" x="8"  y="6"  width="2"   height="20" fill="currentColor"/>
+    <rect class="b3" x="15" y="3"  width="2"   height="24" fill="currentColor"/>
+    <rect class="form" x="25" y="0" width="3.4" height="28"/>
+  </symbol>
 </svg>
-<!-- HEADER: ilha flutuante -->
-<header class="nav">
-<a aria-label="ECHO, início" class="brand" href="#top">
-<svg aria-hidden="true" class="sym" viewbox="0 0 40 28"><use href="#echo-sym"></use></svg>
-    ECHO
-  </a>
-<nav aria-label="Navegação principal" class="nav-links"><a href="#metodo">Método</a><a href="#harmonia">Princípios</a><a href="#evidencias">Evidências</a><a href="#aplicacoes">Mercado</a></nav>
-<a class="nav-cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20o%20ECHO">Conversar</a>
-</header>
-<!-- DIAPASÃO · gaveta de 5 respostas (modelo Planta-mãe) -->
-<button aria-controls="mae-panel" aria-expanded="false" class="mae-trigger" data-mae-open="" type="button"><span aria-hidden="true" class="dia"></span><span class="mae-lbl">O ECHO em 5 respostas</span></button>
-<div class="mae-scrim" data-mae-close=""></div>
-<aside aria-hidden="true" aria-label="O ECHO em cinco respostas" aria-modal="true" class="mae-panel" id="mae-panel" role="dialog">
-<div class="mae-head">
-<span class="mae-kick">Harmonia como método</span>
-<h2>O ECHO em cinco respostas</h2>
-<button aria-label="Fechar" class="mae-x" data-mae-close="" type="button">&times;</button>
-</div>
-<div class="mae-body">
-<div class="mae-qa"><span class="mae-q"><span class="qnum">01</span>O que é?</span><p>Um framework jurídico-operacional ágil, desenhado para transformar práticas de trabalho em procedimentos claros, documentados e transmissíveis.</p></div>
-<div class="mae-qa"><span class="mae-q"><span class="qnum">02</span>Por que existe?</span><p>Porque equipes jurídicas não precisam apenas produzir mais. Precisam saber como produzem, por que produzem assim e como preservar esse conhecimento.</p></div>
-<div class="mae-qa"><span class="mae-q"><span class="qnum">03</span>Como opera?</span><p>O ECHO observa a rotina, identifica padrões, organiza critérios, define etapas e transforma modos de trabalho em fluxo governável e previsível.</p></div>
-<div class="mae-qa"><span class="mae-q"><span class="qnum">04</span>Onde se aplica?</span><p>Estruturado para gabinete de Turma Recursal, aplica-se também a outras equipes jurídicas, núcleos de produção, revisão, triagem, gestão documental e implantação de soluções digitais.</p></div>
-<div class="mae-qa"><span class="mae-q"><span class="qnum">05</span>O que entrega?</span><p>Mais clareza sobre o trabalho, menos dependência de memória informal e maior capacidade de continuidade, treinamento, controle e escala.</p></div>
-</div>
-<div class="mae-foot">
-<a class="mae-brand" data-mae-close="" href="#top"><span aria-hidden="true" class="dia"></span> ECHO</a>
-<nav aria-label="Seções" class="mae-links">
-<a data-mae-close="" href="#problema">Problema</a>
-<a data-mae-close="" href="#metodo">Método</a>
-<a data-mae-close="" href="#harmonia">Princípios</a>
-<a data-mae-close="" href="#evidencias">Evidências</a>
-<a data-mae-close="" href="#aplicacoes">Mercado</a>
-<a data-mae-close="" href="#atrio">ATRIO</a>
-</nav>
-</div>
-</aside>
-<main id="main">
-<!-- 1 · HERO -->
-<section class="hero">
-<div class="wrap">
-<div class="hero-grid">
-<div class="hero-lead">
-<span class="eyebrow rv">Metodologia jurídico-operacional</span>
-<h1 class="rv">
-<span class="brandmark">ECHO</span>
-<span class="thesis">Da prática herdada ao procedimento instalado.</span>
-</h1>
-<p class="lead rv">Framework autoral que transforma prática jurídica acumulada em <b>camadas de trabalho documentadas, transmissíveis e governáveis</b> — acervo, equipe, triagem, qualidade e memória como frentes de uma mesma operação. Sem esteira única.</p>
-<div class="hcta rv">
-<a class="btn btn--primary" data-magnetic="" href="#metodo">
-<span class="btn-t">Ler o método</span>
-<span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
-</a>
-<button class="btn btn--ghost" data-magnetic="" data-mae-open="" type="button">
-<span class="btn-t">O ECHO em 5 respostas</span>
-<span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
+
+<!-- GAVETA LATERAL · handle + drawer -->
+<button class="dw-handle" id="dw-handle" aria-expanded="false" aria-controls="dw-drawer" aria-label="Abrir: Harmonia como método — o ECHO em cinco respostas">
+  <span class="glyph" aria-hidden="true">◇</span>Harmonia como método
 </button>
-</div>
-</div>
-<aside aria-label="Indicadores do gabinete" class="result rv">
-<span class="rk">Indicadores do gabinete · produtividade real</span>
-<p class="rbeat"><i>59,7%</i> de conversão voto/despacho</p>
-<div class="rlist"><span class="tag">+7,1 p.p. sobre a média observada</span><span class="tag">424 votos no ciclo analisado</span><span class="tag">258 votos em cinco meses</span></div>
+<div class="dw-backdrop" id="dw-backdrop" hidden></div>
+<aside class="dw-drawer" id="dw-drawer" role="dialog" aria-modal="true" aria-labelledby="dw-title">
+  <div class="dw-inner">
+    <div class="dw-head">
+      <div>
+        <span class="dw-eyebrow">Harmonia como método</span>
+        <h2 class="dw-title" id="dw-title">O ECHO em cinco respostas</h2>
+      </div>
+      <button class="dw-close" id="dw-close" aria-label="Fechar">×</button>
+    </div>
+    <article class="dw-card"><div class="q">O que é</div><p class="a">Metodologia jurídico-operacional para transformar prática jurídica acumulada em materiais, critérios e procedimentos de trabalho.</p></article>
+    <article class="dw-card"><div class="q">Por que existe</div><p class="a">Porque equipes jurídicas não precisam apenas produzir mais. Precisam saber como produzem, por que produzem assim e como preservam esse conhecimento.</p></article>
+    <article class="dw-card"><div class="q">Como opera</div><p class="a">Por acervo metodológico: manuais, mapas, matrizes, roteiros, checklists, planilhas e registros que tornam a rotina legível e transmissível.</p></article>
+    <article class="dw-card"><div class="q">Onde se forma</div><p class="a">Em operação jurídica de volume, regida por autoridade decisória, prazos, acervo heterogêneo e necessidade de consistência.</p></article>
+    <article class="dw-card dw-card--key"><div class="q">O que revela</div><p class="a"><b>Capacidade de converter experiência jurídica em método documentado</b>, com critérios de entrada, classificação, distribuição, revisão e memória.</p></article>
+  </div>
 </aside>
-</div>
-</div>
+
+<nav class="nav" aria-label="Navegação principal">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="#top" aria-label="ECHO — início"><span class="brand-mark"><svg class="sym" viewBox="0 0 40 28" aria-hidden="true"><use href="#echo-sym"/></svg></span>ECHO</a>
+      <div class="nav-links">
+        <a href="#problema">Problema</a>
+        <a href="#decisao">Decisão</a>
+        <a href="#acervo">Acervo</a>
+        <a href="#operacao">Operação</a>
+        <a href="#evidencias">Evidências</a>
+        <a href="#continuidade">Continuidade</a>
+        <a class="btn nav-cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20o%20ECHO">Contato</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="hero-waves" aria-hidden="true">
+    <svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice" fill="none">
+      <path d="M-40,70 q90,-8 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
+      <path d="M-40,108 q90,10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".06" stroke-width="1"/>
+      <path d="M-40,146 q90,-12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#FF7F50" stroke-opacity=".12" stroke-width="1"/>
+      <path d="M-40,184 q90,9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
+      <path d="M-40,222 q90,-13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".065" stroke-width="1"/>
+      <path d="M-40,260 q90,15 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#FF7F50" stroke-opacity=".14" stroke-width="1.1"/>
+      <path d="M-40,298 q90,-11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
+      <path d="M-40,336 q90,14 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".06" stroke-width="1"/>
+      <path d="M-40,374 q90,-16 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#FF7F50" stroke-opacity=".11" stroke-width="1.1"/>
+      <path d="M-40,412 q90,12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".05" stroke-width="1"/>
+      <path d="M-40,450 q90,-10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".05" stroke-width="1"/>
+      <path d="M-40,488 q90,13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#FF7F50" stroke-opacity=".09" stroke-width="1"/>
+      <path d="M-40,526 q90,-9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".045" stroke-width="1"/>
+      <path d="M-40,564 q90,11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".045" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="wrap">
+    <div class="hero-top rv">
+      <span class="eyebrow">Metodologia jurídico-operacional</span>
+      <span class="label">da prática herdada ao procedimento instalado</span>
+    </div>
+    <h1 class="hero-title rv">EC<span class="t">H</span>O</h1>
+    <div class="hero-grid">
+      <div class="hero-lead rv">
+        <p class="hero-kicker">Da prática herdada ao <em>procedimento instalado.</em></p>
+        <p class="hero-define">Metodologia jurídico-operacional para transformar rotina, equipe e acervo em <b>procedimento documentado, transmissível e governável</b>.</p>
+        <p class="hero-copy">O ECHO nasce antes da automação. Nasce da pergunta anterior: como uma operação jurídica regida por prazos, volume e múltiplas pessoas pode funcionar com mais clareza, memória e critério comum?</p>
+        <p class="hero-copy">Não é software. Não é promessa de escala. É <b>método instalado por materiais concretos</b>: manuais, mapas, matrizes, planilhas, roteiros, checklists e registros de orientação.</p>
+        <div class="hero-tags">
+          <span class="k">Legal Operations</span><span>Workflow Design</span><span>Knowledge Management</span><span>Quality Gates</span><span>Gestão Jurídica</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn solid-d" href="#acervo">Ver acervo metodológico <span aria-hidden="true">→</span></a>
+          <a class="btn light" href="#evidencias">Ver evidências</a>
+        </div>
+      </div>
+      <aside class="hero-panel rv" aria-label="Acervo metodológico resumido">
+        <div class="hero-panel-head"><span>acervo metodológico</span><span>entrada → memória</span></div>
+        <div class="hero-steps">
+          <div class="hero-step"><span class="no">01</span><span><span class="name">Notas Introdutórias</span><span class="desc">entrada e orientação</span></span></div>
+          <div class="hero-step"><span class="no">02</span><span><span class="name">Mapa Temático</span><span class="desc">classificação e acervo</span></span></div>
+          <div class="hero-step"><span class="no">03</span><span><span class="name">Afinação Processual</span><span class="desc">requisitos e filtros</span></span></div>
+          <div class="hero-step"><span class="no">04</span><span><span class="name">Planilhas e Registros</span><span class="desc">cadência e memória</span></span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</header>
+
+<!-- 01 · PROBLEMA -->
+<section class="section surface cv" id="problema">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">01</div>
+      <div class="head-body">
+        <span class="eyebrow">Problema</span>
+        <h2>O problema não era produzir mais. Era tornar a produção transmissível.</h2>
+        <p class="sub">Em estruturas jurídicas de volume, o que mais escapa não é o mérito da decisão — é o percurso que a precede</p>
+      </div>
+    </div>
+    <div class="split rv">
+      <div></div>
+      <p class="lead">Parte decisiva do trabalho não está apenas no mérito das decisões. Está no percurso anterior: entrada, classificação, triagem, distribuição, revisão, devolução e memória.</p>
+      <div class="text">
+        <p>Quando esse percurso não é documentado, a equipe opera por <b>repetição oral, dependência de pessoas-chave e aprendizado irregular</b>. O conhecimento existe, mas circula com ruído.</p>
+        <p>A rotina trabalha, mas não se deixa governar.</p>
+      </div>
+    </div>
+    <div class="signal-grid rv stagger">
+      <article class="signal"><span class="sno">01</span><h3 class="st">Memória oral</h3><p class="sp">Saber prático transmitido por convivência, sem documentação suficiente para escala, continuidade e entrada segura de novos integrantes.</p></article>
+      <article class="signal"><span class="sno">02</span><h3 class="st">Acervo sem mapa</h3><p class="sp">Matérias, incidentes e prazos distintos sem classificação operacional estável, com baixa visibilidade de concentração temática.</p></article>
+      <article class="signal"><span class="sno">03</span><h3 class="st">Carga sem leitura fina</h3><p class="sp">Distribuição que exige ler complexidade, urgência, afinidade temática e risco de gargalo — não apenas quantidade.</p></article>
+      <article class="signal"><span class="sno">04</span><h3 class="st">Qualidade tardia</h3><p class="sp">Vícios simples consumindo tempo técnico qualificado antes da verificação mínima de requisitos.</p></article>
+    </div>
+  </div>
 </section>
-<!-- 3 · PROBLEMA -->
-<section class="s" id="problema">
-<div class="wrap">
-<div class="mhead rv">
-<h2>O ruído não estava no esforço. Estava na falta de partitura comum.</h2>
-<p class="desc">Em operações jurídicas de volume, parte decisiva da entrega vem de decisões anteriores ao mérito — o que entra, como se classifica, quem recebe, quando avança, onde se verifica e como o aprendizado permanece. Quando esses critérios circulam só pela memória das pessoas, a operação funciona, mas não se estabiliza.</p>
-</div>
-<div class="pgrid stagger">
-<div class="pcard">
-<span class="pn2">01</span>
-<h3>Memória oral</h3>
-<p>Saberes críticos transmitidos por convivência — sujeitos a perda, retrabalho e entrada irregular de novos integrantes.</p>
-</div>
-<div class="pcard">
-<span class="pn2">02</span>
-<h3>Acervo sem mapa</h3>
-<p>Matérias, prazos e incidentes distintos disputando o mesmo espaço, sem taxonomia que oriente prioridade e distribuição.</p>
-</div>
-<div class="pcard">
-<span class="pn2">03</span>
-<h3>Carga sem leitura fina</h3>
-<p>Distribuir por quantidade não basta: é preciso ler complexidade, urgência, afinidade temática e risco de gargalo.</p>
-</div>
-<div class="pcard">
-<span class="pn2">04</span>
-<h3>Qualidade tardia</h3>
-<p>Sem gates de entrada, vícios simples consomem tempo técnico qualificado antes da verificação mínima de regularidade.</p>
-</div>
-</div>
-</div>
+
+<!-- 02 · DECISÃO METODOLÓGICA -->
+<section class="section cv" id="decisao">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">02</div>
+      <div class="head-body">
+        <span class="eyebrow">Decisão metodológica</span>
+        <h2>Instalar método antes de acelerar trabalho.</h2>
+        <p class="sub">O trabalho precisava deixar de depender apenas de hábito e passar a produzir rastro</p>
+      </div>
+    </div>
+    <div class="split rv">
+      <div></div>
+      <p class="lead">O ECHO surge como resposta a um problema de forma. A decisão foi converter a rotina em materiais utilizáveis.</p>
+      <div class="text">
+        <p>Não documentos decorativos, mas <b>instrumentos de operação</b>: notas introdutórias, mapas de matéria, matrizes de papéis, planilhas de acompanhamento, roteiros de verificação, checklists de requisitos e registros de orientação.</p>
+        <p>Cada material responde a uma pergunta prática da operação — e deixa rastro do que antes só existia na escuta.</p>
+      </div>
+    </div>
+    <div class="answer-band rv">
+      <div class="big">Manuais.<br>Mapas.<br>Matrizes.<br>Registros.<br><em>Critério.</em></div>
+      <div class="side">
+        <p>A sofisticação do ECHO não está na ferramenta. Está no <b>critério que conecta cada material a um problema real da operação</b>: como a pessoa entra, como a matéria é classificada, como a carga é distribuída e como a memória permanece.</p>
+        <p class="force">O método começa quando o <i>hábito deixa de bastar.</i></p>
+      </div>
+    </div>
+  </div>
 </section>
-<!-- 4 · MÉTODO EM CAMADAS (Método + Arquitetura, fundidos) -->
-<section class="s gray" id="metodo">
-<div class="wrap">
-<div class="mhead rv">
-<span class="eyebrow">Método em camadas</span>
-<h2>O ECHO opera por frentes, não por uma esteira única</h2>
-<p class="desc">Cada camada é uma frente que pode ser acionada sozinha — documentar, distribuir, classificar, revisar, afinar ou preservar memória. A filosofia é a harmonia: cada parte tem função, entrada, limite, critério e retorno. Quando uma desafina, o método mostra onde ajustar.</p>
-</div>
-<div class="arch stagger">
-<div class="arow">
-<div class="al">
-<span class="an">Camada 01</span>
-<span class="at">Registro</span>
-<span class="aq">O que precisa deixar de circular apenas por hábito?</span>
-</div>
-<div class="ar2">
-<p class="ad">Converte conhecimento tácito em documentação ativa: orientações, manuais, critérios, papéis e referências.</p>
-<div class="tags"><span class="tag">Documentação técnica</span><span class="tag">Knowledge management</span><span class="tag">Padronização</span></div>
-</div>
-</div>
-<div class="arow">
-<div class="al">
-<span class="an">Camada 02</span>
-<span class="at">Papéis</span>
-<span class="aq">Quem responde por cada parte da operação?</span>
-</div>
-<div class="ar2">
-<p class="ad">Define responsabilidades, autonomia, progressão e supervisão. O trabalho deixa de ser só distribuído e passa a ser situado.</p>
-<div class="tags"><span class="tag">Operating model</span><span class="tag">People operations</span><span class="tag">Delegação progressiva</span></div>
-</div>
-</div>
-<div class="arow">
-<div class="al">
-<span class="an">Camada 03</span>
-<span class="at">Matéria</span>
-<span class="aq">Como o acervo deve ser lido para poder ser governado?</span>
-</div>
-<div class="ar2">
-<p class="ad">Organiza matérias por núcleos e afinidades. A classificação jurídica passa a operar como arquitetura de informação.</p>
-<div class="tags"><span class="tag">Taxonomia jurídica</span><span class="tag">Information architecture</span><span class="tag">Matter management</span></div>
-</div>
-</div>
-<div class="arow">
-<div class="al">
-<span class="an">Camada 04</span>
-<span class="at">Fluxo</span>
-<span class="aq">Quais passagens precisam existir sem virar burocracia?</span>
-</div>
-<div class="ar2">
-<p class="ad">Estrutura entrada, triagem, análise, revisão e devolução como pontos verificáveis — sem reduzir o trabalho a uma linha mecânica.</p>
-<div class="tags"><span class="tag">Workflow design</span><span class="tag">BPM</span><span class="tag">Gestão de filas</span></div>
-</div>
-</div>
-<div class="arow">
-<div class="al">
-<span class="an">Camada 05</span>
-<span class="at">Afinação</span>
-<span class="aq">Onde o ruído deve ser corrigido antes de virar retrabalho?</span>
-</div>
-<div class="ar2">
-<p class="ad">Define critérios mínimos, checklists, requisitos, prazos e quality gates para proteger o tempo técnico. A correção deixa de ser evento: vira memória.</p>
-<div class="tags"><span class="tag">Quality assurance</span><span class="tag">Compliance processual</span><span class="tag">SOP / POP</span></div>
-</div>
-</div>
-<div class="arow">
-<div class="al">
-<span class="an">Camada 06</span>
-<span class="at">Memória</span>
-<span class="aq">Como o aprendizado retorna ao sistema?</span>
-</div>
-<div class="ar2">
-<p class="ad">Impede que cada demanda seja um recomeço. O que foi decidido, corrigido e estabilizado alimenta a próxima entrega.</p>
-<div class="tags"><span class="tag">Melhoria contínua</span><span class="tag">Base de conhecimento</span><span class="tag">Reuso qualificado</span></div>
-</div>
-</div>
-</div>
-<p class="apps-beat rv">Seis camadas. Uma só partitura.</p>
-</div>
+
+<!-- 03 · ACERVO METODOLÓGICO -->
+<section class="section surface cv" id="acervo">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">03</div>
+      <div class="head-body">
+        <span class="eyebrow">Acervo metodológico</span>
+        <h2>O acervo metodológico do ECHO</h2>
+        <p class="sub">Instrumentos simples, mas estruturantes. Cada material nomeia um ruído da operação e o converte em procedimento — com a leitura profissional lida dentro do próprio material</p>
+      </div>
+    </div>
+
+    <div class="acervo-flow rv stagger" aria-label="Percurso do acervo: entrada, classificação, distribuição, verificação, cadência, memória">
+      <span class="node"><b>01</b> Entrada</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>02</b> Classificação</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>03</b> Distribuição</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>04</b> Verificação</span><span class="arrow" aria-hidden="true">→</span>
+      <span class="node"><b>05</b> Memória</span>
+    </div>
+
+    <div class="materials rv stagger">
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A01</span><span class="mat-kind">Manual</span></div>
+        <h3 class="mat-name">Notas Introdutórias</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Onboarding informal e repetição de orientações básicas.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Onboarding</span><span class="tag">Enablement</span><span class="tag">Knowledge Management</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A02</span><span class="mat-kind">Roteiro</span></div>
+        <h3 class="mat-name">Roteiro de Entrevistas</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Ouvir rotinas, comparar práticas e identificar ruídos operacionais.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Diagnóstico baseado apenas em impressão individual.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operational Discovery</span><span class="tag">Process Mapping</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A03</span><span class="mat-kind">Mapa</span></div>
+        <h3 class="mat-name">Mapa Temático</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Organizar matérias por núcleos, agrupadores, temas e afinidades.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Distribuição casuística e baixa visibilidade de concentração temática.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Taxonomy</span><span class="tag">Matter Management</span><span class="tag">Information Architecture</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A04</span><span class="mat-kind">Mapa</span></div>
+        <h3 class="mat-name">Mapa de Localizadores</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Converter assuntos granulares em localizadores operacionais.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Excesso de categorias pouco úteis para a gestão do acervo.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Taxonomia operacional</span><span class="tag">Gestão de filas</span><span class="tag">Matter Routing</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A05</span><span class="mat-kind">Matriz</span></div>
+        <h3 class="mat-name">Matriz de Papéis</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Definir responsabilidades, níveis de autonomia, pontos de supervisão e progressão.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Ambiguidade de função e dependência de orientação oral.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operating Model</span><span class="tag">People Operations</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A06</span><span class="mat-kind">Matriz</span></div>
+        <h3 class="mat-name">Matriz de Competências</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Estruturar maturidade, autonomia e desenvolvimento por critérios.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Avaliação intuitiva e pouco documentada da evolução da equipe.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Competency Framework</span><span class="tag">Talent Development</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A07</span><span class="mat-kind">Manual</span></div>
+        <h3 class="mat-name">Afinação Processual</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Registrar requisitos, prazos, pontos de entrada e critérios mínimos de verificação.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Vícios simples consumindo tempo técnico qualificado.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">SOP</span><span class="tag">Quality Assurance</span><span class="tag">Compliance</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A08</span><span class="mat-kind">Roteiro</span></div>
+        <h3 class="mat-name">Roteiros de Verificação</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Orientar a checagem de cabimento, tempestividade, preparo, representação e demais requisitos.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Análise formal dispersa e sujeita a retrabalho.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Quality Gates</span><span class="tag">Checklist jurídico</span><span class="tag">Compliance processual</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A09</span><span class="mat-kind">Planilha</span></div>
+        <h3 class="mat-name">Planilhas de Acompanhamento</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Monitorar carga, andamento, distribuição, cadência e efeitos observáveis.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Baixa visibilidade sobre volume, ritmo e gargalos.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operational Dashboard</span><span class="tag">Capacity Planning</span></div>
+      </article>
+
+      <article class="mat">
+        <div class="mat-head"><span class="mat-no">A10</span><span class="mat-kind">Registro</span></div>
+        <h3 class="mat-name">Registro de Orientações</h3>
+        <div class="mat-spec">
+          <div class="cell"><span class="k">Função</span><span class="v">Preservar decisões operacionais, ajustes recorrentes e memória de revisão.</span></div>
+          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Correção que morre no caso individual.</span></div>
+        </div>
+        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Knowledge Base</span><span class="tag">Continuous Improvement</span></div>
+      </article>
+
+    </div>
+  </div>
 </section>
-<!-- 6 · PRINCÍPIOS (Harmonia) -->
-<section class="s gray" id="harmonia">
-<div class="wrap">
-<div class="mhead center rv">
-<span class="eyebrow">Filosofia de trabalho</span>
-<h2>A harmonia tem princípios</h2>
-<p class="desc">Uma operação jurídica só ganha escala quando suas partes passam a tocar em conjunto — com critério suficiente para que o resultado não dependa de esforço individual. Cinco princípios sustentam essa harmonia.</p>
-</div>
-<div class="defs stagger"><div class="def"><span class="dterm">Escuta</span><span class="dmean">é <i>entender a rotina antes de prescrever fluxo.</i></span></div><div class="def"><span class="dterm">Critério</span><span class="dmean">é <i>transformar decisão operacional em regra compartilhável.</i></span></div><div class="def"><span class="dterm">Proporção</span><span class="dmean">é <i>distribuir carga por complexidade, urgência e capacidade.</i></span></div><div class="def"><span class="dterm">Afinação</span><span class="dmean">é <i>corrigir o ruído antes que ele vire retrabalho.</i></span></div><div class="def"><span class="dterm">Memória</span><span class="dmean">é <i>fazer cada entrega alimentar a próxima.</i></span></div></div>
-<div class="defs-foot rv">
-<p>Harmonia não é suavidade decorativa. É a capacidade de fazer acervo, equipe, critérios, revisão e memória operarem juntos, sem depender de improviso permanente. É o que dá nome à prática: <b>regência</b> de uma operação inteira, e não execução de uma tarefa isolada.</p>
-<p class="beat">Regência recursal.</p>
-</div>
-</div>
+
+<!-- 04 · MÉTODO EM OPERAÇÃO -->
+<section class="section cv" id="operacao">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">04</div>
+      <div class="head-body">
+        <span class="eyebrow">Método em operação</span>
+        <h2>Como os materiais mudam a rotina</h2>
+        <p class="sub">A consistência aparece quando a entrada fica mais clara, a distribuição menos intuitiva, a revisão ganha critério e a equipe deixa de depender só da escuta</p>
+      </div>
+    </div>
+
+    <div class="cases rv stagger">
+
+      <article class="case">
+        <div class="case-head"><span class="ci">01</span><h3>Entrada e triagem</h3></div>
+        <div class="ab">
+          <div class="ab-col"><span class="abk">Antes</span><p>Demandas podiam avançar para análise técnica antes da verificação mínima de requisitos.</p></div>
+          <div class="ab-col after"><span class="abk">Depois</span><p>Afinação Processual, Roteiros de Verificação e Checklists de Requisitos funcionam como filtros prévios.</p></div>
+        </div>
+        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Quality Gates</span><span class="tag">Compliance processual</span><span class="tag">Redução de retrabalho</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-head"><span class="ci">02</span><h3>Distribuição temática</h3></div>
+        <div class="ab">
+          <div class="ab-col"><span class="abk">Antes</span><p>A distribuição dependia de leitura casuística da matéria.</p></div>
+          <div class="ab-col after"><span class="abk">Depois</span><p>Mapa Temático, Mapa de Localizadores e Planilhas de Acompanhamento permitem ler carga, afinidade, repetição e risco de gargalo.</p></div>
+        </div>
+        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Taxonomia jurídica</span><span class="tag">Capacity Planning</span><span class="tag">Gestão de filas</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-head"><span class="ci">03</span><h3>Entrada de novos integrantes</h3></div>
+        <div class="ab">
+          <div class="ab-col"><span class="abk">Antes</span><p>O aprendizado dependia de convivência, repetição de orientações e memória da equipe.</p></div>
+          <div class="ab-col after"><span class="abk">Depois</span><p>Notas Introdutórias, Matriz de Papéis e Matriz de Competências oferecem base de entrada, progressão e autonomia.</p></div>
+        </div>
+        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Onboarding</span><span class="tag">Gestão do conhecimento</span><span class="tag">People Operations</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-head"><span class="ci">04</span><h3>Revisão e devolução</h3></div>
+        <div class="ab">
+          <div class="ab-col"><span class="abk">Antes</span><p>A revisão podia funcionar como correção final, sem retorno estruturado ao método.</p></div>
+          <div class="ab-col after"><span class="abk">Depois</span><p>Registros de Orientação e rotinas de devolução transformam recorrências em memória operacional.</p></div>
+        </div>
+        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Continuous Improvement</span><span class="tag">Feedback operacional</span><span class="tag">Governança de qualidade</span></div>
+      </article>
+
+    </div>
+  </div>
 </section>
-<!-- 7 · EVIDÊNCIAS -->
-<section class="s" id="evidencias">
-<div class="wrap">
-<div class="mhead rv">
-<h2>Evidência antes de promessa</h2>
-<p class="desc">Cinco anos e cinco meses em chefia de gabinete, em ambiente público de julgamento de alto volume. O ECHO se lê por provas de construção e por efeitos observados — sem inflar causalidade. O dado mostra cadência; o método mostra o desenho que a torna governável.</p>
-</div>
-<div class="pgrid stagger">
-<div class="pcard">
-<span class="pn2">Acervo</span>
-<h3>102 assuntos</h3>
-<p>Granularidade temática suficiente para tornar o acervo classificável e distribuível.</p>
-</div>
-<div class="pcard">
-<span class="pn2">Organização</span>
-<h3>10 localizadores</h3>
-<p>Pontos de leitura, distribuição e controle ao longo do fluxo.</p>
-</div>
-<div class="pcard">
-<span class="pn2">Especialidade</span>
-<h3>3 núcleos</h3>
-<p>Agrupamento por afinidade para equilibrar carga e profundidade técnica.</p>
-</div>
-<div class="pcard">
-<span class="pn2">Triagem</span>
-<h3>8 roteiros</h3>
-<p>Verificação de regularidade e pontos críticos antes do avanço da demanda.</p>
-</div>
-<div class="pcard">
-<span class="pn2">Memória</span>
-<h3>700+ referências</h3>
-<p>Base de consulta para consistência, revisão e reuso qualificado.</p>
-</div>
-<div class="pcard">
-<span class="pn2">Equipe</span>
-<h3>4 níveis de atuação</h3>
-<p>Papéis, autonomia, supervisão e progressão formalizados em matriz.</p>
-</div>
-</div>
-<div class="evcol rv" style="margin-top:clamp(28px,4vw,52px)">
-<p class="evk">Instrumentos que materializaram o método</p>
-<div class="tags"><span class="tag">Manual de entrada</span><span class="tag">Mapa temático</span><span class="tag">Matriz de papéis</span><span class="tag">Manual de afinação</span><span class="tag">Planilhas de acompanhamento</span><span class="tag">Checklists de requisitos</span></div>
-</div>
-<div class="result rv">
-<span class="rk">Efeitos observados</span>
-<div class="rlist"><span class="tag">Menor dependência de orientação oral</span><span class="tag">Entrada mais segura de novos integrantes</span><span class="tag">Critérios replicáveis em outros núcleos</span></div>
-<p class="rbeat"><i>Menos improviso.</i> Mais continuidade.</p>
-</div>
-</div>
+
+<!-- 05 · REGÊNCIA RECURSAL (dark) -->
+<section class="section dark cv" id="regencia">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">05</div>
+      <div class="head-body">
+        <span class="eyebrow">Regência recursal</span>
+        <h2>Harmonia não é suavidade. É coordenação.</h2>
+        <p class="sub">A condição institucional do trabalho: uma equipe jurídica que atua sob direção decisória, responsabilidade pública e exigência de consistência</p>
+      </div>
+    </div>
+    <div class="regence rv">
+      <div></div>
+      <div class="prose">
+        <p>O ECHO nasce em ambiente decisório, em uma operação regida por autoridade técnica, prazos, formalidade e acervo sensível.</p>
+        <p>A regência não é metáfora de comando pessoal. É a condição institucional do trabalho: uma equipe jurídica atua sob direção decisória, responsabilidade pública e exigência de consistência.</p>
+        <p>Nesse contexto, harmonia não significa suavidade. Significa coordenação. <b>Cada material criado pelo ECHO busca dar forma comum ao que antes dependia de escuta, hábito e repetição oral.</b></p>
+        <p class="regence-quote">A equipe não precisava tocar mais alto. Precisava tocar pela <em>mesma partitura.</em></p>
+      </div>
+    </div>
+    <div class="regence-map rv stagger" aria-label="Distinções da regência">
+      <div class="rm"><span class="rmk">Filosofia</span><span class="rmv">Harmonia</span></div>
+      <div class="rm"><span class="rmk">Conceito institucional</span><span class="rmv">Regência</span></div>
+      <div class="rm"><span class="rmk">Quem rege</span><span class="rmv">A autoridade decisória</span></div>
+      <div class="rm"><span class="rmk">A equipe</span><span class="rmv">É regida</span></div>
+      <div class="rm"><span class="rmk">O método</span><span class="rmv">Organiza a execução</span></div>
+    </div>
+  </div>
 </section>
-<!-- 8 · APLICAÇÕES PROFISSIONAIS -->
-<section class="s gray" id="aplicacoes">
-<div class="wrap">
-<div class="mhead rv">
-<span class="eyebrow">Tradução para mercado</span>
-<h2>Onde o ECHO conversa com o mercado</h2>
-<p class="desc">Nasceu no jurídico público, mas sua lógica é transferível a ambientes privados de volume, repetição, risco e conhecimento disperso.</p>
-</div>
-<p class="beatline rv">Cada frente reúne uma operação concreta e as <span class="mark">disciplinas de mercado que ela mobiliza.</span></p>
-<div class="apps stagger">
-<article class="app">
-<div class="app-head"><span class="apn">01</span><h3>Diagnóstico de operação jurídica</h3></div>
-<div class="app-body">
-<p class="ades">Mapeamento de fluxos, gargalos, dependências informais, retrabalho e riscos de perda de memória.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Leitura crítica da operação e matriz de prioridade.</p></div>
-<div class="tags" style="margin-top:18px"><span class="tag">Discovery / Operational Research</span><span class="tag">Capacity Planning</span></div>
-</div>
-</article>
-<article class="app">
-<div class="app-head"><span class="apn">02</span><h3>Legal Ops e operating model</h3></div>
-<div class="app-body">
-<p class="ades">Papéis, rotinas, indicadores iniciais, documentação mínima e governança para áreas jurídicas em crescimento.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Modelo operacional jurídico claro, utilizável e ajustável.</p></div>
-<div class="tags" style="margin-top:18px"><span class="tag">Operating Model / People Ops</span></div>
-</div>
-</article>
-<article class="app">
-<div class="app-head"><span class="apn">03</span><h3>Gestão de conhecimento e onboarding</h3></div>
-<div class="app-body">
-<p class="ades">Orientações dispersas convertidas em manuais, bases, roteiros de entrada e critérios de autonomia progressiva.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Entrada mais segura de novos integrantes e menos orientação oral repetida.</p></div>
-<div class="tags" style="margin-top:18px"><span class="tag">Knowledge Management</span></div>
-</div>
-</article>
-<article class="app">
-<div class="app-head"><span class="apn">04</span><h3>Governança de qualidade e pré-IA</h3></div>
-<div class="app-body">
-<p class="ades">Preparar o terreno antes de automações: classificação, checklists, gates e controle humano nos pontos críticos.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Base mínima para escalar sem acelerar desordem.</p></div>
-<div class="tags" style="margin-top:18px"><span class="tag">Quality Gates / QA</span></div>
-</div>
-</article>
-<article class="app">
-<div class="app-head"><span class="apn">05</span><h3>Produto jurídico e legaltech</h3></div>
-<div class="app-body">
-<p class="ades">Problemas jurídicos traduzidos em requisitos, taxonomias, critérios de validação e fluxos assistidos.</p>
-<div class="deliver"><span class="dk">Entrega possível</span><p>Especificação jurídica qualificada para produto, automação ou IA.</p></div>
-<div class="tags" style="margin-top:18px"><span class="tag">Legal Taxonomy / Information Architecture</span></div>
-</div>
-</article>
-</div>
-<p class="apps-beat rv">Antes de escalar, afinar o sistema.</p>
-</div>
+
+<!-- 06 · EVIDÊNCIAS -->
+<section class="section surface cv" id="evidencias">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">06</div>
+      <div class="head-body">
+        <span class="eyebrow">Evidências</span>
+        <h2>Provas antes de adjetivos</h2>
+        <p class="sub">Os dados indicam aplicação real, cadência operacional e existência de rotina governável — não prova isolada de superioridade</p>
+      </div>
+    </div>
+    <div class="evidence rv stagger">
+      <article class="ev"><span class="evk">conversão observada</span><div class="value">59,7<i>%</i></div><p class="caption">de conversão voto/despacho como indicador de produtividade observado.</p></article>
+      <article class="ev"><span class="evk">no ciclo analisado</span><div class="value">53,9<i>%</i></div><p class="caption">de conversão voto/despacho no ciclo operacional analisado.</p></article>
+      <article class="ev"><span class="evk">acima da média</span><div class="value"><i>+</i>7,1<span style="font-size:.5em"> p.p.</span></div><p class="caption">sobre a média observada no período.</p></article>
+      <article class="ev"><span class="evk">volume · ciclo</span><div class="value">424</div><p class="caption">votos no ciclo operacional analisado.</p></article>
+      <article class="ev feature">
+        <div style="display:flex;flex-direction:column;">
+          <span class="evk">cadência · cinco meses</span>
+          <div class="value">258</div>
+          <p class="caption">votos em cinco meses. Os números apontam aplicação real e ritmo de trabalho sustentado, sem inferência de causalidade absoluta.</p>
+          <p class="ev-beat">O dado aponta cadência. O método mostra <i>como a cadência foi sustentada.</i></p>
+        </div>
+        <div class="ev-note">
+          Nenhum percentual foi recalculado e nenhuma causalidade absoluta é inferida. Os indicadores funcionam como evidência de operação — não como prova isolada de superioridade. O que demonstram é a existência de uma rotina governável, com cadência observável e memória que permite ler o próprio ritmo.
+        </div>
+      </article>
+    </div>
+  </div>
 </section>
-<!-- 9 · RELAÇÃO COM ATRIO (faixa escura) -->
-<section aria-label="Relação entre ECHO e ATRIO" class="s dark" id="atrio">
-<div class="wrap">
-<div class="mhead rv">
-<h2>ECHO instala. ATRIO amplia.</h2>
-<p class="atrio-beat">O ECHO harmoniza a operação; o ATRIO amplia essa base para uma arquitetura jurídico-tecnológica assistida por IA. Não é substituição: primeiro o trabalho ganha rastro, critério e memória — depois pode receber camadas de automação, validação e rastreabilidade.</p>
-</div>
-<div class="acompare stagger">
-<div class="apanel lead">
-<span class="apk">ECHO · instala</span>
-<span class="apt">Harmonia operacional</span>
-<div class="tags"><span class="tag">Escuta</span><span class="tag">Camadas</span><span class="tag">Papéis</span><span class="tag">Quality gates</span><span class="tag">Memória</span></div>
-</div>
-<div class="apanel">
-<span class="apk">ATRIO · amplia</span>
-<span class="apt">Arquitetura jurídico-tecnológica</span>
-<div class="tags"><span class="tag">IA assistida</span><span class="tag">Módulos</span><span class="tag">Raciocínio</span><span class="tag">Validação</span><span class="tag">Rastreabilidade</span></div>
-</div>
-</div>
-<div class="atrio-foot rv">
-<p class="af">ECHO instala. <i>ATRIO amplia.</i></p>
-<a class="btn btn--on-dark" data-magnetic="" href="atrio.html">
-<span class="btn-t">Conhecer o ATRIO</span>
-<span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
-</a>
-</div>
-</div>
+
+<!-- 07 · AUTORIA E CONTINUIDADE -->
+<section class="section cv" id="continuidade">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">07</div>
+      <div class="head-body">
+        <span class="eyebrow">Autoria e continuidade</span>
+        <h2>Lastro, forma e continuidade</h2>
+        <p class="sub">O ECHO não é vitrine de tecnologia. É metodologia de instalação: transforma prática jurídica acumulada em procedimento compartilhável</p>
+      </div>
+    </div>
+
+    <div class="cont rv">
+      <aside class="cont-id">
+        <div><span class="label">autoria</span><p class="name" style="margin-top:18px">Christian<br>da Costa</p></div>
+        <div class="contacts">
+          <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a>
+          <a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
+        </div>
+      </aside>
+      <div class="cont-text">
+        <p>O ECHO transforma prática jurídica acumulada em procedimento compartilhável.</p>
+        <p>Sua relevância está no que permite demonstrar: <b>capacidade de ler uma operação, nomear seus ruídos, construir materiais, definir critérios e converter experiência em método transferível.</b></p>
+        <p>É leitura de operação, não vitrine: a competência aparece na estrutura construída — papéis, materiais, critérios, triagem e memória — antes que o vocabulário de mercado existisse para nomeá-la.</p>
+      </div>
+    </div>
+
+    <div class="compare rv stagger">
+      <div class="cpanel lead">
+        <span class="cpk">ECHO · instala</span>
+        <span class="cpt">Método instalado</span>
+        <p class="cpd">Organiza rotina, papéis, materiais, critérios, triagem e memória. Dá forma comum ao trabalho antes de qualquer automação.</p>
+        <div class="tags"><span class="tag">Rotina</span><span class="tag">Papéis</span><span class="tag">Materiais</span><span class="tag">Triagem</span><span class="tag">Memória</span></div>
+      </div>
+      <div class="cpanel">
+        <span class="cpk">ATRIO · amplia</span>
+        <span class="cpt">Arquitetura assistida</span>
+        <p class="cpd">Amplia essa base para uma arquitetura jurídico-tecnológica assistida por IA, com módulos, governança de raciocínio, validação e rastreabilidade.</p>
+        <div class="tags"><span class="tag">Módulos</span><span class="tag">IA assistida</span><span class="tag">Raciocínio</span><span class="tag">Validação</span><span class="tag">Rastreabilidade</span></div>
+      </div>
+    </div>
+
+    <div class="cont-foot rv">
+      <p class="cf">Antes de ampliar inteligência, é preciso <i>dar forma ao trabalho.</i></p>
+      <a class="btn ghost" href="atrio.html">Conhecer o ATRIO <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
 </section>
-<!-- 10 · FECHAMENTO / CONTATO -->
+
+<!-- FECHAMENTO -->
 <section class="close" id="contato">
-<div class="wrap">
-<p class="cphrase rv">Rastro, lastro, harmonia.</p>
-<div class="cprose rv">
-<p>O ECHO não é uma vitrine de tecnologia. É um método de instalação: transforma prática jurídica acumulada em camadas de trabalho compartilháveis.</p>
-<p>Sua relevância para o portfolio está no que permite demonstrar: <b>capacidade de ouvir uma operação, nomear seus ruídos, construir critérios e converter experiência em método transferível.</b></p>
-</div>
-<p class="cbeat rv">Não há excesso a reivindicar. Há estrutura a mostrar.</p>
-<div class="cta-row rv">
-<a class="btn btn--primary" data-magnetic="" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20aplica%C3%A7%C3%A3o%20do%20ECHO">
-<span class="btn-t">Conversar</span>
-<span class="btn-ic"><svg aria-hidden="true" viewbox="0 0 24 24"><use href="#arw"></use></svg></span>
-</a>
-</div>
-<div class="cchannels rv">
-<a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
-<a href="https://www.linkedin.com/in/christiandcosta" rel="noopener" target="_blank">LinkedIn</a>
-</div>
-</div>
+  <div class="wrap">
+    <p class="close-title rv">Não mais ruído.<br>Não mais improviso.<br><em>Mais método.</em></p>
+    <p class="close-sub rv">Manuais guardam · mapas orientam · matrizes situam · registros preservam</p>
+    <div class="close-actions rv">
+      <a class="btn solid-d" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20o%20ECHO">Contato <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
 </section>
+
 </main>
+
 <footer>
-<div class="wrap">
-<div class="foot-main">
-<div class="foot-brand">
-<span class="fb"><svg aria-hidden="true" class="sym" viewbox="0 0 40 28"><use href="#echo-sym"></use></svg> ECHO</span>
-<p>Metodologia jurídico-operacional. Da prática herdada ao procedimento instalado.</p>
-</div>
-<div class="foot-col">
-<h4>Método</h4>
-<a href="#problema">O problema</a>
-<a href="#metodo">Método em camadas</a>
-<a href="#harmonia">Princípios</a>
-<a href="#evidencias">Evidências</a>
-</div>
-<div class="foot-col">
-<h4>Aplicação</h4>
-<a href="#aplicacoes">Mercado</a>
-<a href="#atrio">Relação com ATRIO</a>
-<a href="atrio.html">ATRIO (site)</a>
-</div>
-<div class="foot-col">
-<h4>Contato</h4>
-<a href="mailto:christiandscosta@gmail.com">E-mail</a>
-<a href="https://www.linkedin.com/in/christiandcosta" rel="noopener" target="_blank">LinkedIn</a>
-<a href="atrio.html">ATRIO</a>
-</div>
-</div>
-<div class="foot-legal">
-<span>© 2026 ECHO · Metodologia jurídico-operacional</span>
-<span>Da prática herdada ao procedimento instalado</span>
-</div>
-</div>
+  <div class="wrap">
+    <div class="footer-grid">
+      <span class="footer-brand"><span class="brand-mark"><svg class="sym" viewBox="0 0 40 28" aria-hidden="true"><use href="#echo-sym"/></svg></span> ECHO</span>
+      <div class="footer-links">
+        <a href="#problema">Problema</a>
+        <a href="#decisao">Decisão</a>
+        <a href="#acervo">Acervo</a>
+        <a href="#operacao">Operação</a>
+        <a href="#regencia">Regência</a>
+        <a href="#evidencias">Evidências</a>
+        <a href="#continuidade">Continuidade</a>
+        <a href="mailto:christiandscosta@gmail.com">Contato</a>
+      </div>
+    </div>
+    <p class="footer-note">ECHO · metodologia jurídico-operacional. Da prática herdada ao procedimento instalado. Harmonia é a filosofia; regência é a condição institucional do trabalho. Quem rege é a autoridade decisória; a equipe é regida; o método organiza a execução. © 2026.</p>
+  </div>
 </footer>
+
 <script>
-  /* reveal + stagger (IntersectionObserver, sem listeners de scroll) */
-  (function(){
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var els = document.querySelectorAll('.rv,.stagger');
-    if(!('IntersectionObserver' in window) || reduce){
-      els.forEach(function(el){ el.classList.add('in'); });
-      return;
+/* reveal + stagger — IntersectionObserver, com salvaguarda para render sem scroll */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.rv,.stagger');
+  function showAll(){ els.forEach(function(el){ el.classList.add('in'); }); }
+  if(!('IntersectionObserver' in window) || reduce){ showAll(); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(el){ io.observe(el); });
+  setTimeout(showAll, 2600);
+})();
+
+/* scrollspy via IntersectionObserver */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var ids = ['problema','decisao','acervo','operacao','evidencias','continuidade'];
+  var links = {};
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    var h = a.getAttribute('href');
+    if(h && h.charAt(0) === '#'){ links[h.slice(1)] = a; }
+  });
+  var spy = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        var id = e.target.id;
+        ids.forEach(function(k){ if(links[k]){ links[k].classList.toggle('active', k === id); } });
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px', threshold:0});
+  ids.forEach(function(id){ var el = document.getElementById(id); if(el){ spy.observe(el); } });
+})();
+
+/* nav: estado "scrolled" via sentinela */
+(function(){
+  var nav = document.querySelector('.nav');
+  var sentinel = document.getElementById('nav-sentinel');
+  if(!nav || !sentinel || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ nav.classList.toggle('scrolled', !e.isIntersecting); });
+  },{threshold:0});
+  io.observe(sentinel);
+})();
+
+/* GAVETA · drawer com focus-trap, ESC e retorno de foco */
+(function(){
+  var handle = document.getElementById('dw-handle');
+  var drawer = document.getElementById('dw-drawer');
+  var backdrop = document.getElementById('dw-backdrop');
+  var closeBtn = document.getElementById('dw-close');
+  if(!handle || !drawer || !backdrop) return;
+
+  function focusables(){
+    return Array.prototype.slice.call(
+      drawer.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])')
+    );
+  }
+  function onKey(e){
+    if(e.key === 'Escape'){ e.preventDefault(); close(); return; }
+    if(e.key === 'Tab'){
+      var f = focusables(); if(!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
     }
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    },{threshold:.14, rootMargin:'0px 0px -8% 0px'});
-    els.forEach(function(el){ io.observe(el); });
-  })();
-
-  /* scrollspy via IntersectionObserver */
-  (function(){
-    if(!('IntersectionObserver' in window)) return;
-    var ids = ['metodo','harmonia','evidencias','aplicacoes'];
-    var links = {};
-    document.querySelectorAll('.nav-links a').forEach(function(a){
-      var h = a.getAttribute('href');
-      if(h && h.charAt(0) === '#'){ links[h.slice(1)] = a; }
-    });
-    var spy = new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(e.isIntersecting){
-          var id = e.target.id;
-          ids.forEach(function(k){ if(links[k]){ links[k].classList.toggle('active', k === id); } });
-        }
-      });
-    },{rootMargin:'-45% 0px -50% 0px', threshold:0});
-    ids.forEach(function(id){ var el = document.getElementById(id); if(el){ spy.observe(el); } });
-  })();
-
-  /* nav: estado "scrolled" via sentinela (sem scroll handler) */
-  (function(){
-    var nav = document.querySelector('.nav');
-    var sentinel = document.getElementById('nav-sentinel');
-    if(!nav || !sentinel || !('IntersectionObserver' in window)) return;
-    var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ nav.classList.toggle('scrolled', !e.isIntersecting); });
-    },{threshold:0});
-    io.observe(sentinel);
-  })();
-
-  /* CTAs magnéticos (apenas ponteiro fino + sem reduced-motion; só transform) */
-  (function(){
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-    document.querySelectorAll('[data-magnetic]').forEach(function(btn){
-      var ic = btn.querySelector('.btn-ic');
-      btn.addEventListener('pointermove', function(ev){
-        var r = btn.getBoundingClientRect();
-        var x = ev.clientX - r.left - r.width/2;
-        var y = ev.clientY - r.top - r.height/2;
-        btn.style.transform = 'translate(' + (x*0.16).toFixed(2) + 'px,' + (y*0.26).toFixed(2) + 'px)';
-        if(ic){ ic.style.transform = 'translate(' + (x*0.12).toFixed(2) + 'px,' + (y*0.12).toFixed(2) + 'px)'; }
-      });
-      btn.addEventListener('pointerleave', function(){
-        btn.style.transform = '';
-        if(ic){ ic.style.transform = ''; }
-      });
-    });
-  })();
-
-  /* DIAPASÃO · gaveta de respostas (open/close + esc + scrim + links) */
-  (function(){
-    var body=document.body, panel=document.getElementById('mae-panel');
-    if(!panel) return;
-    var trigger=document.querySelector('.mae-trigger');
-    function open(){ body.classList.add('mae-on'); panel.setAttribute('aria-hidden','false');
-      if(trigger){trigger.setAttribute('aria-expanded','true');}
-      var x=panel.querySelector('.mae-x'); if(x){x.focus();} }
-    function close(){ body.classList.remove('mae-on'); panel.setAttribute('aria-hidden','true');
-      if(trigger){trigger.setAttribute('aria-expanded','false');} }
-    document.querySelectorAll('[data-mae-open]').forEach(function(b){ b.addEventListener('click',function(e){e.preventDefault();open();}); });
-    document.querySelectorAll('[data-mae-close]').forEach(function(b){ b.addEventListener('click',function(){ close(); }); });
-    document.addEventListener('keydown',function(e){ if((e.key==='Escape'||e.key==='Esc') && body.classList.contains('mae-on')){ close(); } });
-  })();
+  }
+  function open(){
+    backdrop.hidden = false;
+    void backdrop.offsetWidth;
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+    handle.setAttribute('aria-expanded','true');
+    document.documentElement.style.overflow = 'hidden';
+    var f = focusables(); if(f.length) f[0].focus();
+    document.addEventListener('keydown', onKey);
+  }
+  function close(){
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    handle.setAttribute('aria-expanded','false');
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    window.setTimeout(function(){ backdrop.hidden = true; }, 400);
+    handle.focus();
+  }
+  handle.addEventListener('click', function(){
+    drawer.classList.contains('open') ? close() : open();
+  });
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+})();
 </script>
+
 </body>
 </html>
