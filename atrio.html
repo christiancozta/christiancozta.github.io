@@ -276,6 +276,38 @@ p{text-wrap:pretty;}
 .acc-body .limits{font-size:12.5px;color:var(--mut);}
 .acc-body .limits b{color:var(--ink);}
 
+  /* ---------- 05 · construção — grade de módulos ---------- */
+  .bx-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,22px);align-items:start;}
+  .bx-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+    padding:clamp(22px,2.4vw,34px);display:flex;flex-direction:column;position:relative;}
+  .bx-card::before{content:"";position:absolute;top:0;left:0;width:44px;height:2px;background:var(--terra);}
+  .bx-top{display:flex;align-items:baseline;gap:12px;}
+  .bx-num{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--terra);font-weight:500;}
+  .bx-name{font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);font-weight:650;line-height:.95;
+    letter-spacing:-.03em;color:var(--ink);font-optical-sizing:auto;}
+  .bx-role{margin-top:8px;font-family:var(--mono);font-size:9.6px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--mut);}
+  .bx-thesis{margin-top:var(--s-3);font-family:var(--serif);font-size:clamp(17px,1.5vw,20px);
+    line-height:1.32;font-weight:560;letter-spacing:-.01em;color:var(--ink);}
+  .bx-thesis em{color:var(--terra);font-style:italic;}
+  .bx-block{margin-top:var(--s-4);}
+  .bx-k{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--terra);font-weight:500;margin-bottom:10px;}
+  .bx-chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .bx-chip{font-size:12.5px;line-height:1;padding:7px 11px;border:1px solid var(--line);
+    border-radius:var(--r-pill);color:var(--mut);background:var(--surface);}
+  .bx-chip.t{font-family:var(--mono);font-size:11px;letter-spacing:.01em;}
+  .bx-value{margin-top:var(--s-4);padding:12px 0 12px 16px;border-left:2px solid var(--terra);
+    font-size:13.5px;line-height:1.5;color:var(--mut);}
+  .bx-value b{color:var(--ink);font-weight:600;}
+  .bx-card .m-detail{margin-top:var(--s-4);}
+  .bx-card .acc-body{font-size:13.5px;line-height:1.66;}
+  .bx-card .acc-body p{margin:0;}
+  .bx-card .acc-body .term{color:var(--terra);font-weight:500;}
+  .bx-card .acc-body b{color:var(--ink);font-weight:600;}
+  .bx-card .acc-body .bx-close{color:var(--ink);font-weight:560;}
+  @media(max-width:760px){.bx-grid{grid-template-columns:1fr;}.bx-card{padding:24px;}}
+
 /* slot de tela */
 .m-screen{display:flex;flex-direction:column;gap:8px;}
 .screen-frame{aspect-ratio:16/10;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
@@ -728,22 +760,91 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       <div class="index">05</div>
       <div class="head-body">
         <span class="eyebrow">Autoria técnica</span>
-        <h2>A base nasce protegida</h2>
-        <p class="sub">Pseudonimização na entrada, cofre apartado, tudo inventariado — antes de a IA tocar em qualquer coisa</p>
+        <h2>O que a construção exigiu</h2>
+        <p class="sub">Cada módulo respondeu a uma ausência: acervo a governar, raciocínio a reconstruir, texto a auditar, saída a proteger sem romper o limite do dado</p>
       </div>
     </div>
-    <div class="authoring rv">
-      <div></div>
-      <div class="prose">
-        <p>Reusar decisão judicial exige uma condição que quase nenhum sistema cumpre: tornar o dado seguro <b>antes</b> do reuso, não depois. O CORPUS faz isso na entrada.</p>
-        <p>Construí o pipeline em <span class="term">Python</span>. Cada decisão entra em PDF — com detecção de escaneado e <span class="term">OCR</span> para o que vem sem texto — e, antes de qualquer reaproveitamento, todo dado pessoal vira código estável: nome, CPF, CNPJ, OAB, e-mail, telefone, endereço. A mesma pessoa recebe sempre o mesmo código em todo o acervo, o que preserva a relação entre as peças sem expor quem é. O mapa de volta ao dado real vive num <b>cofre apartado</b>, que nunca acompanha a base. O número CNJ nunca é mascarado — é a chave que identifica e deduplica.</p>
-        <p>O reconhecimento de nomes usa <span class="term">spaCy</span>; o que corre em segredo de justiça é segregado na entrada e fica fora do reuso; cada documento que sai da captura vira uma linha de <b>inventário</b> — com hash, processo, classe e situação, sem dado cru —, de modo que o registro circula e é auditável enquanto o cofre e os originais permanecem trancados.</p>
-        <p>Nada disso é acessório. Cada peça responde a um artigo da <span class="term">LGPD</span>: pseudonimização (art. 13), dado sensível (art. 11), segurança (art. 46), responsabilização (art. 6º, X). A anonimização irreversível da saída fica com o <b>LUX</b> (art. 12) — peça-irmã na outra ponta do fluxo. O CORPUS protege o que entra; o LUX protege o que sai.</p>
-        <p class="origin-beat">A base histórica veio antes da governança. O TJPR não oferece API pública: o acervo da 2ª Turma Recursal era público no sentido jurídico, inacessível no sentido técnico. Construí o acesso do zero — em Python, com <span class="term">Selenium</span> simulando a navegação humana e capturando o conteúdo direto do <span class="term">DOM</span>, um scraper parametrizado por órgão julgador e período. O tratamento veio com <span class="term">pandas</span>: normalização, deduplicação por número de processo e enriquecimento por metadados. Essa base bruta é o que o CORPUS recebe e governa.</p>
-        <p>A base concreta: <b>115.114 decisões</b> da 2ª Turma Recursal do TJPR (2018–2026), extraídas de um sistema sem API pública e reorganizadas em acervo governado. Nenhuma etapa dependeu de equipe de TI.</p>
-        <p>Disponibilidade pública não é acessibilidade técnica — e acesso sem governança não é reuso seguro. O ATRIO resolveu as duas distâncias. Com código.</p>
-        <p class="stack-strip"><b>Python</b> · pdfplumber · <b>spaCy</b> · OCR (Tesseract) · Selenium / DOM · pandas · dedup por hash · <b>LGPD-by-design</b></p>
-      </div>
+    <div class="bx-grid rv stagger">
+
+      <article class="bx-card">
+        <div class="bx-top"><span class="bx-num">01</span><span class="bx-name">CORPUS</span></div>
+        <div class="bx-role">memória documental governada</div>
+        <p class="bx-thesis">O documento deixa de ser arquivo solto e passa a integrar uma <em>base governada</em>.</p>
+        <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Arquitetura de informação</span><span class="bx-chip">Pseudonimização</span><span class="bx-chip">Inventário</span><span class="bx-chip">OCR</span><span class="bx-chip">Deduplicação</span><span class="bx-chip">Versionamento seguro</span><span class="bx-chip">LGPD operacional</span></div></div>
+        <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">Python</span><span class="bx-chip t">pdfplumber</span><span class="bx-chip t">Selenium / DOM</span><span class="bx-chip t">pandas</span><span class="bx-chip t">spaCy · pt_core_news_md</span><span class="bx-chip t">OCR · Tesseract</span><span class="bx-chip t">dedup por hash</span><span class="bx-chip t">cofre apartado</span></div></div>
+        <div class="bx-value"><b>115.114 decisões</b> extraídas de um sistema sem API pública e reorganizadas em acervo governado, sem depender de equipe de TI.</div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-build-corpus-btn" aria-expanded="false" aria-controls="acc-build-corpus"><span>O que a construção exigiu</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-build-corpus" role="region" aria-labelledby="acc-build-corpus-btn"><div class="acc-inner"><div class="acc-body">
+            <p>Reusar decisão judicial exige uma condição que quase nenhum sistema cumpre: tornar o dado seguro antes do reuso, não depois. O CORPUS faz isso na entrada.</p>
+            <p>Construí o pipeline em <span class="term">Python</span>. Cada decisão entra em PDF, com detecção de escaneado e OCR para o que vem sem texto. Antes de qualquer reaproveitamento, todo dado pessoal vira código estável: nome, CPF, CNPJ, OAB, e-mail, telefone, endereço. A mesma pessoa recebe sempre o mesmo código em todo o acervo, o que preserva a relação entre as peças sem expor quem é. O mapa de volta ao dado real vive num <b>cofre apartado</b>, que nunca acompanha a base. O número CNJ nunca é mascarado: é a chave que identifica e deduplica.</p>
+            <p>A base histórica veio antes da governança. O TJPR não oferece API pública. O acervo da 2ª Turma Recursal era público no sentido jurídico e inacessível no sentido técnico. Construí o acesso do zero, com <span class="term">Selenium</span> simulando a navegação humana e capturando o conteúdo direto do <span class="term">DOM</span>, um scraper parametrizado por órgão julgador e período. O tratamento veio com <span class="term">pandas</span>: normalização, deduplicação por número de processo e enriquecimento por metadados. São <b>115.114 decisões</b>, de 2018 a 2026.</p>
+            <p>Cada peça responde a um artigo da <span class="term">LGPD</span>: pseudonimização (art. 13), dado sensível (art. 11), segurança (art. 46), responsabilização (art. 6º, X). A anonimização irreversível da saída fica com o <b>LUX</b> (art. 12), peça-irmã na outra ponta. O CORPUS protege o que entra. O LUX protege o que sai.</p>
+            <p class="bx-close">Disponibilidade pública não é acessibilidade técnica, e acesso sem governança não é reuso seguro. O CORPUS resolveu as duas distâncias. Com código.</p>
+          </div></div></div>
+        </div>
+      </article>
+
+      <article class="bx-card">
+        <div class="bx-top"><span class="bx-num">02</span><span class="bx-name">RATIO</span></div>
+        <div class="bx-role">formulação decisória faseada</div>
+        <p class="bx-thesis">A decisão não chega como texto pronto. Chega como <em>percurso reconstruível</em>.</p>
+        <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Legal reasoning design</span><span class="bx-chip">Máquina de estados</span><span class="bx-chip">Workflow decisório</span><span class="bx-chip">Governança de IA</span><span class="bx-chip">Proveniência</span><span class="bx-chip">Anti-alucinação</span></div></div>
+        <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">Prompt systems por fase</span><span class="bx-chip t">Bases modulares</span><span class="bx-chip t">Calendário jurídico</span><span class="bx-chip t">Marcadores de pendência</span><span class="bx-chip t">Hard stops</span></div></div>
+        <div class="bx-value">Três vias isoladas <b>(RI · ED · MS)</b>, oito estados de fase e sete travas verificáveis contra avanço sem lastro.</div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-build-ratio-btn" aria-expanded="false" aria-controls="acc-build-ratio"><span>O que a construção exigiu</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-build-ratio" role="region" aria-labelledby="acc-build-ratio-btn"><div class="acc-inner"><div class="acc-body">
+            <p>O problema que o RATIO resolve não é a redação. É o avanço sem lastro.</p>
+            <p>Decompus a rotina decisória em fases e dei a cada uma entrada própria, saída obrigatória e trava contra passagem prematura. Recurso Inominado, Embargos de Declaração e Mandado de Segurança não se misturam: cada via conserva a sua gramática, e o sistema recusa tratar ato coator como decisão recorrida ou impetrante como recorrente. Isolamento de rito: falha comum, falha grave.</p>
+            <p>O percurso corre sobre uma <b>máquina de estados</b>. Cada fase carrega um estado formal: não iniciada, em análise, validada, validada com ressalva, bloqueada, invalidada por alteração substancial. Nenhuma passa à seguinte sem seleção expressa do operador, e o sistema não lê silêncio como autorização. Mudança formal não invalida o que veio antes; mudança substancial se propaga para frente e derruba as fases dependentes. A consistência do conjunto deixa de ser cuidado do redator e vira propriedade do sistema.</p>
+            <p>Sete travas sustentam a confiança, cada uma desenhada contra um modo específico de erro: escopo, sucessão, validação expressa, anti-alucinação, proveniência, invalidação em cascata e versão final limpa condicionada. Afirmação relevante sem origem identificável recebe marcador de pendência e não preenche o vazio. A versão final só é liberada sem pendência impeditiva, contradição ou trava ativa.</p>
+            <p>O modelo redige. A regra governa. O operador decide.</p>
+            <p class="bx-close">A força do RATIO está menos na minuta e mais na rota que impõe. Ele não pergunta qual texto entregar. Pergunta quem validou, em que ponto, com base em quê e sob qual pendência.</p>
+          </div></div></div>
+        </div>
+      </article>
+
+      <article class="bx-card">
+        <div class="bx-top"><span class="bx-num">03</span><span class="bx-name">CERNE</span></div>
+        <div class="bx-role">confronto crítico do raciocínio</div>
+        <p class="bx-thesis">O texto só avança depois que o <em>raciocínio suporta avançar</em>.</p>
+        <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Auditoria de raciocínio</span><span class="bx-chip">QA jurídico</span><span class="bx-chip">Análise argumentativa</span><span class="bx-chip">Confronto de achados</span><span class="bx-chip">Desenho de critério</span><span class="bx-chip">Mensuração de erro</span></div></div>
+        <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">Critério de impacto operacional</span><span class="bx-chip t">Gate técnico</span><span class="bx-chip t">Estados de avanço</span><span class="bx-chip t">Log externo</span><span class="bx-chip t">Falso positivo / bloqueio / avanço</span></div></div>
+        <div class="bx-value"><b>Achado emergente:</b> duas fragilidades acopladas revelam a falha que nenhuma, sozinha, mostraria.</div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-build-cerne-btn" aria-expanded="false" aria-controls="acc-build-cerne"><span>O que a construção exigiu</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-build-cerne" role="region" aria-labelledby="acc-build-cerne-btn"><div class="acc-inner"><div class="acc-body">
+            <p>O CERNE ocupa o ponto em que a boa redação ainda não basta.</p>
+            <p>Separei três coisas que a prática mistura: fonte, raciocínio e estilo. Fonte pertence à validação documental. Estilo pertence ao fechamento. O CERNE audita o uso jurídico da razão apresentada, e só ele.</p>
+            <p>A auditoria tem critério antes de ter opinião. Só há achado quando o risco afeta tese, conclusão, fundamento, regime jurídico, autoridade do precedente ou estimativa de risco. Crítica fora desse limite é ruído, e ruído inflado desgasta a confiança que a auditoria deveria proteger. Por isso o sistema reconhece o resultado limpo como entrega válida: um auditor que nunca sabe parar transforma prudência em desconfiança automática.</p>
+            <p>O ponto distintivo está no <b>confronto</b>. Um achado isolado costuma ser corrigível. Dois achados acoplados podem produzir uma falha que nenhum deles, sozinho, revelaria. O confronto existe para fazer emergir essa falha antes que a forma a esconda.</p>
+            <p>No fim, o módulo não devolve parecer solto. Devolve um estado de avanço: avança, avança com ajuste, revisão humana, bloqueio parcial, bloqueio total. Cada execução registra o que foi aplicado, o que foi descartado, o gate final e a decisão humana. O log guarda inclusive o silêncio.</p>
+            <p class="bx-close">O CERNE existe para impedir que a pressa vire passivo.</p>
+          </div></div></div>
+        </div>
+      </article>
+
+      <article class="bx-card">
+        <div class="bx-top"><span class="bx-num">04</span><span class="bx-name">LUX</span></div>
+        <div class="bx-role">refinamento formal sob limite</div>
+        <p class="bx-thesis">A saída ganha clareza e proteção sem perder o <em>lastro do texto de origem</em>.</p>
+        <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Legal writing</span><span class="bx-chip">Revisão controlada</span><span class="bx-chip">Padronização formal</span><span class="bx-chip">Anonimização</span><span class="bx-chip">Tokens intocáveis</span><span class="bx-chip">Preservação de mérito</span></div></div>
+        <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">LGPD operacional</span><span class="bx-chip t">Modos público / pseudonimizado / interno</span><span class="bx-chip t">Revisão em três blocos</span><span class="bx-chip t">Supressão reforçada</span></div></div>
+        <div class="bx-value"><b>Anonimização irreversível</b> na saída (LGPD art. 12), peça-irmã do CORPUS na outra ponta do fluxo.</div>
+        <div class="m-detail">
+          <button class="acc-trigger" id="acc-build-lux-btn" aria-expanded="false" aria-controls="acc-build-lux"><span>O que a construção exigiu</span><span class="acc-icon" aria-hidden="true">▸</span></button>
+          <div class="acc-panel" id="acc-build-lux" role="region" aria-labelledby="acc-build-lux-btn"><div class="acc-inner"><div class="acc-body">
+            <p>O LUX fecha a cadeia, e fecha por contenção.</p>
+            <p>Estabeleci uma fronteira dura entre revisão de forma e intervenção de mérito. O módulo corrige gramática, pontuação, concordância, regência, clareza local, conectivo e repetição. Não toca em tese, fundamento, dispositivo, conclusão, precedente, norma, citação direta, valor ou data. Esses são <b>tokens intocáveis</b>: o estilo passa ao largo deles.</p>
+            <p>A proteção do dado vem antes do estilo. Por padrão, o texto é tratado como se pudesse circular em ambiente público, salvo indicação expressa de uso interno. Quando há criança, adolescente, segredo de justiça, saúde, violência doméstica, filiação ou dado financeiro sensível, o corte se torna mais restritivo. Na outra ponta do fluxo, o LUX responde pela anonimização irreversível da saída, peça-irmã do CORPUS: um pseudonimiza para reusar, o outro anonimiza para circular.</p>
+            <p>A entrega vem em três blocos: texto marcado, lista de alterações e versão final limpa. O que mudou precisa poder ser visto. Revisão que apaga o próprio rastro não é revisão; é reescrita silenciosa.</p>
+            <p>Quando a melhoria formal encosta no mérito, o sistema para. Quando a elegância ameaça o dado, vence a proteção. Na dúvida entre alterar e preservar, preserva.</p>
+            <p class="bx-close">Clareza sem usurpação.</p>
+          </div></div></div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
