@@ -46,7 +46,8 @@
   --wrap:1240px;
 
   /* raios */
-  --r:14px; --r-lg:20px; --r-xl:24px; --r-pill:999px;
+  /* cards ortogonais — arquitetura; pill preservado só para controles */
+  --r:0; --r-lg:0; --r-xl:0; --r-pill:999px;
 
   /* sombra */
   --shadow:0 28px 80px rgba(10,11,13,.22);
@@ -71,7 +72,7 @@
 
 /* ---------- 2 · BASE / RESET ---------- */
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;background:var(--ink);-webkit-text-size-adjust:100%;}
+html{background:var(--ink);-webkit-text-size-adjust:100%;}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
@@ -191,7 +192,7 @@ p{text-wrap:pretty;}
   letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:500;}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:var(--s-5);}
 
-.hero-panel{width:100%;max-width:330px;justify-self:end;border:1px solid rgba(232,236,239,.18);border-radius:var(--r-lg);
+.hero-panel{width:100%;max-width:330px;justify-self:end;border:1px solid rgba(232,236,239,.18);border-radius:20px;
   overflow:hidden;background:linear-gradient(180deg,rgba(232,236,239,.06),rgba(232,236,239,.02));box-shadow:var(--shadow);}
 .hero-panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 15px;
   border-bottom:1px solid rgba(232,236,239,.14);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
@@ -203,8 +204,7 @@ p{text-wrap:pretty;}
 .hero-step .no{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--terra);}
 .hero-step .name{font-family:var(--serif);font-size:22px;font-weight:650;line-height:1;letter-spacing:-.03em;color:var(--cloud);}
 .hero-step .desc{display:block;margin-top:5px;font-size:11.4px;line-height:1.42;color:rgba(232,236,239,.56);font-weight:300;}
-.hero-step .icon{width:30px;height:30px;color:rgba(232,236,239,.9);}
-.hero-step:nth-child(2) .icon,.hero-step:nth-child(3) .icon{color:var(--terra);}
+.hero-step .icon{width:30px;height:30px;color:var(--terra);}
 @media(max-width:1000px){.hero .wrap{width:min(100% - 44px,var(--wrap));}}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-panel{justify-self:stretch;max-width:560px;}.hero-top{display:block;}.hero-top .label{display:block;margin-top:10px;}}
 @media(max-width:620px){.hero{padding-top:104px;}.hero-actions .btn{width:100%;}}
@@ -245,8 +245,7 @@ p{text-wrap:pretty;}
 .m-id .m-num{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--terra);font-weight:500;}
 .m-id .m-name{display:block;margin-top:8px;font-family:var(--serif);font-size:clamp(34px,3.4vw,50px);font-weight:650;line-height:.92;letter-spacing:-.04em;}
 .m-id .m-role{display:block;margin-top:10px;font-family:var(--mono);font-size:9.6px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
-.m-mark{width:56px;height:56px;color:var(--ink);flex-shrink:0;}
-.module--core .m-mark{color:var(--terra);}
+.m-mark{width:80px;height:80px;color:var(--ink);flex-shrink:0;}
 .m-claim{font-family:var(--serif);font-size:clamp(19px,1.6vw,22px);line-height:1.26;font-weight:560;letter-spacing:-.01em;color:var(--ink);max-width:30ch;}
 .m-desc{font-size:14px;line-height:1.65;color:var(--mut);max-width:46ch;}
 
@@ -261,7 +260,7 @@ p{text-wrap:pretty;}
 .m-detail{border-bottom:1px solid var(--line2);}
 .acc-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);
   padding:var(--s-3) 0;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);}
-.acc-trigger .acc-icon{color:var(--terra);transition:transform .3s var(--ease-quint);font-size:20px;}
+.acc-trigger .acc-icon{color:var(--terra);transition:transform .3s var(--ease-quint);font-size:36px;}
 .acc-trigger[aria-expanded="true"] .acc-icon{transform:rotate(90deg);}
 .acc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease-quint);}
 .acc-panel.open{grid-template-rows:1fr;}
@@ -279,8 +278,11 @@ p{text-wrap:pretty;}
   /* ---------- 05 · construção — grade de módulos ---------- */
   .bx-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,22px);align-items:start;}
   .bx-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-    padding:clamp(22px,2.4vw,34px);display:flex;flex-direction:column;position:relative;}
-  .bx-card::before{content:"";position:absolute;top:0;left:0;width:44px;height:2px;background:var(--terra);}
+    padding:clamp(22px,2.4vw,34px);display:flex;flex-direction:column;position:relative;overflow:hidden;}
+  .bx-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--terra);z-index:2;}
+  .bx-bg{position:absolute;top:-16%;right:-18%;width:62%;aspect-ratio:1;opacity:.07;color:var(--ink);pointer-events:none;z-index:0;}
+  .bx-bg .mark{width:100%;height:100%;}
+  .bx-card>*:not(.bx-bg){position:relative;z-index:1;}
   .bx-top{display:flex;align-items:baseline;gap:12px;}
   .bx-num{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--terra);font-weight:500;}
   .bx-name{font-family:var(--serif);font-size:clamp(26px,2.6vw,34px);font-weight:650;line-height:.95;
@@ -343,15 +345,6 @@ p{text-wrap:pretty;}
 .stack-strip b{color:var(--terra);font-weight:500;}
 @media(max-width:900px){.authoring{grid-template-columns:1fr;}}
 
-/* ---- MÉTODO (fluxo) ---- */
-.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
-.step{background:var(--paper);padding:24px 20px 26px;min-height:178px;display:flex;flex-direction:column;}
-.step .num{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--terra);font-weight:500;}
-.step .title{font-family:var(--serif);font-size:23px;font-weight:620;line-height:1.08;letter-spacing:-.025em;margin-top:22px;}
-.step .small{margin-top:auto;padding-top:22px;font-size:12.5px;line-height:1.5;color:var(--mut);}
-@media(max-width:1080px){.steps{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:660px){.steps{grid-template-columns:1fr;}}
-
 /* ---- EVIDÊNCIAS ---- */
 .evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
 .ev{background:var(--paper);padding:30px;min-height:200px;display:flex;flex-direction:column;}
@@ -367,7 +360,7 @@ p{text-wrap:pretty;}
 @media(max-width:560px){.evidence{grid-template-columns:1fr;}}
 
 /* ---- PRINCÍPIOS ---- */
-.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.principles{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
 .principle{background:var(--surface);padding:28px;min-height:200px;}
 .principle h3{font-family:var(--serif);font-size:26px;font-weight:620;line-height:1.08;letter-spacing:-.02em;}
 .principle p{font-size:14.5px;color:var(--mut);line-height:1.7;margin-top:16px;}
@@ -389,7 +382,6 @@ p{text-wrap:pretty;}
 
 /* ---- FECHAMENTO / FOOTER ---- */
 .close{background:var(--ink);color:var(--cloud);padding:clamp(96px,12vw,130px) 0;text-align:center;position:relative;overflow:hidden;}
-.close::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 120%,rgba(166,58,35,.28),transparent 45%);}
 .close .wrap{position:relative;z-index:var(--z-base);}
 .close-title{font-family:var(--serif);font-size:clamp(42px,6vw,90px);font-weight:650;line-height:1.02;letter-spacing:-.045em;}
 .close-title em{font-style:italic;color:var(--terra);}
@@ -451,17 +443,83 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
   .pm-drawer.open{opacity:1;}
   .pm-backdrop{transition:opacity .2s ease;}
   .pm-handle{transition:none;}
+  .ev-modal,.ev-modal .ev-modal-dialog{transition:opacity .2s ease,visibility .2s;transform:none;}
 }
+
+/* ---- ARQUITETURA · bloco introdutório (antes: "Como funciona") ---- */
+.arch-intro{margin:0 0 var(--s-6);display:flex;flex-direction:column;gap:12px;}
+.arch-intro-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);}
+.arch-intro p{max-width:72ch;font-family:var(--serif);font-size:clamp(19px,1.9vw,26px);line-height:1.4;font-weight:560;letter-spacing:-.012em;color:var(--ink);}
+.arch-intro b{color:var(--terra);font-weight:600;}
+
+/* onde se instala — assistentes (antes: pills do fluxo) */
+.arch-install{margin:0 0 var(--s-6);display:flex;flex-direction:column;gap:14px;}
+.arch-install .arch-flow{margin-bottom:0;}
+
+/* marca pessoal na Origem */
+.origin-namerow{display:flex;align-items:center;gap:18px;}
+.origin-mark{width:47px;height:72px;flex-shrink:0;background:currentColor;
+  -webkit-mask:url(assets/marca/cdc-negativo.png) center/contain no-repeat;
+  mask:url(assets/marca/cdc-negativo.png) center/contain no-repeat;}
+
+/* ---- nota de autoria (após Resposta) ---- */
+.authorship-note{margin-top:var(--s-6);max-width:80ch;display:flex;align-items:flex-start;gap:18px;}
+.authorship-note .authorship-mark{width:34px;height:52px;object-fit:contain;flex-shrink:0;margin-top:2px;}
+.authorship-note p{font-family:var(--serif);font-size:clamp(14px,1.0vw,16px);line-height:1.5;font-weight:500;color:var(--ink);letter-spacing:-.005em;}
+
+/* ---- EVIDÊNCIAS · registros operacionais (cards compactos + visor) ---- */
+.reg-head{margin-top:var(--s-7);margin-bottom:var(--s-4);}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.reg{background:var(--paper);padding:clamp(22px,2.4vw,30px);display:grid;grid-template-columns:1fr auto;gap:var(--s-4);align-items:start;min-height:158px;}
+.reg--pending{background:var(--surface);}
+.reg--pending .reg-name{color:var(--mut);}
+.reg-body{display:flex;flex-direction:column;gap:11px;min-width:0;}
+.reg-top{display:flex;align-items:center;gap:12px;}
+.reg-mark{width:26px;height:26px;color:var(--terra);flex-shrink:0;}
+.reg-name{font-family:var(--serif);font-size:clamp(23px,2.2vw,29px);font-weight:650;line-height:1;letter-spacing:-.03em;color:var(--ink);}
+.reg-sub{font-family:var(--mono);font-size:9.6px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);}
+.reg-text{font-size:13.5px;line-height:1.62;color:var(--mut);max-width:44ch;}
+.reg-aside{align-self:stretch;display:flex;align-items:flex-end;}
+.reg-open{display:inline-flex;flex-direction:column;gap:7px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);padding:12px 15px;text-align:left;transition:border-color .25s,background .25s,transform .25s var(--ease-quint);}
+.reg-open:hover{border-color:var(--terra);background:var(--white);transform:translateY(-1px);}
+.reg-open .reg-open-k{font-family:var(--mono);font-size:8.6px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);}
+.reg-open .reg-open-cta{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);font-weight:500;}
+.reg-pending{align-self:flex-end;font-family:var(--mono);font-size:8.6px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut2);}
+@media(max-width:760px){.reg-grid{grid-template-columns:1fr;}.reg{grid-template-columns:1fr;}.reg-aside{align-items:flex-start;}}
+
+/* trigger de visor sobre o slot de tela do card em destaque */
+.screen-open{width:100%;cursor:pointer;transition:border-color .25s,transform .25s var(--ease-quint);}
+.screen-open:hover{border-color:var(--terra);transform:translateY(-1px);}
+
+/* ---- VISOR · modal reutilizável (registro operacional) ---- */
+.ev-modal{position:fixed;inset:0;z-index:var(--z-drawer);display:flex;align-items:center;justify-content:center;
+  padding:clamp(20px,5vw,64px);opacity:0;visibility:hidden;transition:opacity .35s var(--ease-quint),visibility .35s;}
+.ev-modal.open{opacity:1;visibility:visible;}
+.ev-modal-backdrop{position:absolute;inset:0;background:rgba(10,11,13,.82);backdrop-filter:blur(4px);cursor:zoom-out;}
+.ev-modal-dialog{position:relative;z-index:1;width:min(1040px,100%);max-height:calc(100vh - 2*clamp(20px,5vw,64px));
+  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-radius:var(--r-lg);overflow:hidden;
+  display:flex;flex-direction:column;transform:translateY(12px) scale(.99);transition:transform .4s var(--ease-expo);box-shadow:var(--shadow);}
+.ev-modal.open .ev-modal-dialog{transform:none;}
+.ev-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px 18px;border-bottom:1px solid var(--dline2);}
+.ev-modal-title{font-family:var(--serif);font-size:20px;font-weight:620;letter-spacing:-.02em;color:var(--cloud);}
+.ev-modal-close{width:38px;height:38px;flex-shrink:0;border:1px solid var(--dline);border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;color:var(--cloud);font-size:18px;transition:background .2s,border-color .2s;}
+.ev-modal-close:hover{background:var(--graph);border-color:var(--terra);}
+.ev-modal-figure{margin:0;overflow:auto;background:var(--graph2);min-height:0;}
+.ev-modal-figure img{width:100%;height:auto;display:block;}
+.ev-modal-fallback{padding:clamp(30px,6vw,64px) 24px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.08em;line-height:1.7;color:rgba(232,236,239,.5);
+  background:linear-gradient(rgba(232,236,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(232,236,239,.05) 1px,transparent 1px),var(--graph);background-size:22px 22px,22px 22px,auto;}
+.ev-modal-caption{padding:14px 18px 18px;font-size:13.5px;line-height:1.6;color:rgba(232,236,239,.72);border-top:1px solid var(--dline2);}
 </style>
 </head>
 <body>
 <svg class="svg-defs" aria-hidden="true" focusable="false">
-  <symbol id="mark-atrio" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 942 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><path fill="currentColor" d="M0,0 H942 V1000 H711 V300 H571 V1000 H371 V300 H232 V1000 H0 Z"></path></svg></symbol>
-  <symbol id="mark-corpus" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 695 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><g fill="currentColor"><path d="M0,0 H318 V380 L237,500 L318,620 V1000 H0 Z"></path><path d="M695,0 H377 V380 L458,500 L377,620 V1000 H695 Z"></path></g></svg></symbol>
-  <symbol id="mark-ratio" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 1164 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><path fill="currentColor" fill-rule="evenodd" d="M582,0 L1164,1000 L0,1000 Z M520,350 L441,1000 L276,1000 Z M644,350 L888,1000 L723,1000 Z"></path></svg></symbol>
-  <symbol id="mark-cerne" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 766 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><g fill="currentColor"><path d="M0,0 L349,205 L349,795 L0,1000 L0,630 L195,500 L0,370 Z"></path><path d="M766,0 L417,205 L417,795 L766,1000 L766,630 L571,500 L766,370 Z"></path></g></svg></symbol>
-  <symbol id="mark-lux" viewBox="0 0 240 240"><svg x="20" y="20" width="200" height="200" viewBox="0 0 720 1000" preserveAspectRatio="xMidYMid meet" overflow="visible"><defs><clipPath id="tlux"><rect x="0" y="0" width="720" height="500"></rect></clipPath><clipPath id="blux"><rect x="0" y="500" width="720" height="500"></rect></clipPath><mask id="mlux"><rect width="720" height="1000" fill="#000"></rect><g clip-path="url(#tlux)"><path fill="#fff" d="M360,274 L720,637 L360,1000 L0,637 Z"></path><path fill="#000" d="M360,477 L518,637 L360,797 L202,637 Z"></path><path fill="#fff" d="M360,0 L720,363 L360,726 L0,363 Z"></path><path fill="#000" d="M360,203 L518,363 L360,523 L202,363 Z"></path></g><g clip-path="url(#blux)"><path fill="#fff" d="M360,0 L720,363 L360,726 L0,363 Z"></path><path fill="#000" d="M360,203 L518,363 L360,523 L202,363 Z"></path><path fill="#fff" d="M360,274 L720,637 L360,1000 L0,637 Z"></path><path fill="#000" d="M360,477 L518,637 L360,797 L202,637 Z"></path></g></mask></defs><rect width="720" height="1000" fill="currentColor" mask="url(#mlux)"></rect></svg></symbol>
-</svg>
+  <symbol id="mark-atrio" viewBox="0 0 1000 1000"><g transform="translate(80,80) scale(0.84)" fill="currentColor"><rect x="100" y="100" width="800" height="260"/><rect x="100" y="360" width="200" height="540"/><rect x="700" y="360" width="200" height="540"/><rect x="400" y="360" width="200" height="540"/></g></symbol>
+  <symbol id="mark-corpus" viewBox="0 0 1000 1000"><g transform="translate(80,80) scale(0.84)" fill="currentColor"><polygon points="140,100 440,100 440,340 280,500 440,660 440,900 140,900"/><polygon points="860,100 560,100 560,340 720,500 560,660 560,900 860,900"/><polygon points="500,380 620,500 500,620 380,500"/></g></symbol>
+  <symbol id="mark-ratio" viewBox="0 0 1000 1000"><g transform="translate(80,80) scale(0.84)" fill="currentColor"><path fill-rule="evenodd" d="M 72.789062 150.984375 L 72.789062 222.308594 L 561.148438 222.308594 L 561.359375 462.507812 L 561.570312 702.703125 L 696.25 703.132812 L 696.25 79.660156 L 72.789062 79.660156 Z M 73.347656 307.621094 C 73.039062 307.929688 72.789062 340.023438 72.789062 378.945312 L 72.789062 449.710938 L 87.679688 449.710938 C 95.871094 449.710938 152.136719 449.71875 212.710938 449.730469 L 322.84375 449.746094 L 322.84375 703.125 L 469.6875 703.125 L 469.6875 307.0625 L 271.796875 307.0625 C 162.957031 307.0625 73.652344 307.3125 73.347656 307.621094 M 73.347656 534.183594 C 73.039062 534.488281 72.789062 572.625 72.789062 618.933594 L 72.789062 703.125 L 238.09375 703.125 L 238.09375 533.621094 L 156 533.621094 C 110.847656 533.621094 73.652344 533.875 73.347656 534.183594" transform="matrix(1.2831356633 0 0 1.2831356633 6.6092765422 -2.2147871069)"/></g></symbol>
+  <symbol id="mark-cerne" viewBox="0 0 1000 1000"><g transform="translate(80,80) scale(0.84)" fill="currentColor"><path d="M170,100 L900,100 L900,830 Z"/><path d="M100,170 L100,900 L830,900 Z"/></g></symbol>
+  <symbol id="mark-lux" viewBox="0 0 1000 1000"><g transform="translate(80,80) scale(0.84)" fill="currentColor"><polygon points="100,100 300,100 375,640 375,900 100,900"/><polygon points="430,100 650,100 375,640"/><polygon points="900,100 900,900 100,900 100,640 375,640"/></g></symbol></svg>
 
 <!-- PLANTA-MÃE · handle + gaveta -->
 <button class="pm-handle" id="pm-handle" aria-expanded="false" aria-controls="pm-drawer" aria-label="Abrir Planta-mãe — o ATRIO em cinco respostas">
@@ -493,9 +551,9 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
         <a href="#problema">Problema</a>
         <a href="#resposta">Resposta</a>
         <a href="#arquitetura">Arquitetura</a>
-        <a href="#autoria">Autoria</a>
+        <a href="#principios">Critério</a>
         <a href="#evidencias">Evidências</a>
-        <a href="#principios">Princípios</a>
+        <a href="#autoria">Autoria</a>
         <a class="btn nav-cta" href="mailto:christiandscosta@gmail.com?subject=Conversa%20sobre%20ATRIO">Contato</a>
       </div>
     </div>
@@ -512,7 +570,7 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
     <div class="hero-grid">
       <div class="hero-lead rv">
         <p class="hero-kicker">Antes de acelerar o jurídico: <em>governar o raciocínio</em></p>
-        <p class="hero-define">Sistema de regência recursal assistida por IA, para gestâo de acervo, raciocínio e revisão crítica, preservando <b>decisão humana rastreável</b>.</p>
+        <p class="hero-define">Sistema de regência recursal assistida por IA, para gestão de acervo, raciocínio e revisão crítica, preservando <b>decisão humana rastreável</b>.</p>
         <p class="hero-copy"><b>ATRIO é uma arquitetura modular de IA jurídica</b> para acervo, formulação decisória, confronto crítico e refinamento textual sob controle do operador. Não substitui o juízo — torna o percurso verificável.</p>
         <p class="hero-synthesis"><span>em síntese</span> memória governada, raciocínio faseado, crítica antes da forma e decisão humana no eixo</p>
         <div class="hero-actions">
@@ -573,6 +631,10 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       <div class="big">Memória.<br>Formulação.<br>Crítica.<br><em>Forma.</em></div>
       <div class="side"><p>O sistema separa o que costuma se misturar. Cada módulo tem função própria, limite próprio e ponto de controle humano.</p><p style="margin-top:16px"><b>A promessa central não é automatizar a decisão.</b> É tornar visível o caminho pelo qual uma decisão assistida pode ser formulada, testada e revisada.</p></div>
     </div>
+    <div class="authorship-note rv">
+      <img class="authorship-mark" src="assets/marca/cdc-terra.png" width="336" height="512" alt="Marca de Christian da Costa" />
+      <p>Construção autoral desenvolvida, testada e operacionalizada em ambiente jurídico real, combinando arquitetura documental, raciocínio jurídico, automação local, governança de IA e revisão crítica.</p>
+    </div>
   </div>
 </section>
 
@@ -583,15 +645,23 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       <div class="head-body">
         <span class="eyebrow">Arquitetura modular</span>
         <h2>Quatro módulos, uma cadeia governada de raciocínio</h2>
-        <p class="sub">Entradas, operações, saídas e pontos de controle — cada módulo é um bloco com função, spec e tela próprios</p>
+        <p class="sub">Entradas, operações, saídas e pontos de controle. Cada módulo é um bloco com função, spec e tela próprios</p>
       </div>
     </div>
 
-    <div class="arch-flow rv stagger" aria-label="Fluxo: CORPUS, RATIO, CERNE, LUX">
-      <span class="node"><b>01</b> CORPUS</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>02</b> RATIO</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>03</b> CERNE</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>04</b> LUX</span>
+    <div class="arch-intro rv">
+      <span class="arch-intro-k">Como funciona</span>
+      <p>Documento entra. <b>CORPUS</b> organiza. <b>RATIO</b> formula. <b>CERNE</b> confronta. <b>LUX</b> refina. O humano decide.</p>
+    </div>
+
+    <div class="arch-install rv">
+      <span class="arch-intro-k">Onde se instala</span>
+      <div class="arch-flow" aria-label="Assistentes onde o ATRIO se instala">
+        <span class="node">ChatGPT</span>
+        <span class="node">Claude</span>
+        <span class="node">Gemini</span>
+        <span class="node">Copilot</span>
+      </div>
     </div>
 
     <div class="modules rv stagger">
@@ -602,31 +672,27 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
           <div class="m-id"><span class="m-num">01</span><span class="m-name">CORPUS</span><span class="m-role">memória documental governada</span></div>
           <span class="m-mark"><svg class="mark"><use href="#mark-corpus"></use></svg></span>
         </div>
-        <p class="m-claim">A base entra crua e fica limpa — antes de a IA tocar em qualquer coisa.</p>
+        <p class="m-claim">A base entra crua e fica limpa antes de a IA tocar em qualquer coisa</p>
         <p class="m-desc">Recebe o acervo, organiza, protege e dá lastro ao material que alimenta os demais módulos. É fonte e destino do pipeline: um loop fechado de conhecimento governado.</p>
         <div class="m-spec">
-          <div class="cell"><span class="k">Entrada</span><span class="v">decisões em PDF · detecção de escaneado + OCR · 2018–2026</span></div>
-          <div class="cell"><span class="k">Opera</span><span class="v">extrai → pseudonimiza → segrega segredo → inventaria → preserva</span></div>
-          <div class="cell"><span class="k">Saída</span><span class="v">base limpa por processo (.txt) · inventário auditável · cofre apartado</span></div>
+          <div class="cell"><span class="k">Entrada</span><span class="v">decisões em PDF · detecção de escaneado + OCR</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">extrai → pseudonimiza → inventaria </span></div>
+          <div class="cell"><span class="k">Saída</span><span class="v">base limpa por processo (.txt) · inventário · cofre </span></div>
         </div>
         <div class="m-detail">
           <button class="acc-trigger" id="acc-corpus-btn" aria-expanded="false" aria-controls="acc-corpus"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
           <div class="acc-panel" id="acc-corpus" role="region" aria-labelledby="acc-corpus-btn">
             <div class="acc-inner"><ul class="acc-body">
-              <li><b>Pseudonimização reversível na entrada.</b> Cada dado pessoal (nome, CPF, CNPJ, OAB, e-mail, telefone, endereço) vira código estável; mesma pessoa, mesmo código em todo o acervo. O mapa código→dado real vive num cofre apartado que nunca acompanha a base.</li>
+              <li><b>Pseudonimização reversível na entrada</b>. Cada dado pessoal (nome, CPF, CNPJ, OAB, e-mail, telefone, endereço) vira código estável; mesma pessoa, mesmo código em todo o acervo. O mapa código→dado real vive num cofre apartado que nunca acompanha a base.</li>
               <li><b>O CNJ é chave, não dado</b> — nunca mascarado; identifica e deduplica o processo. O hash deduplica o arquivo.</li>
               <li><b>spaCy</b> (<code>pt_core_news_md</code>) para reconhecimento de nomes, com fallback por pista textual.</li>
               <li><b>Segredo de justiça</b> segregado na entrada, fora do reuso; triagem conservadora.</li>
-              <li><b>Inventário</b>: uma linha por documento (hash, CNJ, classe, situação), sem dado cru — circula e é auditável. O original é preservado como dado bruto.</li>
+              <li><b>Inventário</b>: uma linha por documento (hash, CNJ, classe, situação), sem dado cru, circula e é auditável. O original é preservado como dado bruto.</li>
               <li class="meta-strip"><b>LGPD</b> · art. 13 pseudonimização · art. 11 dado sensível · art. 46 segurança · art. 6º X responsabilização · art. 12 anonimização (→ LUX)</li>
-              <li class="limits"><b>Limites assumidos:</b> detecção não é perfeita (revisão humana segue necessária) · OCR erra mais que texto nativo · identificação por contexto não é capturada · triagem de segredo pode segregar a mais.</li>
+              <li class="limits"><b>Limites assumidos</b>: detecção não é perfeita (revisão humana segue necessária) · OCR erra mais que texto nativo · identificação por contexto não é capturada · triagem de segredo pode segregar a mais.</li>
             </ul></div>
           </div>
         </div>
-        <figure class="m-screen">
-          <div class="screen-frame"><span class="screen-name">painel.py · inventario.csv · árvore 00_entrada → _pseudonimizado / _cofre / _segredo</span></div>
-          <figcaption>estado da base — 2ª Turma Recursal</figcaption>
-        </figure>
       </article>
 
       <!-- 02 RATIO -->
@@ -635,27 +701,23 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
           <div class="m-id"><span class="m-num">02</span><span class="m-name">RATIO</span><span class="m-role">formulação decisória faseada</span></div>
           <span class="m-mark"><svg class="mark"><use href="#mark-ratio"></use></svg></span>
         </div>
-        <p class="m-claim">A decisão se forma em fases — com escolha humana em cada uma.</p>
+        <p class="m-claim">A decisão se forma em fases, com escolha humana em cada uma</p>
         <p class="m-desc">Estrutura o problema, a hipótese, os fundamentos e a minuta a partir da escolha do operador. Cada fase deixa rastro; nenhuma avança sem decisão humana.</p>
         <div class="m-spec">
-          <div class="cell"><span class="k">Entrada</span><span class="v">caso, peças, parâmetros</span></div>
-          <div class="cell"><span class="k">Opera</span><span class="v">estrutura, compara, formula</span></div>
+          <div class="cell"><span class="k">Entrada</span><span class="v">caso, peças, <br>parâmetros</span></div>
+          <div class="cell"><span class="k">Opera</span><span class="v">estrutura, compara, <br>formula</span></div>
           <div class="cell"><span class="k">Saída</span><span class="v">minuta rastreável</span></div>
         </div>
         <div class="m-detail">
           <button class="acc-trigger" id="acc-ratio-btn" aria-expanded="false" aria-controls="acc-ratio"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
           <div class="acc-panel" id="acc-ratio" role="region" aria-labelledby="acc-ratio-btn">
             <div class="acc-inner"><ul class="acc-body">
-              <li><b>Fases explícitas</b> — problema, hipótese, fundamentos, minuta — em vez de uma geração única e opaca.</li>
-              <li><b>Escolha do operador no eixo:</b> o módulo apresenta alternativas; a seleção é humana e fica registrada.</li>
-              <li class="limits"><b>Limite assumido:</b> a formulação assiste e organiza; não decide.</li>
+              <li><b>Fases explícitas</b>: problema, hipótese, fundamentos, minuta — em vez de uma geração única e opaca.</li>
+              <li><b>Escolha do operador no eixo</b>: o módulo apresenta alternativas; a seleção é humana e fica registrada.</li>
+              <li class="limits"><b>Limite assumido</b>: a formulação assiste e organiza; não decide.</li>
             </ul></div>
           </div>
         </div>
-        <figure class="m-screen">
-          <div class="screen-frame"><span class="screen-name">estrutura da formulação · fases e alternativas</span></div>
-          <figcaption>minuta rastreável</figcaption>
-        </figure>
       </article>
 
       <!-- 03 CERNE -->
@@ -664,8 +726,8 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
           <div class="m-id"><span class="m-num">03</span><span class="m-name">CERNE</span><span class="m-role">confronto crítico do raciocínio</span></div>
           <span class="m-mark"><svg class="mark"><use href="#mark-cerne"></use></svg></span>
         </div>
-        <p class="m-claim">Tensiona a formulação antes de ela ganhar forma final.</p>
-        <p class="m-desc">Identifica lacunas, avalia riscos e confronta precedentes sem pertinência material, transformando fragilidade em achado técnico — um gate antes do acabamento.</p>
+        <p class="m-claim">Tensiona a formulação antes de sua forma final</p>
+        <p class="m-desc">Identifica lacunas, avalia riscos e confronta precedentes sem pertinência material, transformando fragilidade em achado técnico.</p>
         <div class="m-spec">
           <div class="cell"><span class="k">Entrada</span><span class="v">formulação e hipóteses</span></div>
           <div class="cell"><span class="k">Opera</span><span class="v">audita, tensiona, qualifica</span></div>
@@ -681,10 +743,6 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
             </ul></div>
           </div>
         </div>
-        <figure class="m-screen">
-          <div class="screen-frame"><span class="screen-name">mapa de achados · lacunas, riscos e gate</span></div>
-          <figcaption>gate técnico</figcaption>
-        </figure>
       </article>
 
       <!-- 04 LUX -->
@@ -693,7 +751,7 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
           <div class="m-id"><span class="m-num">04</span><span class="m-name">LUX</span><span class="m-role">refinamento formal sob limite</span></div>
           <span class="m-mark"><svg class="mark"><use href="#mark-lux"></use></svg></span>
         </div>
-        <p class="m-claim">Refina a forma sem inventar fundamento — e protege o que sai.</p>
+        <p class="m-claim">Refina a forma sem inventar fundamento, reforçando a proteção de saída</p>
         <p class="m-desc">Ajusta clareza, tom, coesão e acabamento sobre a estrutura já validada. Na outra ponta do fluxo, responde pela anonimização irreversível da saída.</p>
         <div class="m-spec">
           <div class="cell"><span class="k">Entrada</span><span class="v">peça aprovada</span></div>
@@ -704,16 +762,12 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
           <button class="acc-trigger" id="acc-lux-btn" aria-expanded="false" aria-controls="acc-lux"><span>Detalhe técnico</span><span class="acc-icon" aria-hidden="true">▸</span></button>
           <div class="acc-panel" id="acc-lux" role="region" aria-labelledby="acc-lux-btn">
             <div class="acc-inner"><ul class="acc-body">
-              <li><b>Calibra sobre estrutura validada:</b> clareza, tom e coesão sem alterar a decisão.</li>
+              <li><b>Calibra sobre estrutura validada</b>: clareza, tom e coesão sem alterar a decisão.</li>
               <li><b>Anonimização irreversível</b> da saída (LGPD art. 12) — peça-irmã do CORPUS na outra ponta do fluxo.</li>
-              <li class="limits"><b>Limite assumido:</b> refina a forma; preserva o juízo.</li>
+              <li class="limits"><b>Limite assumido</b>: refina a forma; preserva o juízo.</li>
             </ul></div>
           </div>
         </div>
-        <figure class="m-screen">
-          <div class="screen-frame"><span class="screen-name">saída calibrada · texto final controlado</span></div>
-          <figcaption>forma sob limite</figcaption>
-        </figure>
       </article>
 
     </div>
@@ -723,41 +777,108 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       <div class="pivot" aria-hidden="true">⇄</div>
       <div class="pole"><span class="k">LUX · saída</span><p>Anonimiza de forma <b>irreversível</b> para que o que sai seja seguro. Peças-irmãs nas duas pontas.</p></div>
     </div>
-
-    <div class="gov-strip rv stagger">
-      <div class="gov">governança</div>
-      <div class="gov">rastreabilidade</div>
-      <div class="gov">inspecionabilidade</div>
-      <div class="gov">decisão humana</div>
-    </div>
   </div>
 </section>
 
-<section class="section cv" id="fluxo">
+<section class="section cv" id="principios">
   <div class="wrap">
     <div class="head rv">
       <div class="index">04</div>
       <div class="head-body">
-        <span class="eyebrow">Como funciona</span>
-        <h2>Cada etapa deixa rastro</h2>
-        <p class="sub">A linearidade do fluxo não é rigidez. É método para tornar o trabalho mais claro, revisável e governável</p>
+        <span class="eyebrow">Critério</span>
+        <h2>Controle de percurso</h2>
+        <p class="sub">Governança e rastreabilidade operam como critérios transversais sobre todo o fluxo</p>
       </div>
     </div>
-    <div class="steps rv stagger">
-      <article class="step"><span class="num">01</span><h3 class="title">Documento entra</h3><p class="small">O material é recebido como base de trabalho, não como texto solto.</p></article>
-      <article class="step"><span class="num">02</span><h3 class="title">CORPUS organiza</h3><p class="small">A memória documental passa a ser classificável, preservável e recuperável.</p></article>
-      <article class="step"><span class="num">03</span><h3 class="title">RATIO formula</h3><p class="small">A estrutura decisória é conduzida em fases, com escolha humana no eixo.</p></article>
-      <article class="step"><span class="num">04</span><h3 class="title">CERNE confronta</h3><p class="small">O raciocínio é tensionado antes de ganhar forma final.</p></article>
-      <article class="step"><span class="num">05</span><h3 class="title">LUX refina</h3><p class="small">A linguagem é calibrada sem invenção de fundamento.</p></article>
-      <article class="step"><span class="num">06</span><h3 class="title">Humano decide</h3><p class="small">A decisão permanece vinculada ao operador.</p></article>
+    <div class="principles rv stagger">
+      <article class="principle"><h3>Governança</h3><p>Nenhuma etapa sensível avança sem controle do operador. A IA pode organizar, sugerir, tensionar e formular, mas não assume o juízo.</p></article>
+      <article class="principle"><h3>Rastreabilidade</h3><p>O caminho percorrido precisa permanecer visível: o que entrou, onde houve dúvida, qual alternativa foi apresentada e quando o operador decidiu.</p></article>
+    </div>
+    <p class="quote rv"><em>Rastro</em> para saber como chegou.<br><em>Lastro</em> para saber por que chegou.</p>
+  </div>
+</section>
+
+<section class="section surface cv" id="evidencias">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="index">05</div>
+      <div class="head-body">
+        <span class="eyebrow">Evidências</span>
+        <h2>Construído em operação real</h2>
+        <p class="sub">O ATRIO nasce de rotina recursal, acervo volumoso, revisão qualificada e pressão por padronização sem perda de critério</p>
+      </div>
+    </div>
+    <div class="evidence rv stagger">
+      <article class="ev"><div class="value">115.114</div><p class="caption">Decisões da 2ª Turma Recursal do TJPR na base documental governada.</p></article>
+      <article class="ev"><div class="value">2018<i>–</i>2026</div><p class="caption">Recorte temporal do acervo extraído, deduplicado e enriquecido.</p></article>
+      <article class="ev"><div class="value">3 fluxos</div><p class="caption">Recurso Inominado, Embargos de Declaração e Mandado de Segurança.</p></article>
+      <article class="ev"><div class="value">Calendário próprio</div><p class="caption">Prazos em dias úteis, com feriados e suspensões do TJPR.</p></article>
+      <article class="ev feature">
+        <div>
+          <span class="eyebrow">capacidade demonstrada · CORPUS</span>
+          <div class="value" style="margin-top:18px">Do acervo ao rastro decisório</div>
+          <p class="caption">Da captura à base governada: scraper em <b style="color:#fff">Selenium</b> sobre o DOM do TJPR, deduplicação por número de processo em pandas, pseudonimização reversível com spaCy e OCR na entrada, inventário auditável com hash e cofre apartado — tudo conforme a LGPD, antes de a IA tocar em qualquer coisa.</p>
+        </div>
+        <figure class="m-screen">
+          <button type="button" class="screen-frame screen-open" data-img="assets/evidencias/corpus-terminal.webp" data-title="CORPUS · tela operacional" data-caption="Registro local do processamento documental: preservação de originais, segregação de segredo, atualização de cofre, inventário e painel." style="background:linear-gradient(rgba(232,236,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(232,236,239,.05) 1px,transparent 1px),var(--graph);background-size:22px 22px,22px 22px,auto;border-color:rgba(232,236,239,.18)"><span class="screen-name" style="color:rgba(232,236,239,.6)">tela operacional · inventario.csv · cofre · painel</span></button>
+          <figcaption style="color:rgba(232,236,239,.5)">abrir registro operacional</figcaption>
+        </figure>
+      </article>
+    </div>
+
+    <div class="reg-head rv"><span class="label">Registros operacionais</span></div>
+    <div class="reg-grid rv stagger">
+
+      <article class="reg">
+        <div class="reg-body">
+          <div class="reg-top"><span class="reg-mark"><svg class="mark"><use href="#mark-corpus"></use></svg></span><span class="reg-name">CORPUS</span></div>
+          <span class="reg-sub">Do acervo ao rastro</span>
+          <p class="reg-text">Registro local do processamento documental, com preservação de originais, segregação de segredo, atualização de cofre, inventário e painel.</p>
+        </div>
+        <div class="reg-aside">
+          <button type="button" class="reg-open" data-img="assets/evidencias/corpus1.webp" data-title="CORPUS" data-caption="Execução do pipeline documental: entrada, cofre, inventário, segregação e painel.">
+            <span class="reg-open-k">registro operacional</span>
+            <span class="reg-open-cta">Abrir <span aria-hidden="true">&rarr;</span></span>
+          </button>
+        </div>
+      </article>
+
+      <article class="reg reg--pending">
+        <div class="reg-body">
+          <div class="reg-top"><span class="reg-mark"><svg class="mark"><use href="#mark-ratio"></use></svg></span><span class="reg-name">RATIO</span></div>
+          <span class="reg-sub">Decisão humana assistida</span>
+        </div>
+        <div class="reg-aside"><span class="reg-pending">registro em preparação</span></div>
+      </article>
+
+      <article class="reg">
+        <div class="reg-body">
+          <div class="reg-top"><span class="reg-mark"><svg class="mark"><use href="#mark-cerne"></use></svg></span><span class="reg-name">CERNE</span></div>
+          <p class="reg-text">Gate técnico aplicado a uma saída jurídica, com achados, fundamento, produtos considerados e bloqueio parcial.</p>
+        </div>
+        <div class="reg-aside">
+          <button type="button" class="reg-open" data-img="assets/evidencias/cern2.webp" data-title="CERNE" data-caption="Gate técnico aplicado: achados, fundamento e bloqueio parcial.">
+            <span class="reg-open-k">gate técnico</span>
+            <span class="reg-open-cta">Abrir <span aria-hidden="true">&rarr;</span></span>
+          </button>
+        </div>
+      </article>
+
+      <article class="reg reg--pending">
+        <div class="reg-body">
+          <div class="reg-top"><span class="reg-mark"><svg class="mark"><use href="#mark-lux"></use></svg></span><span class="reg-name">LUX</span></div>
+        </div>
+        <div class="reg-aside"><span class="reg-pending">registro em preparação</span></div>
+      </article>
+
     </div>
   </div>
 </section>
 
-<section class="section surface cv" id="autoria">
+<section class="section cv" id="autoria">
   <div class="wrap">
     <div class="head rv">
-      <div class="index">05</div>
+      <div class="index">06</div>
       <div class="head-body">
         <span class="eyebrow">Autoria técnica</span>
         <h2>O que a construção exigiu</h2>
@@ -767,6 +888,7 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
     <div class="bx-grid rv stagger">
 
       <article class="bx-card">
+        <span class="bx-bg" aria-hidden="true"><svg class="mark"><use href="#mark-corpus"></use></svg></span>
         <div class="bx-top"><span class="bx-num">01</span><span class="bx-name">CORPUS</span></div>
         <div class="bx-role">memória documental governada</div>
         <p class="bx-thesis">O documento deixa de ser arquivo solto e passa a integrar uma <em>base governada</em>.</p>
@@ -786,9 +908,10 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       </article>
 
       <article class="bx-card">
+        <span class="bx-bg" aria-hidden="true"><svg class="mark"><use href="#mark-ratio"></use></svg></span>
         <div class="bx-top"><span class="bx-num">02</span><span class="bx-name">RATIO</span></div>
         <div class="bx-role">formulação decisória faseada</div>
-        <p class="bx-thesis">A decisão não chega como texto pronto. Chega como <em>percurso reconstruível</em>.</p>
+        <p class="bx-thesis">A decisão não chega como texto pronto. Chega como <br><em>percurso reconstruível</em>.</p>
         <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Legal reasoning design</span><span class="bx-chip">Máquina de estados</span><span class="bx-chip">Workflow decisório</span><span class="bx-chip">Governança de IA</span><span class="bx-chip">Proveniência</span><span class="bx-chip">Anti-alucinação</span></div></div>
         <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">Prompt systems por fase</span><span class="bx-chip t">Bases modulares</span><span class="bx-chip t">Calendário jurídico</span><span class="bx-chip t">Marcadores de pendência</span><span class="bx-chip t">Hard stops</span></div></div>
         <div class="bx-value">Três vias isoladas <b>(RI · ED · MS)</b>, oito estados de fase e sete travas verificáveis contra avanço sem lastro.</div>
@@ -806,12 +929,13 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       </article>
 
       <article class="bx-card">
+        <span class="bx-bg" aria-hidden="true"><svg class="mark"><use href="#mark-cerne"></use></svg></span>
         <div class="bx-top"><span class="bx-num">03</span><span class="bx-name">CERNE</span></div>
         <div class="bx-role">confronto crítico do raciocínio</div>
-        <p class="bx-thesis">O texto só avança depois que o <em>raciocínio suporta avançar</em>.</p>
+        <p class="bx-thesis">O texto só avança quando o <br><em>raciocínio puder avançar</em>.</p>
         <div class="bx-block"><div class="bx-k">Competências</div><div class="bx-chips"><span class="bx-chip">Auditoria de raciocínio</span><span class="bx-chip">QA jurídico</span><span class="bx-chip">Análise argumentativa</span><span class="bx-chip">Confronto de achados</span><span class="bx-chip">Desenho de critério</span><span class="bx-chip">Mensuração de erro</span></div></div>
         <div class="bx-block"><div class="bx-k">Ferramentas</div><div class="bx-chips"><span class="bx-chip t">Critério de impacto operacional</span><span class="bx-chip t">Gate técnico</span><span class="bx-chip t">Estados de avanço</span><span class="bx-chip t">Log externo</span><span class="bx-chip t">Falso positivo / bloqueio / avanço</span></div></div>
-        <div class="bx-value"><b>Achado emergente:</b> duas fragilidades acopladas revelam a falha que nenhuma, sozinha, mostraria.</div>
+        <div class="bx-value"><b>Achado emergente</b>: duas fragilidades acopladas revelam a falha que nenhuma, sozinha, mostraria.</div>
         <div class="m-detail">
           <button class="acc-trigger" id="acc-build-cerne-btn" aria-expanded="false" aria-controls="acc-build-cerne"><span>O que a construção exigiu</span><span class="acc-icon" aria-hidden="true">▸</span></button>
           <div class="acc-panel" id="acc-build-cerne" role="region" aria-labelledby="acc-build-cerne-btn"><div class="acc-inner"><div class="acc-body">
@@ -826,6 +950,7 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       </article>
 
       <article class="bx-card">
+        <span class="bx-bg" aria-hidden="true"><svg class="mark"><use href="#mark-lux"></use></svg></span>
         <div class="bx-top"><span class="bx-num">04</span><span class="bx-name">LUX</span></div>
         <div class="bx-role">refinamento formal sob limite</div>
         <p class="bx-thesis">A saída ganha clareza e proteção sem perder o <em>lastro do texto de origem</em>.</p>
@@ -849,59 +974,10 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
   </div>
 </section>
 
-<section class="section cv" id="evidencias">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">06</div>
-      <div class="head-body">
-        <span class="eyebrow">Evidências</span>
-        <h2>Construído em operação real</h2>
-        <p class="sub">O ATRIO nasce de rotina recursal, acervo volumoso, revisão qualificada e pressão por padronização sem perda de critério</p>
-      </div>
-    </div>
-    <div class="evidence rv stagger">
-      <article class="ev"><div class="value">115.114</div><p class="caption">Decisões da 2ª Turma Recursal do TJPR na base documental governada.</p></article>
-      <article class="ev"><div class="value">2018<i>–</i>2026</div><p class="caption">Recorte temporal do acervo extraído, deduplicado e enriquecido.</p></article>
-      <article class="ev"><div class="value">3 fluxos</div><p class="caption">Recurso Inominado, Embargos de Declaração e Mandado de Segurança.</p></article>
-      <article class="ev"><div class="value">Calendário próprio</div><p class="caption">Prazos em dias úteis, com feriados e suspensões do TJPR.</p></article>
-      <article class="ev feature">
-        <div>
-          <span class="eyebrow">capacidade demonstrada</span>
-          <div class="value" style="margin-top:18px">Do acervo ao rastro decisório.</div>
-          <p class="caption">Da captura à base governada: scraper em <b style="color:#fff">Selenium</b> sobre o DOM do TJPR, deduplicação por número de processo em pandas, pseudonimização reversível com spaCy e OCR na entrada, inventário auditável com hash e cofre apartado — tudo conforme a LGPD, antes de a IA tocar em qualquer coisa.</p>
-        </div>
-        <figure class="m-screen">
-          <div class="screen-frame" style="background:linear-gradient(rgba(232,236,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(232,236,239,.05) 1px,transparent 1px),var(--graph);background-size:22px 22px,22px 22px,auto;border-color:rgba(232,236,239,.18)"><span class="screen-name" style="color:rgba(232,236,239,.6)">inventario.csv · hash · CNJ · classe · situação</span></div>
-          <figcaption style="color:rgba(232,236,239,.5)">acervo governado — sem dado cru</figcaption>
-        </figure>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="section surface cv" id="principios">
+<section class="section surface cv" id="origem">
   <div class="wrap">
     <div class="head rv">
       <div class="index">07</div>
-      <div class="head-body">
-        <span class="eyebrow">Critério</span>
-        <h2>Controle de percurso</h2>
-        <p class="sub">Governança e rastreabilidade operam como critérios transversais sobre todo o fluxo</p>
-      </div>
-    </div>
-    <div class="principles rv stagger">
-      <article class="principle"><h3>Governança</h3><p>Nenhuma etapa sensível avança sem controle do operador. A IA pode organizar, sugerir, tensionar e formular, mas não assume o juízo.</p></article>
-      <article class="principle"><h3>Rastreabilidade</h3><p>O caminho percorrido precisa permanecer visível: o que entrou, onde houve dúvida, qual alternativa foi apresentada e quando o operador decidiu.</p></article>
-      <article class="principle"><h3>Inspecionabilidade</h3><p>O sistema não foi pensado para esconder incerteza atrás de texto fluente, mas para expor o rastro e preservar o lastro.</p></article>
-    </div>
-    <p class="quote rv"><em>Rastro</em> para saber como chegou.<br><em>Lastro</em> para saber por que chegou.</p>
-  </div>
-</section>
-
-<section class="section cv" id="origem">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">08</div>
       <div class="head-body">
         <span class="eyebrow">Origem</span>
         <h2>Método, não vitrine</h2>
@@ -910,7 +986,10 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
     </div>
     <div class="origin-card rv">
       <aside class="origin-id">
-        <div><span class="label">autoria</span><p class="name" style="margin-top:18px">Christian<br>da Costa</p></div>
+        <div class="origin-namerow">
+          <span class="origin-mark" role="img" aria-label="Marca de Christian da Costa"></span>
+          <div><span class="label">autoria</span><p class="name" style="margin-top:18px">Christian<br>da Costa</p></div>
+        </div>
         <div class="contacts"><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></div>
       </aside>
       <div class="origin-text">
@@ -938,16 +1017,31 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
       <span>ATRIO · Arquitetura de Raciocínio via Inteligência Orquestrada</span>
       <div class="footer-links">
         <a href="#arquitetura">Arquitetura</a>
+        <a href="#principios">Critério</a>
+        <a href="#evidencias">Evidências</a>
         <a href="#autoria">Autoria técnica</a>
-        <a href="#fluxo">Fluxo</a>
-        <a href="#principios">Princípios</a>
         <a href="#origem">Origem</a>
         <a href="mailto:christiandscosta@gmail.com">Contato</a>
       </div>
     </div>
-    <p class="footer-note">CORPUS · RATIO · CERNE · LUX. Pseudonimização reversível na entrada, anonimização irreversível na saída, inventário auditável e cofre apartado — LGPD-by-design. A decisão permanece com o juízo humano.</p>
+    <p class="footer-note">CORPUS · RATIO · CERNE · LUX. Pseudonimização reversível na entrada, anonimização irreversível na saída, inventário auditável e cofre apartado (LGPD-by-design). A decisão permanece com o juízo humano.</p>
   </div>
 </footer>
+
+<!-- VISOR · modal reutilizável de registro operacional -->
+<div class="ev-modal" id="ev-modal" role="dialog" aria-modal="true" aria-labelledby="ev-modal-title" hidden>
+  <div class="ev-modal-backdrop" data-ev-close></div>
+  <div class="ev-modal-dialog">
+    <div class="ev-modal-head">
+      <h2 class="ev-modal-title" id="ev-modal-title"></h2>
+      <button type="button" class="ev-modal-close" id="ev-modal-close" data-ev-close aria-label="Fechar visor">×</button>
+    </div>
+    <figure class="ev-modal-figure" id="ev-modal-figure">
+      <img id="ev-modal-img" alt="" />
+    </figure>
+    <div class="ev-modal-caption" id="ev-modal-caption"></div>
+  </div>
+</div>
 
 <script>
 /* reveal — IntersectionObserver, com falha segura para render headless/sem JS-scroll */
@@ -965,7 +1059,7 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
 
 /* scrollspy */
 (function(){
-  var ids = ['problema','resposta','arquitetura','autoria','evidencias','principios'];
+  var ids = ['problema','resposta','arquitetura','principios','evidencias','autoria'];
   var links = {};
   document.querySelectorAll('.nav-links a').forEach(function(a){
     var h = a.getAttribute('href');
@@ -1038,6 +1132,58 @@ footer a{transition:color .2s;}footer a:hover{color:var(--cloud);}
   });
   closeBtn.addEventListener('click', close);
   backdrop.addEventListener('click', close);
+})();
+
+/* visor · modal reutilizável de registro operacional — fecha por × e clique fora */
+(function(){
+  var modal = document.getElementById('ev-modal');
+  if(!modal) return;
+  var img = document.getElementById('ev-modal-img');
+  var figure = document.getElementById('ev-modal-figure');
+  var titleEl = document.getElementById('ev-modal-title');
+  var capEl = document.getElementById('ev-modal-caption');
+  var closeBtn = document.getElementById('ev-modal-close');
+  var lastFocus = null;
+  function clearFallback(){ var f = figure.querySelector('.ev-modal-fallback'); if(f) f.remove(); }
+  function openModal(src, title, caption){
+    titleEl.textContent = title || '';
+    capEl.textContent = caption || '';
+    clearFallback();
+    img.style.display = '';
+    img.alt = title || 'registro operacional';
+    var triedAlt = false;
+    img.onerror = function(){
+      if(!triedAlt && /\.webp$/i.test(img.src)){ triedAlt = true; img.src = img.src.replace(/\.webp$/i, '.png'); return; }
+      img.style.display = 'none';
+      clearFallback();
+      var d = document.createElement('div');
+      d.className = 'ev-modal-fallback';
+      d.textContent = 'registro operacional indisponível · adicione ' + (src || '');
+      figure.appendChild(d);
+    };
+    img.src = src || '';
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    void modal.offsetWidth;
+    modal.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKey);
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    window.setTimeout(function(){ modal.hidden = true; img.removeAttribute('src'); }, 360);
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function onKey(e){ if(e.key === 'Escape'){ e.preventDefault(); closeModal(); } }
+  document.querySelectorAll('[data-img]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openModal(btn.getAttribute('data-img'), btn.getAttribute('data-title'), btn.getAttribute('data-caption'));
+    });
+  });
+  modal.querySelectorAll('[data-ev-close]').forEach(function(el){ el.addEventListener('click', closeModal); });
 })();
 </script>
    <style>
