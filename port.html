@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Christian da Costa · Case Integrado</title>
 
-  <!-- Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -14,20 +13,16 @@
     :root {
       --bg: #FDFDFD;
       --ink: #1A1A1A;
-      --muted: rgba(26, 26, 26, 0.58);
-      --line: rgba(26, 26, 26, 0.12);
-      --line-strong: rgba(26, 26, 26, 0.22);
+      --muted: rgba(26, 26, 26, .58);
+      --line: rgba(26, 26, 26, .13);
+      --line-strong: rgba(26, 26, 26, .28);
 
       /*
-        Interpretação do 75/35:
-        - coluna esquerda: 35vw;
-        - conteúdo principal: área remanescente.
-        Se quiser 25/75, altere --sidebar-w para 25vw.
+        Proporção 75/35 interpretada como:
+        direita 75 partes / esquerda 35 partes.
+        35 ÷ 110 = 31,818%.
       */
-      --sidebar-w: 35vw;
-      --sidebar-w-max: 460px;
-      --sidebar-w-min: 320px;
-
+      --sidebar: clamp(320px, 31.818vw, 470px);
       --ease: cubic-bezier(.22, 1, .36, 1);
     }
 
@@ -42,19 +37,12 @@
 
     body {
       margin: 0;
-      font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-weight: 400;
+      min-height: 100vh;
       color: var(--ink);
       background: var(--bg);
+      font-family: "Manrope", Arial, sans-serif;
+      font-weight: 400;
       overflow-x: hidden;
-    }
-
-    body.sidebar-closed {
-      --sidebar-current: 0px;
-    }
-
-    body:not(.sidebar-closed) {
-      --sidebar-current: clamp(var(--sidebar-w-min), var(--sidebar-w), var(--sidebar-w-max));
     }
 
     a {
@@ -64,262 +52,216 @@
 
     button {
       font: inherit;
-      color: inherit;
     }
-
-    /* COLUNA ESQUERDA */
 
     .sidebar {
       position: fixed;
-      inset: 0 auto 0 0;
       z-index: 20;
-      width: var(--sidebar-current);
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--sidebar);
+      padding: 34px 32px 28px;
       background: var(--bg);
       border-right: 1px solid var(--line);
       display: grid;
       grid-template-rows: auto 1fr auto;
-      padding: 34px 32px 28px;
-      transition:
-        width 520ms var(--ease),
-        padding 520ms var(--ease),
-        border-color 520ms var(--ease);
-      overflow: hidden;
+      transition: transform 460ms var(--ease);
     }
 
     body.sidebar-closed .sidebar {
-      padding-left: 0;
-      padding-right: 0;
-      border-right-color: transparent;
+      transform: translateX(-100%);
     }
 
-    .sidebar-inner {
-      width: calc(clamp(var(--sidebar-w-min), var(--sidebar-w), var(--sidebar-w-max)) - 64px);
-      min-width: 256px;
-      opacity: 1;
-      transform: translateX(0);
-      transition:
-        opacity 280ms ease,
-        transform 520ms var(--ease);
-    }
-
-    body.sidebar-closed .sidebar-inner {
-      opacity: 0;
-      transform: translateX(-24px);
-      pointer-events: none;
-    }
-
-    .sidebar-top {
+    .topline {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
     }
 
-    .eyebrow {
-      margin: 0 0 18px;
-      font-size: 11px;
-      line-height: 1;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .sidebar-title {
+    .eyebrow,
+    .nav-label,
+    .kicker {
       margin: 0;
-      max-width: 10ch;
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      font-weight: 700;
-      font-size: clamp(34px, 4.2vw, 58px);
-      line-height: 0.88;
-      letter-spacing: -0.06em;
-    }
-
-    .sidebar-subtitle {
-      margin: 26px 0 0;
-      max-width: 26ch;
-      font-size: 15px;
-      line-height: 1.45;
-      color: var(--muted);
-    }
-
-    .close-toggle {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--line);
-      background: transparent;
-      border-radius: 999px;
-      cursor: pointer;
-      display: inline-grid;
-      place-items: center;
-      transition:
-        border-color 200ms ease,
-        background 200ms ease,
-        transform 200ms ease;
-    }
-
-    .close-toggle:hover {
-      border-color: var(--line-strong);
-      background: rgba(26, 26, 26, 0.035);
-    }
-
-    .close-toggle span {
-      display: block;
-      font-size: 18px;
-      line-height: 1;
-      transform: translateY(-1px);
-    }
-
-    .nav-wrap {
-      align-self: center;
-      padding: 42px 0;
-    }
-
-    .nav-label {
-      margin: 0 0 18px;
       font-size: 11px;
       line-height: 1;
-      letter-spacing: 0.14em;
+      letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--muted);
       font-weight: 700;
     }
 
-    .side-nav {
-      display: grid;
-      gap: 8px;
-    }
-
-    .side-nav a {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      gap: 22px;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 16px;
-      line-height: 1.1;
+    .brand {
+      margin-top: 18px;
+      font-family: "Space Grotesk", Arial, sans-serif;
       font-weight: 700;
-      letter-spacing: -0.02em;
-      transition: color 180ms ease;
+      font-size: clamp(38px, 4.2vw, 60px);
+      line-height: .86;
+      letter-spacing: -.065em;
+      max-width: 8.6ch;
     }
 
-    .side-nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 0%;
-      height: 1px;
-      background: var(--ink);
-      transition: width 260ms var(--ease);
-    }
-
-    .side-nav a:hover::after,
-    .side-nav a.active::after {
-      width: 100%;
-    }
-
-    .side-nav small {
+    .thesis {
+      margin: 26px 0 0;
+      max-width: 27ch;
       color: var(--muted);
-      font-size: 11px;
-      line-height: 1;
-      letter-spacing: 0.12em;
-      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.48;
     }
 
-    .signature {
+    .icon-button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
       display: grid;
-      gap: 8px;
-      border-top: 1px solid var(--line);
-      padding-top: 20px;
+      place-items: center;
+      transition: border-color 180ms ease, background 180ms ease;
     }
 
-    .signature strong {
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      font-weight: 700;
-      font-size: 18px;
+    .icon-button:hover {
+      border-color: var(--line-strong);
+      background: rgba(26, 26, 26, .035);
+    }
+
+    .close-button {
+      flex: 0 0 auto;
+      font-size: 19px;
       line-height: 1;
-      letter-spacing: -0.04em;
     }
 
-    .signature span {
-      max-width: 28ch;
-      font-size: 12px;
-      line-height: 1.45;
-      color: var(--muted);
-    }
-
-    /* BOTÃO DE REABERTURA */
-
-    .open-toggle {
+    .open-button {
       position: fixed;
+      z-index: 30;
       left: 18px;
       top: 18px;
-      z-index: 30;
-      width: 42px;
-      height: 42px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--bg);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
       opacity: 0;
       pointer-events: none;
-      transform: translateX(-8px);
-      transition:
-        opacity 240ms ease,
-        transform 240ms ease,
-        border-color 200ms ease,
-        background 200ms ease;
+      background: var(--bg);
+      transform: translateX(-10px);
+      transition: opacity 220ms ease, transform 220ms ease;
     }
 
-    .open-toggle:hover {
-      border-color: var(--line-strong);
-      background: rgba(26, 26, 26, 0.035);
-    }
-
-    body.sidebar-closed .open-toggle {
+    body.sidebar-closed .open-button {
       opacity: 1;
       pointer-events: auto;
       transform: translateX(0);
     }
 
-    .open-toggle i {
-      width: 16px;
-      height: 10px;
+    .open-button span,
+    .open-button span::before,
+    .open-button span::after {
       display: block;
-      border-top: 2px solid var(--ink);
-      border-bottom: 2px solid var(--ink);
-      position: relative;
-    }
-
-    .open-toggle i::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 3px;
       width: 16px;
       height: 2px;
       background: var(--ink);
+      content: "";
     }
 
-    /* CONTEÚDO PRINCIPAL */
+    .open-button span {
+      position: relative;
+    }
 
-    .main {
-      margin-left: var(--sidebar-current);
+    .open-button span::before {
+      position: absolute;
+      top: -5px;
+      left: 0;
+    }
+
+    .open-button span::after {
+      position: absolute;
+      top: 5px;
+      left: 0;
+    }
+
+    .nav-block {
+      align-self: center;
+      padding: 42px 0;
+    }
+
+    .nav {
+      margin-top: 20px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav a {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 0;
+      height: 1px;
+      background: var(--ink);
+      transition: width 240ms var(--ease);
+    }
+
+    .nav a:hover::after,
+    .nav a.is-active::after {
+      width: 100%;
+    }
+
+    .nav small {
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .signature {
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .signature strong {
+      display: block;
+      font-family: "Space Grotesk", Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .signature span {
+      display: block;
+      margin-top: 8px;
+      max-width: 30ch;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .page {
       min-height: 100vh;
-      transition: margin-left 520ms var(--ease);
-      background:
-        linear-gradient(to right, rgba(26, 26, 26, 0.035), transparent 1px),
-        var(--bg);
+      margin-left: var(--sidebar);
+      transition: margin-left 460ms var(--ease);
+      background: var(--bg);
     }
 
-    .main-inner {
-      width: min(100%, 1120px);
-      padding: 76px clamp(28px, 5vw, 78px) 96px;
+    body.sidebar-closed .page {
+      margin-left: 0;
+    }
+
+    .content {
+      width: min(1120px, 100%);
+      padding: 76px clamp(26px, 5vw, 80px) 96px;
     }
 
     .section {
@@ -331,96 +273,85 @@
       scroll-margin-top: 24px;
     }
 
-    .section.compact {
-      min-height: 72vh;
-    }
-
-    .section-kicker {
-      margin: 0 0 18px;
-      font-size: 12px;
-      line-height: 1;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
+    .section:last-child {
+      border-bottom: 0;
     }
 
     h1,
     h2,
     h3 {
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      font-weight: 700;
+      margin: 0;
       color: var(--ink);
-      letter-spacing: -0.06em;
+      font-family: "Space Grotesk", Arial, sans-serif;
+      font-weight: 700;
+      letter-spacing: -.065em;
     }
 
     h1 {
-      margin: 0;
       max-width: 12ch;
-      font-size: clamp(54px, 8vw, 118px);
-      line-height: 0.84;
+      font-size: clamp(56px, 8vw, 118px);
+      line-height: .84;
     }
 
     h2 {
-      margin: 0;
-      max-width: 13ch;
-      font-size: clamp(44px, 6vw, 92px);
-      line-height: 0.86;
+      max-width: 12.5ch;
+      font-size: clamp(46px, 6vw, 92px);
+      line-height: .86;
     }
 
     h3 {
-      margin: 0 0 10px;
+      margin-bottom: 10px;
       font-size: 22px;
-      line-height: 1;
-      letter-spacing: -0.04em;
+      line-height: .95;
+      letter-spacing: -.045em;
     }
 
     .lead {
       margin: 34px 0 0;
-      max-width: 760px;
-      font-size: clamp(20px, 2.1vw, 31px);
-      line-height: 1.2;
-      letter-spacing: -0.035em;
+      max-width: 790px;
+      font-size: clamp(20px, 2.05vw, 31px);
+      line-height: 1.22;
+      letter-spacing: -.035em;
     }
 
-    .body-copy {
+    .copy {
       margin: 28px 0 0;
       max-width: 720px;
-      font-size: 17px;
-      line-height: 1.75;
       color: var(--muted);
+      font-size: 17px;
+      line-height: 1.74;
     }
 
-    .grid {
+    .cards {
       margin-top: 46px;
+      max-width: 900px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
-      max-width: 880px;
     }
 
     .card {
-      min-height: 178px;
+      min-height: 176px;
       border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .58);
       padding: 24px;
-      background: rgba(255, 255, 255, 0.55);
     }
 
     .card p {
       margin: 0;
-      font-size: 14px;
-      line-height: 1.65;
       color: var(--muted);
+      font-size: 14px;
+      line-height: 1.64;
     }
 
-    .metric-row {
+    .metrics {
       margin-top: 46px;
+      max-width: 940px;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1px;
-      background: var(--line);
-      max-width: 920px;
       border: 1px solid var(--line);
+      background: var(--line);
+      gap: 1px;
     }
 
     .metric {
@@ -430,61 +361,51 @@
 
     .metric strong {
       display: block;
-      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-family: "Space Grotesk", Arial, sans-serif;
       font-size: clamp(34px, 4vw, 56px);
-      line-height: 0.9;
-      letter-spacing: -0.07em;
+      line-height: .88;
+      letter-spacing: -.075em;
     }
 
     .metric span {
       display: block;
       margin-top: 14px;
-      font-size: 13px;
-      line-height: 1.4;
       color: var(--muted);
+      font-size: 13px;
+      line-height: 1.42;
     }
 
-    /* MOBILE */
-
     @media (max-width: 920px) {
-      body:not(.sidebar-closed) {
-        --sidebar-current: min(86vw, 390px);
+      :root {
+        --sidebar: min(390px, 86vw);
       }
 
-      .main-inner {
-        padding-top: 88px;
-      }
-
-      .grid,
-      .metric-row {
+      .cards,
+      .metrics {
         grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 680px) {
-      body:not(.sidebar-closed) {
-        --sidebar-current: 100vw;
+      :root {
+        --sidebar: 100vw;
       }
 
       .sidebar {
         padding: 28px 24px 24px;
       }
 
-      .sidebar-inner {
-        width: calc(100vw - 48px);
-      }
-
-      .main {
+      .page {
         margin-left: 0;
       }
 
-      body:not(.sidebar-closed) .main {
+      body:not(.sidebar-closed) .page {
         pointer-events: none;
         user-select: none;
       }
 
-      .main-inner {
-        padding: 82px 22px 72px;
+      .content {
+        padding: 86px 22px 72px;
       }
 
       .section {
@@ -504,63 +425,53 @@
 </head>
 
 <body>
-  <aside class="sidebar" aria-label="Navegação lateral fixa">
-    <div class="sidebar-inner sidebar-top">
+  <aside class="sidebar" aria-label="Menu lateral">
+    <div class="topline">
       <div>
         <p class="eyebrow">Case integrado</p>
-        <h1 class="sidebar-title">ECHO ATRIO</h1>
-        <p class="sidebar-subtitle">
-          Da operação bruta à inteligência orquestrada.
-        </p>
+        <div class="brand">ECHO ATRIO</div>
+        <p class="thesis">Da operação bruta à inteligência orquestrada.</p>
       </div>
 
-      <button class="close-toggle" type="button" aria-label="Fechar coluna lateral" title="Fechar coluna">
-        <span>×</span>
-      </button>
+      <button class="icon-button close-button" type="button" aria-label="Fechar coluna">×</button>
     </div>
 
-    <div class="sidebar-inner nav-wrap">
+    <div class="nav-block">
       <p class="nav-label">Navegação</p>
-      <nav class="side-nav" aria-label="Menu da página">
-        <a href="#autoria" data-section="autoria"><span>Autoria</span><small>01</small></a>
-        <a href="#echo" data-section="echo"><span>ECHO</span><small>02</small></a>
-        <a href="#atrio" data-section="atrio"><span>ATRIO</span><small>03</small></a>
-        <a href="#resultados" data-section="resultados"><span>Resultados</span><small>04</small></a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#autoria" data-target="autoria"><span>Autoria</span><small>01</small></a>
+        <a href="#echo" data-target="echo"><span>ECHO</span><small>02</small></a>
+        <a href="#atrio" data-target="atrio"><span>ATRIO</span><small>03</small></a>
+        <a href="#resultados" data-target="resultados"><span>Resultados</span><small>04</small></a>
       </nav>
     </div>
 
-    <div class="sidebar-inner signature">
+    <footer class="signature">
       <strong>Christian da Costa</strong>
       <span>Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio</span>
-    </div>
+    </footer>
   </aside>
 
-  <button class="open-toggle" type="button" aria-label="Abrir coluna lateral" title="Abrir coluna">
-    <i aria-hidden="true"></i>
+  <button class="icon-button open-button" type="button" aria-label="Abrir coluna">
+    <span aria-hidden="true"></span>
   </button>
 
-  <main class="main">
-    <div class="main-inner">
-
+  <main class="page">
+    <div class="content">
       <section class="section" id="autoria" data-section="autoria">
-        <p class="section-kicker">Autoria</p>
+        <p class="kicker">Autoria</p>
         <h1>Antes da máquina, o método.</h1>
-        <p class="lead">
-          Este case organiza uma passagem: da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.
-        </p>
-        <p class="body-copy">
-          A autoria aqui não aparece como assinatura decorativa. Ela funciona como responsabilidade metodológica: alguém observou o fluxo, identificou fricções, nomeou padrões, estruturou procedimentos e transformou uma prática dispersa em sistema legível.
-        </p>
+        <p class="lead">Este case organiza a passagem da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.</p>
+        <p class="copy">A autoria aqui não funciona como assinatura decorativa. Ela aparece como responsabilidade metodológica: observar o fluxo, nomear padrões, estruturar procedimentos e transformar prática dispersa em sistema legível.</p>
       </section>
 
       <section class="section" id="echo" data-section="echo">
-        <p class="section-kicker">ECHO</p>
+        <p class="kicker">ECHO</p>
         <h2>Harmonia como filosofia de atuação.</h2>
-        <p class="lead">
-          O ECHO nasce como método de regência: uma forma de transformar produtividade, qualidade e coordenação em uma mesma superfície de trabalho.
-        </p>
+        <p class="lead">O ECHO nasce como método de regência: uma forma de transformar produtividade, qualidade e coordenação em uma mesma superfície de trabalho.</p>
 
-        <div class="grid">
+        <div class="cards">
           <article class="card">
             <h3>Regência</h3>
             <p>O trabalho jurídico não é apenas produção individual. É sequência, escuta, correção, ritmo e responsabilidade sobre o percurso.</p>
@@ -574,13 +485,11 @@
       </section>
 
       <section class="section" id="atrio" data-section="atrio">
-        <p class="section-kicker">ATRIO</p>
+        <p class="kicker">ATRIO</p>
         <h2>Arquitetura para governar o raciocínio.</h2>
-        <p class="lead">
-          O ATRIO opera como uma planta-mãe: inventaria, estrutura, confronta e refina o trabalho jurídico antes que a inteligência artificial seja tratada como mera aceleração.
-        </p>
+        <p class="lead">O ATRIO opera como planta-mãe: inventaria, estrutura, confronta e refina o trabalho jurídico antes que a inteligência artificial seja tratada como mera aceleração.</p>
 
-        <div class="grid">
+        <div class="cards">
           <article class="card">
             <h3>CORPUS</h3>
             <p>Memória governada, inventário documental, lastro e organização do material de entrada.</p>
@@ -603,14 +512,12 @@
         </div>
       </section>
 
-      <section class="section compact" id="resultados" data-section="resultados">
-        <p class="section-kicker">Resultados</p>
+      <section class="section" id="resultados" data-section="resultados">
+        <p class="kicker">Resultados</p>
         <h2>Evidência antes de ornamento.</h2>
-        <p class="lead">
-          O portfólio deve demonstrar método por meio de rastros: indicadores, fluxos, decisões de arquitetura, entregas e critérios de qualidade.
-        </p>
+        <p class="lead">O portfólio deve demonstrar método por meio de rastros: indicadores, fluxos, decisões de arquitetura, entregas e critérios de qualidade.</p>
 
-        <div class="metric-row" aria-label="Indicadores sintéticos">
+        <div class="metrics">
           <div class="metric">
             <strong>01</strong>
             <span>Fluxo estruturado em fases, com leitura operacional do acervo.</span>
@@ -627,47 +534,51 @@
           </div>
         </div>
       </section>
-
     </div>
   </main>
 
   <script>
-    const body = document.body;
-    const closeButton = document.querySelector(".close-toggle");
-    const openButton = document.querySelector(".open-toggle");
-    const navLinks = [...document.querySelectorAll(".side-nav a")];
-    const sections = [...document.querySelectorAll("main section[data-section]")];
+    (function () {
+      var body = document.body;
+      var closeButton = document.querySelector(".close-button");
+      var openButton = document.querySelector(".open-button");
+      var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
+      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-section]"));
 
-    closeButton.addEventListener("click", () => {
-      body.classList.add("sidebar-closed");
-    });
-
-    openButton.addEventListener("click", () => {
-      body.classList.remove("sidebar-closed");
-    });
-
-    const setActive = (id) => {
-      navLinks.forEach((link) => {
-        link.classList.toggle("active", link.dataset.section === id);
+      closeButton.addEventListener("click", function () {
+        body.classList.add("sidebar-closed");
       });
-    };
 
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      openButton.addEventListener("click", function () {
+        body.classList.remove("sidebar-closed");
+      });
 
-      if (visible) {
-        setActive(visible.target.dataset.section);
+      function setActive(id) {
+        links.forEach(function (link) {
+          link.classList.toggle("is-active", link.getAttribute("data-target") === id);
+        });
       }
-    }, {
-      root: null,
-      threshold: [0.24, 0.42, 0.62]
-    });
 
-    sections.forEach(section => observer.observe(section));
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          var visible = entries
+            .filter(function (entry) { return entry.isIntersecting; })
+            .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
 
-    setActive("autoria");
+          if (visible) {
+            setActive(visible.target.getAttribute("data-section"));
+          }
+        }, {
+          threshold: [0.25, 0.45, 0.65]
+        });
+
+        sections.forEach(function (section) {
+          observer.observe(section);
+        });
+      }
+
+      setActive("autoria");
+    })();
   </script>
 </body>
 </html>
