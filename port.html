@@ -5,8 +5,618 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ECHO ATRIO | Christian da Costa</title>
   <meta name="description" content="Case integrado ECHO ATRIO. Da operação bruta à inteligência orquestrada.">
-  <link rel="stylesheet" href="styles/portfolio.css">
-  <script defer src="scripts/portfolio.js"></script>
+  <style>
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
+
+:root {
+  --bg: #fcfcfc;
+  --ink: #111111;
+  --muted: #747474;
+  --hairline: #dedede;
+  --soft: #f3f1ee;
+  --accent: #a63a23;
+  --sidebar: 31.75rem;
+  --content: 58rem;
+  --gutter: clamp(2rem, 6vw, 5.25rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.18em;
+}
+
+button {
+  font: inherit;
+}
+
+.portfolio {
+  min-height: 100vh;
+}
+
+.pf-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 3rem 2.6rem 2rem;
+  overflow-y: auto;
+  background: var(--bg);
+  border-right: 1px solid var(--hairline);
+  transition: transform 220ms ease;
+}
+
+.sidebar-closed .pf-sidebar {
+  transform: translateX(-100%);
+}
+
+.pf-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.pf-eyebrow,
+.pf-kicker,
+.pf-nav-label,
+.pf-card-num {
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pf-brand {
+  margin: 1.25rem 0 1.8rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2.4rem, 4.2vw, 4.1rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+.pf-thesis {
+  max-width: 16rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.12rem;
+  line-height: 1.35;
+}
+
+.pf-icon-button,
+.pf-open-button {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.pf-close-button {
+  flex: 0 0 auto;
+}
+
+.pf-open-button {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.sidebar-closed .pf-open-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pf-nav-block {
+  margin-top: auto;
+}
+
+.pf-nav-label {
+  margin-bottom: 1.45rem;
+}
+
+.pf-nav {
+  border-top: 1px solid var(--ink);
+}
+
+.pf-nav-item {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.pf-nav-trigger {
+  width: 100%;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  padding: 0;
+  text-align: left;
+  font-size: 1.14rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pf-nav-trigger small {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.pf-nav-trigger.is-active span:first-child {
+  color: var(--accent);
+}
+
+.pf-nav-drawer {
+  padding: 0 0 1.45rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.pf-nav-drawer p {
+  margin: 0 0 0.9rem;
+}
+
+.pf-mini-list {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+}
+
+.pf-mini-list li + li {
+  margin-top: 0.35rem;
+}
+
+.pf-drawer-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pf-tag {
+  display: inline-block;
+  margin: 0 0 0.9rem !important;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  color: var(--accent);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.pf-signature {
+  margin-top: 1rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.pf-signature strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.1rem;
+}
+
+.pf-signature span {
+  display: block;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.pf-page {
+  min-height: 100vh;
+  margin-left: var(--sidebar);
+  transition: margin-left 220ms ease;
+}
+
+.sidebar-closed .pf-page {
+  margin-left: 0;
+}
+
+.pf-content {
+  width: min(var(--content), calc(100vw - var(--sidebar) - var(--gutter) * 2));
+  margin: 0 auto;
+}
+
+.sidebar-closed .pf-content {
+  width: min(var(--content), calc(100vw - var(--gutter) * 2));
+}
+
+.pf-section {
+  padding: clamp(3rem, 8vw, 6.5rem) 0;
+}
+
+.pf-hero {
+  padding-top: clamp(4rem, 8vw, 7.5rem);
+}
+
+.pf-hero h1 {
+  max-width: 11ch;
+  margin: 0.65rem 0 2.25rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(4.4rem, 10vw, 8.3rem);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: -0.075em;
+}
+
+.pf-lead {
+  max-width: 44rem;
+  margin: 0;
+  font-size: clamp(1.55rem, 2.5vw, 2.25rem);
+  line-height: 1.14;
+  letter-spacing: -0.04em;
+}
+
+.pf-copy {
+  max-width: 43rem;
+  margin: 2.35rem 0 0;
+  color: var(--muted);
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+
+.pf-cards-section {
+  padding-top: 0;
+}
+
+.pf-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.pf-cards-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pf-cards-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.pf-card {
+  min-height: 17rem;
+  padding: 1.35rem;
+  border: 1px solid var(--hairline);
+  background: #fff;
+}
+
+.pf-card-num {
+  margin-bottom: 2.5rem;
+  color: var(--accent);
+}
+
+.pf-card h3 {
+  margin: 0 0 1rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.pf-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.pf-concept-toggles {
+  margin-top: 1.2rem;
+  border-top: 1px solid var(--ink);
+}
+
+.pf-concept-toggle {
+  width: 100%;
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: transparent;
+  color: var(--ink);
+  padding: 0;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pf-concept-toggle.is-open {
+  color: var(--accent);
+}
+
+.pf-concept-body {
+  padding: clamp(2rem, 5vw, 4rem) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.pf-prose {
+  max-width: 48rem;
+}
+
+.pf-prose-title {
+  margin: 0 0 2rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+}
+
+.pf-prose p {
+  margin: 0 0 1.15rem;
+  color: #303030;
+  font-size: 1.08rem;
+  line-height: 1.72;
+}
+
+.pf-prose em {
+  color: var(--accent);
+}
+
+.pf-view[hidden],
+[hidden] {
+  display: none !important;
+}
+
+.pf-page-footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--hairline);
+  background: var(--soft);
+}
+
+.pf-footer-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1.2fr;
+  gap: 2rem;
+}
+
+.pf-footer-grid p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.pf-footer-name,
+.pf-footer-mark {
+  color: var(--ink) !important;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --sidebar: 24rem;
+  }
+
+  .pf-cards-3,
+  .pf-cards-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pf-content,
+  .sidebar-closed .pf-content {
+    width: min(100% - 3rem, 58rem);
+  }
+}
+
+@media (max-width: 820px) {
+  :root {
+    --sidebar: min(88vw, 24rem);
+  }
+
+  .pf-page,
+  .sidebar-closed .pf-page {
+    margin-left: 0;
+  }
+
+  .pf-sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 0 100vmax rgba(252, 252, 252, 0.72);
+  }
+
+  .portfolio:not(.sidebar-closed) .pf-sidebar {
+    transform: translateX(0);
+  }
+
+  .pf-open-button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .portfolio:not(.sidebar-closed) .pf-open-button {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pf-hero h1 {
+    font-size: clamp(4rem, 18vw, 6.5rem);
+  }
+
+  .pf-cards-3,
+  .pf-cards-4,
+  .pf-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .pf-sidebar {
+    padding: 2rem 1.35rem;
+  }
+
+  .pf-content,
+  .sidebar-closed .pf-content {
+    width: min(100% - 2rem, 58rem);
+  }
+
+  .pf-hero h1 {
+    max-width: 8ch;
+  }
+
+  .pf-lead {
+    font-size: 1.35rem;
+  }
+}
+
+  </style>
+  <script defer>
+(() => {
+  const root = document.getElementById("portfolio");
+  const closeSidebar = document.querySelector("[data-close-sidebar]");
+  const openSidebar = document.querySelector("[data-open-sidebar]");
+  const navButtons = Array.from(document.querySelectorAll("[data-nav]"));
+  const views = Array.from(document.querySelectorAll("[data-view]"));
+  const drawerItems = Array.from(document.querySelectorAll("[data-drawer-item]"));
+  const conceptButtons = Array.from(document.querySelectorAll("[data-concept-toggle]"));
+
+  const viewById = (id) => document.querySelector(`[data-view="${id}"]`);
+
+  function setSidebar(open) {
+    root.classList.toggle("sidebar-closed", !open);
+  }
+
+  function setView(id, pushHash = true) {
+    const target = viewById(id) ? id : "default";
+
+    views.forEach((view) => {
+      const active = view.dataset.view === target;
+      view.hidden = !active;
+      view.classList.toggle("is-active", active);
+    });
+
+    navButtons.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.nav === target);
+    });
+
+    if (pushHash) {
+      const hash = target === "default" ? "" : `#${target}`;
+      history.replaceState(null, "", `${location.pathname}${hash}`);
+    }
+
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+
+  function toggleDrawer(id) {
+    drawerItems.forEach((item) => {
+      const isTarget = item.dataset.drawerItem === id;
+      const button = item.querySelector("[data-nav]");
+      const drawer = item.querySelector(".pf-nav-drawer");
+      const wasOpen = item.classList.contains("is-open");
+      const shouldOpen = isTarget ? !wasOpen : false;
+
+      item.classList.toggle("is-open", shouldOpen);
+      button.setAttribute("aria-expanded", String(shouldOpen));
+      drawer.hidden = !shouldOpen;
+
+      const chevron = button.querySelector(".pf-chevron");
+      if (chevron) chevron.textContent = shouldOpen ? "−" : "+";
+    });
+  }
+
+  function setInitialViewFromHash() {
+    const hash = location.hash.replace("#", "").trim();
+    if (hash === "echo" || hash === "atrio") {
+      setView(hash, false);
+      toggleDrawer(hash);
+    } else if (hash === "autoria" || hash === "ensaiando") {
+      setView("default", false);
+      toggleDrawer(hash);
+    } else {
+      setView("default", false);
+    }
+  }
+
+  closeSidebar?.addEventListener("click", () => setSidebar(false));
+  openSidebar?.addEventListener("click", () => setSidebar(true));
+
+  navButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.nav;
+
+      if (id === "echo" || id === "atrio") {
+        setView(id);
+        toggleDrawer(id);
+        return;
+      }
+
+      setView("default", id === "autoria" || id === "ensaiando");
+      if (id === "autoria" || id === "ensaiando") {
+        history.replaceState(null, "", `${location.pathname}#${id}`);
+      }
+      toggleDrawer(id);
+    });
+  });
+
+  conceptButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.conceptToggle;
+      const body = document.querySelector(`[data-concept-body="${id}"]`);
+      const wasOpen = button.classList.contains("is-open");
+
+      conceptButtons.forEach((other) => {
+        const otherId = other.dataset.conceptToggle;
+        const otherBody = document.querySelector(`[data-concept-body="${otherId}"]`);
+        other.classList.remove("is-open");
+        other.setAttribute("aria-expanded", "false");
+        const otherChevron = other.querySelector(".pf-chevron");
+        if (otherChevron) otherChevron.textContent = "+";
+        if (otherBody) otherBody.hidden = true;
+      });
+
+      const shouldOpen = !wasOpen;
+      button.classList.toggle("is-open", shouldOpen);
+      button.setAttribute("aria-expanded", String(shouldOpen));
+      if (body) body.hidden = !shouldOpen;
+
+      const chevron = button.querySelector(".pf-chevron");
+      if (chevron) chevron.textContent = shouldOpen ? "−" : "+";
+    });
+  });
+
+  window.addEventListener("hashchange", setInitialViewFromHash);
+  setInitialViewFromHash();
+})();
+
+  </script>
 </head>
 
 <body>
