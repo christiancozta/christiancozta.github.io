@@ -3,582 +3,413 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Christian da Costa · Case Integrado</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #FDFDFD;
-      --ink: #1A1A1A;
-      --muted: rgba(26, 26, 26, .58);
-      --line: rgba(26, 26, 26, .13);
-      --line-strong: rgba(26, 26, 26, .28);
-
-      /*
-        Proporção 75/35 interpretada como:
-        direita 75 partes / esquerda 35 partes.
-        35 ÷ 110 = 31,818%.
-      */
-      --sidebar: clamp(320px, 31.818vw, 470px);
-      --ease: cubic-bezier(.22, 1, .36, 1);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      background: var(--bg);
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      background: var(--bg);
-      font-family: "Manrope", Arial, sans-serif;
-      font-weight: 400;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .sidebar {
-      position: fixed;
-      z-index: 20;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: var(--sidebar);
-      padding: 34px 32px 28px;
-      background: var(--bg);
-      border-right: 1px solid var(--line);
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      transition: transform 460ms var(--ease);
-    }
-
-    body.sidebar-closed .sidebar {
-      transform: translateX(-100%);
-    }
-
-    .topline {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .eyebrow,
-    .nav-label,
-    .kicker {
-      margin: 0;
-      font-size: 11px;
-      line-height: 1;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .brand {
-      margin-top: 18px;
-      font-family: "Space Grotesk", Arial, sans-serif;
-      font-weight: 700;
-      font-size: clamp(38px, 4.2vw, 60px);
-      line-height: .86;
-      letter-spacing: -.065em;
-      max-width: 8.6ch;
-    }
-
-    .thesis {
-      margin: 26px 0 0;
-      max-width: 27ch;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.48;
-    }
-
-    .icon-button {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--ink);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: border-color 180ms ease, background 180ms ease;
-    }
-
-    .icon-button:hover {
-      border-color: var(--line-strong);
-      background: rgba(26, 26, 26, .035);
-    }
-
-    .close-button {
-      flex: 0 0 auto;
-      font-size: 19px;
-      line-height: 1;
-    }
-
-    .open-button {
-      position: fixed;
-      z-index: 30;
-      left: 18px;
-      top: 18px;
-      opacity: 0;
-      pointer-events: none;
-      background: var(--bg);
-      transform: translateX(-10px);
-      transition: opacity 220ms ease, transform 220ms ease;
-    }
-
-    body.sidebar-closed .open-button {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(0);
-    }
-
-    .open-button span,
-    .open-button span::before,
-    .open-button span::after {
-      display: block;
-      width: 16px;
-      height: 2px;
-      background: var(--ink);
-      content: "";
-    }
-
-    .open-button span {
-      position: relative;
-    }
-
-    .open-button span::before {
-      position: absolute;
-      top: -5px;
-      left: 0;
-    }
-
-    .open-button span::after {
-      position: absolute;
-      top: 5px;
-      left: 0;
-    }
-
-    .nav-block {
-      align-self: center;
-      padding: 42px 0;
-    }
-
-    .nav {
-      margin-top: 20px;
-      display: grid;
-      gap: 4px;
-    }
-
-    .nav a {
-      position: relative;
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 15px 0;
-      border-bottom: 1px solid var(--line);
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-
-    .nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 0;
-      height: 1px;
-      background: var(--ink);
-      transition: width 240ms var(--ease);
-    }
-
-    .nav a:hover::after,
-    .nav a.is-active::after {
-      width: 100%;
-    }
-
-    .nav small {
-      font-size: 11px;
-      letter-spacing: .14em;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .signature {
-      border-top: 1px solid var(--line);
-      padding-top: 20px;
-    }
-
-    .signature strong {
-      display: block;
-      font-family: "Space Grotesk", Arial, sans-serif;
-      font-size: 18px;
-      line-height: 1;
-      letter-spacing: -.04em;
-    }
-
-    .signature span {
-      display: block;
-      margin-top: 8px;
-      max-width: 30ch;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .page {
-      min-height: 100vh;
-      margin-left: var(--sidebar);
-      transition: margin-left 460ms var(--ease);
-      background: var(--bg);
-    }
-
-    body.sidebar-closed .page {
-      margin-left: 0;
-    }
-
-    .content {
-      width: min(1120px, 100%);
-      padding: 76px clamp(26px, 5vw, 80px) 96px;
-    }
-
-    .section {
-      min-height: 100vh;
-      display: grid;
-      align-content: center;
-      padding: 64px 0;
-      border-bottom: 1px solid var(--line);
-      scroll-margin-top: 24px;
-    }
-
-    .section:last-child {
-      border-bottom: 0;
-    }
-
-    h1,
-    h2,
-    h3 {
-      margin: 0;
-      color: var(--ink);
-      font-family: "Space Grotesk", Arial, sans-serif;
-      font-weight: 700;
-      letter-spacing: -.065em;
-    }
-
-    h1 {
-      max-width: 12ch;
-      font-size: clamp(56px, 8vw, 118px);
-      line-height: .84;
-    }
-
-    h2 {
-      max-width: 12.5ch;
-      font-size: clamp(46px, 6vw, 92px);
-      line-height: .86;
-    }
-
-    h3 {
-      margin-bottom: 10px;
-      font-size: 22px;
-      line-height: .95;
-      letter-spacing: -.045em;
-    }
-
-    .lead {
-      margin: 34px 0 0;
-      max-width: 790px;
-      font-size: clamp(20px, 2.05vw, 31px);
-      line-height: 1.22;
-      letter-spacing: -.035em;
-    }
-
-    .copy {
-      margin: 28px 0 0;
-      max-width: 720px;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.74;
-    }
-
-    .cards {
-      margin-top: 46px;
-      max-width: 900px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      min-height: 176px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, .58);
-      padding: 24px;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.64;
-    }
-
-    .metrics {
-      margin-top: 46px;
-      max-width: 940px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      border: 1px solid var(--line);
-      background: var(--line);
-      gap: 1px;
-    }
-
-    .metric {
-      background: var(--bg);
-      padding: 28px 24px;
-    }
-
-    .metric strong {
-      display: block;
-      font-family: "Space Grotesk", Arial, sans-serif;
-      font-size: clamp(34px, 4vw, 56px);
-      line-height: .88;
-      letter-spacing: -.075em;
-    }
-
-    .metric span {
-      display: block;
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.42;
-    }
-
-    @media (max-width: 920px) {
-      :root {
-        --sidebar: min(390px, 86vw);
-      }
-
-      .cards,
-      .metrics {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 680px) {
-      :root {
-        --sidebar: 100vw;
-      }
-
-      .sidebar {
-        padding: 28px 24px 24px;
-      }
-
-      .page {
-        margin-left: 0;
-      }
-
-      body:not(.sidebar-closed) .page {
-        pointer-events: none;
-        user-select: none;
-      }
-
-      .content {
-        padding: 86px 22px 72px;
-      }
-
-      .section {
-        min-height: auto;
-        padding: 92px 0;
-      }
-
-      h1 {
-        font-size: clamp(52px, 18vw, 84px);
-      }
-
-      h2 {
-        font-size: clamp(46px, 15vw, 74px);
-      }
-    }
-  </style>
+  <title>ECHO ATRIO | Christian da Costa</title>
+  <meta name="description" content="Case integrado ECHO ATRIO. Da operação bruta à inteligência orquestrada.">
+  <link rel="stylesheet" href="styles/portfolio.css">
+  <script defer src="scripts/portfolio.js"></script>
 </head>
 
 <body>
-  <aside class="sidebar" aria-label="Menu lateral">
-    <div class="topline">
-      <div>
-        <p class="eyebrow">Case integrado</p>
-        <div class="brand">ECHO ATRIO</div>
-        <p class="thesis">Da operação bruta à inteligência orquestrada.</p>
+  <div class="portfolio" id="portfolio">
+    <aside class="pf-sidebar" aria-label="Menu lateral">
+      <div class="pf-topline">
+        <div>
+          <p class="pf-eyebrow">Case integrado</p>
+          <h1 class="pf-brand">ECHO ATRIO</h1>
+          <p class="pf-thesis">Da operação bruta à inteligência orquestrada.</p>
+        </div>
+
+        <button class="pf-icon-button pf-close-button" type="button" aria-label="Fechar coluna lateral" data-close-sidebar>
+          ×
+        </button>
       </div>
 
-      <button class="icon-button close-button" type="button" aria-label="Fechar coluna">×</button>
-    </div>
+      <div class="pf-nav-block">
+        <p class="pf-nav-label">Navegação</p>
 
-    <div class="nav-block">
-      <p class="nav-label">Navegação</p>
+        <nav class="pf-nav" aria-label="Navegação principal">
+          <div class="pf-nav-item" data-drawer-item="autoria">
+            <button type="button" class="pf-nav-trigger" data-nav="autoria" aria-expanded="false">
+              <span>Autoria</span>
+              <small><span class="pf-num">01</span><span class="pf-chevron">+</span></small>
+            </button>
 
-      <nav class="nav" aria-label="Navegação principal">
-        <a href="#autoria" data-target="autoria"><span>Autoria</span><small>01</small></a>
-        <a href="#echo" data-target="echo"><span>ECHO</span><small>02</small></a>
-        <a href="#atrio" data-target="atrio"><span>ATRIO</span><small>03</small></a>
-        <a href="#resultados" data-target="resultados"><span>Resultados</span><small>04</small></a>
-      </nav>
-    </div>
+            <div class="pf-nav-drawer" hidden>
+              <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume no TJPR, foi estruturada uma fundação operacional voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+              <p>Essa base permitiu consolidar a <em>Regência Recursal</em>, método de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e <em>quality gates</em>.</p>
+              <a class="pf-drawer-link" href="cv-christian-da-costa.pdf" download>Baixar currículo ↓</a>
+            </div>
+          </div>
 
-    <footer class="signature">
-      <strong>Christian da Costa</strong>
-      <span>Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio</span>
-    </footer>
-  </aside>
+          <div class="pf-nav-item" data-drawer-item="echo">
+            <button type="button" class="pf-nav-trigger" data-nav="echo" aria-expanded="false">
+              <span>ECHO</span>
+              <small><span class="pf-num">02</span><span class="pf-chevron">+</span></small>
+            </button>
 
-  <button class="icon-button open-button" type="button" aria-label="Abrir coluna">
-    <span aria-hidden="true"></span>
-  </button>
+            <div class="pf-nav-drawer" hidden>
+              <p>Principais resultados do ECHO.</p>
+              <ul class="pf-mini-list">
+                <li>Organização de fluxo e memória operacional.</li>
+                <li>Conversão de prática dispersa em método transmissível.</li>
+                <li>Rastreabilidade, critérios e pontos de controle.</li>
+              </ul>
+              <a class="pf-drawer-link" href="echo.html#evidencias">Ver evidências ↗</a>
+            </div>
+          </div>
 
-  <main class="page">
-    <div class="content">
-      <section class="section" id="autoria" data-section="autoria">
-        <p class="kicker">Autoria</p>
-        <h1>Antes da máquina, o método.</h1>
-        <p class="lead">Este case organiza a passagem da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.</p>
-        <p class="copy">A autoria aqui não funciona como assinatura decorativa. Ela aparece como responsabilidade metodológica: observar o fluxo, nomear padrões, estruturar procedimentos e transformar prática dispersa em sistema legível.</p>
-      </section>
+          <div class="pf-nav-item" data-drawer-item="atrio">
+            <button type="button" class="pf-nav-trigger" data-nav="atrio" aria-expanded="false">
+              <span>ATRIO</span>
+              <small><span class="pf-num">03</span><span class="pf-chevron">+</span></small>
+            </button>
 
-      <section class="section" id="echo" data-section="echo">
-        <p class="kicker">ECHO</p>
-        <h2>Harmonia como filosofia de atuação.</h2>
-        <p class="lead">O ECHO nasce como método de regência: uma forma de transformar produtividade, qualidade e coordenação em uma mesma superfície de trabalho.</p>
+            <div class="pf-nav-drawer" hidden>
+              <p>Principais resultados do ATRIO.</p>
+              <ul class="pf-mini-list">
+                <li>Arquitetura modular de governança jurídica.</li>
+                <li>CORPUS, RATIO, CERNE e LUX.</li>
+                <li>IA como infraestrutura assistida, não como substituição do juízo.</li>
+              </ul>
+              <a class="pf-drawer-link" href="atrio.html#evidencias">Ver evidências ↗</a>
+            </div>
+          </div>
 
-        <div class="cards">
-          <article class="card">
-            <h3>Regência</h3>
-            <p>O trabalho jurídico não é apenas produção individual. É sequência, escuta, correção, ritmo e responsabilidade sobre o percurso.</p>
-          </article>
+          <div class="pf-nav-item" data-drawer-item="ensaiando">
+            <button type="button" class="pf-nav-trigger" data-nav="ensaiando" aria-expanded="false">
+              <span>Ensaiando</span>
+              <small><span class="pf-num">04</span><span class="pf-chevron">+</span></small>
+            </button>
 
-          <article class="card">
-            <h3>Harmonia</h3>
-            <p>A harmonia não elimina tensão. Ela organiza tensão em forma útil, permitindo que diferença, revisão e qualidade coexistam.</p>
-          </article>
+            <div class="pf-nav-drawer" hidden>
+              <p class="pf-tag">em construção</p>
+              <p>Próximas evoluções e estudos futuros. Ampliação dos módulos do ATRIO, ensaios sobre auditoria de raciocínio e experimentos de governança humana vinculante em fluxos assistidos por IA.</p>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <footer class="pf-signature">
+        <strong>Christian da Costa</strong>
+        <span>Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio</span>
+      </footer>
+    </aside>
+
+    <button class="pf-open-button" type="button" aria-label="Abrir coluna lateral" data-open-sidebar>
+      ☰
+    </button>
+
+    <main class="pf-page">
+      <section class="pf-view is-active" id="view-default" data-view="default">
+        <div class="pf-content">
+          <section class="pf-section pf-hero">
+            <p class="pf-kicker">Autoria</p>
+            <h1>Antes da máquina, o método.</h1>
+            <p class="pf-lead">Este case organiza a passagem da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.</p>
+            <p class="pf-copy">A autoria aqui não funciona como assinatura decorativa. Ela aparece como responsabilidade metodológica: observar o fluxo, nomear padrões, estruturar procedimentos e transformar prática dispersa em sistema legível.</p>
+          </section>
+
+          <section class="pf-section pf-cards-section">
+            <div class="pf-cards pf-cards-3">
+              <article class="pf-card">
+                <p class="pf-card-num">01</p>
+                <h3>Fundação operacional</h3>
+                <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume, foi estruturada uma fundação voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+              </article>
+
+              <article class="pf-card">
+                <p class="pf-card-num">02</p>
+                <h3>Regência Recursal</h3>
+                <p>Essa base permitiu consolidar a Regência Recursal, método de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e <em>quality gates</em>.</p>
+              </article>
+
+              <article class="pf-card">
+                <p class="pf-card-num">03</p>
+                <h3>ATRIO</h3>
+                <p>Sobre essa fundação, o ATRIO foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
+              </article>
+            </div>
+
+            <div class="pf-concept-toggles">
+              <button type="button" class="pf-concept-toggle" data-concept-toggle="echo" aria-expanded="false">
+                <span>Conceito ECHO</span>
+                <span class="pf-chevron">+</span>
+              </button>
+
+              <div class="pf-concept-body" data-concept-body="echo" hidden>
+                
+<div class="pf-prose">
+  <h3 class="pf-prose-title">ECHO</h3>
+
+  <p>A música começou ferida.</p>
+
+  <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som. Os violinos subiam cedo, como se tentassem alcançar um céu ainda fechado. Os sopros entravam em sobressalto. Os metais ocupavam o espaço com força sem medida. O tímpano soava grave, quase jurídico, como sentença lançada antes do processo. E a flauta, bonita demais em sua desobediência, por um instante quase convenceu a sala de que beleza bastava.</p>
+
+  <p>Mas beleza sem lugar também é ruído.</p>
+
+  <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra. Havia naquela mão levantada uma tentativa de dar forma ao que se dispersava. A sala vibrava em fragmentos. Não havia erro localizado. Havia uma coerência partida. Um corpo tentando andar com memórias diferentes em cada membro.</p>
+
+  <p>Então ele interrompeu.</p>
+
+  <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
+
+  <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
+
+  <p>Tinham procurado antes. Nas estantes, nas pastas antigas, nas gavetas duras, entre folhas amareladas, compassos interrompidos, setas apontando para margens vazias, nomes de pessoas que já não ocupavam a sala e ainda assim pareciam decidir alguma coisa dentro dela. Havia sinais de uso, vestígios, um caderno com aparência de manual, embora suas páginas guardassem mais lembrança do que método.</p>
+
+  <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição:</p>
+
+  <p><em>sempre foi assim.</em></p>
+
+  <p>E talvez tivesse sido.</p>
+
+  <p>Esse era o problema.</p>
+
+  <p>O passado não desaparecera. Permanecia em lascas, encostado nas paredes, respirando dentro dos instrumentos. Cada músico trazia uma parte da peça como quem traz uma relíquia. A entrada, o peso, o fôlego, o acompanhamento, o silêncio. Nada era falso. Tudo era insuficiente.</p>
+
+  <p>Todos tinham alguma razão.</p>
+
+  <p>E justamente por isso estavam perdidos.</p>
+
+  <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
+
+  <p>Ecos de procedimentos que talvez um dia tivessem sido claros. Acertos repetidos até ganharem a autoridade das superstições. Correções feitas às pressas, soluções brilhantes que ninguém registrou, atalhos que funcionaram uma vez e passaram a vestir a roupa solene da regra. Havia ali a inteligência de quem soube, a ausência de quem saiu, a pressa de quem improvisou, o mérito anônimo de quem salvou a execução sem deixar rastro.</p>
+
+  <p>A sala estava cheia de passado.</p>
+
+  <p>Mas o passado, sem forma, não orienta.</p>
+
+  <p>Assombra.</p>
+
+  <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
+
+  <p>Era ele quem ficava entre a batuta e o corpo da orquestra. Não ocupava o lugar da autoridade, nem se escondia entre os demais instrumentos. Sua função era mais difícil: receber o gesto do maestro, compreender sua intenção e traduzi-la em prática possível. Onde a regência apontava direção, ele precisava construir caminho. Onde havia comando, ele precisava encontrar rotina. Onde havia orientação, ele precisava formar linguagem comum.</p>
+
+  <p>O spalla caminhou entre as estantes com a cautela de quem sabe que toda chegada é uma intervenção. Destruir o que veio antes seria vaidade. Obedecê-lo cegamente, abandono. Recolheu as folhas soltas, ouviu os naipes, observou os gestos, perseguiu a origem dos costumes. Não perguntou o que preferiam. Perguntou o que faziam. E, sobretudo, por que continuavam fazendo.</p>
+
+  <p>Foi um trabalho quase cruel.</p>
+
+  <p>Toda forma verdadeira traz essa crueldade discreta: separar o que tem lastro do que apenas sobreviveu. Retirar da repetição sua falsa inocência. Distinguir o cuidado do medo, a regra do vício, a música do eco batendo em parede vazia.</p>
+
+  <p>Aos poucos, o ensaio deixou de ser repetição e tornou-se escavação. O violino descobriu que sua entrada dependia menos da pauta do que do ombro de um maestro antigo. A viola seguia esse movimento quando a dúvida apertava. Nos sopros, a intuição tinha o pulso ansioso de quem teme chegar tarde. Nos metais, a força escondia excesso. Os graves sustentavam a sala com uma fidelidade já separada de sua causa. E a percussão, ao falar do silêncio, tocou primeiro aquilo que ninguém havia sabido nomear.</p>
+
+  <p>O método começou ali.</p>
+
+  <p>No silêncio que recebeu nome.</p>
+
+  <p>O spalla escreveu.</p>
+
+  <p>Não contra a sala. Não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto. A primeira partitura nasceu sem teste, atravessada por rasuras, flechas, pausas reposicionadas, entradas corrigidas, indicações de respiração e critérios de retorno. Ainda não era garantia. Era condição. Ainda não provava o acerto. Tornava possível a execução.</p>
+
+  <p>Uma entrada respondia por outra.</p>
+
+  <p>Uma pausa deixava de ser vazio.</p>
+
+  <p>Uma decisão podia ser repetida sem depender da memória privada de quem a executava.</p>
+
+  <p>Quando recomeçaram, nada foi grandioso. Nenhum milagre. A música apenas encontrou um chão. Os instrumentos já não disputavam a origem da peça; começavam a reconhecer sua posição dentro dela. O silêncio deixou de ser ausência. Os sopros entraram quando a frase pediu ar. Os metais perderam o excesso e encontraram medida. A flauta, antes lembrança bonita, tornou-se frase.</p>
+
+  <p>A música não ficou perfeita.</p>
+
+  <p>Ficou possível.</p>
+
+  <p>E talvez esse seja o primeiro nome da harmonia: não a ausência de conflito, mas a filosofia de uma atuação em que cada gesto encontra sua proporção, seu tempo e sua responsabilidade diante do conjunto.</p>
+
+  <p>Ao fim, o maestro recolheu a batuta. A autoridade da regência permanecia ali, inteira. Mas sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta carregava a memória da sala e a promessa de não abandoná-la outra vez:</p>
+
+  <p><strong>ECHO.</strong></p>
+
+  <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado. O som já não retornava vazio. Voltava com método. O que antes era resíduo de prática passava a ser forma transmissível. O que antes era memória solta passava a ser gramática comum. O que antes assombrava a sala passava a orientar o próximo ensaio.</p>
+
+  <p>O ECHO não prometia retirar da execução sua matéria humana, com desvios, hesitações e intuições. Sua função era mais severa e mais humilde: recolher práticas dispersas, distinguir lastro e ruído, registrar critérios, fixar pontos de controle e criar condições para que a experiência pudesse ser verificada, repetida e transmitida. O método preservava os ecos do passado ao submetê-los a uma forma capaz de sobreviver à ausência de quem os produziu.</p>
+
+  <p>Assim, a regência deixava de depender apenas da autoridade do gesto e passava a operar como arquitetura institucional. O maestro indicava direção; o spalla convertia direção em sistema; a orquestra, enfim, encontrava harmonia como prática. O ganho estava na redução do ruído, na rastreabilidade do percurso, na preservação do aprendizado e na possibilidade de revisar o próprio fluxo. Não se tratava apenas de tocar melhor uma peça. Tratava-se de garantir que, no próximo ensaio, ninguém precisasse começar do escuro.</p>
+</div>
+
+              </div>
+
+              <button type="button" class="pf-concept-toggle" data-concept-toggle="atrio" aria-expanded="false">
+                <span>Conceito ATRIO</span>
+                <span class="pf-chevron">+</span>
+              </button>
+
+              <div class="pf-concept-body" data-concept-body="atrio" hidden>
+                <div class="pf-prose">
+                  <h3 class="pf-prose-title">ATRIO</h3>
+                  <p>O ATRIO nasce quando o método deixa de ser apenas prática de condução e passa a operar como arquitetura. Seu ponto de partida não é acelerar a produção jurídica, mas criar uma superfície governável para documentos, raciocínios, controles e entregas.</p>
+                  <p>A inteligência artificial, nesse desenho, não ocupa o centro decisório. Ela funciona como força assistiva submetida a inventário, etapas, confronto, revisão e responsabilidade humana. Antes de perguntar o que a máquina entrega, o ATRIO pergunta que percurso permite confiar no que foi produzido.</p>
+                  <p>Por isso, sua lógica é modular: CORPUS organiza o lastro; RATIO estrutura a elaboração; CERNE confronta o raciocínio; LUX refina a linguagem. A arquitetura não substitui o juízo. Dá forma ao caminho que antecede a entrega.</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
 
-      <section class="section" id="atrio" data-section="atrio">
-        <p class="kicker">ATRIO</p>
-        <h2>Arquitetura para governar o raciocínio.</h2>
-        <p class="lead">O ATRIO opera como planta-mãe: inventaria, estrutura, confronta e refina o trabalho jurídico antes que a inteligência artificial seja tratada como mera aceleração.</p>
+      <section class="pf-view" id="view-echo" data-view="echo" hidden>
+        <div class="pf-content">
+          <section class="pf-section pf-hero">
+            <p class="pf-kicker">ECHO</p>
+            <h1>Harmonia como filosofia de atuação.</h1>
+            <p class="pf-lead">Método de regência que transforma produtividade, qualidade e coordenação em uma mesma superfície de trabalho.</p>
+            <p><a class="pf-drawer-link" href="echo.html">Abrir ECHO em página própria ↗</a></p>
+          </section>
 
-        <div class="cards">
-          <article class="card">
-            <h3>CORPUS</h3>
-            <p>Memória governada, inventário documental, lastro e organização do material de entrada.</p>
-          </article>
+          <section class="pf-section">
+            
+<div class="pf-prose">
+  <h3 class="pf-prose-title">ECHO</h3>
 
-          <article class="card">
-            <h3>RATIO</h3>
-            <p>Elaboração assistida por lentes, confrontos e etapas verificáveis de construção decisória.</p>
-          </article>
+  <p>A música começou ferida.</p>
 
-          <article class="card">
-            <h3>CERNE</h3>
-            <p>Auditoria do raciocínio, teste de consistência e detecção de fragilidades argumentativas.</p>
-          </article>
+  <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som. Os violinos subiam cedo, como se tentassem alcançar um céu ainda fechado. Os sopros entravam em sobressalto. Os metais ocupavam o espaço com força sem medida. O tímpano soava grave, quase jurídico, como sentença lançada antes do processo. E a flauta, bonita demais em sua desobediência, por um instante quase convenceu a sala de que beleza bastava.</p>
 
-          <article class="card">
-            <h3>LUX</h3>
-            <p>Refinamento final da linguagem após o controle técnico, sem substituir o juízo humano.</p>
-          </article>
+  <p>Mas beleza sem lugar também é ruído.</p>
+
+  <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra. Havia naquela mão levantada uma tentativa de dar forma ao que se dispersava. A sala vibrava em fragmentos. Não havia erro localizado. Havia uma coerência partida. Um corpo tentando andar com memórias diferentes em cada membro.</p>
+
+  <p>Então ele interrompeu.</p>
+
+  <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
+
+  <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
+
+  <p>Tinham procurado antes. Nas estantes, nas pastas antigas, nas gavetas duras, entre folhas amareladas, compassos interrompidos, setas apontando para margens vazias, nomes de pessoas que já não ocupavam a sala e ainda assim pareciam decidir alguma coisa dentro dela. Havia sinais de uso, vestígios, um caderno com aparência de manual, embora suas páginas guardassem mais lembrança do que método.</p>
+
+  <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição:</p>
+
+  <p><em>sempre foi assim.</em></p>
+
+  <p>E talvez tivesse sido.</p>
+
+  <p>Esse era o problema.</p>
+
+  <p>O passado não desaparecera. Permanecia em lascas, encostado nas paredes, respirando dentro dos instrumentos. Cada músico trazia uma parte da peça como quem traz uma relíquia. A entrada, o peso, o fôlego, o acompanhamento, o silêncio. Nada era falso. Tudo era insuficiente.</p>
+
+  <p>Todos tinham alguma razão.</p>
+
+  <p>E justamente por isso estavam perdidos.</p>
+
+  <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
+
+  <p>Ecos de procedimentos que talvez um dia tivessem sido claros. Acertos repetidos até ganharem a autoridade das superstições. Correções feitas às pressas, soluções brilhantes que ninguém registrou, atalhos que funcionaram uma vez e passaram a vestir a roupa solene da regra. Havia ali a inteligência de quem soube, a ausência de quem saiu, a pressa de quem improvisou, o mérito anônimo de quem salvou a execução sem deixar rastro.</p>
+
+  <p>A sala estava cheia de passado.</p>
+
+  <p>Mas o passado, sem forma, não orienta.</p>
+
+  <p>Assombra.</p>
+
+  <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
+
+  <p>Era ele quem ficava entre a batuta e o corpo da orquestra. Não ocupava o lugar da autoridade, nem se escondia entre os demais instrumentos. Sua função era mais difícil: receber o gesto do maestro, compreender sua intenção e traduzi-la em prática possível. Onde a regência apontava direção, ele precisava construir caminho. Onde havia comando, ele precisava encontrar rotina. Onde havia orientação, ele precisava formar linguagem comum.</p>
+
+  <p>O spalla caminhou entre as estantes com a cautela de quem sabe que toda chegada é uma intervenção. Destruir o que veio antes seria vaidade. Obedecê-lo cegamente, abandono. Recolheu as folhas soltas, ouviu os naipes, observou os gestos, perseguiu a origem dos costumes. Não perguntou o que preferiam. Perguntou o que faziam. E, sobretudo, por que continuavam fazendo.</p>
+
+  <p>Foi um trabalho quase cruel.</p>
+
+  <p>Toda forma verdadeira traz essa crueldade discreta: separar o que tem lastro do que apenas sobreviveu. Retirar da repetição sua falsa inocência. Distinguir o cuidado do medo, a regra do vício, a música do eco batendo em parede vazia.</p>
+
+  <p>Aos poucos, o ensaio deixou de ser repetição e tornou-se escavação. O violino descobriu que sua entrada dependia menos da pauta do que do ombro de um maestro antigo. A viola seguia esse movimento quando a dúvida apertava. Nos sopros, a intuição tinha o pulso ansioso de quem teme chegar tarde. Nos metais, a força escondia excesso. Os graves sustentavam a sala com uma fidelidade já separada de sua causa. E a percussão, ao falar do silêncio, tocou primeiro aquilo que ninguém havia sabido nomear.</p>
+
+  <p>O método começou ali.</p>
+
+  <p>No silêncio que recebeu nome.</p>
+
+  <p>O spalla escreveu.</p>
+
+  <p>Não contra a sala. Não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto. A primeira partitura nasceu sem teste, atravessada por rasuras, flechas, pausas reposicionadas, entradas corrigidas, indicações de respiração e critérios de retorno. Ainda não era garantia. Era condição. Ainda não provava o acerto. Tornava possível a execução.</p>
+
+  <p>Uma entrada respondia por outra.</p>
+
+  <p>Uma pausa deixava de ser vazio.</p>
+
+  <p>Uma decisão podia ser repetida sem depender da memória privada de quem a executava.</p>
+
+  <p>Quando recomeçaram, nada foi grandioso. Nenhum milagre. A música apenas encontrou um chão. Os instrumentos já não disputavam a origem da peça; começavam a reconhecer sua posição dentro dela. O silêncio deixou de ser ausência. Os sopros entraram quando a frase pediu ar. Os metais perderam o excesso e encontraram medida. A flauta, antes lembrança bonita, tornou-se frase.</p>
+
+  <p>A música não ficou perfeita.</p>
+
+  <p>Ficou possível.</p>
+
+  <p>E talvez esse seja o primeiro nome da harmonia: não a ausência de conflito, mas a filosofia de uma atuação em que cada gesto encontra sua proporção, seu tempo e sua responsabilidade diante do conjunto.</p>
+
+  <p>Ao fim, o maestro recolheu a batuta. A autoridade da regência permanecia ali, inteira. Mas sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta carregava a memória da sala e a promessa de não abandoná-la outra vez:</p>
+
+  <p><strong>ECHO.</strong></p>
+
+  <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado. O som já não retornava vazio. Voltava com método. O que antes era resíduo de prática passava a ser forma transmissível. O que antes era memória solta passava a ser gramática comum. O que antes assombrava a sala passava a orientar o próximo ensaio.</p>
+
+  <p>O ECHO não prometia retirar da execução sua matéria humana, com desvios, hesitações e intuições. Sua função era mais severa e mais humilde: recolher práticas dispersas, distinguir lastro e ruído, registrar critérios, fixar pontos de controle e criar condições para que a experiência pudesse ser verificada, repetida e transmitida. O método preservava os ecos do passado ao submetê-los a uma forma capaz de sobreviver à ausência de quem os produziu.</p>
+
+  <p>Assim, a regência deixava de depender apenas da autoridade do gesto e passava a operar como arquitetura institucional. O maestro indicava direção; o spalla convertia direção em sistema; a orquestra, enfim, encontrava harmonia como prática. O ganho estava na redução do ruído, na rastreabilidade do percurso, na preservação do aprendizado e na possibilidade de revisar o próprio fluxo. Não se tratava apenas de tocar melhor uma peça. Tratava-se de garantir que, no próximo ensaio, ninguém precisasse começar do escuro.</p>
+</div>
+
+          </section>
         </div>
       </section>
 
-      <section class="section" id="resultados" data-section="resultados">
-        <p class="kicker">Resultados</p>
-        <h2>Evidência antes de ornamento.</h2>
-        <p class="lead">O portfólio deve demonstrar método por meio de rastros: indicadores, fluxos, decisões de arquitetura, entregas e critérios de qualidade.</p>
+      <section class="pf-view" id="view-atrio" data-view="atrio" hidden>
+        <div class="pf-content">
+          <section class="pf-section pf-hero">
+            <p class="pf-kicker">ATRIO</p>
+            <h1>Arquitetura para governar o raciocínio.</h1>
+            <p class="pf-lead">Planta-mãe que inventaria, estrutura, confronta e refina o trabalho jurídico antes que a IA seja tratada como mera aceleração.</p>
+            <p><a class="pf-drawer-link" href="atrio.html">Abrir ATRIO em página própria ↗</a></p>
+          </section>
 
-        <div class="metrics">
-          <div class="metric">
-            <strong>01</strong>
-            <span>Fluxo estruturado em fases, com leitura operacional do acervo.</span>
-          </div>
+          <section class="pf-section">
+            <div class="pf-cards pf-cards-4">
+              <article class="pf-card">
+                <p class="pf-card-num">01</p>
+                <h3>CORPUS</h3>
+                <p>Memória governada, inventário documental, lastro e organização do material de entrada.</p>
+              </article>
 
-          <div class="metric">
-            <strong>02</strong>
-            <span>Governança do percurso entre documento, raciocínio e texto.</span>
-          </div>
+              <article class="pf-card">
+                <p class="pf-card-num">02</p>
+                <h3>RATIO</h3>
+                <p>Elaboração assistida por lentes, confrontos e etapas verificáveis de construção decisória.</p>
+              </article>
 
-          <div class="metric">
-            <strong>03</strong>
-            <span>Arquitetura autoral aplicada à produção jurídica mediada por IA.</span>
-          </div>
+              <article class="pf-card">
+                <p class="pf-card-num">03</p>
+                <h3>CERNE</h3>
+                <p>Auditoria do raciocínio, teste de consistência e detecção de fragilidades argumentativas.</p>
+              </article>
+
+              <article class="pf-card">
+                <p class="pf-card-num">04</p>
+                <h3>LUX</h3>
+                <p>Refinamento final da linguagem após o controle técnico, sem substituir o juízo humano.</p>
+              </article>
+            </div>
+          </section>
         </div>
       </section>
-    </div>
-  </main>
 
-  <script>
-    (function () {
-      var body = document.body;
-      var closeButton = document.querySelector(".close-button");
-      var openButton = document.querySelector(".open-button");
-      var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
-      var sections = Array.prototype.slice.call(document.querySelectorAll("[data-section]"));
+      <footer class="pf-page-footer">
+        <div class="pf-content pf-footer-grid">
+          <div>
+            <p class="pf-kicker">Autor</p>
+            <p class="pf-footer-name">Christian da Costa</p>
+            <p class="pf-footer-role">Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio</p>
+          </div>
 
-      closeButton.addEventListener("click", function () {
-        body.classList.add("sidebar-closed");
-      });
+          <div>
+            <p class="pf-kicker">Contato</p>
+            <p><a href="mailto:christian@christiancozta.com">christian@christiancozta.com</a></p>
+            <p><a href="https://christiancozta.github.io">christiancozta.github.io ↗</a></p>
+          </div>
 
-      openButton.addEventListener("click", function () {
-        body.classList.remove("sidebar-closed");
-      });
-
-      function setActive(id) {
-        links.forEach(function (link) {
-          link.classList.toggle("is-active", link.getAttribute("data-target") === id);
-        });
-      }
-
-      if ("IntersectionObserver" in window) {
-        var observer = new IntersectionObserver(function (entries) {
-          var visible = entries
-            .filter(function (entry) { return entry.isIntersecting; })
-            .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
-
-          if (visible) {
-            setActive(visible.target.getAttribute("data-section"));
-          }
-        }, {
-          threshold: [0.25, 0.45, 0.65]
-        });
-
-        sections.forEach(function (section) {
-          observer.observe(section);
-        });
-      }
-
-      setActive("autoria");
-    })();
-  </script>
+          <div>
+            <p class="pf-kicker">Marco oficial</p>
+            <p class="pf-footer-mark">Ambiente recursal · TJPR · ago–out 2025</p>
+            <p class="pf-footer-note">Fundação operacional, Regência Recursal e arquitetura ATRIO.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
 </body>
 </html>
