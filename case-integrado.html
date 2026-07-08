@@ -3,658 +3,863 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Inteligência Judiciária Orquestrada</title>
-<meta name="description" content="Da operação bruta à regência recursal. Autoria de Christian da Costa." />
+<title>Autoria — Inteligência Judiciária Orquestrada</title>
+<meta name="description" content="Antes da máquina, o método. Autoria de Christian da Costa." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Work+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Spectral:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+<script>
+  /* Add motion only when the user hasn't asked for reduced motion.
+     Content is fully visible by default; animation is purely additive. */
+  (function () {
+    try {
+      if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('anim');
+      }
+    } catch (e) {}
+  })();
+</script>
 <style>
   :root {
-    --pf-bg: #121212;
-    --pf-bg-soft: #262626;
-    --pf-page-bg: #FEFEFE;
-    --pf-page-ink: #121212;
-    --pf-page-muted: #626262;
-    --pf-page-hairline: #d8d8d8;
-    --pf-page-hairline-strong: #121212;
-    --pf-ink: #ffffff;
-    --pf-muted: #a8a8a8;
-    --pf-hairline: #444444;
-    --pf-hairline-strong: #ffffff;
-    --pf-accent: #e07a5f;
-    --pf-sidebar: 20rem;
-    --pf-content: 52rem;
-    --pf-gutter: clamp(1.5rem, 4.5vw, 4rem);
-    --pf-font-title: "Work Sans", "Helvetica Neue", Arial, sans-serif;
-    --pf-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    /* Left column — cold near-black */
+    --nav-bg: #0F1113;
+    --nav-ink: #FFFFFF;
+    --nav-muted: #9AA1AB;
+    --nav-hair: #23262B;
+    --nav-hair-strong: #3C4149;
+
+    /* Right column — cold white (no warm/yellow cast) */
+    --pg-bg: #F4F6F9;
+    --pg-ink: #0E1013;
+    --pg-muted: #58606B;
+    --pg-hair: #D6DBE2;
+    --pg-hair-strong: #0E1013;
+
+    /* Concept reader — cinematic dark */
+    --rd-bg: #0A0B0D;
+    --rd-ink: #E8EBEF;
+    --rd-muted: #8D949E;
+    --rd-hair: #23262B;
+
+    --accent: #E07A5F;
+    --accent-ink: #C25E43;
+
+    --nav-w: 21rem;
+    --content: 58rem;
+    --gutter: clamp(1.5rem, 4vw, 4.5rem);
+
+    --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* z-index scale */
+    --z-frame: 5;
+    --z-peek: 10;
+    --z-nav: 30;
+    --z-scrim: 25;
+    --z-menu: 40;
   }
+
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    min-height: 100vh;
-    background: var(--pf-bg);
-    color: var(--pf-ink);
-    font-family: var(--pf-font-body);
-    font-size: 12px;
-    line-height: 1.5;
+    min-height: 100dvh;
+    background: var(--nav-bg);
+    color: var(--pg-ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  a { color: inherit; text-underline-offset: 0.18em; }
-  button { font: inherit; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  ::selection { background: var(--accent); color: #fff; }
 
-  /* HOVER PEEK STRIP */
-  .pf-hover-strip {
-    position: fixed; top: 0; left: 0;
-    width: 14px; height: 100vh;
-    z-index: 15; background: transparent;
+  /* ───────────────────────── PEEK STRIP ───────────────────────── */
+  .peek {
+    position: fixed; inset: 0 auto 0 0;
+    width: 16px; height: 100dvh;
+    z-index: var(--z-peek);
     display: none;
   }
-  body.sidebar-collapsed .pf-hover-strip { display: block; }
+  body.collapsed .peek { display: block; }
 
-  /* SIDEBAR */
-  .pf-sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    width: var(--pf-sidebar);
-    z-index: 20;
+  /* ───────────────────────── LEFT COLUMN (NAV) ───────────────────────── */
+  .nav {
+    position: fixed; inset: 0 auto 0 0;
+    width: var(--nav-w);
+    z-index: var(--z-nav);
     display: flex; flex-direction: column;
-    padding: 1.5rem 1.4rem 1.1rem;
-    background: var(--pf-bg);
-    border-right: 1px solid var(--pf-hairline);
+    background: var(--nav-bg);
+    color: var(--nav-ink);
+    border-right: 1px solid var(--nav-hair);
     transform: translateX(0);
-    transition: transform 220ms ease, box-shadow 220ms ease;
-    overflow: hidden;
+    transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
   }
-  .pf-sidebar-scroll {
-    display: flex; flex-direction: column;
-    height: 100%; min-height: 0;
+  body.collapsed .nav { transform: translateX(-100%); }
+  body.collapsed.peeking .nav {
+    transform: translateX(0);
+    box-shadow: 30px 0 80px rgba(0,0,0,.5);
+  }
+
+  /* scroll region — everything EXCEPT the pinned signature */
+  .nav-scroll {
+    flex: 1 1 auto; min-height: 0;
     overflow-y: auto;
+    padding: 1.9rem 1.5rem 1.4rem;
     scrollbar-width: thin;
-    scrollbar-color: var(--pf-hairline) transparent;
+    scrollbar-color: var(--nav-hair-strong) transparent;
   }
-  .pf-sidebar-scroll::-webkit-scrollbar { width: 6px; }
-  .pf-sidebar-scroll::-webkit-scrollbar-thumb { background: var(--pf-hairline); border-radius: 999px; }
+  .nav-scroll::-webkit-scrollbar { width: 6px; }
+  .nav-scroll::-webkit-scrollbar-thumb { background: var(--nav-hair-strong); border-radius: 999px; }
 
-  body.sidebar-collapsed .pf-sidebar { transform: translateX(-100%); }
-  body.sidebar-collapsed.sidebar-peeking .pf-sidebar {
-    transform: translateX(0);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-  }
-
-  .pf-topline {
-    display: flex; align-items: flex-start;
-    justify-content: space-between; gap: 0.75rem;
-  }
-  .pf-brand {
-    margin: 0 0 0.55rem;
-    font-family: var(--pf-font-title);
-    font-weight: 800; font-size: 1.22rem;
-    line-height: 1.22; letter-spacing: 0.01em;
-    text-transform: uppercase; color: var(--pf-ink);
-  }
-  .pf-brand-home {
-    background: transparent; border: 0; padding: 0; margin: 0;
-    color: inherit; font: inherit; line-height: 1.22; letter-spacing: inherit;
+  .nav-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .brand {
+    background: none; border: 0; padding: 0; margin: 0;
     text-align: left; cursor: pointer;
-    transition: color 160ms ease;
+    font-weight: 800; font-size: 0.95rem; line-height: 1.24;
+    letter-spacing: -0.01em; text-transform: uppercase;
+    color: var(--nav-ink);
+    transition: color 180ms var(--ease);
   }
-  .pf-brand-home:hover, .pf-brand-home:focus-visible {
-    color: var(--pf-accent); outline: none;
+  .brand span { display: block; }
+  .brand:hover, .brand:focus-visible { color: var(--accent); outline: none; }
+  .thesis {
+    margin: 0.85rem 0 0;
+    color: var(--nav-muted);
+    font-size: 0.72rem; line-height: 1.45; letter-spacing: 0.01em;
+    max-width: 15rem;
   }
-  .pf-thesis {
-    margin: 0; color: var(--pf-muted);
-    font-size: 0.78rem; line-height: 1.35; max-width: 14rem;
-  }
-  .pf-icon-button {
-    width: 2rem; height: 2rem;
+
+  .collapse {
+    flex: 0 0 auto;
+    width: 2.1rem; height: 2.1rem;
     display: grid; place-items: center;
-    border: 1px solid var(--pf-hairline);
+    border: 1px solid var(--nav-hair-strong);
     border-radius: 999px; background: transparent;
-    color: var(--pf-ink); cursor: pointer;
-    flex: 0 0 auto; font-size: 0.95rem; line-height: 1;
-    transition: border-color 160ms ease, color 160ms ease;
+    cursor: pointer; font-size: 0.9rem; line-height: 1;
+    transition: border-color 180ms var(--ease), color 180ms var(--ease), transform 180ms var(--ease);
   }
-  .pf-icon-button:hover { color: var(--pf-accent); border-color: var(--pf-accent); }
+  .collapse:hover { color: var(--accent); border-color: var(--accent); }
 
-  .pf-nav-block {
-    margin-top: 1.5rem;
-    flex: 0 0 auto;
-    display: flex; flex-direction: column;
-  }
-  .pf-nav-label {
-    margin: 0 0 0.55rem;
-    font-family: var(--pf-font-title);
-    font-size: 0.6rem; font-weight: 700;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--pf-muted);
-  }
-  .pf-nav { border-top: 1px solid var(--pf-hairline-strong); }
-  .pf-nav-item { border-bottom: 1px solid var(--pf-hairline); }
-  .pf-nav-trigger {
-    width: 100%; min-height: 2.35rem;
-    display: flex; align-items: center;
-    justify-content: space-between; gap: 0.75rem;
-    border: 0; background: transparent;
-    color: var(--pf-ink); padding: 0; text-align: left;
-    font-family: var(--pf-font-title);
-    font-size: 0.88rem; font-weight: 700;
-    letter-spacing: 0.01em; cursor: pointer;
-  }
-  .pf-nav-trigger small {
-    display: inline-flex; align-items: center; gap: 0.65rem;
-    color: var(--pf-muted); font-family: var(--pf-font-title);
-    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.12em;
-  }
-  .pf-nav-trigger.is-active > span:first-child { color: var(--pf-accent); }
-  .pf-nav-drawer {
-    display: none;
-    padding: 0.15rem 0 0.85rem;
-    color: var(--pf-muted); font-size: 0.78rem; line-height: 1.5;
-  }
-  .pf-nav-item.is-open .pf-nav-drawer { display: block; }
-  .pf-nav-drawer p { margin: 0 0 0.55rem; }
-  .pf-drawer-eyebrow {
-    margin: 0 0 0.55rem !important;
-    font-family: var(--pf-font-title);
-    font-size: 0.58rem; font-weight: 700;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--pf-muted);
-  }
-  .pf-result-cards {
-    display: flex; flex-direction: column; gap: 0.5rem;
-    margin: 0 0 0.85rem;
-  }
-  .pf-result-card {
-    padding: 0.7rem 0.8rem;
-    border: 1px solid var(--pf-hairline);
-    border-radius: 4px; text-align: left;
-  }
-  .pf-result-num {
-    margin: 0 0 0.3rem !important;
-    font-family: var(--pf-font-title);
-    font-weight: 800; font-size: 1.55rem;
-    line-height: 1; letter-spacing: 0.01em;
-    color: var(--pf-ink);
-  }
-  .pf-result-label {
-    margin: 0 !important;
-    font-family: var(--pf-font-body);
-    font-weight: 400; font-size: 0.72rem;
-    line-height: 1.35; color: var(--pf-muted);
-  }
-  .pf-drawer-link {
-    display: inline-block; margin-top: 0.25rem;
-    color: var(--pf-accent);
-    font-family: var(--pf-font-title);
-    font-weight: 700; font-size: 0.75rem; text-decoration: none;
-  }
-  .pf-drawer-link:hover { text-decoration: underline; }
-  .pf-tag {
-    display: inline-block; margin: 0 0 0.55rem;
-    padding: 0.15rem 0.45rem;
-    border: 1px solid var(--pf-hairline);
-    border-radius: 999px; color: var(--pf-accent);
-    font-family: var(--pf-font-title);
-    font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
-  }
+  .nav-list { margin-top: 2.1rem; border-top: 1px solid var(--nav-hair-strong); }
+  .nav-item { border-bottom: 1px solid var(--nav-hair); }
 
-  /* SIDEBAR FOOTER */
-  .pf-signature {
-    margin-top: 1.25rem; padding-top: 0.85rem;
-    border-top: 1px solid var(--pf-hairline);
-    display: flex; align-items: center; gap: 0.7rem;
-    flex: 0 0 auto;
+  /* nav row: shared look for button-triggers and view links */
+  .nav-row {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 0.95rem 0;
+    background: none; border: 0; text-decoration: none;
+    text-align: left; cursor: pointer;
+    color: var(--nav-ink);
+    font-weight: 600; font-size: 0.98rem; letter-spacing: -0.005em;
+    transition: color 160ms var(--ease);
   }
-  .pf-signature-mark {
-    width: 2.4rem; height: 2.4rem;
+  .nav-row:hover, .nav-row:focus-visible { color: var(--accent); outline: none; }
+  .nav-row .meta {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    color: var(--nav-muted); font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.14em; flex: 0 0 auto;
+  }
+  .nav-row:hover .meta, .nav-row:focus-visible .meta { color: var(--accent); }
+  .nav-sign { font-size: 0.9rem; width: 0.9rem; text-align: center; transition: transform 200ms var(--ease); }
+  .nav-item.open .nav-sign { transform: rotate(45deg); }
+  .nav-arrow { font-size: 0.85rem; transition: transform 220ms var(--ease); }
+  .nav-row:hover .nav-arrow { transform: translate(2px, -2px); }
+  .nav-row.is-active > span:first-child { color: var(--accent); }
+
+  /* collapsible drawer (Autoria / Ensaiando) */
+  .drawer {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 320ms var(--ease);
+  }
+  .nav-item.open .drawer { grid-template-rows: 1fr; }
+  .drawer-inner { overflow: hidden; }
+
+  /* Autoria drawer — CV download */
+  .cv-link {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    margin: 0.35rem 0 1rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    color: var(--nav-ink); text-decoration: none;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+    transition: border-color 180ms var(--ease), color 180ms var(--ease), background 180ms var(--ease);
+  }
+  .cv-link:hover, .cv-link:focus-visible { border-color: var(--accent); color: #fff; background: rgba(224,122,95,.12); outline: none; }
+  .cv-link .ico { font-size: 0.85rem; }
+
+  /* Ensaiando drawer — placeholder pills only */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.35rem 0 1.05rem; }
+  .pill {
+    display: inline-block;
+    padding: 0.3rem 0.62rem;
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    color: var(--nav-muted);
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .pill.is-live { color: var(--accent); border-color: var(--accent); }
+
+  /* always-visible result cards under ECHO / ATRIO — enlarged numbers */
+  .facts { padding: 0.5rem 0 1.15rem; display: flex; flex-direction: column; }
+  .fact {
+    display: flex; gap: 0.95rem; align-items: baseline;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--nav-hair);
+  }
+  .fact:first-child { border-top: 0; padding-top: 0.4rem; }
+  .fact-n {
+    flex: 0 0 auto; min-width: 1.75rem;
+    font-size: 1.5rem; font-weight: 800; line-height: 0.9; letter-spacing: -0.03em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .fact-t { margin: 0; color: var(--nav-muted); font-size: 0.74rem; line-height: 1.42; }
+
+  /* ───────────────────────── PINNED SIGNATURE ───────────────────────── */
+  .sig {
+    flex: 0 0 auto;
+    display: flex; flex-direction: column; gap: 0.9rem;
+    padding: 1.15rem 1.5rem 1.3rem;
+    border-top: 1px solid var(--nav-hair);
+    background: var(--nav-bg);
+  }
+  .sig-id { display: flex; align-items: center; gap: 0.85rem; }
+  .sig-mark {
+    width: 2.5rem; height: 2.5rem;
     flex: 0 0 auto; object-fit: contain; display: block;
+    filter: brightness(0) invert(1); /* force logo to pure white */
   }
-  .pf-signature-text { min-width: 0; display: flex; flex-direction: column; }
-  .pf-signature-text strong {
-    display: block; font-family: var(--pf-font-title);
-    font-size: 0.78rem; font-weight: 700;
-    letter-spacing: 0.01em; color: var(--pf-ink);
+  .sig-text { min-width: 0; }
+  .sig-text strong {
+    display: block;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: -0.005em;
+    color: var(--nav-ink);
   }
-  .pf-signature-text span {
-    display: block; margin-top: 0.15rem;
-    color: var(--pf-muted); font-size: 0.66rem; line-height: 1.35;
+  .sig-text span {
+    display: block; margin-top: 0.18rem;
+    color: var(--nav-muted); font-size: 0.62rem; line-height: 1.4;
   }
+  .sig-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.35rem; }
+  .sig-links a {
+    color: var(--nav-ink); text-decoration: none;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+    padding-bottom: 2px; border-bottom: 1px solid var(--nav-hair-strong);
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .sig-links a:hover, .sig-links a:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
 
-  /* PAGE */
-  .pf-page {
-    min-height: 100vh;
-    margin-left: var(--pf-sidebar);
-    background: var(--pf-page-bg);
-    color: var(--pf-page-ink);
-    transition: margin-left 220ms ease;
+  /* ───────────────────────── RIGHT COLUMN (PAGE) ───────────────────────── */
+  .page {
+    min-height: 100dvh;
+    margin-left: var(--nav-w);
+    background: var(--pg-bg);
+    color: var(--pg-ink);
+    transition: margin-left 320ms var(--ease);
   }
-  body.sidebar-collapsed .pf-page { margin-left: 0; }
-  .pf-content {
-    width: min(var(--pf-content), calc(100vw - var(--pf-sidebar) - var(--pf-gutter) * 2));
+  body.collapsed .page { margin-left: 0; }
+  body.framed .page { display: none; }
+  .wrap {
+    width: min(var(--content), calc(100vw - var(--nav-w) - var(--gutter) * 2));
     margin: 0 auto;
+    padding: 0 var(--gutter);
   }
-  body.sidebar-collapsed .pf-content {
-    width: min(var(--pf-content), calc(100vw - var(--pf-gutter) * 2));
+  body.collapsed .wrap { width: min(var(--content), calc(100vw - var(--gutter) * 2)); }
+
+  /* HERO — compact so the three cards sit above the fold */
+  .hero { padding: clamp(2.25rem, 5vw, 3.5rem) 0 clamp(1.25rem, 3vw, 1.75rem); }
+  .overline {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    margin: 0 0 clamp(1rem, 2.5vw, 1.6rem);
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--pg-muted);
+  }
+  .overline::after { content: ""; width: 2.5rem; height: 1px; background: var(--pg-ink); opacity: .35; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.15fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: end;
+  }
+  .hero h1 {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(2.05rem, 4.6vw, 3.4rem);
+    line-height: 0.98; letter-spacing: -0.03em;
+    text-wrap: balance;
+    max-width: 14ch;
+  }
+  .lead {
+    margin: 0; font-size: clamp(0.95rem, 1.25vw, 1.1rem);
+    line-height: 1.5; letter-spacing: -0.005em; color: var(--pg-ink);
+    text-wrap: pretty; max-width: 46ch;
   }
 
-  /* RIGHT COLUMN THEME */
-  .pf-page .pf-kicker,
-  .pf-page .pf-copy,
-  .pf-page .pf-card p,
-  .pf-page .pf-prose p,
-  .pf-page .pf-footer-grid p {
-    color: var(--pf-page-muted);
+  /* CARDS — in evidence, minimal, blocked grid, first-fold */
+  .cards-section { padding: 0 0 clamp(3rem, 6vw, 5rem); }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; margin: clamp(1.75rem, 3.5vw, 2.5rem) 0 clamp(1rem, 2vw, 1.4rem);
   }
+  .section-head h2 {
+    margin: 0; font-weight: 700; font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    letter-spacing: -0.02em;
+  }
+  .section-head .note { margin: 0; color: var(--pg-muted); font-size: 0.82rem; }
 
-  .pf-page .pf-lead,
-  .pf-page .pf-hero h1,
-  .pf-page .pf-card h3,
-  .pf-page .pf-prose-title,
-  .pf-page .pf-prose strong,
-  .pf-page .pf-concept-toggle,
-  .pf-page .pf-footer-name,
-  .pf-page .pf-footer-mark {
-    color: var(--pf-page-ink) !important;
-  }
-
-  .pf-page .pf-card,
-  .pf-page .pf-concept-toggles {
-    border-top-color: var(--pf-page-hairline-strong);
-  }
-
-  .pf-page .pf-concept-toggle,
-  .pf-page .pf-concept-body {
-    border-bottom-color: var(--pf-page-hairline);
-  }
-
-  .pf-page .pf-concept-toggle.is-open,
-  .pf-page .pf-prose em {
-    color: var(--pf-accent) !important;
-  }
-
-  .pf-view { display: none; }
-  .pf-view.is-active { display: block; animation: pf-fade-in 280ms cubic-bezier(0.22,1,0.36,1); }
-
-  .pf-section { padding: clamp(2.75rem, 6.5vw, 5rem) 0; }
-  .pf-hero { padding-top: clamp(3.5rem, 8vw, 6rem); }
-  .pf-kicker {
-    margin: 0; font-family: var(--pf-font-title);
-    font-size: 0.68rem; font-weight: 700;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--pf-muted);
-  }
-  .pf-hero h1 {
-    max-width: 100%;
-    margin: 0 0 0.55rem;
-    font-family: var(--pf-font-title);
-    font-weight: 800; font-size: clamp(1.9rem, 3.6vw, 3.1rem);
-    line-height: 0.9; letter-spacing: 0.01em;
-    color: var(--pf-ink);
-  }
-  .pf-lead {
-  max-width: 100%;
-  margin: 0;
-  font-size: clamp(0.92rem, 1.15vw, 1.12rem);
-  line-height: 1.34;
-  letter-spacing: -0.005em;
-  color: var(--pf-ink);
-  }
-  .pf-copy {
-  max-width: 100%;
-  margin: 1.55rem 0 0;
-  color: var(--pf-muted);
-  font-size: clamp(0.92rem, 1.15vw, 1.12rem);
-  line-height: 1.34;
-  }
-  .pf-cards-section { padding-top: 0; }
-  .pf-cards {
-    display: grid; gap: 1rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .pf-card {
-    padding: 1.35rem 1.25rem 1.5rem;
-    border-top: 1px solid var(--pf-hairline-strong);
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--pg-hair); }
+  .card {
+    background: var(--pg-bg);
+    padding: clamp(1.35rem, 2.2vw, 1.85rem) clamp(1.2rem, 1.8vw, 1.6rem) clamp(1.4rem, 2.6vw, 2rem);
+    border-top: 2px solid var(--pg-hair-strong);
     display: flex; flex-direction: column;
     min-height: 12rem;
+    transition: background 220ms var(--ease);
   }
-  .pf-card-num {
-    margin: 0 0 2rem; font-family: var(--pf-font-title);
-    font-size: 0.65rem; font-weight: 700;
-    letter-spacing: 0.16em; color: var(--pf-accent);
+  .card-n {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+    color: var(--accent); font-variant-numeric: tabular-nums;
   }
-  .pf-card h3 {
-    margin: 0 0 0.75rem; font-family: var(--pf-font-title);
-    font-weight: 700; font-size: 1.02rem;
-    line-height: 1.1; letter-spacing: 0.02em;
-    text-transform: uppercase; color: var(--pf-ink);
+  .card h3 {
+    margin: clamp(1.25rem, 3vw, 2rem) 0 0.7rem;
+    font-weight: 700; font-size: 1.24rem; letter-spacing: -0.015em;
   }
-  .pf-card p { margin: 0; color: var(--pf-muted); font-size: 0.85rem; line-height: 1.55; }
+  .card p { margin: 0; color: var(--pg-muted); font-size: 0.88rem; line-height: 1.58; }
+  .card .strong { color: var(--pg-ink); font-weight: 600; }
 
-  .pf-concept-toggles {
-    margin-top: 2.5rem;
-    border-top: 1px solid var(--pf-hairline-strong);
+  /* the reveal trigger — a text, deliberately understated */
+  .reveal {
+    margin-top: auto; padding-top: 1.35rem;
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: none; border: 0; padding-left: 0; padding-right: 0;
+    cursor: pointer;
+    font-weight: 600; font-size: 0.84rem; letter-spacing: -0.005em;
+    color: var(--pg-ink);
   }
-  .pf-concept-toggle {
-    width: 100%; min-height: 3rem;
-    display: flex; align-items: center;
-    justify-content: space-between;
-    border: 0; border-bottom: 1px solid var(--pf-hairline);
-    background: transparent; color: var(--pf-ink);
-    padding: 0; text-align: left;
-    font-family: var(--pf-font-title);
-    font-weight: 700; font-size: 0.92rem;
-    letter-spacing: 0.01em; cursor: pointer;
+  .reveal .lbl { position: relative; }
+  .reveal .lbl::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -3px;
+    height: 1.5px; background: var(--accent);
+    transform: scaleX(0); transform-origin: left; transition: transform 300ms var(--ease);
   }
-  .pf-concept-toggle.is-open { color: var(--pf-accent); }
-  .pf-concept-body {
-    display: none;
-    padding: clamp(2rem, 4vw, 3.25rem) 0;
-    border-bottom: 1px solid var(--pf-hairline);
+  .reveal .dot {
+    display: grid; place-items: center;
+    width: 1.55rem; height: 1.55rem; border-radius: 999px;
+    border: 1px solid var(--pg-hair-strong);
+    font-size: 0.8rem; line-height: 1;
+    transition: background 240ms var(--ease), color 240ms var(--ease), border-color 240ms var(--ease), transform 240ms var(--ease);
   }
-  .pf-concept-body.is-open { display: block; }
-  .pf-prose { max-width: 42rem; }
-  .pf-prose-title {
-    margin: 0 0 1.5rem; font-family: var(--pf-font-title);
-    font-weight: 800; font-size: clamp(1.7rem, 3vw, 2.75rem);
-    line-height: 0.9; letter-spacing: 0.02em;
-    text-transform: uppercase; color: var(--pf-ink);
+  .reveal:hover .lbl::after, .reveal:focus-visible .lbl::after { transform: scaleX(1); }
+  .reveal:hover .dot, .reveal:focus-visible .dot {
+    background: var(--accent); border-color: var(--accent); color: #fff; transform: rotate(45deg);
   }
-  .pf-prose p {
-    margin: 0 0 0.95rem; color: #d4d4d4;
-    font-size: 0.95rem; line-height: 1.7;
+  .reveal:focus-visible { outline: none; }
+
+  /* PAGE FOOTER — kept: Autor / Contato / Marco oficial */
+  .foot {
+    border-top: 1px solid var(--pg-hair-strong);
+    padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
   }
-  .pf-prose em { font-style: italic; color: var(--pf-accent); }
-  .pf-prose strong {
-    font-family: var(--pf-font-title);
-    font-weight: 800; letter-spacing: 0.03em;
-    text-transform: uppercase; color: var(--pf-ink);
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1.3fr; gap: clamp(1.5rem, 4vw, 3rem); }
+  .foot dt {
+    margin: 0 0 0.6rem;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--pg-muted);
+  }
+  .foot dd { margin: 0; }
+  .foot .name { font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; }
+  .foot .line { margin-top: 0.4rem; color: var(--pg-muted); font-size: 0.82rem; line-height: 1.5; }
+  .foot a { text-decoration: none; border-bottom: 1px solid var(--pg-hair-strong); padding-bottom: 1px; }
+  .foot a:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+  /* ───────────────────────── FRAMED VIEW (ECHO / ATRIO in right column) ───────────────────────── */
+  .frame-wrap {
+    position: fixed; inset: 0 0 0 var(--nav-w);
+    display: none; flex-direction: column;
+    background: var(--pg-bg);
+    z-index: var(--z-frame);
+    transition: left 320ms var(--ease);
+  }
+  body.collapsed .frame-wrap { left: 0; }
+  body.framed .frame-wrap { display: flex; }
+  .frame-bar {
+    flex: 0 0 auto;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.7rem clamp(1rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--pg-hair);
+    background: var(--pg-bg);
+  }
+  .frame-back {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: none; border: 0; padding: 0; cursor: pointer;
+    color: var(--pg-ink); font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
+    transition: color 160ms var(--ease);
+  }
+  .frame-back:hover, .frame-back:focus-visible { color: var(--accent-ink); outline: none; }
+  .frame-title {
+    font-weight: 800; font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--pg-muted);
+  }
+  .frame-ext {
+    margin-left: auto; color: var(--pg-muted); text-decoration: none;
+    font-size: 0.74rem; font-weight: 600;
+    border-bottom: 1px solid var(--pg-hair); padding-bottom: 1px;
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .frame-ext:hover, .frame-ext:focus-visible { color: var(--accent-ink); border-color: var(--accent); outline: none; }
+  .frame { flex: 1 1 auto; width: 100%; height: 100%; border: 0; background: var(--pg-bg); }
+
+  /* ───────────────────────── CONCEPT READER (dialog) ───────────────────────── */
+  .reader {
+    width: 100vw; max-width: 100vw;
+    height: 100dvh; max-height: 100dvh;
+    margin: 0; padding: 0; border: 0;
+    background: var(--rd-bg); color: var(--rd-ink);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .reader::backdrop { background: rgba(6,7,9,.55); }
+  .reader-inner {
+    width: min(46rem, 100%);
+    margin: 0 auto;
+    padding: clamp(4.5rem, 9vh, 7rem) var(--gutter) clamp(4rem, 10vh, 7rem);
+  }
+  .reader-close {
+    position: fixed; top: clamp(1.1rem, 3vh, 2rem); right: clamp(1.1rem, 3vw, 2.25rem);
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    padding: 0.5rem 0.95rem;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--rd-hair); border-radius: 999px;
+    color: var(--rd-ink); cursor: pointer;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+    backdrop-filter: blur(8px);
+    transition: background 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  .reader-close:hover { background: rgba(224,122,95,.14); border-color: var(--accent); color: #fff; }
+  .reader-close .x { font-size: 1rem; line-height: 1; }
+  .reader-eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .reader-title {
+    margin: 0 0 clamp(2rem, 5vh, 3.5rem);
+    font-weight: 800; font-size: clamp(3.25rem, 12vw, 6rem);
+    line-height: 0.9; letter-spacing: -0.04em;
+    color: #fff;
+  }
+  .reader-sub {
+    margin: -1.5rem 0 clamp(2rem, 5vh, 3.5rem);
+    color: var(--rd-muted); font-size: 0.86rem; letter-spacing: 0.02em;
+  }
+  .prose p {
+    margin: 0 0 1.35rem;
+    font-family: var(--serif);
+    font-weight: 300; font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+    line-height: 1.72; letter-spacing: 0.003em;
+    color: var(--rd-ink);
+    text-wrap: pretty; max-width: 40ch;
+  }
+  .prose .open { font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.4; font-weight: 400; color: #fff; margin-bottom: 1.6rem; }
+  .prose em { font-style: italic; color: var(--accent); }
+  .prose strong {
+    font-family: var(--font); font-weight: 800;
+    letter-spacing: 0.02em; color: #fff;
+  }
+  .prose .caps {
+    font-family: var(--font); font-weight: 700;
+    font-size: 0.9em; letter-spacing: 0.04em; color: #fff;
   }
 
-  /* PAGE FOOTER */
-  .pf-page-footer {
-    padding: 2rem 0;
-    border-top: 1px solid var(--pf-page-hairline);
-    background: var(--pf-page-bg);
+  /* ───────────────────────── MOBILE MENU BUTTON ───────────────────────── */
+  .menu-btn {
+    position: fixed; top: 1rem; left: 1rem; z-index: var(--z-menu);
+    display: none; align-items: center; gap: 0.55rem;
+    padding: 0.6rem 0.95rem;
+    background: var(--nav-bg); color: var(--nav-ink);
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    cursor: pointer; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
   }
-  .pf-footer-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr 1.2fr;
-    gap: 1.5rem;
-  }
-  .pf-footer-grid p {
-    margin: 0.25rem 0 0; color: var(--pf-muted); font-size: 0.82rem;
-  }
-  .pf-footer-name, .pf-footer-mark {
-    color: var(--pf-ink) !important;
-    font-family: var(--pf-font-title);
-    font-weight: 700; letter-spacing: 0.01em;
+  .scrim {
+    position: fixed; inset: 0; z-index: var(--z-scrim);
+    background: rgba(8,9,11,.5); backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity 280ms var(--ease);
   }
 
-  @keyframes pf-fade-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: none; }
+  /* ───────────────────────── MOTION ───────────────────────── */
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .anim .rise { animation: rise .8s var(--ease) both; }
+  .anim .d1 { animation-delay: .05s; }
+  .anim .d2 { animation-delay: .12s; }
+  .anim .d3 { animation-delay: .19s; }
+  .anim .d4 { animation-delay: .26s; }
+  .anim .d5 { animation-delay: .33s; }
+
+  /* smooth dialog open/close */
+  .reader { opacity: 0; transform: translateY(14px) scale(.992); }
+  .anim .reader {
+    transition: opacity .5s var(--ease), transform .6s var(--ease),
+                overlay .6s var(--ease) allow-discrete, display .6s var(--ease) allow-discrete;
+  }
+  .reader[open] { opacity: 1; transform: none; }
+  @starting-style { .reader[open] { opacity: 0; transform: translateY(14px) scale(.992); } }
+  .anim .reader::backdrop { transition: opacity .5s var(--ease), overlay .6s var(--ease) allow-discrete, display .6s var(--ease) allow-discrete; }
+  .reader::backdrop { opacity: 0; }
+  .reader[open]::backdrop { opacity: 1; }
+  @starting-style { .reader[open]::backdrop { opacity: 0; } }
+
+  /* ───────────────────────── RESPONSIVE ───────────────────────── */
+  @media (max-width: 1080px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 1.25rem; align-items: start; }
+    .lead { max-width: 60ch; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    :root { --nav-w: min(84vw, 22rem); }
+    .page, body.collapsed .page { margin-left: 0; }
+    .wrap, body.collapsed .wrap { width: 100%; }
+    .nav { transform: translateX(-100%); box-shadow: none; }
+    body.nav-open .nav { transform: translateX(0); box-shadow: 30px 0 80px rgba(0,0,0,.5); }
+    body.nav-open .scrim { opacity: 1; pointer-events: auto; }
+    .menu-btn { display: inline-flex; }
+    .collapse { display: none; }
+    .peek { display: none !important; }
+    .frame-wrap, body.collapsed .frame-wrap { left: 0; }
+    .cards { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr; }
+    .card { min-height: 0; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: clamp(2rem, 11vw, 2.6rem); }
   }
 
-  @media (max-width: 1100px) {
-    :root { --pf-sidebar: 18.5rem; }
-    .pf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  @media (max-width: 820px) {
-    :root { --pf-sidebar: min(82vw, 20rem); }
-    .pf-page, body.sidebar-collapsed .pf-page { margin-left: 0; }
-    .pf-sidebar { transform: translateX(-100%); }
-    body.sidebar-pinned .pf-sidebar { transform: translateX(0); }
-    .pf-cards, .pf-footer-grid { grid-template-columns: 1fr; }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .pf-view.is-active { animation: none; }
+    * { animation: none !important; transition: none !important; }
   }
 </style>
 </head>
-<body class="sidebar-pinned">
+<body class="pinned">
 
-<div class="pf-hover-strip" aria-hidden="true"></div>
+<div class="peek" aria-hidden="true"></div>
+<div class="scrim" data-close-nav aria-hidden="true"></div>
+<button class="menu-btn" type="button" data-open-nav aria-label="Abrir menu">☰ Menu</button>
 
-<aside class="pf-sidebar" aria-label="Menu lateral">
-  <div class="pf-sidebar-scroll">
-    <div class="pf-topline">
-      <div>
-        <h1 class="pf-brand">
-          <button type="button" class="pf-brand-home" data-action="home" aria-label="Voltar à página inicial">
-            <br />Inteligência<br />Judiciária<br />Orquestrada
-          </button>
-        </h1>
-        <p class="pf-thesis">Da operação bruta à regência recursal</p>
+<!-- ═══════════════════════ LEFT COLUMN — NAV ═══════════════════════ -->
+<aside class="nav" aria-label="Navegação">
+  <div class="nav-scroll">
+    <div class="nav-top">
+      <button class="brand" type="button" data-home aria-label="Voltar à página Autoria">
+        <span>Inteligência</span><span>Judiciária</span><span>Orquestrada</span>
+      </button>
+      <button class="collapse" type="button" data-collapse aria-label="Recolher coluna lateral">×</button>
+    </div>
+    <p class="thesis">Da operação bruta à regência recursal.</p>
+
+    <div class="nav-list">
+
+      <!-- 01 · AUTORIA (home view · collapsible drawer with CV download) -->
+      <div class="nav-item open" data-item="autoria">
+        <button class="nav-row is-active" type="button" data-drawer data-active="autoria" aria-expanded="true">
+          <span>Autoria</span>
+          <span class="meta"><span>01</span><span class="nav-sign">+</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <!-- placeholder: troque o href pelo arquivo real do CV -->
+          <a class="cv-link" href="curriculo-christian-da-costa.pdf" download>
+            <span class="ico" aria-hidden="true">↓</span> Baixar currículo (PDF)
+          </a>
+        </div></div>
       </div>
-      <button class="pf-icon-button" type="button" data-action="toggle-pin" aria-label="Recolher coluna lateral">×</button>
+
+      <!-- 02 · ECHO (loads in the right column · nav stays fixed) -->
+      <div class="nav-item" data-item="echo">
+        <button class="nav-row" type="button" data-frame="echo" data-active="echo">
+          <span>ECHO</span>
+          <span class="meta"><span>02</span><span class="nav-arrow">↗</span></span>
+        </button>
+        <div class="facts">
+          <div class="fact"><span class="fact-n">01</span><p class="fact-t">Fluxo e memória operacional organizados</p></div>
+          <div class="fact"><span class="fact-n">02</span><p class="fact-t">Prática dispersa convertida em método transmissível</p></div>
+          <div class="fact"><span class="fact-n">03</span><p class="fact-t">Rastreabilidade, critérios e pontos de controle</p></div>
+        </div>
+      </div>
+
+      <!-- 03 · ATRIO (loads in the right column · nav stays fixed) -->
+      <div class="nav-item" data-item="atrio">
+        <button class="nav-row" type="button" data-frame="atrio" data-active="atrio">
+          <span>ATRIO</span>
+          <span class="meta"><span>03</span><span class="nav-arrow">↗</span></span>
+        </button>
+        <div class="facts">
+          <div class="fact"><span class="fact-n">01</span><p class="fact-t">Arquitetura modular de governança jurídica</p></div>
+          <div class="fact"><span class="fact-n">02</span><p class="fact-t">CORPUS · RATIO · CERNE · LUX</p></div>
+          <div class="fact"><span class="fact-n">03</span><p class="fact-t">IA como infraestrutura assistida, não substituição do juízo</p></div>
+        </div>
+      </div>
+
+      <!-- 04 · ENSAIANDO (drawer with placeholder pills · right column unchanged) -->
+      <div class="nav-item" data-item="ensaiando">
+        <button class="nav-row" type="button" data-drawer aria-expanded="false">
+          <span>Ensaiando</span>
+          <span class="meta"><span>04</span><span class="nav-sign">+</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="pills">
+            <span class="pill is-live">em construção</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+          </div>
+        </div></div>
+      </div>
+
     </div>
+  </div>
 
-    <div class="pf-nav-block">
-      <p class="pf-nav-label">Navegação</p>
-      <nav class="pf-nav" aria-label="Navegação principal">
-
-        <div class="pf-nav-item" data-item="autoria">
-          <button type="button" class="pf-nav-trigger" data-nav="autoria" aria-expanded="false">
-            <span>Autoria</span>
-            <small><span>01</span><span class="pf-nav-sign">+</span></small>
-          </button>
-          <div class="pf-nav-drawer">
-            <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume no TJPR, foi estruturada uma fundação operacional voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
-            <p>Essa base permitiu consolidar a <em>Regência Recursal</em>, método de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e <em>quality gates</em>.</p>
-          </div>
-        </div>
-
-        <div class="pf-nav-item" data-item="echo">
-          <button type="button" class="pf-nav-trigger" data-nav="echo" aria-expanded="false">
-            <span>ECHO</span>
-            <small><span>02</span><span class="pf-nav-sign">+</span></small>
-          </button>
-          <div class="pf-nav-drawer">
-            <p class="pf-drawer-eyebrow">Resultados</p>
-            <div class="pf-result-cards">
-              <div class="pf-result-card"><p class="pf-result-num">01</p><p class="pf-result-label">Fluxo e memória operacional organizados</p></div>
-              <div class="pf-result-card"><p class="pf-result-num">02</p><p class="pf-result-label">Prática dispersa convertida em método transmissível</p></div>
-              <div class="pf-result-card"><p class="pf-result-num">03</p><p class="pf-result-label">Rastreabilidade, critérios e pontos de controle</p></div>
-            </div>
-            <a class="pf-drawer-link" href="https://christiancozta.github.io/echo.html">Ver página completa →</a>
-          </div>
-
-        </div>
-
-        <div class="pf-nav-item" data-item="atrio">
-          <button type="button" class="pf-nav-trigger" data-nav="atrio" aria-expanded="false">
-            <span>ATRIO</span>
-            <small><span>03</span><span class="pf-nav-sign">+</span></small>
-          </button>
-          <div class="pf-nav-drawer">
-            <p class="pf-drawer-eyebrow">Resultados</p>
-            <div class="pf-result-cards">
-              <div class="pf-result-card"><p class="pf-result-num">01</p><p class="pf-result-label">Arquitetura modular de governança jurídica</p></div>
-              <div class="pf-result-card"><p class="pf-result-num">02</p><p class="pf-result-label">CORPUS, RATIO, CERNE e LUX</p></div>
-              <div class="pf-result-card"><p class="pf-result-num">03</p><p class="pf-result-label">IA como infraestrutura assistida, não substituição do juízo</p></div>
-            </div>
-            <a class="pf-drawer-link" href="https://christiancozta.github.io/atrio.html">Ver página completa →</a>
-          </div>
-
-        </div>
-
-        <div class="pf-nav-item" data-item="ensaiando">
-          <button type="button" class="pf-nav-trigger" data-nav="ensaiando" aria-expanded="false">
-            <span>Ensaiando</span>
-            <small><span>04</span><span class="pf-nav-sign">+</span></small>
-          </button>
-        <div class="pf-nav-drawer">
-            <p class="pf-tag">em construção</p>
-            <p>Próximas evoluções e estudos futuros. Ampliação dos módulos do ATRIO, ensaios sobre auditoria de raciocínio e experimentos de governança humana vinculante em fluxos assistidos por IA.</p>
-          </div>
-        </div>
-
-      </nav>
-    </div>
-
-    <footer class="pf-signature">
-      <img class="pf-signature-mark" src="data:image/png;base64,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" alt="Marca Christian da Costa" />
-      <div class="pf-signature-text">
+  <!-- Pinned signature — never overlapped by drawers (separate flex child) -->
+  <footer class="sig">
+    <div class="sig-id">
+      <img class="sig-mark" src="data:image/png;base64,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" alt="Marca de Christian da Costa" />
+      <div class="sig-text">
         <strong>Christian da Costa</strong>
         <span>Jurista · Arquitetura jurídica · IA jurídica aplicada</span>
       </div>
-    </footer>
-  </div>
+    </div>
+    <div class="sig-links">
+      <a href="mailto:christiandscosta@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
 </aside>
 
-<main class="pf-page">
-  <section class="pf-view is-active" data-view="default">
-    <div class="pf-content">
-      <section class="pf-section pf-hero">
-        <p class="pf-kicker">Autoria</p>
-        <h1>Antes da máquina, o método</h1>
-        <p class="pf-lead">Este case organiza a passagem da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.</p>
-        <p class="pf-copy">A autoria aqui não funciona como assinatura decorativa. Ela aparece como responsabilidade metodológica: observar o fluxo, nomear padrões, estruturar procedimentos e transformar prática dispersa em sistema legível.</p>
-      </section>
+<!-- ═══════════════════════ RIGHT COLUMN — AUTORIA VIEW ═══════════════════════ -->
+<main class="page">
+  <div class="wrap">
 
-      <section class="pf-section pf-cards-section">
-        <div class="pf-cards">
-          <article class="pf-card">
-            <p class="pf-card-num">01</p>
-            <h3>Fundação</h3>
-            <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume, foi estruturada uma fundação voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
-          </article>
-          <article class="pf-card">
-            <p class="pf-card-num">02</p>
-            <h3>Regência</h3>
-            <p>Essa base permitiu consolidar o ECHO, metodologia de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e <em>quality gates</em>.</p>
-          </article>
-          <article class="pf-card">
-            <p class="pf-card-num">03</p>
-            <h3>Arquitetura</h3>
-            <p>Sobre essa fundação, o ATRIO foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
-          </article>
-        </div>
-
-        <div class="pf-concept-toggles">
-          <button type="button" class="pf-concept-toggle" data-concept="echo" aria-expanded="false">
-            <span>Conceito ECHO</span><span class="pf-concept-sign">+</span>
-          </button>
-          <div class="pf-concept-body" data-concept-body="echo">
-            <div class="pf-prose">
-              <h3 class="pf-prose-title">ECHO</h3>
-              <p>A música começou ferida.</p>
-              <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som.</p>
-              <p>Mas beleza sem lugar também é ruído.</p>
-              <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra.</p>
-              <p>Então ele interrompeu.</p>
-              <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
-              <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
-              <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição: <em>sempre foi assim.</em></p>
-              <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
-              <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
-              <p>O método começou ali. No silêncio que recebeu nome. O spalla escreveu — não contra a sala, não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto.</p>
-              <p>A música não ficou perfeita. Ficou possível.</p>
-              <p>Ao fim, o maestro recolheu a batuta. Sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta: <strong>ECHO.</strong></p>
-              <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
-            </div>
-          </div>
-
-          <button type="button" class="pf-concept-toggle" data-concept="atrio" aria-expanded="false">
-            <span>Conceito ATRIO</span><span class="pf-concept-sign">+</span>
-          </button>
-          <div class="pf-concept-body" data-concept-body="atrio">
-            <div class="pf-prose">
-              <h3 class="pf-prose-title">ATRIO</h3>
-              <p>O ATRIO nasce quando o método deixa de ser apenas prática de condução e passa a operar como arquitetura. Seu ponto de partida não é acelerar a produção jurídica, mas criar uma superfície governável para documentos, raciocínios, controles e entregas.</p>
-              <p>A inteligência artificial, nesse desenho, não ocupa o centro decisório. Ela funciona como força assistiva submetida a inventário, etapas, confronto, revisão e responsabilidade humana. Antes de perguntar o que a máquina entrega, o ATRIO pergunta que percurso permite confiar no que foi produzido.</p>
-              <p>Por isso, sua lógica é modular: CORPUS organiza o lastro; RATIO estrutura a elaboração; CERNE confronta o raciocínio; LUX refina a linguagem. A arquitetura não substitui o juízo. Dá forma ao caminho que antecede a entrega.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <footer class="pf-page-footer">
-      <div class="pf-content pf-footer-grid">
-        <div>
-          <p class="pf-kicker">Autor</p>
-          <p class="pf-footer-name">Christian da Costa</p>
-          <p>Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio</p>
-        </div>
-        <div>
-          <p class="pf-kicker">Contato</p>
-          <p><a href="mailto:christian@christiancozta.com">christian@christiancozta.com</a></p>
-        </div>
-        <div>
-          <p class="pf-kicker">Marco oficial</p>
-          <p class="pf-footer-mark">Ambiente recursal · TJPR · ago–out 2025</p>
-          <p>Fundação operacional, Regência Recursal e arquitetura ATRIO.</p>
-        </div>
+    <section class="hero">
+      <p class="overline rise d1">Autoria · 2025</p>
+      <div class="hero-grid">
+        <h1 class="rise d2">Antes da máquina, o método</h1>
+        <p class="lead rise d3">Este case organiza a passagem da experiência operacional acumulada à construção de uma arquitetura própria para governar documentos, raciocínios e entregas jurídicas mediadas por inteligência artificial.</p>
       </div>
+    </section>
+
+    <section class="cards-section">
+      <div class="section-head rise d4">
+        <h2>Três movimentos</h2>
+        <p class="note">Fundação → Regência → Arquitetura</p>
+      </div>
+
+      <div class="cards rise d5">
+        <article class="card">
+          <span class="card-n">01</span>
+          <h3>Fundação</h3>
+          <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume, foi estruturada uma fundação voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+        </article>
+
+        <article class="card">
+          <span class="card-n">02</span>
+          <h3>Regência</h3>
+          <p>Essa base permitiu consolidar o <span class="strong">ECHO</span>, metodologia de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e quality gates.</p>
+          <button class="reveal" type="button" data-reader="reader-echo" aria-haspopup="dialog">
+            <span class="lbl">Conceito ECHO</span>
+            <span class="dot" aria-hidden="true">↗</span>
+          </button>
+        </article>
+
+        <article class="card">
+          <span class="card-n">03</span>
+          <h3>Arquitetura</h3>
+          <p>Sobre essa fundação, o <span class="strong">ATRIO</span> foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
+          <button class="reveal" type="button" data-reader="reader-atrio" aria-haspopup="dialog">
+            <span class="lbl">Conceito ATRIO</span>
+            <span class="dot" aria-hidden="true">↗</span>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <dl class="foot-grid">
+        <div>
+          <dt>Autor</dt>
+          <dd class="name">Christian da Costa</dd>
+          <dd class="line">Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio.</dd>
+        </div>
+        <div>
+          <dt>Contato</dt>
+          <dd class="name"><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></dd>
+        </div>
+        <div>
+          <dt>Marco oficial</dt>
+          <dd class="name">Ambiente recursal · TJPR</dd>
+          <dd class="line">Fundação operacional, Regência Recursal e arquitetura ATRIO. Ago–out 2025.</dd>
+        </div>
+      </dl>
     </footer>
-  </section>
+
+  </div>
 </main>
 
-<script>
-(function(){
-  var body = document.body;
-  var pinBtn = document.querySelector('[data-action="toggle-pin"]');
-  var hoverStrip = document.querySelector('.pf-hover-strip');
-  var sidebar = document.querySelector('.pf-sidebar');
+<!-- ═══════════════════════ RIGHT COLUMN — ECHO / ATRIO FRAMED VIEW ═══════════════════════ -->
+<section class="frame-wrap" aria-label="Página incorporada">
+  <div class="frame-bar">
+    <button class="frame-back" type="button" data-home>← Autoria</button>
+    <span class="frame-title" data-frame-title>ECHO</span>
+    <a class="frame-ext" data-frame-ext href="#" target="_blank" rel="noopener">Abrir em nova aba ↗</a>
+  </div>
+  <iframe class="frame" data-frame-el title="Página incorporada" referrerpolicy="no-referrer"></iframe>
+</section>
 
-  function setPinned(pinned){
-    if(pinned){
-      body.classList.add('sidebar-pinned');
-      body.classList.remove('sidebar-collapsed','sidebar-peeking');
-      pinBtn.textContent = '×';
-      pinBtn.setAttribute('aria-label','Recolher coluna lateral');
-    } else {
-      body.classList.remove('sidebar-pinned');
-      body.classList.add('sidebar-collapsed');
-      body.classList.remove('sidebar-peeking');
-      pinBtn.textContent = '⇱';
-      pinBtn.setAttribute('aria-label','Fixar coluna lateral');
-    }
+<!-- ═══════════════════════ CONCEPT READERS ═══════════════════════ -->
+<dialog class="reader" id="reader-echo" aria-label="Conceito ECHO">
+  <div class="reader-inner">
+    <p class="reader-eyebrow">Conceito · 02</p>
+    <h2 class="reader-title">ECHO</h2>
+    <p class="reader-sub">A ferida de origem, o silêncio que recebeu nome.</p>
+    <div class="prose">
+      <p class="open">A música começou ferida.</p>
+      <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som.</p>
+      <p>Mas beleza sem lugar também é ruído.</p>
+      <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra.</p>
+      <p>Então ele interrompeu.</p>
+      <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
+      <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
+      <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição: <em>sempre foi assim.</em></p>
+      <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
+      <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
+      <p>O método começou ali. No silêncio que recebeu nome. O spalla escreveu — não contra a sala, não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto.</p>
+      <p>A música não ficou perfeita. Ficou possível.</p>
+      <p>Ao fim, o maestro recolheu a batuta. Sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta: <strong>ECHO</strong>.</p>
+      <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
+    </div>
+  </div>
+  <button class="reader-close" type="button" data-close aria-label="Fechar leitura">Fechar <span class="x" aria-hidden="true">×</span></button>
+</dialog>
+
+<dialog class="reader" id="reader-atrio" aria-label="Conceito ATRIO">
+  <div class="reader-inner">
+    <p class="reader-eyebrow">Conceito · 03</p>
+    <h2 class="reader-title">ATRIO</h2>
+    <p class="reader-sub">Quando o método deixa de ser condução e passa a ser arquitetura.</p>
+    <div class="prose">
+      <p class="open">O ATRIO nasce quando o método deixa de ser apenas prática de condução e passa a operar como arquitetura.</p>
+      <p>Seu ponto de partida não é acelerar a produção jurídica, mas criar uma superfície governável para documentos, raciocínios, controles e entregas.</p>
+      <p>A inteligência artificial, nesse desenho, não ocupa o centro decisório. Ela funciona como força assistiva submetida a inventário, etapas, confronto, revisão e responsabilidade humana. Antes de perguntar o que a máquina entrega, o ATRIO pergunta que percurso permite confiar no que foi produzido.</p>
+      <p>Por isso, sua lógica é modular: <span class="caps">CORPUS</span> organiza o lastro; <span class="caps">RATIO</span> estrutura a elaboração; <span class="caps">CERNE</span> confronta o raciocínio; <span class="caps">LUX</span> refina a linguagem.</p>
+      <p>A arquitetura não substitui o juízo. <em>Dá forma ao caminho que antecede a entrega.</em></p>
+    </div>
+  </div>
+  <button class="reader-close" type="button" data-close aria-label="Fechar leitura">Fechar <span class="x" aria-hidden="true">×</span></button>
+</dialog>
+
+<script>
+(function () {
+  var body = document.body;
+
+  /* ── Sections that load in the right column ── */
+  var SECTIONS = {
+    echo:  { url: 'https://christiancozta.github.io/echo.html',  title: 'ECHO'  },
+    atrio: { url: 'https://christiancozta.github.io/atrio.html', title: 'ATRIO' }
+  };
+  var frameEl    = document.querySelector('[data-frame-el]');
+  var frameTitle = document.querySelector('[data-frame-title]');
+  var frameExt   = document.querySelector('[data-frame-ext]');
+  var autoriaRow = document.querySelector('[data-active="autoria"]');
+
+  function clearActive() {
+    document.querySelectorAll('.nav-row').forEach(function (r) { r.classList.remove('is-active'); });
+  }
+  function showAutoria() {
+    body.classList.remove('framed');
+    clearActive();
+    if (autoriaRow) autoriaRow.classList.add('is-active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showFrame(key) {
+    var s = SECTIONS[key];
+    if (!s) return;
+    if (frameEl.getAttribute('src') !== s.url) frameEl.setAttribute('src', s.url);
+    frameTitle.textContent = s.title;
+    frameExt.setAttribute('href', s.url);
+    body.classList.add('framed');
+    clearActive();
+    var row = document.querySelector('[data-active="' + key + '"]');
+    if (row) row.classList.add('is-active');
+    document.querySelector('.frame-wrap').scrollTop = 0;
   }
 
-  pinBtn.addEventListener('click', function(){
-    setPinned(!body.classList.contains('sidebar-pinned'));
-  });
+  /* ── Collapse / peek (desktop) ── */
+  var collapseBtn = document.querySelector('[data-collapse]');
+  var peek = document.querySelector('.peek');
+  var nav = document.querySelector('.nav');
 
-  hoverStrip.addEventListener('mouseenter', function(){
-    if(body.classList.contains('sidebar-collapsed')){
-      body.classList.add('sidebar-peeking');
+  function setCollapsed(on) {
+    body.classList.toggle('collapsed', on);
+    body.classList.remove('peeking');
+    if (collapseBtn) {
+      collapseBtn.textContent = on ? '⇥' : '×';
+      collapseBtn.setAttribute('aria-label', on ? 'Fixar coluna lateral' : 'Recolher coluna lateral');
     }
+  }
+  if (collapseBtn) collapseBtn.addEventListener('click', function () {
+    setCollapsed(!body.classList.contains('collapsed'));
   });
-  sidebar.addEventListener('mouseleave', function(){
-    body.classList.remove('sidebar-peeking');
+  if (peek) peek.addEventListener('mouseenter', function () {
+    if (body.classList.contains('collapsed')) body.classList.add('peeking');
+  });
+  if (nav) nav.addEventListener('mouseleave', function () {
+    body.classList.remove('peeking');
   });
 
-  // Navigation drawers
-  document.querySelectorAll('[data-nav]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var item = btn.closest('.pf-nav-item');
-      var wasOpen = item.classList.contains('is-open');
-      // toggle only this item
-      item.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded', String(!wasOpen));
-      var sign = btn.querySelector('.pf-nav-sign');
-      if(sign) sign.textContent = wasOpen ? '+' : '−';
+  /* ── Mobile off-canvas ── */
+  function setNavOpen(on) { body.classList.toggle('nav-open', on); }
+  var openBtn = document.querySelector('[data-open-nav]');
+  var scrim = document.querySelector('[data-close-nav]');
+  if (openBtn) openBtn.addEventListener('click', function () { setNavOpen(true); });
+  if (scrim) scrim.addEventListener('click', function () { setNavOpen(false); });
+
+  /* ── ECHO / ATRIO → load in right column, nav stays fixed ── */
+  document.querySelectorAll('[data-frame]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showFrame(btn.getAttribute('data-frame'));
+      setNavOpen(false);
     });
   });
 
-  // Concept toggles
-  document.querySelectorAll('[data-concept]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var key = btn.getAttribute('data-concept');
-      var body = document.querySelector('[data-concept-body="'+key+'"]');
-      var open = btn.classList.toggle('is-open');
-      body.classList.toggle('is-open', open);
+  /* ── Collapsible drawers (Autoria / Ensaiando) — only the clicked one toggles ── */
+  document.querySelectorAll('[data-drawer]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.nav-item');
+      var open = item.classList.toggle('open');
       btn.setAttribute('aria-expanded', String(open));
-      var sign = btn.querySelector('.pf-concept-sign');
-      if(sign) sign.textContent = open ? '−' : '+';
+      if (item.getAttribute('data-item') === 'autoria') showAutoria();
     });
   });
 
-  // Brand home: scroll to top
-  document.querySelector('[data-action="home"]').addEventListener('click', function(){
-    window.scrollTo({top:0,behavior:'smooth'});
+  /* ── Back to Autoria (brand + frame back button) ── */
+  document.querySelectorAll('[data-home]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      showAutoria();
+      setNavOpen(false);
+    });
+  });
+
+  /* ── Concept readers (native <dialog>) ── */
+  document.querySelectorAll('[data-reader]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var dlg = document.getElementById(btn.getAttribute('data-reader'));
+      if (dlg && typeof dlg.showModal === 'function') dlg.showModal();
+      else if (dlg) dlg.setAttribute('open', '');
+    });
+  });
+  document.querySelectorAll('.reader').forEach(function (dlg) {
+    dlg.querySelectorAll('[data-close]').forEach(function (c) {
+      c.addEventListener('click', function () { dlg.close(); });
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
   });
 })();
 </script>
