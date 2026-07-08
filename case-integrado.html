@@ -12,6 +12,11 @@
   :root {
     --pf-bg: #2f2f2f;
     --pf-bg-soft: #262626;
+    --pf-page-bg: #FEFEFE;
+    --pf-page-ink: #111111;
+    --pf-page-muted: #626262;
+    --pf-page-hairline: #d8d8d8;
+    --pf-page-hairline-strong: #111111;
     --pf-ink: #ffffff;
     --pf-muted: #a8a8a8;
     --pf-hairline: #444444;
@@ -84,7 +89,7 @@
     margin: 0 0 0.55rem;
     font-family: var(--pf-font-nord);
     font-weight: 800; font-size: 1.15rem;
-    line-height: 1.05; letter-spacing: 0.01em;
+    line-height: 1.15; letter-spacing: 0.01em;
     text-transform: uppercase; color: var(--pf-ink);
   }
   .pf-brand-home {
@@ -219,6 +224,8 @@
   .pf-page {
     min-height: 100vh;
     margin-left: var(--pf-sidebar);
+    background: var(--pf-page-bg);
+    color: var(--pf-page-ink);
     transition: margin-left 220ms ease;
   }
   body.sidebar-collapsed .pf-page { margin-left: 0; }
@@ -228,6 +235,41 @@
   }
   body.sidebar-collapsed .pf-content {
     width: min(var(--pf-content), calc(100vw - var(--pf-gutter) * 2));
+  }
+
+  /* RIGHT COLUMN THEME */
+  .pf-page .pf-kicker,
+  .pf-page .pf-copy,
+  .pf-page .pf-card p,
+  .pf-page .pf-prose p,
+  .pf-page .pf-footer-grid p {
+    color: var(--pf-page-muted);
+  }
+
+  .pf-page .pf-lead,
+  .pf-page .pf-hero h1,
+  .pf-page .pf-card h3,
+  .pf-page .pf-prose-title,
+  .pf-page .pf-prose strong,
+  .pf-page .pf-concept-toggle,
+  .pf-page .pf-footer-name,
+  .pf-page .pf-footer-mark {
+    color: var(--pf-page-ink) !important;
+  }
+
+  .pf-page .pf-card,
+  .pf-page .pf-concept-toggles {
+    border-top-color: var(--pf-page-hairline-strong);
+  }
+
+  .pf-page .pf-concept-toggle,
+  .pf-page .pf-concept-body {
+    border-bottom-color: var(--pf-page-hairline);
+  }
+
+  .pf-page .pf-concept-toggle.is-open,
+  .pf-page .pf-prose em {
+    color: var(--pf-accent) !important;
   }
 
   .pf-view { display: none; }
@@ -329,8 +371,8 @@
   /* PAGE FOOTER */
   .pf-page-footer {
     padding: 2rem 0;
-    border-top: 1px solid var(--pf-hairline);
-    background: var(--pf-bg-soft);
+    border-top: 1px solid var(--pf-page-hairline);
+    background: var(--pf-page-bg);
   }
   .pf-footer-grid {
     display: grid;
@@ -377,7 +419,7 @@
       <div>
         <h1 class="pf-brand">
           <button type="button" class="pf-brand-home" data-action="home" aria-label="Voltar à página inicial">
-            Inteligência<br />Judiciária<br />Orquestrada
+            <br />Inteligência<br />Judiciária<br />Orquestrada
           </button>
         </h1>
         <p class="pf-thesis">Da operação bruta à regência recursal</p>
