@@ -7,7 +7,7 @@
 <meta name="description" content="Framework jurídico de eficiência operacional. Autoria de Christian da Costa." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Spectral:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Spectral:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <script>
   /* Add motion only when the user hasn't asked for reduced motion.
      Content is fully visible by default; animation is purely additive. */
@@ -49,6 +49,7 @@
     --gutter: clamp(1.5rem, 4vw, 4.5rem);
 
     --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --brand-font: "Urbanist", system-ui, -apple-system, "Segoe UI", sans-serif;
     --serif: "Spectral", Georgia, "Times New Roman", serif;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -121,14 +122,26 @@
 
   .nav-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
   .brand {
-    background: none; border: 0; padding: 0; margin: 0;
-    text-align: left; cursor: pointer;
-    font-weight: 600; font-size: 1.15rem; line-height: 1.35;
-    letter-spacing: 0.01em;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--brand-font);
+    font-weight: 500;
+    font-size: 27pt;
+    line-height: 1.25;
+    letter-spacing: -0.035em;
     color: var(--nav-ink);
     transition: color 180ms var(--ease);
   }
-  .brand span { display: block; }
+  .brand span {
+    display: block;
+    white-space: nowrap;
+  }
+  .brand span:nth-child(2) { margin-left: 1.05rem; }
+  .brand span:nth-child(3) { margin-left: 2.1rem; }
   .brand:hover, .brand:focus-visible { color: var(--accent); outline: none; }
   .thesis {
     margin: 1rem 0 0;
@@ -528,7 +541,7 @@
   <div class="nav-scroll">
     <div class="nav-top">
       <button class="brand" type="button" data-home aria-label="Voltar à página Autoria">
-        <span>INTELIGÊNCIA</span><span>JURÍDICA</span><span>ORQUESTRADA</span>
+        <span>Inteligência</span><span>Jurídica</span><span>Orquestrada</span>
       </button>
       <button class="collapse" type="button" data-collapse aria-label="Recolher coluna lateral">×</button>
     </div>
