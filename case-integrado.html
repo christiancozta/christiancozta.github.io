@@ -21,14 +21,14 @@
 </script>
 <style>
 :root {
-    /* Left column — cold near-black */
-    --nav-bg: #181A18;
+    /* Right column (nav) — grafite */
+    --nav-bg: #181818;
     --nav-ink: #FFFFFF;
     --nav-muted: #9AA1AB;
     --nav-hair: #23262B;
     --nav-hair-strong: #3C4149;
 
-    /* Right column — cold white (no warm/yellow cast) */
+    /* Left column (content) — cold white (no warm/yellow cast) */
     --pg-bg: #FAFAFA;
     --pg-ink: #0E1013;
     --pg-muted: #58606B;
@@ -92,30 +92,30 @@
   button { font: inherit; color: inherit; }
   ::selection { background: var(--accent); color: #fff; }
 
-  /* ───────────────────────── LEFT COLUMN (NAV) ───────────────────────── */
+  /* ───────────────────────── RIGHT COLUMN (NAV) ───────────────────────── */
   .nav {
-    position: fixed; inset: 0 auto 0 0;
+    position: fixed; inset: 0 0 0 auto;
     width: var(--nav-w);
     z-index: var(--z-nav);
     display: flex; flex-direction: column;
     background: var(--nav-bg);
     color: var(--nav-ink);
-    border-right: 1px solid var(--nav-hair);
+    border-left: 1px solid var(--nav-hair);
     transform: translateX(0);
     transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
   }
-  body.collapsed .nav { transform: translateX(-100%); }
+  body.collapsed .nav { transform: translateX(100%); }
 
-  /* reopen handle — fixed edge tab, click only (hover-peek removed: it raced
-     against the slide animation and kept re-closing under the cursor) */
+  /* reopen handle — fixed edge tab on the right; cursor proximity also reopens
+     (proximity only OPENS, never closes — no race with the slide animation) */
   .reopen {
-    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    position: fixed; right: 0; top: 50%; transform: translateY(-50%);
     z-index: var(--z-menu);
     display: none; align-items: center; justify-content: center;
     width: 1.6rem; height: 3.9rem; padding: 0;
     background: var(--nav-bg); color: var(--nav-muted);
-    border: 1px solid var(--nav-hair-strong); border-left: 0;
-    border-radius: 0 999px 999px 0;
+    border: 1px solid var(--nav-hair-strong); border-right: 0;
+    border-radius: 999px 0 0 999px;
     cursor: pointer; font-size: 1.05rem; line-height: 1;
     transition: color 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
   }
@@ -292,15 +292,15 @@
     color: var(--nav-muted); font-size: 0.62rem; line-height: 1.4;
   }
 
-  /* ───────────────────────── RIGHT COLUMN (PAGE) ───────────────────────── */
+  /* ───────────────────────── LEFT COLUMN (PAGE) ───────────────────────── */
   .page {
     min-height: 100dvh;
-    margin-left: var(--nav-w);
+    margin-right: var(--nav-w);
     background: var(--pg-bg);
     color: var(--pg-ink);
-    transition: margin-left 320ms var(--ease);
+    transition: margin-right 320ms var(--ease);
   }
-  body.collapsed .page { margin-left: 0; }
+  body.collapsed .page { margin-right: 0; }
   body.framed .page { display: none; }
   .wrap {
     width: min(var(--content), calc(100vw - var(--nav-w) - var(--gutter) * 2));
@@ -309,51 +309,82 @@
   }
   body.collapsed .wrap { width: min(var(--content), calc(100vw - var(--gutter) * 2)); }
 
-  /* HERO — stacked, compact: headline above, lead below, cards next */
-  .hero {   padding: clamp(2rem, 4vw, 3rem) 0 clamp(1.5rem, 3.5vw, 2.4rem); }
+  /* HERO — untitled opening: first sentence as display, rest as small lead */
+  .hero { padding: clamp(2.75rem, 6.5vw, 5rem) 0 clamp(2rem, 4.5vw, 3.25rem); }
   .hero h1 {
     margin: 0;
     font-family: var(--font-body);
-    font-weight: 800;
-    font-size: var(--text-hero-size);
-    line-height: .94;
-    letter-spacing: -.045em;
+    font-weight: 700;
+    font-size: clamp(1.55rem, 2.7vw, 2.4rem);
+    line-height: 1.16;
+    letter-spacing: -.028em;
     text-wrap: balance;
-    max-width: 16ch;
+    max-width: 26ch;
   }
   .lead {
-    margin: 1.15rem 0 0;
+    margin: 1.3rem 0 0;
     font-family: var(--font-body);
-    font-size: var(--text-subtitle-size);
-    font-weight: 520;
-    line-height: 1.3;
-    letter-spacing: -.012em;
+    font-size: 0.85rem;
+    font-weight: 450;
+    line-height: 1.66;
+    letter-spacing: 0;
     color: var(--pg-muted);
     text-wrap: pretty;
-    max-width: 100%;
-}
-
-  /* TRÊS MOVIMENTOS — three unboxed columns, small blocks, generous air */
-  .cards-section {
-    border-top: 1px solid var(--pg-hair);
-    padding: clamp(1.75rem, 3.5vw, 2.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+    max-width: 54ch;
   }
+  .lead .strong, .mov .strong { color: var(--pg-ink); font-weight: 600; }
 
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(2.25rem, 4.5vw, 3.75rem); }
-  .card-n {
+  /* TRÊS MOVIMENTOS — offset micro-label + small blocks, thin top rules,
+     one grafite block (print grid) */
+  .mov-section { padding: clamp(1.25rem, 3vw, 2.25rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
+  .mov-grid {
+    display: grid;
+    grid-template-columns: minmax(6rem, .55fr) repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.4rem, 3vw, 2.75rem);
+    row-gap: clamp(2.75rem, 5.5vw, 4.25rem);
+    align-items: start;
+  }
+  .mov-label {
+    margin: .15rem 0 0;
+    color: var(--pg-muted);
+    font-size: var(--text-micro-size); letter-spacing: .14em; line-height: 1.6;
+  }
+  .mov { border-top: 1px solid var(--pg-hair-strong); padding-top: 1rem; }
+  .mov-n {
     display: block;
     font-family: var(--font-tag);
     font-size: var(--text-micro-size); font-weight: 600; line-height: 1.1; letter-spacing: .09em;
-    text-transform: uppercase;
     color: var(--accent); font-variant-numeric: tabular-nums;
   }
-  .card h3 { margin: .65rem 0 .75rem; font-family: var(--font-body); font-weight: 600; font-size: var(--text-card-title-size); line-height: 1.2; letter-spacing: 0; }
-  .card p { margin: 0; color: var(--pg-muted); font-family: var(--font-body); font-size: var(--text-body-size); line-height: var(--text-body-leading); }
-  .card .strong { color: var(--pg-ink); font-weight: 600; }
+  .mov h2 {
+    margin: .6rem 0 .75rem;
+    font-family: var(--font-body);
+    font-size: .95rem; font-weight: 650; line-height: 1.25; letter-spacing: -.008em;
+  }
+  .mov p {
+    margin: 0;
+    color: var(--pg-muted);
+    font-family: var(--font-body);
+    font-size: .8rem; line-height: 1.62;
+    text-align: justify; -webkit-hyphens: auto; hyphens: auto;
+  }
+  /* featured block — grafite card, like the dark block in the print */
+  .mov--dark {
+    border-top: 0;
+    background: var(--nav-bg); color: var(--nav-ink);
+    padding: 1.35rem 1.3rem 1.6rem;
+  }
+  .mov--dark h2 { color: #fff; }
+  .mov--dark p { color: var(--nav-muted); }
+  .mov--sintese { grid-column: 2 / span 2; }
+  .mov--conceitos { grid-column: 4; }
+
+  /* concept links — own grid cell (best home for the readers) */
+  .concept-links { display: flex; flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: .2rem; }
 
   /* concept trigger — quiet text link, persistent accent underline */
   .reveal {
-    margin: 1.35rem 0 0; padding: 0;
+    margin: 0; padding: 0;
     display: inline-flex; align-items: center; gap: 0.5rem;
     background: none; border: 0; cursor: pointer;
     font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
@@ -388,13 +419,13 @@
 
   /* ───────────────────────── FRAMED VIEW (ECHO / ATRIO in right column) ───────────────────────── */
   .frame-wrap {
-    position: fixed; inset: 0 0 0 var(--nav-w);
+    position: fixed; inset: 0 var(--nav-w) 0 0;
     display: none; flex-direction: column;
     background: var(--pg-bg);
     z-index: var(--z-frame);
-    transition: left 320ms var(--ease);
+    transition: right 320ms var(--ease);
   }
-  body.collapsed .frame-wrap { left: 0; }
+  body.collapsed .frame-wrap { right: 0; }
   body.framed .frame-wrap { display: flex; }
   .frame-bar {
     flex: 0 0 auto;
@@ -490,7 +521,8 @@
   .nav-row .meta,
   .pill,
   .fact-n,
-  .card-n,
+  .mov-n,
+  .mov-label,
   .foot dt,
   .frame-title,
   .reader-eyebrow,
@@ -506,7 +538,7 @@
 
   /* ───────────────────────── MOBILE MENU BUTTON ───────────────────────── */
   .menu-btn {
-    position: fixed; top: 1rem; left: 1rem; z-index: var(--z-menu);
+    position: fixed; top: 1rem; right: 1rem; z-index: var(--z-menu);
     display: none; align-items: center; gap: 0.55rem;
     padding: 0.6rem 0.95rem;
     background: var(--nav-bg); color: var(--nav-ink);
@@ -541,23 +573,28 @@
 
   /* ───────────────────────── RESPONSIVE ───────────────────────── */
   @media (max-width: 1080px) {
-    .lead { max-width: 60ch; }
-    .cards { grid-template-columns: 1fr; gap: 2.5rem; }
-    .card p { max-width: 62ch; }
+    .mov-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mov-label { grid-column: 1 / -1; margin: 0; }
+    .mov--sintese { grid-column: span 2; }
+    .mov--conceitos { grid-column: auto; }
     .foot-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 860px) {
     :root { --nav-w: min(84vw, 22rem); }
-    .page, body.collapsed .page { margin-left: 0; }
+    .page, body.collapsed .page { margin-right: 0; }
     .wrap, body.collapsed .wrap { width: 100%; }
-    .nav { transform: translateX(-100%); box-shadow: none; }
-    body.nav-open .nav { transform: translateX(0); box-shadow: 30px 0 80px rgba(0,0,0,.5); }
+    .nav { transform: translateX(100%); box-shadow: none; }
+    body.nav-open .nav { transform: translateX(0); box-shadow: -30px 0 80px rgba(0,0,0,.5); }
     body.nav-open .scrim { opacity: 1; pointer-events: auto; }
     .menu-btn { display: inline-flex; }
     .collapse { display: none; }
     .reopen { display: none !important; }
-    .frame-wrap, body.collapsed .frame-wrap { left: 0; }
+    .frame-wrap, body.collapsed .frame-wrap { right: 0; }
     .foot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .mov-grid { grid-template-columns: 1fr; }
+    .mov--sintese, .mov--conceitos { grid-column: auto; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
@@ -568,9 +605,9 @@
 
 <div class="scrim" data-close-nav aria-hidden="true"></div>
 <button class="menu-btn" type="button" data-open-nav aria-label="Abrir menu">☰ Menu</button>
-<button class="reopen" type="button" data-reopen aria-label="Mostrar coluna lateral">›</button>
+<button class="reopen" type="button" data-reopen aria-label="Mostrar coluna lateral">‹</button>
 
-<!-- ═══════════════════════ LEFT COLUMN — NAV ═══════════════════════ -->
+<!-- ═══════════════════════ RIGHT COLUMN — NAV ═══════════════════════ -->
 <aside class="nav" aria-label="Navegação">
   <div class="nav-scroll">
     <div class="nav-top">
@@ -665,42 +702,55 @@
   </footer>
 </aside>
 
-<!-- ═══════════════════════ RIGHT COLUMN — AUTORIA VIEW ═══════════════════════ -->
+<!-- ═══════════════════════ LEFT COLUMN — AUTORIA VIEW ═══════════════════════ -->
 <main class="page">
   <div class="wrap">
 
     <section class="hero">
-      <h1 class="rise d2">Método</h1>
-      <p class="lead rise d3">O projeto nasce de uma experiência concreta de prática jurídica de alto volume.<br />Ao transformar rotina jurídica dispersa em percurso governável, o método não acompanhou o fluxo. Ele o construiu.</p>
+      <h1 class="rise d2">A Inteligência Jurídica Orquestrada nasce da prática judicial em escala.</h1>
+      <p class="lead rise d3">Sua origem está na necessidade de transformar acervos extensos, rotinas dispersas e produção decisória contínua em fluxos governáveis, rastreáveis e qualificados. O percurso se organiza em três movimentos: <span class="strong">massa, método e arquitetura</span>.</p>
     </section>
 
-    <section class="cards-section">
+    <section class="mov-section">
 
-      <div class="cards rise d5">
-        <article class="card">
-          <span class="card-n">01/21 - 07/25</span>
-          <h3>Fundação</h3>
-          <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume, foi estruturada uma fundação voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+      <div class="mov-grid rise d5">
+        <p class="mov-label">Três movimentos</p>
+
+        <article class="mov mov--dark">
+          <span class="mov-n">01</span>
+          <h2>Método</h2>
+          <p>O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga, saneamento de backlog e integração digital de mais de 33 mil execuções fiscais. Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível.</p>
         </article>
 
-        <article class="card">
-          <span class="card-n">08/25 - 10/25</span>
-          <h3>Regência</h3>
-          <p>Essa base permitiu consolidar o <span class="strong">ECHO</span>, metodologia de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e quality gates.</p>
-          <button class="reveal" type="button" data-reader="reader-echo" aria-haspopup="dialog">
-            <span class="lbl">Conceito ECHO</span>
-            <span class="arr" aria-hidden="true">↗</span>
-          </button>
+        <article class="mov">
+          <span class="mov-n">02</span>
+          <h2>Regência</h2>
+          <p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a regência do fluxo decisório. O <span class="strong">ECHO</span> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p>
         </article>
 
-        <article class="card">
-          <span class="card-n">11/25 - 05/26</span>
-          <h3>Arquitetura</h3>
-          <p>Sobre essa fundação, o <span class="strong">ATRIO</span> foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
-          <button class="reveal" type="button" data-reader="reader-atrio" aria-haspopup="dialog">
-            <span class="lbl">Conceito ATRIO</span>
-            <span class="arr" aria-hidden="true">↗</span>
-          </button>
+        <article class="mov">
+          <span class="mov-n">03</span>
+          <h2>Arquitetura</h2>
+          <p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <span class="strong">ATRIO</span> transforma a lógica construída no ECHO em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p>
+        </article>
+
+        <article class="mov mov--sintese">
+          <h2>Síntese</h2>
+          <p>Da execução fiscal à regência recursal, e da regência à arquitetura, o percurso revela uma mesma tese: eficiência jurídica não nasce da automação isolada, mas da organização prévia do fluxo. A tecnologia só produz valor quando encontra método, critério e governança.</p>
+        </article>
+
+        <article class="mov mov--conceitos">
+          <h2>Conceitos</h2>
+          <div class="concept-links">
+            <button class="reveal" type="button" data-reader="reader-echo" aria-haspopup="dialog">
+              <span class="lbl">Conceito ECHO</span>
+              <span class="arr" aria-hidden="true">↗</span>
+            </button>
+            <button class="reveal" type="button" data-reader="reader-atrio" aria-haspopup="dialog">
+              <span class="lbl">Conceito ATRIO</span>
+              <span class="arr" aria-hidden="true">↗</span>
+            </button>
+          </div>
         </article>
       </div>
     </section>
@@ -727,7 +777,7 @@
   </div>
 </main>
 
-<!-- ═══════════════════════ RIGHT COLUMN — ECHO / ATRIO FRAMED VIEW ═══════════════════════ -->
+<!-- ═══════════════════════ LEFT COLUMN — ECHO / ATRIO FRAMED VIEW ═══════════════════════ -->
 <section class="frame-wrap" aria-label="Página incorporada">
   <div class="frame-bar">
     <button class="frame-back" type="button" data-home>← Autoria</button>
@@ -829,6 +879,14 @@
   var reopenBtn = document.querySelector('[data-reopen]');
   if (collapseBtn) collapseBtn.addEventListener('click', function () { body.classList.add('collapsed'); });
   if (reopenBtn) reopenBtn.addEventListener('click', function () { body.classList.remove('collapsed'); });
+
+  /* proximity reopen — the collapsed column returns when the cursor nears the
+     right edge; it only opens (closing stays on the × button), so no race */
+  document.addEventListener('mousemove', function (e) {
+    if (!body.classList.contains('collapsed')) return;
+    if (window.innerWidth <= 860) return;
+    if (window.innerWidth - e.clientX <= 22) body.classList.remove('collapsed');
+  });
 
   /* ── Mobile off-canvas ── */
   function setNavOpen(on) { body.classList.toggle('nav-open', on); }
