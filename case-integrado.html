@@ -28,12 +28,12 @@
     --nav-hair: #23262B;
     --nav-hair-strong: #3C4149;
 
-    /* Right column (content) — cold white (no warm/yellow cast) */
-    --pg-bg: #FAFAFA;
-    --pg-ink: #0E1013;
-    --pg-muted: #58606B;
-    --pg-hair: #D6DBE2;
-    --pg-hair-strong: #0E1013;
+    /* Right column (content) — laboratório: estritamente branco e preto */
+    --pg-bg: #FFFFFF;
+    --pg-ink: #000000;
+    --pg-muted: #000000;
+    --pg-hair: #000000;
+    --pg-hair-strong: #000000;
 
     /* Concept reader — cinematic dark */
     --rd-bg: #0A0B0D;
@@ -148,7 +148,7 @@
     text-align: left;
     cursor: pointer;
     font-family: var(--brand-font);
-    font-size: clamp(1.05rem, 1.25vw, 1.22rem);
+    font-size: clamp(1.18rem, 1.55vw, 1.42rem);
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.03em;
@@ -275,13 +275,6 @@
     border-top: 1px solid var(--nav-hair);
     background: var(--nav-bg);
   }
-  .sig-id { display: flex; align-items: center; gap: 0.85rem; }
-  .sig-mark {
-    width: 2.5rem; height: 2.5rem;
-    flex: 0 0 auto; object-fit: contain; display: block;
-    filter: brightness(0) invert(1); /* force logo to pure white */
-  }
-  .sig-text { min-width: 0; }
   .sig-text strong {
     display: block;
     font-size: 0.8rem; font-weight: 700; letter-spacing: -0.005em;
@@ -309,7 +302,7 @@
   }
   body.collapsed .wrap { width: min(var(--content), calc(100vw - var(--gutter) * 2)); }
 
-  /* HERO — untitled opening: the thesis alone, nothing else */
+  /* HERO — título + nota de trabalho: a tese vira texto de corpo, discreto */
   .hero { padding: clamp(2.75rem, 6.5vw, 5rem) 0 clamp(2rem, 4.5vw, 3.25rem); }
   .hero h1 {
     margin: 0;
@@ -321,29 +314,30 @@
     text-wrap: balance;
     max-width: 36ch;
   }
+  .hero-note {
+    margin: 1.4rem 0 0;
+    max-width: 52ch;
+    font-size: .85rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
   .mov .strong { color: var(--pg-ink); font-weight: 600; }
 
-  /* TRÊS MOVIMENTOS — offset micro-label + small blocks, thin top rules,
-     one grafite block (print grid) */
+  /* MOVIMENTOS — três blocos horizontais, curtos e compactos; respiro pelo gap */
   .mov-section { padding: clamp(1.25rem, 3vw, 2.25rem) 0 clamp(3.5rem, 7vw, 5.5rem); }
   .mov-grid {
     display: grid;
-    grid-template-columns: minmax(6rem, .55fr) repeat(3, minmax(0, 1fr));
-    column-gap: clamp(1.4rem, 3vw, 2.75rem);
-    row-gap: clamp(2.75rem, 5.5vw, 4.25rem);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(1.75rem, 3.5vw, 3rem);
+    row-gap: clamp(2.75rem, 6vw, 4rem);
     align-items: start;
-  }
-  .mov-label {
-    margin: .15rem 0 0;
-    color: var(--pg-muted);
-    font-size: var(--text-micro-size); letter-spacing: .14em; line-height: 1.6;
   }
   .mov { border-top: 1px solid var(--pg-hair-strong); padding-top: 1rem; }
   .mov-n {
     display: block;
     font-family: var(--font-tag);
     font-size: var(--text-micro-size); font-weight: 600; line-height: 1.1; letter-spacing: .09em;
-    color: var(--accent); font-variant-numeric: tabular-nums;
+    color: var(--pg-ink); font-variant-numeric: tabular-nums;
   }
   .mov h2 {
     margin: .6rem 0 .75rem;
@@ -357,28 +351,24 @@
     font-size: .72rem; line-height: 1.62;
     text-align: justify; -webkit-hyphens: auto; hyphens: auto;
   }
-  .mov--conceitos { grid-column: 4; }
 
-  /* concept links — own grid cell (best home for the readers) */
-  .concept-links { display: flex; flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: .2rem; }
-
-  /* concept trigger — quiet text link, persistent accent underline */
-  .reveal {
-    margin: 0; padding: 0;
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: none; border: 0; cursor: pointer;
-    font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
+  /* referência conceitual no corpo do card — palavra preta com sublinha fina;
+     hover/foco invertem (branco sobre preto), mesmo idioma dos links do rodapé */
+  .c-ref {
+    display: inline;
+    margin: 0; padding: 0 1px 1px;
+    background: none; border: 0;
+    border-bottom: 1px solid var(--pg-ink);
+    font: inherit; font-weight: 600;
     color: var(--pg-ink);
+    cursor: pointer;
+    transition: background 160ms var(--ease), color 160ms var(--ease);
   }
-  .reveal .lbl {
-    padding-bottom: 3px;
-    border-bottom: 1px solid rgba(224,122,95,.45);
-    transition: border-color 220ms var(--ease);
+  .c-ref:hover { background: var(--pg-ink); color: #FFFFFF; }
+  .c-ref:focus-visible {
+    outline: 2px solid var(--pg-ink); outline-offset: 2px;
+    background: var(--pg-ink); color: #FFFFFF;
   }
-  .reveal .arr { color: var(--accent-ink); font-size: 0.85rem; transition: transform 220ms var(--ease); }
-  .reveal:hover .lbl, .reveal:focus-visible .lbl { border-bottom-color: var(--accent); }
-  .reveal:hover .arr, .reveal:focus-visible .arr { transform: translate(2px, -2px); }
-  .reveal:focus-visible { outline: none; }
 
   /* PAGE FOOTER — kept: Autor / Contato / Marco oficial */
   .foot {
@@ -395,7 +385,8 @@
   .foot .name { font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; }
   .foot .line { margin-top: 0.4rem; color: var(--pg-muted); font-size: 0.82rem; line-height: 1.5; }
   .foot a { text-decoration: none; border-bottom: 1px solid var(--pg-hair-strong); padding-bottom: 1px; }
-  .foot a:hover { color: var(--accent-ink); border-color: var(--accent); }
+  .foot a:hover, .foot a:focus-visible { background: var(--pg-ink); color: #FFFFFF; border-color: var(--pg-ink); }
+  .foot a:focus-visible { outline: 2px solid var(--pg-ink); outline-offset: 2px; }
 
   /* ───────────────────────── FRAMED VIEW (ECHO / ATRIO in right column) ───────────────────────── */
   .frame-wrap {
@@ -502,7 +493,6 @@
   .pill,
   .fact-n,
   .mov-n,
-  .mov-label,
   .foot dt,
   .frame-title,
   .reader-eyebrow,
@@ -553,9 +543,7 @@
 
   /* ───────────────────────── RESPONSIVE ───────────────────────── */
   @media (max-width: 1080px) {
-    .mov-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .mov-label { grid-column: 1 / -1; margin: 0; }
-    .mov--conceitos { grid-column: auto; }
+    .mov-grid { grid-template-columns: 1fr; }
     .foot-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 860px) {
@@ -570,10 +558,6 @@
     .reopen { display: none !important; }
     .frame-wrap, body.collapsed .frame-wrap { left: 0; }
     .foot-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 640px) {
-    .mov-grid { grid-template-columns: 1fr; }
-    .mov--conceitos { grid-column: auto; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
@@ -671,12 +655,9 @@
 
   <!-- Pinned signature — official mark of the work (contact lives in the Autoria drawer) -->
   <footer class="sig">
-    <div class="sig-id">
-      <img class="sig-mark" src="data:image/png;base64,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" alt="Marca de Christian da Costa" />
-      <div class="sig-text">
-        <strong>Ambiente recursal · TJPR</strong>
-        <span>Fundação operacional, regência recursal e arquitetura ATRIO. Ago-out 2025.</span>
-      </div>
+    <div class="sig-text">
+      <strong>Ambiente recursal · TJPR</strong>
+      <span>Fundação operacional, regência recursal e arquitetura ATRIO. Ago-out 2025.</span>
     </div>
   </footer>
 </aside>
@@ -686,45 +667,31 @@
   <div class="wrap">
 
     <section class="hero">
-      <h1 class="rise d2">Da execução fiscal à regência recursal, e da regência à arquitetura, o percurso revela uma mesma tese: eficiência jurídica não nasce da automação isolada.</h1>
+      <h1 class="rise d2">Antes da máquina, o método</h1>
+      <p class="hero-note rise d3">Da execução fiscal à regência recursal, e da regência à arquitetura, o percurso revela uma mesma tese: eficiência jurídica não nasce da automação isolada.</p>
     </section>
 
     <section class="mov-section">
 
       <div class="mov-grid rise d5">
-        <p class="mov-label">Três movimentos</p>
-
         <article class="mov">
           <span class="mov-n">01</span>
-          <h2>Método</h2>
+          <h2>Fundação</h2>
           <p>O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga, saneamento de backlog e integração digital de mais de 33 mil execuções fiscais. Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível.</p>
         </article>
 
         <article class="mov">
           <span class="mov-n">02</span>
           <h2>Regência</h2>
-          <p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a regência do fluxo decisório. O <span class="strong">ECHO</span> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p>
+          <p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a <button class="c-ref" type="button" data-reader="reader-echo" aria-haspopup="dialog">regência</button> do fluxo decisório. O <span class="strong">ECHO</span> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p>
         </article>
 
         <article class="mov">
           <span class="mov-n">03</span>
           <h2>Arquitetura</h2>
-          <p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <span class="strong">ATRIO</span> transforma a lógica construída no ECHO em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p>
+          <p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <span class="strong">ATRIO</span> transforma a lógica construída no ECHO em <button class="c-ref" type="button" data-reader="reader-atrio" aria-haspopup="dialog">arquitetura</button> modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p>
         </article>
 
-        <article class="mov mov--conceitos">
-          <h2>Conceitos</h2>
-          <div class="concept-links">
-            <button class="reveal" type="button" data-reader="reader-echo" aria-haspopup="dialog">
-              <span class="lbl">Conceito ECHO</span>
-              <span class="arr" aria-hidden="true">↗</span>
-            </button>
-            <button class="reveal" type="button" data-reader="reader-atrio" aria-haspopup="dialog">
-              <span class="lbl">Conceito ATRIO</span>
-              <span class="arr" aria-hidden="true">↗</span>
-            </button>
-          </div>
-        </article>
       </div>
     </section>
 
