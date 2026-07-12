@@ -41,8 +41,13 @@
     --rd-muted: #8D949E;
     --rd-hair: #23262B;
 
-    --accent: #a63a23;
-    --accent-ink: #d6c124;
+    --accent: #a63a23;                 /* terracota — referência do território ATRIO */
+    --nav-accent: #FFFFFF;             /* realce neutro do menu escuro — base */
+    --coral-on-dark: #FA8072;          /* território ECHO · salmão · AA 7.10 sobre o nav */
+    --terra-on-dark: #CE7248;          /* território ATRIO · terracota clareada · AA 5.18 sobre o nav */
+    --coral-on-white: #AD3629;         /* nome echo em tela branca · AA 6.29 */
+    --terra-on-white: #A63A23;         /* nome ATRIO em tela branca · AA 6.46 */
+    /* --accent-ink removido: interação do leitor agora é neutra (preto estrutural + sublinhado), sem acento amarelo proprietário */
 
     --nav-w: 21rem;
     --content: 72rem;
@@ -90,7 +95,7 @@
   }
   a { color: inherit; }
   button { font: inherit; color: inherit; }
-  ::selection { background: var(--accent); color: #fff; }
+  ::selection { background: #C9CED4; color: #181818; }
 
   /* ───────────────────────── LEFT COLUMN (NAV) ───────────────────────── */
   .nav {
@@ -120,8 +125,8 @@
     transition: color 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
   }
   .reopen:hover, .reopen:focus-visible {
-    color: #fff; border-color: var(--accent);
-    background: rgba(224,122,95,.16); outline: none;
+    color: #fff; border-color: var(--nav-accent);
+    background: rgba(255,255,255,.12); outline: none;
   }
   body.collapsed .reopen { display: inline-flex; }
 
@@ -159,7 +164,7 @@
   .brand__line--inteligencia { margin-inline-start: 0; font-weight: 600; }
   .brand__line--juridica { margin-inline-start: .7em; font-weight: 600; }
   .brand__line--orquestrada { margin-block-start: .08em; margin-inline-start: 1.45em; font-weight: 700; }
-  .brand:hover, .brand:focus-visible { color: var(--accent); outline: none; }
+  .brand:hover, .brand:focus-visible { color: var(--nav-ink); opacity: .78; outline: none; }
   @media (max-width: 480px) {
     .brand__line--juridica { margin-inline-start: .55em; }
     .brand__line--orquestrada { margin-inline-start: 1.15em; }
@@ -180,34 +185,40 @@
     cursor: pointer; font-size: 0.9rem; line-height: 1;
     transition: border-color 180ms var(--ease), color 180ms var(--ease), transform 180ms var(--ease);
   }
-  .collapse:hover { color: var(--accent); border-color: var(--accent); }
+  .collapse:hover { color: var(--nav-accent); border-color: var(--nav-accent); }
 
   .nav-list { margin-top: 2.1rem; border-top: 1px solid var(--nav-hair-strong); }
   .nav-item { border-bottom: 1px solid var(--nav-hair); }
+  /* acento por território: coral p/ ECHO, terracota p/ ATRIO — herdado por row, meta, arrow e fact-n */
+  .nav-item[data-item="echo"]  { --row-accent: var(--coral-on-dark); --row-ink: #0B0C0E; }
+  .nav-item[data-item="atrio"] { --row-accent: var(--terra-on-dark); --row-ink: #0B0C0E; }
 
   /* nav row: shared look for button-triggers and view links */
   .nav-row {
     width: 100%;
     display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
-    padding: 0.95rem 0;
+    padding: 0.85rem 0.6rem; border-radius: 8px;
     background: none; border: 0; text-decoration: none;
     text-align: left; cursor: pointer;
     color: var(--nav-ink);
     font-weight: 600; font-size: 0.98rem; letter-spacing: -0.005em;
-    transition: color 160ms var(--ease);
+    transition: background-color 160ms var(--ease), color 160ms var(--ease);
   }
-  .nav-row:hover, .nav-row:focus-visible { color: var(--accent); outline: none; }
+  .nav-row:hover { background: var(--row-accent, rgba(255,255,255,.06)); color: var(--row-ink, var(--nav-ink)); }
+  .nav-row:focus-visible { background: var(--row-accent, rgba(255,255,255,.06)); color: var(--row-ink, var(--nav-ink)); outline: 2px solid var(--nav-accent); outline-offset: 2px; }
   .nav-row .meta {
     display: inline-flex; align-items: center; gap: 0.7rem;
     color: var(--nav-muted); font-size: 0.62rem; font-weight: 600;
     letter-spacing: 0.14em; flex: 0 0 auto;
   }
-  .nav-row:hover .meta, .nav-row:focus-visible .meta { color: var(--accent); }
+  .nav-row:hover .meta, .nav-row:focus-visible .meta { color: var(--row-ink, var(--nav-muted)); }
   .nav-sign { font-size: 0.9rem; width: 0.9rem; text-align: center; transition: transform 200ms var(--ease); }
   .nav-item.open .nav-sign { transform: rotate(45deg); }
   .nav-arrow { font-size: 0.85rem; transition: transform 220ms var(--ease); }
-  .nav-row:hover .nav-arrow { transform: translate(2px, -2px); }
-  .nav-row.is-active > span:first-child { color: var(--accent); }
+  .nav-row:hover .nav-arrow, .nav-row:focus-visible .nav-arrow { transform: translate(2px, -2px); color: var(--row-ink, inherit); }
+  .nav-row.is-active { background: var(--row-accent, rgba(255,255,255,.06)); }
+  .nav-row.is-active > span:first-child { color: var(--row-ink, var(--nav-ink)); }
+  .nav-row.is-active .meta { color: var(--row-ink, var(--nav-muted)); }
 
   /* collapsible drawer — one per item; only the active page's drawer stays open */
   .drawer {
@@ -227,7 +238,7 @@
     padding-bottom: 2px; border-bottom: 1px solid var(--nav-hair-strong);
     transition: color 160ms var(--ease), border-color 160ms var(--ease);
   }
-  .who-link:hover, .who-link:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+  .who-link:hover, .who-link:focus-visible { color: var(--nav-accent); border-color: var(--nav-accent); outline: none; }
 
   .cv-link {
     display: inline-flex; align-items: center; gap: 0.55rem;
@@ -238,7 +249,7 @@
     font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
     transition: border-color 180ms var(--ease), color 180ms var(--ease), background 180ms var(--ease);
   }
-  .cv-link:hover, .cv-link:focus-visible { border-color: var(--accent); color: #fff; background: rgba(224,122,95,.12); outline: none; }
+  .cv-link:hover, .cv-link:focus-visible { border-color: var(--nav-accent); color: #fff; background: rgba(255,255,255,.10); outline: none; }
   .cv-link .ico { font-size: 0.85rem; }
 
   /* Ensaiando drawer — placeholder pills only */
@@ -250,7 +261,7 @@
     color: var(--nav-muted);
     font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
   }
-  .pill.is-live { color: var(--accent); border-color: var(--accent); }
+  .pill.is-live { color: var(--nav-accent); border-color: var(--nav-accent); }
 
   /* result cards under ECHO / ATRIO — now inside drawers, page-bound */
   .facts { padding: 0.5rem 0 1.15rem; display: flex; flex-direction: column; }
@@ -263,7 +274,7 @@
   .fact-n {
     flex: 0 0 auto; min-width: 1.75rem;
     font-size: 1.5rem; font-weight: 800; line-height: 0.9; letter-spacing: -0.03em;
-    color: var(--accent);
+    color: var(--row-accent, var(--nav-ink));
     font-variant-numeric: tabular-nums;
   }
   .fact-t { margin: 0; color: var(--nav-muted); font-size: 0.74rem; line-height: 1.42; }
@@ -323,6 +334,10 @@
     line-height: 1.7;
   }
   .mov .strong { color: var(--pg-ink); font-weight: 600; }
+  /* nomes em tela branca: negrito + paleta da marca */
+  .name { font-weight: 700; }
+  .name--echo  { color: var(--coral-on-white); }
+  .name--atrio { color: var(--terra-on-white); }
 
   /* MOVIMENTOS — três blocos horizontais, curtos e compactos; respiro pelo gap */
   .mov-section { padding: clamp(1.25rem, 3vw, 2.25rem) 0 clamp(3.5rem, 7vw, 2.5rem); }
@@ -412,18 +427,22 @@
     color: var(--pg-ink); font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
     transition: color 160ms var(--ease);
   }
-  .frame-back:hover, .frame-back:focus-visible { color: var(--accent-ink); outline: none; }
+  .frame-back:hover, .frame-back:focus-visible { color: var(--pg-ink); text-decoration: underline; text-underline-offset: 4px; outline: none; }
   .frame-title {
     font-weight: 800; font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--pg-muted);
   }
+  /* nome do projeto na barra do leitor (tela branca): caixa preservada + paleta da marca */
+  .frame-wrap .frame-title { text-transform: none; letter-spacing: 0.01em; font-size: 0.9rem; }
+  .frame-wrap[data-territory="echo"]  .frame-title { color: var(--coral-on-white); }
+  .frame-wrap[data-territory="atrio"] .frame-title { color: var(--terra-on-white); }
   .frame-ext {
     margin-left: auto; color: var(--pg-muted); text-decoration: none;
     font-size: 0.74rem; font-weight: 600;
     border-bottom: 1px solid var(--pg-hair); padding-bottom: 1px;
     transition: color 160ms var(--ease), border-color 160ms var(--ease);
   }
-  .frame-ext:hover, .frame-ext:focus-visible { color: var(--accent-ink); border-color: var(--accent); outline: none; }
+  .frame-ext:hover, .frame-ext:focus-visible { color: var(--pg-ink); border-color: var(--pg-ink); outline: none; }
   .frame { flex: 1 1 auto; width: 100%; height: 100%; border: 0; background: var(--pg-bg); }
 
   /* ───────────────────────── CONCEPT READER (dialog) ───────────────────────── */
@@ -451,13 +470,15 @@
     backdrop-filter: blur(8px);
     transition: background 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
   }
-  .reader-close:hover { background: rgba(224,122,95,.14); border-color: var(--accent); color: #fff; }
+  .reader-close:hover { background: rgba(255,255,255,.10); border-color: var(--rd-ink); color: #fff; }
   .reader-close .x { font-size: 1rem; line-height: 1; }
   .reader-eyebrow {
     margin: 0 0 1rem;
     font-size: 0.66rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
-    color: var(--accent);
+    color: var(--rd-ink);
   }
+  #reader-echo  .reader-eyebrow { color: var(--coral-on-dark); }
+  #reader-atrio .reader-eyebrow { color: var(--terra-on-dark); }
   .reader-title {
     margin: 0 0 clamp(2rem, 5vh, 3.5rem);
     font-family: var(--font-body);
@@ -478,7 +499,7 @@
     text-wrap: pretty; max-width: 44ch;
   }
   .prose .open { font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.4; font-weight: 400; color: #fff; margin-bottom: 1.6rem; }
-  .prose em { font-style: italic; color: var(--accent); }
+  .prose em { font-style: italic; color: inherit; }
   .prose strong {
     font-family: var(--font); font-weight: 800;
     letter-spacing: 0.02em; color: #fff;
@@ -607,7 +628,7 @@
       <!-- 02 · ECHO (loads in the right column · drawer opens only on its page) -->
       <div class="nav-item" data-item="echo">
         <button class="nav-row" type="button" data-frame="echo" data-active="echo" aria-expanded="false">
-          <span>ECHO</span>
+          <span>echo</span>
           <span class="meta"><span>02</span><span class="nav-arrow">↗</span></span>
         </button>
         <div class="drawer"><div class="drawer-inner">
@@ -684,13 +705,13 @@
         <article class="mov">
           <span class="mov-n">02</span>
           <h2>Regência</h2>
-          <p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a <button class="c-ref" type="button" data-reader="reader-echo" aria-haspopup="dialog">regência</button> do fluxo decisório. O <span class="strong">ECHO</span> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p>
+          <p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a <button class="c-ref" type="button" data-reader="reader-echo" aria-haspopup="dialog">regência</button> do fluxo decisório. O <span class="name name--echo">echo</span> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p>
         </article>
 
         <article class="mov">
           <span class="mov-n">03</span>
           <h2>Arquitetura</h2>
-          <p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <span class="strong">ATRIO</span> transforma a lógica construída no ECHO em <button class="c-ref" type="button" data-reader="reader-atrio" aria-haspopup="dialog">arquitetura</button> modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p>
+          <p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <span class="name name--atrio">ATRIO</span> transforma a lógica construída no <span class="name name--echo">echo</span> em <button class="c-ref" type="button" data-reader="reader-atrio" aria-haspopup="dialog">arquitetura</button> modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p>
         </article>
 
       </div>
@@ -710,7 +731,7 @@
         <div>
           <dt>Marco oficial</dt>
           <dd class="name">Ambiente recursal · TJPR</dd>
-          <dd class="line">Fundação operacional, Regência Recursal e arquitetura ATRIO. Ago-out 2025.</dd>
+          <dd class="line">Fundação operacional, Regência Recursal e arquitetura <span class="name name--atrio">ATRIO</span>. Ago-out 2025.</dd>
         </div>
       </dl>
     </footer>
@@ -722,14 +743,14 @@
 <section class="frame-wrap" aria-label="Página incorporada">
   <div class="frame-bar">
     <button class="frame-back" type="button" data-home>← Autoria</button>
-    <span class="frame-title" data-frame-title>ECHO</span>
+    <span class="frame-title" data-frame-title>echo</span>
     <a class="frame-ext" data-frame-ext href="#" target="_blank" rel="noopener">Abrir em nova aba ↗</a>
   </div>
   <iframe class="frame" data-frame-el title="Página incorporada" referrerpolicy="no-referrer"></iframe>
 </section>
 
 <!-- ═══════════════════════ CONCEPT READERS ═══════════════════════ -->
-<dialog class="reader" id="reader-echo" aria-label="Conceito ECHO">
+<dialog class="reader" id="reader-echo" aria-label="Conceito echo">
   <div class="reader-inner">
     <p class="reader-eyebrow">Conceito · 02</p>
     <h2 class="reader-title">echo</h2>
@@ -748,7 +769,7 @@
       <p>O método começou ali. No silêncio que recebeu nome. O spalla escreveu — não contra a sala, não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto.</p>
       <p>A música não ficou perfeita. Ficou possível.</p>
       <p>Ao fim, o maestro recolheu a batuta. Sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta: <strong>echo</strong>.</p>
-      <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
+      <p>Não era o eco como repetição automática. Era echo como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
     </div>
   </div>
   <button class="reader-close" type="button" data-close aria-label="Fechar leitura">Fechar <span class="x" aria-hidden="true">×</span></button>
@@ -776,7 +797,7 @@
 
   /* ── Sections that load in the right column ── */
   var SECTIONS = {
-    echo:  { url: 'https://christiancozta.github.io/echo.html',  title: 'ECHO'  },
+    echo:  { url: 'https://christiancozta.github.io/echo.html',  title: 'echo'  },
     atrio: { url: 'https://christiancozta.github.io/atrio.html', title: 'ATRIO' }
   };
   var frameEl    = document.querySelector('[data-frame-el]');
@@ -808,6 +829,7 @@
     if (!s) return;
     if (frameEl.getAttribute('src') !== s.url) frameEl.setAttribute('src', s.url);
     frameTitle.textContent = s.title;
+    document.querySelector('.frame-wrap').setAttribute('data-territory', key);
     frameExt.setAttribute('href', s.url);
     body.classList.add('framed');
     setActive(key);
