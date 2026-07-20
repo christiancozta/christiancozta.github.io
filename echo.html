@@ -1,1142 +1,224 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>echo - Metodologia jurídica de regência recursal</title>
-<meta name="description" content="Da prática herdada ao método instalado. Memória, rastreabilidade e governança da operação jurídica."/>
-<meta name="theme-color" content="#0B0C0E"/>
-<meta property="og:title" content="echo - Metodologia jurídica de regência recursal" />
-<meta property="og:description" content="Da prática herdada ao método instalado. Memória, rastreabilidade e governança da operação jurídica."/>
-<meta property="og:type" content="website"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3CclipPath id='c'%3E%3Ccircle cx='50' cy='50' r='47'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23c)' fill='%230B0C0E'%3E%3Crect x='3' width='33' height='100'/%3E%3Crect x='38' width='14' height='100'/%3E%3Crect x='54' width='11' height='100'/%3E%3Crect x='67' width='8' height='100'/%3E%3Crect x='77' width='6' height='100'/%3E%3Crect x='85' width='5' height='100'/%3E%3Crect x='92' width='5' height='100'/%3E%3C/g%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@500..600&amp;family=Bricolage+Grotesque:wght@700&amp;family=Commissioner:wght@400..600&amp;family=Familjen+Grotesk:wght@500..700&amp;display=swap" rel="stylesheet" />
-<script>document.documentElement.classList.add('js');</script>
-<style>
-/* ============================================================
-   echo — landing autoral
-   Matriz estrutural: gramática visual do ATRIO.
-   Diferenciação: waves discretas · coral em dois tons · acervo metodológico.
-   Tipografia: Bricolage Grotesque (hero) · Familjen Grotesk (estrutura) · Commissioner (corpo) · Azeret Mono (microtaxonomia).
-   Camadas: 1 tokens · 2 base/reset · 3 layout · 4 componentes · 5 motion
-   ============================================================ */
-
-/* ---------- 1 · TOKENS ---------- */
-:root{
-  /* base neutra fria */
-  --paper:#FAFBFC;     /* fundo padrão claro */
-  --surface:#EFF1F3;   /* seções alternadas */
-  --cloud:#E8ECEF;     /* texto/linhas sobre escuro */
-  --white:#FFFFFF;
-  --ink:#181818;       /* preto levemente frio */
-  --graph:#121417;     /* grafite frio */
-  --graph2:#171A1E;
-  --mut:#5C6168;       /* cinza médio — AA sobre paper/surface */
-  --mut2:#8E939A;      /* cinza claro — decorativo/large */
-
-  /* coral — sinal de método · APENAS dois tons */
-  --coral-dark:#FA8072;   /* salmão — sobre fundos escuros (AA≥6.98 sobre os escuros da página) */
-  --coral-light:#AD3629;  /* salmão escurecido, mesma matiz — sobre fundos claros (AA em texto pequeno: paper 6.07 · surface 5.56) */
-
-  /* coral aplicado por derivação dos dois tons (sem novas cores) */
-  --coral-soft-l:color-mix(in srgb,var(--coral-light) 8%,transparent);
-  --coral-edge-l:color-mix(in srgb,var(--coral-light) 24%,transparent);
-  --coral-soft-d:color-mix(in srgb,var(--coral-dark) 10%,transparent);
-  --coral-edge-d:color-mix(in srgb,var(--coral-dark) 28%,transparent);
-  --coral-light-hover:color-mix(in oklab,var(--coral-light) 86%,black);
-  --coral-dark-hover:color-mix(in oklab,var(--coral-dark) 88%,white);
-
-  /* hairlines */
-  --line:rgba(11,12,14,.12);
-  --line2:rgba(11,12,14,.07);
-  --dline:rgba(232,236,239,.16);
-  --dline2:rgba(232,236,239,.08);
-
-  /* escala de espaçamento — base 8px */
-  --s-1:4px; --s-2:8px; --s-3:16px; --s-4:24px; --s-5:32px;
-  --s-6:48px; --s-7:64px; --s-8:96px; --s-9:128px;
-  --section-y:clamp(78px,9.2vw,118px);
-  --wrap:1240px;
-
-  /* raios */
-  --r:14px; --r-lg:20px; --r-xl:24px; --r-pill:999px;
-
-  /* sombra (tinta neutra fria) */
-  --shadow:0 28px 80px rgba(11,12,14,.20);
-  --shadow-sm:0 14px 44px rgba(11,12,14,.10);
-
-  /* sistema tipográfico do ecossistema */
-  --font-echo-hero:'Bricolage Grotesque',system-ui,sans-serif;
-  --font-echo-display:'Familjen Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --font-body:'Commissioner',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --font-tag:'Azeret Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
-  --display:var(--font-echo-hero);
-  --title:var(--font-body);--sec-title:var(--font-echo-display);
-  --body:var(--font-body);
-  --card:var(--font-echo-display);
-  --mono:var(--font-tag);
-  --text-body-size:clamp(.92rem,1.2vw,1.02rem);
-  --text-body-leading:1.62;
-  --text-concept-size:clamp(1.08rem,1.5vw,1.28rem);
-  --text-concept-leading:1.68;
-  --text-section-size:clamp(2.15rem,5vw,4rem);
-  --text-hero-size:clamp(3.5rem,8vw,6rem);
-  --text-subtitle-size:clamp(1.15rem,2.2vw,1.6rem);
-  --text-card-title-size:1.05rem;
-  --text-micro-size:.68rem;
-  --text-micro-large:.74rem;
-
-  /* easing */
-  --ease-quint:cubic-bezier(.22,1,.36,1);
-  --ease-expo:cubic-bezier(.16,1,.3,1);
-
-  /* z-index semântico */
-  --z-grain:1;
-  --z-base:2;
-  --z-pill:70;
-  --z-sticky:80;
-}
-
-/* ---------- 2 · BASE / RESET ---------- */
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;background:var(--ink);-webkit-text-size-adjust:100%;color-scheme:light;}
-body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:var(--text-body-size);line-height:var(--text-body-leading);font-weight:400;letter-spacing:0;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
-/* grão fílmico — toque tátil, fixo e não-interativo */
-body::after{content:"";position:fixed;inset:0;z-index:var(--z-grain);pointer-events:none;opacity:.02;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-a{color:inherit;text-decoration:none;}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
-svg{display:block;}
-img{max-width:100%;display:block;}
-h1,h2,h3{text-wrap:balance;}
-p{text-wrap:pretty;}
-::selection{background:var(--coral-light);color:var(--cloud);}
-:focus-visible{outline:2px solid var(--coral-light);outline-offset:3px;border-radius:2px;}
-/* scrollbar discreta — some o cinza padrão do SO, sinal coral no arraste */
-html{scrollbar-width:thin;scrollbar-color:rgba(92,97,104,.5) transparent;}
-::-webkit-scrollbar{width:12px;height:12px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(92,97,104,.5);border-radius:99px;border:3px solid transparent;background-clip:padding-box;}
-::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--coral-light) 62%,var(--mut));background-clip:padding-box;}
-
-/* ---------- 3 · LAYOUT ---------- */
-.wrap{width:min(var(--wrap),calc(100% - 72px));margin:0 auto;}
-.section{padding:var(--section-y) 0;background:var(--paper);position:relative;}
-.section.surface{background:var(--surface);}
-.section.dark{background:var(--ink);color:var(--cloud);overflow:hidden;}
-/* estratos horizontais discretos — cadência/topografia (≠ grid diagonal do ATRIO) */
-.section.dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
-  background:repeating-linear-gradient(0deg,rgba(232,236,239,.032) 0 1px,transparent 1px 27px);}
-.section .wrap{position:relative;z-index:var(--z-base);}
-section[id],.close[id]{scroll-margin-top:96px;}
-@media(max-width:980px){.wrap{width:min(100% - 44px,var(--wrap));}}
-
-/* below-the-fold render perf */
-.cv{content-visibility:auto;contain-intrinsic-size:auto 900px;}
-
-/* section head — índice grande (gramática ATRIO) */
-.head{display:grid;grid-template-columns:208px minmax(0,1fr);gap:clamp(28px,5vw,52px);align-items:start;margin-bottom:var(--s-7);}
-.index{font-family:var(--mono);font-size:clamp(80px,10vw,140px);line-height:.8;font-weight:600;
-  letter-spacing:-.04em;color:rgba(11,12,14,.12);font-variant-numeric:tabular-nums;}
-.dark .index{color:rgba(232,236,239,.14);}
-.head-body{width:100%; min-width:0; border-top:1px solid var(--line); padding-top:var(--s-4); position:relative;}
-.head-body::before{content:"";position:absolute;top:-1px;left:0;width:160px;height:3px;background:var(--coral-light);}
-.dark .head-body{border-color:var(--dline);}
-.dark .head-body::before{background:var(--coral-dark);}
-.head h2{width:100%; max-width:none; font-family:var(--sec-title); font-size:var(--text-section-size); font-weight:700; line-height:1;
-  letter-spacing:-.025em; margin-top:var(--s-4); text-wrap:wrap;}
-.head .sub{ width:100%; max-width:none; margin-top:var(--s-4); font-family:var(--title); font-size:var(--text-subtitle-size); line-height:1.28; letter-spacing:-.01em; color:var(--mut); font-weight:500; text-wrap:wrap;}
-/* Display fora do herói: apenas a ironia declarada da palavra "suavidade" */
-.peace{font-family:var(--title);font-weight:600;text-transform:lowercase;letter-spacing:-.01em;}
-.dark .head .sub{color:rgba(232,236,239,.72);}
-@media(max-width:900px){.head{grid-template-columns:1fr;gap:var(--s-3);margin-bottom:var(--s-6);}.index{font-size:clamp(62px,21vw,104px);}}
-
-/* ---------- 4 · COMPONENTES ---------- */
-
-/* labels / eyebrow / botões (Azeret Mono) */
-.label{font-family:var(--mono);font-size:var(--text-micro-size);letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--coral-light);}
-.dark .label,.hero .label,.cont-id .label{color:var(--coral-dark);}
-.hero-top a.label:hover{text-decoration:underline;text-underline-offset:3px;}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:var(--text-micro-size);letter-spacing:.09em;text-transform:uppercase;color:var(--mut);font-weight:600;}
-.eyebrow::before{content:"";width:8px;height:8px;background:var(--coral-light);display:inline-block;}
-.dark .eyebrow{color:rgba(232,236,239,.64);}
-.dark .eyebrow::before{background:var(--coral-dark);}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid currentColor;
-  border-radius:var(--r-pill);padding:13px 20px;font-family:var(--mono);font-size:var(--text-micro-size);letter-spacing:.09em;
-  text-transform:uppercase;font-weight:600;transition:background .25s,color .25s,border-color .25s,transform .25s var(--ease-quint),box-shadow .3s var(--ease-quint);}
-.btn:hover{transform:translateY(-1px);}
-.btn:active{transform:translateY(0) scale(.98);}
-/* botão sólido sobre fundo claro: coral-light + texto branco */
-.btn.primary{background:var(--coral-light);border-color:var(--coral-light);color:var(--white);}
-.btn.primary:hover{background:var(--coral-light-hover);border-color:var(--coral-light-hover);box-shadow:0 14px 30px -12px color-mix(in srgb,var(--coral-light) 50%,transparent);}
-.btn.dark{background:var(--ink);border-color:var(--ink);color:var(--cloud);}
-.btn.dark:hover{background:var(--graph);border-color:var(--graph);}
-.btn.ghost{color:var(--ink);border-color:var(--line);background:var(--white);}
-.btn.ghost:hover{border-color:var(--coral-edge-l);color:var(--coral-light);}
-/* sobre fundo escuro */
-.btn.light{color:var(--cloud);border-color:rgba(232,236,239,.34);}
-.btn.light:hover{background:var(--cloud);color:var(--ink);border-color:var(--cloud);}
-/* botão sólido sobre fundo escuro: coral-dark + texto ink (nunca branco) */
-.btn.solid-d{background:var(--coral-dark);border-color:var(--coral-dark);color:var(--ink);}
-.btn.solid-d:hover{background:var(--coral-dark-hover);border-color:var(--coral-dark-hover);}
-/* ícone-em-botão: a seta mora numa cápsula própria, flush com a borda direita.
-   cor derivada de currentColor → funciona em qualquer variante sem novas regras */
-.btn:has(.ico){padding-right:8px;gap:11px;}
-.btn .ico{display:inline-flex;align-items:center;justify-content:center;flex:none;
-  width:26px;height:26px;margin:-7px 0;border-radius:var(--r-pill);
-  font-family:var(--title);font-size:14px;line-height:1;
-  background:color-mix(in srgb,currentColor 15%,transparent);
-  transition:transform .35s var(--ease-quint),background .35s var(--ease-quint);}
-.btn:hover .ico{background:color-mix(in srgb,currentColor 26%,transparent);transform:translate(2px,-2px);}
-.btn.down:hover .ico{transform:translate(0,3px);}
-.btn:active .ico{transform:translate(0,0) scale(.94);}
-
-/* svg defs holder */
-.svg-defs{position:absolute;width:0;height:0;overflow:hidden;}
-.sym{color:var(--coral-dark);}
-
-/* ---- NAV (pílula flutuante, glass escuro) ---- */
-.nav{position:fixed;z-index:var(--z-sticky);top:14px;left:0;right:0;pointer-events:none;}
-.nav .bar{height:54px;display:flex;align-items:center;justify-content:space-between;
-  border:1px solid rgba(232,236,239,.14);background:rgba(11,12,14,.74);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  color:var(--cloud);border-radius:var(--r-pill);padding:0 9px 0 18px;pointer-events:auto;
-  box-shadow:0 16px 44px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  transition:background .4s var(--ease-quint),box-shadow .4s var(--ease-quint);}
-.nav.scrolled .bar{background:rgba(11,12,14,.86);box-shadow:0 20px 56px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.09);}
-.brand{display:flex;align-items:center;gap:11px;font-family:var(--title);font-size:14px;letter-spacing:.08em;font-weight:700;color:var(--cloud);}
-.brand-mark{width:22px;height:22px;}
-.nav-links{display:flex;align-items:center;gap:2px;font-family:var(--mono);font-size:var(--text-micro-size);letter-spacing:.09em;text-transform:uppercase;color:rgba(232,236,239,.62);font-weight:600;}
-.nav-links a{padding:9px 11px;border-radius:var(--r-pill);transition:color .2s,background .2s;}
-.nav-links a:hover{color:var(--cloud);}
-.nav-links a.active{background:var(--coral-dark);color:var(--ink);}
-.nav-cta{margin-left:8px;color:var(--cloud);border-color:rgba(232,236,239,.28);padding:10px 14px;font-size:10.5px;}
-@media(max-width:1000px){.nav-links{display:none;}.nav .bar{border-radius:28px;}}
-
-/* ---- HERO ---- */
-.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;
-  background:var(--ink);color:var(--cloud);padding:118px 0 78px;}
-/* waves discretas — quase topográficas, finas, baixa opacidade */
-.hero-waves{position:absolute;inset:0;pointer-events:none;
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.78) 56%,rgba(0,0,0,.18));
-  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1),rgba(0,0,0,.78) 56%,rgba(0,0,0,.18));}
-.hero-waves svg{width:100%;height:100%;}
-.hero-waves .cw{stroke:var(--coral-dark);}
-/* anel coral discreto, baixa opacidade */
-.hero::after{content:"";position:absolute;width:54vw;height:54vw;border-radius:50%;
-  border:1px solid var(--coral-edge-d);right:-19vw;bottom:-28vw;
-  box-shadow:inset 0 0 0 1px rgba(232,236,239,.04);opacity:.5;pointer-events:none;}
-.hero .wrap{position:relative;z-index:var(--z-base);width:min(1320px,calc(100% - 72px));}
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;
-  padding-bottom:20px;border-bottom:1px solid rgba(232,236,239,.18);}
-.hero-title{font-family:var(--display);font-weight:700;font-size:var(--text-hero-size);line-height:.95;
-  letter-spacing:-.045em;margin:26px 0 0 -.02em;color:var(--cloud);}
-.hero-title .t{color:var(--coral-dark);}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,340px);
-  gap:clamp(36px,4.4vw,60px);align-items:start;margin-top:clamp(24px,4vw,48px);}
-.hero-lead{max-width:1080px;}
-.hero-kicker{font-family:var(--title);font-size:var(--text-subtitle-size);font-weight:500;line-height:1.28;
-  letter-spacing:-.01em;max-width:52ch;color:var(--cloud);}
-.hero-kicker em{font-style:normal;color:var(--coral-dark);}
-.hero-define{margin-top:var(--s-4);max-width:64ch;font-size:clamp(17px,1.5vw,20px);
-  line-height:1.5;color:rgba(232,236,239,.88);font-weight:500;}
-.hero-define b{color:var(--coral-dark);font-weight:500;}
-.hero-copy{margin-top:var(--s-4);max-width:88ch;color:rgba(232,236,239,.72);
-  font-size:clamp(15px,1.1vw,17px);font-weight:400;line-height:1.7;}
-.hero-copy + .hero-copy{margin-top:14px;}
-.hero-copy b{color:var(--cloud);font-weight:500;}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:var(--s-5);}
-
-.hero-panel{width:100%;max-width:340px;justify-self:end;border:1px solid rgba(232,236,239,.18);border-radius:var(--r-lg);
-  overflow:hidden;background:linear-gradient(180deg,rgba(232,236,239,.06),rgba(232,236,239,.02));
-  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.1);}
-.hero-panel-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;
-  border-bottom:1px solid rgba(232,236,239,.14);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
-  text-transform:uppercase;color:rgba(232,236,239,.6);}
-.hero-panel-head span:last-child{color:var(--coral-dark);}
-.hero-step{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:baseline;
-  padding:15px 16px;border-bottom:1px solid rgba(232,236,239,.09);}
-.hero-step:last-child{border-bottom:0;}
-.hero-step .no{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--coral-dark);font-weight:600;}
-.hero-step .name{font-family:var(--title);font-size:19px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:var(--cloud);}
-.hero-step .desc{display:block;margin-top:6px;font-family:var(--body);font-size:.8rem;letter-spacing:0;line-height:1.5;color:rgba(232,236,239,.56);text-transform:uppercase;}
-@media(max-width:1000px){.hero .wrap{width:min(100% - 44px,var(--wrap));}}
-@media(max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-panel{justify-self:stretch;max-width:560px;}.hero-top{display:block;}.hero-top .label{display:block;margin-top:10px;}}
-@media(max-width:620px){.hero{padding-top:108px;}.hero-actions .btn{width:100%;}}
-
-/* ---- SPLIT (problema / decisão) ---- */
-.split{display:grid;grid-template-columns:200px 1fr 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
-.split .lead{font-size:clamp(18px,1.6vw,22px);line-height:1.4;font-family:var(--title);font-weight:500;letter-spacing:-.01em;}
-.split .text{font-size:16px;line-height:1.74;color:var(--mut);display:flex;flex-direction:column;gap:16px;max-width:62ch;}
-.split .text b{color:var(--ink);font-weight:500;}
-.dark .split .text{color:rgba(232,236,239,.72);}
-.dark .split .text b{color:var(--cloud);}
-@media(max-width:900px){.split{grid-template-columns:1fr;gap:var(--s-4);}}
-
-/* signal-grid (registros do problema) */
-.signal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:var(--s-7);}
-.signal{background:var(--paper);padding:var(--s-5);min-height:208px;display:flex;flex-direction:column;font-family:var(--body);letter-spacing:0;}
-.surface .signal{background:var(--surface);}
-.signal .sno{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--coral-light);font-weight:600;}
-.signal .st{font-family:var(--title);font-size:var(--text-card-title-size);line-height:1.2;font-weight:600;letter-spacing:-.01em;margin-top:18px;}
-.signal .sp{font-size:14px;line-height:1.62;color:var(--mut);margin-top:14px;}
-@media(max-width:980px){.signal-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:560px){.signal-grid{grid-template-columns:1fr;}}
-
-/* answer-band (decisão metodológica) */
-.answer-band{margin-top:var(--s-7);border-radius:var(--r-xl);overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr;background:var(--ink);color:var(--cloud);
-  box-shadow:0 44px 100px -46px rgba(11,12,14,.55),inset 0 1px 0 rgba(255,255,255,.06);}
-.answer-band .big{padding:clamp(34px,5vw,48px);font-family:var(--display);font-size:clamp(34px,5vw,64px);font-weight:700;line-height:1.02;letter-spacing:-.03em;}
-.answer-band .big em{font-style:normal;color:var(--coral-dark);}
-.answer-band .side{padding:clamp(34px,5vw,48px);border-left:1px solid rgba(232,236,239,.16);font-size:15px;line-height:1.74;color:rgba(232,236,239,.72);display:flex;flex-direction:column;gap:18px;}
-.answer-band .side b{color:var(--cloud);font-weight:500;}
-.answer-band .force{font-family:var(--title);font-size:clamp(20px,2.1vw,26px);font-weight:600;line-height:1.2;letter-spacing:-.015em;color:#fff;}
-.answer-band .force i{font-style:normal;color:var(--coral-dark);}
-@media(max-width:860px){.answer-band{grid-template-columns:1fr;}.answer-band .side{border-left:0;border-top:1px solid rgba(232,236,239,.16);}}
-
-/* ---- ACERVO METODOLÓGICO · materiais em grid ---- */
-.acervo-flow{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:var(--s-5);
-  font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);}
-.acervo-flow .node{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-pill);padding:8px 14px;background:var(--white);color:var(--ink);}
-.acervo-flow .node b{color:var(--coral-light);font-weight:500;}
-.surface .acervo-flow .node{background:var(--paper);}
-.acervo-flow .arrow{color:var(--coral-light);}
-
-.materials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3);align-items:start;}
-.mat{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);font-family:var(--body);letter-spacing:0;
-  padding:clamp(24px,2.6vw,30px);display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden;
-  transition:transform .5s var(--ease-quint),box-shadow .5s var(--ease-quint),border-color .4s;}
-.mat::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
-  background:linear-gradient(90deg,var(--coral-light) 0%,var(--coral-light) 22%,color-mix(in srgb,var(--coral-light) 0%,transparent) 78%);
-  transform-origin:left;transform:scaleX(.4);opacity:.9;transition:transform .5s var(--ease-quint),opacity .4s;}
-.mat:hover{transform:translateY(-4px);box-shadow:0 30px 60px -34px rgba(11,12,14,.4);border-color:var(--coral-edge-l);}
-.mat:hover::before{transform:scaleX(1);opacity:1;}
-.mat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.mat-no{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--coral-light);font-weight:600;}
-.mat-kind{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2);
-  border:1px solid var(--line);border-radius:var(--r-pill);padding:5px 11px;}
-.mat-name{font-family:var(--title);font-size:var(--text-card-title-size);font-weight:600;line-height:1.2;letter-spacing:-.01em;color:var(--ink);}
-.mat-spec{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line2);padding-top:16px;}
-.mat-spec .cell{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:baseline;}
-.mat-spec .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-light);font-weight:600;}
-.mat-spec .v{font-size:13.5px;line-height:1.5;color:var(--mut);}
-.mat-read{display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--line2);padding-top:16px;margin-top:auto;}
-.mat-read .rk{flex-basis:100%;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2);margin-bottom:3px;}
-.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--mut);
-  border:1px solid var(--line);border-radius:var(--r-pill);padding:6px 11px;background:var(--paper);white-space:nowrap;
-  transition:border-color .3s,color .3s;text-transform:uppercase;}
-.mat:hover .tag{border-color:var(--coral-edge-l);}
-.mat-doc{display:inline-flex;align-items:center;gap:12px;margin:4px 0 2px;padding:8px 13px 8px 8px;
-  border:1px solid var(--line2);border-radius:12px;background:var(--white);text-decoration:none;width:fit-content;
-  transition:border-color .25s,box-shadow .25s,transform .25s;}
-.mat-doc img{width:38px;height:auto;border-radius:4px;border:1px solid var(--line);display:block;flex:none;}
-.mat-doc-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-light);font-weight:600;}
-.mat-doc:hover{border-color:var(--coral-edge-l);box-shadow:var(--shadow-sm);transform:translateY(-2px);}
-.mat-title-row{display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.mat-title-row .mat-name{flex:1;min-width:0;margin:0;}
-.mat-title-row .mat-doc{margin:0;flex:none;}
-.mat-tbl-wrap{border-top:1px solid var(--line2);padding-top:16px;}
-.mat-tbl-k{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2);margin-bottom:10px;}
-.mat-tbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-weight:400;font-variant-numeric:tabular-nums;table-layout:fixed;}
-.mat-tbl th{text-align:left;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-light);font-weight:500;padding:0 10px 7px 0;border-bottom:1px solid var(--line);}
-.mat-tbl td{font-size:12px;line-height:1.5;color:var(--mut);padding:8px 10px 8px 0;border-bottom:1px solid var(--line2);vertical-align:top;}
-.mat-tbl tr:last-child td{border-bottom:none;}
-.mat-tbl th:last-child,.mat-tbl td:last-child{padding-right:0;}
-.mat-tbl .num{color:var(--ink);font-weight:500;white-space:nowrap;}
-@media(max-width:980px){.materials{grid-template-columns:1fr;}}
-@media(max-width:520px){.mat-spec .cell{grid-template-columns:1fr;gap:5px;}}
-
-/* ---- MÉTODO EM OPERAÇÃO · antes/depois ---- */
-.cases{display:flex;flex-direction:column;gap:var(--s-3);}
-.case{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);padding:clamp(28px,3.4vw,46px);box-shadow:var(--shadow-sm);font-family:var(--body);letter-spacing:0;}
-.surface .case{background:var(--paper);}
-.case-head{display:flex;align-items:baseline;gap:18px;margin-bottom:26px;}
-.case-head .ci{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--coral-light);font-weight:600;flex:0 0 auto;}
-.case-head h3{font-family:var(--title);font-size:var(--text-card-title-size);line-height:1.2;letter-spacing:-.01em;font-weight:600;}
-.ab{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.ab-col{background:var(--paper);border:1px solid var(--line2);border-radius:var(--r);padding:24px 24px 28px;}
-.surface .ab-col{background:var(--surface);}
-.ab-col.after{background:var(--coral-soft-l);border-color:var(--coral-edge-l);}
-.ab-col .abk{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2);font-weight:600;}
-.ab-col.after .abk{color:var(--coral-light);}
-.ab-col.after .abk::before{content:"";width:6px;height:6px;background:var(--coral-light);}
-.ab-col p{margin-top:13px;font-size:15px;line-height:1.6;color:var(--mut);}
-.ab-col.after p{color:var(--ink);}
-.case-foot{margin-top:24px;border-top:1px solid var(--line2);padding-top:20px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
-.case-foot .fk{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut2);margin-right:6px;}
-@media(max-width:760px){.ab{grid-template-columns:1fr;}}
-
-/* ---- REGÊNCIA RECURSAL (dark) ---- */
-.regence{display:grid;grid-template-columns:200px 1fr;gap:clamp(28px,5vw,52px);align-items:start;}
-.regence .prose{max-width:64ch;display:flex;flex-direction:column;gap:var(--s-4);font-size:clamp(15.5px,1.2vw,17px);line-height:1.76;color:rgba(232,236,239,.74);}
-.regence .prose p:first-child{font-family:var(--title);font-size:clamp(20px,2vw,26px);line-height:1.35;color:var(--cloud);font-weight:600;letter-spacing:-.01em;}
-.regence .prose b{color:var(--cloud);font-weight:500;}
-.regence-quote{margin-top:var(--s-6);border-top:1px solid var(--dline);padding-top:var(--s-5);font-family:var(--display);
-  font-size:clamp(26px,3.8vw,50px);font-weight:600;line-height:1.12;letter-spacing:-.02em;width:100%;max-width:none;color:#fff;}
-.regence-quote em{font-style:normal;color:var(--coral-dark);}
-.regence-map{margin-top:var(--s-6);display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--dline);border:1px solid var(--dline);border-radius:var(--r);overflow:hidden;}
-.rm{background:var(--ink);padding:20px 18px;display:flex;flex-direction:column;gap:9px;}
-.rm .rmk{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-dark);font-weight:600;}
-.rm .rmv{font-family:var(--title);font-size:16.5px;font-weight:600;line-height:1.2;letter-spacing:-.01em;color:var(--cloud);}
-@media(max-width:900px){.regence{grid-template-columns:1fr;}.regence-map{grid-template-columns:1fr;}}
-
-/* ---- EVIDÊNCIAS ---- */
-.evidence{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
-.ev{background:var(--paper);padding:30px;min-height:188px;display:flex;flex-direction:column;}
-.surface .ev{background:var(--surface);}
-.ev .value{font-family:var(--mono);font-size:clamp(32px,3.6vw,50px);font-weight:500;line-height:.96;letter-spacing:-.04em;font-variant-numeric:tabular-nums;}
-.ev .value i{font-style:normal;color:var(--coral-light);}
-.ev .caption{margin-top:14px;color:var(--mut);font-size:13px;line-height:1.55;max-width:34ch;}
-.ev .evk{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-light);font-weight:600;margin-bottom:14px;}
-.ev-base{display:block;margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--mut);font-variant-numeric:tabular-nums;}
-.ev.feature .ev-base{color:rgba(232,236,239,.6);}
-.ev.feature{background:var(--ink);color:var(--cloud);grid-column:1 / -1;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:stretch;padding:clamp(30px,4vw,44px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
-.ev.feature .value{color:#fff;}
-.ev.feature .value i{color:var(--coral-dark);}
-.ev.feature .evk{color:var(--coral-dark);}
-.ev.feature .caption{color:rgba(232,236,239,.74);font-size:14px;max-width:48ch;}
-.ev-beat{margin-top:auto;padding-top:var(--s-4);font-family:var(--display);font-size:clamp(20px,2.2vw,27px);font-weight:600;line-height:1.15;letter-spacing:-.015em;color:#fff;}
-.ev-beat i{font-style:normal;color:var(--coral-dark);}
-.ev-note{font-family:var(--body);font-size:13.5px;line-height:1.65;color:rgba(232,236,239,.66);border-left:1px solid var(--dline);padding-left:18px;display:flex;flex-direction:column;justify-content:center;}
-@media(max-width:980px){.evidence{grid-template-columns:1fr 1fr;}.ev.feature{grid-template-columns:1fr;}.ev-note{border-left:0;border-top:1px solid var(--dline);padding-left:0;padding-top:18px;margin-top:6px;}}
-@media(max-width:560px){.evidence{grid-template-columns:1fr;}}
-
-/* ---- AUTORIA E CONTINUIDADE ---- */
-.cont{display:grid;grid-template-columns:320px 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden;}
-.cont-id{background:var(--ink);color:var(--cloud);padding:clamp(28px,4vw,38px);display:flex;flex-direction:column;justify-content:space-between;gap:var(--s-6);min-height:340px;}
-.cont-id .name{font-family:var(--title);font-size:36px;font-weight:700;line-height:1.05;letter-spacing:-.02em;}
-.cont-id .contacts{display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:rgba(232,236,239,.66);}
-.cont-id .contacts a:hover{color:var(--coral-dark);}
-.cont-text{background:var(--paper);padding:clamp(28px,4vw,42px);font-size:16px;color:var(--mut);line-height:1.76;display:flex;flex-direction:column;gap:var(--s-4);max-width:72ch;}
-.cont-text p:first-child{font-family:var(--title);font-size:clamp(19px,1.9vw,24px);line-height:1.35;color:var(--ink);font-weight:600;letter-spacing:-.01em;}
-.cont-text b{color:var(--ink);font-weight:500;}
-@media(max-width:820px){.cont{grid-template-columns:1fr;}.cont-id{min-height:0;}}
-
-.compare{margin-top:var(--s-4);display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3);}
-.cpanel{background:var(--graph);border:1px solid var(--dline);border-radius:var(--r-xl);padding:32px 30px 36px;display:flex;flex-direction:column;gap:16px;color:var(--cloud);
-  box-shadow:0 40px 90px -50px rgba(11,12,14,.6),inset 0 1px 0 rgba(255,255,255,.05);}
-.cpanel.lead{border-color:var(--coral-edge-d);background:linear-gradient(180deg,color-mix(in srgb,var(--coral-dark) 8%,transparent),var(--graph) 62%);}
-.cpanel .cpk{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(232,236,239,.62);font-weight:500;}
-.cpanel.lead .cpk{color:var(--coral-dark);}
-.cpanel .cpt{font-family:var(--title);font-size:clamp(22px,2.5vw,30px);font-weight:600;line-height:1.1;letter-spacing:-.015em;color:#fff;}
-.cpanel .cpd{font-size:14.5px;line-height:1.62;color:rgba(232,236,239,.7);}
-.cpanel .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;}
-.cpanel .tag{background:rgba(232,236,239,.05);border-color:var(--dline);color:rgba(232,236,239,.78);}
-.cont-foot{margin-top:var(--s-6);display:flex;flex-wrap:wrap;align-items:center;gap:22px 40px;justify-content:space-between;}
-.cont-foot .cf{font-family:var(--title);font-size:clamp(22px,2.6vw,34px);font-weight:600;line-height:1.12;letter-spacing:-.02em;color:var(--ink);max-width:24ch;}
-.cont-foot .cf i{font-style:normal;color:var(--coral-light);}
-@media(max-width:760px){.compare{grid-template-columns:1fr;}}
-
-/* ---- FECHAMENTO / FOOTER ---- */
-.close{background:var(--ink);color:var(--cloud);padding:clamp(96px,12vw,132px) 0;text-align:center;position:relative;overflow:hidden;}
-.close::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 122%,color-mix(in srgb,var(--coral-dark) 22%,transparent),transparent 46%);}
-.close .wrap{position:relative;z-index:var(--z-base);}
-.close-title{font-family:var(--display);font-size:clamp(40px,6vw,86px);font-weight:700;line-height:1.06;letter-spacing:-.03em;}
-.close-title em{font-style:normal;color:var(--coral-dark);}
-.close-sub{margin-top:var(--s-4);font-family:var(--title);font-size:clamp(16px,1.4vw,19px);font-weight:500;color:rgba(232,236,239,.78);}
-.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:var(--s-6);}
-footer{background:var(--ink);color:rgba(232,236,239,.58);border-top:1px solid rgba(232,236,239,.12);padding:52px 0 64px;}
-.footer-grid{display:grid;grid-template-columns:1fr auto;gap:36px;align-items:start;}
-.footer-brand{display:flex;align-items:center;gap:12px;font-family:var(--title);font-weight:700;font-size:17px;letter-spacing:.22em;color:var(--cloud);}
-.footer-brand .brand-mark{width:22px;height:22px;}
-.footer-links{display:flex;gap:22px;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;}
-footer a{transition:color .2s;}footer a:hover{color:var(--coral-dark);}
-.footer-note{margin-top:var(--s-5);max-width:780px;font-size:12.5px;line-height:1.7;color:rgba(232,236,239,.5);}
-@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}.close-actions .btn{width:100%;}}
-
-/* ---- COMPREENSÃO · o echo em cinco respostas (ex-gaveta, promovida) ---- */
-.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:var(--s-3);}
-.ans{background:var(--cloud);color:var(--ink);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;font-family:var(--body);letter-spacing:0;}
-.ans .q{background:var(--coral-light);color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;padding:12px 18px;}
-.ans .a{padding:18px;font-size:14.5px;line-height:1.58;color:#33373D;}
-.ans .a b{color:var(--ink);font-weight:600;}
-.ans--key{background:var(--coral-light);}
-.ans--key .q{background:rgba(0,0,0,.2);color:#fff;}
-.ans--key .a{color:rgba(255,255,255,.94);}
-.ans--key .a b{color:#fff;}
-
-/* ---- faixa de conversão (pico pós-evidências) ---- */
-.cta-band{margin-top:var(--s-5);border:1px solid var(--line);border-radius:var(--r-lg);background:var(--white);
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;padding:clamp(22px,3vw,30px);}
-.cta-band .ct{font-size:clamp(18px,1.8vw,22px);font-weight:600;letter-spacing:-.01em;max-width:44ch;}
-
-/* ---- âncora de contato persistente (do pico ao fim) ---- */
-.contact-pill{position:fixed;right:18px;bottom:18px;z-index:var(--z-pill);
-  background:var(--ink);color:var(--cloud);border:1px solid var(--dline);border-radius:var(--r-pill);
-  padding:13px 20px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
-  box-shadow:0 14px 44px rgba(0,0,0,.28);display:inline-flex;align-items:center;gap:10px;
-  opacity:0;visibility:hidden;transform:translateY(8px);
-  transition:opacity .4s var(--ease-quint),transform .4s var(--ease-quint),visibility .4s;}
-.contact-pill.on{opacity:1;visibility:visible;transform:none;}
-.contact-pill .dot{width:8px;height:8px;background:var(--coral-dark);border-radius:50%;}
-.contact-pill:hover{background:var(--graph);}
-
-/* ---------- 5 · MOTION / REVEAL ---------- */
-.js .rv{opacity:0;transform:translateY(24px);filter:blur(7px);
-  transition:opacity .8s var(--ease-quint),transform .8s var(--ease-quint),filter .8s var(--ease-quint);}
-.js .rv.in{opacity:1;transform:none;filter:none;}
-.js .rv.stagger.in{opacity:1;transform:none;filter:none;}
-.js .stagger > *{opacity:0;transform:translateY(20px);filter:blur(6px);
-  transition:opacity .7s var(--ease-quint),transform .7s var(--ease-quint),filter .7s var(--ease-quint);}
-.js .stagger.in > *{opacity:1;transform:none;filter:none;}
-.js .stagger.in > *:nth-child(2){transition-delay:.06s;}
-.js .stagger.in > *:nth-child(3){transition-delay:.12s;}
-.js .stagger.in > *:nth-child(4){transition-delay:.18s;}
-.js .stagger.in > *:nth-child(5){transition-delay:.24s;}
-.js .stagger.in > *:nth-child(6){transition-delay:.30s;}
-.js .stagger.in > *:nth-child(7){transition-delay:.36s;}
-.js .stagger.in > *:nth-child(8){transition-delay:.42s;}
-.js .stagger.in > *:nth-child(9){transition-delay:.48s;}
-.js .stagger.in > *:nth-child(10){transition-delay:.54s;}
-
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto;}
-  .js .rv,.js .stagger>*{opacity:1;transform:none;filter:none;transition:none;}
-  .btn:hover{transform:none;}
-  .btn .ico,.btn:hover .ico{transform:none;}
-  .mat:hover{transform:none;}
-  .mat::before{transform:none;transition:none;}
-  .contact-pill{transition:opacity .2s ease;transform:none;}
-}
-
-/* Redução global de escala — somente desktop */
-@media (min-width: 1001px) {
-  html {
-    zoom: 0.9;
-  }
-}
-
-</style>
-</head>
-<body id="top">
-
-<a class="skip" href="#main" style="position:absolute;left:-999px;top:0;z-index:200;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:12px 18px;border-radius:0 0 12px 0;">Pular para o conteúdo</a>
-<div id="nav-sentinel" aria-hidden="true" style="position:absolute;top:0;height:1px;width:1px;"></div>
-
-<!-- defs reutilizáveis: marca CORPUS (círculo fatiado em barras verticais decrescentes) -->
-<svg class="svg-defs" aria-hidden="true" focusable="false">
-  <clipPath id="corpus-clip"><circle cx="50" cy="50" r="47"/></clipPath>
-  <symbol id="echo-sym" viewBox="0 0 100 100">
-    <g clip-path="url(#corpus-clip)" fill="currentColor">
-      <rect x="3"  width="33" height="100"/>
-      <rect x="38" width="14" height="100"/>
-      <rect x="54" width="11" height="100"/>
-      <rect x="67" width="8"  height="100"/>
-      <rect x="77" width="6"  height="100"/>
-      <rect x="85" width="5"  height="100"/>
-      <rect x="92" width="5"  height="100"/>
-    </g>
-  </symbol>
-</svg>
-
-
-<nav class="nav" aria-label="Navegação principal">
-  <div class="wrap">
-    <div class="bar">
-      <a class="brand" href="#top" aria-label="echo — início"><span class="brand-mark"><svg class="sym" viewBox="0 0 100 100" aria-hidden="true"><use href="#echo-sym"/></svg></span>echo</a>
-      <div class="nav-links">
-        <a href="#compreensao">O echo</a>
-        <a href="#evidencias">Evidências</a>
-        <a href="#acervo">Acervo</a>
-        <a href="#operacao">Operação</a>
-        <a href="#regencia">Regência</a>
-        <a href="#continuidade">Continuidade</a>
-        <a class="btn nav-cta" href="mailto:christiandscosta@gmail.com?subject=echo%20%E2%80%94%20contato">Contato</a>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<main id="main">
-
-<!-- HERO -->
-<header class="hero" id="hero">
-  <div class="hero-waves" aria-hidden="true">
-    <svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice" fill="none">
-      <path d="M-40,70 q90,-8 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
-      <path d="M-40,108 q90,10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".06" stroke-width="1"/>
-      <path d="M-40,146 q90,-12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" class="cw" stroke-opacity=".12" stroke-width="1"/>
-      <path d="M-40,184 q90,9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
-      <path d="M-40,222 q90,-13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".065" stroke-width="1"/>
-      <path d="M-40,260 q90,15 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" class="cw" stroke-opacity=".14" stroke-width="1.1"/>
-      <path d="M-40,298 q90,-11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".055" stroke-width="1"/>
-      <path d="M-40,336 q90,14 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".06" stroke-width="1"/>
-      <path d="M-40,374 q90,-16 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" class="cw" stroke-opacity=".11" stroke-width="1.1"/>
-      <path d="M-40,412 q90,12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".05" stroke-width="1"/>
-      <path d="M-40,450 q90,-10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".05" stroke-width="1"/>
-      <path d="M-40,488 q90,13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" class="cw" stroke-opacity=".09" stroke-width="1"/>
-      <path d="M-40,526 q90,-9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".045" stroke-width="1"/>
-      <path d="M-40,564 q90,11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#E8ECEF" stroke-opacity=".045" stroke-width="1"/>
-    </svg>
-  </div>
-  <div class="wrap">
-    <div class="hero-top rv">
-      <span class="eyebrow">Framework autoral · operação jurídica de volume</span>
-      <a class="label" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">autoria · Christian da Costa</a>
-    </div>
-     <h1 class="hero-title rv">ec<span class="t">h</span>o</h1>
-    <div class="hero-grid">
-      <div class="hero-lead rv">
-        <p class="hero-kicker">Da prática herdada ao <em>método instalado</em></p>
-        <p class="hero-define">Metodologia de regência recursal para estruturar <b>memória</b>, <b>rastreabilidade</b> e <b>governança</b> na operação jurídica.</p>
-        <p class="hero-copy">O echo nasce antes da automação. Nasce da pergunta anterior: como uma operação jurídica regida por prazos, volume e múltiplas pessoas pode funcionar com mais clareza, memória e critério comum?</p>
-        <p class="hero-copy">Não é software. Não é promessa de escala. É <b>método instalado por materiais concretos, transmissíveis e governáveis</b>: manuais, mapas, matrizes, planilhas, roteiros, checklists e registros de orientação.</p>
-        <div class="hero-actions">
-          <a class="btn solid-d down" href="#acervo">Ver acervo <span class="ico" aria-hidden="true">↓</span></a>
-          <a class="btn light" href="#evidencias">Ver evidências</a>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ECHO — Fase 0</title><meta name="description" content="ECHO — metodologia jurídica de regência recursal. Fase 0 do sistema-gêmeo ATRIO / ECHO."><meta name="theme-color" content="#181818"><script>document.documentElement.classList.add('js')</script><link rel="icon" href="../../.ECHO/brand/03_web/favicon-32x32.png" sizes="32x32"><link rel="icon" href="../../.ECHO/brand/03_web/favicon.png"><link rel="apple-touch-icon" href="../../.ECHO/brand/03_web/apple-touch-icon.png"><link rel="stylesheet" href="system.css"><link rel="stylesheet" href="theme-echo.css"></head><body class="page--echo"><div class="read-progress" aria-hidden="true"><div class="read-progress__fill"></div></div><a class="skip-link" href="#main">Ir ao conteúdo</a><nav class="site-nav" aria-label="Navegação principal">
+      <div class="wrap nav-bar">
+        <a class="brand" href="#top" aria-label="Voltar ao início de ECHO"><span class="brand-mark" aria-hidden="true"><img src="../../.ECHO/brand/01_symbol/ECHO-symbol.svg" alt="" width="48" height="48"></span><span>ECHO</span></a>
+        <div class="nav-links">
+          <a data-nav-link href="#problema">Problema</a>
+          <a data-nav-link href="#construcao">Construção</a>
+          <a data-nav-link href="#aplicacao">Aplicação</a>
+          <a data-nav-link href="#achados">Achados</a>
+          <a data-nav-link href="#autoria">Autoria</a>
         </div>
+        <a class="nav-contact" data-nav-link href="#contato">Contato</a>
       </div>
-      <aside class="hero-panel rv" aria-label="Acervo metodológico resumido">
-        <div class="hero-panel-head"><span>acervo metodológico</span><span>entrada → memória</span></div>
-        <div class="hero-steps">
-          <div class="hero-step"><span class="no">01</span><span><span class="name">Notas Introdutórias</span><span class="desc">entrada e orientação</span></span></div>
-          <div class="hero-step"><span class="no">02</span><span><span class="name">Mapa Temático</span><span class="desc">classificação e acervo</span></span></div>
-          <div class="hero-step"><span class="no">03</span><span><span class="name">Afinação Processual</span><span class="desc">requisitos e filtros</span></span></div>
-          <div class="hero-step"><span class="no">04</span><span><span class="name">Planilhas e Registros</span><span class="desc">cadência e memória</span></span></div>
+    </nav>
+    <header class="hero" id="top"><div class="hero-waves" aria-hidden="true"><svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMid slice" fill="none"><path d="M-40,70 q90,-8 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".05" stroke-width="1"/><path d="M-40,108 q90,10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".055" stroke-width="1"/><path d="M-40,146 q90,-12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".08" stroke-width="1"/><path d="M-40,184 q90,9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".05" stroke-width="1"/><path d="M-40,222 q90,-13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".06" stroke-width="1"/><path d="M-40,260 q90,15 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".09" stroke-width="1.1"/><path d="M-40,298 q90,-11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".05" stroke-width="1"/><path d="M-40,336 q90,14 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".055" stroke-width="1"/><path d="M-40,374 q90,-16 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".075" stroke-width="1.1"/><path d="M-40,412 q90,12 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".045" stroke-width="1"/><path d="M-40,450 q90,-10 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".045" stroke-width="1"/><path d="M-40,488 q90,13 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".06" stroke-width="1"/><path d="M-40,526 q90,-9 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".04" stroke-width="1"/><path d="M-40,564 q90,11 180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0 t180,0" stroke="#e8ecef" stroke-opacity=".04" stroke-width="1"/></svg></div><div class="wrap hero-inner"><div class="hero-copy" data-reveal><h1 class="hero-name">ec<span class="accent">h</span>o</h1><p class="hero-kicker">Aquilo que retornou e seguiu ecoando adiante</p><div class="hero-manifesto"><p><strong>Metodologia</strong> jurídica de estruturação operacional aplicada à implantação e organização de gabinete judicial.</p><p>Método antes da automação: como uma operação regida por prazos, volume e múltiplas pessoas pode funcionar com clareza, memória e critério comum.</p><p>Instalação por materiais concretos, transmissíveis e governáveis.</p></div></div><aside class="hero-creed" data-reveal><p class="hero-creed-tag">Filosofia</p><h2 class="hero-creed-word">Harmonia</h2><p class="hero-creed-line">Rigorosa na forma, guiada por sentido, coerência e propósito comum.</p><ul class="hero-creed-list"><li>Convergência</li><li>Voz e escuta</li><li>Registro e memória</li><li>Respeito</li><li>Cooperação</li><li>Confidencialidade</li><li>Critério e medida</li><li>Ordem do tempo</li></ul></aside></div></header>
+    <button class="drawer-handle" type="button" data-drawer-handle hidden aria-haspopup="dialog" aria-controls="project-drawer">Diapasão</button>
+    <dialog class="drawer" id="project-drawer" data-drawer aria-label="Diapasão — definição e navegação do ECHO">
+      <div class="drawer-inner">
+        <div class="drawer-top">
+          <div><p class="drawer-kicker">Diapasão</p><h2 class="drawer-title">echo</h2></div>
+          <button class="drawer-close" type="button" data-drawer-close aria-label="Fechar">×</button>
         </div>
-      </aside>
-    </div>
-  </div>
-</header>
-
-<!-- 01 · COMPREENSÃO -->
-<section class="section dark cv" id="compreensao">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">01</div>
-      <div class="head-body">
-        <span class="eyebrow">Harmonia como método</span>
-        <h2>O echo em cinco respostas</h2>
-        <p class="sub">O essencial, sem clique: o que é, por que existe, como opera, onde se forma e o que revela</p>
+        <article class="drawer-answer"><h3>O que é</h3><p>Metodologia jurídica de estruturação operacional aplicada à implantação e organização de gabinete judicial.</p></article>
+        <nav class="drawer-nav" aria-label="Seções do projeto">
+          <a href="#preliminares"><span>01</span>Preliminares</a>
+          <a href="#problema"><span>02</span>Problema</a>
+          <a href="#objetivo"><span>03</span>Objetivo</a>
+          <a href="#construcao"><span>04</span>Construção</a>
+          <a href="#criterios"><span>05</span>Critérios</a>
+          <a href="#aplicacao"><span>06</span>Aplicação</a>
+          <a href="#achados"><span>07</span>Achados</a>
+          <a href="#autoria"><span>08</span>Autoria</a>
+        </nav>
       </div>
-    </div>
-    <div class="answers rv stagger">
-      <article class="ans"><div class="q">O que é</div><p class="a">Metodologia jurídico-operacional para transformar prática jurídica acumulada em materiais, critérios e procedimentos de trabalho.</p></article>
-      <article class="ans"><div class="q">Por que existe</div><p class="a">Porque equipes jurídicas não precisam apenas produzir mais. Precisam saber como produzem, por que produzem assim e como preservam esse conhecimento.</p></article>
-      <article class="ans"><div class="q">Como opera</div><p class="a">Por acervo metodológico: manuais, mapas, matrizes, roteiros, checklists, planilhas e registros que tornam a rotina legível e transmissível.</p></article>
-      <article class="ans"><div class="q">Onde se forma</div><p class="a">Em operação jurídica de volume, regida por autoridade decisória, prazos, acervo heterogêneo e necessidade de consistência.</p></article>
-      <article class="ans ans--key"><div class="q">O que revela</div><p class="a"><b>Capacidade de converter experiência jurídica em método documentado</b>, com critérios de entrada, classificação, distribuição, revisão e memória.</p></article>
-    </div>
-  </div>
-</section>
-
-<!-- 02 · EVIDÊNCIAS -->
-<section class="section surface cv" id="evidencias">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">02</div>
-      <div class="head-body">
-        <span class="eyebrow">Evidências</span>
-        <h2>Provas antes de adjetivos</h2>
-        <p class="sub">Cada indicador com rótulo, número, base e leitura. Os dados indicam aplicação real e rotina governável — não prova isolada de superioridade</p>
+    </dialog>
+    <main id="main">
+      <section class="section section--dark" id="preliminares"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">01</div>
+      <div class="section-heading">
+        <p class="section-tag">Preliminares</p>
+        <h2>Pegando o tom</h2>
+        
       </div>
-    </div>
-    <div class="evidence rv stagger">
-      <article class="ev"><span class="evk">Ementário</span><div class="value">2.758</div><span class="ev-base">base · acervo integral do ementário (A10)</span><p class="caption">modelos de ementa estruturados, com código, hierarquia e fundamento.</p></article>
-      <article class="ev"><span class="evk">Acervo triado</span><div class="value">1.192</div><span class="ev-base">base · fluxo recursal faseado · 30 dias</span><p class="caption">processos triados e segmentados pelo fluxo faseado do método.</p></article>
-      <article class="ev"><span class="evk">Cobertura</span><div class="value">56<i>%</i></div><span class="ev-base">base · acervo do período</span><p class="caption">parcela do acervo com diretriz antecipada antes da análise técnica.</p></article>
-      <article class="ev"><span class="evk">Taxonomia</span><div class="value">102<i>→</i>10</div><span class="ev-base">base · matriz temática · 3 núcleos</span><p class="caption">assuntos granulares reclassificados em localizadores operacionais.</p></article>
-      <article class="ev feature">
-        <div style="display:flex;flex-direction:column;">
-          <span class="evk">Cadência</span>
-          <div class="value">≈900</div>
-          <span class="ev-base">base · 7 assessores · cinco meses · critério amplo</span>
-          <p class="caption">votos produzidos pela operação sob o método, em cinco meses — ritmo sustentado, não pico isolado.</p>
-          <p class="ev-beat">O dado aponta cadência. O método mostra <i>como a cadência foi sustentada.</i></p>
-        </div>
-        <div class="ev-note">
-          Os indicadores seguem critério único e não inferem causalidade absoluta. Funcionam como evidência de operação — não como prova isolada de superioridade. O que demonstram é uma rotina governável, com cadência observável e memória que permite ler o próprio ritmo.
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- 03 · PROBLEMA -->
-<section class="section surface cv" id="problema">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">03</div>
-      <div class="head-body">
-        <span class="eyebrow">Problema</span>
-        <h2>O problema não era produzir mais. Era tornar a produção transmissível</h2>
-        <p class="sub">Em estruturas jurídicas de volume, o que mais escapa não é o mérito da decisão — é o percurso que a precede</p>
+    </header><div class="matrix matrix--5" data-reveal><article class="matrix-card"><p class="card-meta">O que é</p><div class="card-rule"></div><h3 class="card-title">Metodologia</h3><p class="card-copy">Metodologia jurídico-operacional aplicada à implantação e organização de gabinete judicial.</p></article><article class="matrix-card"><p class="card-meta">Por que existe</p><div class="card-rule"></div><h3 class="card-title">Continuidade</h3><p class="card-copy">Porque equipes não precisam apenas produzir mais. Precisam saber como produzem, por que produzem assim e como preservam o conhecimento.</p></article><article class="matrix-card"><p class="card-meta">Como opera</p><div class="card-rule"></div><h3 class="card-title">Acervo</h3><p class="card-copy">Por manuais, mapas, matrizes, roteiros, checklists, planilhas e registros que tornam a rotina legível e transmissível.</p></article><article class="matrix-card"><p class="card-meta">Onde se forma</p><div class="card-rule"></div><h3 class="card-title">Operação</h3><p class="card-copy">Em ambiente jurídico de volume, regido por autoridade decisória, prazos, acervo heterogêneo e necessidade de consistência.</p></article><article class="matrix-card"><p class="card-meta">O que revela</p><div class="card-rule"></div><h3 class="card-title">Capacidade</h3><p class="card-copy">Capacidade de converter experiência jurídica em método documentado, com critérios de entrada, classificação, distribuição, revisão e memória.</p></article></div></div></section>
+      <section class="section section--surface" id="problema"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">02</div>
+      <div class="section-heading">
+        <p class="section-tag">Problema</p>
+        <h2>O problema era não saber por onde começar</h2>
       </div>
-    </div>
-    <div class="split rv">
-      <div></div>
-      <p class="lead">Parte decisiva do trabalho está no percurso anterior à decisão: entrada, classificação, distribuição, revisão e memória.</p>
-      <div class="text">
-        <p>Quando esse percurso não é documentado, a equipe opera por <b>repetição oral, dependência de pessoas-chave e aprendizado irregular</b>. O conhecimento existe, mas circula com ruído.</p>
-        <p>A rotina trabalha, mas não se deixa governar.</p>
-      </div>
-    </div>
-    <div class="signal-grid rv stagger">
-      <article class="signal"><span class="sno">01</span><h3 class="st">Memória oral</h3><p class="sp">Saber prático transmitido por convivência, sem documentação suficiente para escala, continuidade e entrada segura de novos integrantes.</p></article>
-      <article class="signal"><span class="sno">02</span><h3 class="st">Acervo sem mapa</h3><p class="sp">Matérias, incidentes e prazos distintos sem classificação operacional estável, com baixa visibilidade de concentração temática.</p></article>
-      <article class="signal"><span class="sno">03</span><h3 class="st">Carga sem leitura fina</h3><p class="sp">Distribuição que exige ler complexidade, urgência, afinidade temática e risco de gargalo — não apenas quantidade.</p></article>
-      <article class="signal"><span class="sno">04</span><h3 class="st">Qualidade tardia</h3><p class="sp">Vícios simples consumindo tempo técnico qualificado antes da verificação mínima de requisitos.</p></article>
-    </div>
-  </div>
-</section>
-
-<!-- 04 · DECISÃO METODOLÓGICA -->
-<section class="section cv" id="decisao">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">04</div>
-      <div class="head-body">
-        <span class="eyebrow">Decisão metodológica</span>
+    </header>
+        <div class="section-text" data-reveal><p>Em estruturas jurídicas de volume, o que mais escapa não é o mérito da decisão: é o percurso que a precede.</p><p>Parte decisiva do trabalho está no percurso anterior à decisão: entrada, classificação, distribuição, revisão e memória.</p><p>Sem procedimento instituído, o percurso não tinha padrão a seguir: o de primeiro grau não se transportava para a lógica colegiada de segundo grau, e não havia rotina comum a repetir.</p><p>O conhecimento existe, mas circula com ruído. A rotina trabalha, mas não se deixa governar.</p></div><div class="matrix matrix--4" data-reveal><article class="matrix-card"><p class="card-meta">01</p><div class="card-rule"></div><h3 class="card-title">Padrão não transportável</h3><p class="card-copy">O padrão disponível era o de primeiro grau, incompatível com a lógica colegiada de segundo grau.</p></article><article class="matrix-card"><p class="card-meta">02</p><div class="card-rule"></div><h3 class="card-title">Acervo sem mapa</h3><p class="card-copy">Matérias, incidentes e prazos distintos sem classificação operacional estável.</p></article><article class="matrix-card"><p class="card-meta">03</p><div class="card-rule"></div><h3 class="card-title">Carga sem leitura fina</h3><p class="card-copy">Distribuição que exige ler complexidade, urgência, afinidade temática e risco de gargalo.</p></article><article class="matrix-card"><p class="card-meta">04</p><div class="card-rule"></div><h3 class="card-title">Qualidade tardia</h3><p class="card-copy">Vícios simples consumindo tempo técnico qualificado antes da verificação mínima de requisitos.</p></article></div></div></section>
+      <section class="section" id="objetivo"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">03</div>
+      <div class="section-heading">
+        <p class="section-tag">Objetivo</p>
         <h2>Instalar método antes de acelerar trabalho</h2>
-        <p class="sub">O trabalho precisava deixar de depender apenas de hábito e passar a produzir rastro</p>
       </div>
-    </div>
-    <div class="split rv">
-      <div></div>
-      <p class="lead">O echo surge como resposta a um problema de forma. A decisão foi converter a rotina em materiais utilizáveis.</p>
-      <div class="text">
-        <p>Não documentos decorativos, mas <b>instrumentos de operação</b>.</p>
-        <p>Cada material responde a uma pergunta prática da operação — e deixa rastro do que antes só existia na escuta.</p>
-      </div>
-    </div>
-    <div class="answer-band rv">
-      <div class="big">Manuais.<br>Mapas.<br>Matrizes.<br>Registros.<br><em>Critério.</em></div>
-      <div class="side">
-        <p>A sofisticação do echo não está na ferramenta. Está no <b>critério que conecta cada material a um problema real da operação</b>.</p>
-        <p class="force">O método começa quando o <i>hábito deixa de bastar.</i></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 05 · ACERVO METODOLÓGICO -->
-<section class="section surface cv" id="acervo">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">05</div>
-      <div class="head-body">
-        <span class="eyebrow">Base instrumental</span>
+    </header>
+        <div class="section-text" data-reveal><p>O trabalho não tinha procedimento a seguir: era preciso construir o padrão a partir de ecos.</p><p>O ECHO surge como resposta a um problema de forma: converter a rotina em materiais utilizáveis.</p><p>Não documentos decorativos, mas instrumentos de operação. Cada material responde a uma pergunta prática e dá forma registrável ao que antes não tinha procedimento instituído.</p><p>A sofisticação não está na ferramenta. Está no critério que conecta cada material a um problema real.</p></div><div class="synthesis" data-reveal><div class="synthesis-terms">Manuais.<br>Mapas.<br>Matrizes.<br>Registros.</div><div class="synthesis-copy"><p>Quatro famílias instrumentais organizam o acervo metodológico.</p><p>O critério transversal aparece na relação entre material, ruído enfrentado e efeito esperado.</p></div></div></div></section>
+      <section class="section section--surface" id="construcao"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">04</div>
+      <div class="section-heading">
+        <p class="section-tag">Construção</p>
         <h2>Acervo metodológico</h2>
-        <p class="sub">Instrumentos simples, mas estruturantes. Cada material nomeia um ruído da operação e o converte em procedimento — com a leitura profissional lida dentro do próprio material</p>
       </div>
-    </div>
-
-    <div class="acervo-flow rv stagger" aria-label="Percurso do acervo: entrada, classificação, distribuição, verificação, cadência, memória">
-      <span class="node"><b>01</b> Entrada</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>02</b> Classificação</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>03</b> Distribuição</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>04</b> Verificação</span><span class="arrow" aria-hidden="true">→</span>
-      <span class="node"><b>05</b> Memória</span>
-    </div>
-
-    <div class="materials rv stagger">
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A01</span><span class="mat-kind">Manual</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Notas Introdutórias</h3>
-        <a class="mat-doc" href="notas-introdutorias.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Notas Introdutórias">
-          <img src="thumb-notas-introdutorias.webp" alt="Capa — Notas Introdutórias" loading="lazy">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
+    </header><div class="section-text" data-reveal><p>Instrumentos simples, mas estruturantes. Cada material nomeia um ruído da operação e o converte em procedimento.</p></div>
+        <div class="pathway" data-reveal><div class="pathway-main"><div class="path-node"><span>Entrada</span><strong>Demanda</strong></div><div class="path-node"><span>01</span><strong>Classificação</strong></div><div class="path-node"><span>02</span><strong>Distribuição</strong></div><div class="path-node"><span>03</span><strong>Verificação</strong></div><div class="path-node"><span>04</span><strong>Produção</strong></div><div class="path-node"><span>Saída</span><strong>Memória</strong></div></div><div class="path-subline"><span>Autoridade decisória</span><span>Procedimento comum</span><span>Rastro</span><span>Continuidade</span></div></div><div class="technical-grid"><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A01 · Manual</p><h3 class="technical-title">Notas Introdutórias</h3><p class="technical-role">entrada e orientação</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Onboarding informal e repetição de orientações básicas.</span></div>
+        <p class="technical-thesis">Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.</p>
+        <p class="technical-description">Onboarding informal e repetição de orientações básicas.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Onboarding informal e repetição de orientações básicas.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Documento de entrada</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Manual em PDF</p></div></div>
+        <div class="tags"><span class="tag">Onboarding</span><span class="tag">Enablement</span></div>
+      </div><a class="card-doc" href="../../.ECHO/notas-introdutorias.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A02 · Roteiro</p><h3 class="technical-title">Roteiro de Entrevistas</h3><p class="technical-role">descoberta operacional</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Onboarding</span><span class="tag">Enablement</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A02</span><span class="mat-kind">Roteiro</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Roteiro de Entrevistas</h3>
-        <a class="mat-doc" href="a02.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Roteiro de Entrevistas">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
+        <p class="technical-thesis">Ouvir rotinas, comparar práticas e identificar ruídos operacionais.</p>
+        <p class="technical-description">Diagnóstico baseado apenas em impressão individual.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Ouvir rotinas, comparar práticas e identificar ruídos operacionais.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Diagnóstico baseado apenas em impressão individual.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Entrevistas e diagnóstico</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Roteiro em PDF</p></div></div>
+        <div class="tags"><span class="tag">Operational Discovery</span><span class="tag">Process Mapping</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a02.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A03 · Mapa</p><h3 class="technical-title">Mapa Temático</h3><p class="technical-role">taxonomia e acervo</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Ouvir rotinas, comparar práticas e identificar ruídos operacionais.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Diagnóstico baseado apenas em impressão individual.</span></div>
+        <p class="technical-thesis">Organizar matérias por núcleos, agrupadores, temas e afinidades.</p>
+        <p class="technical-description">Distribuição casuística e baixa visibilidade de concentração temática.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Organizar matérias por núcleos, agrupadores, temas e afinidades.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Distribuição casuística e baixa visibilidade de concentração temática.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Classificação temática</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Mapa em PDF</p></div></div>
+        <div class="tags"><span class="tag">Taxonomy</span><span class="tag">Matter Management</span></div>
+      </div><a class="card-doc" href="../../.ECHO/mapa-tematico.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A04 · Mapa</p><h3 class="technical-title">Mapa de Localizadores</h3><p class="technical-role">roteamento e filas</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operational Discovery</span><span class="tag">Process Mapping</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A03</span><span class="mat-kind">Mapa</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Mapa Temático</h3>
-        <a class="mat-doc" href="mapa-tematico.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Mapa Temático">
-          <img src="thumb-mapa-tematico.webp" alt="Capa — Mapa Temático" loading="lazy">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
+        <p class="technical-thesis">Converter assuntos granulares em localizadores operacionais.</p>
+        <p class="technical-description">Excesso de categorias pouco úteis para a gestão do acervo.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Converter assuntos granulares em localizadores operacionais.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Excesso de categorias pouco úteis para a gestão do acervo.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Roteamento do acervo</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Mapa em PDF</p></div></div>
+        <div class="tags"><span class="tag">Matter Routing</span><span class="tag">Gestão de filas</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a04.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A05 · Matriz</p><h3 class="technical-title">Matriz de Papéis</h3><p class="technical-role">modelo operacional</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Organizar matérias por núcleos, agrupadores, temas e afinidades.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Distribuição casuística e baixa visibilidade de concentração temática.</span></div>
+        <p class="technical-thesis">Definir responsabilidades, níveis de autonomia, supervisão e progressão.</p>
+        <p class="technical-description">Ambiguidade de função e dependência de orientação oral.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Definir responsabilidades, níveis de autonomia, supervisão e progressão.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Ambiguidade de função e dependência de orientação oral.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Papéis e governança</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Matriz em PDF</p></div></div>
+        <div class="tags"><span class="tag">Operating Model</span><span class="tag">People Operations</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a05.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A06 · Matriz</p><h3 class="technical-title">Matriz de Competências</h3><p class="technical-role">desenvolvimento e autonomia</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Taxonomy</span><span class="tag">Matter Management</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A04</span><span class="mat-kind">Mapa</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Mapa de Localizadores</h3>
-        <a class="mat-doc" href="a04.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Mapa de Localizadores">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
+        <p class="technical-thesis">Estruturar maturidade, autonomia e desenvolvimento por critérios.</p>
+        <p class="technical-description">Avaliação intuitiva e pouco documentada da evolução da equipe.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Estruturar maturidade, autonomia e desenvolvimento por critérios.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Avaliação intuitiva e pouco documentada da evolução da equipe.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Progressão da equipe</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Matriz em PDF</p></div></div>
+        <div class="tags"><span class="tag">Competency Framework</span><span class="tag">Talent Development</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a06.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A07 · Manual · Roteiro</p><h3 class="technical-title">Afinação processual</h3><p class="technical-role">quality gates</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Converter assuntos granulares em localizadores operacionais.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Excesso de categorias pouco úteis para a gestão do acervo.</span></div>
+        <p class="technical-thesis">Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.</p>
+        <p class="technical-description">Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Triagem e verificação</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Manual em PDF</p></div></div>
+        <div class="tags"><span class="tag">Quality Gates</span><span class="tag">SOP</span></div>
+      </div><a class="card-doc" href="../../.ECHO/afinacao-processual.pdf" target="_blank" rel="noopener" aria-label="Abrir material: PDF">Abrir PDF</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A08 · Base</p><h3 class="technical-title">Precedentes</h3><p class="technical-role">pesquisa e recuperação</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Matter Routing</span><span class="tag">Gestão de filas</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A05</span><span class="mat-kind">Matriz</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Matriz de Papéis</h3>
-        <a class="mat-doc" href="a05.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Matriz de Papéis">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
+        <p class="technical-thesis">Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.</p>
+        <p class="technical-description">Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Pesquisa jurídica</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Base tabular</p></div></div>
+        <div class="tags"><span class="tag">Precedent Database</span><span class="tag">Case Law Retrieval</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a08.png" target="_blank" rel="noopener" aria-label="Abrir material: amostra">Abrir amostra</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A09 · Planilha</p><h3 class="technical-title">Planilhas de Acompanhamento</h3><p class="technical-role">cadência e capacidade</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Definir responsabilidades, níveis de autonomia, pontos de supervisão e progressão.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Ambiguidade de função e dependência de orientação oral.</span></div>
+        <p class="technical-thesis">Monitorar carga, andamento, distribuição, cadência e efeitos observáveis.</p>
+        <p class="technical-description">Baixa visibilidade sobre volume, ritmo e gargalos.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Monitorar carga, andamento, distribuição, cadência e efeitos observáveis.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Baixa visibilidade sobre volume, ritmo e gargalos.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Acompanhamento operacional</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Planilha tabular</p></div></div>
+        <div class="tags"><span class="tag">Operational Dashboard</span><span class="tag">Capacity Planning</span></div>
+      </div><a class="card-doc" href="../../.ECHO/a09.png" target="_blank" rel="noopener" aria-label="Abrir material: amostra">Abrir amostra</a>
+    </article><article class="technical-card" data-reveal>
+      <div class="card-pad">
+        <div class="technical-top">
+          <div><p class="technical-id">A10 · Base</p><h3 class="technical-title">Ementário</h3><p class="technical-role">padronização de conteúdo</p></div>
+          <div class="visual-slot"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 5h17l8 8v30H12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M29 5v9h8M18 23h13M18 30h13M18 37h9" stroke="currentColor" stroke-width="2"/></svg></div>
         </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operating Model</span><span class="tag">People Operations</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A06</span><span class="mat-kind">Matriz</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Matriz de Competências</h3>
-        <a class="mat-doc" href="a06.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Matriz de Competências">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
-        </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Estruturar maturidade, autonomia e desenvolvimento por critérios.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Avaliação intuitiva e pouco documentada da evolução da equipe.</span></div>
-        </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Competency Framework</span><span class="tag">Talent Development</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A07</span><span class="mat-kind">Manual · Roteiro</span></div>
-        <div class="mat-title-row">
-        <h3 class="mat-name">Afinação processual</h3>
-        <a class="mat-doc" href="afinacao-processual.pdf" target="_blank" rel="noopener" aria-label="Abrir PDF: Afinação Processual">
-          <img src="thumb-afinacao-processual.webp" alt="Capa — Afinação Processual" loading="lazy">
-          <span class="mat-doc-k">Abrir PDF ↗</span>
-        </a>
-        </div>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Registrar requisitos, prazos e pontos de entrada, e orientar a checagem de cabimento, tempestividade, preparo e representação — com critérios mínimos de verificação.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Vícios simples consumindo tempo técnico qualificado e análise formal dispersa, sujeita a retrabalho.</span></div>
-        </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Quality Gates</span><span class="tag">SOP</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A08</span><span class="mat-kind">Base</span></div>
-        <h3 class="mat-name">Precedentes</h3>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.</span></div>
-        </div>
-        <div class="mat-tbl-wrap">
-          <span class="mat-tbl-k">Amostra · 633 teses</span>
-          <table class="mat-tbl">
-            <thead><tr><th>Tema</th><th>Ramo</th><th>Tese firmada</th></tr></thead>
-            <tbody>
-              <tr><td class="num">1</td><td>Proc. Civil</td><td>A substituição processual, no polo ativo da execução…</td></tr>
-              <tr><td class="num">16</td><td>Proc. Civil</td><td>O INSS não está obrigado a efetuar depósito prévio do preparo…</td></tr>
-              <tr><td class="num">17</td><td>Proc. Civil</td><td>A dispensa de reexame necessário, quando o valor da condenação…</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Precedent Database</span><span class="tag">Case Law Retrieval</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A09</span><span class="mat-kind">Planilha</span></div>
-        <h3 class="mat-name">Planilhas de Acompanhamento</h3>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Monitorar carga, andamento, distribuição, cadência e efeitos observáveis.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Baixa visibilidade sobre volume, ritmo e gargalos.</span></div>
-        </div>
-        <div class="mat-tbl-wrap">
-          <span class="mat-tbl-k">Amostra · 1.192 processos</span>
-          <table class="mat-tbl">
-            <thead><tr><th>Comarca</th><th>Núcleo</th><th>Providência</th></tr></thead>
-            <tbody>
-              <tr><td class="num">Congonhinhas</td><td>Financeiro</td><td>Voto — contribuição previdenciária sobre HE</td></tr>
-              <tr><td class="num">Curitiba</td><td>Social</td><td>Intimar recorrente para juntar documento</td></tr>
-              <tr><td class="num">Cascavel</td><td>Social</td><td>Despacho — comprovar renúncia da advocacia</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Operational Dashboard</span><span class="tag">Capacity Planning</span></div>
-      </article>
-
-      <article class="mat">
-        <div class="mat-head"><span class="mat-no">A10</span><span class="mat-kind">Base</span></div>
-        <h3 class="mat-name">Ementário</h3>
-        <div class="mat-spec">
-          <div class="cell"><span class="k">Função</span><span class="v">Padronizar ementas por assunto, com código, hierarquia, ramo e fundamento legal.</span></div>
-          <div class="cell"><span class="k">Ruído que resolve</span><span class="v">Ementa reescrita do zero a cada caso e citação legal sem padrão — camada de conteúdo, distinta do acompanhamento operacional do A09.</span></div>
-        </div>
-        <div class="mat-tbl-wrap">
-          <span class="mat-tbl-k">Amostra · 2.758 assuntos</span>
-          <table class="mat-tbl">
-            <thead><tr><th>Código</th><th>Assunto</th><th>Ramo</th></tr></thead>
-            <tbody>
-              <tr><td class="num">7835</td><td>Retificação de Sexo</td><td>Registros Públicos</td></tr>
-              <tr><td class="num">12794</td><td>Permanência</td><td>Dir. da Educação</td></tr>
-              <tr><td class="num">12841</td><td>Mensalidades</td><td>Dir. da Educação</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mat-read"><span class="rk">Leitura profissional</span><span class="tag">Template Library</span><span class="tag">Standardized Drafting</span></div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- 06 · MÉTODO EM OPERAÇÃO -->
-<section class="section cv" id="operacao">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">06</div>
-      <div class="head-body">
-        <span class="eyebrow">Método em operação</span>
+        <p class="technical-thesis">Padronizar ementas por assunto, com código, hierarquia, ramo e fundamento legal.</p>
+        <p class="technical-description">Ementa reescrita do zero a cada caso e citação legal sem padrão.</p>
+        <div class="spec-grid"><div class="spec-cell"><p class="spec-key">Função</p><p class="spec-value">Padronizar ementas por assunto, com código, hierarquia, ramo e fundamento legal.</p></div><div class="spec-cell"><p class="spec-key">Ruído</p><p class="spec-value">Ementa reescrita do zero a cada caso e citação legal sem padrão.</p></div><div class="spec-cell"><p class="spec-key">Uso</p><p class="spec-value">Redação padronizada</p></div><div class="spec-cell"><p class="spec-key">Evidência</p><p class="spec-value">Base tabular</p></div></div>
+        <div class="tags"><span class="tag">Template Library</span><span class="tag">Standardized Drafting</span></div>
+      </div><details class="accordion"><summary>Ver amostra</summary><div class="accordion-body"><div class="table-wrap"><table><thead><tr><th>Código</th><th>Assunto</th><th>Ramo</th></tr></thead><tbody><tr><td>7835</td><td>Retificação de Sexo</td><td>Registros Públicos</td></tr><tr><td>12794</td><td>Permanência</td><td>Direito da Educação</td></tr><tr><td>12841</td><td>Mensalidades</td><td>Direito da Educação</td></tr></tbody></table></div></div></details>
+    </article></div></div></section>
+      <section class="section" id="criterios"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">05</div>
+      <div class="section-heading">
+        <p class="section-tag">Critérios</p>
+        <h2>Harmonia não é suavidade. É coordenação.</h2>
+      </div>
+    </header>
+        <div class="section-text" data-reveal><p>A condição institucional do trabalho: direção decisória, responsabilidade pública e exigência de consistência.</p><p>A regência não é metáfora de comando pessoal. É a condição institucional do trabalho.</p><p>Uma equipe jurídica atua sob direção decisória, prazos, formalidade e acervo sensível.</p><p>Cada material procura dar forma comum ao que antes não tinha padrão, pois não se herdou um procedimento instituído anteriormente.</p></div><div class="matrix matrix--4" data-reveal><article class="matrix-card"><p class="card-meta">Delimitação 01</p><div class="card-rule"></div><h3 class="card-title">Autoridade decisória</h3><p class="card-copy">O método organiza a execução sem deslocar a responsabilidade institucional de quem decide.</p></article><article class="matrix-card"><p class="card-meta">Delimitação 02</p><div class="card-rule"></div><h3 class="card-title">Coordenação</h3><p class="card-copy">Papéis, entradas e devoluções precisam operar segundo relações compreensíveis.</p></article><article class="matrix-card"><p class="card-meta">Delimitação 03</p><div class="card-rule"></div><h3 class="card-title">Procedimento comum</h3><p class="card-copy">Materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível.</p></article><article class="matrix-card"><p class="card-meta">Delimitação 04</p><div class="card-rule"></div><h3 class="card-title">Memória</h3><p class="card-copy">A experiência precisa retornar ao sistema como registro, orientação e critério reutilizável.</p></article></div><p class="criteria-close" data-reveal>A equipe não precisava tocar mais alto. <span class="accent">Precisava tocar pela mesma partitura.</span></p></div></section>
+      <section class="section section--surface" id="aplicacao"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">06</div>
+      <div class="section-heading">
+        <p class="section-tag">Aplicação</p>
         <h2>Como os materiais mudam a rotina</h2>
-        <p class="sub">A consistência aparece quando a entrada fica mais clara, a distribuição menos intuitiva, a revisão ganha critério e a equipe deixa de depender só da escuta</p>
       </div>
-    </div>
-
-    <div class="cases rv stagger">
-
-      <article class="case">
-        <div class="case-head"><span class="ci">01</span><h3>Entrada e triagem</h3></div>
-        <div class="ab">
-          <div class="ab-col"><span class="abk">Antes</span><p>Demandas podiam avançar para análise técnica antes da verificação mínima de requisitos.</p></div>
-          <div class="ab-col after"><span class="abk">Depois</span><p>Afinação Processual, Roteiros de Verificação e Checklists de Requisitos funcionam como filtros prévios.</p></div>
-        </div>
-        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Filtro prévio</span><span class="tag">Menos retrabalho</span></div>
-      </article>
-
-      <article class="case">
-        <div class="case-head"><span class="ci">02</span><h3>Distribuição temática</h3></div>
-        <div class="ab">
-          <div class="ab-col"><span class="abk">Antes</span><p>A distribuição dependia de leitura casuística da matéria.</p></div>
-          <div class="ab-col after"><span class="abk">Depois</span><p>Mapa Temático, Mapa de Localizadores e Planilhas de Acompanhamento permitem ler carga, afinidade, repetição e risco de gargalo.</p></div>
-        </div>
-        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Carga legível</span><span class="tag">Menos gargalo</span></div>
-      </article>
-
-      <article class="case">
-        <div class="case-head"><span class="ci">03</span><h3>Entrada de novos integrantes</h3></div>
-        <div class="ab">
-          <div class="ab-col"><span class="abk">Antes</span><p>O aprendizado dependia de convivência, repetição de orientações e memória da equipe.</p></div>
-          <div class="ab-col after"><span class="abk">Depois</span><p>Notas Introdutórias, Matriz de Papéis e Matriz de Competências oferecem base de entrada, progressão e autonomia.</p></div>
-        </div>
-        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Entrada estruturada</span><span class="tag">Progressão por critério</span></div>
-      </article>
-
-      <article class="case">
-        <div class="case-head"><span class="ci">04</span><h3>Revisão e devolução</h3></div>
-        <div class="ab">
-          <div class="ab-col"><span class="abk">Antes</span><p>A revisão podia funcionar como correção final, sem retorno estruturado ao método.</p></div>
-          <div class="ab-col after"><span class="abk">Depois</span><p>Registros de Orientação e rotinas de devolução transformam recorrências em memória operacional.</p></div>
-        </div>
-        <div class="case-foot"><span class="fk">Leitura profissional</span><span class="tag">Devolução com método</span><span class="tag">Memória operacional</span></div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- 07 · REGÊNCIA RECURSAL (dark) -->
-<section class="section dark cv" id="regencia">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">07</div>
-      <div class="head-body">
-        <span class="eyebrow">Regência recursal</span>
-        <h2>Harmonia não é <span class="peace">suavidade</span>. É coordenação.</h2>
-        <p class="sub">A condição institucional do trabalho: uma equipe jurídica que atua sob direção decisória, responsabilidade pública e exigência de consistência</p>
+    </header><div class="section-text" data-reveal><p>A consistência aparece quando entrada, distribuição, revisão e memória formam o procedimento comum da operação.</p></div>
+        <div class="application-grid"><article class="application-card" data-reveal><div class="card-pad"><p class="card-meta">01</p><h3 class="application-title">Entrada e triagem</h3><p class="application-role">filtro prévio</p><div class="application-fields"><div class="application-field"><h4>Antes</h4><p>Demandas podiam avançar para análise técnica antes da verificação mínima de requisitos.</p></div><div class="application-field"><h4>Depois</h4><p>Afinação Processual, roteiros e checklists funcionam como filtros prévios.</p></div><div class="application-field"><h4>Efeito</h4><p>Menos retrabalho e entrada mais legível.</p></div></div><div class="tags"><span class="tag">Quality gates</span><span class="tag">Triagem</span></div></div><a class="card-doc" href="../../.ECHO/afinacao-processual.pdf" target="_blank" rel="noopener" aria-label="Abrir material: Afinação Processual">Abrir Afinação Processual</a></article><article class="application-card" data-reveal><div class="card-pad"><p class="card-meta">02</p><h3 class="application-title">Distribuição temática</h3><p class="application-role">carga legível</p><div class="application-fields"><div class="application-field"><h4>Antes</h4><p>A distribuição dependia de leitura casuística da matéria.</p></div><div class="application-field"><h4>Depois</h4><p>Mapas e planilhas permitem ler carga, afinidade, repetição e risco de gargalo.</p></div><div class="application-field"><h4>Efeito</h4><p>Distribuição menos intuitiva e maior visibilidade operacional.</p></div></div><div class="tags"><span class="tag">Taxonomia</span><span class="tag">Routing</span></div></div><a class="card-doc" href="aplica2.pdf" target="_blank" rel="noopener" aria-label="Abrir material: Mapa Temático">Abrir Mapa Temático</a></article><article class="application-card" data-reveal><div class="card-pad"><p class="card-meta">03</p><h3 class="application-title">Entrada de novos integrantes</h3><p class="application-role">onboarding estruturado</p><div class="application-fields"><div class="application-field"><h4>Antes</h4><p>Não havia percurso de entrada instituído: sem padrão documentado, cada ingresso partia do zero.</p></div><div class="application-field"><h4>Depois</h4><p>Notas, matrizes de papéis e competências oferecem base de entrada e progressão.</p></div><div class="application-field"><h4>Efeito</h4><p>Autonomia construída por critério, não apenas por tempo de convivência.</p></div></div><div class="tags"><span class="tag">Onboarding</span><span class="tag">Competências</span></div></div><a class="card-doc" href="aplica3.pdf" target="_blank" rel="noopener" aria-label="Abrir material: Matriz de Papéis">Abrir Matriz de Papéis</a></article><article class="application-card" data-reveal><div class="card-pad"><p class="card-meta">04</p><h3 class="application-title">Revisão e devolução</h3><p class="application-role">memória operacional</p><div class="application-fields"><div class="application-field"><h4>Antes</h4><p>A revisão podia funcionar como correção final, sem retorno estruturado ao método.</p></div><div class="application-field"><h4>Depois</h4><p>Registros de orientação e rotinas de devolução transformam recorrências em memória.</p></div><div class="application-field"><h4>Efeito</h4><p>A revisão passa a alimentar o próprio sistema de trabalho.</p></div></div><div class="tags"><span class="tag">Feedback loop</span><span class="tag">Memória</span></div></div><details class="accordion"><summary>Ver detalhe</summary><div class="accordion-body"><p>A devolução deixa de ser episódio isolado e passa a compor a melhoria contínua da operação.</p></div></details></article></div></div></section>
+      <section class="section" id="achados"><div class="wrap"><header class="section-head" data-reveal>
+      <div class="section-index">07</div>
+      <div class="section-heading">
+        <p class="section-tag">Achados</p>
+        <h2>Provas antes de adjetivos</h2>
       </div>
-    </div>
-    <div class="regence rv">
-      <div></div>
-      <div class="prose">
-        <p>O echo nasce em ambiente decisório, em uma operação regida por autoridade técnica, prazos, formalidade e acervo sensível.</p>
-        <p>A regência não é metáfora de comando pessoal. É a condição institucional do trabalho: uma equipe jurídica atua sob direção decisória, responsabilidade pública e exigência de consistência.</p>
-        <p><b>Cada material criado pelo echo busca dar forma comum ao que antes dependia de escuta, hábito e repetição oral.</b></p>
-        <p class="regence-quote">A equipe não precisava tocar mais alto. Precisava tocar pela <em>mesma partitura.</em></p>
-      </div>
-    </div>
-    <div class="regence-map rv stagger" aria-label="Distinções da regência">
-      <div class="rm"><span class="rmk">Filosofia</span><span class="rmv">Harmonia</span></div>
-      <div class="rm"><span class="rmk">Conceito institucional</span><span class="rmv">Regência</span></div>
-      <div class="rm"><span class="rmk">Quem rege</span><span class="rmv">A autoridade decisória</span></div>
-      <div class="rm"><span class="rmk">A equipe</span><span class="rmv">É regida</span></div>
-      <div class="rm"><span class="rmk">O método</span><span class="rmv">Organiza a execução</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 08 · AUTORIA E CONTINUIDADE -->
-<section class="section cv" id="continuidade">
-  <div class="wrap">
-    <div class="head rv">
-      <div class="index">08</div>
-      <div class="head-body">
-        <span class="eyebrow">Autoria e continuidade</span>
+    </header><div class="section-text" data-reveal><p>Cada indicador combina rótulo, número, base e leitura. Os dados indicam aplicação real, não prova isolada de superioridade.</p></div>
+        <div class="metrics" data-reveal><article class="metric"><p class="metric-label">Ementário</p><p class="metric-value">2.758</p><p class="metric-base">base · acervo integral</p><p class="metric-caption">Modelos de ementa estruturados, com código, hierarquia e fundamento.</p></article><article class="metric"><p class="metric-label">Acervo triado</p><p class="metric-value">1.192</p><p class="metric-base">fluxo recursal</p><p class="metric-caption">Processos triados e segmentados pelo fluxo faseado do método.</p></article><article class="metric"><p class="metric-label">Cobertura</p><p class="metric-value">56%</p><p class="metric-base">acervo do período</p><p class="metric-caption">Parcela do acervo com diretriz antecipada antes da análise técnica.</p></article><article class="metric"><p class="metric-label">Taxonomia</p><p class="metric-value">102 → 10</p><p class="metric-base">matriz temática · 3 núcleos</p><p class="metric-caption">Assuntos granulares reclassificados em localizadores operacionais.</p></article><article class="metric-feature"><div class="metric-feature-main"><p class="metric-label">Cadência</p><p class="metric-value">≈900</p><p class="metric-base">7 assessores · cinco meses · critério amplo</p><p class="metric-caption">Votos produzidos pela operação sob o método em cinco meses: ritmo sustentado, não pico isolado.</p></div><div class="metric-feature-copy"><p><strong>Leitura metodológica:</strong> o dado aponta cadência. O método mostra como a cadência foi sustentada.</p><p>Os indicadores demonstram aplicação e escala operacional; não isolam causalidade nem substituem análise qualitativa.</p></div></article></div><details class="accordion metric-details"><summary>Método de leitura dos indicadores</summary><div class="accordion-body"><p>As bases, recortes e critérios de contagem serão auditados e recalibrados na fase editorial final.</p><p>O compromisso do componente é manter número, base, legenda e limite interpretativo sempre visíveis.</p></div></details></div></section>
+      <section class="section section--surface" id="autoria">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+      <div class="section-index">08</div>
+      <div class="section-heading">
+        <p class="section-tag">Autoria</p>
         <h2>Lastro, forma e continuidade</h2>
-        <p class="sub">O echo não é vitrine de tecnologia. É metodologia de instalação: transforma prática jurídica acumulada em procedimento compartilhável</p>
       </div>
-    </div>
-
-    <div class="cont rv">
-      <aside class="cont-id">
-        <div><span class="label">autoria</span><p class="name" style="margin-top:18px">Christian<br>da Costa</p></div>
-        <div class="contacts">
-          <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a>
-          <a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
-        </div>
-      </aside>
-      <div class="cont-text">
-        <p>O que o echo demonstra é anterior a qualquer ferramenta.</p>
-        <p>Sua relevância está no que permite demonstrar: <b>capacidade de ler uma operação, nomear seus ruídos, construir materiais, definir critérios e converter experiência em método transferível.</b></p>
-        <p>É leitura de operação, não vitrine: a competência aparece na estrutura construída, antes que o vocabulário de mercado existisse para nomeá-la.</p>
+    </header><div class="section-text" data-reveal><p>O ECHO constrói procedimento compartilhável onde não havia padrão a herdar.</p></div>
+        <article class="author-card layout-grid" data-reveal>
+          <aside class="author-identity"><div><svg class="author-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 8h12l10 16L42 8h12L38 32l16 24H42L32 40 22 56H10l16-24z" fill="currentColor"/></svg><h3 class="author-name">Christian da Costa</h3><p class="author-role">Advogado · arquiteto jurídico-operacional</p></div><div class="author-contacts"><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noreferrer">linkedin.com/in/christiandcosta</a></div></aside>
+          <div class="author-narrative"><p>O que o ECHO demonstra é anterior a qualquer ferramenta. Sua relevância está na capacidade de ler uma operação, nomear seus ruídos, construir materiais e definir critérios.</p><p>É leitura de operação, não vitrine: a competência aparece na estrutura construída, antes que o vocabulário de mercado exista para nomeá-la.</p><details class="accordion author-accordion"><summary>Ficha técnica e proveniência</summary><div class="accordion-body"><p><strong>Natureza:</strong> metodologia de instalação jurídico-operacional.</p><p><strong>Ambiente:</strong> operação recursal de volume, sob autoridade decisória e exigência de consistência.</p><p><strong>Proveniência:</strong> materiais produzidos para onboarding, classificação, distribuição, quality gates, acompanhamento e memória.</p></div></details></div>
+        </article>
+        <div class="project-grid"><article class="project-card" data-reveal><div class="card-pad"><p class="card-meta">Sistema líder</p><h3>ECHO</h3><p>Metodologia de instalação para implantação de rotinas, fluxos e padrões de trabalho onde ainda não existiam.</p><div class="tags"><span class="tag">Legal Ops</span><span class="tag">Método</span><span class="tag">Memória</span></div><a class="project-link" href="#top">Permanecer no ECHO</a></div></article><article class="project-card" data-reveal><div class="card-pad"><p class="card-meta">Projeto relacionado</p><h3>ATRIO</h3><p>Arquitetura jurídico-tecnológica que amplia a base operacional para raciocínio assistido por IA, com governança e rastreabilidade.</p><div class="tags"><span class="tag">IA governada</span><span class="tag">Raciocínio</span><span class="tag">Rastreabilidade</span></div><a class="project-link" href="atrio-fase0.html">Abrir ATRIO</a></div></article></div>
+        <p class="author-conclusion" data-reveal>Antes de ampliar inteligência, é preciso dar forma ao trabalho.</p>
       </div>
+    </section>
+    </main><div class="final-region">
+      <section class="closing" id="contato"><div class="wrap"><h2 class="closing-title" data-reveal>Não mais ruído. Não mais improviso. Mais método.</h2><p class="closing-subtitle" data-reveal>Registro do método disponível. Canais de contato abaixo.</p><div class="closing-actions" data-reveal><a class="button button--primary" href="mailto:christiandscosta@gmail.com">Contato</a><a class="button button--secondary" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noreferrer">LinkedIn</a></div></div></section>
+      <footer class="site-footer"><div class="wrap footer-grid layout-grid"><div class="footer-main"><h2 class="footer-title">ECHO</h2><div class="footer-links"><a href="#top">Início</a><a href="atrio-fase0.html">ATRIO</a><a href="mailto:christiandscosta@gmail.com">E-mail</a><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noreferrer">LinkedIn</a></div><p class="footer-note">Fase 0 do sistema-gêmeo ATRIO / ECHO. Estrutura, grid, componentes, responsividade e interações já normalizados. Redação e calibração editorial serão fechadas na fase seguinte.</p></div><div class="footer-side"><p>Autoria: Christian da Costa</p><p>Curitiba · Brasil</p><p>© <span data-current-year>2026</span></p></div></div></footer>
+      <div class="signature-band"><div class="wrap signature-inner"><span class="signature-mark" aria-hidden="true"><img src="../../.ECHO/brand/01_symbol/ECHO-symbol.svg" alt="" width="48" height="48"></span><span>Christian da Costa · Arquiteto jurídico · christiandscosta@gmail.com · linkedin.com/in/christiandcosta · © <span data-current-year>2026</span></span></div></div>
     </div>
-
-    <div class="compare rv stagger">
-      <div class="cpanel lead">
-        <span class="cpk">echo · instala</span>
-        <span class="cpt">Método instalado</span>
-        <p class="cpd">Organiza rotina, papéis, materiais, critérios, triagem e memória. Dá forma comum ao trabalho antes de qualquer automação.</p>
-        <div class="tags"><span class="tag">Rotina</span><span class="tag">Papéis</span><span class="tag">Materiais</span><span class="tag">Triagem</span><span class="tag">Memória</span></div>
-      </div>
-      <div class="cpanel">
-        <span class="cpk">ATRIO · amplia</span>
-        <span class="cpt">Arquitetura assistida</span>
-        <p class="cpd">Amplia essa base para uma arquitetura jurídico-tecnológica assistida por IA, com módulos, governança de raciocínio, validação e rastreabilidade.</p>
-        <div class="tags"><span class="tag">Módulos</span><span class="tag">IA assistida</span><span class="tag">Raciocínio</span><span class="tag">Validação</span><span class="tag">Rastreabilidade</span></div>
-      </div>
-    </div>
-
-    <div class="cont-foot rv">
-      <p class="cf">Antes de ampliar inteligência, é preciso <i>dar forma ao trabalho.</i></p>
-      <a class="btn ghost" href="atrio.html">Conhecer o ATRIO <span class="ico" aria-hidden="true">→</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- FECHAMENTO -->
-<section class="close" id="contato">
-  <div class="wrap">
-    <p class="close-title rv">Não mais ruído.<br>Não mais improviso.<br><em>Mais método.</em></p>
-    <p class="close-sub rv">Registro do método disponível. Canais de contato abaixo.</p>
-    <div class="close-actions rv">
-      <a class="btn solid-d" href="mailto:christiandscosta@gmail.com?subject=echo%20%E2%80%94%20contato">Contato <span class="ico" aria-hidden="true">→</span></a>
-      <a class="btn light" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <div class="wrap">
-    <div class="footer-grid">
-      <span class="footer-brand"><span class="brand-mark"><svg class="sym" viewBox="0 0 100 100" aria-hidden="true"><use href="#echo-sym"/></svg></span> echo</span>
-      <div class="footer-links">
-        <a href="#compreensao">O echo</a>
-        <a href="#evidencias">Evidências</a>
-        <a href="#problema">Problema</a>
-        <a href="#decisao">Decisão</a>
-        <a href="#acervo">Acervo</a>
-        <a href="#operacao">Operação</a>
-        <a href="#regencia">Regência</a>
-        <a href="#continuidade">Continuidade</a>
-        <a href="mailto:christiandscosta@gmail.com">Contato</a>
-      </div>
-    </div>
-    <p class="footer-note">echo · metodologia jurídico-operacional. Da prática herdada ao método instalado. © 2026.</p>
-  </div>
-</footer>
-
-<script>
-/* reveal + stagger — IntersectionObserver, com salvaguarda para render sem scroll */
-(function(){
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els = document.querySelectorAll('.rv,.stagger');
-  function showAll(){ els.forEach(function(el){ el.classList.add('in'); }); }
-  if(!('IntersectionObserver' in window) || reduce){ showAll(); return; }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
-  els.forEach(function(el){ io.observe(el); });
-  setTimeout(showAll, 2600);
-})();
-
-/* scrollspy via IntersectionObserver */
-(function(){
-  if(!('IntersectionObserver' in window)) return;
-  var ids = ['compreensao','evidencias','acervo','operacao','regencia','continuidade'];
-  var links = {};
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    var h = a.getAttribute('href');
-    if(h && h.charAt(0) === '#'){ links[h.slice(1)] = a; }
-  });
-  var spy = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(e.isIntersecting){
-        var id = e.target.id;
-        ids.forEach(function(k){ if(links[k]){ links[k].classList.toggle('active', k === id); } });
-      }
-    });
-  },{rootMargin:'-45% 0px -50% 0px', threshold:0});
-  ids.forEach(function(id){ var el = document.getElementById(id); if(el){ spy.observe(el); } });
-})();
-
-/* nav: estado "scrolled" via sentinela */
-(function(){
-  var nav = document.querySelector('.nav');
-  var sentinel = document.getElementById('nav-sentinel');
-  if(!nav || !sentinel || !('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ nav.classList.toggle('scrolled', !e.isIntersecting); });
-  },{threshold:0});
-  io.observe(sentinel);
-})();
-
-/* âncora de contato persistente: liga no pico (Evidências), cede ao fechamento */
-(function(){
-  var pill = document.getElementById('contact-pill');
-  var ev = document.getElementById('evidencias');
-  var end = document.getElementById('contato');
-  if(!pill || !ev || !end || !('IntersectionObserver' in window)) return;
-  var past = false, atEnd = false;
-  function sync(){ pill.classList.toggle('on', past && !atEnd); }
-  new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ past = true; } }); sync();
-  },{threshold:.2}).observe(ev);
-  new IntersectionObserver(function(es){
-    es.forEach(function(e){ atEnd = e.isIntersecting; }); sync();
-  },{threshold:0}).observe(end);
-})();
-</script>
-<a class="contact-pill" id="contact-pill" href="mailto:christiandscosta@gmail.com?subject=echo%20%E2%80%94%20contato"><span class="dot" aria-hidden="true"></span>Contato</a>
-</body>
-</html>
+    <script src="system.js" defer></script></body></html>
