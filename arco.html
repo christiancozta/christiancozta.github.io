@@ -61,6 +61,7 @@
   --slow:  620ms;
 
   /* z-index semântico */
+  --z-tip:  10;
   --z-rail: 20;
   --z-reader: 60;
 }
@@ -166,12 +167,27 @@ body{
   background:var(--atrio);
 }
 
+/* Assinatura: a marca ancora a coluna; nome e contatos sobem alinhados a ela.
+   No escuro a marca é o negativo — os dois triângulos em papel, sem ladrilho. */
 .rail__foot{ margin-top:auto; padding-top:1.5rem; border-top:1px solid var(--hair-inv-soft); }
-.rail__sig{
-  font-family:var(--f-micro);
-  font-size:.62rem; letter-spacing:.04em; line-height:1.75;
-  color:var(--pp-58); margin:0;
+.sig{ display:flex; align-items:flex-start; gap:.8rem; }
+.sig__mark{ flex:none; display:block; width:1.85rem; height:1.85rem; margin-top:.1rem; }
+.sig__name{
+  font-family:var(--f-body); font-weight:600; font-size:.88rem;
+  letter-spacing:-.012em; line-height:1.2; color:var(--paper); margin:0;
 }
+.sig__links{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:.5rem;
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.04em;
+  color:var(--pp-58); margin:.45rem 0 0;
+}
+.sig__links a{
+  color:var(--pp-58); text-decoration:none;
+  border-bottom:1px solid var(--hair-inv); padding-bottom:1px;
+  transition:color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.sig__links a:hover{ color:var(--paper); border-color:var(--paper); }
+.sig__links i{ font-style:normal; color:var(--hair-inv); }
 
 /* Palco */
 .stage{ min-width:0; }
@@ -510,6 +526,7 @@ body{
 .brow__v{ display:flex; flex-wrap:wrap; gap:.35rem; }
 
 .chip{
+  position:relative; z-index:0;
   font-family:var(--f-micro); font-size:.64rem; letter-spacing:.08em;
   border:1px solid var(--hair); background:none; color:var(--ink-62);
   padding:.28rem .45rem; cursor:pointer; white-space:nowrap;
@@ -521,6 +538,43 @@ body{
 }
 .chip--static{ cursor:default; }
 .chip--static:hover{ background:none; border-color:var(--hair); color:var(--ink-62); }
+
+/* A legenda que sobe do lembrete: diz o nome da competência antes do clique.
+   pointer-events:none — nunca intercepta o clique que redireciona.
+   Ancorada à direita porque a calha do verbete é a última da linha. */
+.chip[data-label]::before,
+.chip[data-label]::after{
+  pointer-events:none; opacity:0;
+  transition:opacity var(--fast) linear;
+}
+.chip[data-label]::before{           /* o pé: liga a legenda ao lembrete */
+  content:""; position:absolute; right:.62rem; bottom:100%;
+  width:1px; height:.5rem; background:var(--ink);
+}
+.chip[data-label]::after{
+  content:attr(data-label);
+  position:absolute; right:0; bottom:calc(100% + .5rem);
+  background:var(--ink); color:var(--paper);
+  font-family:var(--f-body); font-size:.74rem; font-weight:500;
+  letter-spacing:-.005em; line-height:1.3; text-transform:none; white-space:nowrap;
+  padding:.42rem .62rem;
+}
+.chip[data-label]:hover, .chip[data-label]:focus-visible{ z-index:var(--z-tip); }
+.chip[data-label]:hover::before, .chip[data-label]:focus-visible::before,
+.chip[data-label]:hover::after,  .chip[data-label]:focus-visible::after{ opacity:1; }
+
+@media (prefers-reduced-motion:no-preference){
+  .chip[data-label]::before{
+    transform:scaleY(0); transform-origin:0 100%;
+    transition:opacity 140ms linear, transform 240ms var(--ease);
+  }
+  .chip[data-label]::after{
+    transform:translateY(5px);
+    transition:opacity 240ms var(--ease), transform 240ms var(--ease);
+  }
+  .chip[data-label]:hover::before, .chip[data-label]:focus-visible::before{ transform:scaleY(1); }
+  .chip[data-label]:hover::after,  .chip[data-label]:focus-visible::after{ transform:none; }
+}
 
 /* --- ÍNDICE: o domínio é uma gaveta; o verbete, outra dentro dela ---------- */
 .grp{ border-bottom:1px solid var(--ink); }
@@ -622,33 +676,29 @@ body{
    FILHOS — iframe no palco, um por vez.   [SISTEMA INTOCADO]
    =========================================================================== */
 .child{ display:flex; flex-direction:column; height:100dvh; }
+/* filete de comando: só o suficiente para caber a saída. Tinta, não papel —
+   o filho abre direto embaixo, sem faixa branca separando. */
 .child__bar{
   position:relative;
-  display:flex; align-items:center; justify-content:space-between; gap:1rem;
-  padding:.9rem clamp(1.25rem,4vw,3rem);
-  border-bottom:1px solid var(--hair);
+  display:flex; align-items:center; justify-content:flex-end;
+  padding:.4rem clamp(1rem,3vw,2rem);
+  background:var(--ink);
   flex:none;
 }
-.child__name{
-  font-family:var(--f-body); font-weight:600; font-size:.92rem;
-  letter-spacing:-.01em;
-  display:flex; align-items:center; gap:.6rem; min-width:0;
-}
-.child__name .dot{ width:6px; height:6px; background:var(--ink); flex:none; }
 .child__full{
-  font-family:var(--f-body); font-size:.8rem; font-weight:500;
-  text-decoration:none; color:var(--ink-62);
-  display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
+  font-family:var(--f-body); font-size:.76rem; font-weight:500;
+  text-decoration:none; color:var(--pp-72);
+  display:inline-flex; align-items:center; gap:.45rem; white-space:nowrap;
   transition:color var(--fast) var(--ease);
 }
-.child__full:hover{ color:var(--ink); }
+.child__full:hover{ color:var(--paper); }
 .child__full .arrow{ font-family:var(--f-micro); transition:transform var(--slow) var(--ease); }
 .child__full:hover .arrow{ transform:translateX(3px); }
 
 /* fio de carga: some quando o filho termina de entrar */
 .child__load{
-  position:absolute; left:0; right:0; bottom:-1px; height:1px;
-  background:var(--ink); transform-origin:0 50%; transform:scaleX(0);
+  position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--paper); transform-origin:0 50%; transform:scaleX(0);
   opacity:0; transition:opacity var(--fast) linear;
 }
 .child[data-loading="true"] .child__load{ opacity:1; animation:load 1.4s var(--ease) infinite; }
@@ -776,6 +826,9 @@ body{
   .brow__v{ grid-column:2 / -1; }
   .brow--h > :last-child{ display:none; }
   .verb__body{ margin-left:0; }
+  /* a calha do verbete deixa de ser a última: a legenda vira para a esquerda */
+  .chip[data-label]::after{ left:0; right:auto; }
+  .chip[data-label]::before{ left:.62rem; right:auto; }
 }
 @media (max-width:820px){
   /* MOBILE — o cordão vira topo; o palco desce inteiro   [DINÂMICA INTOCADA] */
@@ -879,7 +932,22 @@ body{
     </div>
 
     <div class="rail__foot">
-      <p class="rail__sig">Christian da Costa</p>
+      <div class="sig">
+        <!-- marca pessoal: o bloco é a marca; os triângulos são vazados -->
+        <svg class="sig__mark" viewBox="0 0 100 100" role="img"
+             aria-label="Marca pessoal de Christian da Costa">
+          <path fill="#FFFFFF" fill-rule="evenodd"
+                d="M0 0H100V100H0Z M13.75 13.75 50 50 13.75 86.25Z M86.25 13.75 50 50 86.25 86.25Z"></path>
+        </svg>
+        <div>
+          <p class="sig__name">Christian da Costa</p>
+          <p class="sig__links">
+            <a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a>
+            <i aria-hidden="true">·</i>
+            <a href="mailto:christiandscosta@gmail.com">e-mail</a>
+          </p>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -968,9 +1036,8 @@ body{
               <!-- marca pessoal — geometria do kit (assets/marca/cdc-*), ladrilho em tinta -->
               <svg class="mark" viewBox="0 0 100 100" role="img"
                    aria-label="Marca pessoal de Christian da Costa">
-                <rect width="100" height="100" fill="#181818"></rect>
-                <path fill="#FFFFFF" d="M13.75 13.75 50 50 13.75 86.25Z"></path>
-                <path fill="#FFFFFF" d="M86.25 13.75 50 50 86.25 86.25Z"></path>
+                <path fill="#181818" fill-rule="evenodd"
+                      d="M0 0H100V100H0Z M13.75 13.75 50 50 13.75 86.25Z M86.25 13.75 50 50 86.25 86.25Z"></path>
               </svg>
               <p class="aname">Christian da Costa</p>
               <p class="arole">
@@ -1036,79 +1103,79 @@ body{
               <p class="brow__i">01</p>
               <p class="brow__q">“A mesma pergunta é respondida quarenta vezes por mês.”</p>
               <p class="brow__m">Acervo <span class="n-echo">echo</span>: prática herdada levantada, critérios extraídos e formalizados em manuais consultáveis.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="con-02">CON-02</button><button class="chip" type="button" data-goto="con-04">CON-04</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="con-02" data-label="Knowledge Management" aria-label="CON-02 · Knowledge Management">CON-02</button><button class="chip" type="button" data-goto="con-04" data-label="Standard Operating Procedures" aria-label="CON-04 · Standard Operating Procedures">CON-04</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">02</p>
               <p class="brow__q">“Cada pessoa escreve de um jeito diferente.”</p>
               <p class="brow__m"><strong>Manual de Estilo</strong>: padrões extraídos da própria linguagem decisória da equipe, não impostos de fora.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="con-05">CON-05</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="con-05" data-label="Style Guide" aria-label="CON-05 · Style Guide">CON-05</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">03</p>
               <p class="brow__q">“Ninguém sabe onde o trabalho trava.”</p>
               <p class="brow__m">Levantamento de rotinas, atores e dependências antes de qualquer redesenho.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="pro-01">PRO-01</button><button class="chip" type="button" data-goto="pro-06">PRO-06</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="pro-01" data-label="Process Mapping" aria-label="PRO-01 · Process Mapping">PRO-01</button><button class="chip" type="button" data-goto="pro-06" data-label="Root Cause Analysis" aria-label="PRO-06 · Root Cause Analysis">PRO-06</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">04</p>
               <p class="brow__q">“Quando alguém sai, o conhecimento sai junto.”</p>
               <p class="brow__m">Materiais que transmitem critério sem depender de acompanhamento individual.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="con-03">CON-03</button><button class="chip" type="button" data-goto="pro-07">PRO-07</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="con-03" data-label="Knowledge Transfer" aria-label="CON-03 · Knowledge Transfer">CON-03</button><button class="chip" type="button" data-goto="pro-07" data-label="Change Management" aria-label="PRO-07 · Change Management">PRO-07</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">05</p>
               <p class="brow__q">“A classificação das matérias é caótica.”</p>
               <p class="brow__m">Reclassificação taxonômica de <strong>102 assuntos</strong> na operação recursal.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="dad-06">DAD-06</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="dad-06" data-label="Taxonomy" aria-label="DAD-06 · Taxonomy">DAD-06</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">06</p>
               <p class="brow__q">“Nossa base de documentos não serve para IA.”</p>
               <p class="brow__m"><strong>CORPUS</strong>: 115 mil decisões coletadas, deduplicadas, normalizadas e indexadas.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="dad-01">DAD-01</button><button class="chip" type="button" data-goto="dad-02">DAD-02</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="dad-01" data-label="Corpus Engineering" aria-label="DAD-01 · Corpus Engineering">DAD-01</button><button class="chip" type="button" data-goto="dad-02" data-label="Data Quality" aria-label="DAD-02 · Data Quality">DAD-02</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">07</p>
               <p class="brow__q">“A IA alucina e ninguém percebe a tempo.”</p>
               <p class="brow__m"><strong>CERNE</strong>: confronto adversarial por lógica distinta antes da entrega.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="iax-06">IAX-06</button><button class="chip" type="button" data-goto="iax-07">IAX-07</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="iax-06" data-label="Red Teaming" aria-label="IAX-06 · Red Teaming">IAX-06</button><button class="chip" type="button" data-goto="iax-07" data-label="Model Evaluation" aria-label="IAX-07 · Model Evaluation">IAX-07</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">08</p>
               <p class="brow__q">“A decisão está em texto livre. Não dá para medir nem classificar.”</p>
               <p class="brow__m"><strong>CORPUS</strong>: enriquecimento por regra heurística somada a extração estruturada via LLM.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="dad-05">DAD-05</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="dad-05" data-label="Information Extraction" aria-label="DAD-05 · Information Extraction">DAD-05</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">09</p>
               <p class="brow__q">“Não podemos expor dado pessoal ao modelo.”</p>
               <p class="brow__m">Pseudoanonimização em duas camadas — <strong>CORPUS</strong> na entrada, <strong>LUX</strong> na saída — com código estável e reversão só sob controle.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="iax-03">IAX-03</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="iax-03" data-label="Privacy by Design" aria-label="IAX-03 · Privacy by Design">IAX-03</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">10</p>
               <p class="brow__q">“A automação avança sozinha sobre decisão sensível.”</p>
               <p class="brow__m">Gates humanos obrigatórios; a decisão final permanece com o operador.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="iax-04">IAX-04</button><button class="chip" type="button" data-goto="iax-05">IAX-05</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="iax-04" data-label="Human in the Loop" aria-label="IAX-04 · Human in the Loop">IAX-04</button><button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates" aria-label="IAX-05 · Quality Gates">IAX-05</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">11</p>
               <p class="brow__q">“Não conseguimos explicar como aquele texto foi gerado.”</p>
               <p class="brow__m">Registro do percurso entre fonte, formulação, crítica e saída.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="iax-11">IAX-11</button><button class="chip" type="button" data-goto="iax-10">IAX-10</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="iax-11" data-label="Traceability" aria-label="IAX-11 · Traceability">IAX-11</button><button class="chip" type="button" data-goto="iax-10" data-label="Explainability" aria-label="IAX-10 · Explainability">IAX-10</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">12</p>
               <p class="brow__q">“Minutar consome as horas que deveriam ir para a análise.”</p>
               <p class="brow__m"><strong>RATIO/TJX</strong>: arquitetura de prompts que produziu votos reais, sob gate e validação humana.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="prd-01">PRD-01</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="prd-01" data-label="Document Automation" aria-label="PRD-01 · Document Automation">PRD-01</button></div>
             </div>
             <div class="brow">
               <p class="brow__i">13</p>
               <p class="brow__q">“Medimos volume, não desempenho.”</p>
               <p class="brow__m">Indicadores de gabinete acompanhados por produtividade, conversão e acervo.</p>
-              <div class="brow__v"><button class="chip" type="button" data-goto="pro-09">PRO-09</button></div>
+              <div class="brow__v"><button class="chip" type="button" data-goto="pro-09" data-label="KPI Management" aria-label="PRO-09 · KPI Management">PRO-09</button></div>
             </div>
           </div>
 
@@ -2097,9 +2164,8 @@ body{
     <section class="view" data-view="echo" aria-label="ECHO">
       <div class="child child--echo">
         <div class="child__bar">
-          <span class="child__name"><span class="dot" aria-hidden="true"></span>ECHO — regência recursal</span>
           <a class="child__full" href="echo.html" target="_blank" rel="noopener">
-            Prefere a página inteira? por aqui <span class="arrow" aria-hidden="true">→</span>
+            Prefere a página inteira? Por aqui <span class="arrow" aria-hidden="true">→</span>
           </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
@@ -2113,9 +2179,8 @@ body{
     <section class="view" data-view="atrio" aria-label="ATRIO">
       <div class="child child--atrio">
         <div class="child__bar">
-          <span class="child__name"><span class="dot" aria-hidden="true"></span>ATRIO — arquitetura de IA jurídica</span>
           <a class="child__full" href="atrio.html" target="_blank" rel="noopener">
-            Prefere a página inteira? por aqui <span class="arrow" aria-hidden="true">→</span>
+            Prefere a página inteira? Por aqui <span class="arrow" aria-hidden="true">→</span>
           </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
