@@ -9,149 +9,156 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Commissioner:wght@300;400;500;600&family=Azeret+Mono:wght@400;500&family=Funnel+Display:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700&family=Azeret+Mono:wght@400;500&family=Funnel+Display:wght@400;500;600;700&display=swap">
 
 <style>
+/* ===========================================================================
+   PALETA — dois valores. Nada mais.
+   Tudo que parece "cinza" é #181818 (ou #FFFFFF) em opacidade: continua
+   sendo a mesma tinta, com menos pressão. É desenho a nanquim, não paleta.
+   =========================================================================== */
 :root{
-  /* Base */
-  --near-black: #181818;
-  --osso:       #FFFFFF;
-
-  /* Sinais dos filhos — a mãe é o ÚNICO lugar onde os dois se encontram */
-  --echo:        #2E7D5B;  /* verde-pinheiro — ECHO */
-  --echo-on-dark:#849f92;  /* só p/ sinal legível sobre escuro */
-  --atrio:       #a63a23;  /* terracota — ATRIO (cor única, também no escuro) */
-
-  /* Neutros derivados — calibrados para AA sobre o osso */
   --ink:      #181818;
-  --ink-70:   rgba(24,24,24,.72);  /* ~6.3:1 sobre o osso */
-  --muted:    #62676d;             /* ~4.8:1 — micro-textos e rótulos */
-  --hair:     rgba(24,24,24,.14);
+  --paper:    #FFFFFF;
+
+  /* Sinais de território — só onde a marca é nomeada e nos acentos das leituras */
+  --echo:     #2E7D5B;
+  --atrio:    #A63A23;
+
+  /* tinta sobre papel — todas AA */
+  --ink-78:   rgba(24,24,24,.78);   /* ~8.6:1 — corpo secundário            */
+  --ink-62:   rgba(24,24,24,.62);   /* ~5.0:1 — micro-textos, rótulos       */
+  --ink-55:   rgba(24,24,24,.55);   /* só texto grande (display) — ~4.2:1   */
+  --hair:     rgba(24,24,24,.18);
   --hair-soft:rgba(24,24,24,.07);
-  --bg:       var(--osso);
 
-  /* Eixo de leitura único (regra de ouro) */
-  --read-col: 64ch;
+  /* papel sobre tinta — para o cordão e a faixa invertida */
+  --pp-72:    rgba(255,255,255,.72);
+  --pp-58:    rgba(255,255,255,.58);
+  --hair-inv: rgba(255,255,255,.22);
+  --hair-inv-soft: rgba(255,255,255,.10);
 
-  /* Fontes do sistema */
-  --f-struct: "Space Grotesk", system-ui, sans-serif;
+  --bg: var(--paper);
+
+  /* Fontes — o mesmo tripé da família (display · corpo · micro) */
+  --f-display:"Funnel Display", system-ui, sans-serif;
   --f-body:   "Commissioner", system-ui, sans-serif;
   --f-micro:  "Azeret Mono", ui-monospace, monospace;
-  --f-display:"Funnel Display", "Space Grotesk", sans-serif; /* display só-mãe */
 
   /* Cordão (rail) */
-  --rail-w: 236px;
-  --rail-h: 0px;            /* medido no mobile pelo JS */
+  --rail-w: 16.25rem;
+  --rail-h: 0px;              /* medido no mobile pelo JS */
+
+  /* Métrica da arcada — a mesma em toda a página */
+  --pad:    clamp(1.5rem, 5vw, 5rem);
+  --colgap: clamp(1.5rem, 3.2vw, 3.25rem);
+  --pier:   clamp(1.75rem, 3.2vw, 3rem);   /* altura do pilar sob o arco */
+  --read:   66ch;
 
   /* Movimento — massa, não pressa */
   --ease:  cubic-bezier(.22,1,.36,1);
   --fast:  180ms;
   --slow:  620ms;
+
+  /* z-index semântico */
+  --z-rail: 20;
+  --z-reader: 60;
 }
 
 *{ box-sizing:border-box; }
-html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+/* escala geral: -10%. Toda a página é medida em rem, então o zoom desce inteiro. */
+html{ font-size:90%; -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
 body{
   margin:0;
   background:var(--bg);
   color:var(--ink);
   font-family:var(--f-body);
   font-weight:400;
-  line-height:1.62;
+  font-size:clamp(.95rem,1.05vw,1.02rem);
+  line-height:1.64;
   -webkit-font-smoothing:antialiased;
   text-rendering:optimizeLegibility;
 }
+::selection{ background:var(--ink); color:var(--paper); }
 :focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
 
 .skip-link{
-  position:absolute; left:-9999px; top:0; z-index:10;
-  background:var(--ink); color:var(--osso);
-  font-family:var(--f-struct); font-size:.85rem;
-  padding:.6rem 1rem; text-decoration:none;
+  position:absolute; left:-9999px; top:0; z-index:99;
+  background:var(--ink); color:var(--paper);
+  font-family:var(--f-micro); font-size:.78rem;
+  padding:.7rem 1.1rem; text-decoration:none;
 }
 .skip-link:focus{ left:0; }
 
 /* ===========================================================================
-   CASCA — cordão umbilical à esquerda + palco central
-   O rail conecta; não anuncia. Sem métrica pendurada.
+   CASCA — cordão umbilical à esquerda + palco central   [ESTRUTURA INTOCADA]
    =========================================================================== */
 .shell{ display:grid; grid-template-columns:var(--rail-w) 1fr; min-height:100dvh; }
 
 .rail{
-  position:sticky; top:0; align-self:start;
+  position:sticky; top:0; align-self:start; z-index:var(--z-rail);
   height:100dvh;
-  border-right:1px solid var(--hair);
-  padding:2rem 1.5rem;
-  display:flex; flex-direction:column; gap:2.75rem;
-  background:var(--ink);
+  padding:clamp(2rem,2.6vw,2.75rem) 1.75rem clamp(1.5rem,2vw,2rem);
+  display:flex; flex-direction:column; gap:clamp(2rem,3.5vw,3rem);
+  background:var(--ink); color:var(--paper);
 }
 .rail__mark{
   font-family:var(--f-display);
-  color:var(--osso);
-  font-weight:600; font-size:1.35rem;
-  letter-spacing:-.01em; line-height:1;
+  color:var(--paper);
+  font-weight:600; font-size:1.6rem;
+  letter-spacing:-.03em; line-height:1;
+}
+.rail__sub{
+  font-family:var(--f-micro);
+  font-size:.6rem; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--pp-58);
+  margin:.85rem 0 0;
 }
 
-/* o fio do cordão: uma linha que desce da marca e passa por trás dos itens */
-.rail__nav{
-  position:relative;
-  display:flex; flex-direction:column; gap:.1rem;
-  margin-top:-.75rem; padding-left:.9rem;
-}
-.rail__nav::before{
-  content:""; position:absolute; left:0; top:.55rem; bottom:.55rem;
-  width:1px; background:var(--hair);
-}
+/* o fio do cordão: cada passo é uma linha de um mesmo desenho */
+.rail__nav{ display:flex; flex-direction:column; border-top:1px solid var(--hair-inv); }
 .rail__link{
   position:relative;
-  color:rgba(255,255,255,.65);
-  font-family:var(--f-struct);
-  font-size:.92rem; font-weight:500;
-  color:var(--ink-70);
-  text-decoration:none;
-  padding:.5rem 0;
-  border:0; background:none; cursor:pointer;
-  text-align:left;
-  display:flex; align-items:baseline; gap:.55rem;
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  width:100%;
+  padding:.95rem .1rem;
+  border:0; border-bottom:1px solid var(--hair-inv-soft); background:none;
+  font-family:var(--f-body); font-size:1rem; font-weight:500; letter-spacing:-.008em;
+  color:var(--pp-72);
+  text-align:left; text-decoration:none; cursor:pointer;
   transition:color var(--fast) var(--ease);
 }
-/* travessão que cresce: sinal de "você está aqui", sem grito */
-.rail__link::before{
-  content:""; position:absolute; left:-.9rem; top:1.05em;
-  width:0; height:1px; background:currentColor;
+.rail__link .n{
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.1em;
+  color:var(--pp-58); flex:none;
+  transition:color var(--fast) var(--ease);
+}
+/* o travessão que cresce: "você está aqui", sem grito e sem cor */
+.rail__link::after{
+  content:""; position:absolute; left:0; bottom:-1px; height:1px; width:0;
+  background:var(--paper);
   transition:width var(--slow) var(--ease);
 }
-.rail__link:hover{ color:var(--osso); }
-.rail__link:hover::before{ width:.5rem; }
-.rail__link[aria-current="true"]{ color:var(--ink); font-weight:600; }
-.rail__link[aria-current="true"]::before{ width:.9rem; }
+.rail__link:hover{ color:var(--paper); }
+.rail__link:hover .n{ color:var(--pp-72); }
+.rail__link:hover::after{ width:1.75rem; }
+.rail__link[aria-current="true"]{ color:var(--paper); font-weight:600; }
+.rail__link[aria-current="true"] .n{ color:var(--paper); }
+.rail__link[aria-current="true"]::after{ width:100%; }
 
-/* pontinho de sinal — o único lugar onde as duas cores coexistem no cordão */
-.rail__link .dot{
-  width:6px; height:6px; border-radius:50%; flex:none;
-  transform:translateY(-1px);
-  box-shadow:0 0 0 0 currentColor;
-  transition:box-shadow var(--slow) var(--ease);
-}
-.rail__link--echo{ --sig:var(--echo); }
-.rail__link--atrio{ --sig:var(--atrio); }
-.rail__link--echo .dot,
-.rail__link--atrio .dot{ background:var(--sig); color:var(--sig); }
-.rail__link--echo[aria-current="true"] .dot,
-.rail__link--atrio[aria-current="true"] .dot{ box-shadow:0 0 0 3px color-mix(in srgb, var(--sig) 18%, transparent); }
-
-.rail__link--soon{ color:var(--muted); cursor:default; }
+.rail__link--soon{ color:var(--pp-58); cursor:default; }
+.rail__link--soon:hover{ color:var(--pp-58); }
+.rail__link--soon:hover::after{ width:0; }
 .rail__link--soon small{
-  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.06em;
-  text-transform:uppercase; margin-left:.35rem; color:var(--muted);
+  font-family:var(--f-micro); font-size:.58rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--pp-58);
 }
 
-.rail__foot{ margin-top:auto; }
+.rail__foot{ margin-top:auto; padding-top:1.5rem; border-top:1px solid var(--hair-inv-soft); }
 .rail__sig{
-  color:rgba(255,255,255,.45);
   font-family:var(--f-micro);
-  font-size:.68rem; letter-spacing:.03em;
-  color:var(--muted); line-height:1.6; margin:0;
+  font-size:.62rem; letter-spacing:.04em; line-height:1.75;
+  color:var(--pp-58); margin:0;
 }
 
 /* Palco */
@@ -161,182 +168,245 @@ body{
 .view[data-active="true"]{ display:block; }
 
 /* ===========================================================================
-   HOME — a mãe fala com a voz dela. Prosa, não iframe.
+   HOME — papel branco. A mãe fala com a voz dela.
    =========================================================================== */
-.home{ padding:clamp(3rem,7vw,7rem) clamp(1.5rem,5vw,5rem) clamp(4rem,9vw,8rem); }
+.home{ padding:clamp(3rem,7vw,6.5rem) var(--pad) 0; }
 
-/* HERO — abertura na trajetória. Left-anchored, dentro do eixo. */
-.hero{ max-width:none; }
-.hero__tag{
-  font-family:var(--f-micro);
-  font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--muted);
-  margin:0 0 1.5rem;
+/* Filete-título: a régua atravessa, o rótulo pousa na ponta.
+   Mesmo dispositivo em toda a página — sistema, não enfeite. */
+.ruleline{
+  display:flex; align-items:center; gap:1.25rem;
+  margin:0 0 clamp(2rem,4vw,3rem);
 }
-.hero__arc{
-  max-width:(86ch,100%);
+.ruleline::before{ content:""; flex:1; height:1px; background:var(--hair); }
+.ruleline__k{
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-62); flex:none;
+}
+
+/* HERO — título discreto; o subtítulo carrega o arco. Ambos em largura cheia. */
+.hero__t{
   font-family:var(--f-display);
   font-weight:600;
-  font-size:clamp(1.2rem,4.0vw,2.8rem);
-  line-height:1.05;
-  letter-spacing:-.025em;
-  text-wrap:balance;
+  font-size:clamp(1rem,1.35vw,1.22rem);
+  line-height:1.2; letter-spacing:-.02em;
+  color:var(--ink);
+  width:100%; max-width:none;
   margin:0;
 }
-/* a tensão do arco: verde no início do percurso, terracota no fim */
-.hero__arc .g{ color:var(--echo); }
-.hero__arc .t{ color:var(--atrio); }
-.hero__lead{
-  font-size:clamp(1.02rem,1.35vw,1.14rem);
-  color:var(--ink-70);
-  margin:1.7rem 0 0;
-  max-width:58ch;
+.hero__sub{
+  font-family:var(--f-display);
+  font-weight:400;
+  font-size:clamp(1.18rem,2.1vw,1.82rem);
+  line-height:1.34; letter-spacing:-.022em;
+  color:var(--ink-55);
+  width:100%; max-width:none;
+  margin:clamp(1.1rem,2vw,1.6rem) 0 0;
 }
+/* ênfase sem cor: a mesma tinta, com pressão total */
+.hero__sub em{ font-style:normal; color:var(--ink); }
 
-/* O ARCO desenhado: a única figura da home. Verde no começo, terracota no fim.
-   Substitui a régua — não decora: enuncia. */
+/* ===========================================================================
+   O ARCO DESENHADO — a única figura. Arco de descarga sobre a arcada:
+   extradorso, intradorso, linha de nascença. Os pilares descem dela e
+   pousam exatamente na cabeça de cada bloco.
+   =========================================================================== */
 .arc{
-  display:block; width:100%; max-width:(86ch,100%); height:auto;
-  margin:clamp(2.5rem,6vw,4.5rem) 0 clamp(3rem,7vw,5rem);
+  display:block; width:100%;
+  height:clamp(92px,15vw,210px);
+  margin:clamp(3rem,7vw,6rem) 0 0;
   overflow:visible;
 }
-.arc path{ stroke-width:1.25; fill:none; }
+.arc path, .arc line{ fill:none; stroke:var(--ink); }
+.arc .extra{ stroke-opacity:.9; }
+.arc .intra{ stroke-opacity:.28; }
+.arc .spring{ stroke-opacity:.18; }
 
-/* Cesura curta — pausa, não separação */
-.rule{
-  height:1px; border:0; background:var(--hair);
-  margin:clamp(2.5rem,6vw,4rem) 0; width:6ch;
+/* ===========================================================================
+   ARCADA — os três blocos justificados. Vindos do case-integrado:
+   filete na cabeça, número em mono, título curto, corpo justificado.
+   =========================================================================== */
+.arcade{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  column-gap:var(--colgap);
+  row-gap:clamp(2.75rem,6vw,4rem);
+  align-items:start;
+  margin-top:var(--pier);
 }
-
-/* TRÍPTICO — ordem inversa fixa: CONSTRUÇÃO → APLICAÇÃO → ACHADOS.
-   Scroll contínuo. Referencia os filhos; não os reimprime. */
-.panel{ max-width:var(--read-col); margin-bottom:clamp(3.5rem,8vw,6rem); }
-.panel:last-of-type{ margin-bottom:0; }
-.panel__tag{
-  font-family:var(--f-micro);
-  font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--muted);
-  margin:0 0 1rem;
-}
-.panel__title{
-  font-family:var(--f-struct);
-  font-weight:600;
-  font-size:clamp(1.55rem,3vw,2.15rem);
-  line-height:1.1; letter-spacing:-.018em;
-  text-wrap:balance;
-  margin:0 0 1.2rem;
-}
-.panel__body p{ margin:0 0 1rem; }
-.panel__body p:last-child{ margin-bottom:0; }
-
-/* CONSTRUÇÃO: os três movimentos, pendurados no fio. */
-.movements{ display:flex; flex-direction:column; gap:2rem; margin-top:1.6rem; }
-.movement{
+.mov{
   position:relative;
-  padding-left:1.6rem;
-  border-left:1px solid var(--hair);
+  border-top:1px solid var(--ink);
+  padding-top:.9rem;
 }
-/* nó do fio: onde o movimento se prende ao percurso */
-.movement::before{
-  content:""; position:absolute; left:-3px; top:.55rem;
-  width:5px; height:5px; border-radius:50%;
-  background:var(--hair);
+/* o pilar: desce da linha de nascença e entrega a carga no filete do bloco */
+.mov::before{
+  content:""; position:absolute; left:0; top:calc(var(--pier) * -1);
+  width:1px; height:var(--pier); background:var(--hair);
 }
-.movement--echo{ border-left-color:color-mix(in srgb, var(--echo) 45%, transparent); }
-.movement--echo::before{ background:var(--echo); }
-.movement--atrio{ border-left-color:color-mix(in srgb, var(--atrio) 45%, transparent); }
-.movement--atrio::before{ background:var(--atrio); }
-.movement__n{
-  font-family:var(--f-micro); font-size:.7rem; letter-spacing:.1em;
-  color:var(--muted); margin:0 0 .45rem;
+.mov__n{
+  display:block;
+  font-family:var(--f-micro); font-size:.66rem; font-weight:500;
+  letter-spacing:.14em; line-height:1;
+  color:var(--ink); font-variant-numeric:tabular-nums;
+  margin:0;
 }
-.movement__h{
-  font-family:var(--f-struct); font-weight:600; font-size:1.06rem;
-  letter-spacing:-.008em; margin:0 0 .4rem;
+.mov__h{
+  font-family:var(--f-body); font-weight:600;
+  font-size:1.02rem; line-height:1.25; letter-spacing:-.012em;
+  margin:.7rem 0 .8rem;
 }
-.movement__t{ color:var(--ink-70); margin:0; font-size:.99rem; }
+.mov__t{
+  margin:0;
+  color:var(--ink-78);
+  font-size:.83rem; line-height:1.68;
+  text-align:justify; -webkit-hyphens:auto; hyphens:auto;
+}
 
-/* passagem: link discreto que abre a página-filha no palco */
+/* a marca nomeada dentro do corpo — único uso de cor sobre o papel branco
+   (echo 4.9:1 · ATRIO 6.5:1 sobre #FFF) */
+.b-echo { font-weight:700; color:var(--echo);  }
+.b-atrio{ font-weight:700; color:var(--atrio); }
+
+/* passagem: o link que abre a página-filha no palco */
 .passage{
-  display:inline-flex; align-items:baseline; gap:.45rem;
-  margin-top:.7rem;
-  font-family:var(--f-struct); font-size:.88rem; font-weight:500;
-  text-decoration:none;
+  display:inline-flex; align-items:baseline; gap:.5rem;
+  margin-top:1.1rem;
+  font-family:var(--f-body); font-size:.82rem; font-weight:600;
+  letter-spacing:-.005em; color:var(--ink);
   border:0; background:none; cursor:pointer; padding:0;
-  color:var(--sig, var(--ink));
+  text-decoration:none;
 }
-.passage--echo{ --sig:var(--echo); }
-.passage--atrio{ --sig:var(--atrio); }
 .passage span:first-child{
   background-image:linear-gradient(currentColor,currentColor);
-  background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%;
+  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
   transition:background-size var(--slow) var(--ease);
   padding-bottom:2px;
 }
 .passage:hover span:first-child,
-.passage:focus-visible span:first-child{ background-size:100% 1px; }
+.passage:focus-visible span:first-child{ background-size:0% 1px; }
 .passage .arrow{
-  font-family:var(--f-micro);
+  font-family:var(--f-micro); font-size:.8rem;
   transition:transform var(--slow) var(--ease);
 }
-.passage:hover .arrow{ transform:translateX(4px); }
+.passage:hover .arrow{ transform:translateX(5px); }
 
-/* APLICAÇÃO: aqui é o Christian, 1ª pessoa, presente. */
+/* identidade conceitual: mesmo gesto do gatilho do fim da página —
+   o sublinhado recua no hover */
+.idlink{
+  display:inline-block; margin-top:.5rem;
+  font-family:var(--f-body); font-size:.78rem; font-weight:600;
+  letter-spacing:-.005em; color:var(--ink-78);
+  border:0; background:none; cursor:pointer; padding:0 0 1px;
+  background-image:linear-gradient(currentColor,currentColor);
+  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  transition:background-size var(--slow) var(--ease), color var(--fast) var(--ease);
+}
+.idlink:hover{ background-size:0% 1px; color:var(--ink); }
+
+/* ===========================================================================
+   CABEÇALHO DE SEÇÃO — filete, título à esquerda, rótulo na outra ponta.
+   =========================================================================== */
+.shead{
+  display:flex; align-items:baseline; justify-content:space-between; gap:2rem;
+  border-top:1px solid var(--ink);
+  padding-top:1rem;
+  margin:clamp(4.5rem,10vw,8rem) 0 clamp(1.75rem,3.5vw,2.75rem);
+}
+.shead h2{
+  font-family:var(--f-display); font-weight:600;
+  font-size:clamp(1.5rem,2.8vw,2.15rem);
+  line-height:1.08; letter-spacing:-.028em;
+  text-wrap:balance; margin:0;
+}
+.shead__k{
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-62); flex:none;
+}
+
+/* APLICAÇÃO */
+.lede{ max-width:var(--read); margin:0; color:var(--ink-78); text-wrap:pretty; }
+
+.slots{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(1rem,2vw,1.5rem);
+  margin-top:clamp(2rem,4vw,3rem);
+}
 .slot{
-  border:1px dashed var(--hair);
-  padding:1.5rem 1.6rem;
-  margin-top:1.4rem;
+  border:1px solid var(--hair);
   background:var(--hair-soft);
+  padding:clamp(1.25rem,2.2vw,1.75rem);
 }
 .slot__label{
-  font-family:var(--f-micro); font-size:.64rem; letter-spacing:.12em;
-  text-transform:uppercase; color:var(--muted); margin:0 0 .6rem;
+  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-62); margin:0 0 .8rem;
 }
-.slot p:last-child{ margin:0; color:var(--ink-70); font-size:.96rem; }
+.slot p:last-child{ margin:0; color:var(--ink-78); font-size:.88rem; }
 
-/* ACHADOS: prova dura, saída do corpus. */
-.proof{ display:flex; flex-wrap:wrap; gap:2.4rem 3.4rem; margin-top:1.8rem; }
+/* ===========================================================================
+   ACHADOS — a faixa invertida. Único lugar onde o papel vira tinta:
+   a prova pesa, então muda de matéria. Sangra até a borda do palco.
+   =========================================================================== */
+.band{
+  margin:clamp(4.5rem,10vw,8rem) calc(var(--pad) * -1) 0;
+  padding:clamp(3.5rem,7vw,6rem) var(--pad) clamp(4rem,8vw,7rem);
+  background:var(--ink); color:var(--paper);
+}
+.band .shead{ border-top-color:var(--hair-inv); margin-top:0; }
+.band .shead h2{ color:var(--paper); }
+.band .shead__k{ color:var(--pp-58); }
+.band .lede{ color:var(--pp-72); }
+
+.proof{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  column-gap:var(--colgap); row-gap:clamp(2rem,4vw,2.75rem);
+  margin-top:clamp(2.5rem,5vw,4rem);
+}
+.proof__item{ border-top:1px solid var(--hair-inv); padding-top:1rem; }
 .proof__n{
   font-family:var(--f-display); font-weight:600;
-  font-size:clamp(1.9rem,3.8vw,2.9rem); line-height:1;
-  letter-spacing:-.03em;
+  font-size:clamp(2.4rem,5vw,3.6rem); line-height:.95;
+  letter-spacing:-.045em; color:var(--paper);
+  font-variant-numeric:tabular-nums;
 }
 .proof__l{
-  font-family:var(--f-micro); font-size:.7rem; line-height:1.55; letter-spacing:.03em;
-  color:var(--muted); margin:.55rem 0 0; max-width:22ch;
+  font-family:var(--f-micro); font-size:.66rem; line-height:1.6; letter-spacing:.04em;
+  color:var(--pp-58); margin:.9rem 0 0; max-width:24ch;
 }
 
 .aside-note{
-  margin:2.4rem 0 0; max-width:58ch;
-  color:var(--ink-70); font-size:.98rem;
+  margin:clamp(2.5rem,5vw,3.5rem) 0 0; max-width:52ch;
+  color:var(--pp-72); font-size:.92rem;
 }
+.concept-trigger{
+  font:inherit; color:var(--paper); background:none; border:0; padding:0 0 1px; cursor:pointer;
+  font-weight:600;
+  background-image:linear-gradient(currentColor,currentColor);
+  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  transition:background-size var(--slow) var(--ease);
+}
+.concept-trigger:hover{ background-size:0% 1px; }
 
 /* ===========================================================================
-   FILHOS — iframe no palco, um por vez, largura inteira.
-   Affordance de tela cheia em TOM DE COMANDO.
+   FILHOS — iframe no palco, um por vez.   [SISTEMA INTOCADO]
    =========================================================================== */
-.child{
-  display:flex; flex-direction:column;
-  height:100dvh;
-  --sig:var(--ink);
-}
-.child--echo{ --sig:var(--echo); }
-.child--atrio{ --sig:var(--atrio); }
+.child{ display:flex; flex-direction:column; height:100dvh; }
 .child__bar{
   position:relative;
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
-  padding:.85rem clamp(1.25rem,4vw,3rem);
+  padding:.9rem clamp(1.25rem,4vw,3rem);
   border-bottom:1px solid var(--hair);
   flex:none;
 }
 .child__name{
-  font-family:var(--f-struct); font-weight:600; font-size:.95rem;
-  display:flex; align-items:center; gap:.55rem; min-width:0;
+  font-family:var(--f-body); font-weight:600; font-size:.92rem;
+  letter-spacing:-.01em;
+  display:flex; align-items:center; gap:.6rem; min-width:0;
 }
-.child__name .dot{ width:7px; height:7px; border-radius:50%; background:var(--sig); flex:none; }
+.child__name .dot{ width:6px; height:6px; background:var(--ink); flex:none; }
 .child__full{
-  font-family:var(--f-struct); font-size:.84rem; font-weight:500;
-  text-decoration:none; color:var(--ink-70);
+  font-family:var(--f-body); font-size:.8rem; font-weight:500;
+  text-decoration:none; color:var(--ink-62);
   display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap;
   transition:color var(--fast) var(--ease);
 }
@@ -347,7 +417,7 @@ body{
 /* fio de carga: some quando o filho termina de entrar */
 .child__load{
   position:absolute; left:0; right:0; bottom:-1px; height:1px;
-  background:var(--sig); transform-origin:0 50%; transform:scaleX(0);
+  background:var(--ink); transform-origin:0 50%; transform:scaleX(0);
   opacity:0; transition:opacity var(--fast) linear;
 }
 .child[data-loading="true"] .child__load{ opacity:1; animation:load 1.4s var(--ease) infinite; }
@@ -362,74 +432,154 @@ body{
    CONCEPT READER — o registro poético. Só a mãe ousa aqui.
    =========================================================================== */
 .reader{
-  border:1px solid var(--hair);
-  background:var(--bg); color:var(--ink);
-  max-width:52ch; padding:clamp(2rem,5vw,3.25rem);
-  border-radius:0;
+  border:1px solid var(--ink); border-radius:0;
+  background:var(--paper); color:var(--ink);
+  max-width:50ch; padding:clamp(2rem,5vw,3.5rem);
+  z-index:var(--z-reader);
 }
-.reader::backdrop{ background:rgba(24,24,24,.62); }
+.reader::backdrop{ background:rgba(24,24,24,.72); }
 .reader__tag{
-  font-family:var(--f-micro); font-size:.66rem; letter-spacing:.16em;
-  text-transform:uppercase; color:var(--muted); margin:0 0 1.1rem;
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-62); margin:0 0 1.25rem;
 }
 .reader__text{
   font-family:var(--f-display); font-weight:400;
-  font-size:clamp(1.15rem,2.4vw,1.35rem); line-height:1.45; letter-spacing:-.01em;
-  margin:0;
+  font-size:clamp(1.12rem,2.2vw,1.32rem); line-height:1.5; letter-spacing:-.015em;
+  text-wrap:pretty; margin:0;
 }
 .reader__close{
-  margin-top:2rem; font-family:var(--f-micro); font-size:.7rem;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+  margin-top:2.25rem; font-family:var(--f-micro); font-size:.66rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-62);
   background:none; border:0; cursor:pointer; padding:0;
   transition:color var(--fast) var(--ease);
 }
 .reader__close:hover{ color:var(--ink); }
-.concept-trigger{
-  font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer;
-  background-image:linear-gradient(var(--ink),var(--ink));
-  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
-  padding-bottom:1px;
-  opacity:.9;
-  transition:opacity var(--fast) var(--ease);
+
+/* ===========================================================================
+   IDENTIDADE CONCEITUAL — leitura de página inteira. Tinta cheia, texto claro.
+   O sinal do território aparece só nas marcas do desenho (barra, filete,
+   tique): sobre #181818 as duas cores não têm contraste para texto corrido.
+   =========================================================================== */
+.tale{
+  width:100vw; max-width:100vw;
+  height:100dvh; max-height:100dvh;
+  margin:0; padding:0; border:0; border-radius:0;
+  background:var(--ink); color:var(--paper);
+  overflow-y:auto; overscroll-behavior:contain;
+  z-index:var(--z-reader);
 }
-.concept-trigger:hover{ opacity:1; }
+.tale::backdrop{ background:rgba(24,24,24,.82); }
+.tale--echo { --sig:var(--echo);  }
+.tale--atrio{ --sig:var(--atrio); }
+
+.tale__inner{
+  width:min(44rem,100%); margin:0 auto;
+  padding:clamp(3.5rem,9vh,6rem) var(--pad) clamp(4rem,10vh,7rem);
+}
+.tale__mark{
+  display:flex; align-items:center; gap:1rem;
+  margin:0 0 1.5rem;
+}
+.tale__mark::before{
+  content:""; width:2.75rem; height:2px; background:var(--sig); flex:none;
+}
+.tale__k{
+  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--pp-58);
+}
+.tale__title{
+  font-family:var(--f-display); font-weight:600;
+  font-size:clamp(2.2rem,6vw,4rem); line-height:.98; letter-spacing:-.04em;
+  color:var(--paper); margin:0;
+}
+.tale__sub{
+  margin:1.1rem 0 clamp(2.5rem,6vh,4rem);
+  color:var(--pp-58); font-size:.86rem; line-height:1.6;
+}
+.tale__prose p{
+  margin:0 0 1.35rem;
+  font-size:clamp(1rem,1.35vw,1.1rem); line-height:1.78;
+  color:rgba(255,255,255,.86);
+  max-width:46ch; text-wrap:pretty;
+}
+/* a abertura: o tique do território encosta nela */
+.tale__prose .open{
+  position:relative; padding-left:1.35rem;
+  font-size:clamp(1.28rem,2.3vw,1.72rem); line-height:1.42;
+  color:var(--paper); margin-bottom:1.9rem;
+}
+.tale__prose .open::before{
+  content:""; position:absolute; left:0; top:.3em; bottom:.25em;
+  width:2px; background:var(--sig);
+}
+.tale__prose em{ font-style:italic; color:var(--paper); }
+.tale__prose strong{ font-weight:700; color:var(--paper); }
+.tale__prose .caps{ font-weight:600; letter-spacing:.05em; color:var(--paper); }
+.tale__rule{
+  height:1px; border:0; background:var(--hair-inv);
+  margin:clamp(2.5rem,6vh,3.5rem) 0; width:100%;
+}
+.tale__close{
+  position:fixed; top:clamp(1rem,3vh,1.75rem); right:clamp(1rem,3vw,2rem);
+  display:inline-flex; align-items:center; gap:.6rem;
+  padding:.55rem 1rem;
+  background:var(--ink); color:var(--paper);
+  border:1px solid var(--hair-inv); border-radius:999px;
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.14em;
+  text-transform:uppercase; cursor:pointer;
+  transition:border-color var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.tale__close:hover{ border-color:var(--paper); background:rgba(255,255,255,.08); }
 
 /* Tátil */
 .rail__link:active, .passage:active, .child__full:active, .reader__close:active{ transform:translateY(1px); }
 
 /* ===========================================================================
-   MOBILE — o cordão vira topo; o palco desce inteiro
+   RESPONSIVO
    =========================================================================== */
+@media (max-width:1080px){
+  .arcade{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .proof{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
 @media (max-width:820px){
+  /* MOBILE — o cordão vira topo; o palco desce inteiro   [DINÂMICA INTOCADA] */
   .shell{ grid-template-columns:1fr; }
   .rail{
-    position:sticky; top:0; z-index:2;
+    position:sticky; top:0; z-index:var(--z-rail);
     height:auto; flex-direction:row; align-items:center;
-    justify-content:space-between; gap:.75rem 1rem;
-    padding:.85rem 1.15rem;
-    border-right:0; border-bottom:1px solid var(--hair);
+    justify-content:space-between; gap:.75rem 1.25rem;
+    padding:.9rem 1.15rem;
     flex-wrap:wrap;
   }
-  .rail__mark{ font-size:1.1rem; }
+  .rail__mark{ font-size:1.15rem; }
+  .rail__sub{ display:none; }
   .rail__nav{
     flex-direction:row; flex-wrap:wrap; align-items:center;
-    gap:.15rem .95rem; margin-top:0; padding-left:0;
+    gap:.15rem 1.15rem; border-top:0;
   }
-  .rail__nav::before{ display:none; }
-  .rail__link{ padding:.2rem 0; font-size:.86rem; }
-  .rail__link::before{ left:0; top:auto; bottom:-.05rem; }
-  .rail__link:hover::before,
-  .rail__link[aria-current="true"]::before{ width:100%; }
+  .rail__link{
+    width:auto; padding:.25rem 0; font-size:.88rem;
+    border-bottom:0; gap:.4rem;
+  }
+  .rail__link .n{ display:none; }
+  .rail__link::after{ bottom:.05rem; }
+  .rail__link:hover::after,
+  .rail__link[aria-current="true"]::after{ width:100%; }
   .rail__foot{ display:none; }
   /* o filho ocupa o que sobra da tela: uma superfície de rolagem, não duas */
   .child{ height:calc(100dvh - var(--rail-h)); }
-  .home{ padding-top:2.5rem; }
+  .home{ padding-top:2.75rem; }
+  .arcade{ grid-template-columns:1fr; }
+  .proof{ grid-template-columns:1fr; }
+  .slots{ grid-template-columns:1fr; }
+  .shead{ flex-direction:column; align-items:flex-start; gap:.6rem; }
 }
 
 /* ===========================================================================
    REVELAÇÃO — entrada com massa, nunca estática. Só transform/opacity.
+   O conteúdo é visível por padrão; o esconde só entra quando o JS confirma
+   que sabe revelar (trava anti-página-branca).
    =========================================================================== */
-/* o esconde só entra quando o JS confirma que sabe revelar (trava anti-página-branca) */
 @media (prefers-reduced-motion:no-preference){
   .js-reveal [data-reveal]{
     opacity:0; transform:translateY(18px);
@@ -438,8 +588,19 @@ body{
   }
   .js-reveal [data-reveal].is-in{ opacity:1; transform:none; }
 
-  .arc path{ stroke-dasharray:1000; stroke-dashoffset:1000; }
-  .arc.is-in path{ transition:stroke-dashoffset 1600ms var(--ease) 160ms; stroke-dashoffset:0; }
+  /* o arco se desenha: extradorso primeiro, intradorso atrás, nascença por fim */
+  .arc path, .arc line{ stroke-dasharray:1; stroke-dashoffset:1; }
+  .arc.is-in .extra { transition:stroke-dashoffset 1500ms var(--ease) 120ms;  stroke-dashoffset:0; }
+  .arc.is-in .intra { transition:stroke-dashoffset 1500ms var(--ease) 340ms;  stroke-dashoffset:0; }
+  .arc.is-in .spring{ transition:stroke-dashoffset 900ms  var(--ease) 1000ms; stroke-dashoffset:0; }
+
+  /* os pilares descem depois que o arco fecha */
+  .js-reveal .mov::before{
+    transform:scaleY(0); transform-origin:0 0;
+    transition:transform 620ms var(--ease);
+    transition-delay:calc(var(--i,0) * 110ms + 340ms);
+  }
+  .js-reveal .mov.is-in::before{ transform:scaleY(1); }
 }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
@@ -455,12 +616,15 @@ body{
 
   <!-- CORDÃO UMBILICAL — enxuto, silencioso. Conecta, não anuncia. -->
   <nav class="rail" aria-label="Navegação principal">
-    <div class="rail__mark">Arco</div>
+    <div>
+      <div class="rail__mark">Arco</div>
+      <p class="rail__sub">um autor · dois projetos</p>
+    </div>
 
     <div class="rail__nav">
-      <button class="rail__link" type="button" data-view="home" aria-current="true">Origem</button>
-      <button class="rail__link rail__link--echo"  type="button" data-view="echo"><span class="dot"></span>ECHO</button>
-      <button class="rail__link rail__link--atrio" type="button" data-view="atrio"><span class="dot"></span>ATRIO</button>
+      <button class="rail__link" type="button" data-view="home" aria-current="true">Origem<span class="n">01</span></button>
+      <button class="rail__link" type="button" data-view="echo">ECHO<span class="n">02</span></button>
+      <button class="rail__link" type="button" data-view="atrio">ATRIO<span class="n">03</span></button>
       <!-- PENDENTE: destravar quando o loop tags↔equivalências fechar -->
       <span class="rail__link rail__link--soon" aria-disabled="true">Equivalências<small>em breve</small></span>
     </div>
@@ -476,130 +640,139 @@ body{
     <section class="view" data-view="home" data-active="true" aria-label="Origem — o arco">
       <div class="home">
 
-        <!-- HERO: o arco. A mãe abre na trajetória, não na prova. -->
-        <div class="hero" data-reveal>
-          <p class="hero__tag">Um autor, dois projetos</p>
-          <h1 class="hero__arc">
-            Da execução fiscal à <span class="g">regência recursal</span>;</br>da regência à <span class="t">arquitetura do raciocínio</span>.
-          </h1>
-          <p class="hero__lead">
-            Um movimento exigiu o outro. Método antes da automação.
+        <!-- HERO -->
+        <div data-reveal>
+          <div class="ruleline"><span class="ruleline__k">Trajetória</span></div>
+          <h1 class="hero__t">Narrativa de percurso</h1>
+          <p class="hero__sub">
+            Da execução fiscal à <em>regência recursal</em>; da regência à <em>arquitetura do raciocínio</em>.<br>
+            Um movimento exigiu o outro.<br>
+            Método antes da automação.
           </p>
         </div>
 
-        <!-- o arco desenhado: começa verde, termina terracota -->
-        <svg class="arc" viewBox="0 0 640 96" role="presentation" aria-hidden="true" data-reveal>
-          <defs>
-            <linearGradient id="arc-grad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%"   stop-color="#33604A"></stop>
-              <stop offset="52%"  stop-color="#62676d"></stop>
-              <stop offset="100%" stop-color="#a63a23"></stop>
-            </linearGradient>
-          </defs>
-          <path d="M2,86 C140,6 500,6 638,86" stroke="url(#arc-grad)" stroke-linecap="round"></path>
+        <!-- O ARCO: extradorso, intradorso e linha de nascença.
+             preserveAspectRatio="none" + vector-effect: a curva acompanha a
+             largura da arcada; o traço permanece com 1px em qualquer viewport. -->
+        <svg class="arc" viewBox="0 0 1000 240" preserveAspectRatio="none"
+             role="presentation" aria-hidden="true" data-reveal>
+          <path class="extra"  pathLength="1" vector-effect="non-scaling-stroke"
+                d="M0,238 C180,10 820,10 1000,238"></path>
+          <path class="intra"  pathLength="1" vector-effect="non-scaling-stroke"
+                d="M0,238 C205,66 795,66 1000,238"></path>
+          <line class="spring" pathLength="1" vector-effect="non-scaling-stroke"
+                x1="0" y1="238.5" x2="1000" y2="238.5"></line>
         </svg>
 
-        <!-- ===== CONSTRUÇÃO — voz-mãe, passado, transversal ===== -->
-        <section class="panel">
-          <p class="panel__tag" data-reveal>Construção</p>
-          <h2 class="panel__title" data-reveal style="--i:1">Três movimentos, um percurso</h2>
+        <!-- ===== ARCADA — três movimentos, um percurso ===== -->
+        <section class="arcade" aria-label="Construção — três movimentos">
+          <article class="mov" data-reveal style="--i:0">
+            <p class="mov__n">01</p>
+            <h2 class="mov__h">Fundação</h2>
+            <p class="mov__t">
+              O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto
+              volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga,
+              saneamento de backlog e integração digital de mais de 33 mil execuções fiscais. Ali se
+              formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o
+              acervo legível.
+            </p>
+          </article>
 
-          <div class="movements">
-            <div class="movement" data-reveal style="--i:2">
-              <p class="movement__n">01</p>
-              <p class="movement__h">Fundação</p>
-              <p class="movement__t">
-               O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga, saneamento de backlog e integração digital de mais de 33 mil execuções fiscais. Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível.
-              </p>
-            </div>
+          <article class="mov" data-reveal style="--i:1">
+            <p class="mov__n">02</p>
+            <h2 class="mov__h">Regência</h2>
+            <p class="mov__t">
+              O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume
+              para a regência do fluxo decisório. O <span class="b-echo">echo</span> nasce desse momento:
+              organização de acervo, segmentação temática, padronização de rotinas, controle de
+              prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência
+              judicial se converte em método.
+            </p>
+            <button class="passage" type="button" data-view="echo">
+              <span>Ver o echo</span> <span class="arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="idlink" type="button" data-tale="tale-echo" aria-haspopup="dialog">Identidade conceitual</button>
+          </article>
 
-            <div class="movement movement--echo" data-reveal style="--i:3">
-              <p class="movement__n">02</p>
-              <p class="movement__h">Regência</p>
-              <p class="movement__t">
-                O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a regência do fluxo decisório. O echo nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.
-              </p>
-              <button class="passage passage--echo" type="button" data-view="echo">
-                <span>Ver o ECHO</span> <span class="arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-
-            <div class="movement movement--atrio" data-reveal style="--i:4">
-              <p class="movement__n">03</p>
-              <p class="movement__h">Arquitetura</p>
-              <p class="movement__t">
-                O terceiro movimento surge quando o método encontra a inteligência artificial. O ATRIO transforma a lógica construída no echo em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.
-              </p>
-              <button class="passage passage--atrio" type="button" data-view="atrio">
-                <span>Ver o ATRIO</span> <span class="arrow" aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
+          <article class="mov" data-reveal style="--i:2">
+            <p class="mov__n">03</p>
+            <h2 class="mov__h">Arquitetura</h2>
+            <p class="mov__t">
+              O terceiro movimento surge quando o método encontra a inteligência artificial. O
+              <span class="b-atrio">ATRIO</span> transforma a lógica construída no
+              <span class="b-echo">echo</span> em arquitetura modular, com base documental, raciocínio
+              assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui
+              a decisão: passa a operar dentro de um percurso governado.
+            </p>
+            <button class="passage" type="button" data-view="atrio">
+              <span>Ver o ATRIO</span> <span class="arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="idlink" type="button" data-tale="tale-atrio" aria-haspopup="dialog">Identidade conceitual</button>
+          </article>
         </section>
-
-        <hr class="rule">
 
         <!-- ===== APLICAÇÃO — Christian, 1ª pessoa, presente ===== -->
-        <section class="panel">
-          <p class="panel__tag" data-reveal>Aplicação</p>
-          <h2 class="panel__title" data-reveal style="--i:1">O intérprete da encruzilhada</h2>
-          <div class="panel__body" data-reveal style="--i:2">
-            <p>
-              A mãe caminhou; quem traduz sou eu. Entre a língua do tribunal e a língua do
-              mercado há um cruzo, e é dele que este trabalho fala.
-            </p>
-          </div>
+        <section aria-label="Aplicação">
+          <header class="shead" data-reveal>
+            <h2>O intérprete da encruzilhada</h2>
+            <span class="shead__k">Aplicação</span>
+          </header>
 
-          <!-- PENDENTE: o conto "Cá, estamos: o intérprete da encruzilhada".
-               Texto pronto em Interprete_da_Encruzilhada.txt — entra aqui quando
-               você decidir se vai inteiro ou em recorte. -->
-          <div class="slot" data-reveal style="--i:3">
-            <p class="slot__label">Slot — conto (a escrever juntos)</p>
-            <p>
-              “Cá, estamos: o intérprete da encruzilhada.” — o texto entra aqui, na sua voz,
-              quando a gente terminar. Registro presente, primeira pessoa.
-            </p>
-          </div>
+          <p class="lede" data-reveal style="--i:1">
+            A mãe caminhou; quem traduz sou eu. Entre a língua do tribunal e a língua do mercado há um
+            cruzo, e é dele que este trabalho fala.
+          </p>
 
-          <!-- PENDENTE: ponteiro p/ Equivalências quando o loop fechar -->
-          <div class="slot" data-reveal style="--i:4">
-            <p class="slot__label">Slot — equivalências (aguarda o loop tags↔dicionário)</p>
-            <p>
-              A tradução tribunal → mercado, entrada por entrada. Vira página própria,
-              com URL limpa e mandável sozinha, quando a reconciliação fechar.
-            </p>
+          <div class="slots">
+            <!-- PENDENTE: o conto "Cá, estamos: o intérprete da encruzilhada".
+                 Texto pronto em Interprete_da_Encruzilhada.txt — entra aqui quando
+                 você decidir se vai inteiro ou em recorte. -->
+            <div class="slot" data-reveal style="--i:2">
+              <p class="slot__label">Slot — conto (a escrever juntos)</p>
+              <p>
+                “Cá, estamos: o intérprete da encruzilhada.” — o texto entra aqui, na sua voz, quando a
+                gente terminar. Registro presente, primeira pessoa.
+              </p>
+            </div>
+
+            <!-- PENDENTE: ponteiro p/ Equivalências quando o loop fechar -->
+            <div class="slot" data-reveal style="--i:3">
+              <p class="slot__label">Slot — equivalências (aguarda o loop tags↔dicionário)</p>
+              <p>
+                A tradução tribunal → mercado, entrada por entrada. Vira página própria, com URL limpa e
+                mandável sozinha, quando a reconciliação fechar.
+              </p>
+            </div>
           </div>
         </section>
 
-        <hr class="rule">
+        <!-- ===== ACHADOS — a prova pesa: o papel vira tinta ===== -->
+        <section class="band" aria-label="Achados">
+          <header class="shead" data-reveal>
+            <h2>A prova está no acervo</h2>
+            <span class="shead__k">Achados</span>
+          </header>
 
-        <!-- ===== ACHADOS — prova dura, jurimetria ===== -->
-        <section class="panel">
-          <p class="panel__tag" data-reveal>Achados</p>
-          <h2 class="panel__title" data-reveal style="--i:1">A prova está no acervo</h2>
-          <div class="panel__body" data-reveal style="--i:2">
-            <p>
-              O arco não se afirma: se comprova. Os números abaixo saem do próprio corpus,
-              não de estimativa.
-            </p>
-          </div>
+          <p class="lede" data-reveal style="--i:1">
+            O arco não se afirma: se comprova. Os números abaixo saem do próprio corpus, não de estimativa.
+          </p>
 
           <div class="proof">
-            <div class="proof__item" data-reveal style="--i:3">
+            <div class="proof__item" data-reveal style="--i:2">
               <div class="proof__n">899</div>
               <p class="proof__l">votos comprovados na análise jurimétrica</p>
             </div>
-            <div class="proof__item" data-reveal style="--i:4">
+            <div class="proof__item" data-reveal style="--i:3">
               <div class="proof__n">+33 mil</div>
               <p class="proof__l">execuções fiscais no ponto de partida</p>
             </div>
-            <div class="proof__item" data-reveal style="--i:5">
+            <div class="proof__item" data-reveal style="--i:4">
               <div class="proof__n">102</div>
               <p class="proof__l">assuntos reclassificados na taxonomia</p>
             </div>
           </div>
 
-          <p class="aside-note" data-reveal style="--i:6">
+          <p class="aside-note" data-reveal style="--i:5">
             <button class="concept-trigger" type="button" data-reader="r1">Por que “arco”, e não “portfólio”</button>
             — a leitura conceitual, para quem quiser descer mais fundo.
           </p>
@@ -648,6 +821,51 @@ body{
   <p class="reader__tag" id="reader-tag">Leitura conceitual</p>
   <p class="reader__text" id="reader-text"></p>
   <button class="reader__close" type="button" data-reader-close>Fechar</button>
+</dialog>
+
+<!-- IDENTIDADE CONCEITUAL — echo -->
+<dialog class="tale tale--echo" id="tale-echo" aria-label="Identidade conceitual — echo">
+  <div class="tale__inner">
+    <p class="tale__mark"><span class="tale__k">Identidade conceitual · 02</span></p>
+    <h2 class="tale__title">echo</h2>
+    <p class="tale__sub">A ferida de origem, o silêncio que recebeu nome.</p>
+    <div class="tale__prose">
+      <p class="open">A música começou ferida.</p>
+      <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som.</p>
+      <p>Mas beleza sem lugar também é ruído.</p>
+      <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra.</p>
+      <p>Então ele interrompeu.</p>
+      <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
+      <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
+      <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição: <em>sempre foi assim.</em></p>
+      <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
+      <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
+      <p>O método começou ali. No silêncio que recebeu nome. O spalla escreveu — não contra a sala, não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto.</p>
+      <p>A música não ficou perfeita. Ficou possível.</p>
+      <p>Ao fim, o maestro recolheu a batuta. Sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta: <strong>echo</strong>.</p>
+      <p>Não era o eco como repetição automática. Era echo como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
+    </div>
+  </div>
+  <button class="tale__close" type="button" data-tale-close>Fechar ×</button>
+</dialog>
+
+<!-- IDENTIDADE CONCEITUAL — ATRIO
+     PENDENTE: entra aqui a história da estagiária. Não existe em nenhum
+     case-integrado.html do repositório; até chegar, fica o texto conceitual. -->
+<dialog class="tale tale--atrio" id="tale-atrio" aria-label="Identidade conceitual — ATRIO">
+  <div class="tale__inner">
+    <p class="tale__mark"><span class="tale__k">Identidade conceitual · 03</span></p>
+    <h2 class="tale__title">ATRIO</h2>
+    <p class="tale__sub">Quando o método deixa de ser condução e passa a ser arquitetura.</p>
+    <div class="tale__prose">
+      <p class="open">O ATRIO nasce quando o método deixa de ser apenas prática de condução e passa a operar como arquitetura.</p>
+      <p>Seu ponto de partida não é acelerar a produção jurídica, mas criar uma superfície governável para documentos, raciocínios, controles e entregas.</p>
+      <p>A inteligência artificial, nesse desenho, não ocupa o centro decisório. Ela funciona como força assistiva submetida a inventário, etapas, confronto, revisão e responsabilidade humana. Antes de perguntar o que a máquina entrega, o ATRIO pergunta que percurso permite confiar no que foi produzido.</p>
+      <p>Por isso, sua lógica é modular: <span class="caps">CORPUS</span> organiza o lastro; <span class="caps">RATIO</span> estrutura a elaboração; <span class="caps">CERNE</span> confronta o raciocínio; <span class="caps">LUX</span> refina a linguagem.</p>
+      <p>A arquitetura não substitui o juízo. <em>Dá forma ao caminho que antecede a entrega.</em></p>
+    </div>
+  </div>
+  <button class="tale__close" type="button" data-tale-close>Fechar ×</button>
 </dialog>
 
 <script>
@@ -742,6 +960,21 @@ body{
   dialog.querySelector("[data-reader-close]").addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
   dialog.addEventListener("close", () => opener?.focus());
+
+  /* ---- Identidade conceitual: leitura de página inteira ---- */
+  document.querySelectorAll("[data-tale]").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const t = document.getElementById(btn.dataset.tale);
+      if (!t) return;
+      opener = btn;
+      t.showModal();
+      t.scrollTop = 0;
+    }));
+  document.querySelectorAll("dialog.tale").forEach(t => {
+    t.querySelector("[data-tale-close]").addEventListener("click", () => t.close());
+    t.addEventListener("click", e => { if (e.target === t) t.close(); });
+    t.addEventListener("close", () => opener?.focus());
+  });
 })();
 </script>
 </body>
