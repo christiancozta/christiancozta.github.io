@@ -180,8 +180,9 @@ body{
 }
 .ruleline::before{ content:""; flex:1; height:1px; background:var(--hair); }
 .ruleline__k{
-  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.16em;
+  font-family:var(--f-micro); font-size:.62rem; font-weight:500; letter-spacing:.16em;
   text-transform:uppercase; color:var(--ink-62); flex:none;
+  margin:0;
 }
 
 /* HERO — título discreto; o subtítulo carrega o arco. Ambos em largura cheia. */
@@ -195,9 +196,9 @@ body{
   margin:0;
 }
 .hero__sub{
-  font-family:var(--f-body);
+  font-family:var(--f-display);
   font-weight:400;
-  font-size:clamp(1rem,1.78vw,1.54rem);
+  font-size:clamp(1.18rem,2.1vw,1.82rem);
   line-height:1.34; letter-spacing:-.022em;
   color:var(--ink-55);
   width:100%; max-width:none;
@@ -263,38 +264,24 @@ body{
   text-align:justify; -webkit-hyphens:auto; hyphens:auto;
 }
 
-/* a marca nomeada dentro do corpo — único uso de cor sobre o papel branco
-   (echo 4.9:1 · ATRIO 6.5:1 sobre #FFF) */
-.b-echo { font-weight:700; color:var(--echo);  }
-.b-atrio{ font-weight:700; color:var(--atrio); }
-
-/* passagem: o link que abre a página-filha no palco */
-.passage{
-  display:inline-flex; align-items:baseline; gap:.5rem;
-  margin-top:1.1rem;
-  font-family:var(--f-body); font-size:.82rem; font-weight:600;
-  letter-spacing:-.005em; color:var(--ink);
-  border:0; background:none; cursor:pointer; padding:0;
-  text-decoration:none;
-}
-.passage span:first-child{
+/* a marca nomeada dentro do corpo É a passagem para a página-filha.
+   Único uso de cor sobre o papel branco (echo 4.9:1 · ATRIO 6.5:1 sobre #FFF) */
+.b-echo, .b-atrio{
+  display:inline; font:inherit; font-weight:700;
+  border:0; background:none; padding:0 0 1px; margin:0; cursor:pointer;
   background-image:linear-gradient(currentColor,currentColor);
-  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%;
   transition:background-size var(--slow) var(--ease);
-  padding-bottom:2px;
 }
-.passage:hover span:first-child,
-.passage:focus-visible span:first-child{ background-size:0% 1px; }
-.passage .arrow{
-  font-family:var(--f-micro); font-size:.8rem;
-  transition:transform var(--slow) var(--ease);
-}
-.passage:hover .arrow{ transform:translateX(5px); }
+.b-echo { color:var(--echo);  }
+.b-atrio{ color:var(--atrio); }
+.b-echo:hover, .b-echo:focus-visible,
+.b-atrio:hover, .b-atrio:focus-visible{ background-size:100% 1px; }
 
 /* identidade conceitual: mesmo gesto do gatilho do fim da página —
-   o sublinhado recua no hover */
+   o sublinhado recua no hover e o texto assume a cor do território */
 .idlink{
-  display:inline-block; margin-top:.5rem;
+  display:inline-block; margin-top:1.1rem;
   font-family:var(--f-body); font-size:.78rem; font-weight:600;
   letter-spacing:-.005em; color:var(--ink-78);
   border:0; background:none; cursor:pointer; padding:0 0 1px;
@@ -302,7 +289,9 @@ body{
   background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
   transition:background-size var(--slow) var(--ease), color var(--fast) var(--ease);
 }
-.idlink:hover{ background-size:0% 1px; color:var(--ink); }
+.idlink:hover, .idlink:focus-visible{ background-size:0% 1px; }
+.idlink--echo:hover,  .idlink--echo:focus-visible { color:var(--echo);  }
+.idlink--atrio:hover, .idlink--atrio:focus-visible{ color:var(--atrio); }
 
 /* ===========================================================================
    CABEÇALHO DE SEÇÃO — filete, título à esquerda, rótulo na outra ponta.
@@ -324,8 +313,51 @@ body{
   text-transform:uppercase; color:var(--ink-62); flex:none;
 }
 
-/* APLICAÇÃO */
 .lede{ max-width:var(--read); margin:0; color:var(--ink-78); text-wrap:pretty; }
+
+/* o filete-título também abre seção: mesma peça do topo, outro rótulo */
+.ruleline--sec{ margin:clamp(4.5rem,10vw,8rem) 0 clamp(1.75rem,3.5vw,2.75rem); }
+
+/* ===========================================================================
+   AUTORIA — ficha seca. A marca pessoal, os dados, o currículo.
+   =========================================================================== */
+.autoria{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:var(--colgap); row-gap:clamp(2.25rem,5vw,3.25rem);
+  align-items:start;
+}
+.acol{ border-top:1px solid var(--ink); padding-top:.9rem; }
+.acol__k{
+  font-family:var(--f-micro); font-size:.62rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-62);
+  margin:0 0 1.35rem;
+}
+/* marca pessoal — ladrilho; a geometria é a do kit, só o fundo muda por página */
+.mark{ display:block; width:clamp(56px,4.8vw,68px); height:auto; }
+.aname{
+  font-family:var(--f-display); font-weight:600;
+  font-size:clamp(1.3rem,2.3vw,1.75rem); line-height:1.05; letter-spacing:-.03em;
+  margin:1.4rem 0 0;
+}
+.arole{ margin:.6rem 0 0; color:var(--ink-78); font-size:.86rem; max-width:34ch; }
+.alist{ list-style:none; margin:0; padding:0; display:grid; gap:.55rem; font-size:.86rem; }
+.alist span{ color:var(--ink-62); }
+.alist a{
+  color:var(--ink); text-decoration:none;
+  background-image:linear-gradient(var(--hair),var(--hair));
+  background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
+  padding-bottom:1px;
+  transition:background-image var(--fast) var(--ease);
+}
+.alist a:hover{ background-image:linear-gradient(currentColor,currentColor); }
+.cv{
+  display:inline-flex; align-items:center; gap:.7rem;
+  margin-top:1.6rem; padding:.7rem 1.1rem;
+  border:1px solid var(--ink); color:var(--ink); text-decoration:none;
+  font-family:var(--f-micro); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase;
+  transition:background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.cv:hover{ background:var(--ink); color:var(--paper); }
 
 .slots{
   display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
@@ -336,6 +368,7 @@ body{
   border:1px solid var(--hair);
   background:var(--hair-soft);
   padding:clamp(1.25rem,2.2vw,1.75rem);
+  max-width:var(--read);
 }
 .slot__label{
   font-family:var(--f-micro); font-size:.6rem; letter-spacing:.14em;
@@ -460,10 +493,11 @@ body{
    O sinal do território aparece só nas marcas do desenho (barra, filete,
    tique): sobre #181818 as duas cores não têm contraste para texto corrido.
    =========================================================================== */
+/* coluna estreita, altura de página inteira */
 .tale{
-  width:100vw; max-width:100vw;
+  width:min(38rem,100vw); max-width:100vw;
   height:100dvh; max-height:100dvh;
-  margin:0; padding:0; border:0; border-radius:0;
+  margin:0 auto; padding:0; border:0; border-radius:0;
   background:var(--ink); color:var(--paper);
   overflow-y:auto; overscroll-behavior:contain;
   z-index:var(--z-reader);
@@ -473,8 +507,8 @@ body{
 .tale--atrio{ --sig:var(--atrio); }
 
 .tale__inner{
-  width:min(44rem,100%); margin:0 auto;
-  padding:clamp(3.5rem,9vh,6rem) var(--pad) clamp(4rem,10vh,7rem);
+  width:100%;
+  padding:clamp(3.25rem,8vh,5rem) clamp(1.6rem,4.5vw,3rem) clamp(3.5rem,9vh,5.5rem);
 }
 .tale__mark{
   display:flex; align-items:center; gap:1rem;
@@ -498,9 +532,9 @@ body{
 }
 .tale__prose p{
   margin:0 0 1.35rem;
-  font-size:clamp(1rem,1.35vw,1.1rem); line-height:1.78;
+  font-size:clamp(.96rem,1.25vw,1.04rem); line-height:1.78;
   color:rgba(255,255,255,.86);
-  max-width:46ch; text-wrap:pretty;
+  text-wrap:pretty;
 }
 /* a abertura: o tique do território encosta nela */
 .tale__prose .open{
@@ -572,6 +606,7 @@ body{
   .arcade{ grid-template-columns:1fr; }
   .proof{ grid-template-columns:1fr; }
   .slots{ grid-template-columns:1fr; }
+  .autoria{ grid-template-columns:1fr; }
   .shead{ flex-direction:column; align-items:flex-start; gap:.6rem; }
 }
 
@@ -683,15 +718,12 @@ body{
             <h2 class="mov__h">Regência</h2>
             <p class="mov__t">
               O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume
-              para a regência do fluxo decisório. O <span class="b-echo">echo</span> nasce desse momento:
-              organização de acervo, segmentação temática, padronização de rotinas, controle de
-              prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência
-              judicial se converte em método.
+              para a regência do fluxo decisório. O <button class="b-echo" type="button" data-view="echo">echo</button>
+              nasce desse momento: organização de acervo, segmentação temática, padronização de
+              rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em
+              que a experiência judicial se converte em método.
             </p>
-            <button class="passage" type="button" data-view="echo">
-              <span>Ver o echo</span> <span class="arrow" aria-hidden="true">→</span>
-            </button>
-            <button class="idlink" type="button" data-tale="tale-echo" aria-haspopup="dialog">Identidade conceitual</button>
+            <button class="idlink idlink--echo" type="button" data-tale="tale-echo" aria-haspopup="dialog">echo: identidade conceitual</button>
           </article>
 
           <article class="mov" data-reveal style="--i:2">
@@ -699,50 +731,66 @@ body{
             <h2 class="mov__h">Arquitetura</h2>
             <p class="mov__t">
               O terceiro movimento surge quando o método encontra a inteligência artificial. O
-              <span class="b-atrio">ATRIO</span> transforma a lógica construída no
-              <span class="b-echo">echo</span> em arquitetura modular, com base documental, raciocínio
-              assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui
-              a decisão: passa a operar dentro de um percurso governado.
+              <button class="b-atrio" type="button" data-view="atrio">ATRIO</button> transforma a lógica
+              construída no <button class="b-echo" type="button" data-view="echo">echo</button> em
+              arquitetura modular, com base documental, raciocínio assistido, validação humana,
+              rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar
+              dentro de um percurso governado.
             </p>
-            <button class="passage" type="button" data-view="atrio">
-              <span>Ver o ATRIO</span> <span class="arrow" aria-hidden="true">→</span>
-            </button>
-            <button class="idlink" type="button" data-tale="tale-atrio" aria-haspopup="dialog">Identidade conceitual</button>
+            <button class="idlink idlink--atrio" type="button" data-tale="tale-atrio" aria-haspopup="dialog">ATRIO: identidade conceitual</button>
           </article>
         </section>
 
-        <!-- ===== APLICAÇÃO — Christian, 1ª pessoa, presente ===== -->
-        <section aria-label="Aplicação">
-          <header class="shead" data-reveal>
-            <h2>O intérprete da encruzilhada</h2>
-            <span class="shead__k">Aplicação</span>
-          </header>
+        <!-- ===== AUTORIA — ficha seca: marca pessoal, dados, currículo ===== -->
+        <section aria-labelledby="h-autoria">
+          <div class="ruleline ruleline--sec" data-reveal>
+            <h2 class="ruleline__k" id="h-autoria">Autoria</h2>
+          </div>
 
-          <p class="lede" data-reveal style="--i:1">
-            A mãe caminhou; quem traduz sou eu. Entre a língua do tribunal e a língua do mercado há um
-            cruzo, e é dele que este trabalho fala.
-          </p>
-
-          <div class="slots">
-            <!-- PENDENTE: o conto "Cá, estamos: o intérprete da encruzilhada".
-                 Texto pronto em Interprete_da_Encruzilhada.txt — entra aqui quando
-                 você decidir se vai inteiro ou em recorte. -->
-            <div class="slot" data-reveal style="--i:2">
-              <p class="slot__label">Slot — conto (a escrever juntos)</p>
-              <p>
-                “Cá, estamos: o intérprete da encruzilhada.” — o texto entra aqui, na sua voz, quando a
-                gente terminar. Registro presente, primeira pessoa.
+          <div class="autoria">
+            <div class="acol" data-reveal>
+              <p class="acol__k">Identidade</p>
+              <!-- marca pessoal — geometria do kit (assets/marca/cdc-*), ladrilho em tinta -->
+              <svg class="mark" viewBox="0 0 100 100" role="img"
+                   aria-label="Marca pessoal de Christian da Costa">
+                <rect width="100" height="100" fill="#181818"></rect>
+                <path fill="#FFFFFF" d="M13.75 13.75 50 50 13.75 86.25Z"></path>
+                <path fill="#FFFFFF" d="M86.25 13.75 50 50 86.25 86.25Z"></path>
+              </svg>
+              <p class="aname">Christian da Costa</p>
+              <p class="arole">
+                Advogado e mestre em Direito pela UFPR. Assessor jurídico e chefe de gabinete no
+                Tribunal de Justiça do Paraná — Turmas Recursais e Execuções Fiscais.
               </p>
             </div>
 
-            <!-- PENDENTE: ponteiro p/ Equivalências quando o loop fechar -->
-            <div class="slot" data-reveal style="--i:3">
-              <p class="slot__label">Slot — equivalências (aguarda o loop tags↔dicionário)</p>
-              <p>
-                A tradução tribunal → mercado, entrada por entrada. Vira página própria, com URL limpa e
-                mandável sozinha, quando a reconciliação fechar.
-              </p>
+            <div class="acol" data-reveal style="--i:1">
+              <p class="acol__k">Contato e currículo</p>
+              <ul class="alist">
+                <li><span>OAB/PR</span> 89.297 · Curitiba, Brasil</li>
+                <li><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></li>
+                <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">linkedin.com/in/christiandcosta</a></li>
+              </ul>
+              <!-- PENDENTE: soltar o PDF do currículo neste caminho -->
+              <a class="cv" href="CV-Christian_da_Costa.pdf" download>
+                <span aria-hidden="true">↓</span> Baixar currículo (PDF)
+              </a>
             </div>
+          </div>
+        </section>
+
+        <!-- ===== EQUIVALÊNCIAS — placeholder até o loop tags↔dicionário fechar ===== -->
+        <section aria-labelledby="h-equivalencias">
+          <div class="ruleline ruleline--sec" data-reveal>
+            <h2 class="ruleline__k" id="h-equivalencias">Equivalências</h2>
+          </div>
+
+          <div class="slot" data-reveal style="--i:1">
+            <p class="slot__label">Placeholder — aguarda o loop tags ↔ dicionário</p>
+            <p>
+              A tradução tribunal → mercado, entrada por entrada. Vira página própria, com URL limpa e
+              mandável sozinha, quando a reconciliação fechar.
+            </p>
           </div>
         </section>
 
