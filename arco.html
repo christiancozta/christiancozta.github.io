@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arco | Portfólio de Arquitetura Jurídica</title>
-<meta name="description" content="Uma narrativa de percurso: da regência recursal à arquitetura do raciocínio. Autoria de Christian da Costa.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Arco — Christian da Costa</title>
+<meta name="description" content="Narrativa de percurso: da regência recursal à arquitetura do raciocínio">
 <meta name="theme-color" content="#FFFFFF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,13 @@
   --rail-h: 0px;              /* medido no mobile pelo JS */
 
   /* Métrica da arcada — a mesma em toda a página */
-  --pad:    clamp(1.5rem, 5vw, 5rem);
+  /* A arcada respeita o recorte físico da tela. Com viewport-fit=cover a
+     página vai até a borda do aparelho; env() abre a medida onde o vidro
+     tem sensor ou canto redondo (iPhone em paisagem, ~59px de cada lado).
+     Em retrato env() é 0 e a métrica continua exatamente a de antes. */
+  --pad:    max(clamp(1.5rem, 5vw, 5rem),
+                env(safe-area-inset-left, 0px),
+                env(safe-area-inset-right, 0px));
   --colgap: clamp(1.5rem, 3.2vw, 3.25rem);
   --pier:   clamp(1.75rem, 3.2vw, 3rem);   /* altura do pilar sob o arco */
   --read:   58ch;   /* ~72 caracteres reais — o ch é mais largo que a média */
@@ -99,7 +105,11 @@ body{
 .rail{
   position:sticky; top:0; align-self:start; z-index:var(--z-rail);
   height:100dvh;
-  padding:clamp(2rem,2.6vw,2.75rem) 1.75rem clamp(1.5rem,2vw,2rem);
+  /* o cordão encosta no vidro: fundo até a borda, texto fora do recorte */
+  padding:clamp(2rem,2.6vw,2.75rem)
+          max(1.75rem, env(safe-area-inset-right, 0px))
+          calc(clamp(1.5rem,2vw,2rem) + env(safe-area-inset-bottom, 0px))
+          max(1.75rem, env(safe-area-inset-left, 0px));
   display:flex; flex-direction:column; gap:clamp(2rem,3.5vw,3rem);
   background:var(--ink); color:var(--paper);
 }
@@ -684,7 +694,8 @@ body{
 .child__bar{
   position:relative;
   display:flex; align-items:center; justify-content:flex-end;
-  padding:.4rem clamp(1rem,3vw,2rem);
+  padding:.4rem max(clamp(1rem,3vw,2rem), env(safe-area-inset-right, 0px))
+          .4rem max(clamp(1rem,3vw,2rem), env(safe-area-inset-left, 0px));
   background:var(--ink);
   flex:none;
 }
@@ -805,7 +816,8 @@ body{
   margin:clamp(2.5rem,6vh,3.5rem) 0; width:100%;
 }
 .tale__close{
-  position:fixed; top:clamp(1rem,3vh,1.75rem); right:clamp(1rem,3vw,2rem);
+  position:fixed; top:clamp(1rem,3vh,1.75rem);
+  right:max(clamp(1rem,3vw,2rem), env(safe-area-inset-right, 0px));
   display:inline-flex; align-items:center; gap:.6rem;
   padding:.55rem 1rem;
   background:var(--ink); color:var(--paper);
@@ -840,7 +852,8 @@ body{
     position:sticky; top:0; z-index:var(--z-rail);
     height:auto; flex-direction:row; align-items:center;
     justify-content:space-between; gap:.75rem 1.25rem;
-    padding:.9rem 1.15rem;
+    padding:.9rem max(1.15rem, env(safe-area-inset-right, 0px))
+            .9rem max(1.15rem, env(safe-area-inset-left, 0px));
     flex-wrap:wrap;
   }
   .rail__mark{ font-size:1.15rem; }
@@ -1171,7 +1184,7 @@ body{
             <div class="brow">
               <p class="brow__i">12</p>
               <p class="brow__q">“Minutar consome as horas que deveriam ir para a análise.”</p>
-              <p class="brow__m"><strong>RATIO</strong>: arquitetura de prompts que produziu votos reais, sob gate e validação humana.</p>
+              <p class="brow__m"><strong>RATIO/TJX</strong>: arquitetura de prompts que produziu votos reais, sob gate e validação humana.</p>
               <div class="brow__v"><button class="chip" type="button" data-goto="prd-01" data-label="Document Automation" aria-label="PRD-01 · Document Automation">PRD-01</button></div>
             </div>
             <div class="brow">
