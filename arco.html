@@ -58,7 +58,9 @@
                 env(safe-area-inset-left, 0px),
                 env(safe-area-inset-right, 0px));
   --colgap: clamp(1.5rem, 3.2vw, 3.25rem);
-  --pier:   clamp(1.75rem, 3.2vw, 3rem);   /* altura do pilar sob o arco */
+  /* altura do pilar sob o arco — e, no hero, a folga sob a linha de nascença.
+     Medida em vh: é ela que sobe o arco para dentro do campo. */
+  --pier:   clamp(3rem, 11vh, 7rem);
   --read:   58ch;   /* ~72 caracteres reais — o ch é mais largo que a média */
 
   /* Movimento — massa, não pressa */
@@ -213,7 +215,7 @@ body{
    =========================================================================== */
 /* a folga do topo passou para dentro do hero: ele precisa medir a tela inteira,
    e a régua diagonal precisa alcançar a altura do nome. */
-.home{ position:relative; padding:0 var(--pad); --home-top:clamp(3rem,7vw,6.5rem); }
+.home{ position:relative; padding:0 var(--pad); --home-top:clamp(2rem, min(7vw, 10dvh), 6.5rem); }
 
 /* Filete-título: a régua atravessa, o rótulo pousa na ponta.
    Mesmo dispositivo em toda a página — sistema, não enfeite. */
@@ -257,15 +259,17 @@ body{
    =========================================================================== */
 .arc{
   display:block; width:100%; flex:none;
-  height:clamp(92px,15vw,210px);
-  /* pousa no pé do hero: a nascença fecha a dobra, os pilares atravessam */
+  /* também mede em vh: em tela baixa o arco encolhe em vez de ser cortado */
+  height:clamp(88px, min(15vw, 27dvh), 210px);
   margin:clamp(3rem,6vw,5rem) 0 0;
   overflow:visible;
 }
 .arc path, .arc line{ fill:none; stroke:var(--ink); }
 .arc .extra{ stroke-opacity:.9; }
 .arc .intra{ stroke-opacity:.28; }
-.arc .spring{ stroke-opacity:.18; }
+/* a nascença é o datum da página: os pilares pousam nela e a diagonal nasce
+   dela. Uma junta precisa precisa ser vista — .18 não recebia um traço a .5. */
+.arc .spring{ stroke-opacity:.28; }
 
 /* ===========================================================================
    ARCADA — os três blocos justificados. Vindos do case-integrado:
@@ -1046,7 +1050,7 @@ body{
   <nav class="rail" aria-label="Navegação principal">
     <div>
       <button class="rail__mark" type="button" data-view="home" aria-label="Arco — voltar à origem">Arco</button>
-      <p class="rail__sub">regência jurídica orquestrada</p>
+      <p class="rail__sub">um autor · dois projetos</p>
     </div>
 
     <div class="rail__nav">
@@ -1106,7 +1110,7 @@ body{
               <p class="bio__tag">Legal Operations <i aria-hidden="true">|</i> Legal Tech &amp; IA <i aria-hidden="true">|</i> Jurimetria</p>
             </div>
           </div>
-          <p class="mov__t">Advogado e mestre em Direito pela UFPR, na encruzilhada entre operações jurídicas, tecnologia e dados, com mais de cinco anos de experiência como servidor do Poder Judiciário.</p>
+          <p class="mov__t">Advogado e mestre em Direito pela UFPR, na encruzilhada entre operações jurídicas, tecnologia e dados, com mais de cinco anos de experiência como servidor no Poder Judiciário.</p>
           <ul class="bio__list">
             <li>OAB/PR 89.297</li>
             <li><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></li>
@@ -1119,7 +1123,7 @@ body{
           <h1 class="mov__h">Narrativa de percurso</h1>
           <p class="mov__t">
             Da execução fiscal à <em>regência recursal</em>.<br>
-            Da regência à <em>inteligência orquestrada</em>.<br>
+            Da regência à <em>arquitetura do raciocínio</em>.<br>
             Um movimento exigiu o outro.<br>
             Método antes da automação.
           </p>
@@ -1127,15 +1131,18 @@ body{
 
         <!-- O ARCO: extradorso, intradorso e linha de nascença.
              preserveAspectRatio="none" + vector-effect: a curva acompanha a
-             largura da arcada; o traço permanece com 1px em qualquer viewport. -->
-        <svg class="arc" viewBox="0 0 1000 240" preserveAspectRatio="none"
+             largura da arcada; o traço permanece com 1px em qualquer viewport.
+             viewBox fecha em 238 — a nascença É a borda inferior da caixa. Com
+             isso o pé do desenho, o topo dos pilares e o nascimento da diagonal
+             caem todos na mesma linha, sem folga de sub-pixel. -->
+        <svg class="arc" viewBox="0 0 1000 238" preserveAspectRatio="none"
              role="presentation" aria-hidden="true" data-reveal>
           <path class="extra"  pathLength="1" vector-effect="non-scaling-stroke"
                 d="M0,238 C180,10 820,10 1000,238"></path>
           <path class="intra"  pathLength="1" vector-effect="non-scaling-stroke"
                 d="M0,238 C205,66 795,66 1000,238"></path>
           <line class="spring" pathLength="1" vector-effect="non-scaling-stroke"
-                x1="0" y1="238.5" x2="1000" y2="238.5"></line>
+                x1="0" y1="238" x2="1000" y2="238"></line>
         </svg>
 
         </div>
