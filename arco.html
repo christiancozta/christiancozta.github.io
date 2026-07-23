@@ -211,7 +211,9 @@ body{
 /* ===========================================================================
    HOME — papel branco. A mãe fala com a voz dela.
    =========================================================================== */
-.home{ position:relative; padding:clamp(3rem,7vw,6.5rem) var(--pad) 0; }
+/* a folga do topo passou para dentro do hero: ele precisa medir a tela inteira,
+   e a régua diagonal precisa alcançar a altura do nome. */
+.home{ position:relative; padding:0 var(--pad); --home-top:clamp(3rem,7vw,6.5rem); }
 
 /* Filete-título: a régua atravessa, o rótulo pousa na ponta.
    Mesmo dispositivo em toda a página — sistema, não enfeite. */
@@ -254,8 +256,9 @@ body{
    pousam exatamente na cabeça de cada bloco.
    =========================================================================== */
 .arc{
-  display:block; width:100%;
+  display:block; width:100%; flex:none;
   height:clamp(92px,15vw,210px);
+  /* pousa no pé do hero: a nascença fecha a dobra, os pilares atravessam */
   margin:clamp(3rem,6vw,5rem) 0 0;
   overflow:visible;
 }
@@ -873,7 +876,7 @@ body{
   .rail__foot{ display:none; }
   /* o filho ocupa o que sobra da tela: uma superfície de rolagem, não duas */
   .child{ height:calc(100dvh - var(--rail-h)); }
-  .home{ padding-top:2.75rem; }
+  .home{ --home-top:2.75rem; }
   .arcade{ grid-template-columns:1fr; }
   .proof{ grid-template-columns:1fr; }
   .slots{ grid-template-columns:1fr; }
@@ -931,28 +934,53 @@ body{
    a prova cai em escada. Só transform/opacity; overlay sem captura de clique.
    =========================================================================== */
 .ruleline--hero::before{ opacity:0; }        /* a horizontal some; a diagonal a substitui */
-.narr-zone{ position:relative; }
+
+/* O HERO É A ZONA. Mede a tela inteira menos o pilar: a nascença do arco
+   fecha a dobra, os pilares atravessam para fora do campo e a arcada começa
+   exatamente onde a vista termina — só aparece quando a página desce. */
+.narr-zone{
+  position:relative;
+  display:flex; flex-direction:column;
+  padding-top:var(--home-top);
+  min-height:calc(100dvh - var(--pier));
+}
+/* três âncoras, uma tela: a ficha no topo, o percurso no meio, o arco no pé.
+   As duas folgas automáticas repartem a sobra — em tela alta nada fica órfão. */
+.hero__txt, .narr-zone .arc{ margin-top:auto; }
+
 .narr{
   position:absolute; inset:0; z-index:1; pointer-events:none;
   opacity:0; transition:opacity 480ms var(--ease);
 }
 .home.narr-on .narr{ opacity:1; }
 .narr__svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+/* uma régua só, interrompida onde cada dado pousa: N dados, N+1 segmentos.
+   Coordenadas em px (sem viewBox) — a interrupção precisa casar com a altura
+   medida do dado, não com um percentual aproximado. */
 .narr__line{
   fill:none; stroke:var(--ink); stroke-width:1; stroke-opacity:.5;
   stroke-dasharray:1; stroke-dashoffset:1;
 }
-.home.narr-on .narr__line{ transition:stroke-dashoffset 1000ms var(--ease); stroke-dashoffset:0; }
 .narr__stats{ list-style:none; margin:0; padding:0; }
 .narr__stat{
   position:absolute; left:var(--x); right:auto; top:var(--y);
   width:clamp(9rem, 13vw, 12rem); max-width:calc(100% - var(--x));
   display:flex; flex-direction:column; align-items:flex-start; gap:.1rem;
-  padding-left:.6rem;
-  opacity:0; transform:translate(-5px,5px);
-  transition:opacity 560ms var(--ease), transform 560ms var(--ease);
+  opacity:0; transform:translate(-5px,4px);
 }
-.home.narr-on .narr__stat{ opacity:1; transform:none; transition-delay:calc(420ms + var(--d,0) * 120ms); }
+@media (prefers-reduced-motion:no-preference){
+  /* linear: é um traço só descendo em velocidade constante; cada segmento
+     recebe a duração da própria extensão e o atraso do que veio antes */
+  .home.narr-on .narr__line{
+    transition:stroke-dashoffset calc(var(--dur,600) * 1ms) linear calc(var(--dly,0) * 1ms);
+    stroke-dashoffset:0;
+  }
+  .narr__stat{ transition:opacity 420ms var(--ease), transform 420ms var(--ease); }
+  /* o dado acende no instante exato em que a régua chega à sua interrupção */
+  .home.narr-on .narr__stat{
+    opacity:1; transform:none; transition-delay:calc(var(--dly,0) * 1ms);
+  }
+}
 .narr__n{
   font-family:var(--f-display); font-weight:600;
   font-size:clamp(.85rem,1.35vw,1.18rem); line-height:1; letter-spacing:-.03em;
@@ -970,6 +998,8 @@ body{
   /* no mobile a régua diagonal e a cascata cederiam ao texto: recolhe-se */
   .narr{ display:none; }
   .ruleline--hero::before{ opacity:1; }
+  /* o cordão virou topo: o hero mede o que sobra da tela */
+  .narr-zone{ min-height:calc(100dvh - var(--rail-h) - var(--pier)); }
 }
 
 /* Fronteira agora carrega o peso: papel vira tinta (antes era \"A prova está no acervo\") */
@@ -987,7 +1017,11 @@ body{
 
 
 /* ABERTURA — ficha de abertura (marca · nome · tagline · bio justificada · contatos · CV) */
-.bio{ max-width:var(--read); margin:0 0 clamp(1.5rem,3vw,2.4rem); }
+/* estreita de propósito: abre a calha da direita para a régua subir até a
+   altura do nome sem disputar espaço com a prosa */
+.bio{ max-width:min(50ch, 66%); margin:0 0 clamp(1.5rem,3vw,2.4rem); }
+/* sem régua não há calha a proteger: a ficha volta à largura da coluna */
+@media (max-width:820px){ .bio{ max-width:none; } }
 .bio__head{ display:flex; align-items:center; gap:clamp(.7rem,1.3vw,1.05rem); margin:0 0 clamp(.85rem,1.7vw,1.2rem); }
 .bio__mark{ flex:none; width:clamp(30px,3vw,40px); height:auto; display:block; }
 .bio__name{ font-family:var(--f-display); font-weight:700; font-size:clamp(1rem,1.35vw,1.22rem); line-height:1.1; letter-spacing:-.02em; margin:0; }
@@ -1012,7 +1046,7 @@ body{
   <nav class="rail" aria-label="Navegação principal">
     <div>
       <button class="rail__mark" type="button" data-view="home" aria-label="Arco — voltar à origem">Arco</button>
-      <p class="rail__sub">um autor · dois projetos</p>
+      <p class="rail__sub">regência jurídica orquestrada</p>
     </div>
 
     <div class="rail__nav">
@@ -1047,6 +1081,20 @@ body{
     <!-- ===================== HOME: a voz da mãe ===================== -->
     <section class="view" data-view="home" data-active="true" aria-label="Origem — o arco">
       <div class="home">
+        <!-- ===== HERO — uma tela: ficha, percurso e arco. A arcada fica fora. ===== -->
+        <div class="narr-zone">
+
+        <div class="narr" aria-hidden="true">
+          <svg class="narr__svg" aria-hidden="true"></svg>
+          <ul class="narr__stats">
+            <li class="narr__stat"><b class="narr__n">60,4%</b> <span class="narr__l">produtividade elevada em 16,2 p.p (inicial 44,2%)</span></li>
+            <li class="narr__stat"><b class="narr__n">899</b> <span class="narr__l">votos comprovados na análise jurimétrica</span></li>
+            <li class="narr__stat"><b class="narr__n">1.192</b> <span class="narr__l">mapeados e com diretrizes antecipadas em 30 dias</span></li>
+            <li class="narr__stat"><b class="narr__n">2.758</b> <span class="narr__l">modelos de referência institucional consolidados</span></li>
+            <li class="narr__stat"><b class="narr__n">115.114</b> <span class="narr__l">julgados extraídos para formação de memória</span></li>
+          </ul>
+        </div>
+
         <!-- ===== ABERTURA — ficha: marca, nome, tagline, bio, contatos, CV ===== -->
         <section class="bio" aria-labelledby="bio-name" data-reveal>
           <div class="bio__head">
@@ -1058,7 +1106,7 @@ body{
               <p class="bio__tag">Legal Operations <i aria-hidden="true">|</i> Legal Tech &amp; IA <i aria-hidden="true">|</i> Jurimetria</p>
             </div>
           </div>
-          <p class="mov__t">Advogado e mestre em Direito pela UFPR, na encruzilhada entre operações jurídicas, tecnologia e dados, com mais de cinco anos de experiência como servidor no Poder Judiciário.</p>
+          <p class="mov__t">Advogado e mestre em Direito pela UFPR, na encruzilhada entre operações jurídicas, tecnologia e dados, com mais de cinco anos de experiência como servidor do Poder Judiciário.</p>
           <ul class="bio__list">
             <li>OAB/PR 89.297</li>
             <li><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></li>
@@ -1066,26 +1114,12 @@ body{
           </ul>
         </section>
 
-        <div class="narr-zone">
-        <div class="narr" aria-hidden="true">
-          <svg class="narr__svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <line class="narr__line" x1="3" y1="2" x2="34.5" y2="100" pathLength="1" vector-effect="non-scaling-stroke"></line>
-          </svg>
-          <ul class="narr__stats">
-            <li class="narr__stat" style="--x:32.6%;--y:94%;--d:0"><b class="narr__n">60,4%</b> <span class="narr__l">produtividade elevada em 16,2 p.p (inicial 44,2%)</span></li>
-            <li class="narr__stat" style="--x:28.9%;--y:82.5%;--d:1"><b class="narr__n">899</b> <span class="narr__l">votos comprovados na análise jurimétrica</span></li>
-            <li class="narr__stat" style="--x:25.2%;--y:71%;--d:2"><b class="narr__n">1.192</b> <span class="narr__l">mapeados e com diretrizes antecipadas em 30 dias</span></li>
-            <li class="narr__stat" style="--x:21.2%;--y:59.5%;--d:3"><b class="narr__n">2.758</b> <span class="narr__l">modelos de referência institucional consolidados</span></li>
-            <li class="narr__stat" style="--x:17.8%;--y:48%;--d:4"><b class="narr__n">115.114</b> <span class="narr__l">julgados extraídos para formação de memória</span></li>
-          </ul>
-        </div>
-
-        <!-- HERO -->
-        <div data-reveal>
+        <!-- PERCURSO -->
+        <div class="hero__txt" data-reveal>
           <h1 class="mov__h">Narrativa de percurso</h1>
           <p class="mov__t">
             Da execução fiscal à <em>regência recursal</em>.<br>
-            Da regência à <em>arquitetura do raciocínio</em>.<br>
+            Da regência à <em>inteligência orquestrada</em>.<br>
             Um movimento exigiu o outro.<br>
             Método antes da automação.
           </p>
@@ -2397,41 +2431,103 @@ body{
     const home = document.querySelector('.view[data-view="home"] .home');
     const zone = home && home.querySelector('.narr-zone');
     if (!home || !zone) return;
-    const line = zone.querySelector('.narr__line');
+    const svg  = zone.querySelector('.narr__svg');
     const arc  = zone.querySelector('.arc');
-    const stats = [...zone.querySelectorAll('.narr__stat')];
+    const head = zone.querySelector('.bio__head');
+    const narr = zone.querySelector('.narr');
+    /* de cima para baixo é como se lê: do acervo bruto (115.114) até o
+       resultado (60,4%), que pousa dentro do arco. O DOM está invertido. */
+    const stats = [...zone.querySelectorAll('.narr__stat')].reverse();
+    if (!svg || !arc || !head || !narr || !stats.length) return;
+
+    /* a régua é uma só, interrompida onde cada dado pousa: N dados, N+1
+       segmentos. Criados uma vez — layout() só recoloca, nunca recria (recriar
+       reiniciaria o desenho a cada resize). */
+    const NS = 'http://www.w3.org/2000/svg';
+    const segs = Array.from({length: stats.length + 1}, () => {
+      const l = document.createElementNS(NS, 'line');
+      l.setAttribute('class', 'narr__line');
+      l.setAttribute('pathLength', '1');
+      l.setAttribute('vector-effect', 'non-scaling-stroke');
+      return svg.appendChild(l);
+    });
+
+    const GUT  = 10;    // folga entre a régua e o dado
+    const PAD  = 9;     // folga vertical de cada interrupção
+    const DRAW = 1900;  // ms de traço puro, repartidos pela extensão de cada segmento
+    const HOLD = 120;   // ms de pausa em cada dado
 
     function layout(){
       const mov2 = home.querySelectorAll('.arcade .mov')[1];   // bloco 02 · Regência
-      if (!line || !arc || !mov2) return;
+      if (!mov2 || getComputedStyle(narr).display === 'none') return;
       const zr = zone.getBoundingClientRect();
-      if (!zr.width || !zr.height) return;                     // oculto (mobile): não posiciona
+      if (!zr.width || !zr.height) return;                     // oculto: não posiciona
       const ar = arc.getBoundingClientRect();
+      const hr = head.getBoundingClientRect();
       const m2 = mov2.getBoundingClientRect();
-      const px = ((m2.left - zr.left) / zr.width) * 100;       // x do pilar 02
-      const ay = Math.min(((ar.bottom - zr.top) / zr.height) * 100, 100);
-      const tx = 64, ty = 2;                                   // alvo: topo, levemente à direita do centro
-      // nasce no pilar 02 e cresce em direção ao topo-direito (o traço desenha nessa ordem)
-      line.setAttribute('x1', tx); line.setAttribute('y1', ty);
-      line.setAttribute('x2', px.toFixed(2)); line.setAttribute('y2', ay.toFixed(2));
-      const sub = zone.querySelector('.mov__t');
-      let clearTop = 40;
-      if (sub){ const sb = sub.getBoundingClientRect(); clearTop = ((sb.bottom - zr.top)/zr.height)*100 + 4; }
-      const arcTop = (ar.top - zr.top) / zr.height * 100;      // topo do arco (%)
-      const setPos = (s, y) => {
-        const x = tx + (px-tx)*((y-ty)/(ay-ty));               // ponto sobre a linha inteira
-        s.style.display = '';
-        s.style.setProperty('--x', x.toFixed(2)+'%');
-        s.style.setProperty('--y', y.toFixed(2)+'%');
-      };
-      const insideArcY = Math.min(94, ay - (ay - arcTop) * 0.30); // 60,4% dentro do arco
-      const aboveArcY  = arcTop;                                  // 899 "pula" o arco (logo no topo do arco)
-      const topY       = 6;                                       // último dado no alto (à direita, livre do subtítulo)
-      if (stats[0]) setPos(stats[0], insideArcY);
-      for (let i = 1; i < stats.length; i++){
-        const f = (i-1) / (stats.length - 2);                     // 0..1: de 899 até o topo, uniforme
-        setPos(stats[i], aboveArcY + (topY - aboveArcY) * f);
-      }
+
+      /* a régua nasce no pilar do bloco 02, na nascença do arco, e sobe até a
+         altura de "Christian da Costa": o percurso inteiro num traço só */
+      const ay = hr.top - zr.top;
+      const bx = m2.left - zr.left, by = ar.bottom - zr.top;
+      const dy = by - ay;
+      if (!(dy > 0)) return;
+
+      /* faixa útil: o primeiro dado começa abaixo da ficha — não disputa altura
+         com o nome; o último pousa dentro do arco, a 30% da nascença */
+      const hs    = stats.map(s => s.offsetHeight);
+      const first = (hr.bottom - zr.top) + PAD * 2 + hs[0] / 2;
+      const last  = by - (by - (ar.top - zr.top)) * .30;
+      if (last <= first) return;
+      const step = stats.length > 1 ? (last - first) / (stats.length - 1) : 0;
+      const ys   = stats.map((s, k) => first + step * k);
+
+      /* o topo da régua: 64% do palco, salvo quando a ficha alcança essa calha —
+         então recua o necessário para o primeiro dado não encostar nela, sem
+         nunca empurrar o dado para fora do palco */
+      const br = zone.querySelector('.bio').getBoundingClientRect();
+      const f  = (ys[0] + hs[0] / 2 - ay) / dy;
+      const need = f < 1
+        ? ((br.right - zr.left) + GUT * 2 - GUT - bx * f) / (1 - f)
+        : 0;
+      const ax = Math.min(
+        Math.max(zr.width * .64, need),
+        zr.width - stats[0].offsetWidth - GUT
+      );
+      const len = Math.hypot(bx - ax, dy);
+      const xAt = y => ax + (bx - ax) * (y - ay) / dy;
+
+      /* os vãos: cada um cobre exatamente a altura medida do seu dado */
+      const spans = [];
+      let cur = ay;
+      ys.forEach((y, k) => {
+        spans.push([cur, Math.max(cur, y - hs[k] / 2 - PAD)]);
+        cur = Math.max(cur, y + hs[k] / 2 + PAD);
+      });
+      spans.push([cur, Math.max(cur, by)]);
+
+      const lens  = spans.map(([y1, y2]) => (y2 - y1) / dy * len);
+      const total = lens.reduce((a, b) => a + b, 0) || 1;
+
+      let t = 0;
+      spans.forEach(([y1, y2], k) => {
+        const l = segs[k];
+        l.setAttribute('x1', xAt(y1).toFixed(2)); l.setAttribute('y1', y1.toFixed(2));
+        l.setAttribute('x2', xAt(y2).toFixed(2)); l.setAttribute('y2', y2.toFixed(2));
+        const dur = lens[k] / total * DRAW;
+        l.style.setProperty('--dur', Math.round(dur));
+        l.style.setProperty('--dly', Math.round(t));
+        t += dur;
+
+        const s = stats[k];
+        if (!s) return;
+        /* alinhado ao vão, e à esquerda pelo ponto mais recuado da régua dentro
+           dele — a régua desce para a esquerda, o texto nunca a encosta */
+        s.style.setProperty('--y', (ys[k] - hs[k] / 2).toFixed(2) + 'px');
+        s.style.setProperty('--x', (xAt(ys[k] + hs[k] / 2) + GUT).toFixed(2) + 'px');
+        s.style.setProperty('--dly', Math.round(t));
+        t += HOLD;
+      });
     }
 
     layout();
