@@ -7,6 +7,12 @@
 <meta name="description" content="Narrativa de percurso: da regência recursal à arquitetura do raciocínio">
 <meta name="theme-color" content="#FFFFFF">
 
+<!-- a marca pessoal na aba: monólito cortado pelo oxê, kit v1.2 -->
+<link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/simbolo-preto-32x32.png">
+<link rel="apple-touch-icon" href="assets/brand/simbolo-preto-96x96.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700&family=Azeret+Mono:wght@400;500;700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
@@ -31,6 +37,14 @@
   --ink-55:   rgba(24,24,24,.55);   /* só texto grande (display) — ~4.2:1   */
   --hair:     rgba(24,24,24,.18);
   --hair-soft:rgba(24,24,24,.07);
+
+  --ink-70:   rgba(24,24,24,.70);   /* micro-texto sobre a massa tonal do Índice */
+
+  /* massa tonal do Índice — o domínio não é tinta, é papel de outro peso.
+     Alterna para separar conjuntos sem gastar uma única borda. A tinta cheia
+     (#181818) segue reservada à Fronteira. */
+  --grp-a:    #E6E8EA;
+  --grp-b:    #F0F2F4;
 
   /* papel sobre tinta — para o cordão e a faixa invertida */
   --pp-72:    rgba(255,255,255,.72);
@@ -186,7 +200,7 @@ body{
    No escuro a marca é o negativo — os dois triângulos em papel, sem ladrilho. */
 .rail__foot{ margin-top:auto; padding-top:1.5rem; border-top:1px solid var(--hair-inv-soft); }
 .sig{ display:flex; align-items:flex-start; gap:.8rem; }
-.sig__mark{ flex:none; display:block; width:1.85rem; height:1.85rem; margin-top:.1rem; }
+.sig__mark{ flex:none; display:block; width:1.85rem; height:1.85rem; margin-top:.1rem; color:var(--paper); }
 .sig__name{
   font-family:var(--f-body); font-weight:600; font-size:.88rem;
   letter-spacing:-.012em; line-height:1.2; color:var(--paper); margin:0;
@@ -528,7 +542,7 @@ body{
 /* --- A PONTE: nº → dor → mecanismo → verbete -------------------------------- */
 .bridge{ margin-top:.5rem; }
 .brow{
-  display:grid; grid-template-columns:2.75rem 1fr 1.2fr 9rem;
+  display:grid; grid-template-columns:2.75rem minmax(0,1fr) minmax(0,1.2fr) 9rem;
   column-gap:var(--colgap); align-items:start;
   border-top:1px solid var(--hair); padding:1.05rem 0;
 }
@@ -571,10 +585,11 @@ body{
   content:""; position:absolute; right:.62rem; bottom:100%;
   width:1px; height:.5rem; background:var(--ink);
 }
+/* a legenda inverte: papel branco, letra preta — o filete de tinta a segura */
 .chip[data-label]::after{
   content:attr(data-label);
   position:absolute; right:0; bottom:calc(100% + .5rem);
-  background:var(--ink); color:var(--paper);
+  background:var(--paper); color:var(--ink); box-shadow:0 0 0 1px var(--ink);
   font-family:var(--f-body); font-size:.74rem; font-weight:500;
   letter-spacing:-.005em; line-height:1.3; text-transform:none; white-space:nowrap;
   padding:.42rem .62rem;
@@ -596,72 +611,116 @@ body{
   .chip[data-label]:hover::after,  .chip[data-label]:focus-visible::after{ transform:none; }
 }
 
-/* --- ÍNDICE: o domínio é uma gaveta; o verbete, outra dentro dela ---------- */
-.grp{ border-bottom:1px solid var(--ink); }
+/* --- ÍNDICE: o domínio é uma gaveta; o verbete, outra dentro dela ----------
+   Três níveis, e nenhuma borda externa: o domínio é uma massa tonal, o
+   verbete é um registro dentro dela, o conteúdo aberto fecha com um fio
+   branco. O que separa dois domínios é o tom, não o traço. */
+.grp{
+  background:var(--grp-a);
+  padding:.15rem clamp(.9rem,2.2vw,1.6rem) .35rem;
+  width:100%; max-width:100%; min-width:0;
+}
+.grp:nth-of-type(even){ background:var(--grp-b); }
 .grp > summary{
   list-style:none; cursor:pointer;
   display:flex; align-items:baseline; gap:.8rem;
-  padding:1rem 0 .6rem;
+  padding:1.05rem 0 .8rem;
 }
 .grp > summary::-webkit-details-marker{ display:none; }
+/* cabeçalho: a família muda (display, não corpo) e o peso sobe um degrau —
+   é o único ponto do Índice onde a tipografia pesa acima do registro */
 .grp > summary h4{
-  font-family:var(--f-body); font-weight:600; font-size:1.02rem;
-  letter-spacing:-.015em; margin:0;
+  font-family:var(--f-display); font-weight:600;
+  font-size:clamp(1.06rem,1.7vw,1.26rem);
+  letter-spacing:-.028em; margin:0; min-width:0;
 }
 .grp__n{
   font-family:var(--f-micro); font-size:.66rem; letter-spacing:.08em;
-  color:var(--ink-62); font-variant-numeric:tabular-nums;
+  color:var(--ink-70); font-variant-numeric:tabular-nums;
 }
 .grp__x{
   margin-left:auto;
-  font-family:var(--f-micro); font-size:.85rem; color:var(--ink-62);
-  transition:transform var(--slow) var(--ease), color var(--fast) var(--ease);
+  display:inline-block; width:1em; text-align:center; flex:none;
+  font-family:"Azeret Mono","Segoe UI Symbol",ui-monospace,monospace;
+  font-size:1rem; line-height:1; color:var(--ink-70);
+  transition:color var(--fast) var(--ease);
 }
-.grp > summary:hover .grp__x{ color:var(--ink); }
-.grp[open] > summary .grp__x{ transform:rotate(45deg); color:var(--ink); }
-.grp__body{ padding-bottom:1.25rem; border-top:1px solid var(--hair); }
+.grp__x::before{ content:"\203A"; }                             /* › */
+.grp[open] > summary .grp__x::before{ content:"\2304"; }        /* ⌄ */
+.grp > summary:hover .grp__x, .grp[open] > summary .grp__x{ color:var(--ink); }
+.grp > summary:hover h4{ color:var(--ink); }
+.grp__body{
+  padding:0 clamp(.4rem,1vw,.75rem) 1.3rem clamp(1.15rem,2.6vw,2.25rem);
+  border-top:1px solid var(--hair);
+  display:grid; grid-template-columns:minmax(0,1fr);
+}
 
-.verb{ border-top:1px solid var(--hair); }
+/* o registro: largura inteira do domínio, sem calha morta.
+   --chev é a calha do marcador: ele pendura nela sem consumir o recuo. */
+.verb{
+  position:relative; --chev:1.15rem;
+  width:100%; max-width:100%; min-width:0;
+  padding:0 .8rem;
+  border-top:1px solid var(--hair);
+}
 .verb:first-of-type{ border-top:0; }
+/* estado aberto sem depender do símbolo: o fundo não muda — o conteúdo fecha
+   com um fio branco que o separa da equivalência de baixo */
+.verb[open]{ border-bottom:1px solid var(--paper); }
+.verb[open] + .verb{ border-top-color:transparent; }   /* uma linha só, e ela é branca */
 .verb > summary{
   list-style:none; cursor:pointer;
-  display:grid; grid-template-columns:1fr auto auto;
-  column-gap:1.25rem; align-items:baseline;
-  padding:1rem 0;
+  display:grid; grid-template-columns:minmax(0,1fr) auto;
+  column-gap:1rem; align-items:baseline;
+  padding:.62rem 0;
+  width:100%; max-width:100%; min-width:0;
 }
 .verb > summary::-webkit-details-marker{ display:none; }
+.verb__hd{ min-width:0; }
 .verb > summary:hover .verb__t{ background-size:100% 1px; }
 .verb__c{
   font-family:var(--f-micro); font-size:.68rem; letter-spacing:.06em;
   color:var(--ink-62); font-variant-numeric:tabular-nums;
 }
 .verb__t{
-  font-weight:600; font-size:.98rem; letter-spacing:-.012em;
+  font-weight:500; font-size:.97rem; letter-spacing:-.012em; line-height:1.25;
   background-image:linear-gradient(currentColor,currentColor);
   background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%;
   transition:background-size var(--slow) var(--ease);
   padding-bottom:1px;
 }
-.verb__p{ display:block; margin-top:.2rem; color:var(--ink-62); font-size:.76rem; font-weight:400; }
+.verb[open] > summary .verb__t{ color:var(--ink); }
+.verb__p{ display:block; margin-top:.05rem; color:var(--ink-70); font-size:.75rem; font-weight:400; line-height:1.3; }
 .verb__sig{ display:flex; gap:.35rem; align-self:center; }
+/* chevron: › fechado, ⌄ aberto. Pendura à esquerda, na calha do recuo: sai do
+   fluxo, então o título não anda um pixel e o recuo atual fica intacto.
+   Sem `top`: a posição estática o mantém na linha de base do título. */
 .verb__x{
-  font-family:var(--f-micro); font-size:.8rem; color:var(--ink-62);
-  transition:transform var(--slow) var(--ease), color var(--fast) var(--ease);
+  position:absolute; left:calc(var(--chev) * -1);
+  display:inline-block; width:1em; text-align:center;
+  font-family:"Azeret Mono","Segoe UI Symbol",ui-monospace,monospace;
+  font-size:.86rem; line-height:1.27; color:var(--ink-70);
+  transform:translateY(.3em);   /* pousa no eixo óptico da primeira linha */
+  transition:color var(--fast) var(--ease);
 }
-.verb[open] > summary .verb__x{ transform:rotate(45deg); color:var(--ink); }
+.verb__x::before{ content:"\203A"; }                            /* › */
+.verb[open] > summary .verb__x::before{ content:"\2304"; }      /* ⌄ */
+.verb > summary:hover .verb__x, .verb[open] > summary .verb__x{ color:var(--ink); }
 
 .verb__body{
-  padding:0 0 1.9rem;
+  padding:0 0 1.5rem;
   margin-left:0;
-  display:grid; gap:1.15rem;
+  display:grid; grid-template-columns:minmax(0,1fr); gap:1.15rem;
+  width:100%; max-width:100%; min-width:0;
 }
-.verb__body p{ margin:0; font-size:.85rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; max-width:74ch; }
+/* aberto ocupa toda a largura disponível do domínio */
+.verb__body p{ margin:0; font-size:.85rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; max-width:none; }
 .verb__body p.verb__lbl{
   font-family:var(--f-micro); font-size:.63rem; line-height:1.4; letter-spacing:.14em;
   text-transform:uppercase; color:var(--ink); font-weight:700; margin:0 0 .45rem;
 }
 .verb__body p.al{ font-size:.78rem; color:var(--ink-62); }
-.ev{ display:grid; grid-template-columns:5.25rem 1fr; column-gap:1rem; row-gap:.6rem; align-items:baseline; }
+.ev{ display:grid; grid-template-columns:5.25rem minmax(0,1fr); column-gap:1rem; row-gap:.6rem; align-items:baseline; }
 
 /* a marca nomeada — a caixa é da marca: echo é sempre minúsculo, ATRIO sempre alto */
 .t-echo, .t-atrio{
@@ -685,11 +744,13 @@ body{
 }
 .border2 p{ margin:0; font-size:.86rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; max-width:54ch; }
 .outchips{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1.1rem; }
+/* o fecho é uma coluna só, da margem à margem da faixa: é a última palavra,
+   não uma nota de rodapé */
 .eqclose{
   border-top:1px solid var(--hair);
   margin-top:clamp(2.5rem,5vw,3.5rem); padding-top:1.4rem;
   font-size:.83rem; line-height:1.7; color:var(--ink-78); text-wrap:pretty;
-  max-width:56ch;
+  width:100%; max-width:none; min-width:0;
 }
 
 /* ===========================================================================
@@ -844,10 +905,14 @@ body{
 @media (max-width:1080px){
   .arcade{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .proof{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .brow{ grid-template-columns:2.75rem 1fr 1.2fr; row-gap:.7rem; }
+  .brow{ grid-template-columns:2.75rem minmax(0,1fr) minmax(0,1.2fr); row-gap:.7rem; }
   .brow__v{ grid-column:2 / -1; }
   .brow--h > :last-child{ display:none; }
   .verb__body{ margin-left:0; }
+  /* o recuo aperta antes de o registro perder largura; a calha do marcador
+     aperta junto, para o chevron não sair da massa do domínio */
+  .grp__body{ padding-left:clamp(.9rem,2vw,1.5rem); }
+  .verb{ --chev:.95rem; }
   /* a calha do verbete deixa de ser a última: a legenda vira para a esquerda */
   .chip[data-label]::after{ left:0; right:auto; }
   .chip[data-label]::before{ left:.62rem; right:auto; }
@@ -890,13 +955,17 @@ body{
   .eq__stats{ grid-template-columns:1fr; }
   .brow--h{ display:none; }
   /* o número vira marcador pendurado; o resto empilha na segunda calha */
-  .brow{ grid-template-columns:2.25rem 1fr; row-gap:.6rem; column-gap:.75rem; }
+  .brow{ grid-template-columns:2.25rem minmax(0,1fr); row-gap:.6rem; column-gap:.75rem; }
   .brow__q, .brow__m, .brow__v{ grid-column:2; }
-  .verb > summary{ grid-template-columns:1fr auto; column-gap:.75rem; row-gap:.35rem; }
+  /* o índice no celular: o domínio mantém a massa, o registro perde a calha */
+  .grp{ padding-inline:.9rem; }
+  .grp__body{ padding-left:.75rem; padding-right:0; }
+  .verb{ padding-inline:.5rem; --chev:.7rem; }
+  .verb > summary{ grid-template-columns:minmax(0,1fr); column-gap:.75rem; row-gap:.35rem; }
   .verb__c{ grid-column:1 / -1; }
   .verb__sig{ grid-column:1 / -1; }
   .verb__body{ margin-left:0; }
-  .ev{ grid-template-columns:1fr; row-gap:.25rem; }
+  .ev{ grid-template-columns:minmax(0,1fr); row-gap:.25rem; }
   .border2{ grid-template-columns:1fr; }
   .eqhead{ flex-direction:column; align-items:flex-start; gap:.6rem; }
 }
@@ -999,11 +1068,31 @@ body{
   .narr__line{ stroke-dashoffset:0; }
 }
 @media (max-width:820px){
-  /* no mobile a régua diagonal e a cascata cederiam ao texto: recolhe-se */
-  .narr{ display:none; }
+  /* No celular a régua diagonal não cabe — mas o dado cabe. A camada sai da
+     sobreposição e desce em registro: a diagonal vira prumo, a cascata vira
+     lista. Mesma leitura, sem disputar largura com o texto. */
+  .narr{
+    position:static; order:9; opacity:1; pointer-events:auto;
+    width:100%; max-width:100%; min-width:0;
+    margin-top:clamp(1.4rem,4.5vw,2rem);
+  }
+  .narr__svg{ display:none; }
+  .narr__stats{
+    display:grid; grid-template-columns:minmax(0,1fr);
+    gap:.5rem; padding-left:.85rem; border-left:1px solid var(--hair);
+  }
+  .narr__stat{
+    position:static; width:auto; max-width:none;
+    flex-direction:row; align-items:baseline; gap:.6rem;
+    opacity:1; transform:none;
+  }
+  .narr__n{ flex:none; min-width:4.2rem; }
+  .narr__l{ min-width:0; }
   .ruleline--hero::before{ opacity:1; }
   /* o cordão virou topo: o hero mede o que sobra da tela */
   .narr-zone{ min-height:calc(100dvh - var(--rail-h) - var(--pier)); }
+  /* a camada de dados entrou no fluxo: o arco cede a folga que ela ocupa */
+  .narr-zone .arc{ margin-top:clamp(1.5rem,5vw,2.5rem); }
 }
 
 /* Fronteira agora carrega o peso: papel vira tinta (antes era \"A prova está no acervo\") */
@@ -1027,7 +1116,7 @@ body{
 /* sem régua não há calha a proteger: a ficha volta à largura da coluna */
 @media (max-width:820px){ .bio{ max-width:none; } }
 .bio__head{ display:flex; align-items:center; gap:clamp(.7rem,1.3vw,1.05rem); margin:0 0 clamp(.85rem,1.7vw,1.2rem); }
-.bio__mark{ flex:none; width:clamp(30px,3vw,40px); height:auto; display:block; }
+.bio__mark{ flex:none; width:clamp(30px,3vw,40px); height:auto; display:block; color:var(--ink); }
 .bio__name{ font-family:var(--f-display); font-weight:700; font-size:clamp(1rem,1.35vw,1.22rem); line-height:1.1; letter-spacing:-.02em; margin:0; }
 .bio__tag{ font-family:var(--f-display); font-weight:400; font-size:clamp(.72rem,1vw,.86rem); line-height:1.2; letter-spacing:-.01em; color:var(--ink-78); margin:.25rem 0 0; }
 .bio__tag i{ font-style:normal; color:var(--ink-55); padding:0 .28em; }
@@ -1062,11 +1151,12 @@ body{
 
     <div class="rail__foot">
       <div class="sig">
-        <!-- marca pessoal: o bloco é a marca; os triângulos são vazados -->
-        <svg class="sig__mark" viewBox="0 0 100 100" role="img"
+        <!-- kit v1.2, matriz 06: monólito 1:1 cortado pelo oxê triangulado,
+             em negativo. A moldura é a marca; as duas lâminas são vazadas. -->
+        <svg class="sig__mark" viewBox="0 0 120 120" role="img"
              aria-label="Marca pessoal de Christian da Costa">
-          <path fill="#FFFFFF" fill-rule="evenodd"
-                d="M0 0H100V100H0Z M13.75 13.75 50 50 13.75 86.25Z M86.25 13.75 50 50 86.25 86.25Z"></path>
+          <path fill="currentColor" fill-rule="evenodd"
+                d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"></path>
         </svg>
         <div>
           <p class="sig__name">Christian da Costa</p>
@@ -1088,7 +1178,10 @@ body{
         <!-- ===== HERO — uma tela: ficha, percurso e arco. A arcada fica fora. ===== -->
         <div class="narr-zone">
 
-        <div class="narr" aria-hidden="true">
+        <!-- os dados do percurso: sobreposição no desktop, registro em prumo no
+             celular. O número não é enfeite — fica legível ao leitor de tela nos
+             dois casos; só a régua desenhada é decorativa. -->
+        <div class="narr">
           <svg class="narr__svg" aria-hidden="true"></svg>
           <ul class="narr__stats">
             <li class="narr__stat"><b class="narr__n">60,4%</b> <span class="narr__l">produtividade elevada em 16,2 p.p (inicial 44,2%)</span></li>
@@ -1102,8 +1195,10 @@ body{
         <!-- ===== ABERTURA — ficha: marca, nome, tagline, bio, contatos, CV ===== -->
         <section class="bio" aria-labelledby="bio-name" data-reveal>
           <div class="bio__head">
-            <svg class="bio__mark" viewBox="0 0 100 100" role="img" aria-label="Marca pessoal de Christian da Costa">
-              <path fill="#181818" fill-rule="evenodd" d="M0 0H100V100H0Z M13.75 13.75 50 50 13.75 86.25Z M86.25 13.75 50 50 86.25 86.25Z"></path>
+            <!-- kit v1.2, matriz 06: monólito 1:1 cortado pelo oxê triangulado.
+                 A geometria é a do kit; a tinta é a da página. -->
+            <svg class="bio__mark" viewBox="0 0 120 120" role="img" aria-label="Marca pessoal de Christian da Costa">
+              <path fill="currentColor" fill-rule="evenodd" d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"></path>
             </svg>
             <div>
               <h2 class="bio__name" id="bio-name">Christian da Costa</h2>
@@ -1321,14 +1416,13 @@ body{
 
           <!-- ---------- ARQUITETURA ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Arquitetura</h4><span class="grp__n">6</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Arquitetura</h4><span class="grp__n">6</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="arq-04">
                 <summary>
-                  <span><span class="verb__t">Business Rules</span><span class="verb__p">Regras de negócio</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Rules</span><span class="verb__p">Regras de negócio</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1342,9 +1436,8 @@ body{
 
               <details class="verb" id="arq-03">
                 <summary>
-                  <span><span class="verb__t">Decision Support System</span><span class="verb__p">Sistema de apoio à decisão</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Decision Support System</span><span class="verb__p">Sistema de apoio à decisão</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1358,9 +1451,8 @@ body{
 
               <details class="verb" id="arq-01">
                 <summary>
-                  <span><span class="verb__t">Modular Architecture</span><span class="verb__p">Arquitetura modular</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Modular Architecture</span><span class="verb__p">Arquitetura modular</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1374,9 +1466,8 @@ body{
 
               <details class="verb" id="arq-02">
                 <summary>
-                  <span><span class="verb__t">Orchestration</span><span class="verb__p">Orquestração</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Orchestration</span><span class="verb__p">Orquestração</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1390,9 +1481,8 @@ body{
 
               <details class="verb" id="arq-05">
                 <summary>
-                  <span><span class="verb__t">Requirements Management</span><span class="verb__p">Gestão de requisitos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Requirements Management</span><span class="verb__p">Gestão de requisitos</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1406,9 +1496,8 @@ body{
 
               <details class="verb" id="arq-06">
                 <summary>
-                  <span><span class="verb__t">Systems Thinking</span><span class="verb__p">Pensamento sistêmico</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Systems Thinking</span><span class="verb__p">Pensamento sistêmico</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1428,14 +1517,13 @@ body{
 
           <!-- ---------- CONHECIMENTO ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Conhecimento</h4><span class="grp__n">6</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Conhecimento</h4><span class="grp__n">6</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="con-06">
                 <summary>
-                  <span><span class="verb__t">Documentation</span><span class="verb__p">Documentação técnica</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Documentation</span><span class="verb__p">Documentação técnica</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1452,9 +1540,8 @@ body{
 
               <details class="verb" id="con-01">
                 <summary>
-                  <span><span class="verb__t">Knowledge Capture</span><span class="verb__p">Captura de conhecimento</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Knowledge Capture</span><span class="verb__p">Captura de conhecimento</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1468,9 +1555,8 @@ body{
 
               <details class="verb" id="con-02">
                 <summary>
-                  <span><span class="verb__t">Knowledge Management</span><span class="verb__p">Gestão do conhecimento</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Knowledge Management</span><span class="verb__p">Gestão do conhecimento</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1484,9 +1570,8 @@ body{
 
               <details class="verb" id="con-03">
                 <summary>
-                  <span><span class="verb__t">Knowledge Transfer</span><span class="verb__p">Transferência de conhecimento</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Knowledge Transfer</span><span class="verb__p">Transferência de conhecimento</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1500,9 +1585,8 @@ body{
 
               <details class="verb" id="con-04">
                 <summary>
-                  <span><span class="verb__t">Standard Operating Procedures</span><span class="verb__p">Procedimentos operacionais padrão</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Standard Operating Procedures</span><span class="verb__p">Procedimentos operacionais padrão</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1516,9 +1600,8 @@ body{
 
               <details class="verb" id="con-05">
                 <summary>
-                  <span><span class="verb__t">Style Guide</span><span class="verb__p">Guia de estilo e vocabulário controlado</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Style Guide</span><span class="verb__p">Guia de estilo e vocabulário controlado</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1538,14 +1621,13 @@ body{
 
           <!-- ---------- DADOS ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Dados</h4><span class="grp__n">7</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Dados</h4><span class="grp__n">7</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="dad-01">
                 <summary>
-                  <span><span class="verb__t">Corpus Engineering</span><span class="verb__p">Engenharia de corpus</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Corpus Engineering</span><span class="verb__p">Engenharia de corpus</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1559,9 +1641,8 @@ body{
 
               <details class="verb" id="dad-03">
                 <summary>
-                  <span><span class="verb__t">Data Governance</span><span class="verb__p">Governança de dados</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Governance</span><span class="verb__p">Governança de dados</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1575,9 +1656,8 @@ body{
 
               <details class="verb" id="dad-02">
                 <summary>
-                  <span><span class="verb__t">Data Quality</span><span class="verb__p">Qualidade de dados</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Quality</span><span class="verb__p">Qualidade de dados</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1591,9 +1671,8 @@ body{
 
               <details class="verb" id="dad-07">
                 <summary>
-                  <span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1607,9 +1686,8 @@ body{
 
               <details class="verb" id="dad-05">
                 <summary>
-                  <span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1623,9 +1701,8 @@ body{
 
               <details class="verb" id="dad-04">
                 <summary>
-                  <span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1639,9 +1716,8 @@ body{
 
               <details class="verb" id="dad-06">
                 <summary>
-                  <span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1661,14 +1737,13 @@ body{
 
           <!-- ---------- DESIGN ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Design</h4><span class="grp__n">1</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Design</h4><span class="grp__n">1</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="des-01">
                 <summary>
-                  <span><span class="verb__t">Legal Design</span><span class="verb__p">Design jurídico</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Design</span><span class="verb__p">Design jurídico</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1688,14 +1763,13 @@ body{
 
           <!-- ---------- IA ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>IA</h4><span class="grp__n">12</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>IA</h4><span class="grp__n">12</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="iax-01">
                 <summary>
-                  <span><span class="verb__t">AI Governance</span><span class="verb__p">Governança de inteligência artificial</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Governance</span><span class="verb__p">Governança de inteligência artificial</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1709,9 +1783,8 @@ body{
 
               <details class="verb" id="iax-02">
                 <summary>
-                  <span><span class="verb__t">AI Risk Management</span><span class="verb__p">Gestão de riscos de IA</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Risk Management</span><span class="verb__p">Gestão de riscos de IA</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1725,9 +1798,8 @@ body{
 
               <details class="verb" id="iax-09">
                 <summary>
-                  <span><span class="verb__t">Context Engineering</span><span class="verb__p">Engenharia de contexto</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Context Engineering</span><span class="verb__p">Engenharia de contexto</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1741,9 +1813,8 @@ body{
 
               <details class="verb" id="iax-10">
                 <summary>
-                  <span><span class="verb__t">Explainability</span><span class="verb__p">Explicabilidade</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Explainability</span><span class="verb__p">Explicabilidade</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1757,9 +1828,8 @@ body{
 
               <details class="verb" id="iax-04">
                 <summary>
-                  <span><span class="verb__t">Human in the Loop</span><span class="verb__p">Humano no circuito</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Human in the Loop</span><span class="verb__p">Humano no circuito</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1773,9 +1843,8 @@ body{
 
               <details class="verb" id="iax-07">
                 <summary>
-                  <span><span class="verb__t">Model Evaluation</span><span class="verb__p">Avaliação de modelos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Model Evaluation</span><span class="verb__p">Avaliação de modelos</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1789,9 +1858,8 @@ body{
 
               <details class="verb" id="iax-03">
                 <summary>
-                  <span><span class="verb__t">Privacy by Design</span><span class="verb__p">Privacidade desde a concepção</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Privacy by Design</span><span class="verb__p">Privacidade desde a concepção</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1808,9 +1876,8 @@ body{
 
               <details class="verb" id="iax-08">
                 <summary>
-                  <span><span class="verb__t">Prompt Engineering</span><span class="verb__p">Engenharia de prompts</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Prompt Engineering</span><span class="verb__p">Engenharia de prompts</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1824,9 +1891,8 @@ body{
 
               <details class="verb" id="iax-05">
                 <summary>
-                  <span><span class="verb__t">Quality Gates</span><span class="verb__p">Portões de qualidade</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Quality Gates</span><span class="verb__p">Portões de qualidade</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1840,9 +1906,8 @@ body{
 
               <details class="verb" id="iax-06">
                 <summary>
-                  <span><span class="verb__t">Red Teaming</span><span class="verb__p">Confronto adversarial</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Red Teaming</span><span class="verb__p">Confronto adversarial</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1856,9 +1921,8 @@ body{
 
               <details class="verb" id="iax-12">
                 <summary>
-                  <span><span class="verb__t">Risk Assessment</span><span class="verb__p">Avaliação de riscos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Risk Assessment</span><span class="verb__p">Avaliação de riscos</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1872,9 +1936,8 @@ body{
 
               <details class="verb" id="iax-11">
                 <summary>
-                  <span><span class="verb__t">Traceability</span><span class="verb__p">Rastreabilidade</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Traceability</span><span class="verb__p">Rastreabilidade</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1894,14 +1957,13 @@ body{
 
           <!-- ---------- PROCESSO ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Processo</h4><span class="grp__n">10</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Processo</h4><span class="grp__n">10</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="pro-03">
                 <summary>
-                  <span><span class="verb__t">Business Process Management</span><span class="verb__p">Gestão de processos de negócio</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Process Management</span><span class="verb__p">Gestão de processos de negócio</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1915,9 +1977,8 @@ body{
 
               <details class="verb" id="pro-07">
                 <summary>
-                  <span><span class="verb__t">Change Management</span><span class="verb__p">Gestão da mudança</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Change Management</span><span class="verb__p">Gestão da mudança</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1931,9 +1992,8 @@ body{
 
               <details class="verb" id="pro-09">
                 <summary>
-                  <span><span class="verb__t">KPI Management</span><span class="verb__p">Gestão de indicadores</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">KPI Management</span><span class="verb__p">Gestão de indicadores</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1950,9 +2010,8 @@ body{
 
               <details class="verb" id="pro-08">
                 <summary>
-                  <span><span class="verb__t">Process Governance</span><span class="verb__p">Governança de processos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Process Governance</span><span class="verb__p">Governança de processos</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1969,9 +2028,8 @@ body{
 
               <details class="verb" id="pro-05">
                 <summary>
-                  <span><span class="verb__t">Process Improvement</span><span class="verb__p">Melhoria de processos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Process Improvement</span><span class="verb__p">Melhoria de processos</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -1988,9 +2046,8 @@ body{
 
               <details class="verb" id="pro-01">
                 <summary>
-                  <span><span class="verb__t">Process Mapping</span><span class="verb__p">Mapeamento de processos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Process Mapping</span><span class="verb__p">Mapeamento de processos</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2004,9 +2061,8 @@ body{
 
               <details class="verb" id="pro-02">
                 <summary>
-                  <span><span class="verb__t">Process Standardization</span><span class="verb__p">Padronização de processos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Process Standardization</span><span class="verb__p">Padronização de processos</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2020,9 +2076,8 @@ body{
 
               <details class="verb" id="pro-06">
                 <summary>
-                  <span><span class="verb__t">Root Cause Analysis</span><span class="verb__p">Análise de causa raiz</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Root Cause Analysis</span><span class="verb__p">Análise de causa raiz</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2039,9 +2094,8 @@ body{
 
               <details class="verb" id="pro-10">
                 <summary>
-                  <span><span class="verb__t">Stakeholder Management</span><span class="verb__p">Gestão de stakeholders</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Stakeholder Management</span><span class="verb__p">Gestão de stakeholders</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2058,9 +2112,8 @@ body{
 
               <details class="verb" id="pro-04">
                 <summary>
-                  <span><span class="verb__t">Workflow Design</span><span class="verb__p">Desenho de fluxos de trabalho</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Workflow Design</span><span class="verb__p">Desenho de fluxos de trabalho</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2080,14 +2133,13 @@ body{
 
           <!-- ---------- PRODUTO ---------- -->
           <details class="grp" data-reveal>
-            <summary><h4>Produto</h4><span class="grp__n">4</span><span class="grp__x" aria-hidden="true">+</span></summary>
+            <summary><h4>Produto</h4><span class="grp__n">4</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="prd-01">
                 <summary>
-                  <span><span class="verb__t">Document Automation</span><span class="verb__p">Automação documental</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Document Automation</span><span class="verb__p">Automação documental</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2104,9 +2156,8 @@ body{
 
               <details class="verb" id="prd-02">
                 <summary>
-                  <span><span class="verb__t">Legal Engineering</span><span class="verb__p">Engenharia jurídica</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Engineering</span><span class="verb__p">Engenharia jurídica</span></span>
                   <span class="verb__sig"><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2120,9 +2171,8 @@ body{
 
               <details class="verb" id="prd-03">
                 <summary>
-                  <span><span class="verb__t">Legal Operations</span><span class="verb__p">Operações jurídicas</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Operations</span><span class="verb__p">Operações jurídicas</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2139,9 +2189,8 @@ body{
 
               <details class="verb" id="prd-04">
                 <summary>
-                  <span><span class="verb__t">Product Thinking</span><span class="verb__p">Pensamento de produto</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Product Thinking</span><span class="verb__p">Pensamento de produto</span></span>
                   <span class="verb__sig"><span class="t-echo">echo</span><span class="t-atrio">ATRIO</span></span>
-                  <span class="verb__x" aria-hidden="true">+</span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Evidência</p>
@@ -2466,7 +2515,10 @@ body{
 
     function layout(){
       const mov2 = home.querySelectorAll('.arcade .mov')[1];   // bloco 02 · Regência
-      if (!mov2 || getComputedStyle(narr).display === 'none') return;
+      const cs = getComputedStyle(narr);
+      /* a régua só existe enquanto a camada é sobreposição: no celular ela sai
+         do absoluto e vira lista em prumo — não há diagonal a posicionar */
+      if (!mov2 || cs.display === 'none' || cs.position === 'static') return;
       const zr = zone.getBoundingClientRect();
       if (!zr.width || !zr.height) return;                     // oculto: não posiciona
       const ar = arc.getBoundingClientRect();
