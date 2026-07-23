@@ -294,13 +294,16 @@ body{
   grid-template-columns:repeat(3,minmax(0,1fr));
   column-gap:var(--colgap);
   row-gap:clamp(2.75rem,6vw,4rem);
-  align-items:start;
+  align-items:stretch;
   margin-top:var(--pier);
 }
 .mov{
   position:relative;
   border-top:1px solid var(--ink);
   padding-top:.9rem;
+
+  display:flex;
+  flex-direction:column;
 }
 /* o pilar: desce da linha de nascença e entrega a carga no filete do bloco */
 .mov::before{
@@ -324,6 +327,7 @@ body{
   color:var(--ink-78);
   font-size:.83rem; line-height:1.68;
   text-align:justify; -webkit-hyphens:auto; hyphens:auto;
+  flex:1;
 }
 
 /* a marca nomeada dentro do corpo É a passagem para a página-filha.
