@@ -21,11 +21,14 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
+
           p = Path('arco.html')
           s = p.read_text(encoding='utf-8')
 
-          a = '<meta name="theme-color" content="#FFFFFF">\n'
-          b = '''<meta name="theme-color" content="#FFFFFF">
+          if 'html.booting-scroll' not in s:
+              marker = '<meta name="theme-color" content="#FFFFFF">'
+              insert = marker + '''
 
 <style>html.booting-scroll{scroll-behavior:auto!important}</style>
 <script>
@@ -37,25 +40,18 @@ jobs:
   root.scrollTop = 0;
   window.scrollTo(0, 0);
 })();
-</script>
-'''
+</script>'''
+              if marker not in s:
+                  raise SystemExit('theme-color marker not found')
+              s = s.replace(marker, insert, 1)
 
-          c = '''  if ("scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
-  }
+          reset_pattern = re.compile(
+              r'\n  if \("scrollRestoration" in history\) \{.*?\n  \}\n\n  function resetScroll\(\)\{.*?\n  \}\n',
+              re.S,
+          )
+          reset_replacement = '''
 
   function resetScroll(){
-    const root = document.documentElement;
-    const previous = root.style.scrollBehavior;
-    root.style.scrollBehavior = "auto";
-    window.scrollTo({top:0, left:0, behavior:"auto"});
-    requestAnimationFrame(() => {
-      window.scrollTo({top:0, left:0, behavior:"auto"});
-      root.style.scrollBehavior = previous;
-    });
-  }
-'''
-          d = '''  function resetScroll(){
     const root = document.documentElement;
     const snap = () => {
       root.scrollTop = 0;
@@ -73,11 +69,13 @@ jobs:
     });
   }
 '''
+          if 'const previous = root.style.scrollBehavior' in s:
+              s, n = reset_pattern.subn(reset_replacement, s, count=1)
+              if n != 1:
+                  raise SystemExit(f'reset block replacements: {n}')
 
-          e = '''  addEventListener("popstate", () => show(location.hash.slice(1) || "home", {push:false}));
-  show(location.hash.slice(1) || "home", {push:false});
-'''
-          f = '''  addEventListener("popstate", () => show(location.hash.slice(1) || "home", {push:false}));
+          route = '  addEventListener("popstate", () => show(location.hash.slice(1) || "home", {push:false}));\n'
+          listeners = '''  addEventListener("popstate", () => show(location.hash.slice(1) || "home", {push:false}));
   addEventListener("pageshow", () => {
     resetScroll();
     setTimeout(resetScroll, 0);
@@ -86,14 +84,11 @@ jobs:
     resetScroll();
     setTimeout(resetScroll, 0);
   }, {once:true});
-  show(location.hash.slice(1) || "home", {push:false});
 '''
-
-          for old, new in ((a,b),(c,d),(e,f)):
-              n = s.count(old)
-              if n != 1:
-                  raise SystemExit(f'Expected 1 match, found {n}')
-              s = s.replace(old,new,1)
+          if 'addEventListener("pageshow"' not in s:
+              if route not in s:
+                  raise SystemExit('route marker not found')
+              s = s.replace(route, listeners, 1)
 
           p.write_text(s, encoding='utf-8', newline='\n')
           PY
@@ -103,5 +98,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add arco.html
+          if git diff --cached --quiet; then
+            echo "No changes required"
+            exit 0
+          fi
           git commit -m "Fix ARCO restoration before first paint"
           git push origin HEAD:main
+
+# retry 2
