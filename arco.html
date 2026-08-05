@@ -2354,6 +2354,22 @@ body{
 <script>
 (() => {
   "use strict";
+
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  function resetScroll(){
+    const root = document.documentElement;
+    const previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo({top:0, left:0, behavior:"auto"});
+    requestAnimationFrame(() => {
+      window.scrollTo({top:0, left:0, behavior:"auto"});
+      root.style.scrollBehavior = previous;
+    });
+  }
+
   const VIEWS = ["home","echo","atrio"];
   const views = [...document.querySelectorAll(".view")];
   const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
@@ -2404,7 +2420,7 @@ body{
     if (push && location.hash.replace("#","") !== wanted){
       history.pushState({view}, "", wanted ? "#" + wanted : location.pathname);
     }
-    window.scrollTo(0,0);
+    resetScroll();
     stage.focus({preventScroll:true});
     revealNow();
   }
@@ -2415,7 +2431,7 @@ body{
     el.addEventListener("click", () => show(el.dataset.view)));
 
   addEventListener("popstate", () => show(location.hash.slice(1) || "home", {push:false}));
-  if (location.hash) show(location.hash.slice(1), {push:false});
+  show(location.hash.slice(1) || "home", {push:false});
 
   /* ---- Altura do cordão no mobile: o palco desce inteiro, sem rolagem dupla ---- */
   const rail = document.querySelector(".rail");
@@ -2591,6 +2607,12 @@ body{
 
     layout();
     requestAnimationFrame(layout);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        layout();
+        requestAnimationFrame(layout);
+      });
+    }
     addEventListener('resize', layout, {passive:true});
 
     if (reduce){ home.classList.add('narr-on'); return; }
