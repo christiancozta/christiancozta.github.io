@@ -283,6 +283,14 @@ body{
   margin:clamp(3rem,6vw,5rem) 0 0;
   overflow:visible;
 }
+/* Correção definitiva do arco: no desktop a .narr-zone rende mais estreita que
+   o palco (bug de largura herdado), então width:100% dela não alcança a margem.
+   O arco passa a medir a ÁREA DE CONTEÚDO pela viewport — palco (100vw - rail)
+   menos os dois respiros (--pad) — ficando idêntico à largura do .arcade abaixo.
+   Assim os dois pés pousam na margem, sem depender da .narr-zone. */
+@media (min-width:821px){
+  .arc{ width:calc(100vw - var(--rail-w) - var(--pad) * 2); }
+}
 .arc path, .arc line{ fill:none; stroke:var(--ink); }
 .arc .extra{ stroke-opacity:.9; }
 .arc .intra{ stroke-opacity:.28; }
