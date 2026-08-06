@@ -124,3 +124,20 @@
 .page--echo .creed-item:focus-visible .creed-legend { grid-template-rows: 1fr; }
 .page--echo .creed-item:hover .creed-legend > p,
 .page--echo .creed-item:focus-visible .creed-legend > p { color: rgba(232, 236, 239, .66); padding-bottom: 13px; }
+
+/* ============================================================
+   Mobile · remove a faixa de assinatura da composição.
+   No Safari/iOS, o sticky inferior era promovido a uma camada
+   de viewport e o fundo amarelo cobria o hero. O rodapé comum
+   já contém autoria e contatos, portanto a faixa é redundante.
+   ============================================================ */
+@media (max-width: 819px) {
+  .page--echo .signature-band {
+    display: none !important;
+    position: static !important;
+    inset: auto !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+}
