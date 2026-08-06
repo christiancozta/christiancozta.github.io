@@ -26,6 +26,7 @@
     style.id = "atrio-scroll-appearance";
     style.textContent = `
       html {
+        scroll-behavior: auto !important;
         scrollbar-width: thin !important;
         scrollbar-color: #181818 transparent !important;
       }
@@ -47,7 +48,7 @@
         background: #181818;
         border: 0;
         border-radius: 0;
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+        box-shadow: 0 0 0 1px rgba(255,255,255,.24);
       }
 
       html::-webkit-scrollbar-corner,
@@ -129,7 +130,7 @@
     if(event.source !== window.parent || event.origin !== location.origin) return;
     const data = event.data;
     if(!data || data.type !== "ATRIO_NAVIGATE" || !allowed.has(data.section)) return;
-    document.getElementById(data.section)?.scrollIntoView({behavior:reduceMotion.matches?"auto":"smooth",block:"start"});
+    document.getElementById(data.section)?.scrollIntoView({behavior:"auto",block:"start"});
   });
 
   const heroObserver = new IntersectionObserver(([entry]) => {visible=Boolean(entry?.isIntersecting);syncAnimation()},{threshold:.01});
