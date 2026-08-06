@@ -62,6 +62,7 @@
   /* Cordão (rail) */
   --rail-w: 20vw;   /* 2/10 do viewport — as duas colunas do Arco no tabuleiro */
   --rail-h: 0px;              /* medido no mobile pelo JS */
+  --sbw:    0px;              /* largura da barra de rolagem, medida pelo JS */
 
   /* Métrica da arcada — a mesma em toda a página */
   /* A arcada respeita o recorte físico da tela. Com viewport-fit=cover a
@@ -287,9 +288,11 @@ body{
    o palco (bug de largura herdado), então width:100% dela não alcança a margem.
    O arco passa a medir a ÁREA DE CONTEÚDO pela viewport — palco (100vw - rail)
    menos os dois respiros (--pad) — ficando idêntico à largura do .arcade abaixo.
-   Assim os dois pés pousam na margem, sem depender da .narr-zone. */
+   Assim os dois pés pousam na margem, sem depender da .narr-zone.
+   --sbw desconta a barra de rolagem, que 100vw inclui e a arcada não: sem ela
+   o pé direito pousava 15px além da margem no Windows. */
 @media (min-width:821px){
-  .arc{ width:calc(100vw - var(--rail-w) - var(--pad) * 2); }
+  .arc{ width:calc(100vw - var(--sbw) - var(--rail-w) - var(--pad) * 2); }
 }
 .arc path, .arc line{ fill:none; stroke:var(--ink); }
 .arc .extra{ stroke-opacity:.9; }
@@ -3386,6 +3389,15 @@ body{
   if ("ResizeObserver" in window) new ResizeObserver(setRailH).observe(rail);
   addEventListener("resize", setRailH);
   setRailH();
+
+  /* ---- Largura da barra de rolagem: 100vw a conta, a arcada não ----
+     Sem isto o arco mede a viewport inteira e o pé direito pousa além da
+     margem, exatamente a largura da barra (15px no Windows, 0 no macOS com
+     barra sobreposta). O CSS tem fallback 0px, então sem JS nada quebra. */
+  const setScrollbarW = () => document.documentElement.style.setProperty(
+    "--sbw", (window.innerWidth - document.documentElement.clientWidth) + "px");
+  addEventListener("resize", setScrollbarW);
+  setScrollbarW();
 
   /* ---- Concept readers (registro poético — só a mãe) ---- */
   const readers = {
