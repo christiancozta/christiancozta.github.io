@@ -101,6 +101,27 @@
     });
   }
 
+  function setupMobileSignatureFix() {
+    const signature = document.querySelector(".signature-band");
+    if (!signature) return;
+
+    const mobile = window.matchMedia("(max-width: 819px)");
+    const apply = () => {
+      if (mobile.matches) {
+        signature.style.position = "static";
+        signature.style.bottom = "auto";
+        signature.style.zIndex = "auto";
+      } else {
+        signature.style.removeProperty("position");
+        signature.style.removeProperty("bottom");
+        signature.style.removeProperty("z-index");
+      }
+    };
+
+    apply();
+    mobile.addEventListener?.("change", apply);
+  }
+
   /* barra de progresso de leitura — guia vertical que mostra "até onde vai".
      Começa preenchida à metade (via CSS --progress:50%) e completa com o scroll.
      Entra com ~0.5s de atraso para não competir na primeira impressão. */
@@ -136,5 +157,6 @@
   setupDrawer();
   setupActiveNavigation();
   setupYear();
+  setupMobileSignatureFix();
   setupReadProgress();
 })();
