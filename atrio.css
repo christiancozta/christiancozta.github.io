@@ -350,14 +350,18 @@ a{color:inherit}
 .module-panel:nth-of-type(odd){border-right:1px solid var(--terra)}
 .module-panel>header{
   flex:none;min-height:calc(var(--base)*4);
-  display:flex;align-items:center;gap:.85rem;
+  display:grid;
+  grid-template-columns:var(--tline) minmax(0,1fr);
+  align-items:center;column-gap:calc(var(--base)*1.25);
   border-bottom:1px solid var(--rule-soft);
 }
-.module-panel>header>strong{
-  color:var(--terra);
-  font:760 clamp(1.5rem,calc(var(--cell)*.2),2.4rem)/1 var(--display);
-  letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+.module-symbol{
+  width:var(--tline);height:var(--tline);
+  display:grid;place-items:center;
+  background:#FFFFFF;
 }
+.module-symbol img{display:block;width:32px;height:32px;object-fit:contain}
+.module-panel>header>div{min-width:0}
 .module-panel h3{font:700 clamp(1rem,calc(var(--cell)*.128),1.32rem)/1 var(--nav);letter-spacing:-.02em}
 .module-panel>header p{
   margin-top:.34rem;color:var(--muted);
@@ -569,8 +573,12 @@ a{color:inherit}
   .ledger-mark{padding:0;margin-bottom:.5rem}
   .issue-ledger p{padding:0}
 
-  .module-panel>header{display:block;min-height:0;padding-bottom:.8rem;margin-bottom:.8rem}
-  .module-panel>header>strong{display:block;margin-bottom:.3rem}
+  .module-panel>header{
+    display:grid;
+    grid-template-columns:var(--tline) minmax(0,1fr);
+    min-height:var(--grid-row);
+    padding-bottom:0;margin-bottom:.8rem;
+  }
   .module-panel dl{grid-template-columns:4.2rem minmax(0,1fr)}
   .module-criterion{height:auto;display:block;margin-top:.9rem;padding-top:.7rem}
 
