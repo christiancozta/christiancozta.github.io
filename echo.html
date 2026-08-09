@@ -94,6 +94,15 @@ figcaption.score-h{display:none}
 .r2{height:34px}.r2 .tracos line{stroke-width:2}
 .r3{height:42px}.r3 .tracos line{stroke-width:3}
 .escala figcaption{margin-top:4px;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.6);text-wrap:pretty}
+
+/* ==========================================================================
+   RASTRO — indicador contínuo de progresso de rolagem (somente visual).
+   ========================================================================== */
+.echo-trace{position:fixed;top:0;right:0;width:9px;height:100vh;height:100dvh;z-index:40;pointer-events:none}
+.echo-trace i{position:absolute;top:0;left:4px;width:1px;height:100%;background:rgba(128,128,128,.34)}
+.echo-trace b{position:absolute;top:0;left:3.5px;width:2px;height:0;background:#FFB627}
+.echo-trace s{position:absolute;left:4.5px;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#FFB627;text-decoration:none}
+@media(max-width:719px){.echo-trace{display:none}}
 </style>
 </helmet>
 
@@ -654,5 +663,12 @@ class Component extends DCLogic {
 }
 
 </script>
+<div class="echo-trace" aria-hidden="true"><i></i><b></b><s></s></div>
+<script>(function(){var el=document.querySelector('.echo-trace');if(!el)return;var fill=el.querySelector('b'),dot=el.querySelector('s'),f=0;
+function apply(){f=0;var max=document.documentElement.scrollHeight-window.innerHeight;var p=max>0?Math.min(1,Math.max(0,(window.scrollY||document.documentElement.scrollTop)/max)):0;var pct=(p*100)+'%';fill.style.height=pct;dot.style.top=pct;}
+function schedule(){if(!f)f=(window.requestAnimationFrame||function(cb){return setTimeout(cb,16)})(apply);}
+apply();window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
+if(window.ResizeObserver){var ro=new ResizeObserver(schedule);ro.observe(document.documentElement);if(document.body)ro.observe(document.body);}
+})();</script>
 </body>
 </html>
