@@ -1788,6 +1788,17 @@ body{
 .cv--bio{ white-space:nowrap; }
 
 </style>
+<style>
+  /* Rail estrutural de progresso de rolagem (autocontido) */
+  .progress-rail{position:fixed;top:14vh;bottom:14vh;right:22px;width:2px;z-index:30;pointer-events:none}
+  .progress-rail__track{position:absolute;inset:0;left:0;width:1px;background:rgba(17,19,22,.14)}
+  .progress-rail__fill{position:absolute;top:0;left:0;width:2px;height:0;background:#FFB627}
+  .progress-rail__mark{position:absolute;left:0;width:7px;height:1px;background:rgba(17,19,22,.28);transform:translateY(-.5px)}
+  .progress-rail[data-motion="on"] .progress-rail__fill{transition:height .12s linear}
+  @media(max-width:1119px){.progress-rail{right:12px;top:5.5rem}}
+  @media(max-width:719px){.progress-rail{display:none}}
+  @media(prefers-reduced-motion:reduce){.progress-rail__fill{transition:none!important}}
+</style>
 </head>
 <body>
 
@@ -4211,4 +4222,59 @@ body{
 </script>
 
 
+<div class="progress-rail" id="progress-rail" aria-hidden="true" data-motion="on">
+  <div class="progress-rail__track"></div>
+  <div class="progress-rail__fill" id="progress-rail-fill"></div>
+</div>
+<script>
+(() => {
+  "use strict";
+  const rail = document.getElementById("progress-rail");
+  const fill = document.getElementById("progress-rail-fill");
+  if(!rail || !fill) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) rail.dataset.motion = "off";
+
+  const SECTIONS = '[data-section],.view[data-active="true"] section[id],.view[data-active="true"] section[aria-labelledby],.view[data-active="true"] section[aria-label]';
+  let raf = 0, marks = [];
+
+  const metrics = () => {
+    const el = document.scrollingElement || document.documentElement;
+    return {el, max: Math.max(0, el.scrollHeight - window.innerHeight)};
+  };
+
+  function buildMarks(){
+    marks.forEach(n => n.remove());
+    marks = [];
+    const {el, max} = metrics();
+    if(max <= 0) return;
+    document.querySelectorAll(SECTIONS).forEach(section => {
+      const top = section.getBoundingClientRect().top + el.scrollTop;
+      const ratio = Math.min(1, Math.max(0, top / max));
+      const node = document.createElement("span");
+      node.className = "progress-rail__mark";
+      node.style.top = (ratio * 100).toFixed(3) + "%";
+      rail.appendChild(node);
+      marks.push(node);
+    });
+  }
+
+  function paint(){
+    raf = 0;
+    const {el, max} = metrics();
+    const progress = max > 0 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0;
+    fill.style.height = (progress * 100).toFixed(3) + "%";
+    rail.style.visibility = max > 0 ? "visible" : "hidden";
+  }
+
+  const schedule = () => { if(!raf) raf = requestAnimationFrame(paint); };
+  const remeasure = () => { buildMarks(); schedule(); };
+
+  addEventListener("scroll", schedule, {passive:true});
+  addEventListener("resize", remeasure, {passive:true});
+  addEventListener("load", remeasure);
+  if(typeof ResizeObserver === "function") new ResizeObserver(remeasure).observe(document.documentElement);
+  document.fonts?.ready.then(remeasure);
+  remeasure();
+})();
+</script>
 </body></html>
