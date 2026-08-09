@@ -404,14 +404,14 @@ a{color:inherit}
   display:flex;flex-direction:column;
   border-bottom:1px solid var(--rule);
 }
-.sample-module:nth-of-type(odd){border-right:1px solid var(--terra)}
-.sample-module summary{
+.sample-module--left{border-right:1px solid var(--terra)}
+.sample-module summary,.sample-module__summary{
   flex:1;
   display:grid;
   grid-template-rows:calc(var(--base)*3) 1fr calc(var(--base)*2);
   padding:0 var(--gutter) var(--base);
-  cursor:pointer;list-style:none;
 }
+.sample-module summary{cursor:pointer;list-style:none}
 .sample-module summary::-webkit-details-marker{display:none}
 .sample-module summary:focus-visible{outline:1px solid var(--terra);outline-offset:-4px}
 .sample-module__identity{align-self:center}
@@ -426,31 +426,45 @@ a{color:inherit}
 .sample-module__copy b{display:block;color:var(--terra);font:650 .88em/var(--base) var(--nav);letter-spacing:.09em;text-transform:uppercase}
 .sample-module__action{
   align-self:end;justify-self:start;
-  color:var(--text-dark);
-  font:650 clamp(.58rem,calc(var(--cell)*.073),.72rem)/1 var(--nav);
-  letter-spacing:.06em;text-transform:uppercase;
-  padding-bottom:.3rem;border-bottom:1px solid var(--terra);
+  width:var(--tline);height:var(--tline);
+  display:grid;place-items:center;
+  color:var(--terra);
+  font:500 clamp(1rem,calc(var(--cell)*.13),1.4rem)/1 var(--nav);
 }
-.sample-module__action::after{content:" +";color:var(--terra)}
-.sample-module[open] .sample-module__action::after{content:" \2212"}
+.sample-module__action::after{content:"+"}
+.sample-module[open] .sample-module__action::after{content:"\2212"}
 .sample-drawer{
   flex:none;
-  min-height:calc(var(--board-row)*2);
-  display:grid;
-  grid-template-rows:calc(var(--board-row)) 1fr;
-  padding:0 var(--gutter) var(--base);
+  display:block;
+  padding:var(--base) var(--gutter);
   border-top:1px solid var(--terra);
   background-color:var(--l2);
 }
-.sample-placeholder{
-  display:flex;align-items:flex-end;
-  padding:var(--base) 0;
+.sample-media{
+  min-width:0;margin:0;
+  display:grid;grid-template-columns:minmax(0,1fr);gap:var(--base);
+  padding-bottom:var(--base);
   border-bottom:1px solid var(--rule-soft);
-  color:var(--muted);
-  font:600 clamp(.58rem,calc(var(--cell)*.073),.72rem)/var(--base) var(--nav);
-  letter-spacing:.06em;
 }
-.sample-drawer p{align-self:center;font-size:clamp(.79rem,calc(var(--cell)*.097),.95rem);line-height:var(--base)}
+.sample-media img{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.sample-media__link{display:block;cursor:zoom-in}
+.sample-media__link:focus-visible{outline:1px solid var(--terra);outline-offset:3px}
+.sample-media--carousel{
+  display:flex;
+  overflow-x:auto;overscroll-behavior-inline:contain;
+  scroll-snap-type:inline mandatory;
+  scrollbar-width:thin;
+  scrollbar-color:var(--terra) transparent;
+}
+.sample-media--carousel::-webkit-scrollbar{height:3px}
+.sample-media--carousel::-webkit-scrollbar-thumb{background:var(--terra)}
+.sample-media__frame{flex:0 0 100%;min-width:0;margin:0;scroll-snap-align:start}
+.sample-media__frame figcaption{
+  margin-top:.45rem;color:var(--muted);
+  font:600 clamp(.54rem,calc(var(--cell)*.067),.67rem)/var(--base) var(--nav);
+  letter-spacing:.09em;
+}
+.sample-drawer p{margin-top:var(--base);font-size:clamp(.79rem,calc(var(--cell)*.097),.95rem);line-height:var(--base)}
 
 /* ==========================================================================
    04 ACHADOS
@@ -583,11 +597,13 @@ a{color:inherit}
   .module-criterion{height:auto;display:block;margin-top:.9rem;padding-top:.7rem}
 
   .sample-module{padding:0}
-  .sample-module summary{display:block;padding:1rem}
+  .sample-module summary,.sample-module__summary{display:block;padding:1rem}
   .sample-module__copy{margin:.9rem 0}
-  .sample-module__action{display:inline-block}
+  .sample-module__action{display:grid}
   .sample-drawer{display:block;min-height:0;padding:1rem}
-  .sample-placeholder{display:block;min-height:calc(var(--board-row)*.8);padding:1rem 0}
+  .sample-media{gap:1rem;padding-bottom:1rem}
+  .sample-media--carousel{display:grid;grid-template-columns:minmax(0,1fr);overflow-x:visible;scroll-snap-type:none}
+  .sample-media__frame{width:auto}
   .sample-drawer p{margin-top:1rem}
 
   .metric-row__number{display:block;padding:0 0 .5rem;line-height:1}
