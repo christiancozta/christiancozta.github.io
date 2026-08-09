@@ -77,11 +77,87 @@ a{color:inherit}
    inteiros da unidade, de modo que a base da esteira coincida exatamente com
    as oito macrocolunas do documento. Sem malha atrás do conteúdo.
    ========================================================================== */
-.hero{height:100dvh;background:var(--terra);isolation:isolate}
+.hero{height:100dvh;background:var(--terra);isolation:isolate;overflow:clip}
 .runway{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .runway__light{fill:var(--text-light)}
 .runway__dark{fill:var(--g1)}
 .runway__rim{display:none}
+
+/* Filete editorial: a pill preta contrasta com o campo terracota do Hero.
+   O trilho tem altura zero para não alterar a geometria da esteira e permanece
+   sticky apenas durante o primeiro capítulo. */
+.legal-tech-topline{
+  position:relative;z-index:30;
+  margin-bottom:-1px;border-top:1px solid #fff;
+}
+.legal-tech-pillrail{
+  position:sticky;top:0;z-index:30;height:0;
+  display:flex;align-items:flex-start;justify-content:flex-end;
+  pointer-events:none;
+}
+.legal-tech-pill{
+  position:relative;pointer-events:auto;
+  width:148px;min-height:36px;padding:0 18px;
+  display:inline-grid;place-items:center;text-align:center;
+  border:1px solid #fff;border-radius:0 0 0 999px;
+  background:#000;color:#fff;cursor:pointer;
+  font:600 9.5px/1 var(--nav);
+  letter-spacing:.24em;text-transform:uppercase;
+}
+.legal-tech-pill__label{
+  display:block;padding-left:.24em;
+}
+.legal-tech-pill__arrow{
+  position:absolute;right:18px;top:50%;
+  color:#fff;font-size:11px;line-height:1;letter-spacing:0;
+  transform:translateY(-50%);
+  transition:transform .24s cubic-bezier(.22,.68,0,1);
+}
+.legal-tech-pill:hover .legal-tech-pill__arrow,
+.legal-tech-pill:focus-visible .legal-tech-pill__arrow{transform:translate(2px,-50%)}
+.legal-tech-pill:focus-visible{outline:1px solid #fff;outline-offset:-4px}
+
+/* Nota de origem: não modal, para conservar a leitura livre do portfólio.
+   Foco, Escape e retorno ao acionador são tratados em atrio.js. */
+.legal-tech-note{
+  position:fixed;z-index:80;
+  right:clamp(10px,2vw,28px);top:clamp(10px,2vw,28px);
+  width:min(440px,calc(100% - 20px));
+  max-height:min(78dvh,760px);overflow:auto;overscroll-behavior:contain;
+  padding:clamp(20px,2.4vw,30px);
+  border-top:6px solid var(--terra);
+  background:var(--l1);color:var(--text-dark);
+  box-shadow:0 24px 70px rgba(0,0,0,.42);
+  scrollbar-width:thin;scrollbar-color:var(--terra) transparent;
+}
+.legal-tech-note[hidden]{display:none}
+.legal-tech-note__head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.legal-tech-note__kicker{
+  color:rgba(23,26,29,.62);
+  font:600 9.5px/1 var(--nav);
+  letter-spacing:.24em;text-transform:uppercase;
+}
+.legal-tech-note__close{
+  flex:none;width:36px;height:36px;
+  display:grid;place-items:center;
+  border:1px solid rgba(23,26,29,.32);border-radius:999px;
+  background:transparent;color:var(--text-dark);cursor:pointer;
+  font:500 16px/1 var(--nav);
+}
+.legal-tech-note__close:hover{background:var(--text-dark);color:var(--l1)}
+.legal-tech-note__close:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+.legal-tech-note h2{
+  max-width:22ch;margin-top:14px;
+  font:700 clamp(1.25rem,2.2vw,1.7rem)/1.06 var(--display);
+  letter-spacing:-.03em;text-wrap:balance;
+}
+.legal-tech-note>p:not(.legal-tech-note__kicker){
+  margin-top:12px;font-size:14px;line-height:1.6;text-wrap:pretty;
+}
+.legal-tech-note>h2+p{margin-top:18px}
+.legal-tech-note__resolution{
+  padding-top:14px;border-top:1px solid rgba(23,26,29,.24);
+}
 
 .hero__content{
   position:absolute;
@@ -552,6 +628,8 @@ a{color:inherit}
   .global-grid{grid-template-columns:repeat(4,var(--cell));width:calc(var(--cell)*4)}
 
   .hero{height:calc(100dvh - 4rem)}
+  .legal-tech-pill{width:144px;min-height:34px;padding:0 18px}
+  .legal-tech-note{right:10px;top:10px;width:calc(100% - 20px);padding:20px}
   .hero__content{position:static;height:100%;justify-content:center;padding:1rem}
   .hero h1{width:100%;font-size:clamp(4rem,21vw,7rem)}
   .hero p{width:100%;margin-top:1.1rem}
@@ -622,4 +700,7 @@ a{color:inherit}
   .page-footer a{display:inline-block}
 }
 
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .legal-tech-pill__arrow{transition:none}
+}

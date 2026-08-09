@@ -9,6 +9,9 @@
   const sections = [...document.querySelectorAll("[data-section]")];
   const allowed = new Set(sections.map(section => section.id));
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  const legalTechTrigger = document.getElementById("legal-tech-trigger");
+  const legalTechNote = document.getElementById("legal-tech-note");
+  const legalTechClose = document.getElementById("legal-tech-close");
 
   // Espelha --grid-row do CSS: a unidade vertical do tabuleiro.
   const UNIT = 84;
@@ -120,6 +123,29 @@
     if(run && !raf) raf = requestAnimationFrame(tick);
     if(!run && raf){cancelAnimationFrame(raf);raf=0;draw(0)}
   }
+
+  function setLegalTechOpen(open,{restoreFocus=true}={}){
+    if(!legalTechTrigger || !legalTechNote) return;
+    legalTechNote.hidden = !open;
+    legalTechTrigger.setAttribute("aria-expanded",String(open));
+    if(open){
+      legalTechNote.scrollTop = 0;
+      requestAnimationFrame(() => legalTechClose?.focus({preventScroll:true}));
+    }else if(restoreFocus){
+      legalTechTrigger.focus({preventScroll:true});
+    }
+  }
+
+  legalTechTrigger?.addEventListener("click",() => {
+    const open = legalTechTrigger.getAttribute("aria-expanded") !== "true";
+    setLegalTechOpen(open,{restoreFocus:false});
+  });
+  legalTechClose?.addEventListener("click",() => setLegalTechOpen(false));
+  document.addEventListener("keydown",event => {
+    if(event.key !== "Escape" || legalTechNote?.hidden) return;
+    event.preventDefault();
+    setLegalTechOpen(false);
+  });
 
   function post(section){
     if(window.parent === window || location.protocol === "file:") return;
