@@ -1630,15 +1630,7 @@ body{
   }
   .js-reveal [data-reveal].is-in{ opacity:1; transform:none; }
 
-  /* o arco se desenha: extradorso primeiro, intradorso atrás, nascença por fim.
-     --len é o comprimento do traço medido em pixels de tela, escrito pelo JS.
-     A medida precisa ser essa: com preserveAspectRatio="none" a curva desenhada
-     é mais longa que a curva do viewBox, e vector-effect aplica o tracejado em
-     pixels. Um tracejado calibrado em unidade de viewBox (pathLength) ficava
-     mais curto que a curva a partir de ~1450px de janela — o traço parava no
-     ar, sem o pé direito pousar. Sem JS a propriedade não resolve, a herança
-     devolve "none" e o arco nasce inteiro: nunca falta desenho. */
-  .arc path, .arc line{ stroke-dasharray:var(--len); stroke-dashoffset:var(--len); }
+  /* o arco se desenha: extradorso primeiro, intradorso atrás, nascença por fim */
   .arc.is-in .extra { transition:stroke-dashoffset 1500ms var(--ease) 120ms;  stroke-dashoffset:0; }
   .arc.is-in .intra { transition:stroke-dashoffset 1500ms var(--ease) 340ms;  stroke-dashoffset:0; }
   .arc.is-in .spring{ transition:stroke-dashoffset 900ms  var(--ease) 1000ms; stroke-dashoffset:0; }
@@ -1686,7 +1678,6 @@ body{
    medida do dado, não com um percentual aproximado. */
 .narr__line{
   fill:none; stroke:var(--ink); stroke-width:1; stroke-opacity:.5;
-  stroke-dasharray:1; stroke-dashoffset:1;
 }
 .narr__stats{ list-style:none; margin:0; padding:0; }
 .narr__stat{
@@ -1718,9 +1709,6 @@ body{
   color:var(--ink-62); text-transform:none; text-align:left;
 }
 @media (prefers-reduced-motion:reduce){
-  /* a camada entra sem transição — mas continua entrando pela mesma porta do
-     .narr-on, que só abre depois da medida. Acender .narr aqui, à revelia da
-     medida, era a outra via pela qual os dados podiam aparecer sem lugar. */
   .narr{ transition:none; }
   .narr__stat{ opacity:1; transform:none; }
   .narr__line{ stroke-dashoffset:0; }
@@ -1902,10 +1890,7 @@ body{
              largura da arcada; o traço permanece com 1px em qualquer viewport.
              viewBox fecha em 238 — a nascença É a borda inferior da caixa. Com
              isso o pé do desenho, o topo dos pilares e o nascimento da diagonal
-             caem todos na mesma linha, sem folga de sub-pixel.
-             O desenho não leva pathLength: a curva é esticada em x e comprimida
-             em y, então a única medida verdadeira do traço é a da tela — o JS
-             mede e escreve em --len. -->
+             caem todos na mesma linha, sem folga de sub-pixel. -->
         <svg class="arc" viewBox="0 0 1000 238" preserveAspectRatio="none" role="presentation" aria-hidden="true" data-reveal="">
           <path class="extra" vector-effect="non-scaling-stroke" d="M0,238 C180,10 820,10 1000,238"></path>
           <path class="intra" vector-effect="non-scaling-stroke" d="M0,238 C205,66 795,66 1000,238"></path>
@@ -3945,49 +3930,41 @@ body{
   addEventListener("resize", setScrollbarW);
   setScrollbarW();
 
-  /* ---- Medida do arco: o traço se mede na tela, não no viewBox ----
-     O desenho é esticado (preserveAspectRatio="none") e o traço é desenhado em
-     pixels (vector-effect). Quem calibrava o tracejado era pathLength, que fala
-     em unidade de viewBox: da janela de ~1450px em diante a curva desenhada
-     ficava mais longa que a medida, e o tracejado acabava antes do pé direito —
-     o arco parava no ar. Aqui o comprimento é medido na curva já transformada e
-     escrito em --len; refeito a cada mudança de caixa, o desenho fecha sempre.
-     O ponto final ganha 1px de folga: sub-pixel não pode roubar a junta. */
   (() => {
     const arc = document.querySelector('.view[data-view="home"] .arc');
     if (!arc) return;
-    const shapes = [...arc.querySelectorAll("path, line")];
-    if (!shapes.length) return;
+    const extra  = arc.querySelector(".extra");
+    const intra  = arc.querySelector(".intra");
+    const spring = arc.querySelector(".spring");
+    if (!extra || !intra || !spring) return;
 
-    const onScreen = el => {
-      const m = el.getCTM && el.getCTM();
-      if (!m) return 0;                                   /* sem caixa: não mede */
-      /* a nascença é reta: basta levar o segmento à tela */
-      if (el.tagName === "line"){
-        const dx = el.x2.baseVal.value - el.x1.baseVal.value;
-        const dy = el.y2.baseVal.value - el.y1.baseVal.value;
-        return Math.hypot(m.a * dx + m.c * dy, m.b * dx + m.d * dy);
-      }
-      /* as curvas: soma das cordas já transformadas — 128 passos bastam para
-         um erro abaixo do décimo de pixel numa curva desta abertura */
-      if (typeof el.getPointAtLength !== "function") return 0;
-      const total = el.getTotalLength();
-      let len = 0, prev = el.getPointAtLength(0).matrixTransform(m);
-      for (let i = 1; i <= 128; i++){
-        const p = el.getPointAtLength(total * i / 128).matrixTransform(m);
-        len += Math.hypot(p.x - prev.x, p.y - prev.y);
-        prev = p;
-      }
-      return len;
+    const K = 1000, A = 238;
+
+    const redraw = () => {
+      const r = arc.getBoundingClientRect();
+      const W = r.width, H = r.height;
+      if (!W || !H) return;
+      const x = v => +(v * W / K).toFixed(2);
+      const y = v => +(v * H / A).toFixed(2);
+
+      arc.setAttribute("viewBox", `0 0 ${+W.toFixed(2)} ${+H.toFixed(2)}`);
+      extra.setAttribute("d", `M0,${y(238)} C${x(180)},${y(10)} ${x(820)},${y(10)} ${x(1000)},${y(238)}`);
+      intra.setAttribute("d", `M0,${y(238)} C${x(205)},${y(66)} ${x(795)},${y(66)} ${x(1000)},${y(238)}`);
+      spring.setAttribute("x1", 0);      spring.setAttribute("y1", y(238));
+      spring.setAttribute("x2", x(1000)); spring.setAttribute("y2", y(238));
+
+      [extra, intra, spring].forEach(el => {
+        el.removeAttribute("vector-effect");
+        if (reduce) return;
+        const len = (el === spring ? W : el.getTotalLength()) + 1;
+        el.setAttribute("stroke-dasharray", len.toFixed(2));
+        el.setAttribute("stroke-dashoffset", len.toFixed(2));
+      });
     };
-    const gauge = () => shapes.forEach(el => {
-      const len = onScreen(el);
-      if (len) el.style.setProperty("--len", (len + 1).toFixed(1) + "px");
-    });
 
-    gauge();                                   /* antes da primeira pintura */
-    if ("ResizeObserver" in window) new ResizeObserver(gauge).observe(arc);
-    addEventListener("resize", gauge, {passive:true});
+    redraw();
+    if ("ResizeObserver" in window) new ResizeObserver(redraw).observe(arc);
+    addEventListener("resize", redraw, {passive:true});
   })();
 
   /* ---- Concept readers (registro poético — só a mãe) ---- */
@@ -4093,8 +4070,6 @@ body{
     const segs = Array.from({length: stats.length + 1}, () => {
       const l = document.createElementNS(NS, 'line');
       l.setAttribute('class', 'narr__line');
-      l.setAttribute('pathLength', '1');
-      l.setAttribute('vector-effect', 'non-scaling-stroke');
       return svg.appendChild(l);
     });
 
@@ -4103,9 +4078,6 @@ body{
     const DRAW = 1900;  // ms de traço puro, repartidos pela extensão de cada segmento
     const HOLD = 120;   // ms de pausa em cada dado
 
-    /* Devolve true quando mediu e pousou cada dado; false quando não havia o
-       que medir. A resposta é a licença de entrada da camada: dado sem lugar
-       marcado não entra em cena. */
     function layout(){
       const mov2 = home.querySelectorAll('.arcade .mov')[1];   // bloco 02 · Regência
       const cs = getComputedStyle(narr);
@@ -4164,8 +4136,12 @@ body{
       let t = 0;
       spans.forEach(([y1, y2], k) => {
         const l = segs[k];
-        l.setAttribute('x1', xAt(y1).toFixed(2)); l.setAttribute('y1', y1.toFixed(2));
-        l.setAttribute('x2', xAt(y2).toFixed(2)); l.setAttribute('y2', y2.toFixed(2));
+        const x1 = xAt(y1), x2 = xAt(y2);
+        l.setAttribute('x1', x1.toFixed(2)); l.setAttribute('y1', y1.toFixed(2));
+        l.setAttribute('x2', x2.toFixed(2)); l.setAttribute('y2', y2.toFixed(2));
+        const seg = Math.hypot(x2 - x1, y2 - y1) + 1;
+        l.setAttribute('stroke-dasharray', seg.toFixed(2));
+        l.setAttribute('stroke-dashoffset', seg.toFixed(2));
         const dur = lens[k] / total * DRAW;
         l.style.setProperty('--dur', Math.round(dur));
         l.style.setProperty('--dly', Math.round(t));
@@ -4183,21 +4159,12 @@ body{
       return true;
     }
 
-    /* A camada entra por duas condições, não por uma: o toque a arma, a medida
-       a acende. Faltava a segunda. Quando a home está fora do palco — entrada
-       por #echo ou #atrio, ou recarga sobre a página-filha — a zona não tem
-       caixa e não há onde pousar os dados; o toque acendia assim mesmo, e os
-       cinco dados caíam empilhados no canto da zona, logo acima do nome. Agora
-       a medida é refeita a cada vez que a zona volta a ter caixa, e só a medida
-       bem-sucedida acende. */
-    let asked = reduce;                     /* sem movimento, não se espera toque */
+    let asked = reduce;
     const enter = () => { if (layout() && asked) home.classList.add('narr-on'); };
 
     enter();
     requestAnimationFrame(enter);
     addEventListener('resize', enter, {passive:true});
-    /* a zona reaparece com o Percurso e muda de altura quando as fontes chegam
-       (primeira visita, cache limpo): as duas ocasiões pedem medida nova */
     if ("ResizeObserver" in window) new ResizeObserver(enter).observe(zone);
     document.fonts?.ready.then(enter);
 
