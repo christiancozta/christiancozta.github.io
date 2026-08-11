@@ -1,17 +1,19 @@
-# trigger: second push after workflow exists
+# one-shot integration runner; remove after success
 name: ECHO v16 one-shot integration
 
 on:
   push:
     paths:
       - '.github/workflows/echo-v16-once.yml'
+  pull_request:
+    paths:
+      - '.echo-v16-trigger'
 
 permissions:
   contents: write
 
 jobs:
   integrate:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
