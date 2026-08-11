@@ -1,0 +1,132 @@
+name: ECHO v16 one-shot integration
+
+on:
+  push:
+    paths:
+      - '.github/workflows/echo-v16-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BLOB_CSS: 87500fd2a4308a0eb0fdb0edf8d563ab4615daca
+      BLOB_OPENING: 30bf0d1a1e99eba7b76505beb1a69603ef1749d7
+      BLOB_LIFECYCLE: 52657e3ed464b52f11a5c1b834fdb90579be6856
+      BLOB_RETURN: 962543cd2d37dcda31eded289e334771d163c7e9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch and validate ECHO
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, json, os, re, urllib.request
+
+          def fetch_blob(sha):
+              repo = os.environ['GITHUB_REPOSITORY']
+              url = f'https://api.github.com/repos/{repo}/git/blobs/{sha}'
+              req = urllib.request.Request(url, headers={
+                  'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                  'Accept': 'application/vnd.github+json',
+                  'X-GitHub-Api-Version': '2022-11-28',
+              })
+              with urllib.request.urlopen(req) as response:
+                  data = json.load(response)
+              return base64.b64decode(data['content']).decode('utf-8')
+
+          NEW_CSS = fetch_blob(os.environ['BLOB_CSS'])
+          NEW_OPENING = fetch_blob(os.environ['BLOB_OPENING'])
+          NEW_LIFECYCLE = fetch_blob(os.environ['BLOB_LIFECYCLE'])
+          NEW_RETURN = fetch_blob(os.environ['BLOB_RETURN'])
+
+          path = Path('echo.html')
+          s = path.read_text(encoding='utf-8')
+
+          # Guardas: aborta sem escrever se o main não for a versão conhecida.
+          assert '<script src="./support.js?v=20260807-1"></script>' in s
+          assert '<header id="top" class="echo-hero">' in s
+          assert '<section id="preliminares"' in s
+          assert '/* partitura do acervo:' in s
+          assert '<sc-if value="{{ notaAberta }}" hint-placeholder-val="{{ false }}">' in s
+          assert 'componentDidUpdate() { this._sweep(); }' in s
+
+          old_fonts = 'family=Azeret+Mono:wght@400;500&family=Commissioner:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&display=swap'
+          new_fonts = 'family=Azeret+Mono:wght@400;500&family=Commissioner:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&family=Zalando+Sans+Expanded:wght@700&display=swap'
+          assert s.count(old_fonts) == 1
+          s = s.replace(old_fonts, new_fonts, 1)
+
+          old_body = 'body{margin:0;background:#F2EFE9;'
+          assert s.count(old_body) == 1
+          s = s.replace(old_body, 'body{margin:0;overflow-x:clip;background:#F2EFE9;', 1)
+
+          css_start = s.index('/* ==========================================================================\n   HERO — campo de eco / proposta consolidada.')
+          css_end = s.index('/* cadeia operacional:', css_start)
+          s = s[:css_start] + NEW_CSS + s[css_end:]
+
+          part_start = s.index('/* partitura do acervo:')
+          part_end = s.index('/* Achados — escala de vernier:', part_start)
+          s = s[:part_start] + s[part_end:]
+
+          hero_start = s.index('<header id="top" class="echo-hero">')
+          prelim = s.index('<section id="preliminares"', hero_start)
+          s = s[:hero_start] + NEW_OPENING + s[prelim:]
+
+          old_note_start = s.rfind('\n<sc-if value="{{ notaAberta }}" hint-placeholder-val="{{ false }}">')
+          assert old_note_start != -1
+          marker = '</sc-if>\n</x-dc>'
+          old_note_end = s.index(marker, old_note_start)
+          s = s[:old_note_start] + '\n</x-dc>' + s[old_note_end + len(marker):]
+
+          life_start = s.index('  componentDidMount() {')
+          life_end = s.index('  _show(el) {', life_start)
+          s = s[:life_start] + NEW_LIFECYCLE + s[life_end:]
+
+          old_return = """    return {
+      materiais, percursos, ficha,
+      notaAberta: this.state.nota,
+      abrirNota: () => this.setState((st) => ({ nota: !st.nota })),
+      fecharNota: () => this.setState({ nota: false })
+    };
+"""
+          assert s.count(old_return) == 1
+          s = s.replace(old_return, NEW_RETURN, 1)
+
+          # Estrutura, contrato de âncoras do ARCO e sintaxe DC.
+          required = ['top','legal-ops-trigger','legal-ops-note','legal-ops-close','visao-geral','preliminares','acervo','achados','autoria']
+          ids = re.findall(r'\bid=["\']([^"\']+)["\']', s)
+          for rid in required:
+              assert ids.count(rid) == 1, (rid, ids.count(rid))
+          assert len(ids) == len(set(ids)), 'IDs duplicados'
+          assert all(x not in s for x in ['echo-plot','echo-lede','partitura','echo-families'])
+          assert 'Zalando Sans Expanded' in s
+          assert '--ink:#181818' in s and '--amber:#FFB627' in s and '--paper:#F2EFE9' in s
+          assert 'aria-labelledby="legal-ops-note-title" hidden' not in s
+          assert 'Base: 8 assessores; cinco meses; critério amplo' in s
+
+          path.write_text(s, encoding='utf-8')
+          m = re.search(r'<script type="text/x-dc"[^>]*>(.*?)</script>', s, re.S)
+          assert m, 'script DC ausente'
+          Path('/tmp/echo-dc-check.js').write_text(m.group(1), encoding='utf-8')
+          PY
+
+          node --check /tmp/echo-dc-check.js
+          git diff --check -- echo.html
+
+      - name: Commit ECHO only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add echo.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat(echo): integra nova abertura e pill legal ops"
+          git push origin HEAD:main
