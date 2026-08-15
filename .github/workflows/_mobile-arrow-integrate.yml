@@ -1,0 +1,79 @@
+name: mobile-arrow-integration-once
+
+on:
+  push:
+    branches:
+      - agent/mobile-arrow-integration
+    paths:
+      - .mobile-arrow-apply
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Integrate validated mobile arrow
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          variant_path = Path('arco-mobile-rail.html')
+          target_path = Path('arco.html')
+          variant = variant_path.read_text(encoding='utf-8')
+          html = target_path.read_text(encoding='utf-8')
+
+          assert 'mobile-arrow-integrated' not in html, 'integration marker already present'
+          assert html.count('</head>') == 1, 'unexpected </head> count'
+          assert html.count('</body>') == 1, 'unexpected </body> count'
+
+          css_match = re.search(r"const CSS = String\.raw`([\s\S]*?)`;\n\n  const JS", variant)
+          js_match = re.search(r"const JS = String\.raw`([\s\S]*?)`;\n\n  fetch\('arco\.html'", variant)
+          assert css_match and js_match, 'could not extract validated variant blocks'
+          css = css_match.group(1).strip()
+          js = js_match.group(1).strip()
+
+          # Desktop isolation: no DOM mutation, listeners or measurements above 820px.
+          guard = "  const mq = matchMedia('(max-width:820px)');\n  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;"
+          assert js.count(guard) == 1, 'mobile guard anchor changed'
+          js = js.replace(guard, guard + "\n  if (!mq.matches) return;", 1)
+
+          # The transported stylesheet is composed only of mobile/reduced-motion media blocks.
+          compact = re.sub(r'/\\*[\\s\\S]*?\\*/', '', css).strip()
+          assert compact.startswith('@media (max-width:820px)'), 'unexpected unscoped CSS before mobile media query'
+          assert '@media (min-width:' not in css, 'desktop media rule found in mobile block'
+
+          style = '\n<!-- mobile arrow: validated mobile-only transport -->\n<style id="mobile-arrow-integrated">\n' + css + '\n</style>\n'
+          script = '\n<!-- mobile arrow: no-op above 820px -->\n<script id="mobile-arrow-integrated-js">\n' + js + '\n</script>\n'
+
+          html = html.replace('</head>', style + '</head>', 1)
+          before_body, close = html.rsplit('</body>', 1)
+          html = before_body + script + '</body>' + close
+
+          assert html.count('id="mobile-arrow-integrated"') == 1
+          assert html.count('id="mobile-arrow-integrated-js"') == 1
+          target_path.write_text(html, encoding='utf-8')
+
+          Path('/tmp/mobile-arrow.js').write_text(js, encoding='utf-8')
+          PY
+
+          node --check /tmp/mobile-arrow.js
+          git diff --check
+          test "$(git diff --name-only)" = "arco.html"
+          grep -q "if (!mq.matches) return;" arco.html
+          grep -q 'id="mobile-arrow-integrated"' arco.html
+          grep -q 'id="mobile-arrow-integrated-js"' arco.html
+
+      - name: Commit isolated integration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add arco.html
+          git commit -m "integrate mobile arrow into arco"
+          git push origin HEAD:agent/mobile-arrow-integration
