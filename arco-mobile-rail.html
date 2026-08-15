@@ -27,7 +27,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     --mobile-arrow-x:var(--pad);
     --mobile-arrow-top:0px;
     --mobile-arrow-h:0px;
-    --mobile-arrow-draw:1800ms;
     --metric-shift:clamp(1.25rem,6vw,1.6rem);
     --title-shift:clamp(1.25rem,6vw,1.6rem);
   }
@@ -63,23 +62,16 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   }
 
   /* EIXO ÚNICO — o centro do filete coincide com o x=0 da spring. */
-  .home::after{
-    content:"";
+  .mobile-arrow-axis{
     position:absolute;
     pointer-events:none;
     z-index:0;
     left:calc(var(--mobile-arrow-x) - .5px);
     top:calc(var(--mobile-arrow-top) - .5px);
     width:1px;
-    height:var(--mobile-arrow-h);
+    height:0;
     background:var(--hair);
-    transform:scaleY(0);
-    transform-origin:50% 0;
-    will-change:transform;
-  }
-  .home.mobile-arrow-ready.mobile-arrow-on::after{
-    transform:scaleY(1);
-    transition:transform var(--mobile-arrow-draw) linear;
+    will-change:height;
   }
 
   /* MÉTRICAS — o border-left antigo sai. Cada número recebe um ramal da mesma
@@ -138,8 +130,8 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   .home.mobile-arrow-ready.mobile-arrow-on .narr__stat{
     opacity:1;
     transform:none;
-    transition:opacity 330ms var(--ease), transform 330ms var(--ease);
-    transition-delay:calc(var(--arrow-delay,0ms) + 65ms);
+    transition:opacity 420ms var(--ease), transform 420ms var(--ease);
+    transition-delay:var(--arrow-delay,0ms);
   }
 
   /* ARCADA — os três pilares desktop são removidos. No mobile a flecha única
@@ -188,7 +180,7 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
 }
 
 @media (max-width:820px) and (prefers-reduced-motion:reduce){
-  .home::after,
+  .mobile-arrow-axis,
   .narr__n::before,
   .arcade .mov__h::before{
     transform:none !important;
@@ -212,45 +204,97 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   if (!home) return;
 
   const arc = home.querySelector('.narr-zone .arc');
-  const metricNumbers = [...home.querySelectorAll('.narr__stat .narr__n')];
+  const metricStats = [...home.querySelectorAll('.narr__stat')];
+  const metricNumbers = metricStats.map(stat => stat.querySelector('.narr__n'));
   const titles = [...home.querySelectorAll('.arcade > .mov > .mov__h')];
   const lastTitle = titles[titles.length - 1];
-  if (!arc || metricNumbers.length !== 5 || titles.length !== 3 || !lastTitle) return;
+  if (!arc || metricNumbers.length !== 5 || metricNumbers.some(n => !n) || titles.length !== 3 || !lastTitle) return;
+
+  /* Mesmo relógio narrativo do arco.html desktop:
+     1900 ms de traço puro + 120 ms de pausa em cada dado;
+     o dado revela em 420 ms quando a linha chega a ele. */
+  const DRAW = 1900;
+  const HOLD = 120;
+
+  const axis = document.createElement('span');
+  axis.className = 'mobile-arrow-axis';
+  axis.setAttribute('aria-hidden','true');
+  home.appendChild(axis);
 
   let started = false;
+  let axisAnimation = null;
+  let axisDone = false;
+  let timeline = null;
 
   function measureArrow(){
-    if (!mq.matches) return;
+    if (!mq.matches) return null;
 
     const hr = home.getBoundingClientRect();
     const ar = arc.getBoundingClientRect();
     const lr = lastTitle.getBoundingClientRect();
-    if (!hr.width || !ar.width || !lr.width) return;
+    if (!hr.width || !ar.width || !lr.width) return null;
 
-    /* spring: x=0 e y=altura do próprio SVG. O eixo CSS usa exatamente esses
-       dois pontos físicos como origem, sem migrar para uma calha externa. */
     const x = ar.left - hr.left;
     const top = ar.bottom - hr.top;
     const end = lr.top + lr.height / 2 - hr.top;
     const height = Math.max(1, end - top);
 
-    /* duração cresce moderadamente com a extensão real, sem ficar lenta demais. */
-    const draw = Math.round(Math.min(2300, Math.max(1450, height * 1.65)));
-
     home.style.setProperty('--mobile-arrow-x', x.toFixed(2) + 'px');
     home.style.setProperty('--mobile-arrow-top', top.toFixed(2) + 'px');
     home.style.setProperty('--mobile-arrow-h', height.toFixed(2) + 'px');
-    home.style.setProperty('--mobile-arrow-draw', draw + 'ms');
 
-    [...metricNumbers, ...titles].forEach(node => {
+    const metricPoints = metricNumbers.map((node, i) => {
       const r = node.getBoundingClientRect();
       const y = r.top + r.height / 2 - hr.top;
-      const ratio = Math.min(1, Math.max(0, (y - top) / height));
-      const delay = Math.round(ratio * draw) + 'ms';
-      node.style.setProperty('--arrow-delay', delay);
-      /* o delay também pertence ao li, porque é ele que faz o fade do conjunto */
-      node.closest('.narr__stat')?.style.setProperty('--arrow-delay', delay);
+      const p = Math.min(1, Math.max(0, (y - top) / height));
+      return {node, stat:metricStats[i], p};
     });
+
+    const total = DRAW + HOLD * metricPoints.length;
+    const frames = [{height:'0px', offset:0}];
+
+    metricPoints.forEach((point, i) => {
+      const arrival = point.p * DRAW + i * HOLD;
+      const h = (point.p * height).toFixed(2) + 'px';
+      frames.push({height:h, offset:Math.min(1, arrival / total)});
+      frames.push({height:h, offset:Math.min(1, (arrival + HOLD) / total)});
+      const delay = Math.round(arrival) + 'ms';
+      point.node.style.setProperty('--arrow-delay', delay);
+      point.stat.style.setProperty('--arrow-delay', delay);
+    });
+
+    titles.forEach(node => {
+      const r = node.getBoundingClientRect();
+      const y = r.top + r.height / 2 - hr.top;
+      const p = Math.min(1, Math.max(0, (y - top) / height));
+      const holdsBefore = metricPoints.reduce((n, m) => n + (m.p < p ? 1 : 0), 0);
+      const arrival = p * DRAW + holdsBefore * HOLD;
+      node.style.setProperty('--arrow-delay', Math.round(arrival) + 'ms');
+    });
+
+    frames.push({height:height.toFixed(2) + 'px', offset:1});
+    timeline = {height, total, frames};
+
+    if (reduce || axisDone) axis.style.height = height.toFixed(2) + 'px';
+    return timeline;
+  }
+
+  function playArrow(){
+    const data = measureArrow();
+    if (!data) return;
+    axisAnimation?.cancel();
+    axis.style.height = '0px';
+    axisAnimation = axis.animate(data.frames, {
+      duration:data.total,
+      easing:'linear',
+      fill:'forwards'
+    });
+    axisAnimation.finished.then(() => {
+      axisDone = true;
+      axis.style.height = data.height.toFixed(2) + 'px';
+      axisAnimation?.cancel();
+      axisAnimation = null;
+    }).catch(() => {});
   }
 
   function activate(){
@@ -259,6 +303,12 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     if (!mq.matches) return;
     measureArrow();
     home.classList.add('mobile-arrow-on');
+    if (reduce){
+      axisDone = true;
+      axis.style.height = 'var(--mobile-arrow-h)';
+    } else {
+      playArrow();
+    }
   }
 
   function sync(){
@@ -267,13 +317,16 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     home.classList.add('mobile-arrow-ready');
     if (reduce){
       started = true;
+      axisDone = true;
+      axis.style.height = 'var(--mobile-arrow-h)';
       home.classList.add('mobile-arrow-on');
     } else if (started){
       home.classList.add('mobile-arrow-on');
+      if (axisDone) axis.style.height = 'var(--mobile-arrow-h)';
     }
   }
 
-  const EVENTS = ['scroll','wheel','pointerdown','keydown','touchstart'];
+  const EVENTS = ['scroll','wheel','pointerdown','pointermove','keydown','touchstart'];
   EVENTS.forEach(type => addEventListener(type, activate, {passive:true, once:true}));
 
   mq.addEventListener?.('change', sync);
