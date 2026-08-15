@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Arco — variante mobile rail</title>
+<title>Arco — mobile arrow | Christian da Costa</title>
 <meta name="robots" content="noindex,nofollow">
 <style>
 html,body{margin:0;min-height:100%;background:#fff;color:#181818}
@@ -18,62 +18,142 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
 
   const CSS = String.raw`
 /* ========================================================================== 
-   VARIANTE EXPERIMENTAL — MOBILE RAIL
-   Escopo total: <= 820px. Desktop permanece byte-for-byte visualmente regido
-   pelo arco.html de origem.
+   VARIANTE EXPERIMENTAL — MOBILE ARROW
+   A spring do arco vira o início de uma única flecha vertical. O eixo permanece
+   no x físico do pé esquerdo do SVG; dele derivam métricas e títulos.
    ========================================================================== */
 @media (max-width:820px){
-  /* A narrativa mobile deixa de usar border-left estático. O prumo passa a ser
-     uma peça animável, disparada pela primeira interação real do usuário. */
-  .narr__stats{
-    position:relative;
-    border-left:0 !important;
+  .home{
+    --mobile-arrow-x:var(--pad);
+    --mobile-arrow-top:0px;
+    --mobile-arrow-h:0px;
+    --mobile-arrow-draw:1800ms;
+    --metric-shift:clamp(1.25rem,6vw,1.6rem);
+    --title-shift:clamp(1.25rem,6vw,1.6rem);
   }
-  .narr__stats::before{
+
+  /* No celular o hero deixa de preencher artificialmente uma viewport inteira.
+     O percurso fica mais compacto e o arco sobe, abrindo espaço para métricas
+     com quebra natural em duas linhas. */
+  .narr-zone{
+    min-height:auto !important;
+    padding-top:clamp(1.45rem,4.2vw,2rem);
+  }
+  .hero__txt,
+  .narr-zone .arc{
+    margin-top:0 !important;
+  }
+  .bio{
+    max-width:none;
+    margin:0 0 clamp(.9rem,2.6vw,1.2rem);
+  }
+  .hero__txt{
+    margin-top:clamp(1.25rem,3.8vw,1.7rem) !important;
+  }
+  .narr-zone .arc{
+    margin-top:clamp(.9rem,3vw,1.3rem) !important;
+  }
+  .narr{
+    position:static;
+    order:9;
+    opacity:1;
+    pointer-events:auto;
+    width:100%; max-width:100%; min-width:0;
+    margin-top:clamp(.55rem,2.4vw,.85rem);
+  }
+
+  /* EIXO ÚNICO — o centro do filete coincide com o x=0 da spring. */
+  .home::after{
     content:"";
     position:absolute;
-    left:0;
-    top:0;
-    bottom:0;
+    pointer-events:none;
+    z-index:0;
+    left:calc(var(--mobile-arrow-x) - .5px);
+    top:calc(var(--mobile-arrow-top) - .5px);
     width:1px;
+    height:var(--mobile-arrow-h);
     background:var(--hair);
     transform:scaleY(0);
     transform-origin:50% 0;
     will-change:transform;
   }
-  .narr__stat{
-    opacity:0 !important;
-    transform:translateY(5px) !important;
-  }
-  .home.mobile-lines-on .narr__stats::before{
+  .home.mobile-arrow-ready.mobile-arrow-on::after{
     transform:scaleY(1);
-    transition:transform 1050ms linear;
+    transition:transform var(--mobile-arrow-draw) linear;
   }
-  .home.mobile-lines-on .narr__stat{
-    opacity:1 !important;
-    transform:none !important;
-    transition:opacity 360ms var(--ease), transform 360ms var(--ease);
-  }
-  .home.mobile-lines-on .narr__stat:nth-child(1){ transition-delay:140ms; }
-  .home.mobile-lines-on .narr__stat:nth-child(2){ transition-delay:315ms; }
-  .home.mobile-lines-on .narr__stat:nth-child(3){ transition-delay:490ms; }
-  .home.mobile-lines-on .narr__stat:nth-child(4){ transition-delay:665ms; }
-  .home.mobile-lines-on .narr__stat:nth-child(5){ transition-delay:840ms; }
 
-  /* A arcada deixa de reutilizar os três pilares desktop. Em mobile há um só
-     eixo, situado na calha esquerda (fora da massa textual), e três ramais. */
+  /* MÉTRICAS — o border-left antigo sai. Cada número recebe um ramal da mesma
+     flecha; a legenda pode ocupar uma ou duas linhas sem alterar o ponto de
+     referência, que continua sendo o centro óptico do número. */
+  .narr__svg{ display:none; }
+  .narr__stats{
+    position:relative;
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    gap:clamp(.28rem,1.4vw,.42rem);
+    padding-left:0;
+    border-left:0;
+  }
+  .narr__stat{
+    position:static;
+    width:auto; max-width:none;
+    display:grid;
+    grid-template-columns:clamp(7rem,29vw,8.4rem) minmax(0,1fr);
+    align-items:start;
+    column-gap:clamp(.55rem,2.4vw,.8rem);
+    opacity:1;
+    transform:none;
+  }
+  .home.mobile-arrow-ready .narr__stat{
+    opacity:0;
+    transform:translateY(4px);
+  }
+  .narr__n{
+    position:relative;
+    display:block;
+    min-width:0;
+    padding-left:var(--metric-shift);
+  }
+  .narr__n::before{
+    content:"";
+    position:absolute;
+    pointer-events:none;
+    left:0;
+    top:calc(50% - .5px);
+    width:calc(var(--metric-shift) - .38rem);
+    height:1px;
+    background:var(--hair);
+    transform:scaleX(0);
+    transform-origin:0 50%;
+    will-change:transform;
+  }
+  .narr__l{
+    min-width:0;
+    line-height:1.46;
+  }
+  .home.mobile-arrow-ready.mobile-arrow-on .narr__n::before{
+    transform:scaleX(1);
+    transition:transform 280ms var(--ease) var(--arrow-delay,0ms);
+  }
+  .home.mobile-arrow-ready.mobile-arrow-on .narr__stat{
+    opacity:1;
+    transform:none;
+    transition:opacity 330ms var(--ease), transform 330ms var(--ease);
+    transition-delay:calc(var(--arrow-delay,0ms) + 65ms);
+  }
+
+  /* ARCADA — os três pilares desktop são removidos. No mobile a flecha única
+     continua descendo pelo limite esquerdo do conteúdo e deriva só para os
+     títulos. 01/02/03 somem. A prosa conserva exatamente o alinhamento original. */
   .arcade{
     position:relative;
-    --mrail-gutter:clamp(15px,4.2vw,20px);
-    --mrail-title-shift:clamp(1.55rem,7vw,2rem);
-    --mrail-spine-top:calc(var(--pier) * -1);
-    --mrail-spine-h:calc(100% + var(--pier));
-    --mrail-join-delay:1850ms;
+    grid-template-columns:1fr;
+    row-gap:clamp(1.05rem,3.6vw,1.45rem);
+    margin-top:clamp(.95rem,3.4vw,1.35rem);
   }
-
-  /* elimina a gramática desktop que, empilhada, invadia o campo da prosa */
   .arcade .mov{
     border-top:0;
+    padding-top:0;
   }
   .arcade .mov::before{
     content:none !important;
@@ -82,86 +162,39 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   .arcade .mov__n{
     display:none !important;
   }
-
-  /* eixo único: nasce exatamente no datum do spring e termina no centro óptico
-     do terceiro título; altura/top são medidos em runtime em pixels reais. */
-  .arcade::before{
-    content:"";
-    position:absolute;
-    z-index:0;
-    pointer-events:none;
-    left:calc(var(--mrail-gutter) * -1);
-    top:calc(var(--mrail-spine-top) - .5px);
-    width:1px;
-    height:var(--mrail-spine-h);
-    background:var(--hair);
-    transform:scaleY(0);
-    transform-origin:50% 0;
-    will-change:transform;
-  }
-
-  /* quarta horizontal: é a última a se desenhar. Parte do eixo e desemboca no
-     extremo esquerdo da spring do SVG, no mesmo y físico da linha de nascença. */
-  .arcade::after{
-    content:"";
-    position:absolute;
-    z-index:0;
-    pointer-events:none;
-    left:calc(var(--mrail-gutter) * -1);
-    top:calc(var(--mrail-spine-top) - .5px);
-    width:var(--mrail-gutter);
-    height:1px;
-    background:rgba(24,24,24,.28);
-    transform:scaleX(0);
-    transform-origin:0 50%;
-    will-change:transform;
-  }
-
-  /* Só o título cede espaço ao ramal. A prosa permanece no alinhamento original. */
   .arcade .mov__h{
     position:relative;
     z-index:1;
-    padding-left:var(--mrail-title-shift);
+    padding-left:var(--title-shift);
+    margin:.1rem 0 .65rem;
   }
   .arcade .mov__h::before{
     content:"";
     position:absolute;
     pointer-events:none;
-    left:calc(var(--mrail-gutter) * -1);
+    left:0;
     top:calc(50% - .5px);
-    width:calc(var(--mrail-gutter) + var(--mrail-title-shift) - .48rem);
+    width:calc(var(--title-shift) - .35rem);
     height:1px;
     background:var(--hair);
     transform:scaleX(0);
     transform-origin:0 50%;
     will-change:transform;
   }
-
-  /* desenho coordenado: o eixo percorre a calha; cada ramal nasce no instante
-     em que o eixo alcança o centro do respectivo título; a ligação ao arco fecha. */
-  .home.mobile-arcade-on .arcade::before{
-    transform:scaleY(1);
-    transition:transform var(--mrail-draw,1600ms) linear;
-  }
-  .home.mobile-arcade-on .arcade .mov__h::before{
+  .home.mobile-arrow-ready.mobile-arrow-on .arcade .mov__h::before{
     transform:scaleX(1);
-    transition:transform 360ms var(--ease) var(--mrail-branch-delay,0ms);
-  }
-  .home.mobile-arcade-on .arcade::after{
-    transform:scaleX(1);
-    transition:transform 430ms var(--ease) var(--mrail-join-delay);
+    transition:transform 300ms var(--ease) var(--arrow-delay,0ms);
   }
 }
 
 @media (max-width:820px) and (prefers-reduced-motion:reduce){
-  .narr__stats::before,
-  .arcade::before,
-  .arcade::after,
+  .home::after,
+  .narr__n::before,
   .arcade .mov__h::before{
     transform:none !important;
     transition:none !important;
   }
-  .narr__stat{
+  .home.mobile-arrow-ready .narr__stat{
     opacity:1 !important;
     transform:none !important;
     transition:none !important;
@@ -172,111 +205,90 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   const JS = String.raw`
 (() => {
   'use strict';
+
   const mq = matchMedia('(max-width:820px)');
   const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const home = document.querySelector('.view[data-view="home"] .home');
   if (!home) return;
 
-  const arcade = home.querySelector('.arcade');
   const arc = home.querySelector('.narr-zone .arc');
-  const titles = arcade ? [...arcade.querySelectorAll(':scope > .mov > .mov__h')] : [];
-  if (!arcade || !arc || titles.length !== 3) return;
+  const metricNumbers = [...home.querySelectorAll('.narr__stat .narr__n')];
+  const titles = [...home.querySelectorAll('.arcade > .mov > .mov__h')];
+  const lastTitle = titles[titles.length - 1];
+  if (!arc || metricNumbers.length !== 5 || titles.length !== 3 || !lastTitle) return;
 
-  const DRAW = 1600;
-  let interacted = false;
-  let arcadeObserver = null;
+  let started = false;
 
-  function measureRail(){
+  function measureArrow(){
     if (!mq.matches) return;
 
-    const rr = arcade.getBoundingClientRect();
+    const hr = home.getBoundingClientRect();
     const ar = arc.getBoundingClientRect();
-    if (!rr.width || !ar.width) return;
+    const lr = lastTitle.getBoundingClientRect();
+    if (!hr.width || !ar.width || !lr.width) return;
 
-    /* spring e arcade têm a mesma borda esquerda no mobile. A diferença real
-       entre arc.bottom e arcade.top substitui qualquer hipótese sobre --pier. */
-    const start = ar.bottom - rr.top;
+    /* spring: x=0 e y=altura do próprio SVG. O eixo CSS usa exatamente esses
+       dois pontos físicos como origem, sem migrar para uma calha externa. */
+    const x = ar.left - hr.left;
+    const top = ar.bottom - hr.top;
+    const end = lr.top + lr.height / 2 - hr.top;
+    const height = Math.max(1, end - top);
 
-    const centers = titles.map(title => {
-      const tr = title.getBoundingClientRect();
-      return tr.top + tr.height / 2 - rr.top;
+    /* duração cresce moderadamente com a extensão real, sem ficar lenta demais. */
+    const draw = Math.round(Math.min(2300, Math.max(1450, height * 1.65)));
+
+    home.style.setProperty('--mobile-arrow-x', x.toFixed(2) + 'px');
+    home.style.setProperty('--mobile-arrow-top', top.toFixed(2) + 'px');
+    home.style.setProperty('--mobile-arrow-h', height.toFixed(2) + 'px');
+    home.style.setProperty('--mobile-arrow-draw', draw + 'ms');
+
+    [...metricNumbers, ...titles].forEach(node => {
+      const r = node.getBoundingClientRect();
+      const y = r.top + r.height / 2 - hr.top;
+      const ratio = Math.min(1, Math.max(0, (y - top) / height));
+      const delay = Math.round(ratio * draw) + 'ms';
+      node.style.setProperty('--arrow-delay', delay);
+      /* o delay também pertence ao li, porque é ele que faz o fade do conjunto */
+      node.closest('.narr__stat')?.style.setProperty('--arrow-delay', delay);
     });
-    const end = centers[centers.length - 1];
-    const height = Math.max(1, end - start);
-
-    arcade.style.setProperty('--mrail-spine-top', start.toFixed(2) + 'px');
-    arcade.style.setProperty('--mrail-spine-h', height.toFixed(2) + 'px');
-    arcade.style.setProperty('--mrail-draw', DRAW + 'ms');
-
-    centers.forEach((center, i) => {
-      const ratio = Math.min(1, Math.max(0, (center - start) / height));
-      const delay = Math.round(ratio * DRAW);
-      titles[i].style.setProperty('--mrail-branch-delay', delay + 'ms');
-    });
-
-    const lastDelay = parseFloat(getComputedStyle(titles[titles.length - 1])
-      .getPropertyValue('--mrail-branch-delay')) || DRAW;
-    arcade.style.setProperty('--mrail-join-delay', Math.round(lastDelay + 430) + 'ms');
   }
 
-  function armArcade(){
-    if (!mq.matches || !interacted) return;
-    if (reduce){
-      home.classList.add('mobile-arcade-on');
-      return;
-    }
-    if (arcadeObserver) return;
-    arcadeObserver = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      requestAnimationFrame(() => {
-        measureRail();
-        home.classList.add('mobile-arcade-on');
-      });
-      arcadeObserver.disconnect();
-      arcadeObserver = null;
-    }, {threshold:.06, rootMargin:'0px 0px -4% 0px'});
-    arcadeObserver.observe(arcade);
-  }
-
-  function firstInteraction(){
-    if (interacted) return;
-    interacted = true;
+  function activate(){
+    if (started) return;
+    started = true;
     if (!mq.matches) return;
-    measureRail();
-    home.classList.add('mobile-lines-on');
-    armArcade();
+    measureArrow();
+    home.classList.add('mobile-arrow-on');
+  }
+
+  function sync(){
+    if (!mq.matches) return;
+    measureArrow();
+    home.classList.add('mobile-arrow-ready');
+    if (reduce){
+      started = true;
+      home.classList.add('mobile-arrow-on');
+    } else if (started){
+      home.classList.add('mobile-arrow-on');
+    }
   }
 
   const EVENTS = ['scroll','wheel','pointerdown','keydown','touchstart'];
-  EVENTS.forEach(type => addEventListener(type, firstInteraction, {passive:true, once:true}));
+  EVENTS.forEach(type => addEventListener(type, activate, {passive:true, once:true}));
 
-  function syncBreakpoint(){
-    measureRail();
-    if (!mq.matches) return;
-    if (reduce){
-      interacted = true;
-      home.classList.add('mobile-lines-on','mobile-arcade-on');
-      return;
-    }
-    if (interacted){
-      home.classList.add('mobile-lines-on');
-      armArcade();
-    }
-  }
-
-  mq.addEventListener?.('change', syncBreakpoint);
-  addEventListener('resize', measureRail, {passive:true});
-  addEventListener('orientationchange', measureRail, {passive:true});
-  document.fonts?.ready.then(() => requestAnimationFrame(measureRail));
+  mq.addEventListener?.('change', sync);
+  addEventListener('resize', measureArrow, {passive:true});
+  addEventListener('orientationchange', measureArrow, {passive:true});
+  document.fonts?.ready.then(() => requestAnimationFrame(sync));
 
   if (typeof ResizeObserver === 'function'){
-    const ro = new ResizeObserver(() => requestAnimationFrame(measureRail));
+    const ro = new ResizeObserver(() => requestAnimationFrame(measureArrow));
+    ro.observe(home);
     ro.observe(arc);
-    ro.observe(arcade);
+    ro.observe(lastTitle);
   }
 
-  requestAnimationFrame(measureRail);
-  syncBreakpoint();
+  requestAnimationFrame(sync);
 })();
 `;
 
@@ -286,11 +298,9 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
       return response.text();
     })
     .then(source => {
-      const style = '<meta name="robots" content="noindex,nofollow"><style id="mobile-rail-variant">' + CSS + '</style>';
-      const script = '<script id="mobile-rail-variant-js">' + JS + '</scr' + 'ipt>';
-      source = source.replace('<title>Arco | Christian da Costa</title>', '<title>Arco — mobile rail | Christian da Costa</title>');
-      source = source.replace('</head>', style + '</head>');
-      source = source.replace('</body>', script + '</body>');
+      source = source.replace('<title>Arco | Christian da Costa</title>', '<title>Arco — mobile arrow | Christian da Costa</title>');
+      source = source.replace('</head>', '<meta name="robots" content="noindex,nofollow"><style id="mobile-arrow-variant">' + CSS + '</style></head>');
+      source = source.replace('</body>', '<script id="mobile-arrow-variant-js">' + JS + '</scr' + 'ipt></body>');
       document.open();
       document.write(source);
       document.close();
