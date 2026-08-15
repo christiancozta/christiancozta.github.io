@@ -39,6 +39,10 @@ jobs:
           css = css_match.group(1).strip()
           js = js_match.group(1).strip()
 
+          # Normalize transport-only whitespace; no semantic transformation.
+          css = '\n'.join(line.rstrip() for line in css.splitlines())
+          js = '\n'.join(line.rstrip() for line in js.splitlines())
+
           # Desktop isolation: no DOM mutation, listeners or measurements above 820px.
           guard = "  const mq = matchMedia('(max-width:820px)');\n  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;"
           assert js.count(guard) == 1, 'mobile guard anchor changed'
