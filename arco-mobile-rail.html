@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Arco — variante mobile rail</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+html,body{margin:0;min-height:100%;background:#fff;color:#181818}
+.arco-variant-loader{min-height:100dvh;display:grid;place-items:center;font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.04em;color:rgba(24,24,24,.62)}
+</style>
+</head>
+<body>
+<div class="arco-variant-loader" role="status">Carregando variante mobile…</div>
+<script>
+(() => {
+  'use strict';
+
+  const CSS = String.raw`
+/* ========================================================================== 
+   VARIANTE EXPERIMENTAL — MOBILE RAIL
+   Escopo total: <= 820px. Desktop permanece byte-for-byte visualmente regido
+   pelo arco.html de origem.
+   ========================================================================== */
+@media (max-width:820px){
+  /* A narrativa mobile deixa de usar border-left estático. O prumo passa a ser
+     uma peça animável, disparada pela primeira interação real do usuário. */
+  .narr__stats{
+    position:relative;
+    border-left:0 !important;
+  }
+  .narr__stats::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:1px;
+    background:var(--hair);
+    transform:scaleY(0);
+    transform-origin:50% 0;
+    will-change:transform;
+  }
+  .narr__stat{
+    opacity:0 !important;
+    transform:translateY(5px) !important;
+  }
+  .home.mobile-lines-on .narr__stats::before{
+    transform:scaleY(1);
+    transition:transform 1050ms linear;
+  }
+  .home.mobile-lines-on .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+    transition:opacity 360ms var(--ease), transform 360ms var(--ease);
+  }
+  .home.mobile-lines-on .narr__stat:nth-child(1){ transition-delay:140ms; }
+  .home.mobile-lines-on .narr__stat:nth-child(2){ transition-delay:315ms; }
+  .home.mobile-lines-on .narr__stat:nth-child(3){ transition-delay:490ms; }
+  .home.mobile-lines-on .narr__stat:nth-child(4){ transition-delay:665ms; }
+  .home.mobile-lines-on .narr__stat:nth-child(5){ transition-delay:840ms; }
+
+  /* A arcada deixa de reutilizar os três pilares desktop. Em mobile há um só
+     eixo, situado na calha esquerda (fora da massa textual), e três ramais. */
+  .arcade{
+    position:relative;
+    --mrail-gutter:clamp(15px,4.2vw,20px);
+    --mrail-title-shift:clamp(1.55rem,7vw,2rem);
+    --mrail-spine-top:calc(var(--pier) * -1);
+    --mrail-spine-h:calc(100% + var(--pier));
+    --mrail-join-delay:1850ms;
+  }
+
+  /* elimina a gramática desktop que, empilhada, invadia o campo da prosa */
+  .arcade .mov{
+    border-top:0;
+  }
+  .arcade .mov::before{
+    content:none !important;
+    display:none !important;
+  }
+  .arcade .mov__n{
+    display:none !important;
+  }
+
+  /* eixo único: nasce exatamente no datum do spring e termina no centro óptico
+     do terceiro título; altura/top são medidos em runtime em pixels reais. */
+  .arcade::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    pointer-events:none;
+    left:calc(var(--mrail-gutter) * -1);
+    top:calc(var(--mrail-spine-top) - .5px);
+    width:1px;
+    height:var(--mrail-spine-h);
+    background:var(--hair);
+    transform:scaleY(0);
+    transform-origin:50% 0;
+    will-change:transform;
+  }
+
+  /* quarta horizontal: é a última a se desenhar. Parte do eixo e desemboca no
+     extremo esquerdo da spring do SVG, no mesmo y físico da linha de nascença. */
+  .arcade::after{
+    content:"";
+    position:absolute;
+    z-index:0;
+    pointer-events:none;
+    left:calc(var(--mrail-gutter) * -1);
+    top:calc(var(--mrail-spine-top) - .5px);
+    width:var(--mrail-gutter);
+    height:1px;
+    background:rgba(24,24,24,.28);
+    transform:scaleX(0);
+    transform-origin:0 50%;
+    will-change:transform;
+  }
+
+  /* Só o título cede espaço ao ramal. A prosa permanece no alinhamento original. */
+  .arcade .mov__h{
+    position:relative;
+    z-index:1;
+    padding-left:var(--mrail-title-shift);
+  }
+  .arcade .mov__h::before{
+    content:"";
+    position:absolute;
+    pointer-events:none;
+    left:calc(var(--mrail-gutter) * -1);
+    top:calc(50% - .5px);
+    width:calc(var(--mrail-gutter) + var(--mrail-title-shift) - .48rem);
+    height:1px;
+    background:var(--hair);
+    transform:scaleX(0);
+    transform-origin:0 50%;
+    will-change:transform;
+  }
+
+  /* desenho coordenado: o eixo percorre a calha; cada ramal nasce no instante
+     em que o eixo alcança o centro do respectivo título; a ligação ao arco fecha. */
+  .home.mobile-arcade-on .arcade::before{
+    transform:scaleY(1);
+    transition:transform var(--mrail-draw,1600ms) linear;
+  }
+  .home.mobile-arcade-on .arcade .mov__h::before{
+    transform:scaleX(1);
+    transition:transform 360ms var(--ease) var(--mrail-branch-delay,0ms);
+  }
+  .home.mobile-arcade-on .arcade::after{
+    transform:scaleX(1);
+    transition:transform 430ms var(--ease) var(--mrail-join-delay);
+  }
+}
+
+@media (max-width:820px) and (prefers-reduced-motion:reduce){
+  .narr__stats::before,
+  .arcade::before,
+  .arcade::after,
+  .arcade .mov__h::before{
+    transform:none !important;
+    transition:none !important;
+  }
+  .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+}
+`;
+
+  const JS = String.raw`
+(() => {
+  'use strict';
+  const mq = matchMedia('(max-width:820px)');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const home = document.querySelector('.view[data-view="home"] .home');
+  if (!home) return;
+
+  const arcade = home.querySelector('.arcade');
+  const arc = home.querySelector('.narr-zone .arc');
+  const titles = arcade ? [...arcade.querySelectorAll(':scope > .mov > .mov__h')] : [];
+  if (!arcade || !arc || titles.length !== 3) return;
+
+  const DRAW = 1600;
+  let interacted = false;
+  let arcadeObserver = null;
+
+  function measureRail(){
+    if (!mq.matches) return;
+
+    const rr = arcade.getBoundingClientRect();
+    const ar = arc.getBoundingClientRect();
+    if (!rr.width || !ar.width) return;
+
+    /* spring e arcade têm a mesma borda esquerda no mobile. A diferença real
+       entre arc.bottom e arcade.top substitui qualquer hipótese sobre --pier. */
+    const start = ar.bottom - rr.top;
+
+    const centers = titles.map(title => {
+      const tr = title.getBoundingClientRect();
+      return tr.top + tr.height / 2 - rr.top;
+    });
+    const end = centers[centers.length - 1];
+    const height = Math.max(1, end - start);
+
+    arcade.style.setProperty('--mrail-spine-top', start.toFixed(2) + 'px');
+    arcade.style.setProperty('--mrail-spine-h', height.toFixed(2) + 'px');
+    arcade.style.setProperty('--mrail-draw', DRAW + 'ms');
+
+    centers.forEach((center, i) => {
+      const ratio = Math.min(1, Math.max(0, (center - start) / height));
+      const delay = Math.round(ratio * DRAW);
+      titles[i].style.setProperty('--mrail-branch-delay', delay + 'ms');
+    });
+
+    const lastDelay = parseFloat(getComputedStyle(titles[titles.length - 1])
+      .getPropertyValue('--mrail-branch-delay')) || DRAW;
+    arcade.style.setProperty('--mrail-join-delay', Math.round(lastDelay + 430) + 'ms');
+  }
+
+  function armArcade(){
+    if (!mq.matches || !interacted) return;
+    if (reduce){
+      home.classList.add('mobile-arcade-on');
+      return;
+    }
+    if (arcadeObserver) return;
+    arcadeObserver = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      requestAnimationFrame(() => {
+        measureRail();
+        home.classList.add('mobile-arcade-on');
+      });
+      arcadeObserver.disconnect();
+      arcadeObserver = null;
+    }, {threshold:.06, rootMargin:'0px 0px -4% 0px'});
+    arcadeObserver.observe(arcade);
+  }
+
+  function firstInteraction(){
+    if (interacted) return;
+    interacted = true;
+    if (!mq.matches) return;
+    measureRail();
+    home.classList.add('mobile-lines-on');
+    armArcade();
+  }
+
+  const EVENTS = ['scroll','wheel','pointerdown','keydown','touchstart'];
+  EVENTS.forEach(type => addEventListener(type, firstInteraction, {passive:true, once:true}));
+
+  function syncBreakpoint(){
+    measureRail();
+    if (!mq.matches) return;
+    if (reduce){
+      interacted = true;
+      home.classList.add('mobile-lines-on','mobile-arcade-on');
+      return;
+    }
+    if (interacted){
+      home.classList.add('mobile-lines-on');
+      armArcade();
+    }
+  }
+
+  mq.addEventListener?.('change', syncBreakpoint);
+  addEventListener('resize', measureRail, {passive:true});
+  addEventListener('orientationchange', measureRail, {passive:true});
+  document.fonts?.ready.then(() => requestAnimationFrame(measureRail));
+
+  if (typeof ResizeObserver === 'function'){
+    const ro = new ResizeObserver(() => requestAnimationFrame(measureRail));
+    ro.observe(arc);
+    ro.observe(arcade);
+  }
+
+  requestAnimationFrame(measureRail);
+  syncBreakpoint();
+})();
+`;
+
+  fetch('arco.html', {cache:'no-store'})
+    .then(response => {
+      if (!response.ok) throw new Error('arco.html: HTTP ' + response.status);
+      return response.text();
+    })
+    .then(source => {
+      const style = '<meta name="robots" content="noindex,nofollow"><style id="mobile-rail-variant">' + CSS + '</style>';
+      const script = '<script id="mobile-rail-variant-js">' + JS + '</scr' + 'ipt>';
+      source = source.replace('<title>Arco | Christian da Costa</title>', '<title>Arco — mobile rail | Christian da Costa</title>');
+      source = source.replace('</head>', style + '</head>');
+      source = source.replace('</body>', script + '</body>');
+      document.open();
+      document.write(source);
+      document.close();
+    })
+    .catch(error => {
+      document.body.innerHTML = '<pre style="padding:24px;font:12px/1.5 monospace;white-space:pre-wrap">Falha ao carregar a variante mobile.\n' +
+        String(error && error.message || error).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + '</pre>';
+    });
+})();
+</script>
+</body>
+</html>
