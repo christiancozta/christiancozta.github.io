@@ -45,7 +45,7 @@ jobs:
           js = js.replace(guard, guard + "\n  if (!mq.matches) return;", 1)
 
           # The transported stylesheet is composed only of mobile/reduced-motion media blocks.
-          compact = re.sub(r'/\\*[\\s\\S]*?\\*/', '', css).strip()
+          compact = re.sub(r'/\*[\s\S]*?\*/', '', css).strip()
           assert compact.startswith('@media (max-width:820px)'), 'unexpected unscoped CSS before mobile media query'
           assert '@media (min-width:' not in css, 'desktop media rule found in mobile block'
 
