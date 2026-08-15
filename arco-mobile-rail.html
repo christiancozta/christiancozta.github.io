@@ -34,9 +34,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     --branch-gap:.45rem;
   }
 
-  /* No celular o hero deixa de preencher artificialmente uma viewport inteira.
-     O percurso fica mais compacto e o arco sobe, abrindo espaço para métricas
-     com quebra natural em duas linhas. */
   .narr-zone{
     min-height:auto !important;
     padding-top:clamp(1.45rem,4.2vw,2rem);
@@ -64,7 +61,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     margin-top:clamp(.55rem,2.4vw,.85rem);
   }
 
-  /* EIXO ÚNICO — o centro do filete coincide com o x=0 da spring. */
   .mobile-arrow-axis{
     position:absolute;
     pointer-events:none;
@@ -79,9 +75,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     will-change:height;
   }
 
-  /* MÉTRICAS — o border-left antigo sai. Cada número recebe um ramal da mesma
-     flecha; a legenda pode ocupar uma ou duas linhas sem alterar o ponto de
-     referência, que continua sendo o centro óptico do número. */
   .narr__svg{ display:none; }
   .narr__stats{
     position:relative;
@@ -141,9 +134,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     transition-delay:var(--arrow-delay,0ms);
   }
 
-  /* ARCADA — os três pilares desktop são removidos. No mobile a flecha única
-     continua descendo pelo limite esquerdo do conteúdo e deriva só para os
-     títulos. 01/02/03 somem. A prosa conserva exatamente o alinhamento original. */
   .arcade{
     position:relative;
     grid-template-columns:1fr;
@@ -183,9 +173,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     will-change:transform;
   }
 
-  /* Fechamento físico da flecha: a linha vertical termina no mesmo centro do
-     ramal de Arquitetura. Este filete de papel elimina qualquer sobra causada
-     por transformações de reveal sem tocar no ramal horizontal. */
   .arcade > .mov:last-child .mov__h::after{
     content:"";
     position:absolute;
@@ -239,11 +226,9 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   const lastTitle = titles[titles.length - 1];
   if (!arc || metricNumbers.length !== 5 || metricNumbers.some(n => !n) || titles.length !== 3 || !lastTitle) return;
 
-  /* Mesmo relógio narrativo do arco.html desktop:
-     1900 ms de traço puro + 120 ms de pausa em cada dado;
-     o dado revela em 420 ms quando a linha chega a ele. */
   const DRAW = 1900;
   const HOLD = 120;
+  const CONTINUE = 1900;
 
   const axis = document.createElement('span');
   axis.className = 'mobile-arrow-axis';
@@ -255,9 +240,6 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   let axisDone = false;
   let timeline = null;
 
-  /* Coordenadas de layout, não coordenadas visuais. offsetTop/offsetLeft ignoram
-     o translateY dos reveals; assim o fim da flecha não muda quando o artigo
-     termina sua animação de entrada. */
   function layoutBox(el){
     let x = 0, y = 0, node = el;
     while (node && node !== home){
@@ -292,16 +274,19 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     const metricPoints = metricNumbers.map((node, i) => {
       const b = layoutBox(node);
       const y = b.y + b.height / 2;
-      const p = Math.min(1, Math.max(0, (y - top) / height));
-      return {node, stat:metricStats[i], p};
+      return {node, stat:metricStats[i], y};
     });
 
-    const total = DRAW + HOLD * metricPoints.length;
+    const metricEnd = Math.max(top + 1, metricPoints[metricPoints.length - 1].y);
+    const metricSpan = Math.max(1, metricEnd - top);
+    const metricClock = DRAW + HOLD * metricPoints.length;
+    const total = metricClock + CONTINUE;
     const frames = [{height:'0px', offset:0}];
 
     metricPoints.forEach((point, i) => {
-      const arrival = point.p * DRAW + i * HOLD;
-      const h = (point.p * height).toFixed(2) + 'px';
+      const q = Math.min(1, Math.max(0, (point.y - top) / metricSpan));
+      const arrival = q * DRAW + i * HOLD;
+      const h = Math.max(0, point.y - top).toFixed(2) + 'px';
       frames.push({height:h, offset:Math.min(1, arrival / total)});
       frames.push({height:h, offset:Math.min(1, (arrival + HOLD) / total)});
       const delay = Math.round(arrival) + 'ms';
@@ -312,12 +297,12 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     titles.forEach(node => {
       const b = layoutBox(node);
       const y = b.y + b.height / 2;
-      const p = Math.min(1, Math.max(0, (y - top) / height));
-      const holdsBefore = metricPoints.reduce((n, m) => n + (m.p < p ? 1 : 0), 0);
-      const arrival = p * DRAW + holdsBefore * HOLD;
+      const q = Math.min(1, Math.max(0, (y - metricEnd) / Math.max(1, end - metricEnd)));
+      const arrival = metricClock + q * CONTINUE;
       node.style.setProperty('--arrow-delay', Math.round(arrival) + 'ms');
     });
 
+    frames.push({height:metricSpan.toFixed(2) + 'px', offset:Math.min(1, metricClock / total)});
     frames.push({height:height.toFixed(2) + 'px', offset:1});
     timeline = {height, total, frames};
 
