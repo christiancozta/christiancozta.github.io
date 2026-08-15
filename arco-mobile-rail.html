@@ -29,6 +29,7 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     --mobile-arrow-h:0px;
     --metric-shift:clamp(1.25rem,6vw,1.6rem);
     --title-shift:clamp(1.25rem,6vw,1.6rem);
+    --body-gutter:clamp(.72rem,3vw,.95rem);
   }
 
   /* No celular o hero deixa de preencher artificialmente uma viewport inteira.
@@ -71,6 +72,8 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     width:1px;
     height:0;
     background:var(--hair);
+    max-height:var(--mobile-arrow-h);
+    overflow:hidden;
     will-change:height;
   }
 
@@ -146,6 +149,7 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   .arcade .mov{
     border-top:0;
     padding-top:0;
+    padding-left:var(--body-gutter);
   }
   .arcade .mov::before{
     content:none !important;
@@ -164,9 +168,9 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     content:"";
     position:absolute;
     pointer-events:none;
-    left:0;
+    left:calc(var(--body-gutter) * -1);
     top:calc(50% - .5px);
-    width:calc(var(--title-shift) - .35rem);
+    width:calc(var(--body-gutter) + var(--title-shift) - .45rem);
     height:1px;
     background:var(--hair);
     transform:scaleX(0);
@@ -291,7 +295,8 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
     });
     axisAnimation.finished.then(() => {
       axisDone = true;
-      axis.style.height = data.height.toFixed(2) + 'px';
+      const finalData = measureArrow() || data;
+      axis.style.height = finalData.height.toFixed(2) + 'px';
       axisAnimation?.cancel();
       axisAnimation = null;
     }).catch(() => {});
@@ -329,19 +334,36 @@ html,body{margin:0;min-height:100%;background:#fff;color:#181818}
   const EVENTS = ['scroll','wheel','pointerdown','pointermove','keydown','touchstart'];
   EVENTS.forEach(type => addEventListener(type, activate, {passive:true, once:true}));
 
+  let measureRAF = 0;
+  const scheduleMeasure = () => {
+    if (measureRAF) cancelAnimationFrame(measureRAF);
+    measureRAF = requestAnimationFrame(() => {
+      measureRAF = requestAnimationFrame(() => {
+        measureRAF = 0;
+        const data = measureArrow();
+        if (axisDone && data) axis.style.height = data.height.toFixed(2) + 'px';
+      });
+    });
+  };
+
   mq.addEventListener?.('change', sync);
-  addEventListener('resize', measureArrow, {passive:true});
-  addEventListener('orientationchange', measureArrow, {passive:true});
-  document.fonts?.ready.then(() => requestAnimationFrame(sync));
+  addEventListener('resize', scheduleMeasure, {passive:true});
+  addEventListener('orientationchange', scheduleMeasure, {passive:true});
+  document.fonts?.ready.then(() => {
+    requestAnimationFrame(() => requestAnimationFrame(sync));
+  });
 
   if (typeof ResizeObserver === 'function'){
-    const ro = new ResizeObserver(() => requestAnimationFrame(measureArrow));
+    const ro = new ResizeObserver(scheduleMeasure);
     ro.observe(home);
     ro.observe(arc);
-    ro.observe(lastTitle);
+    ro.observe(home.querySelector('.narr__stats'));
+    ro.observe(home.querySelector('.arcade'));
+    metricStats.forEach(el => ro.observe(el));
+    titles.forEach(el => ro.observe(el));
   }
 
-  requestAnimationFrame(sync);
+  requestAnimationFrame(() => requestAnimationFrame(sync));
 })();
 `;
 
