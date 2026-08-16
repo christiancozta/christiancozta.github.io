@@ -448,12 +448,19 @@ a{color:inherit}
    Frontispício materno e quatro superfícies horizontais. A alternância 2 | 4
    / 4 | 2 distingue as faixas sem sugerir uma ordem de passagem obrigatória.
    ========================================================================== */
-.architecture-board{background:var(--l1)}
+.architecture-board{background-color:var(--l1)}
 .architecture-frontispiece{
-  grid-column:1/-1;min-height:calc(var(--board-row)*2.4);
+  grid-column:1/-1;min-height:calc(var(--grid-row)*5);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:calc(var(--base)*3) var(--gutter);
   border-bottom:1px solid var(--terra);text-align:center;
+}
+.architecture-frontispiece,.system-band{
+  background-image:
+    linear-gradient(to right,var(--grid-light) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--grid-light) 1px,transparent 1px);
+  background-position:0 0;background-repeat:repeat;
+  background-size:var(--cell) var(--grid-row);
 }
 .architecture-frontispiece__trigger{
   width:min(calc(var(--cell)*4),720px);display:flex;flex-direction:column;align-items:center;
@@ -480,8 +487,8 @@ a{color:inherit}
   grid-column:1/-1;display:grid;grid-template-columns:repeat(6,var(--cell));
   min-height:calc(var(--board-row)*2.5);border-bottom:1px solid var(--rule);
 }
-.system-band--white{background:#FFFFFF}
-.system-band--soft{background:var(--l1)}
+.system-band--white{background-color:#FFFFFF}
+.system-band--soft{background-color:var(--l1)}
 .system-band__symbol{
   grid-column:span 2;display:flex;flex-direction:column;justify-content:center;
   min-width:0;padding:calc(var(--base)*2) var(--gutter);
