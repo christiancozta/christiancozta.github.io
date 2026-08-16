@@ -1,0 +1,194 @@
+name: Patch rail active states
+
+on:
+  push:
+    branches:
+      - fix/rail-active-echo-atrio
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply minimal patch
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("arco.html")
+          text = path.read_text(encoding="utf-8")
+
+          css_anchor = '''.rail__link[data-view="atrio"]:hover::after {
+            background:var(--atrio);
+          }
+          '''
+          css_replacement = css_anchor + '''
+          /* Territórios permanentes: a marca nomeada conserva o próprio sinal mesmo
+             quando outra view está em campo. O estado corrente continua expresso pelo
+             peso e pelo travessão. */
+          .rail__link[data-view="echo"],
+          .rail__link[data-view="echo"] .n{
+            color:var(--echo);
+          }
+          .rail__link[data-view="echo"]::after{ background:var(--echo); }
+
+          .rail__link[data-view="atrio"],
+          .rail__link[data-view="atrio"] .n{
+            color:var(--atrio);
+          }
+          .rail__link[data-view="atrio"]::after{ background:var(--atrio); }
+
+          /* Nos filhos, cor é estado: somente a subseção corrente recebe o acento. */
+          .rail__seclink[data-child="echo"][aria-current="location"]{ color:var(--echo); }
+          .rail__seclink[data-child="atrio"][aria-current="location"]{ color:var(--atrio); }
+          '''
+          if css_anchor not in text:
+              raise SystemExit("CSS anchor not found")
+          text = text.replace(css_anchor, css_replacement, 1)
+
+          js_anchor = '''  const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
+            const stage = document.getElementById("stage");
+            const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+          '''
+          js_replacement = '''  const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
+            const childLinks = [...document.querySelectorAll(".rail__seclink[data-child]")];
+            const stage = document.getElementById("stage");
+            const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            const childKey = view => `arco:child:${view}`;
+            function rememberedChild(view){
+              let target = "";
+              try { target = sessionStorage.getItem(childKey(view)) || ""; } catch {}
+              return childLinks.some(link => link.dataset.child === view && link.dataset.target === target)
+                ? target : "";
+            }
+            function setChildActive(view, target, {persist = true} = {}){
+              childLinks.forEach(link => {
+                if (link.dataset.child !== view) return;
+                if (link.dataset.target === target) link.setAttribute("aria-current", "location");
+                else link.removeAttribute("aria-current");
+              });
+              if (persist && target){
+                try { sessionStorage.setItem(childKey(view), target); } catch {}
+              }
+            }
+          '''
+          if js_anchor not in text:
+              raise SystemExit("JS declarations anchor not found")
+          text = text.replace(js_anchor, js_replacement, 1)
+
+          frame_anchor = '''    const frame = document.querySelector('.view[data-active="true"] iframe');
+              if (frame && frame.dataset.src && frame.getAttribute("src") === "about:blank"){
+                const child = frame.closest(".child");
+                child.dataset.loading = "true";
+                frame.addEventListener("load", () => child.dataset.loading = "false", {once:true});
+                frame.src = frame.dataset.src;
+              }
+          '''
+          frame_replacement = '''    const frame = document.querySelector('.view[data-active="true"] iframe');
+              if (frame && frame.dataset.src && frame.getAttribute("src") === "about:blank"){
+                const remembered = rememberedChild(view);
+                if (remembered){
+                  const base = frame.dataset.src.split("#")[0];
+                  frame.dataset.src = base + "#" + remembered;
+                  setChildActive(view, remembered, {persist:false});
+                }
+                const child = frame.closest(".child");
+                child.dataset.loading = "true";
+                frame.addEventListener("load", () => child.dataset.loading = "false", {once:true});
+                frame.src = frame.dataset.src;
+              }
+          '''
+          if frame_anchor not in text:
+              raise SystemExit("Frame loader anchor not found")
+          text = text.replace(frame_anchor, frame_replacement, 1)
+
+          click_anchor = '''      const view = btn.dataset.child, alvo = btn.dataset.target;
+                const frame = document.querySelector(`.view[data-view="${view}"] iframe`);
+          '''
+          click_replacement = '''      const view = btn.dataset.child, alvo = btn.dataset.target;
+                setChildActive(view, alvo);
+                const frame = document.querySelector(`.view[data-view="${view}"] iframe`);
+          '''
+          if click_anchor not in text:
+              raise SystemExit("Child click anchor not found")
+          text = text.replace(click_anchor, click_replacement, 1)
+
+          tracking_anchor = '''      pousar();
+              }));
+
+            /* só os controles: as próprias .view também carregam data-view e não podem
+          '''
+          tracking_replacement = '''      pousar();
+              }));
+
+            /* ---- Subseção corrente dos filhos: clique, hash e rolagem usam o mesmo estado ---- */
+            const childTracking = new WeakMap();
+            function bindChildTracking(frame){
+              const view = frame.closest(".view")?.dataset.view;
+              if (view !== "echo" && view !== "atrio") return;
+
+              let win, doc;
+              try { win = frame.contentWindow; doc = frame.contentDocument; }
+              catch { return; }
+              if (!win || !doc) return;
+
+              const sections = childLinks
+                .filter(link => link.dataset.child === view)
+                .map(link => ({id:link.dataset.target, node:doc.getElementById(link.dataset.target)}))
+                .filter(item => item.node);
+              if (!sections.length) return;
+
+              const previous = childTracking.get(frame);
+              if (previous){
+                previous.win.removeEventListener("scroll", previous.schedule);
+                previous.win.removeEventListener("hashchange", previous.schedule);
+              }
+
+              let raf = 0;
+              const sync = () => {
+                raf = 0;
+                const marker = Math.min(160, Math.max(72, win.innerHeight * .18));
+                let active = sections[0];
+                for (const section of sections){
+                  if (section.node.getBoundingClientRect().top <= marker) active = section;
+                  else break;
+                }
+                setChildActive(view, active.id);
+              };
+              const schedule = () => {
+                if (!raf) raf = win.requestAnimationFrame(sync);
+              };
+
+              win.addEventListener("scroll", schedule, {passive:true});
+              win.addEventListener("hashchange", schedule);
+              childTracking.set(frame, {win, schedule});
+              schedule();
+            }
+
+            document.querySelectorAll('.view[data-view="echo"] iframe, .view[data-view="atrio"] iframe')
+              .forEach(frame => frame.addEventListener("load", () => bindChildTracking(frame)));
+
+            /* só os controles: as próprias .view também carregam data-view e não podem
+          '''
+          if tracking_anchor not in text:
+              raise SystemExit("Tracking insertion anchor not found")
+          text = text.replace(tracking_anchor, tracking_replacement, 1)
+
+          path.write_text(text, encoding="utf-8")
+
+      - name: Commit patch and remove helper workflow
+        run: |
+          rm -f .github/workflows/patch-rail-active.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add arco.html .github/workflows/patch-rail-active.yml
+          git commit -m "fix: sync rail accents and active subsections"
+          git push origin HEAD:${GITHUB_REF_NAME}
