@@ -5,6 +5,7 @@
   const runway = document.querySelector(".runway");
   const light = runway?.querySelector(".runway__light");
   const dark = runway?.querySelector(".runway__dark");
+  const origin = runway?.querySelector(".runway__origin");
   const rim = runway?.querySelector(".runway__rim");
   const sections = [...document.querySelectorAll("[data-section]")];
   const allowed = new Set(sections.map(section => section.id));
@@ -127,7 +128,34 @@
     horizon = Math.max(UNIT, h - depth);
     root.style.setProperty("--horizon", `${horizon}px`);
     runway.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    drawStaticRunway();
     draw(0);
+  }
+
+  function drawStaticRunway(){
+    const base = h - horizon;
+    const cx = w / 2;
+    const unit = w / 8;
+    const max = 1.82;
+    const x = (i,r) => (cx + (i - 4) * unit * r).toFixed(3);
+    const y = r => (horizon + base * r).toFixed(3);
+    light.setAttribute(
+      "d",
+      `M${cx.toFixed(3)},${horizon.toFixed(3)}` +
+      `L${x(8,max)},${y(max)}` +
+      `L${x(0,max)},${y(max)}Z`
+    );
+
+    /* origem da esteira: um único triângulo preto, pequeno e estável. */
+    const originDepth = Math.min(10, base * .04);
+    const originHalf = (w / 2) * (originDepth / base);
+    origin?.setAttribute(
+      "d",
+      `M${cx.toFixed(3)},${horizon.toFixed(3)}` +
+      `L${(cx + originHalf).toFixed(3)},${(horizon + originDepth).toFixed(3)}` +
+      `L${(cx - originHalf).toFixed(3)},${(horizon + originDepth).toFixed(3)}Z`
+    );
+    rim?.setAttribute("d", "");
   }
 
   function draw(phase){
@@ -141,23 +169,24 @@
     const rho = n => d0 / (d0 + n - phase);
     const x = (i,r) => (cx + (i - 4) * unit * r).toFixed(3);
     const y = r => (horizon + base * r).toFixed(3);
-    light.setAttribute(
-      "d",
-      `M${cx.toFixed(3)},${horizon.toFixed(3)}` +
-      `L${x(8,max)},${y(max)}` +
-      `L${x(0,max)},${y(max)}Z`
-    );
     const cells = [];
+    const xNear = new Array(9);
+    const xFar = new Array(9);
     for(let row=0;row<count;row+=1){
       const rFar = rho(row+1);
       if(rFar > max) continue;
       const rNear = Math.min(rho(row),max);
+      const yNear = y(rNear);
+      const yFar = y(rFar);
+      for(let i=0;i<9;i+=1){
+        xNear[i] = x(i,rNear);
+        xFar[i] = x(i,rFar);
+      }
       for(let col=row%2;col<8;col+=2){
-        cells.push(`M${x(col,rNear)},${y(rNear)}L${x(col+1,rNear)},${y(rNear)}L${x(col+1,rFar)},${y(rFar)}L${x(col,rFar)},${y(rFar)}Z`);
+        cells.push(`M${xNear[col]},${yNear}L${xNear[col+1]},${yNear}L${xFar[col+1]},${yFar}L${xFar[col]},${yFar}Z`);
       }
     }
     dark.setAttribute("d",cells.join(""));
-    rim?.setAttribute("d", "");
   }
 
   function tick(time){
