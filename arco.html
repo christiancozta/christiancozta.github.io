@@ -696,6 +696,25 @@ body{
   background:var(--atrio);
 }
 
+/* Territórios permanentes: a marca nomeada conserva o próprio sinal mesmo
+   quando outra view está em campo. O estado corrente continua expresso pelo
+   peso e pelo travessão. */
+.rail__link[data-view="echo"],
+.rail__link[data-view="echo"] .n{
+  color:var(--echo);
+}
+.rail__link[data-view="echo"]::after{ background:var(--echo); }
+
+.rail__link[data-view="atrio"],
+.rail__link[data-view="atrio"] .n{
+  color:var(--atrio);
+}
+.rail__link[data-view="atrio"]::after{ background:var(--atrio); }
+
+/* Nos filhos, cor é estado: somente a subseção corrente recebe o acento. */
+.rail__seclink[data-child="echo"][aria-current="location"]{ color:var(--echo); }
+.rail__seclink[data-child="atrio"][aria-current="location"]{ color:var(--atrio); }
+
 /* o pé da coluna: frase autoral, nome, headline, contatos e lugar — ancorados
    na base e separados do índice pela maior folga da coluna. Nenhuma régua:
    o que divide é espaço negativo. */
@@ -4062,8 +4081,27 @@ body{
   const VIEWS = ["home","echo","atrio"];
   const views = [...document.querySelectorAll(".view")];
   const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
+  const childLinks = [...document.querySelectorAll(".rail__seclink[data-child]")];
   const stage = document.getElementById("stage");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const childKey = view => `arco:child:${view}`;
+  function rememberedChild(view){
+    let target = "";
+    try { target = sessionStorage.getItem(childKey(view)) || ""; } catch {}
+    return childLinks.some(link => link.dataset.child === view && link.dataset.target === target)
+      ? target : "";
+  }
+  function setChildActive(view, target, {persist = true} = {}){
+    childLinks.forEach(link => {
+      if (link.dataset.child !== view) return;
+      if (link.dataset.target === target) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    if (persist && target){
+      try { sessionStorage.setItem(childKey(view), target); } catch {}
+    }
+  }
 
   /* ---- Revelação em scroll (IntersectionObserver, nunca listener de scroll) ----
      Fica ANTES da rota: show() chama revealNow() e não pode achar io na zona morta. */
@@ -4099,6 +4137,12 @@ body{
 
     const frame = document.querySelector('.view[data-active="true"] iframe');
     if (frame && frame.dataset.src && frame.getAttribute("src") === "about:blank"){
+      const remembered = rememberedChild(view);
+      if (remembered){
+        const base = frame.dataset.src.split("#")[0];
+        frame.dataset.src = base + "#" + remembered;
+        setChildActive(view, remembered, {persist:false});
+      }
       const child = frame.closest(".child");
       child.dataset.loading = "true";
       frame.addEventListener("load", () => child.dataset.loading = "false", {once:true});
@@ -4120,6 +4164,7 @@ body{
   document.querySelectorAll("[data-child]").forEach(btn =>
     btn.addEventListener("click", () => {
       const view = btn.dataset.child, alvo = btn.dataset.target;
+      setChildActive(view, alvo);
       const frame = document.querySelector(`.view[data-view="${view}"] iframe`);
       const base = frame ? (frame.dataset.src || "").split("#")[0] : "";
       const virgem = frame && frame.getAttribute("src") === "about:blank";
@@ -4143,6 +4188,53 @@ body{
       };
       pousar();
     }));
+
+  /* ---- Subseção corrente dos filhos: clique, hash e rolagem usam o mesmo estado ---- */
+  const childTracking = new WeakMap();
+  function bindChildTracking(frame){
+    const view = frame.closest(".view")?.dataset.view;
+    if (view !== "echo" && view !== "atrio") return;
+
+    let win, doc;
+    try { win = frame.contentWindow; doc = frame.contentDocument; }
+    catch { return; }
+    if (!win || !doc) return;
+
+    const sections = childLinks
+      .filter(link => link.dataset.child === view)
+      .map(link => ({id:link.dataset.target, node:doc.getElementById(link.dataset.target)}))
+      .filter(item => item.node);
+    if (!sections.length) return;
+
+    const previous = childTracking.get(frame);
+    if (previous){
+      previous.win.removeEventListener("scroll", previous.schedule);
+      previous.win.removeEventListener("hashchange", previous.schedule);
+    }
+
+    let raf = 0;
+    const sync = () => {
+      raf = 0;
+      const marker = Math.min(160, Math.max(72, win.innerHeight * .18));
+      let active = sections[0];
+      for (const section of sections){
+        if (section.node.getBoundingClientRect().top <= marker) active = section;
+        else break;
+      }
+      setChildActive(view, active.id);
+    };
+    const schedule = () => {
+      if (!raf) raf = win.requestAnimationFrame(sync);
+    };
+
+    win.addEventListener("scroll", schedule, {passive:true});
+    win.addEventListener("hashchange", schedule);
+    childTracking.set(frame, {win, schedule});
+    schedule();
+  }
+
+  document.querySelectorAll('.view[data-view="echo"] iframe, .view[data-view="atrio"] iframe')
+    .forEach(frame => frame.addEventListener("load", () => bindChildTracking(frame)));
 
   /* só os controles: as próprias .view também carregam data-view e não podem
      capturar o clique que borbulha de dentro delas */
