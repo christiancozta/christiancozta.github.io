@@ -18,7 +18,7 @@ jobs:
           ref: fix/rail-active-context-v2
           fetch-depth: 0
 
-      - name: Apply rail state correction
+      - name: Apply and verify correction
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -27,104 +27,79 @@ jobs:
           p = Path('arco.html')
           s = p.read_text(encoding='utf-8')
 
-          # 1) Territory color exists only while the corresponding parent view is active.
-          css_pattern = re.compile(
-              r'/\* Hover territorial \*/.*?(?=/\* o pé da coluna:)',
-              re.S,
-          )
-          css_replacement = '''/* Estado territorial: a cor de acento só aparece quando a página-mãe
-             está em campo. Fora dela, echo e ATRIO voltam à tinta neutra do cordão. */
+          css = '''/* Estado territorial: o acento existe somente enquanto a página-mãe está em campo. */
           .rail__link[data-view="echo"][aria-current="true"],
           .rail__link[data-view="echo"][aria-current="true"] .n{
             color:var(--echo);
           }
-          .rail__link[data-view="echo"][aria-current="true"]::after{
-            background:var(--echo);
-          }
+          .rail__link[data-view="echo"][aria-current="true"]::after{ background:var(--echo); }
 
           .rail__link[data-view="atrio"][aria-current="true"],
           .rail__link[data-view="atrio"][aria-current="true"] .n{
             color:var(--atrio);
           }
-          .rail__link[data-view="atrio"][aria-current="true"]::after{
-            background:var(--atrio);
-          }
+          .rail__link[data-view="atrio"][aria-current="true"]::after{ background:var(--atrio); }
 
           /* Nos filhos, cor é estado: somente a subseção corrente recebe o acento. */
           .rail__seclink[data-child="echo"][aria-current="location"]{ color:var(--echo); }
           .rail__seclink[data-child="atrio"][aria-current="location"]{ color:var(--atrio); }
 
           '''
-          s, css_count = css_pattern.subn(css_replacement, s, count=1)
-          if css_count != 1:
-              raise SystemExit(f'CSS patch expected 1 match, got {css_count}')
+          s, n = re.subn(
+              r'/\* Hover territorial \*/.*?(?=/\* o pé da coluna:)',
+              css,
+              s,
+              count=1,
+              flags=re.S,
+          )
+          assert n == 1, f'CSS block: {n}'
 
-          # 2) Empty child state is a real state: clear persisted subsection when above Preliminares.
-          old_persist = '''    if (persist && target){
-              try { sessionStorage.setItem(childKey(view), target); } catch {}
-            }
-          }'''
-          new_persist = '''    if (persist){
+          s, n = re.subn(
+              r'    if \(persist && target\)\{\n\s*try \{ sessionStorage\.setItem\(childKey\(view\), target\); \} catch \{\}\n\s*\}',
+              '''    if (persist){
               try {
                 if (target) sessionStorage.setItem(childKey(view), target);
                 else sessionStorage.removeItem(childKey(view));
               } catch {}
-            }
-          }'''
-          if old_persist not in s:
-              raise SystemExit('Persistence block not found')
-          s = s.replace(old_persist, new_persist, 1)
+            }''',
+              s,
+              count=1,
+          )
+          assert n == 1, f'persist block: {n}'
 
-          # 3) Do not assume Preliminares is active before its scroll boundary is reached.
-          old_sync = '''      const marker = Math.min(160, Math.max(72, win.innerHeight * .18));
-              let active = sections[0];
+          s, n = re.subn(
+              r'      let active = sections\[0\];\n      for \(const section of sections\)\{\n        if \(section\.node\.getBoundingClientRect\(\)\.top <= marker\) active = section;\n        else break;\n      \}\n      setChildActive\(view, active\.id\);',
+              '''      let active = null;
               for (const section of sections){
                 if (section.node.getBoundingClientRect().top <= marker) active = section;
                 else break;
               }
-              setChildActive(view, active.id);'''
-          new_sync = '''      const marker = Math.min(160, Math.max(72, win.innerHeight * .18));
-              let active = null;
-              for (const section of sections){
-                if (section.node.getBoundingClientRect().top <= marker) active = section;
-                else break;
-              }
-              setChildActive(view, active ? active.id : "");'''
-          if old_sync not in s:
-              raise SystemExit('Child tracking block not found')
-          s = s.replace(old_sync, new_sync, 1)
+              setChildActive(view, active ? active.id : "");''',
+              s,
+              count=1,
+          )
+          assert n == 1, f'tracking block: {n}'
+
+          required = [
+              '.rail__link[data-view="echo"][aria-current="true"]',
+              '.rail__link[data-view="atrio"][aria-current="true"]',
+              'let active = null;',
+              'setChildActive(view, active ? active.id : "");',
+              'sessionStorage.removeItem(childKey(view));',
+          ]
+          assert all(x in s for x in required)
+          assert 'let active = sections[0];' not in s
+          assert 'Territórios permanentes' not in s
+          assert 'Hover territorial' not in s
 
           p.write_text(s, encoding='utf-8')
           PY
 
-      - name: Verify intended selectors and state logic
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          s = Path('arco.html').read_text(encoding='utf-8')
-          required = [
-            '.rail__link[data-view="echo"][aria-current="true"]',
-            '.rail__link[data-view="atrio"][aria-current="true"]',
-            'let active = null;',
-            'setChildActive(view, active ? active.id : "");',
-            'sessionStorage.removeItem(childKey(view));',
-          ]
-          missing = [x for x in required if x not in s]
-          forbidden = [
-            '.rail__link[data-view="echo"],\n.rail__link[data-view="echo"] .n',
-            '.rail__link[data-view="atrio"],\n.rail__link[data-view="atrio"] .n',
-            'let active = sections[0];',
-          ]
-          present_forbidden = [x for x in forbidden if x in s]
-          if missing or present_forbidden:
-              raise SystemExit(f'missing={missing}; forbidden={present_forbidden}')
-          PY
-
-      - name: Remove one-shot workflow and commit patch
+      - name: Remove one-shot workflow and commit
         run: |
           rm .github/workflows/patch-rail-active-context-v2.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add arco.html .github/workflows/patch-rail-active-context-v2.yml
-          git commit -m "fix: contextualiza acento do menu echo e ATRIO"
+          git commit -m "fix: corrige estado contextual de echo e ATRIO"
           git push origin fix/rail-active-context-v2
