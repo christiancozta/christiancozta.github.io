@@ -1826,6 +1826,11 @@ body{
    no x físico do pé esquerdo do SVG; dele derivam métricas e títulos.
    ========================================================================== */
 @media (max-width:820px){
+  /* O palco móvel nunca pode ampliar o documento além da viewport. Rótulos
+     métricos e pseudo-elementos da flecha permanecem contidos na sua calha. */
+  html, body{ overflow-x:clip; }
+  .stage, .home{ width:100%; max-width:100%; min-width:0; }
+
   .home{
     position:relative;
     --mobile-arrow-x:var(--pad);
@@ -1924,7 +1929,8 @@ body{
     min-width:0;
     font-size:clamp(.48rem,1.9vw,.52rem);
     line-height:1.34;
-    white-space:nowrap;
+    white-space:normal;
+    overflow-wrap:anywhere;
   }
   .home.mobile-arrow-ready.mobile-arrow-on .narr__n::before{
     transform:scaleX(1);
@@ -1992,10 +1998,6 @@ body{
     transform:scaleX(1);
     transition:transform 300ms var(--ease) var(--arrow-delay,0ms);
   }
-}
-
-@media (max-width:389px){
-  .narr__l{ white-space:normal; }
 }
 
 @media (max-width:820px) and (prefers-reduced-motion:reduce){
