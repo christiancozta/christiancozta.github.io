@@ -1,0 +1,90 @@
+name: Normalize rail state patch
+
+on:
+  push:
+    branches:
+      - fix/rail-active-context-v2
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/rail-active-context-v2
+          fetch-depth: 0
+
+      - name: Normalize edited JavaScript and verify behavior
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('arco.html')
+          s = p.read_text(encoding='utf-8')
+
+          malformed_persist = '''    if (persist){
+          try {
+            if (target) sessionStorage.setItem(childKey(view), target);
+            else sessionStorage.removeItem(childKey(view));
+          } catch {}
+        }
+        }'''
+          normalized_persist = '''    if (persist){
+              try {
+                if (target) sessionStorage.setItem(childKey(view), target);
+                else sessionStorage.removeItem(childKey(view));
+              } catch {}
+            }
+          }'''
+          if malformed_persist not in s:
+              raise SystemExit('Malformed persistence block not found')
+          s = s.replace(malformed_persist, normalized_persist, 1)
+
+          malformed_sync = '''      let active = null;
+          for (const section of sections){
+            if (section.node.getBoundingClientRect().top <= marker) active = section;
+            else break;
+          }
+          setChildActive(view, active ? active.id : "");
+          };'''
+          normalized_sync = '''      let active = null;
+              for (const section of sections){
+                if (section.node.getBoundingClientRect().top <= marker) active = section;
+                else break;
+              }
+              setChildActive(view, active ? active.id : "");
+            };'''
+          if malformed_sync not in s:
+              raise SystemExit('Malformed tracking block not found')
+          s = s.replace(malformed_sync, normalized_sync, 1)
+
+          required = [
+              '.rail__link[data-view="echo"][aria-current="true"]',
+              '.rail__link[data-view="atrio"][aria-current="true"]',
+              '.rail__seclink[data-child="echo"][aria-current="location"]',
+              '.rail__seclink[data-child="atrio"][aria-current="location"]',
+              'let active = null;',
+              'setChildActive(view, active ? active.id : "");',
+              'sessionStorage.removeItem(childKey(view));',
+          ]
+          missing = [x for x in required if x not in s]
+          forbidden = ['Territórios permanentes', 'Hover territorial', 'let active = sections[0];']
+          bad = [x for x in forbidden if x in s]
+          if missing or bad:
+              raise SystemExit(f'missing={missing}; forbidden={bad}')
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Remove workflow and commit
+        run: |
+          rm .github/workflows/normalize-rail-state-patch.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add arco.html .github/workflows/normalize-rail-state-patch.yml
+          git commit -m "chore: normaliza implementação do estado ativo"
+          git push origin fix/rail-active-context-v2
