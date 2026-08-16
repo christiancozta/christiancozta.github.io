@@ -12,6 +12,52 @@
   const legalTechTrigger = document.getElementById("legal-tech-trigger");
   const legalTechNote = document.getElementById("legal-tech-note");
   const legalTechClose = document.getElementById("legal-tech-close");
+  const brandTriggers = [...document.querySelectorAll(".brand-trigger")];
+  const brandNote = document.getElementById("brand-note");
+  const brandClose = document.getElementById("brand-note-close");
+  const brandPiece = document.getElementById("brand-note-piece");
+  const brandTitle = document.getElementById("brand-note-title");
+  const brandMeaning = document.getElementById("brand-note-meaning");
+  const brandRationale = document.getElementById("brand-note-rationale");
+  const brandRelation = document.getElementById("brand-note-relation");
+
+  const brandCopy = {
+    atrio: {
+      title:"ATRIO",
+      piece:"Rei · estrutura-mãe",
+      meaning:"Pórtico, entrada governada, unidade e regência.",
+      rationale:"A forma reúne acessos sob uma estrutura comum e torna visível o princípio de regência.",
+      relation:"O Rei representa especialização sob regência comum, nunca hierarquia de importância: unidade por gramática; distinção por movimento."
+    },
+    corpus: {
+      title:"CORPUS",
+      piece:"Torre · memória documental",
+      meaning:"Estratos, classificação, preservação e lastro.",
+      rationale:"A forma organiza camadas e sustenta uma base estável, legível e preservável.",
+      relation:"A Torre traduz a função de classificar, conservar e recuperar a memória documental que dá lastro ao sistema."
+    },
+    ratio: {
+      title:"RATIO",
+      piece:"Cavalo · formulação faseada",
+      meaning:"Percurso, direção, inflexão e desvio controlado.",
+      rationale:"O movimento não avança em linha automática: muda de direção segundo escolhas verificáveis.",
+      relation:"O Cavalo traduz a formulação em fases, com inflexões controladas e validação humana ao longo do percurso."
+    },
+    cerne: {
+      title:"CERNE",
+      piece:"Rainha · núcleo crítico",
+      meaning:"Escrutínio, confronto, tensão produtiva e retorno ao fundamento.",
+      rationale:"A forma concentra força no núcleo e amplia o campo de confronto sem perder o ponto de origem.",
+      relation:"A Rainha traduz a amplitude do escrutínio e o retorno ao fundamento quando a formulação precisa ser tensionada."
+    },
+    lux: {
+      title:"LUX",
+      piece:"Bispo · refinamento formal",
+      meaning:"Diagonalidade, projeção, depuração, legibilidade e acabamento.",
+      rationale:"A diagonal projeta e depura, conduzindo o olhar sem romper o lastro da forma anterior.",
+      relation:"O Bispo traduz o refinamento que melhora legibilidade e acabamento sem atravessar a fronteira do mérito."
+    }
+  };
 
   // Espelha --grid-row do CSS: a unidade vertical do tabuleiro.
   const UNIT = 84;
@@ -22,6 +68,7 @@
   let w = 0;
   let h = 0;
   let horizon = 0;
+  let lastBrandTrigger = null;
 
   function installScrollAppearance(){
     if(document.getElementById("atrio-scroll-appearance")) return;
@@ -138,11 +185,47 @@
 
   legalTechTrigger?.addEventListener("click",() => {
     const open = legalTechTrigger.getAttribute("aria-expanded") !== "true";
+    if(open) setBrandOpen(false,{restoreFocus:false});
     setLegalTechOpen(open,{restoreFocus:false});
   });
   legalTechClose?.addEventListener("click",() => setLegalTechOpen(false));
+
+  function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
+    if(!brandNote) return;
+    brandTriggers.forEach(item => item.setAttribute("aria-expanded","false"));
+    brandNote.hidden = !open;
+    if(open && trigger){
+      const copy = brandCopy[trigger.dataset.brand];
+      if(!copy) return;
+      lastBrandTrigger = trigger;
+      trigger.setAttribute("aria-expanded","true");
+      brandPiece.textContent = copy.piece;
+      brandTitle.textContent = copy.title;
+      brandMeaning.textContent = copy.meaning;
+      brandRationale.textContent = copy.rationale;
+      brandRelation.textContent = copy.relation;
+      brandNote.scrollTop = 0;
+      requestAnimationFrame(() => brandClose?.focus({preventScroll:true}));
+    }else if(restoreFocus && lastBrandTrigger){
+      lastBrandTrigger.focus({preventScroll:true});
+    }
+  }
+
+  brandTriggers.forEach(trigger => trigger.addEventListener("click",() => {
+    const open = trigger.getAttribute("aria-expanded") !== "true";
+    if(open) setLegalTechOpen(false,{restoreFocus:false});
+    setBrandOpen(open,{trigger,restoreFocus:false});
+  }));
+  brandClose?.addEventListener("click",() => setBrandOpen(false));
+
   document.addEventListener("keydown",event => {
-    if(event.key !== "Escape" || legalTechNote?.hidden) return;
+    if(event.key !== "Escape") return;
+    if(!brandNote?.hidden){
+      event.preventDefault();
+      setBrandOpen(false);
+      return;
+    }
+    if(legalTechNote?.hidden) return;
     event.preventDefault();
     setLegalTechOpen(false);
   });
@@ -167,6 +250,20 @@
     if(current) post(current.target.id);
   },{threshold:[.2,.4,.6],rootMargin:"-12% 0px -52% 0px"});
   sections.forEach(section => sectionObserver.observe(section));
+
+  const revealItems = [...document.querySelectorAll(".architecture-frontispiece,.system-band,.metric-row,.authorship-row,.responsibility-row,.relations-row,.final-row")];
+  if(!reduceMotion.matches && "IntersectionObserver" in window){
+    root.classList.add("motion-ready");
+    revealItems.forEach(item => item.classList.add("reveal-item"));
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      });
+    },{threshold:.08,rootMargin:"0px 0px -8% 0px"});
+    revealItems.forEach(item => revealObserver.observe(item));
+  }
 
   const ro = new ResizeObserver(measure);
   ro.observe(document.documentElement);
