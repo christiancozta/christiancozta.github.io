@@ -677,39 +677,18 @@ body{
 .rail__link[aria-current="true"]::after{ width:100%; }
 .rail__link[aria-current="true"]::after{ width:100%; }
 
-/* Hover territorial */
-.rail__link[data-view="echo"]:hover,
-.rail__link[data-view="echo"]:hover .n {
+/* Estado territorial: o acento existe somente enquanto a página-mãe está em campo. */
+.rail__link[data-view="echo"][aria-current="true"],
+.rail__link[data-view="echo"][aria-current="true"] .n{
   color:var(--echo);
 }
+.rail__link[data-view="echo"][aria-current="true"]::after{ background:var(--echo); }
 
-.rail__link[data-view="echo"]:hover::after {
-  background:var(--echo);
-}
-
-.rail__link[data-view="atrio"]:hover,
-.rail__link[data-view="atrio"]:hover .n {
+.rail__link[data-view="atrio"][aria-current="true"],
+.rail__link[data-view="atrio"][aria-current="true"] .n{
   color:var(--atrio);
 }
-
-.rail__link[data-view="atrio"]:hover::after {
-  background:var(--atrio);
-}
-
-/* Territórios permanentes: a marca nomeada conserva o próprio sinal mesmo
-   quando outra view está em campo. O estado corrente continua expresso pelo
-   peso e pelo travessão. */
-.rail__link[data-view="echo"],
-.rail__link[data-view="echo"] .n{
-  color:var(--echo);
-}
-.rail__link[data-view="echo"]::after{ background:var(--echo); }
-
-.rail__link[data-view="atrio"],
-.rail__link[data-view="atrio"] .n{
-  color:var(--atrio);
-}
-.rail__link[data-view="atrio"]::after{ background:var(--atrio); }
+.rail__link[data-view="atrio"][aria-current="true"]::after{ background:var(--atrio); }
 
 /* Nos filhos, cor é estado: somente a subseção corrente recebe o acento. */
 .rail__seclink[data-child="echo"][aria-current="location"]{ color:var(--echo); }
@@ -4098,9 +4077,12 @@ body{
       if (link.dataset.target === target) link.setAttribute("aria-current", "location");
       else link.removeAttribute("aria-current");
     });
-    if (persist && target){
-      try { sessionStorage.setItem(childKey(view), target); } catch {}
-    }
+    if (persist){
+    try {
+      if (target) sessionStorage.setItem(childKey(view), target);
+      else sessionStorage.removeItem(childKey(view));
+    } catch {}
+  }
   }
 
   /* ---- Revelação em scroll (IntersectionObserver, nunca listener de scroll) ----
@@ -4216,12 +4198,12 @@ body{
     const sync = () => {
       raf = 0;
       const marker = Math.min(160, Math.max(72, win.innerHeight * .18));
-      let active = sections[0];
-      for (const section of sections){
-        if (section.node.getBoundingClientRect().top <= marker) active = section;
-        else break;
-      }
-      setChildActive(view, active.id);
+      let active = null;
+    for (const section of sections){
+      if (section.node.getBoundingClientRect().top <= marker) active = section;
+      else break;
+    }
+    setChildActive(view, active ? active.id : "");
     };
     const schedule = () => {
       if (!raf) raf = win.requestAnimationFrame(sync);
