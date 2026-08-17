@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Familjen+Grotesk:wght@400;500;600;700&family=Science+Gothic:wght@500..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="atrio.css?v=20260816-architecture2">
+  <link rel="stylesheet" href="atrio.css?v=20260816-brand-field4">
 </head>
 <body>
   <!--
@@ -64,21 +64,66 @@
     <p class="legal-tech-note__resolution">O ATRIO nasceu dessa tensão: governar o percurso entre memória, raciocínio, crítica e forma, para que produtividade não fosse apenas velocidade, mas decisão assistida com método, controle e responsabilidade.</p>
   </aside>
 
-  <aside class="brand-note" id="brand-note" role="dialog" aria-modal="false" aria-labelledby="brand-note-title" hidden>
-    <div class="brand-note__head">
-      <div>
-        <p class="brand-note__kicker">Construção da marca</p>
-        <p class="brand-note__piece" id="brand-note-piece"></p>
+  <aside class="brand-note" id="brand-note" role="dialog" aria-modal="true" aria-labelledby="brand-note-title" data-phase="overview" tabindex="-1" hidden>
+    <div class="brand-note__shell">
+      <header class="brand-note__head">
+        <div>
+          <p class="brand-note__kicker">Construção da marca</p>
+          <p class="brand-note__instruction">Selecione uma peça. O movimento revela a função.</p>
+        </div>
+        <button class="brand-note__close" id="brand-note-close" type="button" aria-label="Fechar construção da marca">×</button>
+      </header>
+
+      <div class="brand-note__stage">
+        <div class="brand-field" id="brand-field" role="group" aria-label="Família simbólica do ATRIO">
+          <!-- A ordem semântica é deliberada; o grid posiciona ATRIO uma linha abaixo. -->
+          <button class="brand-piece brand-piece--atrio" type="button" data-brand-piece="atrio" aria-label="Explorar ATRIO" aria-pressed="false">
+            <img src="assets/atrio/brand/atrio-rei.svg" alt="" width="1080" height="1080">
+          </button>
+          <button class="brand-piece brand-piece--corpus" type="button" data-brand-piece="corpus" aria-label="Explorar CORPUS" aria-pressed="false">
+            <img src="assets/atrio/brand/corpus-torre.svg" alt="" width="1080" height="1080">
+          </button>
+          <button class="brand-piece brand-piece--ratio" type="button" data-brand-piece="ratio" aria-label="Explorar RATIO" aria-pressed="false">
+            <img src="assets/atrio/brand/ratio-cavalo.svg" alt="" width="1080" height="1080">
+          </button>
+          <button class="brand-piece brand-piece--cerne" type="button" data-brand-piece="cerne" aria-label="Explorar CERNE" aria-pressed="false">
+            <img src="assets/atrio/brand/cerne-rainha.svg" alt="" width="1080" height="1080">
+          </button>
+          <button class="brand-piece brand-piece--lux" type="button" data-brand-piece="lux" aria-label="Explorar LUX" aria-pressed="false">
+            <img src="assets/atrio/brand/lux-bispo.svg" alt="" width="1080" height="1080">
+          </button>
+        </div>
+
+        <article class="brand-card" aria-live="polite">
+          <button class="brand-card__back" id="brand-card-back" type="button" hidden>← Família simbólica</button>
+          <p class="brand-note__piece" id="brand-note-piece" hidden></p>
+          <h2 id="brand-note-title">Unidade por gramática. Distinção por movimento.</h2>
+
+          <section class="brand-card__overview" id="brand-card-overview">
+            <p class="brand-card__intro">Uma estrutura-mãe e quatro especializações, reunidas pelo mesmo sistema visual.</p>
+            <ul>
+              <li><strong>ATRIO</strong><span>Arquitetura de Raciocínio via Inteligência Orquestrada</span></li>
+              <li><strong>CORPUS</strong><span>memória documental governada</span></li>
+              <li><strong>RATIO</strong><span>formulação decisória faseada</span></li>
+              <li><strong>CERNE</strong><span>confronto crítico do raciocínio</span></li>
+              <li><strong>LUX</strong><span>refinamento formal sob limite</span></li>
+            </ul>
+          </section>
+
+          <section class="brand-card__detail" id="brand-card-detail" hidden>
+            <p class="brand-card__lead" id="brand-note-meaning"></p>
+            <div class="brand-card__prose">
+              <p><span>Forma</span><span id="brand-note-rationale"></span></p>
+              <p><span>Função</span><span id="brand-note-relation"></span></p>
+            </div>
+            <footer class="brand-card__version">
+              <span>Versionamento</span>
+              <p id="brand-note-version">[VERSIONAMENTO — INSERIR]</p>
+            </footer>
+          </section>
+        </article>
       </div>
-      <button class="brand-note__close" id="brand-note-close" type="button" aria-label="Fechar construção da marca">×</button>
     </div>
-    <h2 id="brand-note-title"></h2>
-    <dl class="brand-note__body">
-      <div><dt>Significado</dt><dd id="brand-note-meaning"></dd></div>
-      <div><dt>Racional da forma</dt><dd id="brand-note-rationale"></dd></div>
-      <div><dt>Símbolo e função</dt><dd id="brand-note-relation"></dd></div>
-      <div><dt>Versionamento</dt><dd id="brand-note-version">[VERSIONAMENTO — INSERIR]</dd></div>
-    </dl>
   </aside>
 
   <main>
@@ -339,6 +384,6 @@
   <footer class="page-footer">
     <div class="global-grid"><div class="content-stage page-footer__content"><strong>ATRIO</strong><p>Christian da Costa, Curitiba, Brasil, 2026</p><a href="arco.html" target="_top">Voltar ao ARCO</a></div></div>
   </footer>
-  <script src="atrio.js?v=20260816-architecture2"></script>
+  <script src="atrio.js?v=20260816-brand-field4"></script>
 </body>
 </html>

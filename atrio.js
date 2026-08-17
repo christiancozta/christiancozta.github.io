@@ -21,6 +21,11 @@
   const brandMeaning = document.getElementById("brand-note-meaning");
   const brandRationale = document.getElementById("brand-note-rationale");
   const brandRelation = document.getElementById("brand-note-relation");
+  const brandField = document.getElementById("brand-field");
+  const brandPieces = [...document.querySelectorAll("[data-brand-piece]")];
+  const brandOverview = document.getElementById("brand-card-overview");
+  const brandDetail = document.getElementById("brand-card-detail");
+  const brandBack = document.getElementById("brand-card-back");
 
   const brandCopy = {
     atrio: {
@@ -70,6 +75,8 @@
   let h = 0;
   let horizon = 0;
   let lastBrandTrigger = null;
+  let brandMove = null;
+  let brandMoveToken = 0;
 
   function installScrollAppearance(){
     if(document.getElementById("atrio-scroll-appearance")) return;
@@ -219,25 +226,109 @@
   });
   legalTechClose?.addEventListener("click",() => setLegalTechOpen(false));
 
+  function resetBrandExperience(){
+    brandMoveToken += 1;
+    brandMove?.cancel();
+    brandMove = null;
+    brandNote.dataset.phase = "overview";
+    delete brandNote.dataset.active;
+    brandPieces.forEach(piece => piece.setAttribute("aria-pressed","false"));
+    brandOverview.hidden = false;
+    brandDetail.hidden = true;
+    brandBack.hidden = true;
+    brandPiece.hidden = true;
+    brandTitle.textContent = "Unidade por gramática. Distinção por movimento.";
+  }
+
+  function revealBrand(key){
+    const copy = brandCopy[key];
+    if(!copy) return;
+    brandPiece.hidden = false;
+    brandPiece.textContent = copy.piece;
+    brandTitle.textContent = copy.title;
+    brandMeaning.textContent = copy.meaning;
+    brandRationale.textContent = copy.rationale;
+    brandRelation.textContent = copy.relation;
+    brandOverview.hidden = true;
+    brandDetail.hidden = false;
+    brandBack.hidden = false;
+    brandNote.dataset.phase = "detail";
+  }
+
+  function brandRoute(key,dx,dy){
+    const routes = {
+      atrio:[[0,0],[0,-dy]],                 // Rei: uma casa em direção ao campo comum.
+      corpus:[[0,0],[0,dy*2]],              // Duas casas à frente.
+      ratio:[[0,0],[0,dy*2],[dx,dy*2]],     // Cavalo: inflexão em L.
+      cerne:[[0,0],[-dx*2,0]],              // Rainha: horizontal, o eixo ainda não usado.
+      lux:[[0,0],[-dx*2,dy*2]]              // Bispo: diagonal.
+    };
+    return routes[key] || [[0,0]];
+  }
+
+  async function moveBrandPiece(piece){
+    if(!brandField || !piece) return;
+    const key = piece.dataset.brandPiece;
+    if(!brandCopy[key]) return;
+
+    const previous = brandPieces.find(item => item.getAttribute("aria-pressed") === "true");
+    const previousTransform = previous ? getComputedStyle(previous).transform : "none";
+    const token = ++brandMoveToken;
+    brandMove?.cancel();
+    if(previous && previous !== piece && previousTransform !== "none" && !reduceMotion.matches){
+      previous.animate(
+        [{transform:previousTransform},{transform:"translate3d(0,0,0)"}],
+        {duration:380,easing:"cubic-bezier(.22,.68,0,1)"}
+      );
+    }
+    brandPieces.forEach(item => item.setAttribute("aria-pressed",String(item === piece)));
+    brandNote.dataset.active = key;
+    brandNote.dataset.phase = "moving";
+
+    const fieldBox = brandField.getBoundingClientRect();
+    const dx = Math.min(fieldBox.width / 5,132);
+    const dy = Math.min(fieldBox.height / 4,118);
+    const route = brandRoute(key,dx,dy);
+    const ratioOffsets = [0,.64,1];
+    const frames = route.map(([x,y],index) => ({
+      offset:key === "ratio" ? ratioOffsets[index] : (route.length === 1 ? 1 : index / (route.length - 1)),
+      transform:`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`
+    }));
+
+    if(reduceMotion.matches || typeof piece.animate !== "function"){
+      revealBrand(key);
+      return;
+    }
+
+    brandMove = piece.animate(frames,{
+      duration:key === "ratio" ? 1080 : 900,
+      easing:key === "ratio" ? "cubic-bezier(.44,.02,.56,.98)" : "cubic-bezier(.22,.78,.08,1)",
+      fill:"forwards"
+    });
+
+    try{await brandMove.finished}catch(_error){return}
+    if(token !== brandMoveToken || brandNote.hidden) return;
+    revealBrand(key);
+  }
+
   function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
     if(!brandNote) return;
     brandTriggers.forEach(item => item.setAttribute("aria-expanded","false"));
-    brandNote.hidden = !open;
     if(open && trigger){
-      const copy = brandCopy[trigger.dataset.brand];
-      if(!copy) return;
       lastBrandTrigger = trigger;
       trigger.setAttribute("aria-expanded","true");
-      brandPiece.textContent = copy.piece;
-      brandTitle.textContent = copy.title;
-      brandMeaning.textContent = copy.meaning;
-      brandRationale.textContent = copy.rationale;
-      brandRelation.textContent = copy.relation;
+      brandNote.hidden = false;
+      document.body.classList.add("brand-dialog-open");
+      resetBrandExperience();
       brandNote.scrollTop = 0;
-      requestAnimationFrame(() => brandClose?.focus({preventScroll:true}));
-    }else if(restoreFocus && lastBrandTrigger){
-      lastBrandTrigger.focus({preventScroll:true});
+      requestAnimationFrame(() => brandNote.focus({preventScroll:true}));
+      return;
     }
+
+    brandNote.hidden = true;
+    document.body.classList.remove("brand-dialog-open");
+    resetBrandExperience();
+    if(restoreFocus && lastBrandTrigger) lastBrandTrigger.focus({preventScroll:true});
   }
 
   brandTriggers.forEach(trigger => trigger.addEventListener("click",() => {
@@ -245,9 +336,32 @@
     if(open) setLegalTechOpen(false,{restoreFocus:false});
     setBrandOpen(open,{trigger,restoreFocus:false});
   }));
+  brandPieces.forEach(piece => piece.addEventListener("click",() => moveBrandPiece(piece)));
+  brandBack?.addEventListener("click",() => {
+    resetBrandExperience();
+    requestAnimationFrame(() => brandPieces[0]?.focus({preventScroll:true}));
+  });
   brandClose?.addEventListener("click",() => setBrandOpen(false));
 
   document.addEventListener("keydown",event => {
+    if(event.key === "Tab" && brandNote && !brandNote.hidden){
+      const controls = [...brandNote.querySelectorAll("button:not([disabled])")]
+        .filter(control => !control.hidden);
+      const first = controls[0];
+      const last = controls.at(-1);
+      if(!first || !last) return;
+      if(!brandNote.contains(document.activeElement) || document.activeElement === brandNote){
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      }else if(event.shiftKey && document.activeElement === first){
+        event.preventDefault();
+        last.focus();
+      }else if(!event.shiftKey && document.activeElement === last){
+        event.preventDefault();
+        first.focus();
+      }
+      return;
+    }
     if(event.key !== "Escape") return;
     if(!brandNote?.hidden){
       event.preventDefault();
