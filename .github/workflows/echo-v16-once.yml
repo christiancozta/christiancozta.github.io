@@ -27,25 +27,25 @@ jobs:
           p = Path("arco.html")
           s = p.read_text(encoding="utf-8")
 
-          anchor = '''.rail__link[data-view="atrio"][aria-current="true"]::after{ background:var(--atrio); }
-'''
-          addition = '''
-.rail__link[data-view="echo"]:hover,
-.rail__link[data-view="echo"]:hover .n{
-  color:var(--echo);
-}
-.rail__link[data-view="echo"]:hover::after{
-  background:var(--echo);
-}
-
-.rail__link[data-view="atrio"]:hover,
-.rail__link[data-view="atrio"]:hover .n{
-  color:var(--atrio);
-}
-.rail__link[data-view="atrio"]:hover::after{
-  background:var(--atrio);
-}
-'''
+          anchor = '.rail__link[data-view="atrio"][aria-current="true"]::after{ background:var(--atrio); }\n'
+          addition = ''.join([
+              '\n',
+              '.rail__link[data-view="echo"]:hover,\n',
+              '.rail__link[data-view="echo"]:hover .n{\n',
+              '  color:var(--echo);\n',
+              '}\n',
+              '.rail__link[data-view="echo"]:hover::after{\n',
+              '  background:var(--echo);\n',
+              '}\n',
+              '\n',
+              '.rail__link[data-view="atrio"]:hover,\n',
+              '.rail__link[data-view="atrio"]:hover .n{\n',
+              '  color:var(--atrio);\n',
+              '}\n',
+              '.rail__link[data-view="atrio"]:hover::after{\n',
+              '  background:var(--atrio);\n',
+              '}\n',
+          ])
 
           assert s.count(anchor) == 1, "ATRIO territorial anchor changed"
           assert addition not in s, "hover patch already present"
@@ -62,14 +62,12 @@ jobs:
 
           git diff --check -- arco.html
 
-      - name: Restore one-time workflow and commit only the intended final change
+      - name: Commit only arco.html
         shell: bash
         run: |
-          git show 07423ae44b1c5bb94a850e13deb957f1ee2002ea > .github/workflows/echo-v16-once.yml
-          git diff --check -- arco.html .github/workflows/echo-v16-once.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add arco.html .github/workflows/echo-v16-once.yml
+          git add arco.html
           git diff --cached --quiet && exit 0
           git commit -m "fix(arco): add territorial hover states to menu"
           git push origin HEAD:main
