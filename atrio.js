@@ -21,14 +21,27 @@
   const brandMeaning = document.getElementById("brand-note-meaning");
   const brandRationale = document.getElementById("brand-note-rationale");
   const brandRelation = document.getElementById("brand-note-relation");
-  const brandField = document.getElementById("brand-field");
-  const brandPieces = [...document.querySelectorAll("[data-brand-piece]")];
-  const brandOverview = document.getElementById("brand-card-overview");
-  const brandDetail = document.getElementById("brand-card-detail");
-  const brandBack = document.getElementById("brand-card-back");
+  const brandImage = document.getElementById("brand-note-image");
+  const sampleTriggers = [...document.querySelectorAll("[data-sample]")];
+  const sampleNote = document.getElementById("sample-note");
+  const sampleClose = document.getElementById("sample-note-close");
+  const sampleTitle = document.getElementById("sample-note-title");
+  const sampleContent = document.getElementById("sample-note-content");
+  const moduleSystem = document.getElementById("architecture-system");
+  const moduleField = document.getElementById("module-piece-column");
+  const moduleCardStage = document.querySelector(".module-card-stage");
+  const moduleVision = document.getElementById("module-stream-vision");
+  const modulePieces = [...document.querySelectorAll("[data-module-piece]")];
+  const moduleCards = [...document.querySelectorAll("[data-module-card]")];
+  const moduleCardByKey = new Map(moduleCards.map(card => [card.dataset.moduleCard,card]));
+  const moduleOverviewCard = moduleCardByKey.get("overview");
+  const moduleAtrioCard = moduleCardByKey.get("atrio");
+  const moduleStreamCards = moduleCards.filter(card => !["overview","atrio"].includes(card.dataset.moduleCard));
+  const moduleBacks = [...document.querySelectorAll(".module-card__back")];
 
   const brandCopy = {
     atrio: {
+      asset:"assets/atrio/brand/atrio-rei.svg",
       title:"ATRIO",
       piece:"Rei · estrutura-mãe",
       meaning:"Pórtico, entrada governada, unidade e regência.",
@@ -36,6 +49,7 @@
       relation:"O Rei representa especialização sob regência comum, nunca hierarquia de importância: unidade por gramática; distinção por movimento."
     },
     corpus: {
+      asset:"assets/atrio/brand/corpus-torre.svg",
       title:"CORPUS",
       piece:"Torre · memória documental",
       meaning:"Estratos, classificação, preservação e lastro.",
@@ -43,6 +57,7 @@
       relation:"A Torre traduz a função de classificar, conservar e recuperar a memória documental que dá lastro ao sistema."
     },
     ratio: {
+      asset:"assets/atrio/brand/ratio-cavalo.svg",
       title:"RATIO",
       piece:"Cavalo · formulação faseada",
       meaning:"Percurso, direção, inflexão e desvio controlado.",
@@ -50,6 +65,7 @@
       relation:"O Cavalo traduz a formulação em fases, com inflexões controladas e validação humana ao longo do percurso."
     },
     cerne: {
+      asset:"assets/atrio/brand/cerne-rainha.svg",
       title:"CERNE",
       piece:"Rainha · núcleo crítico",
       meaning:"Escrutínio, confronto, tensão produtiva e retorno ao fundamento.",
@@ -57,12 +73,18 @@
       relation:"A Rainha traduz a amplitude do escrutínio e o retorno ao fundamento quando a formulação precisa ser tensionada."
     },
     lux: {
+      asset:"assets/atrio/brand/lux-bispo.svg",
       title:"LUX",
       piece:"Bispo · refinamento formal",
       meaning:"Diagonalidade, projeção, depuração, legibilidade e acabamento.",
       rationale:"A diagonal projeta e depura, conduzindo o olhar sem romper o lastro da forma anterior.",
       relation:"O Bispo traduz o refinamento que melhora legibilidade e acabamento sem atravessar a fronteira do mérito."
     }
+  };
+
+  const sampleCopy = {
+    corpus:{title:"CORPUS",template:"sample-template-corpus"},
+    cerne:{title:"CERNE",template:"sample-template-cerne"}
   };
 
   // Espelha --grid-row do CSS: a unidade vertical do tabuleiro.
@@ -75,10 +97,13 @@
   let h = 0;
   let horizon = 0;
   let lastBrandTrigger = null;
-  let brandMove = null;
-  let brandMoveToken = 0;
+  let lastSampleTrigger = null;
+  let moduleMove = null;
+  let moduleMoveToken = 0;
 
   function installScrollAppearance(){
+    // No Arco, o hospedeiro já desenha o único indicador de progresso.
+    if(window.parent !== window) return;
     if(document.getElementById("atrio-scroll-appearance")) return;
     const style = document.createElement("style");
     style.id = "atrio-scroll-appearance";
@@ -121,6 +146,7 @@
     const width = document.documentElement.clientWidth;
     const runwayCell = width / 8;
     cell = width <= 760 ? width / 4 : runwayCell;
+    moduleField?.setAttribute("aria-orientation",width <= 760 ? "horizontal" : "vertical");
     // No desktop, a mesma medida governa a base da esteira e as oito macrocolunas pós-Hero.
     root.style.setProperty("--runway-cell", `${runwayCell}px`);
     root.style.setProperty("--cell", `${cell}px`);
@@ -226,100 +252,221 @@
   });
   legalTechClose?.addEventListener("click",() => setLegalTechOpen(false));
 
-  function resetBrandExperience(){
-    brandMoveToken += 1;
-    brandMove?.cancel();
-    brandMove = null;
-    brandNote.dataset.phase = "overview";
-    delete brandNote.dataset.active;
-    brandPieces.forEach(piece => piece.setAttribute("aria-pressed","false"));
-    brandOverview.hidden = false;
-    brandDetail.hidden = true;
-    brandBack.hidden = true;
-    brandPiece.hidden = true;
-    brandTitle.textContent = "Unidade por gramática. Distinção por movimento.";
+  function setModuleView(view){
+    if(!moduleSystem || !moduleCardStage) return;
+    moduleSystem.dataset.streamView = view;
+    moduleCardStage.dataset.streamView = view;
+    moduleOverviewCard.hidden = view !== "overview";
+    moduleAtrioCard.hidden = view !== "atrio";
+    moduleStreamCards.forEach(card => {
+      card.hidden = view !== "stream" || card.dataset.revealed !== "true";
+    });
+    moduleVision.hidden = view !== "stream";
+    moduleSystem.dataset.modulePhase = view === "stream" ? "stream" : "vision";
   }
 
-  function revealBrand(key){
-    const copy = brandCopy[key];
-    if(!copy) return;
-    brandPiece.hidden = false;
-    brandPiece.textContent = copy.piece;
-    brandTitle.textContent = copy.title;
-    brandMeaning.textContent = copy.meaning;
-    brandRationale.textContent = copy.rationale;
-    brandRelation.textContent = copy.relation;
-    brandOverview.hidden = true;
-    brandDetail.hidden = false;
-    brandBack.hidden = false;
-    brandNote.dataset.phase = "detail";
+  function revealStreamModule(key){
+    const card = moduleCardByKey.get(key);
+    if(!card || !moduleStreamCards.includes(card)) return null;
+    card.dataset.revealed = "true";
+    setModuleView("stream");
+    card.hidden = false;
+    card.classList.remove("is-revealed");
+    requestAnimationFrame(() => card.classList.add("is-revealed"));
+    return card;
   }
 
-  function brandRoute(key,dx,dy){
+  function resetAtrioPiece(){
+    const atrioPiece = modulePieces.find(piece => piece.dataset.modulePiece === "atrio");
+    if(!atrioPiece) return;
+    atrioPiece.getAnimations?.().forEach(animation => animation.cancel());
+    atrioPiece.style.removeProperty("transform");
+    atrioPiece.removeAttribute("data-docked");
+    atrioPiece.removeAttribute("data-moving");
+    atrioPiece.setAttribute("aria-expanded","false");
+  }
+
+  function showVision({focus=false}={}){
+    moduleMoveToken += 1;
+    moduleMove?.cancel();
+    moduleMove = null;
+    resetAtrioPiece();
+    setModuleView("overview");
+    if(focus) requestAnimationFrame(() => modulePieces[0]?.focus({preventScroll:true}));
+  }
+
+  function resetModuleSystem(){
+    moduleMoveToken += 1;
+    moduleMove?.cancel();
+    moduleMove = null;
+    modulePieces.forEach(piece => {
+      piece.getAnimations?.().forEach(animation => animation.cancel());
+      piece.style.removeProperty("transform");
+      piece.removeAttribute("data-docked");
+      piece.removeAttribute("data-moving");
+      piece.setAttribute("aria-expanded","false");
+    });
+    moduleStreamCards.forEach(card => {
+      card.hidden = true;
+      card.removeAttribute("data-revealed");
+      card.classList.remove("is-revealed");
+    });
+    setModuleView("overview");
+  }
+
+  function moduleRoute(key,dx,dy){
     const routes = {
-      atrio:[[0,0],[0,-dy]],                 // Rei: uma casa em direção ao campo comum.
-      corpus:[[0,0],[0,dy*2]],              // Duas casas à frente.
-      ratio:[[0,0],[0,dy*2],[dx,dy*2]],     // Cavalo: inflexão em L.
-      cerne:[[0,0],[-dx*2,0]],              // Rainha: horizontal, o eixo ainda não usado.
-      lux:[[0,0],[-dx*2,dy*2]]              // Bispo: diagonal.
+      atrio:[[0,0],[dx,0]],                  // Rei: uma casa em direção ao campo comum.
+      corpus:[[0,0],[dx*2,0]],               // Torre: duas casas à frente.
+      ratio:[[0,0],[0,dy*2],[dx,dy*2]],      // Cavalo: inflexão em L.
+      cerne:[[0,0],[dx*2.35,0]],             // Rainha: avanço horizontal amplo.
+      lux:[[0,0],[dx*1.8,-dy*1.8]]           // Bispo: diagonal ascendente.
     };
     return routes[key] || [[0,0]];
   }
 
-  async function moveBrandPiece(piece){
-    if(!brandField || !piece) return;
-    const key = piece.dataset.brandPiece;
+  function moduleLanding(piece,key){
+    const target = moduleCardByKey.get(key);
+    if(!moduleField || !moduleCardStage || !piece || !target || target.hidden) return null;
+    const fieldBox = moduleField.getBoundingClientRect();
+    const stageBox = moduleCardStage.getBoundingClientRect();
+    const targetBox = target.getBoundingClientRect();
+    const headerBox = target.querySelector(".module-card__header")?.getBoundingClientRect() || targetBox;
+    const flowBox = target.querySelector(".module-card__flow")?.getBoundingClientRect();
+    const pieceWidth = piece.offsetWidth;
+    const pieceHeight = piece.offsetHeight;
+    const restingRight = fieldBox.left + piece.offsetLeft + pieceWidth;
+    const restingTop = fieldBox.top + piece.offsetTop;
+    const restingBottom = restingTop + pieceHeight;
+    const horizontalRail = matchMedia("(max-width:760px)").matches;
+    const x = horizontalRail ? 0 : stageBox.left - restingRight + pieceWidth * .025;
+    const y = horizontalRail
+      ? targetBox.top - restingBottom + pieceHeight * .025
+      : flowBox ? flowBox.top - restingTop : headerBox.top + headerBox.height / 2 - restingTop - pieceHeight / 2;
+    return {x,y,transform:`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`};
+  }
+
+  function syncDockedPieces(){
+    if(!moduleSystem || !moduleCardStage) return;
+    const view = moduleCardStage.dataset.streamView;
+    modulePieces.forEach(piece => {
+      if(piece.dataset.docked !== "true" || piece.dataset.moving === "true") return;
+      const key = piece.dataset.modulePiece;
+      if((view === "stream" && key === "atrio") || (view === "atrio" && key !== "atrio") || view === "overview") return;
+      const landing = moduleLanding(piece,key);
+      if(landing) piece.style.transform = landing.transform;
+    });
+  }
+
+  function settleModuleLayout(){
+    return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
+  function restoreModulePhase(){
+    if(!moduleSystem || !moduleCardStage) return;
+    moduleSystem.dataset.modulePhase = moduleCardStage.dataset.streamView === "stream" ? "stream" : "vision";
+  }
+
+  async function moveModulePiece(piece){
+    if(!moduleField || !moduleSystem || !piece) return;
+    const key = piece.dataset.modulePiece;
     if(!brandCopy[key]) return;
 
-    const previous = brandPieces.find(item => item.getAttribute("aria-pressed") === "true");
-    const previousTransform = previous ? getComputedStyle(previous).transform : "none";
-    const token = ++brandMoveToken;
-    brandMove?.cancel();
-    if(previous && previous !== piece && previousTransform !== "none" && !reduceMotion.matches){
-      previous.animate(
-        [{transform:previousTransform},{transform:"translate3d(0,0,0)"}],
-        {duration:380,easing:"cubic-bezier(.22,.68,0,1)"}
-      );
+    if(piece.dataset.docked === "true"){
+      if(key === "atrio"){
+        setModuleView("atrio");
+      }else{
+        resetAtrioPiece();
+        setModuleView("stream");
+      }
+      await settleModuleLayout();
+      syncDockedPieces();
+      moduleCardByKey.get(key)?.scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
+      return;
     }
-    brandPieces.forEach(item => item.setAttribute("aria-pressed",String(item === piece)));
-    brandNote.dataset.active = key;
-    brandNote.dataset.phase = "moving";
 
-    const fieldBox = brandField.getBoundingClientRect();
-    const dx = Math.min(fieldBox.width / 5,132);
-    const dy = Math.min(fieldBox.height / 4,118);
-    const route = brandRoute(key,dx,dy);
+    const token = ++moduleMoveToken;
+    moduleMove?.cancel();
+    modulePieces.forEach(item => item.removeAttribute("data-moving"));
+    piece.getAnimations?.().forEach(animation => animation.cancel());
+    piece.style.removeProperty("transform");
+    piece.dataset.moving = "true";
+    piece.setAttribute("aria-expanded","true");
+    moduleSystem.dataset.modulePhase = "moving";
+
+    const fieldBox = moduleField.getBoundingClientRect();
+    const dx = Math.min(fieldBox.width / 5,82);
+    const dy = Math.min(fieldBox.height / 12,76);
+    const route = moduleRoute(key,dx,dy);
     const ratioOffsets = [0,.64,1];
     const frames = route.map(([x,y],index) => ({
       offset:key === "ratio" ? ratioOffsets[index] : (route.length === 1 ? 1 : index / (route.length - 1)),
       transform:`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`
     }));
 
-    if(reduceMotion.matches || typeof piece.animate !== "function"){
-      revealBrand(key);
-      return;
+    let outward = null;
+    if(!reduceMotion.matches && typeof piece.animate === "function"){
+      outward = piece.animate(frames,{
+        duration:key === "ratio" ? 980 : 820,
+        easing:key === "ratio" ? "cubic-bezier(.44,.02,.56,.98)" : "cubic-bezier(.22,.78,.08,1)",
+        fill:"forwards"
+      });
+      moduleMove = outward;
+      try{await outward.finished}catch(_error){piece.removeAttribute("data-moving");restoreModulePhase();return}
+      if(token !== moduleMoveToken) return;
     }
 
-    brandMove = piece.animate(frames,{
-      duration:key === "ratio" ? 1080 : 900,
-      easing:key === "ratio" ? "cubic-bezier(.44,.02,.56,.98)" : "cubic-bezier(.22,.78,.08,1)",
-      fill:"forwards"
-    });
+    if(key === "atrio"){
+      setModuleView("atrio");
+    }else{
+      resetAtrioPiece();
+      revealStreamModule(key);
+    }
+    await settleModuleLayout();
+    if(token !== moduleMoveToken) return;
+    const landing = moduleLanding(piece,key);
+    if(!landing){piece.removeAttribute("data-moving");restoreModulePhase();return}
 
-    try{await brandMove.finished}catch(_error){return}
-    if(token !== brandMoveToken || brandNote.hidden) return;
-    revealBrand(key);
+    const [endX,endY] = route.at(-1);
+    if(reduceMotion.matches || typeof piece.animate !== "function"){
+      piece.style.transform = landing.transform;
+    }else{
+      const docking = piece.animate(
+        [{transform:`translate3d(${endX.toFixed(2)}px,${endY.toFixed(2)}px,0)`},{transform:landing.transform}],
+        {duration:360,easing:"cubic-bezier(.16,1,.3,1)",fill:"forwards"}
+      );
+      moduleMove = docking;
+      try{await docking.finished}catch(_error){outward?.cancel();piece.removeAttribute("data-moving");restoreModulePhase();return}
+      if(token !== moduleMoveToken) return;
+      piece.style.transform = landing.transform;
+      docking.cancel();
+      outward?.cancel();
+    }
+
+    piece.dataset.docked = "true";
+    piece.removeAttribute("data-moving");
+    moduleMove = null;
+    restoreModulePhase();
+    syncDockedPieces();
   }
 
   function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
     if(!brandNote) return;
     brandTriggers.forEach(item => item.setAttribute("aria-expanded","false"));
     if(open && trigger){
+      const copy = brandCopy[trigger.dataset.brand];
+      if(!copy) return;
       lastBrandTrigger = trigger;
       trigger.setAttribute("aria-expanded","true");
+      brandPiece.textContent = copy.piece;
+      brandTitle.textContent = copy.title;
+      brandMeaning.textContent = copy.meaning;
+      brandRationale.textContent = copy.rationale;
+      brandRelation.textContent = copy.relation;
+      brandImage.src = copy.asset;
+      brandImage.alt = `Símbolo ${copy.title}`;
       brandNote.hidden = false;
       document.body.classList.add("brand-dialog-open");
-      resetBrandExperience();
       brandNote.scrollTop = 0;
       requestAnimationFrame(() => brandNote.focus({preventScroll:true}));
       return;
@@ -327,42 +474,98 @@
 
     brandNote.hidden = true;
     document.body.classList.remove("brand-dialog-open");
-    resetBrandExperience();
     if(restoreFocus && lastBrandTrigger) lastBrandTrigger.focus({preventScroll:true});
+  }
+
+  function setSampleOpen(open,{trigger=lastSampleTrigger,restoreFocus=true}={}){
+    if(!sampleNote || !sampleContent) return;
+    sampleTriggers.forEach(item => item.setAttribute("aria-expanded","false"));
+    if(open && trigger){
+      const copy = sampleCopy[trigger.dataset.sample];
+      const template = copy ? document.getElementById(copy.template) : null;
+      if(!copy || !template) return;
+      lastSampleTrigger = trigger;
+      trigger.setAttribute("aria-expanded","true");
+      sampleTitle.textContent = copy.title;
+      sampleContent.replaceChildren(template.content.cloneNode(true));
+      sampleNote.hidden = false;
+      document.body.classList.add("sample-dialog-open");
+      sampleContent.scrollTop = 0;
+      requestAnimationFrame(() => sampleNote.focus({preventScroll:true}));
+      return;
+    }
+
+    sampleNote.hidden = true;
+    sampleContent.replaceChildren();
+    document.body.classList.remove("sample-dialog-open");
+    if(restoreFocus && lastSampleTrigger) lastSampleTrigger.focus({preventScroll:true});
+  }
+
+  function trapDialogTab(event,dialog){
+    const controls = [...dialog.querySelectorAll("a[href],button:not([disabled])")]
+      .filter(control => !control.hidden && control.getClientRects().length);
+    const first = controls[0];
+    const last = controls.at(-1);
+    if(!first || !last) return;
+    if(!dialog.contains(document.activeElement) || document.activeElement === dialog){
+      event.preventDefault();
+      (event.shiftKey ? last : first).focus();
+    }else if(event.shiftKey && document.activeElement === first){
+      event.preventDefault();
+      last.focus();
+    }else if(!event.shiftKey && document.activeElement === last){
+      event.preventDefault();
+      first.focus();
+    }
   }
 
   brandTriggers.forEach(trigger => trigger.addEventListener("click",() => {
     const open = trigger.getAttribute("aria-expanded") !== "true";
-    if(open) setLegalTechOpen(false,{restoreFocus:false});
+    if(open){
+      setLegalTechOpen(false,{restoreFocus:false});
+      setSampleOpen(false,{restoreFocus:false});
+    }
     setBrandOpen(open,{trigger,restoreFocus:false});
   }));
-  brandPieces.forEach(piece => piece.addEventListener("click",() => moveBrandPiece(piece)));
-  brandBack?.addEventListener("click",() => {
-    resetBrandExperience();
-    requestAnimationFrame(() => brandPieces[0]?.focus({preventScroll:true}));
+  sampleTriggers.forEach(trigger => trigger.addEventListener("click",() => {
+    setBrandOpen(false,{restoreFocus:false});
+    setLegalTechOpen(false,{restoreFocus:false});
+    setSampleOpen(true,{trigger,restoreFocus:false});
+  }));
+  modulePieces.forEach(piece => {
+    piece.addEventListener("click",() => moveModulePiece(piece));
+    piece.addEventListener("keydown",event => {
+      if(!["ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"].includes(event.key)) return;
+      event.preventDefault();
+      const current = modulePieces.indexOf(piece);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? modulePieces.length - 1 :
+        (current + (["ArrowDown","ArrowRight"].includes(event.key) ? 1 : -1) + modulePieces.length) % modulePieces.length;
+      modulePieces[next]?.focus();
+    });
   });
+  moduleBacks.forEach(back => back.addEventListener("click",() => showVision({focus:true})));
+  moduleVision?.addEventListener("click",() => showVision({focus:true}));
   brandClose?.addEventListener("click",() => setBrandOpen(false));
+  sampleClose?.addEventListener("click",() => setSampleOpen(false));
+  sampleNote?.addEventListener("click",event => {
+    if(event.target === sampleNote) setSampleOpen(false);
+  });
 
   document.addEventListener("keydown",event => {
+    if(event.key === "Tab" && sampleNote && !sampleNote.hidden){
+      trapDialogTab(event,sampleNote);
+      return;
+    }
     if(event.key === "Tab" && brandNote && !brandNote.hidden){
-      const controls = [...brandNote.querySelectorAll("button:not([disabled])")]
-        .filter(control => !control.hidden);
-      const first = controls[0];
-      const last = controls.at(-1);
-      if(!first || !last) return;
-      if(!brandNote.contains(document.activeElement) || document.activeElement === brandNote){
-        event.preventDefault();
-        (event.shiftKey ? last : first).focus();
-      }else if(event.shiftKey && document.activeElement === first){
-        event.preventDefault();
-        last.focus();
-      }else if(!event.shiftKey && document.activeElement === last){
-        event.preventDefault();
-        first.focus();
-      }
+      trapDialogTab(event,brandNote);
       return;
     }
     if(event.key !== "Escape") return;
+    if(!sampleNote?.hidden){
+      event.preventDefault();
+      setSampleOpen(false);
+      return;
+    }
     if(!brandNote?.hidden){
       event.preventDefault();
       setBrandOpen(false);
@@ -394,7 +597,7 @@
   },{threshold:[.2,.4,.6],rootMargin:"-12% 0px -52% 0px"});
   sections.forEach(section => sectionObserver.observe(section));
 
-  const revealItems = [...document.querySelectorAll(".architecture-frontispiece,.system-band,.metric-row,.authorship-row,.responsibility-row,.relations-row,.final-row")];
+  const revealItems = [...document.querySelectorAll(".architecture-system,.metric-row,.authorship-row,.responsibility-row,.relations-row,.final-row")];
   if(!reduceMotion.matches && "IntersectionObserver" in window){
     root.classList.add("motion-ready");
     revealItems.forEach(item => item.classList.add("reveal-item"));
@@ -410,10 +613,13 @@
 
   const ro = new ResizeObserver(measure);
   ro.observe(document.documentElement);
+  const moduleStageObserver = new ResizeObserver(() => requestAnimationFrame(syncDockedPieces));
+  if(moduleCardStage) moduleStageObserver.observe(moduleCardStage);
   reduceMotion.addEventListener?.("change",syncAnimation);
   document.fonts?.ready.then(measure);
   window.addEventListener("load",measure);
   installScrollAppearance();
+  resetModuleSystem();
   measure();
   syncAnimation();
 })();
