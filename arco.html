@@ -1809,19 +1809,21 @@ body{
   html::-webkit-scrollbar, body::-webkit-scrollbar{ width:0; height:0; }
 
   .progress-rail{position:fixed;top:14vh;bottom:14vh;right:22px;width:9px;z-index:30;pointer-events:none}
+  .progress-rail[data-ready="false"]{visibility:hidden}
   .progress-rail__track{position:absolute;top:0;bottom:0;left:4px;width:1px;background:rgba(17,19,22,.14)}
-  .progress-rail__fill{position:absolute;top:0;left:3.5px;width:2px;height:0;background:#181818}
+  .progress-rail__fill{position:absolute;top:0;left:3.5px;width:2px;height:100%;transform:scaleY(0);transform-origin:50% 0;background:#181818}
   .progress-rail__head{position:absolute;left:4.5px;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#181818;display:none}
   .progress-rail__mark{position:absolute;left:4px;width:7px;height:1px;background:rgba(17,19,22,.28);transform:translateY(-.5px)}
   /* modo echo: rastro contínuo, altura cheia, sem marcação estrutural */
   .progress-rail[data-mode="echo"]{top:0;bottom:0;right:6px}
   .progress-rail[data-mode="echo"] .progress-rail__head{display:block}
   .progress-rail[data-mode="echo"] .progress-rail__mark{display:none}
+  .progress-rail[data-mode="atrio"]{display:none}
   .progress-rail[data-mode="neutro"] .progress-rail__mark{display:none}
   /* palcos escuros (filhos): o filete precisa de tinta clara */
   .progress-rail[data-field="dark"] .progress-rail__track{background:rgba(128,128,128,.34)}
   .progress-rail[data-field="dark"] .progress-rail__mark{background:rgba(242,239,233,.30)}
-  .progress-rail[data-motion="on"] .progress-rail__fill{transition:height .12s linear}
+  .progress-rail[data-motion="on"] .progress-rail__fill{transition:transform .12s linear}
   .progress-rail[data-motion="on"] .progress-rail__head{transition:top .12s linear}
   @media(max-width:1119px){.progress-rail{right:12px;top:5.5rem}.progress-rail[data-mode="echo"]{top:0}}
   @media(max-width:719px){.progress-rail{display:none}}
@@ -4018,7 +4020,7 @@ body{
           </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
-        <iframe class="child__frame" title="ATRIO — página completa" src="about:blank" data-src="atrio.html?v=20260817-module-stream4" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <iframe class="child__frame" title="ATRIO — página completa" src="about:blank" data-src="atrio.html?v=20260817-scrollbar1" loading="lazy" referrerpolicy="no-referrer"></iframe>
       </div>
     </section>
 
@@ -4557,7 +4559,7 @@ body{
 </script>
 
 
-<div class="progress-rail" id="progress-rail" aria-hidden="true" data-motion="on" data-mode="percurso" data-field="light">
+<div class="progress-rail" id="progress-rail" aria-hidden="true" data-ready="false" data-motion="on" data-mode="percurso" data-field="light">
   <div class="progress-rail__track"></div>
   <div class="progress-rail__fill" id="progress-rail-fill"></div>
   <span class="progress-rail__head" id="progress-rail-head"></span>
@@ -4568,7 +4570,7 @@ body{
   /* Indicador único: um só componente físico, quatro gramáticas.
      percurso -> rail estrutural segmentado pelas seções reais da view ativa
      echo     -> rastro contínuo (fio + carga + ponto-cabeça), sem marcação
-     atrio    -> rail estrutural (ATRIO standalone não possui indicador próprio)
+     atrio    -> indicador do próprio ATRIO, idêntico no direto e no iframe
      neutro   -> rail sem marcação (Repertório)
      O scroll permanece nativo: aqui só se lê scrollTop. */
   const rail = document.getElementById("progress-rail");
@@ -4577,15 +4579,22 @@ body{
   if(!rail || !fill) return;
   if(matchMedia("(prefers-reduced-motion: reduce)").matches) rail.dataset.motion = "off";
 
-  const SECTIONS = '.view[data-active="true"] section[id],.view[data-active="true"] section[aria-labelledby],.view[data-active="true"] section[aria-label]';
+  const HOME_CHECKPOINTS = [
+    '.view[data-view="home"] .arcade',
+    '#repertorio',
+    '#eq-ponte',
+    '#parte-i',
+    '#eq-dicionario',
+    '#eq-metodo'
+  ];
   let raf = 0, marks = [], bound = null, lastH = -1;
 
   const activeView = () =>
     document.querySelector('.view[data-active="true"]')?.dataset.view || "home";
 
-  /* filho same-origin: some com a barra nativa dele e com o rastro próprio do
-     echo, para nunca existirem duas barras concorrentes na mesma view */
-  function dressChild(doc){
+  /* O ECHO mantém a gramática existente: o hospedeiro desenha seu rastro e
+     desliga apenas as barras concorrentes desse filho. O ATRIO se autogoverna. */
+  function dressEchoChild(doc){
     if(!doc || doc.getElementById("arco-child-scroll")) return;
     const st = doc.createElement("style");
     st.id = "arco-child-scroll";
@@ -4604,7 +4613,7 @@ body{
     try{
       const doc = frame && frame.contentDocument;
       if(doc && doc.documentElement && doc.readyState !== "loading"){
-        dressChild(doc);
+        if(view === "echo") dressEchoChild(doc);
         return {win:frame.contentWindow, doc};
       }
     }catch(e){ /* sem acesso: cai no hospedeiro */ }
@@ -4629,8 +4638,10 @@ body{
     if(rail.dataset.mode !== "percurso") return;
     const {el, max} = metrics(t);
     if(max <= 0 || t.doc !== document) return;
-    document.querySelectorAll(SECTIONS).forEach(section => {
-      const top = section.getBoundingClientRect().top + el.scrollTop;
+    HOME_CHECKPOINTS.forEach(selector => {
+      const checkpoint = document.querySelector(selector);
+      if(!checkpoint) return;
+      const top = checkpoint.getBoundingClientRect().top + el.scrollTop;
       const ratio = Math.min(1, Math.max(0, top / max));
       const node = document.createElement("span");
       node.className = "progress-rail__mark";
@@ -4646,7 +4657,7 @@ body{
     const {el, max} = metrics(t);
     const progress = max > 0 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0;
     const pct = (progress * 100).toFixed(3) + "%";
-    fill.style.height = pct;
+    fill.style.transform = `scaleY(${progress.toFixed(5)})`;
     if(head) head.style.top = pct;
     rail.style.visibility = max > 0 ? "visible" : "hidden";
     if(el.scrollHeight !== lastH){ lastH = el.scrollHeight; buildMarks(t); }
@@ -4671,6 +4682,7 @@ body{
   function sync(){
     rail.dataset.mode = mode();
     rail.dataset.field = activeView() === "home" ? "light" : "dark";
+    rail.dataset.ready = "true";
     bind();
     remeasure();
   }

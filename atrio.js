@@ -1,6 +1,8 @@
 (() => {
   "use strict";
   const root = document.documentElement;
+  const scrollRail = document.getElementById("atrio-progress");
+  const scrollFill = document.getElementById("atrio-progress-fill");
   const hero = document.getElementById("hero");
   const runway = document.querySelector(".runway");
   const light = runway?.querySelector(".runway__light");
@@ -100,46 +102,26 @@
   let lastSampleTrigger = null;
   let moduleMove = null;
   let moduleMoveToken = 0;
+  let scrollRaf = 0;
 
-  function installScrollAppearance(){
-    // No Arco, o hospedeiro já desenha o único indicador de progresso.
-    if(window.parent !== window) return;
-    if(document.getElementById("atrio-scroll-appearance")) return;
-    const style = document.createElement("style");
-    style.id = "atrio-scroll-appearance";
-    style.textContent = `
-      html {
-        scroll-behavior: auto !important;
-        scrollbar-width: thin !important;
-        scrollbar-color: #181818 transparent !important;
-      }
+  function paintScrollProgress(){
+    scrollRaf = 0;
+    if(!scrollRail || !scrollFill) return;
+    const scroller = document.scrollingElement || root;
+    const max = Math.max(0,scroller.scrollHeight - innerHeight);
+    const progress = max > 0 ? Math.min(1,Math.max(0,scroller.scrollTop / max)) : 0;
+    scrollFill.style.transform = `scaleY(${progress.toFixed(5)})`;
+    scrollRail.hidden = max <= 0;
+  }
 
-      html::-webkit-scrollbar,
-      body::-webkit-scrollbar {
-        display: block !important;
-        width: 6px;
-        height: 6px;
-      }
+  function scheduleScrollProgress(){
+    if(!scrollRaf) scrollRaf = requestAnimationFrame(paintScrollProgress);
+  }
 
-      html::-webkit-scrollbar-track,
-      body::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      html::-webkit-scrollbar-thumb,
-      body::-webkit-scrollbar-thumb {
-        background: #181818;
-        border: 0;
-        border-radius: 0;
-        box-shadow: 0 0 0 1px rgba(255,255,255,.24);
-      }
-
-      html::-webkit-scrollbar-corner,
-      body::-webkit-scrollbar-corner {
-        background: transparent;
-      }
-    `;
-    document.head.appendChild(style);
+  function syncScrollField(section){
+    if(!scrollRail || !section) return;
+    scrollRail.dataset.field = section === hero ? "terra" :
+      section.classList.contains("field-dark") ? "dark" : "light";
   }
 
   function measure(){
@@ -180,7 +162,7 @@
     );
 
     /* origem da esteira: um único triângulo preto, pequeno e estável. */
-    const originDepth = Math.min(10, base * .04);
+    const originDepth = Math.min(6, base * .022);
     const originHalf = (w / 2) * (originDepth / base);
     origin?.setAttribute(
       "d",
@@ -593,7 +575,10 @@
 
   const sectionObserver = new IntersectionObserver(entries => {
     const current = entries.filter(entry => entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
-    if(current) post(current.target.id);
+    if(current){
+      syncScrollField(current.target);
+      post(current.target.id);
+    }
   },{threshold:[.2,.4,.6],rootMargin:"-12% 0px -52% 0px"});
   sections.forEach(section => sectionObserver.observe(section));
 
@@ -613,13 +598,19 @@
 
   const ro = new ResizeObserver(measure);
   ro.observe(document.documentElement);
+  const scrollResizeObserver = new ResizeObserver(scheduleScrollProgress);
+  scrollResizeObserver.observe(document.body);
   const moduleStageObserver = new ResizeObserver(() => requestAnimationFrame(syncDockedPieces));
   if(moduleCardStage) moduleStageObserver.observe(moduleCardStage);
   reduceMotion.addEventListener?.("change",syncAnimation);
   document.fonts?.ready.then(measure);
+  document.fonts?.ready.then(scheduleScrollProgress);
   window.addEventListener("load",measure);
-  installScrollAppearance();
+  window.addEventListener("load",scheduleScrollProgress);
+  window.addEventListener("resize",scheduleScrollProgress,{passive:true});
+  window.addEventListener("scroll",scheduleScrollProgress,{passive:true});
   resetModuleSystem();
   measure();
+  paintScrollProgress();
   syncAnimation();
 })();
