@@ -1777,7 +1777,11 @@ body{
 .bio__name{ font-family:var(--f-display); font-weight:700; font-size:clamp(1rem,1.35vw,1.22rem); line-height:1.1; letter-spacing:-.02em; margin:0; }
 .bio__tag{ font-family:var(--f-display); font-weight:400; font-size:clamp(.72rem,1vw,.86rem); line-height:1.2; letter-spacing:-.01em; color:var(--ink-78); margin:.25rem 0 0; }
 .bio__tag i{ font-style:normal; color:var(--ink-55); padding:0 .28em; }
-.bio__run{ margin:0 0 clamp(.9rem,1.8vw,1.3rem); text-align:justify; }
+.bio__run{
+  margin:0 0 clamp(.9rem,1.8vw,1.3rem);
+  font-size:.83rem; line-height:1.68;
+  text-align:justify;
+}
 .bio__run .mov__t{ display:inline; }
 .bio__end{ white-space:nowrap; }
 .bio__list{
@@ -2033,7 +2037,7 @@ body{
   <nav class="rail" aria-label="Navegação principal">
     <div class="rail__id">
       <button class="rail__title" type="button" data-view="home" aria-label="Arco — voltar à origem">Arco</button>
-      <p class="rail__kicker">Portfólio de inteligência jurídica</p>
+      <p class="rail__kicker">Portfólio de<br>inteligência jurídica</p>
     </div>
 
     <div class="rail__index">
@@ -4014,7 +4018,7 @@ body{
           </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
-        <iframe class="child__frame" title="ATRIO — página completa" src="about:blank" data-src="atrio.html?v=20260816-architecture2" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <iframe class="child__frame" title="ATRIO — página completa" src="about:blank" data-src="atrio.html?v=20260816-brand-field4" loading="lazy" referrerpolicy="no-referrer"></iframe>
       </div>
     </section>
 
@@ -4431,6 +4435,7 @@ body{
     const GUT  = 10;    // folga entre a régua e o dado
     const PAD  = 9;     // folga vertical de cada interrupção
     const LIFT = 3;     // correção óptica uniforme: toda a cascata sobe 3px
+    const LIFT_899 = 3; // respiro adicional entre a segunda linha de 899 e o arco
     const DRAW = 1900;  // ms de traço puro, repartidos pela extensão de cada segmento
     const HOLD = 120;   // ms de pausa em cada dado
 
@@ -4461,9 +4466,11 @@ body{
       const last  = by - (by - (ar.top - zr.top)) * .30;
       if (last <= first) return false;
       const step = stats.length > 1 ? (last - first) / (stats.length - 1) : 0;
-      const ys   = stats.map((s, k) => first + step * k - LIFT);
+      const ys   = stats.map((s, k) =>
+        first + step * k - LIFT - (s.querySelector('.narr__n')?.textContent.trim() === '899' ? LIFT_899 : 0)
+      );
 
-      /* o topo da régua: 64% do palco, salvo quando a ficha alcança essa calha —
+      /* o topo da régua: 68% do palco, salvo quando a ficha alcança essa calha —
          então recua o necessário para o primeiro dado não encostar nela, sem
          nunca empurrar o dado para fora do palco */
       const br = zone.querySelector('.bio').getBoundingClientRect();
@@ -4472,7 +4479,7 @@ body{
         ? ((br.right - zr.left) + GUT * 2 - GUT - bx * f) / (1 - f)
         : 0;
       const ax = Math.min(
-        Math.max(zr.width * .64, need),
+        Math.max(zr.width * .68, need),
         zr.width - stats[0].offsetWidth - GUT
       );
       const len = Math.hypot(bx - ax, dy);
