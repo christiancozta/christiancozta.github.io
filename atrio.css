@@ -338,9 +338,10 @@ body.sample-dialog-open{overflow:hidden}
 }
 .board>*{min-width:0}
 
-/* Doze divisões ópticas: uma linha central por macrocoluna do palco. */
+/* As subdivisões ópticas permanecem na métrica, mas não são pintadas. */
 .board::before{
   content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  display:none;
   background-repeat:repeat-x;background-size:var(--cell) 100%;
 }
 .field-dark .board::before{
