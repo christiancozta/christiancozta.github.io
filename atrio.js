@@ -184,7 +184,7 @@ if(architectureMode==="mobile")return[{offset:0,transform:"translate3d(0,0,0)"},
 if(key==="atrio")return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(0,${end.y.toFixed(2)}px,0)`}];
 if(key==="corpus"){
 const sign=Math.sign(end.x)||1;
-const safeTail=Math.min(Math.abs(end.x)*.34,architecturePieceSize+Math.max(8,architecturePieceSize*.09));
+const safeTail=Math.min(Math.abs(end.x),architecturePieceSize+Math.max(8,architecturePieceSize*.09));
 const turnX=end.x-sign*safeTail;
 return[
 {offset:0,transform:"translate3d(0,0,0)"},
@@ -199,16 +199,17 @@ if(key==="ratio")return[
 {offset:.72,transform:`translate3d(${(end.x*.72).toFixed(2)}px,${end.y.toFixed(2)}px,0) scale(1.025)`},
 {offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0) scale(1)`}
 ];
-if(key==="cerne")return[
+if(key==="cerne"||key==="lux"){
+const sign=Math.sign(end.x)||1;
+const safeRemain=Math.min(Math.abs(end.x),architecturePieceSize+Math.max(8,architecturePieceSize*.09));
+const clearanceX=end.x-sign*safeRemain;
+const clearanceY=Math.min(end.y,architecturePieceSize);
+return[
 {offset:0,transform:"translate3d(0,0,0)"},
-{offset:.48,transform:`translate3d(${(end.x*.38).toFixed(2)}px,${(end.y*.72).toFixed(2)}px,0)`},
+{offset:key==="cerne"?.58:.66,transform:`translate3d(${clearanceX.toFixed(2)}px,${clearanceY.toFixed(2)}px,0)`},
 {offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}
 ];
-if(key==="lux")return[
-{offset:0,transform:"translate3d(0,0,0)"},
-{offset:.54,transform:`translate3d(${(end.x*.46).toFixed(2)}px,${(end.y*.78).toFixed(2)}px,0)`},
-{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}
-];
+}
 return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}];
 }
 function reverseFrames(frames){return[...frames].reverse().map(frame=>({...frame,offset:1-frame.offset})).sort((a,b)=>a.offset-b.offset)}
