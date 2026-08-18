@@ -23,6 +23,8 @@
   --g4:#252A2F;
   --l1:#F4F7F9;
   --l2:#E9EEF1;
+  --surface-light-architecture:#F8F8F8;
+  --surface-light-authorship:#FCFCFC;
   --text-dark:#171A1D;
   --text-light:#EEF2F4;
 
@@ -290,9 +292,10 @@ body.sample-dialog-open{overflow:hidden}
 
 /* ==========================================================================
    CAMPOS — continuidade do tabuleiro depois do Hero.
-   Mesmas oito macrocolunas, ritmo de 84 px, sem alternância cromática.
+   Mesmas oito macrocolunas; a malha estrutural permanece em 84 px e a linha
+   horizontal visível acompanha a macrofileira de 168 px.
    ========================================================================== */
-.frame{background-position:0 0;background-repeat:repeat;background-size:var(--cell) var(--grid-row)}
+.frame{background-position:0 0;background-repeat:repeat;background-size:var(--cell) var(--board-row)}
 .field-dark{
   --rule:var(--rule-dark);
   --rule-soft:var(--rule-dark-soft);
@@ -312,9 +315,9 @@ body.sample-dialog-open{overflow:hidden}
     linear-gradient(to bottom,var(--grid-light) 1px,transparent 1px);
 }
 .field-dark--prelim{background-color:var(--g2)}
-.field-light--architecture{background-color:var(--l1)}
+.field-light--architecture{background-color:var(--surface-light-architecture)}
 .field-dark--findings{background-color:var(--g3)}
-.field-light--authorship{background-color:var(--l1)}
+.field-light--authorship{background-color:var(--surface-light-authorship)}
 
 /* Uma fileira estrutural vazia antes e depois de cada board. */
 .section-shell{grid-template-rows:var(--board-row) auto var(--board-row)}
@@ -504,18 +507,15 @@ body.sample-dialog-open{overflow:hidden}
 
 /* ==========================================================================
    02 ARQUITETURA
-   As peças formam uma coluna de navegação; o card de quatro macrocolunas
-   concentra toda a antiga tabela sem transformá-la em faixas independentes.
+   As peças formam uma coluna de navegação; o palco escuro de quatro
+   macrocolunas concentra a antiga tabela sem criar uma segunda malha visual.
    ========================================================================== */
-.architecture-board{background-color:var(--l1)}
+.architecture-board{background-color:transparent}
+.field-light--architecture .architecture-board::before{display:none}
 .architecture-system{
   grid-column:1/-1;display:grid;grid-template-columns:repeat(6,var(--cell));
   min-height:calc(var(--board-row)*3.35);border-bottom:1px solid var(--rule);
-  background-image:
-    linear-gradient(to right,var(--grid-light) 1px,transparent 1px),
-    linear-gradient(to bottom,var(--grid-light) 1px,transparent 1px);
-  background-position:0 0;background-repeat:repeat;
-  background-size:var(--cell) var(--grid-row);
+  background:transparent;
 }
 .module-piece-column{
   position:relative;z-index:2;grid-column:1/span 2;min-width:0;
@@ -719,7 +719,7 @@ body.sample-dialog-open{overflow:hidden}
   background-image:
     linear-gradient(to right,var(--grid-dark) 1px,transparent 1px),
     linear-gradient(to bottom,var(--grid-dark) 1px,transparent 1px);
-  background-size:var(--cell) var(--grid-row);
+  background-size:var(--cell) var(--board-row);
 }
 .page-footer__content{
   min-height:calc(var(--board-row)*2);
