@@ -5,6 +5,12 @@
    a linguagem de microjogadas já aprovada. A geometria não depende do conteúdo.
    ========================================================================== */
 
+/* A Seção 02 não duplica o respiro entre boards: a Seção 03 já possui sua
+   macrofileira de entrada. Assim o card termina onde termina o conteúdo. */
+.field-light--architecture .section-shell{
+  grid-template-rows:var(--board-row) auto 0;
+}
+
 .field-light--architecture .architecture-system{
   --architecture-unit:42px;
   --architecture-piece:108px;
@@ -297,7 +303,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
 /* Versionamento: metadata estrutural pronta para receber valor por módulo. */
 .field-light--architecture .module-card__version{
   margin:0 clamp(18px,calc(var(--cell)*.13),24px);
-  padding-top:clamp(16px,2.6vh,22px);
+  padding:clamp(16px,2.6vh,22px) 0 clamp(22px,3.2vh,30px);
   border-top:1px solid var(--architecture-card-rule);
   display:flex;
   align-items:baseline;
@@ -457,7 +463,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   .field-light--architecture .module-card__flow--atrio .module-card__regency p{font-size:clamp(.8rem,3.65vw,.92rem)}
   .field-light--architecture .module-card__version{
     margin:0 16px;
-    padding-top:16px;
+    padding:16px 0 22px;
   }
   .field-light--architecture .module-sample-strip{
     gap:10px;
