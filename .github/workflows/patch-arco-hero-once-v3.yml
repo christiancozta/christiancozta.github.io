@@ -1,0 +1,76 @@
+name: Patch Arco hero once v3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-arco-hero-once-v3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch Arco hero narrative
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('arco.html')
+          s = p.read_text(encoding='utf-8')
+
+          edits = [
+              (
+                  '.hero__txt, .narr-zone .arc{ margin-top:auto; }\n\n.narr{',
+                  '.hero__txt, .narr-zone .arc{ margin-top:auto; }\n\n/* O novo percurso equivale a 8 linhas: duas pausas de meia linha.\n   No desktop, o bloco cresce para cima e preserva o respiro diante do arco. */\n.mov__pause{\n  display:block;\n  height:.84em;\n}\n\n@media (min-width:821px){\n  .hero__txt{\n    position:relative;\n    top:-2.8rem;\n  }\n}\n\n.narr{'
+              ),
+              (
+                  '            Da execução fiscal à <em>regência recursal</em>.<br>',
+                  '            Da gestão judicial ao método.<br>'
+              ),
+              (
+                  '            Da regência à <em>arquitetura do raciocínio</em>.<br>',
+                  '            Do método à arquitetura de IA.<br>'
+              ),
+              (
+                  '            Um movimento exigiu o outro.<br>\n            Método antes da automação.',
+                  '            Um movimento exigiu o outro.\n            <span class="mov__pause" aria-hidden="true"></span>\n            Este portfólio narra uma trajetória<br>\n            na encruzilhada entre operações jurídicas,<br>\n            tecnologia, dados e governança.\n            <span class="mov__pause" aria-hidden="true"></span>\n            <em>Tradução disponível durante o percurso.</em>'
+              ),
+          ]
+
+          for old, new in edits:
+              count = s.count(old)
+              assert count == 1, f'expected one target, found {count}: {old[:80]!r}'
+              s = s.replace(old, new, 1)
+
+          assert s.count('class="mov__pause"') == 2
+          assert s.count('top:-2.8rem') == 1
+          assert s.count('Da gestão judicial ao método.') == 1
+          assert s.count('Do método à arquitetura de IA.') == 1
+          assert s.count('Tradução disponível durante o percurso.') == 1
+          assert 'Da execução fiscal à <em>regência recursal</em>.' not in s
+          assert 'Método antes da automação.' not in s
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          git diff --check -- arco.html
+
+      - name: Commit patch and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add arco.html
+          git rm .github/workflows/patch-arco-hero-once-v3.yml
+          git diff --cached --check
+          git commit -m "feat(arco): refine hero percurso narrative"
+          git push origin HEAD:main
