@@ -82,12 +82,12 @@ jobs:
 
           git diff --check -- arco.html
 
-      - name: Commit arco.html to main
+      - name: Commit patch and remove workflow
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add arco.html
-          git diff --cached --quiet && exit 0
+          git rm .github/workflows/arco-hero-once.yml
           git commit -m "feat(arco): refine hero percurso narrative"
           git push origin HEAD:main
