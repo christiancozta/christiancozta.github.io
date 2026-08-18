@@ -1685,19 +1685,12 @@ body{
    As duas folgas automáticas repartem a sobra — em tela alta nada fica órfão. */
 .hero__txt, .narr-zone .arc{ margin-top:auto; }
 
-/* O novo percurso equivale a 8 linhas: duas pausas de meia linha.
-   No desktop, o bloco cresce para cima e preserva o respiro diante do arco. */
+/* O novo percurso equivale a 8 linhas: duas pausas de meia linha. */
 .mov__pause{
   display:block;
   height:.84em;
 }
 
-@media (min-width:821px){
-  .hero__txt{
-    position:relative;
-    top:-2.8rem;
-  }
-}
 
 .narr{
   position:absolute; inset:0; z-index:1; pointer-events:none;
@@ -1799,7 +1792,7 @@ body{
 /* ABERTURA — ficha de abertura (marca · nome · tagline · bio justificada · contatos · CV) */
 /* estreita de propósito: abre a calha da direita para a régua subir até a
    altura do nome sem disputar espaço com a prosa */
-.bio{ max-width:min(50ch, 66%); margin:0 0 clamp(1.5rem,3vw,2.4rem); }
+.bio{ max-width:66%; margin:0 0 clamp(1.5rem,3vw,2.4rem); }
 /* sem régua não há calha a proteger: a ficha volta à largura da coluna */
 @media (max-width:820px){ .bio{ max-width:none; } }
 .bio__head{ display:flex; align-items:center; gap:clamp(.7rem,1.3vw,1.05rem); margin:0 0 clamp(.85rem,1.7vw,1.2rem); }
@@ -1810,7 +1803,7 @@ body{
 .bio__run{
   margin:0 0 clamp(.9rem,1.8vw,1.3rem);
   font-size:.83rem; line-height:1.68;
-  text-align:justify;
+  text-align:left;
 }
 .bio__run .mov__t{ display:inline; }
 .bio__end{ white-space:nowrap; }
