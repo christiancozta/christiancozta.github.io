@@ -1,0 +1,73 @@
+name: Patch ECHO scrollbar once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-echo-scrollbar-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch ECHO scrollbar geometry
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          edits = {
+              "echo.html": [
+                  (
+                      '.echo-trace{position:fixed;top:0;right:0;width:9px;height:100vh;height:100dvh;z-index:40;pointer-events:none}',
+                      '.echo-trace{position:fixed;top:44px;right:0;bottom:0;width:9px;height:auto;z-index:40;pointer-events:none}'
+                  ),
+              ],
+              "arco.html": [
+                  (
+                      '.progress-rail[data-mode="echo"]{top:0;bottom:0;right:6px}',
+                      '.progress-rail[data-mode="echo"]{top:44px;bottom:0;right:6px}'
+                  ),
+                  (
+                      '@media(max-width:1119px){.progress-rail{right:12px;top:5.5rem}.progress-rail[data-mode="echo"]{top:0}}',
+                      '@media(max-width:1119px){.progress-rail{right:12px;top:5.5rem}.progress-rail[data-mode="echo"]{top:44px}}'
+                  ),
+              ],
+          }
+
+          for filename, replacements in edits.items():
+              path = Path(filename)
+              text = path.read_text(encoding="utf-8")
+              for old, new in replacements:
+                  count = text.count(old)
+                  assert count == 1, f"{filename}: expected exactly one target, found {count}: {old}"
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding="utf-8")
+
+          echo = Path("echo.html").read_text(encoding="utf-8")
+          arco = Path("arco.html").read_text(encoding="utf-8")
+          assert '.echo-trace{position:fixed;top:44px;right:0;bottom:0;width:9px;height:auto;' in echo
+          assert '.progress-rail[data-mode="echo"]{top:44px;bottom:0;right:6px}' in arco
+          assert '.progress-rail[data-mode="echo"]{top:0;bottom:0;right:6px}' not in arco
+          PY
+
+          git diff --check -- echo.html arco.html
+
+      - name: Commit and publish
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/patch-echo-scrollbar-once.yml
+          git add echo.html arco.html
+          git diff --cached --check
+          git commit -m "fix: start ECHO scrollbars below Legal Ops pill"
+          git push origin HEAD:main
