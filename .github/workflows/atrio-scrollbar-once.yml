@@ -1,0 +1,43 @@
+name: Patch ATRIO scrollbar once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/atrio-scrollbar-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch ATRIO scrollbar offset
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('atrio.css')
+          s = p.read_text(encoding='utf-8')
+          old = 'position:fixed;top:0;right:3px;bottom:0;z-index:20;width:2px;'
+          new = 'position:fixed;top:44px;right:3px;bottom:0;z-index:20;width:2px;'
+          assert s.count(old) == 1, s.count(old)
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          PY
+          git diff --check -- atrio.css
+
+      - name: Commit patch and remove workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add atrio.css
+          git rm .github/workflows/atrio-scrollbar-once.yml
+          git commit -m "fix: start ATRIO scrollbar below Legal Tech pill"
+          git push origin HEAD:main
