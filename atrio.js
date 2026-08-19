@@ -33,6 +33,7 @@ const sampleContent = document.getElementById("sample-note-content");
 const moduleSystem = document.getElementById("architecture-system");
 const moduleField = document.getElementById("module-piece-column");
 const moduleCardStage = document.querySelector(".module-card-stage");
+const moduleStatus = document.getElementById("module-status");
 const modulePieces = [...document.querySelectorAll("[data-module-piece]")];
 const moduleCards = [...document.querySelectorAll("[data-module-card]")];
 const moduleCardByKey = new Map(moduleCards.map(card => [card.dataset.moduleCard,card]));
@@ -51,7 +52,7 @@ const ARCHITECTURE_NAV_KEYS = new Set(["Tab","ArrowDown","ArrowUp","ArrowRight",
 const DESKTOP_GRID = 24;
 const DESKTOP_CENTER = 12;
 const DESKTOP_START = {corpus:2.5,ratio:7.25,atrio:12,cerne:16.75,lux:21.5};
-const MODULE_DURATION = {corpus:720,ratio:780,atrio:520,cerne:780,lux:720};
+const MODULE_DURATION = {corpus:460,ratio:520,atrio:360,cerne:500,lux:460};
 const UNIT = 84;
 let raf = 0;
 let visible = true;
@@ -171,8 +172,8 @@ const samples=card.querySelector(".module-sample-strip");
 return[body,version,samples].filter(Boolean);
 }
 function moduleHeaderParts(card){if(!card)return[];const title=card.querySelector(".module-card__header h3"),subtitle=card.querySelector(".module-card__subtitle");return[title,subtitle].filter(Boolean)}
-function setPieceExpanded(key,expanded){const piece=modulePiece(key);if(!piece)return;piece.setAttribute("aria-expanded",String(expanded));piece.setAttribute("aria-pressed",String(expanded))}
-function clearPieceStates(){modulePieces.forEach(piece=>{piece.getAnimations?.().forEach(animation=>animation.cancel());piece.style.removeProperty("transform");piece.setAttribute("aria-expanded","false");piece.setAttribute("aria-pressed","false")})}
+function setPieceExpanded(key,expanded){const piece=modulePiece(key);if(!piece)return;piece.setAttribute("aria-expanded",String(expanded))}
+function clearPieceStates(){modulePieces.forEach(piece=>{piece.getAnimations?.().forEach(animation=>animation.cancel());piece.style.removeProperty("transform");piece.setAttribute("aria-expanded","false")})}
 function showOverview(){
 if(moduleOverviewCard)moduleOverviewCard.hidden=false;
 moduleDetailCards.forEach(card=>{card.hidden=true;card.removeAttribute("data-detail-phase");[...moduleHeaderParts(card),...moduleBody(card)].forEach(part=>{part.getAnimations?.().forEach(animation=>animation.cancel());part.style.removeProperty("opacity");part.style.removeProperty("transform")})});
@@ -180,14 +181,27 @@ moduleCardStage?.removeAttribute("data-header-anchor");moduleCardStage?.style.re
 }
 function hideOverview(){if(moduleOverviewCard)moduleOverviewCard.hidden=true}
 function desktopEndpoint(key,unit=architectureUnit){const start=DESKTOP_START[key]??DESKTOP_CENTER;return{x:(DESKTOP_CENTER-start)*unit,y:architectureLandingY}}
-function mobileEndpoint(key,micro=architectureMicro){
-const vectors={corpus:[0,micro*.82],ratio:[micro*.72,micro*.36],atrio:[0,micro*.52],cerne:[-micro,micro*.82],lux:[micro*.78,micro*.78]};const[x,y]=vectors[key]||[0,0];return{x,y};
+function mobileEndpoint(key){
+// Mesma tese do desktop em escala de trilho: as cinco origens convergem para a
+// coluna central. A descida vem antes do deslocamento lateral, para a peca sair
+// da faixa das vizinhas antes de atravessar (nunca passa por cima de ninguem).
+const piece=modulePiece(key),anchor=modulePiece(MODULE_ORDER[Math.floor(MODULE_ORDER.length/2)]);
+if(!piece||!anchor)return{x:0,y:0};
+// offsetLeft ignora transform: mede a posicao de repouso, nao a peca em movimento.
+const mid=el=>el.offsetLeft+el.offsetWidth/2;
+return{x:mid(anchor)-mid(piece),y:piece.offsetHeight*.55};
 }
 function endpointFor(key){return architectureMode==="mobile"?mobileEndpoint(key):desktopEndpoint(key)}
 function forwardFrames(key){
 const end=endpointFor(key);
-if(architectureMode==="mobile"&&key==="ratio")return[{offset:0,transform:"translate3d(0,0,0)"},{offset:.58,transform:`translate3d(${end.x.toFixed(2)}px,0,0)`},{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}];
-if(architectureMode==="mobile")return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}];
+if(architectureMode==="mobile"){
+if(!end.x)return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(0,${end.y.toFixed(2)}px,0)`}];
+return[
+{offset:0,transform:"translate3d(0,0,0)"},
+{offset:.42,transform:`translate3d(0,${end.y.toFixed(2)}px,0)`},
+{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}
+];
+}
 if(key==="atrio")return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(0,${end.y.toFixed(2)}px,0)`}];
 if(key==="corpus"){
 const sign=Math.sign(end.x)||1;
@@ -206,21 +220,28 @@ if(key==="ratio")return[
 {offset:.72,transform:`translate3d(${(end.x*.72).toFixed(2)}px,${end.y.toFixed(2)}px,0) scale(1.025)`},
 {offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0) scale(1)`}
 ];
-if(key==="cerne"||key==="lux"){
-const sign=Math.sign(end.x)||1;
-const safeRemain=Math.min(Math.abs(end.x),architecturePieceSize+Math.max(8,architecturePieceSize*.09));
-const clearanceX=end.x-sign*safeRemain;
-const clearanceY=Math.min(end.y,architecturePieceSize);
+if(key==="cerne"){
+// Dama: uma linha so, sem inflexao. Alcance livre em qualquer direcao.
 return[
 {offset:0,transform:"translate3d(0,0,0)"},
-{offset:key==="cerne"?.58:.66,transform:`translate3d(${clearanceX.toFixed(2)}px,${clearanceY.toFixed(2)}px,0)`},
+{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}
+];
+}
+if(key==="lux"){
+// Bispo: aproxima pela horizontal e entra na casa em 45 graus exatos (|dx| === |dy|).
+const sign=Math.sign(end.x)||1;
+const diagonal=Math.min(Math.abs(end.x),end.y);
+const turnX=end.x-sign*diagonal;
+return[
+{offset:0,transform:"translate3d(0,0,0)"},
+{offset:.55,transform:`translate3d(${turnX.toFixed(2)}px,0,0)`},
 {offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}
 ];
 }
 return[{offset:0,transform:"translate3d(0,0,0)"},{offset:1,transform:`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`}];
 }
 function reverseFrames(frames){return[...frames].reverse().map(frame=>({...frame,offset:1-frame.offset})).sort((a,b)=>a.offset-b.offset)}
-function movementDuration(key){const base=MODULE_DURATION[key]||640;return architectureMode==="mobile"?Math.min(360,base*.48):base}
+function movementDuration(key){const base=MODULE_DURATION[key]||640;return architectureMode==="mobile"?Math.min(480,Math.round(base*.82)):base}
 async function animatePiece(piece,key,direction="forward",token=moduleToken){
 if(!piece)return false;const frames=forwardFrames(key),selected=direction==="forward"?frames:reverseFrames(frames),end=endpointFor(key);moduleAnimation?.cancel();piece.getAnimations?.().forEach(animation=>animation.cancel());
 if(reduceMotion.matches||typeof piece.animate!=="function"){piece.style.transform=direction==="forward"?`translate3d(${end.x.toFixed(2)}px,${end.y.toFixed(2)}px,0)`:"translate3d(0,0,0)";return token===moduleToken}
@@ -240,21 +261,38 @@ const animations=visibleParts.map((part,index)=>part.animate(show?[{opacity:0,tr
 try{await Promise.all(animations.map(animation=>animation.finished))}catch(_error){return false}if(token!==moduleToken)return false;
 visibleParts.forEach((part,index)=>{part.style.opacity=show?"1":"0";part.style.transform="translate3d(0,0,0)";animations[index].cancel()});return true;
 }
+function announceModule(card){
+// O palco inteiro em aria-live despejava o card completo no leitor de tela.
+// Anuncia so a identidade do modulo.
+if(!moduleStatus||!card)return;
+const title=card.querySelector(".module-card__header h3")?.textContent.trim()||"";
+const subtitle=card.querySelector(".module-card__subtitle")?.textContent.trim()||"";
+moduleStatus.textContent=[title,subtitle].filter(Boolean).join(", ");
+}
+function frameArchitecture(){
+// O layout ja esta final quando o card sai de hidden; so as opacidades animam.
+// Poe o topo do trilho a 6% da janela: peca pousada e card cabem juntos nos dois modos.
+if(!moduleField)return;
+const target=Math.max(0,moduleField.getBoundingClientRect().top+scrollY-innerHeight*.06);
+if(Math.abs(target-scrollY)<24)return;
+scrollTo({top:target,behavior:reduceMotion.matches?"auto":"smooth"});
+}
 async function revealModuleCard(key,token){
-const card=moduleCardByKey.get(key);if(!card)return false;hideOverview();moduleDetailCards.forEach(item=>{item.hidden=item!==card});card.hidden=false;card.dataset.detailPhase="header";syncLandingAnchor();
+const card=moduleCardByKey.get(key);if(!card)return false;announceModule(card);hideOverview();moduleDetailCards.forEach(item=>{item.hidden=item!==card});card.hidden=false;card.dataset.detailPhase="header";syncLandingAnchor();
 const headerParts=moduleHeaderParts(card),bodyParts=moduleBody(card);headerParts.forEach(part=>{part.style.opacity="0"});bodyParts.forEach(part=>{part.style.opacity="0"});
+frameArchitecture();
 if(!await animateParts(headerParts,true,token))return false;card.dataset.detailPhase="body";if(!await animateParts(bodyParts,true,token))return false;card.dataset.detailPhase="active";return true;
 }
 async function concealModuleCard(key,token){const card=moduleCardByKey.get(key);if(!card||card.hidden)return true;card.dataset.detailPhase="closing";if(!await animateParts(moduleBody(card),false,token))return false;if(!await animateParts(moduleHeaderParts(card),false,token))return false;card.hidden=true;card.removeAttribute("data-detail-phase");return true}
 async function activateModule(key){
 if(!MODULE_ORDER.includes(key)||!moduleSystem)return;
 if(moduleState.phase!=="idle"){if(moduleState.phase==="active"&&moduleState.activeKey===key)returnModule(key);else{moduleState.pendingKey=key;if(moduleState.phase==="active"&&moduleState.activeKey)returnModule(moduleState.activeKey)}return}
-const token=++moduleToken;moduleState.pendingKey=null;setModuleState("moving",key);setPieceExpanded(key,true);const piece=modulePiece(key);const moved=await animatePiece(piece,key,"forward",token);if(!moved||token!==moduleToken)return;
-const revealed=await revealModuleCard(key,token);if(!revealed||token!==moduleToken)return;setModuleState("active",key);syncActivePieceTransform();scheduleScrollProgress();if(moduleState.pendingKey&&moduleState.pendingKey!==key)returnModule(key);
+const token=++moduleToken;moduleState.pendingKey=null;setModuleState("moving",key);setPieceExpanded(key,true);const piece=modulePiece(key);const moved=await animatePiece(piece,key,"forward",token);if(!moved||token!==moduleToken){if(token===moduleToken)normalizeArchitecture();return}
+const revealed=await revealModuleCard(key,token);if(!revealed||token!==moduleToken){if(token===moduleToken)normalizeArchitecture();return}setModuleState("active",key);syncActivePieceTransform();scheduleScrollProgress();if(moduleState.pendingKey&&moduleState.pendingKey!==key)returnModule(key);
 }
 async function returnModule(key){
 if(!key||moduleState.phase==="returning")return;if(moduleState.activeKey!==key&&moduleState.phase!=="active")return;
-const token=++moduleToken,pending=moduleState.pendingKey;setModuleState("returning",key);const piece=modulePiece(key);if(!await concealModuleCard(key,token)||token!==moduleToken)return;if(!await animatePiece(piece,key,"reverse",token)||token!==moduleToken)return;
+const token=++moduleToken,pending=moduleState.pendingKey;setModuleState("returning",key);const piece=modulePiece(key);if(!await concealModuleCard(key,token)||token!==moduleToken){if(token===moduleToken)normalizeArchitecture();return}if(!await animatePiece(piece,key,"reverse",token)||token!==moduleToken){if(token===moduleToken)normalizeArchitecture();return}
 setPieceExpanded(key,false);piece?.style.removeProperty("transform");moduleState.activeKey=null;showOverview();setModuleState("idle",null);scheduleScrollProgress();const next=moduleState.pendingKey||pending;moduleState.pendingKey=null;if(next&&next!==key)requestAnimationFrame(()=>activateModule(next));
 }
 function normalizeArchitecture({restoreOverview=true}={}){moduleToken+=1;moduleAnimation?.cancel();moduleAnimation=null;moduleState.pendingKey=null;moduleState.activeKey=null;clearPieceStates();if(restoreOverview)showOverview();setModuleState("idle",null)}
@@ -349,7 +387,7 @@ sampleContent.replaceChildren(visual,...(description?[description]:[]));
 return true;
 }
 function prepareArchitecture(){
-if(!moduleSystem||!moduleField||!moduleCardStage)return;ensureArchitectureStyles();
+if(!moduleSystem||!moduleField||!moduleCardStage)return;
 const ordered=MODULE_ORDER.map(key=>modulePiece(key)).filter(Boolean);ordered.forEach(piece=>moduleField.appendChild(piece));modulePieces.splice(0,modulePieces.length,...ordered);
 moduleDetailCards.forEach(card=>{
 card.querySelectorAll(".module-card__back").forEach(back=>back.remove());
@@ -378,7 +416,6 @@ brandTriggers.splice(0,brandTriggers.length,...document.querySelectorAll(".brand
 sampleTriggers.splice(0,sampleTriggers.length,...document.querySelectorAll(".module-sample-sheet[data-sample]"));
 document.getElementById("module-stream-vision")?.remove();showOverview();clearPieceStates();setModuleState("idle",null);
 }
-function ensureArchitectureStyles(){if(document.querySelector('link[data-architecture-styles="v2"]'))return;const link=document.createElement("link");link.rel="stylesheet";link.href="atrio-arquitetura.css?v=20260818-architecture4";link.dataset.architectureStyles="v2";document.head.appendChild(link)}
 
 function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
 if(!brandNote)return;brandTriggers.forEach(item=>item.setAttribute("aria-expanded","false"));

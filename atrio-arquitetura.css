@@ -34,9 +34,7 @@
 .field-light--architecture .module-piece:focus-visible{opacity:var(--architecture-piece-rest-opacity);filter:none;outline:1px solid transparent}
 .field-light--architecture .module-piece-column .module-piece:hover{opacity:1;filter:contrast(1.05);transform:none}
 .field-light--architecture .module-piece[aria-expanded="true"],
-.field-light--architecture .module-piece[aria-pressed="true"],
-.field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"],
-.field-light--architecture .module-piece-column:hover .module-piece[aria-pressed="true"]{opacity:1;filter:none}
+.field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"]{opacity:1;filter:none}
 .field-light--architecture .module-piece:active{transform:none}
 .field-light--architecture .architecture-system[data-module-phase="moving"] .module-piece:not([aria-expanded="true"]),
 .field-light--architecture .architecture-system[data-module-phase="returning"] .module-piece:not([aria-expanded="true"]){opacity:.22}
@@ -194,9 +192,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   .field-light--architecture .module-piece-column:hover .module-piece{opacity:.72}
   .field-light--architecture .module-piece-column .module-piece:hover{opacity:1}
   .field-light--architecture .module-piece[aria-expanded="true"],
-  .field-light--architecture .module-piece[aria-pressed="true"],
-  .field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"],
-  .field-light--architecture .module-piece-column:hover .module-piece[aria-pressed="true"]{opacity:1;filter:none}
+  .field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"]{opacity:1;filter:none}
 
   .field-light--architecture .module-card-stage{order:2;min-height:0;height:auto;align-self:stretch;border-top:0}
   .field-light--architecture .module-card--overview{min-height:0;padding:32px 16px 34px}
@@ -233,4 +229,10 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   .field-light--architecture .module-card--detail .module-card__mother,
   .field-light--architecture .module-card__version,.field-light--architecture .module-sample-strip,
   .field-light--architecture .module-sample-sheet{transition:none}
+}
+
+/* Status do modulo: anuncio para leitor de tela, fora do fluxo visual. */
+.field-light--architecture .module-status{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
 }
