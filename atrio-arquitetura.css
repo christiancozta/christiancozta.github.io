@@ -36,6 +36,26 @@
 .field-light--architecture .module-piece[aria-expanded="true"],
 .field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"]{opacity:1;filter:none}
 .field-light--architecture .module-piece:active{transform:none}
+
+/* Etiqueta de identificacao: so no ponteiro fino, so na peca que ainda nao foi
+   aberta. Resolve a peca sem rotulo sem povoar o trilho de texto permanente. */
+@media(hover:hover) and (pointer:fine){
+  .field-light--architecture .module-piece::after{
+    content:attr(data-label);
+    position:absolute;z-index:5;left:50%;top:100%;
+    transform:translate(-50%,4px);
+    padding:4px 9px;background:#141013;color:#FAFAFA;
+    font:600 .58rem/1 var(--font-ui);letter-spacing:.13em;text-transform:uppercase;
+    white-space:nowrap;pointer-events:none;opacity:0;
+    transition:opacity .18s cubic-bezier(.22,.68,0,1),transform .18s cubic-bezier(.22,.68,0,1);
+  }
+  .field-light--architecture .module-piece:hover::after{opacity:1;transform:translate(-50%,8px)}
+  .field-light--architecture .module-piece[aria-expanded="true"]::after,
+  .field-light--architecture .architecture-system[data-module-phase="moving"] .module-piece::after,
+  .field-light--architecture .architecture-system[data-module-phase="returning"] .module-piece::after{
+    content:none;
+  }
+}
 .field-light--architecture .architecture-system[data-module-phase="moving"] .module-piece:not([aria-expanded="true"]),
 .field-light--architecture .architecture-system[data-module-phase="returning"] .module-piece:not([aria-expanded="true"]){opacity:.22}
 
@@ -96,7 +116,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   letter-spacing:-.025em;text-wrap:balance
 }
 .field-light--architecture .module-card--detail .module-card__subtitle{
-  max-width:42ch;margin-top:8px;color:rgba(250,250,250,.64);
+  max-width:42ch;margin-top:18px;color:rgba(250,250,250,.64);
   font:700 clamp(.48rem,calc(var(--cell)*.052),.56rem)/1.35 var(--font-heading);
   letter-spacing:.09em;text-transform:uppercase;text-wrap:pretty
 }
@@ -122,7 +142,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
 .field-light--architecture .module-lead{
   max-width:48ch;font-size:clamp(.9rem,calc(var(--cell)*.108),1.05rem);font-weight:500;line-height:1.5;text-wrap:pretty
 }
-.field-light--architecture .module-card__architecture dl{margin-top:clamp(20px,3vh,26px);gap:clamp(13px,1.8vh,17px)}
+.field-light--architecture .module-card__architecture dl{margin-top:clamp(20px,3vh,26px);gap:6px}
 .field-light--architecture .module-card__section dt,
 .field-light--architecture .operation-copy b{
   color:var(--architecture-card-accent);font:700 clamp(.58rem,calc(var(--cell)*.068),.68rem)/1.25 var(--font-heading);
@@ -132,8 +152,8 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
 .field-light--architecture .operation-copy p{
   color:rgba(250,250,250,.72);font-size:clamp(.76rem,calc(var(--cell)*.091),.9rem);line-height:1.52;text-wrap:pretty
 }
-.field-light--architecture .module-card__section dd{margin-top:6px}
-.field-light--architecture .operation-copy{gap:clamp(16px,calc(var(--base)*.82),22px)}
+.field-light--architecture .module-card__section dd{margin-top:clamp(13px,1.8vh,17px)}
+.field-light--architecture .operation-copy{gap:8px}
 .field-light--architecture .module-card__index li{font-size:clamp(.72rem,calc(var(--cell)*.086),.84rem);line-height:1.45}
 .field-light--architecture .module-card__index strong{color:var(--architecture-card-accent);font-family:var(--font-brand)}
 .field-light--architecture .module-card__index span{color:rgba(250,250,250,.72)}
@@ -208,6 +228,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   .field-light--architecture .module-piece{
     position:relative;top:auto;left:auto!important;width:clamp(54px,17vw,82px);height:auto;margin:0;justify-self:center;opacity:.72;transform:none
   }
+  .field-light--architecture .module-piece::after{content:none}
   .field-light--architecture .module-piece-column:hover .module-piece{opacity:.72}
   .field-light--architecture .module-piece-column .module-piece:hover{opacity:1}
   .field-light--architecture .module-piece[aria-expanded="true"],

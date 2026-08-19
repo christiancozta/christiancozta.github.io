@@ -409,6 +409,7 @@ return true;
 function prepareArchitecture(){
 if(!moduleSystem||!moduleField||!moduleCardStage)return;
 const ordered=MODULE_ORDER.map(key=>modulePiece(key)).filter(Boolean);ordered.forEach(piece=>moduleField.appendChild(piece));modulePieces.splice(0,modulePieces.length,...ordered);
+modulePieces.forEach(piece=>{piece.dataset.label=piece.dataset.modulePiece.toUpperCase()});
 moduleDetailCards.forEach(card=>{
 card.querySelectorAll(".module-card__back").forEach(back=>back.remove());
 const legacyTrigger=card.querySelector(".module-card__piece.brand-trigger"),heading=card.querySelector(".module-card__header h3");
@@ -456,6 +457,14 @@ function trapDialogTab(event,dialog){const controls=[...dialog.querySelectorAll(
 function setArchitectureInputMode(mode){root.dataset.architectureInput=mode}
 
 prepareArchitecture();
+/* A mae aciona um modulo pelo cordao. activateModule ja enquadra a secao pelo
+   frameArchitecture, entao nao ha rolagem propria aqui: a jogada acontece com a
+   secao em quadro, nunca durante o trajeto. */
+window.atrioActivateModule = key => {
+if(!MODULE_ORDER.includes(key))return;
+if(moduleState.phase==="active"&&moduleState.activeKey===key){frameArchitecture();return}
+activateModule(key);
+};
 document.addEventListener("pointerdown",event=>{if(moduleSystem?.contains(event.target))setArchitectureInputMode("pointer")},true);
 document.addEventListener("keydown",event=>{if(ARCHITECTURE_NAV_KEYS.has(event.key))setArchitectureInputMode("keyboard")},true);
 brandTriggers.forEach(trigger=>trigger.addEventListener("click",()=>{const open=trigger.getAttribute("aria-expanded")!=="true";if(open){setLegalTechOpen(false,{restoreFocus:false});setSampleOpen(false,{restoreFocus:false})}setBrandOpen(open,{trigger,restoreFocus:false})}));
