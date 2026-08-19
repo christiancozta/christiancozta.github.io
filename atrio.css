@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ========================================================================== 
    ATRIO — sistema visual
    --------------------------------------------------------------------------
    Tabuleiro contínuo: 8 macrocolunas, board central na relação 1 | 6 | 1.
@@ -353,6 +353,23 @@ body.sample-dialog-open{overflow:hidden}
 .motion-ready .reveal-item.is-visible{opacity:1;transform:translateY(0);transition:opacity .82s cubic-bezier(.32,.72,0,1),transform .82s cubic-bezier(.32,.72,0,1)}
 
 /* 03 ACHADOS */
+.findings-context{
+  justify-content:flex-end;
+  padding-bottom:var(--base)
+}
+.findings-context>h3:first-child{
+  height:auto;display:block;
+  color:var(--text-light);
+  font:600 clamp(.9rem,calc(var(--cell)*.112),1.08rem)/1.15 var(--font-heading);
+  letter-spacing:-.008em;text-transform:none
+}
+.findings-context .row-body{
+  flex:none;display:block;justify-content:initial;padding-bottom:0
+}
+.findings-context p{
+  color:var(--muted);
+  font:400 clamp(.76rem,calc(var(--cell)*.093),.9rem)/var(--base) var(--font-body)
+}
 .findings-context strong{color:var(--terra);font-size:clamp(1.08rem,calc(var(--cell)*.135),1.34rem);font-weight:600}
 .metric-row{grid-column:1/-1;display:grid;grid-template-columns:calc(var(--cell)*2) minmax(0,1fr);border-bottom:1px solid var(--rule)}
 .metric-row__number{align-self:end;padding:0 var(--gutter) var(--base);color:var(--terra);font:760 clamp(2rem,calc(var(--cell)*.4),4.2rem)/calc(var(--base)*3) var(--font-numeric);letter-spacing:-.06em;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -375,8 +392,8 @@ body.sample-dialog-open{overflow:hidden}
 
 .relations-row{grid-column:1/-1;grid-row:span 2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--rule)}
 .relations-row article{display:grid;align-content:center;padding:0 var(--gutter)}
-.relation-echo{background:#F2EFE9;color:#181818;border-right:1px solid var(--terra)}
-.relation-echo h3{color:#181818;font:700 clamp(1rem,calc(var(--cell)*.125),1.2rem)/1 var(--font-zalando);letter-spacing:-.025em}
+.relation-echo{background:#FFB627;color:#181818;border-right:1px solid var(--terra)}
+.relation-echo h3{color:#181818;font:700 clamp(1rem,calc(var(--cell)*.125),1.2rem)/1 var(--font-zalando);letter-spacing:-.025em;text-transform:lowercase}
 .relation-echo p{color:#181818;font-size:clamp(.74rem,calc(var(--cell)*.09),.88rem);line-height:var(--base)}
 .relation-arco{background:#181818;color:#FAFAFA}
 .relation-arco h3{color:#FAFAFA;font:700 clamp(1rem,calc(var(--cell)*.125),1.2rem)/1 var(--font-schibsted);letter-spacing:-.025em}
