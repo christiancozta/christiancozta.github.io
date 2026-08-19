@@ -167,9 +167,8 @@ function modulePiece(key){return modulePieces.find(piece=>piece.dataset.modulePi
 function moduleBody(card){
 if(!card)return[];
 const body=card.querySelector(".module-card__flow")||card.querySelector(".module-card__mother");
-const version=card.querySelector(".module-card__version");
 const samples=card.querySelector(".module-sample-strip");
-return[body,version,samples].filter(Boolean);
+return[body,samples].filter(Boolean);
 }
 function moduleHeaderParts(card){if(!card)return[];const title=card.querySelector(".module-card__header h3"),subtitle=card.querySelector(".module-card__subtitle");return[title,subtitle].filter(Boolean)}
 function setPieceExpanded(key,expanded){const piece=modulePiece(key);if(!piece)return;piece.setAttribute("aria-expanded",String(expanded))}
@@ -327,7 +326,7 @@ const defined=(card.dataset.version||"").trim();
 value.textContent=defined||"—";
 if(!defined)value.setAttribute("aria-label","Versão não informada");
 version.append(label,value);
-card.append(version);
+(card.querySelector(".module-card__flow")||card).append(version);
 }
 function sampleItemsFor(key){
 const copy=sampleCopy[key];
@@ -347,11 +346,32 @@ card.querySelectorAll(".operational-sample-trigger").forEach(trigger=>trigger.re
 if(card.querySelector(".module-sample-strip"))return;
 const copy=sampleCopy[key];
 const items=sampleItemsFor(key);
-if(!copy||!items.length)return;
+const title=copy?copy.title:(card.querySelector(".module-card__header h3")?.textContent.trim()||key.toUpperCase());
 const strip=document.createElement("div");
 strip.className="module-sample-strip";
+if(!items.length){
+// ATRIO e regencia, nao modulo operacional: nao produz registro, entao a
+// faixa nao se aplica. Nos demais ela permanece, vazia e declarada, para os
+// quatro modulos conservarem a mesma anatomia.
+if(key==="atrio")return;
+strip.classList.add("module-sample-strip--empty");
 strip.setAttribute("role","group");
-strip.setAttribute("aria-label",`Registros visuais de ${copy.title}`);
+strip.setAttribute("aria-label",`Registros visuais de ${title}: em preparação`);
+for(let i=0;i<2;i+=1){
+const ghost=document.createElement("span");
+ghost.className="module-sample-sheet module-sample-sheet--placeholder";
+ghost.setAttribute("aria-hidden","true");
+strip.append(ghost);
+}
+const nota=document.createElement("p");
+nota.className="module-sample-pending";
+nota.textContent="Registro visual em preparação";
+strip.append(nota);
+card.append(strip);
+return;
+}
+strip.setAttribute("role","group");
+strip.setAttribute("aria-label",`Registros visuais de ${title}`);
 items.forEach(item=>{
 const button=document.createElement("button");
 button.type="button";
