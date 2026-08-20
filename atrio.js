@@ -25,8 +25,12 @@ const brandMeaning = document.getElementById("brand-note-meaning");
 const brandRationale = document.getElementById("brand-note-rationale");
 const brandRelation = document.getElementById("brand-note-relation");
 const brandImage = document.getElementById("brand-note-image");
-const brandSelo = document.getElementById("brand-note-selo");
-const brandVersions = document.getElementById("brand-note-versions");
+const versionNote = document.getElementById("version-note");
+const versionClose = document.getElementById("version-note-close");
+const versionTitle = document.getElementById("version-note-title");
+const versionCurrent = document.getElementById("version-note-current");
+const versionList = document.getElementById("version-note-list");
+let lastVersionTrigger = null;
 const sampleTriggers = [...document.querySelectorAll("[data-sample]")];
 const sampleNote = document.getElementById("sample-note");
 const sampleClose = document.getElementById("sample-note-close");
@@ -324,9 +328,16 @@ if(!card||card.querySelector(".module-card__version"))return;
 const version=document.createElement("div");
 version.className="module-card__version";
 version.dataset.moduleVersion=key;
-const label=document.createElement("span");
+const label=document.createElement("button");
+label.type="button";
 label.className="module-card__version-label";
-label.textContent=(brandCopy[key]&&brandCopy[key].selo)||"VERSÃO";
+label.dataset.versionOf=key;
+label.setAttribute("aria-haspopup","dialog");
+label.setAttribute("aria-controls","version-note");
+label.setAttribute("aria-expanded","false");
+const atual=((brandCopy[key]&&brandCopy[key].historico)||[]).at(-1);
+label.textContent=atual?("v. "+atual.v):"—";
+label.setAttribute("aria-label","Histórico de versões do "+((brandCopy[key]&&brandCopy[key].title)||key.toUpperCase()));
 const value=document.createElement("strong");
 value.className="module-card__version-value";
 const defined=(card.dataset.version||"").trim();
@@ -426,9 +437,34 @@ sampleTriggers.splice(0,sampleTriggers.length,...document.querySelectorAll(".mod
 document.getElementById("module-stream-vision")?.remove();showOverview();clearPieceStates();setModuleState("idle",null);
 }
 
+function setVersionOpen(open,{trigger=lastVersionTrigger,restoreFocus=true}={}){
+if(!versionNote)return;
+document.querySelectorAll(".module-card__version-label").forEach(b=>b.setAttribute("aria-expanded","false"));
+if(open&&trigger){
+const copy=brandCopy[trigger.dataset.versionOf];
+if(!copy)return;
+lastVersionTrigger=trigger;trigger.setAttribute("aria-expanded","true");
+const linhas=(copy.historico||[]).slice();
+const atual=linhas.at(-1);
+versionTitle.textContent=copy.title;
+versionCurrent.textContent=atual?("Versão corrente "+atual.v+" — "+atual.d):"";
+const anteriores=linhas.slice(0,-1).reverse();
+versionList.replaceChildren(...anteriores.map(item=>{
+const li=document.createElement("li");
+const marca=document.createElement("b");marca.textContent="v. "+item.v+" ("+item.d+")";
+const texto=document.createElement("span");texto.textContent=item.t;
+li.append(marca,texto);return li;}));
+versionList.hidden=anteriores.length===0;
+versionNote.hidden=false;document.body.classList.add("sample-dialog-open");
+versionNote.scrollTop=0;requestAnimationFrame(()=>versionNote.focus({preventScroll:true}));
+return;
+}
+versionNote.hidden=true;document.body.classList.remove("sample-dialog-open");
+if(restoreFocus&&lastVersionTrigger)lastVersionTrigger.focus({preventScroll:true});
+}
 function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
 if(!brandNote)return;brandTriggers.forEach(item=>item.setAttribute("aria-expanded","false"));
-if(open&&trigger){const copy=brandCopy[trigger.dataset.brand];if(!copy)return;lastBrandTrigger=trigger;trigger.setAttribute("aria-expanded","true");brandPiece.textContent=copy.piece;brandTitle.textContent=copy.title;brandMeaning.textContent=copy.meaning;brandRationale.textContent=copy.rationale;brandRelation.textContent=copy.relation;brandImage.src=copy.asset;brandImage.alt=`Símbolo ${copy.title}`;if(brandSelo)brandSelo.textContent=copy.selo||"Versionamento";if(brandVersions){brandVersions.replaceChildren(...(copy.historico||[]).slice().reverse().map(item=>{const li=document.createElement("li");const marca=document.createElement("b");marca.textContent=`v. ${item.v} (${item.d})`;const texto=document.createElement("span");texto.textContent=item.t;li.append(marca,texto);return li;}))}brandNote.hidden=false;document.body.classList.add("brand-dialog-open");brandNote.scrollTop=0;requestAnimationFrame(()=>brandNote.focus({preventScroll:true}));return}
+if(open&&trigger){const copy=brandCopy[trigger.dataset.brand];if(!copy)return;lastBrandTrigger=trigger;trigger.setAttribute("aria-expanded","true");brandPiece.textContent=copy.piece;brandTitle.textContent=copy.title;brandMeaning.textContent=copy.meaning;brandRationale.textContent=copy.rationale;brandRelation.textContent=copy.relation;brandImage.src=copy.asset;brandImage.alt=`Símbolo ${copy.title}`;brandNote.hidden=false;document.body.classList.add("brand-dialog-open");brandNote.scrollTop=0;requestAnimationFrame(()=>brandNote.focus({preventScroll:true}));return}
 brandNote.hidden=true;document.body.classList.remove("brand-dialog-open");if(restoreFocus&&lastBrandTrigger)lastBrandTrigger.focus({preventScroll:true});
 }
 function setSampleOpen(open,{trigger=lastSampleTrigger,restoreFocus=true}={}){
@@ -458,8 +494,16 @@ document.addEventListener("keydown",event=>{if(ARCHITECTURE_NAV_KEYS.has(event.k
 brandTriggers.forEach(trigger=>trigger.addEventListener("click",()=>{const open=trigger.getAttribute("aria-expanded")!=="true";if(open){setLegalTechOpen(false,{restoreFocus:false});setSampleOpen(false,{restoreFocus:false})}setBrandOpen(open,{trigger,restoreFocus:false})}));
 sampleTriggers.forEach(trigger=>trigger.addEventListener("click",()=>{setBrandOpen(false,{restoreFocus:false});setLegalTechOpen(false,{restoreFocus:false});setSampleOpen(true,{trigger,restoreFocus:false})}));
 modulePieces.forEach(piece=>{piece.addEventListener("click",()=>activateModule(piece.dataset.modulePiece));piece.addEventListener("keydown",event=>{if(!["ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;event.preventDefault();const current=modulePieces.indexOf(piece),next=event.key==="Home"?0:event.key==="End"?modulePieces.length-1:(current+(["ArrowDown","ArrowRight"].includes(event.key)?1:-1)+modulePieces.length)%modulePieces.length;modulePieces[next]?.focus()})});
-brandClose?.addEventListener("click",()=>setBrandOpen(false));sampleClose?.addEventListener("click",()=>setSampleOpen(false));sampleNote?.addEventListener("click",event=>{if(event.target===sampleNote)setSampleOpen(false)});
-document.addEventListener("keydown",event=>{if(event.key==="Tab"&&sampleNote&&!sampleNote.hidden){trapDialogTab(event,sampleNote);return}if(event.key==="Tab"&&brandNote&&!brandNote.hidden){trapDialogTab(event,brandNote);return}if(event.key!=="Escape")return;if(!sampleNote?.hidden){event.preventDefault();setSampleOpen(false);return}if(!brandNote?.hidden){event.preventDefault();setBrandOpen(false);return}if(legalTechNote?.hidden)return;event.preventDefault();setLegalTechOpen(false)});
+brandClose?.addEventListener("click",()=>setBrandOpen(false));sampleClose?.addEventListener("click",()=>setSampleOpen(false));
+versionClose?.addEventListener("click",()=>setVersionOpen(false));
+versionNote?.addEventListener("click",event=>{if(event.target===versionNote)setVersionOpen(false)});
+document.addEventListener("click",event=>{
+const alvo=event.target.closest(".module-card__version-label");
+if(!alvo)return;
+setSampleOpen(false,{restoreFocus:false});setBrandOpen(false,{restoreFocus:false});
+setVersionOpen(alvo.getAttribute("aria-expanded")!=="true",{trigger:alvo,restoreFocus:false});
+});sampleNote?.addEventListener("click",event=>{if(event.target===sampleNote)setSampleOpen(false)});
+document.addEventListener("keydown",event=>{if(event.key==="Tab"&&sampleNote&&!sampleNote.hidden){trapDialogTab(event,sampleNote);return}if(event.key==="Tab"&&brandNote&&!brandNote.hidden){trapDialogTab(event,brandNote);return}if(event.key==="Tab"&&versionNote&&!versionNote.hidden){trapDialogTab(event,versionNote);return}if(event.key!=="Escape")return;if(!versionNote?.hidden){event.preventDefault();setVersionOpen(false);return}if(!sampleNote?.hidden){event.preventDefault();setSampleOpen(false);return}if(!brandNote?.hidden){event.preventDefault();setBrandOpen(false);return}if(legalTechNote?.hidden)return;event.preventDefault();setLegalTechOpen(false)});
 function post(section){if(window.parent===window||location.protocol==="file:")return;window.parent.postMessage({type:"ATRIO_SECTION",section},location.origin)}
 window.addEventListener("message",event=>{if(event.source!==window.parent||event.origin!==location.origin)return;const data=event.data;if(!data||data.type!=="ATRIO_NAVIGATE"||!allowed.has(data.section))return;document.getElementById(data.section)?.scrollIntoView({behavior:"auto",block:"start"})});
 const heroObserver=new IntersectionObserver(([entry])=>{visible=Boolean(entry?.isIntersecting);syncAnimation()},{threshold:.01});heroObserver.observe(hero);
