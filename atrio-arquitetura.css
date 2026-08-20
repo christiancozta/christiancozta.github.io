@@ -98,13 +98,15 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
 
 .field-light--architecture .module-card--detail{min-height:0;padding:0;border:0}
 .field-light--architecture .module-card--detail::before{
-  content:"";position:absolute;z-index:2;top:-2px;left:50%;width:clamp(36px,8%,58px);height:3px;
-  background:var(--architecture-card-accent);transform:translateX(-50%)
+  content:"";position:absolute;z-index:2;top:-2px;left:clamp(18px,calc(var(--cell)*.13),24px);
+  width:clamp(36px,8%,58px);height:3px;background:var(--architecture-card-accent)
 }
 .field-light--architecture .module-card--detail .module-card__header{
-  position:static;box-sizing:border-box;width:min(560px,74%);max-width:74%;margin:calc(var(--architecture-piece)*.34) auto 0;padding:0;text-align:center
+  position:static;box-sizing:border-box;width:100%;max-width:none;
+  margin:calc(var(--architecture-piece)*.34) 0 0;
+  padding:0 clamp(18px,calc(var(--cell)*.13),24px);text-align:left
 }
-.field-light--architecture .module-card--detail .module-card__subtitle{margin-left:auto;margin-right:auto}
+.field-light--architecture .module-card--detail .module-card__subtitle{margin-left:0;margin-right:0}
 .field-light--architecture .module-card--detail .module-card__piece{display:none!important}
 .field-light--architecture .module-card__title-trigger{
   appearance:none;display:inline;margin:0;padding:0;border:0;border-bottom:1px solid transparent;background:transparent;
@@ -116,7 +118,7 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   letter-spacing:-.025em;text-wrap:balance
 }
 .field-light--architecture .module-card--detail .module-card__subtitle{
-  max-width:42ch;margin-top:8px;color:rgba(250,250,250,.64);
+  max-width:none;margin-top:8px;color:rgba(250,250,250,.64);
   font:700 clamp(.48rem,calc(var(--cell)*.052),.56rem)/1.35 var(--font-heading);
   letter-spacing:.09em;text-transform:uppercase;text-wrap:pretty
 }
@@ -134,13 +136,13 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
   gap:clamp(28px,calc(var(--cell)*.2),38px);row-gap:clamp(20px,2.8vh,28px);
   align-items:start;padding-bottom:clamp(28px,4vh,42px)
 }
-.field-light--architecture .module-card--detail .module-card__architecture{grid-column:1;grid-row:1/3}
+.field-light--architecture .module-card--detail .module-card__architecture{grid-column:1;grid-row:1/3;align-self:stretch}
 .field-light--architecture .module-card--detail .module-card__operation{grid-column:2;grid-row:1}
 .field-light--architecture .module-card--detail .module-card__mother{
   max-width:none;padding-top:var(--base);padding-bottom:clamp(28px,4vh,42px);border-top:1px solid var(--architecture-card-rule)
 }
 .field-light--architecture .module-lead{
-  margin-bottom:calc(var(--base)*.5);max-width:48ch;font-size:clamp(.9rem,calc(var(--cell)*.108),1.05rem);font-weight:500;line-height:1.5;text-wrap:pretty
+  margin-bottom:calc(var(--base)*.5);max-width:none;font-size:clamp(.9rem,calc(var(--cell)*.108),1.05rem);font-weight:500;line-height:1.5;text-wrap:pretty
 }
 .field-light--architecture .module-card__architecture dl{margin-top:clamp(20px,3vh,26px);gap:var(--base)}
 .field-light--architecture .module-card__section dt,
@@ -214,7 +216,6 @@ html[data-architecture-input="keyboard"] .field-light--architecture .module-samp
 }
 
 @media(max-width:980px) and (min-width:761px){
-  .field-light--architecture .module-card--detail .module-card__header{width:min(500px,72%);max-width:72%}
 }
 
 @media(max-width:760px){

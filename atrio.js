@@ -308,7 +308,7 @@ const overviewSubtitle=moduleOverviewCard.querySelector(".module-card__subtitle"
 const overviewIndex=moduleOverviewCard.querySelector(".module-card__index");
 const overviewMother=moduleOverviewCard.querySelector(".module-card__mother");
 const currentMother=atrioCard.querySelector(".module-card__mother");
-if(overviewSubtitle&&overviewIndex&&overviewMother){
+if(overviewSubtitle&&overviewIndex&&overviewMother&&!atrioCard.querySelector(".module-card__flow")){
 currentMother?.remove();
 const flow=document.createElement("div");flow.className="module-card__flow module-card__flow--atrio";
 const architecture=document.createElement("section");architecture.className="module-card__section module-card__architecture module-card__system-map";
@@ -326,7 +326,7 @@ version.className="module-card__version";
 version.dataset.moduleVersion=key;
 const label=document.createElement("span");
 label.className="module-card__version-label";
-label.textContent="VERSÃO";
+label.textContent=(brandCopy[key]&&brandCopy[key].selo)||"VERSÃO";
 const value=document.createElement("strong");
 value.className="module-card__version-value";
 const defined=(card.dataset.version||"").trim();
