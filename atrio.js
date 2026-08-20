@@ -25,10 +25,14 @@ const brandMeaning = document.getElementById("brand-note-meaning");
 const brandRationale = document.getElementById("brand-note-rationale");
 const brandRelation = document.getElementById("brand-note-relation");
 const brandImage = document.getElementById("brand-note-image");
+const brandSelo = document.getElementById("brand-note-selo");
+const brandVersions = document.getElementById("brand-note-versions");
 const sampleTriggers = [...document.querySelectorAll("[data-sample]")];
 const sampleNote = document.getElementById("sample-note");
 const sampleClose = document.getElementById("sample-note-close");
 const sampleTitle = document.getElementById("sample-note-title");
+const sampleIndexLabel = document.getElementById("sample-note-index");
+const sampleNotice = document.getElementById("sample-note-notice");
 const sampleContent = document.getElementById("sample-note-content");
 const moduleSystem = document.getElementById("architecture-system");
 const moduleField = document.getElementById("module-piece-column");
@@ -40,13 +44,16 @@ const moduleCardByKey = new Map(moduleCards.map(card => [card.dataset.moduleCard
 const moduleOverviewCard = moduleCardByKey.get("overview");
 const moduleDetailCards = moduleCards.filter(card => card.dataset.moduleCard !== "overview");
 const brandCopy = {
-atrio:{asset:"assets/atrio/brand/atrio-rei.svg",title:"ATRIO",piece:"Rei · estrutura-mãe",meaning:"Pórtico, entrada governada, unidade e regência.",rationale:"A forma reúne acessos sob uma estrutura comum e torna visível o princípio de regência.",relation:"O Rei representa especialização sob regência comum, nunca hierarquia de importância: unidade por gramática; distinção por movimento."},
-corpus:{asset:"assets/atrio/brand/corpus-torre.svg",title:"CORPUS",piece:"Torre · memória documental",meaning:"Estratos, classificação, preservação e lastro.",rationale:"A forma organiza camadas e sustenta uma base estável, legível e preservável.",relation:"A Torre traduz a função de classificar, conservar e recuperar a memória documental que dá lastro ao sistema."},
-ratio:{asset:"assets/atrio/brand/ratio-cavalo.svg",title:"RATIO",piece:"Cavalo · formulação faseada",meaning:"Percurso, direção, inflexão e desvio controlado.",rationale:"O movimento não avança em linha automática: muda de direção segundo escolhas verificáveis.",relation:"O Cavalo traduz a formulação em fases, com inflexões controladas e validação humana ao longo do percurso."},
-cerne:{asset:"assets/atrio/brand/cerne-rainha.svg",title:"CERNE",piece:"Rainha · núcleo crítico",meaning:"Escrutínio, confronto, tensão produtiva e retorno ao fundamento.",rationale:"A forma concentra força no núcleo e amplia o campo de confronto sem perder o ponto de origem.",relation:"A Rainha traduz a amplitude do escrutínio e o retorno ao fundamento quando a formulação precisa ser tensionada."},
-lux:{asset:"assets/atrio/brand/lux-bispo.svg",title:"LUX",piece:"Bispo · refinamento formal",meaning:"Diagonalidade, projeção, depuração, legibilidade e acabamento.",rationale:"A diagonal projeta e depura, conduzindo o olhar sem romper o lastro da forma anterior.",relation:"O Bispo traduz o refinamento que melhora legibilidade e acabamento sem atravessar a fronteira do mérito."}
+atrio:{selo:"API 0.7.0",historico:[{"v": "0.7.0", "d": "07/2026", "t": "Backend local do método: contratos tipados, máquina de estados, persistência, cofre cifrado e proveniência. Vinte e três rotas sob /v1."}],asset:"assets/atrio/brand/atrio-rei.svg",title:"ATRIO",piece:"Rei · estrutura-mãe",meaning:"Pórtico, entrada governada, unidade e regência.",rationale:"A forma reúne acessos sob uma estrutura comum e torna visível o princípio de regência.",relation:"O Rei representa especialização sob regência comum, nunca hierarquia de importância: unidade por gramática; distinção por movimento."},
+corpus:{selo:"CORPUS 1.5.0",historico:[{"v": "1.0.0", "d": "data não recuperável", "t": "Robô de entrada com pseudonimização por cofre, triagem de segredo de justiça e log de execução."}, {"v": "1.1.0", "d": "data não recuperável", "t": "Inventário em CSV como fonte da verdade. Hash SHA-256 como chave, deduplicação por arquivo e por número CNJ."}, {"v": "1.2.0", "d": "data não recuperável", "t": "OCR para PDF digitalizado sem camada de texto, reaproveitando motores e cofre existentes."}, {"v": "1.3.0", "d": "data não recuperável", "t": "Painel operacional em linguagem ATRIO, somente leitura."}, {"v": "1.4.0", "d": "data não recuperável", "t": "Inventários separados, documental e de pseudônimos, com consolidado XLSX."}, {"v": "1.5.0", "d": "26/07/2026", "t": "Monorepo reorganizado e CORPUS fechado como pacote versionado. Homologado contra PostgreSQL vivo em 27/07/2026."}],asset:"assets/atrio/brand/corpus-torre.svg",title:"CORPUS",piece:"Torre · memória documental",meaning:"Estratos, classificação, preservação e lastro.",rationale:"A forma organiza camadas e sustenta uma base estável, legível e preservável.",relation:"A Torre traduz a função de classificar, conservar e recuperar a memória documental que dá lastro ao sistema."},
+ratio:{selo:"RATIO 7.0.0",historico:[{"v": "1.0.0", "d": "24/03/2026", "t": "Release inicial. Prompt operacional com regras de ouro, sanção lógica e acervo de nove anos."}, {"v": "2.0.0", "d": "27/03/2026", "t": "Banco de modelos cede lugar a biblioteca de fundamentos, com aderência material e prioridade temporal."}, {"v": "3.0.0", "d": "28/03/2026", "t": "Pacote de dez arquivos nomeados substitui os acervos hospedados."}, {"v": "4.0.0", "d": "09/04/2026", "t": "Recurso inominado e embargos unificados sob identificação automática do tipo de peça."}, {"v": "5.0.0", "d": "19/04/2026", "t": "Fontes autorizadas reduzidas a três arquivos. Consulta a fonte não listada passa a ser vedada."}, {"v": "6.0.0", "d": "05/2026", "t": "Modularização por fase. Estado do Caso como objeto explícito e separação formal entre RATIO e LUX."}, {"v": "7.0.0", "d": "07/2026", "t": "Camada Instructions com precedência sobre o core. Arquivo por módulo, mandado de segurança com rito próprio e invalidação em cascata."}],asset:"assets/atrio/brand/ratio-cavalo.svg",title:"RATIO",piece:"Cavalo · formulação faseada",meaning:"Percurso, direção, inflexão e desvio controlado.",rationale:"O movimento não avança em linha automática: muda de direção segundo escolhas verificáveis.",relation:"O Cavalo traduz a formulação em fases, com inflexões controladas e validação humana ao longo do percurso."},
+cerne:{selo:"CERNE 2.0.0",historico:[{"v": "0.1.0", "d": "data não recuperável", "t": "Primeiro protótipo executável: triagem, roteamento por modo decisório e dois eixos fixos."}, {"v": "0.2.0", "d": "data não recuperável", "t": "Segunda versão autônoma da API. Onze eixos e saídas para interface e relatório técnico."}, {"v": "1.2.0", "d": "data não recuperável", "t": "Identidade de módulo na integração com o ATRIO. Auditoria adversarial a partir do handoff do RATIO, com cinco gates."}, {"v": "2.0.0", "d": "18/08/2026", "t": "Consolidação canônica. Core e Cartuchos de Domínio, VIGOR versionado, Audit Bundle e adjudicação humana no contrato."}],asset:"assets/atrio/brand/cerne-rainha.svg",title:"CERNE",piece:"Rainha · núcleo crítico",meaning:"Escrutínio, confronto, tensão produtiva e retorno ao fundamento.",rationale:"A forma concentra força no núcleo e amplia o campo de confronto sem perder o ponto de origem.",relation:"A Rainha traduz a amplitude do escrutínio e o retorno ao fundamento quando a formulação precisa ser tensionada."},
+lux:{selo:"LUX 6.0.0",historico:[{"v": "1.0.0", "d": "30/03/2026", "t": "Refinador final com entrega em três blocos, sem fases e sem handshake."}, {"v": "2.0.0", "d": "13/04/2026", "t": "Protocolo de sete fases com aprovação obrigatória, sistema de marcação e hierarquia de regras."}, {"v": "3.0.0", "d": "21/04/2026", "t": "Gatilhos de modo cedem lugar a #GUIA. Seis fases, com estilo promovido a fase própria."}, {"v": "4.0.0", "d": "22/04/2026", "t": "Obrigatoriedade do fluxo revogada. Entrega integral por padrão e perguntas intermediárias opcionais."}, {"v": "5.0.0", "d": "04/05/2026", "t": "Modularização em onze arquivos, com validação silenciosa e instalação própria. O sistema deixa de ser prompt."}, {"v": "6.0.0", "d": "07/2026", "t": "Camada de anonimização com três modos de destino e quarenta tipos de identificador. Onze arquivos reduzidos a três."}],asset:"assets/atrio/brand/lux-bispo.svg",title:"LUX",piece:"Bispo · refinamento formal",meaning:"Diagonalidade, projeção, depuração, legibilidade e acabamento.",rationale:"A diagonal projeta e depura, conduzindo o olhar sem romper o lastro da forma anterior.",relation:"O Bispo traduz o refinamento que melhora legibilidade e acabamento sem atravessar a fronteira do mérito."}
 };
-const sampleCopy = {corpus:{title:"CORPUS",template:"sample-template-corpus"},cerne:{title:"CERNE",template:"sample-template-cerne"}};
+const sampleCopy = {corpus:{title:"CORPUS",template:"sample-template-corpus"},
+cerne:{title:"CERNE",template:"sample-template-cerne"},
+ratio:{title:"RATIO",template:"sample-template-cerne",placeholder:true},
+lux:{title:"LUX",template:"sample-template-cerne",placeholder:true}};
 const MODULE_ORDER = ["corpus","ratio","atrio","cerne","lux"];
 const ARCHITECTURE_NAV_KEYS = new Set(["Tab","ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"]);
 const DESKTOP_GRID = 24;
@@ -167,8 +174,8 @@ function modulePiece(key){return modulePieces.find(piece=>piece.dataset.modulePi
 function moduleBody(card){
 if(!card)return[];
 const body=card.querySelector(".module-card__flow")||card.querySelector(".module-card__mother");
-const samples=card.querySelector(".module-sample-strip");
-return[body,samples].filter(Boolean);
+const footer=card.querySelector(".module-card__footer");
+return[body,footer].filter(Boolean);
 }
 function moduleHeaderParts(card){if(!card)return[];const title=card.querySelector(".module-card__header h3"),subtitle=card.querySelector(".module-card__subtitle");return[title,subtitle].filter(Boolean)}
 function setPieceExpanded(key,expanded){const piece=modulePiece(key);if(!piece)return;piece.setAttribute("aria-expanded",String(expanded))}
@@ -326,7 +333,10 @@ const defined=(card.dataset.version||"").trim();
 value.textContent=defined||"—";
 if(!defined)value.setAttribute("aria-label","Versão não informada");
 version.append(label,value);
-(card.querySelector(".module-card__flow")||card).append(version);
+const footer=document.createElement("div");
+footer.className="module-card__footer";
+footer.append(version);
+(card.querySelector(".module-card__flow")||card).append(footer);
 }
 function sampleItemsFor(key){
 const copy=sampleCopy[key];
@@ -343,56 +353,34 @@ height:image.getAttribute("height")||""
 function buildSampleGallery(card,key){
 if(!card)return;
 card.querySelectorAll(".operational-sample-trigger").forEach(trigger=>trigger.remove());
-if(card.querySelector(".module-sample-strip"))return;
+const footer=card.querySelector(".module-card__footer");
+if(!footer||footer.querySelector(".module-sample-button"))return;
 const copy=sampleCopy[key];
 const items=sampleItemsFor(key);
-const title=copy?copy.title:(card.querySelector(".module-card__header h3")?.textContent.trim()||key.toUpperCase());
-const strip=document.createElement("div");
-strip.className="module-sample-strip";
-if(!items.length){
-// ATRIO e regencia, nao modulo operacional: nao produz registro, entao a
-// faixa nao se aplica. Nos demais ela permanece, vazia e declarada, para os
-// quatro modulos conservarem a mesma anatomia.
-if(key==="atrio")return;
-strip.classList.add("module-sample-strip--empty");
-strip.setAttribute("role","group");
-strip.setAttribute("aria-label",`Registros visuais de ${title}: em preparação`);
-for(let i=0;i<2;i+=1){
-const ghost=document.createElement("span");
-ghost.className="module-sample-sheet module-sample-sheet--placeholder";
-ghost.setAttribute("aria-hidden","true");
-strip.append(ghost);
-}
-const nota=document.createElement("p");
-nota.className="module-sample-pending";
-nota.textContent="Registro visual em preparação";
-strip.append(nota);
-card.append(strip);
-return;
-}
-strip.setAttribute("role","group");
-strip.setAttribute("aria-label",`Registros visuais de ${title}`);
+if(!copy||!items.length)return;
+// O registro deixa de ser miniatura ilegivel e passa a ser controle nomeado,
+// no mesmo rodape da versao. Dois botoes dividem a largura restante da coluna.
 items.forEach(item=>{
 const button=document.createElement("button");
 button.type="button";
-button.className="module-sample-sheet";
+button.className="module-sample-button";
 button.dataset.sample=key;
 button.dataset.sampleIndex=String(item.index);
+if(copy.placeholder)button.dataset.placeholder="true";
 button.setAttribute("aria-haspopup","dialog");
 button.setAttribute("aria-controls","sample-note");
 button.setAttribute("aria-expanded","false");
-button.setAttribute("aria-label",`Abrir registro visual ${item.index+1} de ${copy.title}`);
-const image=document.createElement("img");
-image.src=item.src;
-image.alt="";
-if(item.width)image.width=Number(item.width);
-if(item.height)image.height=Number(item.height);
-image.loading="lazy";
-image.decoding="async";
-button.append(image);
-strip.append(button);
+const ordem=String(item.index+1).padStart(2,"0");
+button.setAttribute("aria-label",`Abrir registro visual ${ordem} de ${copy.title}`);
+const texto=document.createElement("span");
+texto.textContent=`Registro ${ordem}`;
+const seta=document.createElement("span");
+seta.className="module-sample-button__mark";
+seta.setAttribute("aria-hidden","true");
+seta.textContent="↗";
+button.append(texto,seta);
+footer.append(button);
 });
-card.append(strip);
 }
 function renderSampleSelection(copy,index){
 const template=copy?document.getElementById(copy.template):null;
@@ -434,13 +422,13 @@ buildModuleVersion(card,key);
 buildSampleGallery(card,key);
 });
 brandTriggers.splice(0,brandTriggers.length,...document.querySelectorAll(".brand-trigger"));
-sampleTriggers.splice(0,sampleTriggers.length,...document.querySelectorAll(".module-sample-sheet[data-sample]"));
+sampleTriggers.splice(0,sampleTriggers.length,...document.querySelectorAll(".module-sample-button[data-sample]"));
 document.getElementById("module-stream-vision")?.remove();showOverview();clearPieceStates();setModuleState("idle",null);
 }
 
 function setBrandOpen(open,{trigger=lastBrandTrigger,restoreFocus=true}={}){
 if(!brandNote)return;brandTriggers.forEach(item=>item.setAttribute("aria-expanded","false"));
-if(open&&trigger){const copy=brandCopy[trigger.dataset.brand];if(!copy)return;lastBrandTrigger=trigger;trigger.setAttribute("aria-expanded","true");brandPiece.textContent=copy.piece;brandTitle.textContent=copy.title;brandMeaning.textContent=copy.meaning;brandRationale.textContent=copy.rationale;brandRelation.textContent=copy.relation;brandImage.src=copy.asset;brandImage.alt=`Símbolo ${copy.title}`;brandNote.hidden=false;document.body.classList.add("brand-dialog-open");brandNote.scrollTop=0;requestAnimationFrame(()=>brandNote.focus({preventScroll:true}));return}
+if(open&&trigger){const copy=brandCopy[trigger.dataset.brand];if(!copy)return;lastBrandTrigger=trigger;trigger.setAttribute("aria-expanded","true");brandPiece.textContent=copy.piece;brandTitle.textContent=copy.title;brandMeaning.textContent=copy.meaning;brandRationale.textContent=copy.rationale;brandRelation.textContent=copy.relation;brandImage.src=copy.asset;brandImage.alt=`Símbolo ${copy.title}`;if(brandSelo)brandSelo.textContent=copy.selo||"Versionamento";if(brandVersions){brandVersions.replaceChildren(...(copy.historico||[]).slice().reverse().map(item=>{const li=document.createElement("li");const marca=document.createElement("b");marca.textContent=`v. ${item.v} (${item.d})`;const texto=document.createElement("span");texto.textContent=item.t;li.append(marca,texto);return li;}))}brandNote.hidden=false;document.body.classList.add("brand-dialog-open");brandNote.scrollTop=0;requestAnimationFrame(()=>brandNote.focus({preventScroll:true}));return}
 brandNote.hidden=true;document.body.classList.remove("brand-dialog-open");if(restoreFocus&&lastBrandTrigger)lastBrandTrigger.focus({preventScroll:true});
 }
 function setSampleOpen(open,{trigger=lastSampleTrigger,restoreFocus=true}={}){
@@ -449,7 +437,7 @@ if(open&&trigger){
 const copy=sampleCopy[trigger.dataset.sample];
 const index=Number.parseInt(trigger.dataset.sampleIndex||"0",10);
 if(!copy||!renderSampleSelection(copy,Number.isFinite(index)?index:0))return;
-lastSampleTrigger=trigger;trigger.setAttribute("aria-expanded","true");sampleTitle.textContent=copy.title;sampleNote.hidden=false;document.body.classList.add("sample-dialog-open");sampleContent.scrollTop=0;requestAnimationFrame(()=>sampleNote.focus({preventScroll:true}));return;
+lastSampleTrigger=trigger;trigger.setAttribute("aria-expanded","true");sampleTitle.textContent=copy.title;const total=sampleItemsFor(trigger.dataset.sample).length;const atual=(Number.isFinite(index)?index:0)+1;if(sampleIndexLabel)sampleIndexLabel.textContent=total>1?`Registro ${String(atual).padStart(2,"0")} de ${String(total).padStart(2,"0")}`:"Registro 01";if(sampleNotice){const emprestado=Boolean(copy.placeholder);sampleNotice.hidden=!emprestado;sampleNotice.textContent=emprestado?`Tela do CERNE, exibida como marcador enquanto o registro do ${copy.title} não é publicado.`:"";}sampleNote.hidden=false;document.body.classList.add("sample-dialog-open");sampleContent.scrollTop=0;requestAnimationFrame(()=>sampleNote.focus({preventScroll:true}));return;
 }
 sampleNote.hidden=true;sampleContent.replaceChildren();document.body.classList.remove("sample-dialog-open");if(restoreFocus&&lastSampleTrigger)lastSampleTrigger.focus({preventScroll:true});
 }
