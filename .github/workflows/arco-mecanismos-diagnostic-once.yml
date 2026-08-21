@@ -1,0 +1,77 @@
+name: Diagnose ARCO mechanism patch once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/arco-mecanismos-diagnostic-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Diagnose patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+
+          s = Path('arco.html').read_text(encoding='utf-8')
+          out = []
+          out.append('blob=' + subprocess.check_output(['git','hash-object','arco.html'], text=True).strip())
+          out.append('mec=' + str(s.count('<details class="mec" id=')))
+          out.append('mec_eq=' + str(s.count('class="mec__eq"')))
+          out.append('eq_label=' + str(s.count('<p class="verb__lbl">Equivalências associadas</p>')))
+          out.append('visible_groups=' + str(s.count('class="chips mec__chips"')))
+
+          def details(text):
+              starts=list(re.finditer(r'<details class="mec"\b[^>]*>', text))
+              token=re.compile(r'<details\b[^>]*>|</details>')
+              vals=[]
+              for st in starts:
+                  depth=0
+                  for m in token.finditer(text, st.start()):
+                      depth += 1 if m.group(0).startswith('<details') else -1
+                      if depth==0:
+                          vals.append(text[st.start():m.end()]); break
+              return vals
+
+          body_eq = re.compile(
+              r'(?ms)^(?P<outer>[ \t]*)<div><p class="verb__lbl">Equivalências associadas</p>\n'
+              r'(?P<inner>[ \t]*)<div class="chips">\n'
+              r'(?P<buttons>.*?)'
+              r'(?P=inner)</div>\n'
+              r'(?P=outer)</div>\n?'
+          )
+          summary_eq = re.compile(r'(?m)^(?P<indent>[ \t]*)<span class="mec__eq">[^<]*</span>\n')
+          cards=details(s)
+          out.append('parsed_cards=' + str(len(cards)))
+          for i,c in enumerate(cards,1):
+              bm=body_eq.search(c); sm=summary_eq.search(c)
+              labels=re.findall(r'<p class="verb__lbl">([^<]+)</p>', c)
+              buttons=[] if not bm else re.findall(r'<button class="chip"\b[^>]*>.*?</button>', bm.group('buttons'), re.S)
+              out.append(f'{i:02d}: body_eq={bool(bm)} summary_eq={bool(sm)} buttons={len(buttons)} labels={labels!r}')
+
+          out.append('old_p=' + str(s.count('.mec__p{ display:block; margin-top:.1rem; color:var(--ink-70); font-size:.78rem; line-height:1.3; }\n')))
+          css=re.compile(r'(?ms)/\* a lista fechada é leitura, não controle:.*?\*/\n\.mec__eq\{\n.*?^\}\n')
+          out.append('eq_css=' + str(len(css.findall(s))))
+          out.append('body_p=' + str(s.count('.mec__body p{ margin:0; font-size:.85rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; }\n')))
+          js=re.compile(r'btn\.addEventListener\("click", \(\) => \{\n(?P<indent>[ \t]*)const target = document\.getElementById\(btn\.dataset\.goto\);')
+          out.append('js_pat=' + str(len(js.findall(s))))
+          Path('.github/arco-mec-diagnostics.txt').write_text('\n'.join(out)+'\n', encoding='utf-8')
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/arco-mec-diagnostics.txt
+          git rm .github/workflows/arco-mecanismos-diagnostic-once.yml
+          git commit -m "chore: record ARCO mechanism diagnostics"
+          git push origin HEAD:main
