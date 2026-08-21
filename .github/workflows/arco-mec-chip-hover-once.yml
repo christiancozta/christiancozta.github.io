@@ -37,30 +37,27 @@ jobs:
           groups = list(group_pat.finditer(before))
           assert len(groups) == 17, len(groups)
 
-          button_pat = re.compile(r'(<button class="chip"\b[^>]*\bdata-label=")([^"]+)("[^>]*>.*?</button>)', re.S)
-          total_buttons = 0
-          changed = 0
+          button_pat = re.compile(r'(<button class="chip"[^>]*\bdata-label=")([^"]+)("[^>]*>.*?</button>)', re.S)
+          counts = {'buttons': 0, 'changed': 0}
 
           def clean_group(m):
-              nonlocal_dummy = None
               group = m.group(0)
               def clean_button(bm):
-                  global total_buttons, changed
                   label = bm.group(2)
-                  total_buttons += 1
+                  counts['buttons'] += 1
                   assert ';' in label, label
                   second = label.split(';', 1)[1].strip()
                   assert second, label
-                  changed += 1
+                  counts['changed'] += 1
                   return bm.group(1) + second + bm.group(3)
               return button_pat.sub(clean_button, group)
 
           s = group_pat.sub(clean_group, s)
 
-          assert total_buttons > 0
-          assert changed == total_buttons
+          assert counts['buttons'] > 0
+          assert counts['changed'] == counts['buttons']
 
-          # Postconditions: all mechanism-chip tooltips now contain only the translated label.
+          # Postconditions: mechanism-chip tooltips now contain only the translated label.
           new_groups = group_pat.findall(s)
           assert len(new_groups) == 17
           for group in new_groups:
@@ -73,23 +70,21 @@ jobs:
           def mechanism_chip_buttons(text):
               out = []
               for g in group_pat.findall(text):
-                  out.extend(re.findall(r'<button class="chip"\b[^>]*>.*?</button>', g, re.S))
+                  out.extend(re.findall(r'<button class="chip"[^>]*>.*?</button>', g, re.S))
               return out
 
           old_buttons = mechanism_chip_buttons(before)
           new_buttons = mechanism_chip_buttons(s)
-          assert len(old_buttons) == len(new_buttons) == total_buttons
+          assert len(old_buttons) == len(new_buttons) == counts['buttons']
 
           strip_label = lambda x: re.sub(r'\sdata-label="[^"]*"', '', x)
           assert [strip_label(x) for x in old_buttons] == [strip_label(x) for x in new_buttons]
 
           # Everything outside the mechanism chip groups is byte-identical.
-          old_outside = group_pat.sub('<MEC_CHIPS/>', before)
-          new_outside = group_pat.sub('<MEC_CHIPS/>', s)
-          assert old_outside == new_outside
+          assert group_pat.sub('<MEC_CHIPS/>', before) == group_pat.sub('<MEC_CHIPS/>', s)
 
           p.write_text(s, encoding='utf-8')
-          print({'mechanism_chip_groups': 17, 'labels_cleaned': changed})
+          print({'mechanism_chip_groups': 17, 'labels_cleaned': counts['changed']})
           PY
 
           git diff --check -- arco.html
