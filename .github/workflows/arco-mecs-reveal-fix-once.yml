@@ -1,0 +1,56 @@
+name: Fix ARCO mechanisms reveal once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/arco-mecs-reveal-fix-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Patch and validate arco.html
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git hash-object arco.html)" = "b11a6fd59e864084dd05d6f2a7e4ac824d765290"
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('arco.html')
+          s = p.read_text(encoding='utf-8')
+          old = '<div class="mecs" data-reveal="" style="--i:2">'
+          new = '<div class="mecs">'
+          assert s.count(old) == 1, s.count(old)
+          assert s.count(new) == 0
+          before = s
+          s = s.replace(old, new, 1)
+          assert s.count(old) == 0
+          assert s.count(new) == 1
+          # Only the long mechanisms wrapper loses reveal; header/lead and reveal system stay intact.
+          assert 'As construções que sustentam as competências demonstradas. Abra o mecanismo para ler a prova.' in s
+          assert 'threshold:.15, rootMargin:"0px 0px -6% 0px"' in s
+          p.write_text(s, encoding='utf-8')
+          print({'mecs_reveal_removed': True})
+          PY
+          git diff --check -- arco.html
+
+      - name: Commit and remove runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- arco.html
+          git rm -- .github/workflows/arco-mecs-reveal-fix-once.yml
+          git diff --cached --check
+          git commit -m "fix(arco): torna mecanismos visíveis no mobile"
+          git push origin HEAD:main
