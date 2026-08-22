@@ -447,8 +447,8 @@
   /* massa tonal do Índice — o domínio não é tinta, é papel de outro peso.
      Alterna para separar conjuntos sem gastar uma única borda. A tinta cheia
      (#181818) segue reservada à Fronteira. */
-  --grp-a:    #F9F9F9;
-  --grp-b:    #EEEEEE;
+  --grp-a:    #FBFBFB;
+  --grp-b:    #FFFFFF;
 
   /* papel sobre tinta — para o cordão e a faixa invertida */
   --pp-72:    rgba(255,255,255,.72);
@@ -1087,11 +1087,31 @@ body{
   margin:.75rem 0 0; max-width:22ch;
 }
 
+/* a Tradução começa longe do movimento que a antecede: o respiro é a pausa */
+#repertorio{ margin-top:clamp(3.5rem,8vw,7rem); }
+
+/* item 7: abertura em duas colunas — o placar mede à esquerda, o aviso avisa
+   à direita. O bloco de tinta encolheu: diz o que precisa e para. */
+.abertura{
+  display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1fr);
+  column-gap:var(--colgap); row-gap:clamp(1.75rem,3.5vw,2.5rem);
+  align-items:start; margin-top:clamp(1.9rem,3.8vw,2.9rem);
+}
+.band--aviso{
+  margin:0; align-self:start;
+  padding:clamp(1.15rem,2.3vw,1.6rem) clamp(1.1rem,2.2vw,1.5rem) clamp(1.25rem,2.5vw,1.7rem);
+}
+.band--aviso .eqhead{ margin:0 0 .75rem; gap:1rem; }
+.band--aviso .eqhead h3{ font-size:clamp(.98rem,1.45vw,1.14rem); letter-spacing:-.018em; }
+.band--aviso .fronteira-txt p{ font-size:.78rem; line-height:1.6; }
+.band--aviso .fronteira-txt p + p{ margin-top:.7rem; }
+
 /* cabeçalho de capítulo */
 .eqhead{
   display:flex; align-items:baseline; justify-content:space-between; gap:2rem;
   margin:clamp(2rem,4vw,3.25rem) 0 clamp(1.1rem,2vw,1.5rem);
 }
+.band--interna > .eqhead:first-child{ margin-top:0; }
 .eqhead__k{ display:none; }
 .eqhead h2, .eqhead h3{
   font-family:var(--f-display); font-weight:600;
@@ -1305,26 +1325,10 @@ body{
 /* --- PARTE I: O MECANISMO --------------------------------------------------
    O dicionário é gaveta dentro de gaveta porque o verbete é curto. O mecanismo
    é o contrário: o estado fechado já carrega código, nome, função e origem, e
-   por isso o domínio aqui não é massa tonal — é filete e contagem. Uma gaveta
-   só, e a prova mora dentro dela. */
-.mecdom{
-  display:flex; align-items:baseline; justify-content:space-between; gap:1.5rem;
-  border-top:1px solid var(--ink); padding:.9rem 0 .15rem;
-  margin:clamp(1.5rem,2.8vw,2.25rem) 0 0;
-}
-.mecs > .mecdom:first-child{ margin-top:0; }
-.mecdom h4{
-  font-family:var(--f-display); font-weight:600;
-  font-size:clamp(1.06rem,1.7vw,1.26rem);
-  letter-spacing:-.028em; margin:0; min-width:0; text-wrap:balance;
-}
-.mecdom__n{
-  font-family:var(--f-micro); font-size:.66rem; letter-spacing:.08em;
-  color:var(--ink-70); font-variant-numeric:tabular-nums; flex:none;
-}
-
+   por isso o domínio é a mesma gaveta do Índice: massa tonal, fechada em
+   repouso, e a prova mora dentro dela. */
 .mec{ border-top:1px solid var(--hair); }
-.mecdom + .mec{ border-top:0; }
+.grp__body > .mec:first-child{ border-top:0; }
 .mec > summary{
   list-style:none; cursor:pointer;
   display:grid; grid-template-columns:minmax(0,1fr) auto;
@@ -1691,7 +1695,6 @@ body{
   /* o mecanismo no celular: o marcador fica na primeira linha, a origem desce.
      O domínio segue em fileira — a contagem sozinha embaixo do título perde o
      referente; ao lado dele, continua sendo legenda. */
-  .mecdom{ gap:.9rem; }
   .mec > summary, .pain > summary{ column-gap:.75rem; }
 }
 
@@ -2341,11 +2344,14 @@ body{
 }
 
 /* --- PLACAR HIERARQUIZADO: as classes mandam, o resto as mede -------------- */
-.eq__stats--rank{ grid-template-columns:1.5fr 1fr 1.25fr; align-items:start; }
-.eq__stat--lead .eq__n{ font-size:clamp(2.6rem,5.6vw,4.4rem); letter-spacing:-.05em; }
-.eq__stat--lead .eq__l{ color:var(--ink); max-width:16ch; }
+.eq__stats--rank{
+  grid-template-columns:minmax(0,1fr); margin-top:0;
+  row-gap:clamp(1.1rem,2.2vw,1.65rem);
+}
+.eq__stat--lead .eq__n{ font-size:clamp(2.5rem,5.2vw,4rem); letter-spacing:-.05em; }
+.eq__stat--lead .eq__l{ color:var(--ink); }
 @media (max-width:820px){
-  .eq__stats--rank{ grid-template-columns:1fr; }
+  .abertura{ grid-template-columns:minmax(0,1fr); }
 }
 </style>
 </head>
@@ -2561,32 +2567,35 @@ body{
               O que foi construído na prática, traduzido em problemas, mecanismos e linguagem
               profissional reconhecível.
             </p>
-            <!-- o placar é hierarquizado: as classes mandam, o resto as mede -->
-            <div class="eq__stats eq__stats--rank">
-              <div class="eq__stat eq__stat--lead"><div class="eq__n">17</div><p class="eq__l">classes de atuação</p></div>
-              <div class="eq__stat"><div class="eq__n">5</div><p class="eq__l">domínios que as reúnem</p></div>
-              <div class="eq__stat"><div class="eq__n">46</div><p class="eq__l">equivalências de mercado indexadas</p></div>
-            </div>
           </div>
 
-          <!-- ===== FRONTEIRA — a faixa escura abre o repertório ===== -->
-          <section class="band band--fronteira band--interna" aria-labelledby="eq-fronteira">
-          <header class="eqhead" data-reveal="">
-            <h3 id="eq-fronteira">Fronteira</h3>
-          </header>
-          <div class="fronteira-txt" data-reveal="" style="--i:1">
-            <p>
-              Desenvolvi ferramentas sem saber que já eram batizadas. Extraí métricas e calculei
-              indicadores de listas que o sistema entregava brutas. Reformulei o que “sempre foi
-              assim” quando ele não respondia ao problema.
-            </p>
-            <p>
-              Essa mesma lógica orienta a documentação do percurso. Hipóteses, revisões e decisões
-              abandonadas permanecem registradas. Afinal, o erro assumido e documentado é o acerto
-              pelo método.
-            </p>
+          <!-- ===== ABERTURA — o placar mede, a Fronteira avisa =====
+               Duas colunas: à esquerda a contagem, do domínio à equivalência; à
+               direita o aviso de tinta, curto, do tamanho do que precisa dizer. -->
+          <div class="abertura" data-reveal="" style="--i:2">
+            <div class="eq__stats eq__stats--rank">
+              <div class="eq__stat"><div class="eq__n">5</div><p class="eq__l">domínios de construção</p></div>
+              <div class="eq__stat eq__stat--lead"><div class="eq__n">17</div><p class="eq__l">classes de atuação</p></div>
+              <div class="eq__stat"><div class="eq__n">46</div><p class="eq__l">equivalências de mercado indexadas</p></div>
+            </div>
+
+            <section class="band band--fronteira band--interna band--aviso" aria-labelledby="eq-fronteira">
+              <header class="eqhead">
+                <h3 id="eq-fronteira">Fronteira</h3>
+              </header>
+              <div class="fronteira-txt">
+                <p>
+                  Desenvolvi ferramentas sem saber que já eram batizadas. Extraí métricas e calculei
+                  indicadores de listas que o sistema entregava brutas. Reformulei o que “sempre foi
+                  assim” quando ele não respondia ao problema.
+                </p>
+                <p>
+                  Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e
+                  documentado é o acerto pelo método.
+                </p>
+              </div>
+            </section>
           </div>
-          </section>
 
           <!-- ===== A COLEÇÃO — uma matéria, três portas de entrada =====
                Não há três conteúdos. Há dezessete mecanismos e três acessos: a dor
@@ -2609,24 +2618,24 @@ body{
                 <button class="door" type="button" role="tab" id="door-dor" data-door="dor"
                         aria-controls="pane-dor" aria-selected="false" tabindex="-1">
                   <span class="door__t">Dor</span>
-                  <span class="door__n">8 problemas</span>
+                  <span class="door__n">ponto de partida</span>
                 </button>
                 <button class="door" type="button" role="tab" id="door-constr" data-door="constr"
                         aria-controls="pane-constr" aria-selected="true" tabindex="0">
-                  <span class="door__t">Construção</span>
-                  <span class="door__n">17 classes de atuação</span>
+                  <span class="door__t">Mecanismo</span>
+                  <span class="door__n">prova material</span>
                 </button>
                 <button class="door" type="button" role="tab" id="door-termo" data-door="termo"
                         aria-controls="pane-termo" aria-selected="false" tabindex="-1">
-                  <span class="door__t">Termo</span>
-                  <span class="door__n">46 equivalências</span>
+                  <span class="door__t">Equivalência</span>
+                  <span class="door__n">resultado da tradução</span>
                 </button>
               </div>
             </div>
             <div class="doors__caps">
               <p class="doors__cap" data-cap="dor" hidden>Oito problemas reconhecíveis da operação jurídica. Abra a dor para ler a resposta construída — e seguir dela ao mecanismo que a sustenta.</p>
               <p class="doors__cap" data-cap="constr">A coleção inteira, agrupada pelo domínio que a produziu. A origem fica à vista; a prova abre dentro: problema, implementação e evidência.</p>
-              <p class="doors__cap" data-cap="termo" hidden>O nome que o mercado privado usa. Abra o termo para ler a definição e descobrir por quais mecanismos ele se demonstra.</p>
+              <p class="doors__cap" data-cap="termo" hidden>O nome que o mercado privado usa. Abra a equivalência para ler a definição e descobrir por quais mecanismos ela se demonstra.</p>
             </div>
           </div>
 
@@ -2788,7 +2797,9 @@ body{
 
           <div class="pane" id="pane-constr" role="tabpanel" aria-labelledby="door-constr" tabindex="0">
             <div class="mecs">
-              <header class="mecdom"><h4>Data Engineering &amp; Corpus Architecture</h4><span class="mecdom__n">4</span></header>
+          <details class="grp" data-reveal="">
+            <summary><h4>Data Engineering &amp; Corpus Architecture</h4><span class="grp__n">4</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
 
             <details class="mec" id="mec-02-1">
               <summary>
@@ -2932,7 +2943,12 @@ body{
               </div>
             </details>
 
-              <header class="mecdom"><h4>Decision Systems &amp; Automation</h4><span class="mecdom__n">4</span></header>
+            </div>
+          </details>
+
+          <details class="grp" data-reveal="">
+            <summary><h4>Decision Systems &amp; Automation</h4><span class="grp__n">4</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
 
             <details class="mec" id="mec-04-3">
               <summary>
@@ -3097,7 +3113,12 @@ body{
               </div>
             </details>
 
-              <header class="mecdom"><h4>Governance &amp; Assurance for AI</h4><span class="mecdom__n">3</span></header>
+            </div>
+          </details>
+
+          <details class="grp" data-reveal="">
+            <summary><h4>Governance &amp; Assurance for AI</h4><span class="grp__n">3</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
 
             <details class="mec" id="mec-05-2">
               <summary>
@@ -3223,7 +3244,12 @@ body{
               </div>
             </details>
 
-              <header class="mecdom"><h4>Knowledge &amp; Content Infrastructure</h4><span class="mecdom__n">3</span></header>
+            </div>
+          </details>
+
+          <details class="grp" data-reveal="">
+            <summary><h4>Knowledge &amp; Content Infrastructure</h4><span class="grp__n">3</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
 
             <details class="mec" id="mec-01-3">
               <summary>
@@ -3329,7 +3355,12 @@ body{
               </div>
             </details>
 
-              <header class="mecdom"><h4>Legal Process &amp; Method Enablement</h4><span class="mecdom__n">3</span></header>
+            </div>
+          </details>
+
+          <details class="grp" data-reveal="">
+            <summary><h4>Legal Process &amp; Method Enablement</h4><span class="grp__n">3</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
 
             <details class="mec" id="mec-03-3">
               <summary>
@@ -3447,12 +3478,132 @@ body{
               </div>
             </details>
             </div>
+          </details>
+
+            </div>
           </div>
 
           <div class="pane" id="pane-termo" role="tabpanel" aria-labelledby="door-termo" tabindex="0" hidden>
             <div class="dict" id="eq-dicionario">
           <details class="grp" data-reveal="">
-            <summary><h4>AI Governance, Risk &amp; Assurance</h4><span class="grp__n">10</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <summary><h4>Data &amp; Information Management</h4><span class="grp__n">7</span><span class="grp__x" aria-hidden="true"></span></summary>
+            <div class="grp__body">
+
+              <details class="verb" id="dad-01">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Corpus Engineering</span><span class="verb__p">Engenharia de corpus</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-1" data-label="Data Ingestion &amp; API Integration">Ingestão</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Pipeline; ETL; Web Scraping; API Integration; Data Ingestion</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-03">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Governance</span><span class="verb__p">Governança de dados</span></span>
+                  <span class="verb__sig"><span class="verb__mec">6 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-1" data-label="Data Ingestion &amp; API Integration">Ingestão</button>
+                      <button class="chip" type="button" data-goto="mec-02-2" data-label="Data Quality &amp; Normalization">Qualidade</button>
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Document Lifecycle Management; Ciclo de vida documental</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-02">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Quality</span><span class="verb__p">Qualidade de dados</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-2" data-label="Data Quality &amp; Normalization">Qualidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Cleansing; Dataset Curation; Deduplicação; Curadoria de dados</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-07">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Information Retrieval; Findability; Recuperação da informação</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-05">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Enrichment; Structured Extraction; NLP; Document Understanding; Entity Extraction</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-04">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Catalog; Data Modeling; Catálogo de dados; Modelagem de dados</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-06">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Classification; Categorização; Assuntos</p></div>
+                </div>
+              </details>
+
+            </div>
+          </details>
+
+          <details class="grp" data-reveal="">
+            <summary><h4>Governance &amp; Assurance for AI</h4><span class="grp__n">10</span><span class="grp__x" aria-hidden="true"></span></summary>
             <div class="grp__body">
 
               <details class="verb" id="iax-01">
@@ -3614,123 +3765,6 @@ body{
                     </div>
                   </div>
                   <div><p class="verb__lbl">Também chamado de</p><p class="al">Auditability; Data Lineage; Decision Traceability; Audit Trail; Auditabilidade; Linhagem</p></div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <details class="grp" data-reveal="">
-            <summary><h4>Data &amp; Information Management</h4><span class="grp__n">7</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
-
-              <details class="verb" id="dad-01">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Corpus Engineering</span><span class="verb__p">Engenharia de corpus</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-1" data-label="Data Ingestion &amp; API Integration">Ingestão</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Pipeline; ETL; Web Scraping; API Integration; Data Ingestion</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-03">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Governance</span><span class="verb__p">Governança de dados</span></span>
-                  <span class="verb__sig"><span class="verb__mec">6 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-1" data-label="Data Ingestion &amp; API Integration">Ingestão</button>
-                      <button class="chip" type="button" data-goto="mec-02-2" data-label="Data Quality &amp; Normalization">Qualidade</button>
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Document Lifecycle Management; Ciclo de vida documental</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-02">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Data Quality</span><span class="verb__p">Qualidade de dados</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-2" data-label="Data Quality &amp; Normalization">Qualidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Cleansing; Dataset Curation; Deduplicação; Curadoria de dados</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-07">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Information Retrieval; Findability; Recuperação da informação</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-05">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Enrichment; Structured Extraction; NLP; Document Understanding; Entity Extraction</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-04">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Catalog; Data Modeling; Catálogo de dados; Modelagem de dados</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-06">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Classification; Categorização; Assuntos</p></div>
                 </div>
               </details>
 
@@ -4781,10 +4815,23 @@ body{
       for (let d = target.parentElement?.closest("details"); d;
                d = d.parentElement?.closest("details")) d.open = true;
       if (target.tagName === "DETAILS") target.open = true;
-      target.scrollIntoView({block:"center", behavior: reduce ? "auto" : "smooth"});
-      /* alvo sem summary (a cabeça da Parte I) recebe o foco ele mesmo:
-         o teclado não pode perder o lugar num salto que a vista fez */
+      /* O foco vem antes do salto: em Chrome um focus() cancela o scroll suave
+         que já esteja em curso, e o alvo ficava para trás. Alvo sem summary (a
+         cabeça da coleção) recebe o foco ele mesmo — o teclado não pode perder o
+         lugar num salto que a vista fez. */
       (target.querySelector("summary") || target).focus({preventScroll:true});
+      /* A conta espera o reflow: as gavetas acima do alvo acabaram de abrir, e
+         medir antes disso deixa a vista curta — num alvo acima, ela nem sobe. O
+         painel congelado desconta a própria altura, senão pousa por cima. */
+      requestAnimationFrame(() => {
+        const barra = doorBox && doorBox.closest(".collection")?.contains(target)
+          ? doorBox.getBoundingClientRect().height : 0;
+        /* offsetTop, e não o retângulo: a revelação em scroll desloca o elemento
+           por transform, que mente no rect e não mexe no layout. */
+        let y = -barra - 24;
+        for (let n = target; n; n = n.offsetParent) y += n.offsetTop;
+        scrollTo({top: Math.max(0, y), behavior: reduce ? "auto" : "smooth"});
+      });
     }));
 
   /* ---- Identidade conceitual: leitura de página inteira ---- */
