@@ -1314,17 +1314,15 @@ body{
   padding-bottom:1px;
 }
 .mec > summary:hover .mec__t{ background-size:100% 1px; }
-.mec__p{ display:block; margin-top:.1rem; color:var(--ink-70); font-size:.78rem; line-height:1.3; }
+.mec__p{ display:block; margin-top:.1rem; color:var(--ink-70); font-size:.78rem; line-height:1.3; font-style:italic; }
 .mec__f{
   display:block; margin-top:.65rem; max-width:none;
   font-size:.86rem; line-height:1.62; color:var(--ink-78); text-wrap:pretty;
 }
-/* a lista fechada é leitura, não controle: os lembretes clicáveis moram no
-   corpo aberto — botão dentro de summary é botão dentro de botão */
-.mec__eq{
-  display:block; margin-top:.75rem;
-  font-family:var(--f-micro); font-size:.66rem; letter-spacing:.06em; line-height:1.7;
-  color:var(--ink-62); text-wrap:pretty;
+/* equivalências ficam aparentes no estado fechado; o JS impede que o clique
+   no chip acione também a abertura da gaveta. */
+.mec__chips{
+  margin-top:.75rem; align-items:center;
 }
 .mec__sig, .mec__org{ display:flex; flex-wrap:wrap; gap:.3rem; align-items:baseline; margin:0; }
 .t-plus{ font-family:var(--f-micro); font-size:.62rem; color:var(--ink-62); }
@@ -1343,6 +1341,7 @@ body{
   width:100%; max-width:100%; min-width:0;
 }
 .mec__body p{ margin:0; font-size:.85rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; }
+.mec__body p.verb__lbl{ font-weight:700; color:var(--ink); }
 .mec__body strong{ font-weight:600; color:var(--ink); }
 /* a evidência é lista: cada item é um fato, e o traço marca a contagem sem
    pedir um glifo */
@@ -2409,7 +2408,10 @@ body{
                   <span class="mec__t">Knowledge Capture &amp; Documentation</span>
                   <span class="mec__p">Captura de conhecimento e documentação</span>
                   <span class="mec__f">Identificar a prática executada e convertê-la em documentação estruturada, verificável e atualizável.</span>
-                  <span class="mec__eq">Documentation; Knowledge Capture</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="con-06" data-label="Documentation; Documentação técnica">Documentation</button>
+                    <button class="chip" type="button" data-goto="con-01" data-label="Knowledge Capture; Captura de conhecimento">Knowledge Capture</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2427,12 +2429,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="con-06" data-label="Documentation; Documentação técnica">Documentation</button>
-                    <button class="chip" type="button" data-goto="con-01" data-label="Knowledge Capture; Captura de conhecimento">Knowledge Capture</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2443,7 +2439,12 @@ body{
                   <span class="mec__t">Knowledge Management &amp; Transfer</span>
                   <span class="mec__p">Gestão e transferência de conhecimento</span>
                   <span class="mec__f">Transformar conhecimento institucional disperso em acervo consultável e transmissível.</span>
-                  <span class="mec__eq">Knowledge Management; Knowledge Transfer; Change Management</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="con-02" data-label="Knowledge Management; Gestão do conhecimento">Knowledge Management</button>
+                    <button class="chip" type="button" data-goto="con-03" data-label="Knowledge Transfer; Transferência de conhecimento">Knowledge Transfer</button>
+                    <button class="chip" type="button" data-goto="pro-07" data-label="Change Management; Gestão da mudança">Change Management</button>
+                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2461,14 +2462,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="con-02" data-label="Knowledge Management; Gestão do conhecimento">Knowledge Management</button>
-                    <button class="chip" type="button" data-goto="con-03" data-label="Knowledge Transfer; Transferência de conhecimento">Knowledge Transfer</button>
-                    <button class="chip" type="button" data-goto="pro-07" data-label="Change Management; Gestão da mudança">Change Management</button>
-                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2479,7 +2472,10 @@ body{
                   <span class="mec__t">Content Governance &amp; Controlled Language</span>
                   <span class="mec__p">Governança de conteúdo e linguagem controlada</span>
                   <span class="mec__f">Definir e executar padrões de linguagem, terminologia e intervenção textual.</span>
-                  <span class="mec__eq">Style Guide; Legal Design</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="con-05" data-label="Style Guide; Guia de estilo">Style Guide</button>
+                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">LUX</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2497,12 +2493,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">LUX</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="con-05" data-label="Style Guide; Guia de estilo">Style Guide</button>
-                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2516,7 +2506,10 @@ body{
                   <span class="mec__t">Data Ingestion &amp; API Integration</span>
                   <span class="mec__p">Ingestão de dados e integração por API</span>
                   <span class="mec__f">Adquirir e persistir documentos de forma reproduzível, resiliente e processável.</span>
-                  <span class="mec__eq">Corpus Engineering; Data Governance</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="dad-01" data-label="Corpus Engineering; Engenharia de corpus">Corpus Engineering</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">CORPUS</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2537,12 +2530,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">CORPUS</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="dad-01" data-label="Corpus Engineering; Engenharia de corpus">Corpus Engineering</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2553,7 +2540,10 @@ body{
                   <span class="mec__t">Data Quality &amp; Normalization</span>
                   <span class="mec__p">Qualidade e normalização de dados</span>
                   <span class="mec__f">Preparar o corpus por deduplicação, limpeza, padronização e validação estrutural.</span>
-                  <span class="mec__eq">Data Quality; Data Governance</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="dad-02" data-label="Data Quality; Qualidade de dados">Data Quality</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">CORPUS</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2571,12 +2561,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">CORPUS</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="dad-02" data-label="Data Quality; Qualidade de dados">Data Quality</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2587,7 +2571,13 @@ body{
                   <span class="mec__t">Metadata, Taxonomy &amp; Information Architecture</span>
                   <span class="mec__p">Metadados, taxonomia e arquitetura da informação</span>
                   <span class="mec__f">Estruturar o acervo para classificação, localização, recuperação e reutilização.</span>
-                  <span class="mec__eq">Taxonomy; Information Architecture; Metadata Management</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="dad-06" data-label="Taxonomy; Taxonomia">Taxonomy</button>
+                    <button class="chip" type="button" data-goto="dad-07" data-label="Information Architecture; Arquitetura da informação">Information Architecture</button>
+                    <button class="chip" type="button" data-goto="dad-04" data-label="Metadata Management; Gestão de metadados">Metadata Management</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">CORPUS</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2606,15 +2596,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">CORPUS</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="dad-06" data-label="Taxonomy; Taxonomia">Taxonomy</button>
-                    <button class="chip" type="button" data-goto="dad-07" data-label="Information Architecture; Arquitetura da informação">Information Architecture</button>
-                    <button class="chip" type="button" data-goto="dad-04" data-label="Metadata Management; Gestão de metadados">Metadata Management</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2625,7 +2606,11 @@ body{
                   <span class="mec__t">Information Extraction &amp; Enrichment</span>
                   <span class="mec__p">Extração e enriquecimento da informação</span>
                   <span class="mec__f">Converter texto jurídico livre em atributos estruturados e reutilizáveis.</span>
-                  <span class="mec__eq">Information Extraction; Context Engineering</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="dad-05" data-label="Information Extraction; Extração de informação">Information Extraction</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">CORPUS</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2643,13 +2628,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">CORPUS</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="dad-05" data-label="Information Extraction; Extração de informação">Information Extraction</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2663,7 +2641,17 @@ body{
                   <span class="mec__t">Process Mapping &amp; Workflow Design</span>
                   <span class="mec__p">Mapeamento de processos e desenho de fluxos</span>
                   <span class="mec__f">Tornar visíveis as etapas, responsabilidades, dependências e gargalos da operação.</span>
-                  <span class="mec__eq">Process Mapping; Workflow Design; Root Cause Analysis</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="pro-01" data-label="Process Mapping; Mapeamento de processos">Process Mapping</button>
+                    <button class="chip" type="button" data-goto="pro-04" data-label="Workflow Design; Desenho de fluxos de trabalho">Workflow Design</button>
+                    <button class="chip" type="button" data-goto="pro-06" data-label="Root Cause Analysis; Análise de causa raiz">Root Cause Analysis</button>
+                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
+                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
+                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
+                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
+                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
+                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2682,19 +2670,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="pro-01" data-label="Process Mapping; Mapeamento de processos">Process Mapping</button>
-                    <button class="chip" type="button" data-goto="pro-04" data-label="Workflow Design; Desenho de fluxos de trabalho">Workflow Design</button>
-                    <button class="chip" type="button" data-goto="pro-06" data-label="Root Cause Analysis; Análise de causa raiz">Root Cause Analysis</button>
-                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
-                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
-                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
-                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
-                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
-                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2705,7 +2680,16 @@ body{
                   <span class="mec__t">SOP &amp; Playbook Design</span>
                   <span class="mec__p">Desenho de procedimentos e playbooks</span>
                   <span class="mec__f">Formalizar rotinas e critérios para execução consistente sem eliminar a análise jurídica.</span>
-                  <span class="mec__eq">Standard Operating Procedures; Process Standardization; Change Management</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="con-04" data-label="Standard Operating Procedures; Procedimentos operacionais padrão">Standard Op. Procedures</button>
+                    <button class="chip" type="button" data-goto="pro-02" data-label="Process Standardization; Padronização de processos">Process Standardization</button>
+                    <button class="chip" type="button" data-goto="pro-07" data-label="Change Management; Gestão da mudança">Change Management</button>
+                    <button class="chip" type="button" data-goto="con-03" data-label="Knowledge Transfer; Transferência de conhecimento">Knowledge Transfer</button>
+                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
+                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
+                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
+                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2724,18 +2708,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="con-04" data-label="Standard Operating Procedures; Procedimentos operacionais padrão">Standard Op. Procedures</button>
-                    <button class="chip" type="button" data-goto="pro-02" data-label="Process Standardization; Padronização de processos">Process Standardization</button>
-                    <button class="chip" type="button" data-goto="pro-07" data-label="Change Management; Gestão da mudança">Change Management</button>
-                    <button class="chip" type="button" data-goto="con-03" data-label="Knowledge Transfer; Transferência de conhecimento">Knowledge Transfer</button>
-                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
-                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
-                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
-                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2746,7 +2718,11 @@ body{
                   <span class="mec__t">KPI &amp; Performance Management</span>
                   <span class="mec__p">Gestão de indicadores e desempenho</span>
                   <span class="mec__f">Relacionar métricas operacionais a evolução, capacidade e decisão de gestão.</span>
-                  <span class="mec__eq">KPI Management; Process Improvement</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="pro-09" data-label="KPI Management; Gestão de indicadores">KPI Management</button>
+                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
+                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-echo">ECHO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2765,13 +2741,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-echo">ECHO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="pro-09" data-label="KPI Management; Gestão de indicadores">KPI Management</button>
-                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
-                    <button class="chip" type="button" data-goto="pro-03" data-label="Business Process Management; Gestão de processos de negócio">Business Process Management</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2785,7 +2754,20 @@ body{
                   <span class="mec__t">Systems Orchestration &amp; Business Rules</span>
                   <span class="mec__p">Orquestração de sistemas e regras de negócio</span>
                   <span class="mec__f">Coordenar módulos especializados por responsabilidades e condições explícitas de transição.</span>
-                  <span class="mec__eq">Orchestration; Business Rules; Modular Architecture; Decision Support System</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="arq-02" data-label="Orchestration; Orquestração">Orchestration</button>
+                    <button class="chip" type="button" data-goto="arq-04" data-label="Business Rules; Regras de negócio">Business Rules</button>
+                    <button class="chip" type="button" data-goto="arq-01" data-label="Modular Architecture; Arquitetura modular">Modular Architecture</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="arq-05" data-label="Requirements Management; Gestão de requisitos">Requirements Management</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
+                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
+                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
+                    <button class="chip" type="button" data-goto="pro-04" data-label="Workflow Design; Desenho de fluxos de trabalho">Workflow Design</button>
+                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
+                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">ATRIO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2806,22 +2788,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">ATRIO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="arq-02" data-label="Orchestration; Orquestração">Orchestration</button>
-                    <button class="chip" type="button" data-goto="arq-04" data-label="Business Rules; Regras de negócio">Business Rules</button>
-                    <button class="chip" type="button" data-goto="arq-01" data-label="Modular Architecture; Arquitetura modular">Modular Architecture</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="arq-05" data-label="Requirements Management; Gestão de requisitos">Requirements Management</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
-                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
-                    <button class="chip" type="button" data-goto="pro-05" data-label="Process Improvement; Melhoria de processos">Process Improvement</button>
-                    <button class="chip" type="button" data-goto="pro-04" data-label="Workflow Design; Desenho de fluxos de trabalho">Workflow Design</button>
-                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
-                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2832,7 +2798,15 @@ body{
                   <span class="mec__t">RATIO — Decision Workflow Engineering</span>
                   <span class="mec__p">Engenharia do fluxo decisório</span>
                   <span class="mec__f">Decompor a formulação jurídica em etapas, contextos, lentes e critérios verificáveis.</span>
-                  <span class="mec__eq">Prompt Engineering; Context Engineering; Document Automation</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
+                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
+                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
+                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">RATIO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2851,17 +2825,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">RATIO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
-                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
-                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                    <button class="chip" type="button" data-goto="prd-04" data-label="Product Thinking; Pensamento de produto">Product Thinking</button>
-                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2872,7 +2835,16 @@ body{
                   <span class="mec__t">CERNE — Adversarial Evaluation</span>
                   <span class="mec__p">Avaliação adversarial</span>
                   <span class="mec__f">Submeter formulações a confronto crítico por lógicas distintas antes da entrega.</span>
-                  <span class="mec__eq">Red Teaming; Model Evaluation; Risk Assessment</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="iax-06" data-label="Red Teaming; Confronto adversarial">Red Teaming</button>
+                    <button class="chip" type="button" data-goto="iax-07" data-label="Model Evaluation; Avaliação de modelos">Model Evaluation</button>
+                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
+                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
+                    <button class="chip" type="button" data-goto="pro-06" data-label="Root Cause Analysis; Análise de causa raiz">Root Cause Analysis</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">CERNE</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2891,18 +2863,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">CERNE</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="iax-06" data-label="Red Teaming; Confronto adversarial">Red Teaming</button>
-                    <button class="chip" type="button" data-goto="iax-07" data-label="Model Evaluation; Avaliação de modelos">Model Evaluation</button>
-                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
-                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
-                    <button class="chip" type="button" data-goto="pro-06" data-label="Root Cause Analysis; Análise de causa raiz">Root Cause Analysis</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2913,7 +2873,14 @@ body{
                   <span class="mec__t">LUX — Controlled Generation</span>
                   <span class="mec__p">Geração textual controlada</span>
                   <span class="mec__f">Refinar linguagem e estrutura sem reabrir o conteúdo jurídico validado.</span>
-                  <span class="mec__eq">Style Guide; Document Automation; Decision Support System</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="con-05" data-label="Style Guide; Guia de estilo">Style Guide</button>
+                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
+                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">LUX</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2932,16 +2899,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">LUX</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="con-05" data-label="Style Guide; Guia de estilo">Style Guide</button>
-                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="iax-08" data-label="Prompt Engineering; Engenharia de prompts">Prompt Engineering</button>
-                    <button class="chip" type="button" data-goto="des-01" data-label="Legal Design; Design jurídico">Legal Design</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2955,7 +2912,15 @@ body{
                   <span class="mec__t">Privacy by Design &amp; Pseudonymization</span>
                   <span class="mec__p">Privacidade desde a concepção e pseudoanonimização</span>
                   <span class="mec__f">Proteger dados pessoais antes da entrada e revisar sua exposição na saída.</span>
-                  <span class="mec__eq">Privacy by Design; Data Governance</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="iax-03" data-label="Privacy by Design; Privacidade desde a concepção">Privacy by Design</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
+                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
+                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
+                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">CORPUS</span><span class="t-plus">+</span><span class="t-atrio">LUX</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -2974,17 +2939,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">CORPUS</span><span class="t-plus">+</span><span class="t-atrio">LUX</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="iax-03" data-label="Privacy by Design; Privacidade desde a concepção">Privacy by Design</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
-                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
-                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
-                    <button class="chip" type="button" data-goto="iax-09" data-label="Context Engineering; Engenharia de contexto">Context Engineering</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -2995,7 +2949,20 @@ body{
                   <span class="mec__t">Human-in-the-Loop &amp; Quality Gates</span>
                   <span class="mec__p">Supervisão humana e gates de qualidade</span>
                   <span class="mec__f">Impedir o avanço automático sobre etapas sensíveis sem validação e responsabilidade humanas.</span>
-                  <span class="mec__eq">Human in the Loop; Quality Gates; Process Governance</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="iax-04" data-label="Human in the Loop; Humano no circuito">Human in the Loop</button>
+                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
+                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
+                    <button class="chip" type="button" data-goto="arq-04" data-label="Business Rules; Regras de negócio">Business Rules</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="arq-05" data-label="Requirements Management; Gestão de requisitos">Requirements Management</button>
+                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
+                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
+                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
+                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">RATIO</span><span class="t-plus">+</span><span class="t-atrio">CERNE</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -3015,22 +2982,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">RATIO</span><span class="t-plus">+</span><span class="t-atrio">CERNE</span><span class="t-plus">+</span><span class="t-atrio">ATRIO</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="iax-04" data-label="Human in the Loop; Humano no circuito">Human in the Loop</button>
-                    <button class="chip" type="button" data-goto="iax-05" data-label="Quality Gates; Portões de qualidade">Quality Gates</button>
-                    <button class="chip" type="button" data-goto="pro-08" data-label="Process Governance; Governança de processos">Process Governance</button>
-                    <button class="chip" type="button" data-goto="arq-04" data-label="Business Rules; Regras de negócio">Business Rules</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="arq-05" data-label="Requirements Management; Gestão de requisitos">Requirements Management</button>
-                    <button class="chip" type="button" data-goto="prd-01" data-label="Document Automation; Automação documental">Document Automation</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                    <button class="chip" type="button" data-goto="pro-10" data-label="Stakeholder Management; Gestão de stakeholders">Stakeholder Management</button>
-                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
-                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
-                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -3041,7 +2992,16 @@ body{
                   <span class="mec__t">Traceability &amp; Auditability</span>
                   <span class="mec__p">Rastreabilidade e auditabilidade</span>
                   <span class="mec__f">Preservar os elementos necessários para reconstruir o percurso documental e decisório.</span>
-                  <span class="mec__eq">Traceability; Explainability; AI Governance</span>
+                  <span class="chips mec__chips">
+                    <button class="chip" type="button" data-goto="iax-11" data-label="Traceability; Rastreabilidade">Traceability</button>
+                    <button class="chip" type="button" data-goto="iax-10" data-label="Explainability; Explicabilidade">Explainability</button>
+                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
+                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
+                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
+                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
+                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
+                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
+                  </span>
                 </span>
                 <span class="mec__sig"><span class="t-atrio">ATRIO</span><span class="t-plus">+</span><span class="t-atrio">CORPUS</span></span>
                 <span class="mec__x" aria-hidden="true"></span>
@@ -3060,18 +3020,6 @@ body{
                   </ul>
                 </div>
                 <div><p class="verb__lbl">Origem</p><p class="mec__org"><span class="t-atrio">ATRIO</span><span class="t-plus">+</span><span class="t-atrio">CORPUS</span></p></div>
-                <div><p class="verb__lbl">Equivalências associadas</p>
-                  <div class="chips">
-                    <button class="chip" type="button" data-goto="iax-11" data-label="Traceability; Rastreabilidade">Traceability</button>
-                    <button class="chip" type="button" data-goto="iax-10" data-label="Explainability; Explicabilidade">Explainability</button>
-                    <button class="chip" type="button" data-goto="iax-01" data-label="AI Governance; Governança de inteligência artificial">AI Governance</button>
-                    <button class="chip" type="button" data-goto="iax-02" data-label="AI Risk Management; Gestão de riscos de IA">AI Risk Management</button>
-                    <button class="chip" type="button" data-goto="iax-12" data-label="Risk Assessment; Avaliação de riscos">Risk Assessment</button>
-                    <button class="chip" type="button" data-goto="dad-03" data-label="Data Governance; Governança de dados">Data Governance</button>
-                    <button class="chip" type="button" data-goto="arq-03" data-label="Decision Support System; Sistema de apoio à decisão">Decision Support System</button>
-                    <button class="chip" type="button" data-goto="prd-02" data-label="Legal Engineering; Engenharia jurídica">Legal Engineering</button>
-                  </div>
-                </div>
               </div>
             </details>
 
@@ -4350,7 +4298,8 @@ body{
      por isso a cadeia é percorrida inteira, não só o domínio do dicionário.
      Sem tocar em location.hash: o hash é do roteador de views, não de âncora. ---- */
   document.querySelectorAll("[data-goto]").forEach(btn =>
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", event => {
+      if (btn.closest(".mec > summary")) event.stopPropagation();
       const target = document.getElementById(btn.dataset.goto);
       if (!target) return;
       for (let d = target.parentElement?.closest("details"); d;
