@@ -56,10 +56,23 @@ block = r'''
   if (!home || !zone || !bio || !arc || !rail || !railTitle || !name) return;
 
   if (dataLink){
-    dataLink.addEventListener('pointerenter', () => dataLink.classList.add('is-data-hover'));
-    dataLink.addEventListener('pointerleave', () => dataLink.classList.remove('is-data-hover'));
-    dataLink.addEventListener('focus', () => dataLink.classList.add('is-data-hover'));
-    dataLink.addEventListener('blur', () => dataLink.classList.remove('is-data-hover'));
+    const dataN = dataLink.querySelector('.n');
+    const on = () => {
+      dataLink.classList.add('is-data-hover');
+      dataLink.style.setProperty('color','#00455D','important');
+      dataN?.style.setProperty('color','#00455D','important');
+    };
+    const off = () => {
+      dataLink.classList.remove('is-data-hover');
+      dataLink.style.removeProperty('color');
+      dataN?.style.removeProperty('color');
+    };
+    dataLink.addEventListener('mouseenter', on);
+    dataLink.addEventListener('pointerenter', on);
+    dataLink.addEventListener('mouseleave', off);
+    dataLink.addEventListener('pointerleave', off);
+    dataLink.addEventListener('focus', on);
+    dataLink.addEventListener('blur', off);
   }
 
   const mqDesktopArrow = matchMedia('(min-width:821px)');
