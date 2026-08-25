@@ -3,8 +3,7 @@ name: ARCO b2b fix + browser validation
 on:
   push:
     branches: [b2b]
-    paths:
-      - '.github/workflows/arco-b2b-fix-validate.yml'
+    paths: ['.github/workflows/arco-b2b-fix-validate.yml']
 
 permissions:
   contents: write
@@ -23,49 +22,41 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
-          p = Path('arco.html')
-          s = p.read_text(encoding='utf-8')
+          p=Path('arco.html')
+          s=p.read_text(encoding='utf-8')
 
-          replacements = {
-            '5 domínios de atuação organizam 17 mecanismos, traduzidos em ao menos 86 nomenclaturas equivalentes no mercado privado.':
-              'domínios organizam 17 mecanismos, com ao menos 86 nomenclaturas equivalentes no mercado privado.',
-            '4 módulos de IA jurídica compõem ATRIO: arquitetura decisória end-to-end, local, com 175 testes e base de 115.114 julgados.':
-              'módulos de IA jurídica compõem ATRIO: arquitetura local end-to-end, com 175 testes e 115.114 julgados.',
-            '3 núcleos de trabalho estruturam 10 temáticas derivadas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.':
-              'núcleos estruturam 10 temáticas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.',
-            '2 projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.':
-              'projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.',
+          copies={
+            '5 domínios de atuação organizam 17 mecanismos, traduzidos em ao menos 86 nomenclaturas equivalentes no mercado privado.':'domínios organizam 17 mecanismos, com ao menos 86 nomenclaturas equivalentes no mercado privado.',
+            '4 módulos de IA jurídica compõem ATRIO: arquitetura decisória end-to-end, local, com 175 testes e base de 115.114 julgados.':'módulos de IA jurídica compõem ATRIO: arquitetura local end-to-end, com 175 testes e 115.114 julgados.',
+            '3 núcleos de trabalho estruturam 10 temáticas derivadas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.':'núcleos estruturam 10 temáticas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.',
+            '2 projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.':'projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.'
           }
-          for old, new in replacements.items():
-              if old not in s:
-                  raise SystemExit(f'Missing expected copy: {old}')
-              s = s.replace(old, new, 1)
+          for old,new in copies.items():
+            if old not in s: raise SystemExit('copy anchor missing: '+old[:50])
+            s=s.replace(old,new,1)
 
-          old_mobile = '  .narr__short{ display:none !important; }'
-          new_mobile = '''  .narr__short{ display:none !important; }
+          anchor='  .narr__short{ display:none !important; }'
+          mobile='''  .narr__short{ display:none !important; }
           .narr__stat[data-step="1"] .narr__short{
             display:block !important;
             grid-column:2 !important; grid-row:1 !important;
           }'''
-          if old_mobile not in s:
-              raise SystemExit('Missing mobile narr__short override.')
-          s = s.replace(old_mobile, new_mobile, 1)
+          if anchor not in s: raise SystemExit('mobile anchor missing')
+          s=s.replace(anchor,mobile,1)
 
-          old_layout = '''  function layout(){
-            if (mq.matches) return null;
-
-            const zr = zone.getBoundingClientRect();
-            const ar = arc.getBoundingClientRect();
-            const hr = head.getBoundingClientRect();
-            const nr = name.getBoundingClientRect();
-
-            const axisX = ar.left - zr.left + ar.width / 2;
-            const springY = ar.bottom - zr.top;
-            const arcTop = ar.top - zr.top;
-            narr.style.setProperty('--cross-axis-x', axisX.toFixed(2) + 'px');
-          '''
-          new_layout = '''  function layoutBox(el){
+          pattern=re.compile(r'''  function layout\(\)\{\s*
+            if \(mq\.matches\) return null;\s*
+            const zr = zone\.getBoundingClientRect\(\);\s*
+            const ar = arc\.getBoundingClientRect\(\);\s*
+            const hr = head\.getBoundingClientRect\(\);\s*
+            const nr = name\.getBoundingClientRect\(\);\s*
+            const axisX = ar\.left - zr\.left \+ ar\.width / 2;\s*
+            const springY = ar\.bottom - zr\.top;\s*
+            const arcTop = ar\.top - zr\.top;\s*
+            narr\.style\.setProperty\('--cross-axis-x', axisX\.toFixed\(2\) \+ 'px'\);\s*''',re.X)
+          replacement='''  function layoutBox(el){
             let x = 0, y = 0, node = el;
             while (node && node !== zone){
               x += node.offsetLeft || 0;
@@ -81,8 +72,8 @@ jobs:
           function layout(){
             if (mq.matches) return null;
 
-            /* Coordenadas de layout, não coordenadas pós-transform. O reveal
-               desloca temporariamente o SVG; a encruzilhada nasce da spring física. */
+            /* Usa coordenadas de layout: o reveal transforma o SVG, mas a
+               encruzilhada precisa nascer da spring física e invariável. */
             const ar = layoutBox(arc);
             const hr = layoutBox(head);
             const nr = layoutBox(name);
@@ -92,27 +83,28 @@ jobs:
             const springY = ar.bottom;
             const arcTop = ar.y;
             narr.style.setProperty('--cross-axis-x', axisX.toFixed(2) + 'px');
+
           '''
-          if old_layout not in s:
-              raise SystemExit('Missing transform-sensitive desktop layout block.')
-          s = s.replace(old_layout, new_layout, 1)
+          s,n=pattern.subn(replacement,s,count=1)
+          if n!=1: raise SystemExit(f'desktop layout block matches: {n}')
 
-          for old, new in (
-              ('    const safeTop = hr.bottom - zr.top + 20;', '    const safeTop = hr.bottom + 20;'),
-              ('''    const points = stats.map((stat, i) => {
-              const numberRect = numbers[i].getBoundingClientRect();
-              return tops[i] + numberRect.height / 2;
-            });''', '''    const points = stats.map((stat, i) => {
+          if '    const safeTop = hr.bottom - zr.top + 20;' not in s: raise SystemExit('safeTop anchor missing')
+          s=s.replace('    const safeTop = hr.bottom - zr.top + 20;','    const safeTop = hr.bottom + 20;',1)
+
+          points=re.compile(r'''    const points = stats\.map\(\(stat, i\) => \{\s*
+            const numberRect = numbers\[i\]\.getBoundingClientRect\(\);\s*
+            return tops\[i\] \+ numberRect\.height / 2;\s*
+            \}\);''',re.X)
+          s,n=points.subn('''    const points = stats.map((stat, i) => {
               return tops[i] + numbers[i].offsetHeight / 2;
-            });'''),
-              ('    const nameRight = nr.right - zr.left;', '    const nameRight = nr.right;'),
-          ):
-              if old not in s:
-                  raise SystemExit(f'Missing geometry fragment: {old[:70]}')
-              s = s.replace(old, new, 1)
+            });''',s,count=1)
+          if n!=1: raise SystemExit(f'points block matches: {n}')
 
-          p.write_text(s, encoding='utf-8')
-          print('Measured corrections applied.')
+          if '    const nameRight = nr.right - zr.left;' not in s: raise SystemExit('nameRight anchor missing')
+          s=s.replace('    const nameRight = nr.right - zr.left;','    const nameRight = nr.right;',1)
+
+          p.write_text(s,encoding='utf-8')
+          print('Measured corrections applied')
           PY
 
       - name: Validate JavaScript syntax
@@ -120,133 +112,82 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-          s = Path('arco.html').read_text(encoding='utf-8')
-          m = re.search(r'<script id="hero-5to1-b2b-js">(.*?)</script>', s, re.S)
-          assert m, 'hero script not found'
-          Path('/tmp/hero-5to1.js').write_text(m.group(1), encoding='utf-8')
+          s=Path('arco.html').read_text(encoding='utf-8')
+          m=re.search(r'<script id="hero-5to1-b2b-js">(.*?)</script>',s,re.S)
+          assert m
+          Path('/tmp/hero.js').write_text(m.group(1),encoding='utf-8')
           PY
-          node --check /tmp/hero-5to1.js
+          node --check /tmp/hero.js
 
       - name: Install browser harness
         run: npm install --no-save playwright-core@1.55.0
 
-      - name: Run real browser geometry tests
+      - name: Validate desktop and mobile in Chrome
         run: |
-          CHROME_PATH="$(which google-chrome || which chromium || which chromium-browser)"
+          export CHROME_PATH="$(which google-chrome || which chromium || which chromium-browser)"
           test -n "$CHROME_PATH"
-          echo "Chrome: $CHROME_PATH"
-          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/arco-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/http.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
           sleep 1
-          CHROME_PATH="$CHROME_PATH" node <<'JS'
-          const { chromium } = require('playwright-core');
-          const assert = require('assert');
-
-          const close = (a,b,t=1.25,msg='coordinates') =>
-            assert(Math.abs(a-b) <= t, `${msg}: ${a} vs ${b} (Δ=${Math.abs(a-b)})`);
-
-          (async () => {
-            const browser = await chromium.launch({
-              headless: true,
-              executablePath: process.env.CHROME_PATH,
-              args: ['--no-sandbox','--disable-dev-shm-usage']
-            });
-
-            async function load(width,height){
-              const page = await browser.newPage({viewport:{width,height}});
-              const pageErrors=[];
-              page.on('pageerror', e => pageErrors.push(String(e)));
-              await page.goto('http://127.0.0.1:8765/arco.html', {waitUntil:'networkidle'});
-              await page.evaluate(() => document.fonts?.ready);
-              await page.mouse.move(140,120);
-              await page.waitForTimeout(width <= 820 ? 5000 : 3600);
-              assert.deepStrictEqual(pageErrors, [], `page errors at ${width}: ${pageErrors.join('; ')}`);
-              return page;
+          node <<'JS'
+          const { chromium }=require('playwright-core');
+          const assert=require('assert');
+          const near=(a,b,t,msg)=>assert(Math.abs(a-b)<=t,`${msg}: ${a} vs ${b}; delta ${Math.abs(a-b)}`);
+          (async()=>{
+            const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH,args:['--no-sandbox']});
+            async function load(w,h){
+              const p=await browser.newPage({viewport:{width:w,height:h}}), errors=[];
+              p.on('pageerror',e=>errors.push(String(e)));
+              await p.goto('http://127.0.0.1:8765/arco.html',{waitUntil:'networkidle'});
+              await p.evaluate(()=>document.fonts?.ready);
+              await p.mouse.move(150,120);
+              await p.waitForTimeout(w<=820?5000:3600);
+              assert.deepStrictEqual(errors,[],`page errors ${w}: ${errors}`);
+              return p;
             }
-
-            async function desktop(width,height,label){
-              const page = await load(width,height);
-              const base = await page.evaluate(() => {
-                const arc = document.querySelector('.narr-zone .arc');
-                const axis = document.querySelector('.hero-cross-axis');
-                const link = document.querySelector('.hero-cross-link');
-                const name = document.querySelector('.bio__name');
-                const rr = el => { const r=el.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}; };
-                return {arc:rr(arc),axis:rr(axis),link:rr(link),name:rr(name),scrollWidth:document.body.scrollWidth,innerWidth};
-              });
-
-              close(base.axis.left + base.axis.width/2, base.arc.left + base.arc.width/2, 1.1, `${label}: axis x vs spring center`);
-              close(base.axis.bottom, base.arc.bottom, 1.1, `${label}: axis endpoint vs spring`);
-              assert(base.link.left >= base.name.right + 20, `${label}: crossbar too close to / crossing name`);
-              assert(base.scrollWidth <= base.innerWidth + 1, `${label}: horizontal overflow`);
-
+            async function desktop(w,h,label){
+              const p=await load(w,h);
+              const b=await p.evaluate(()=>{const q=s=>document.querySelector(s),r=e=>{const x=e.getBoundingClientRect();return{left:x.left,right:x.right,top:x.top,bottom:x.bottom,width:x.width,height:x.height}};return{arc:r(q('.narr-zone .arc')),axis:r(q('.hero-cross-axis')),link:r(q('.hero-cross-link')),name:r(q('.bio__name')),scrollWidth:document.body.scrollWidth,innerWidth}});
+              near(b.axis.left+b.axis.width/2,b.arc.left+b.arc.width/2,1.1,label+' axis center');
+              near(b.axis.bottom,b.arc.bottom,1.1,label+' spring endpoint');
+              assert(b.link.left>=b.name.right+20,label+' crossbar/name clearance');
+              assert(b.scrollWidth<=b.innerWidth+1,label+' overflow');
               const expanded=[];
-              for (const step of ['5','4','3','2']){
-                await page.click(`.narr__stat[data-step="${step}"] button.narr__n`);
-                await page.waitForTimeout(340);
-                const e = await page.evaluate(step => {
-                  const stat=document.querySelector(`.narr__stat[data-step="${step}"]`);
-                  const detail=stat.querySelector('.narr__detail');
-                  const arc=document.querySelector('.arc');
-                  const dr=detail.getBoundingClientRect(), sr=stat.getBoundingClientRect(), ar=arc.getBoundingClientRect();
-                  const lh=parseFloat(getComputedStyle(detail).lineHeight);
-                  return {
-                    step,
-                    lines:Math.round(dr.height/lh),
-                    statBottom:sr.bottom,
-                    arcTop:ar.top,
-                    open:[...document.querySelectorAll('.narr__stat.is-open')].map(x=>x.dataset.step),
-                    text:detail.textContent.trim()
-                  };
-                }, step);
-                assert(e.lines <= 2, `${label}: step ${step} uses ${e.lines} lines`);
-                assert.deepStrictEqual(e.open,[step], `${label}: accordion is not exclusive at step ${step}`);
+              for(const step of ['5','4','3','2']){
+                await p.click(`.narr__stat[data-step="${step}"] button.narr__n`); await p.waitForTimeout(340);
+                const e=await p.evaluate(step=>{const st=document.querySelector(`.narr__stat[data-step="${step}"]`),d=st.querySelector('.narr__detail'),a=document.querySelector('.arc'),dr=d.getBoundingClientRect(),sr=st.getBoundingClientRect(),ar=a.getBoundingClientRect(),lh=parseFloat(getComputedStyle(d).lineHeight);return{step,lines:Math.round(dr.height/lh),gap:ar.top-sr.bottom,open:[...document.querySelectorAll('.narr__stat.is-open')].map(x=>x.dataset.step),text:d.textContent.trim()}},step);
+                assert(e.lines<=2,`${label} step ${step}: ${e.lines} lines`);
+                assert.deepStrictEqual(e.open,[step],`${label} accordion ${step}`);
                 expanded.push(e);
               }
-              const five=expanded.find(x=>x.step==='5');
-              assert(five.arcTop - five.statBottom >= 5, `${label}: expanded 5 enters arc (${five.arcTop-five.statBottom}px)`);
-              await page.screenshot({path:`/tmp/${label}.png`});
-              console.log(label, JSON.stringify({base,expanded}));
-              await page.close();
+              assert(expanded[0].gap>=5,`${label} expanded 5 arc gap ${expanded[0].gap}`);
+              await p.screenshot({path:`/tmp/${label}.png`});
+              console.log(label,JSON.stringify({base:b,expanded}));
+              await p.close();
             }
-
             async function mobile(){
-              const page = await load(390,844);
-              const d = await page.evaluate(() => {
-                const arc=document.querySelector('.narr-zone .arc');
-                const axis=document.querySelector('.mobile-arrow-axis');
-                const rr=el=>{const r=el.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
-                return {
-                  arc:rr(arc),axis:rr(axis),
-                  stats:[...document.querySelectorAll('.narr__stat')].map(x=>({step:x.dataset.step,text:x.innerText.trim()})),
-                  titles:[...document.querySelectorAll('.arcade > .mov > .mov__h')].map(x=>x.textContent.trim()),
-                  scrollWidth:document.body.scrollWidth,innerWidth
-                };
-              });
-              close(d.axis.left + d.axis.width/2, d.arc.left, 1.2, 'mobile: axis x vs left spring foot');
-              close(d.axis.top, d.arc.bottom, 1.2, 'mobile: axis start vs spring');
-              assert(d.scrollWidth <= d.innerWidth + 1, 'mobile: horizontal overflow');
-              assert.deepStrictEqual(d.stats.map(x=>x.step), ['5','4','3','2','1'], 'mobile metric order');
-              for (const item of d.stats.slice(0,4)){
-                assert(!new RegExp(`^${item.step}\\s+${item.step}\\b`).test(item.text), `mobile duplicate number at ${item.step}: ${item.text}`);
-              }
-              assert(/PERCURSO/i.test(d.stats[4].text), `mobile: 1 percurso not visible: ${d.stats[4].text}`);
-              assert(d.titles.length===3 && /Arquitetura/i.test(d.titles[2]), 'mobile: movement continuation broken');
-              await page.screenshot({path:'/tmp/b2b-mobile.png'});
+              const p=await load(390,844);
+              const d=await p.evaluate(()=>{const q=s=>document.querySelector(s),r=e=>{const x=e.getBoundingClientRect();return{left:x.left,top:x.top,bottom:x.bottom,width:x.width}};return{arc:r(q('.narr-zone .arc')),axis:r(q('.mobile-arrow-axis')),stats:[...document.querySelectorAll('.narr__stat')].map(x=>({step:x.dataset.step,text:x.innerText.trim()})),titles:[...document.querySelectorAll('.arcade>.mov>.mov__h')].map(x=>x.textContent.trim()),scrollWidth:document.body.scrollWidth,innerWidth}});
+              near(d.axis.left+d.axis.width/2,d.arc.left,1.2,'mobile axis/left foot');
+              near(d.axis.top,d.arc.bottom,1.2,'mobile axis/spring');
+              assert(d.scrollWidth<=d.innerWidth+1,'mobile overflow');
+              assert.deepStrictEqual(d.stats.map(x=>x.step),['5','4','3','2','1'],'mobile order');
+              d.stats.slice(0,4).forEach(x=>assert(!new RegExp(`^${x.step}\\s+${x.step}\\b`).test(x.text),'duplicate '+x.step));
+              assert(/PERCURSO/i.test(d.stats[4].text),'1 PERCURSO missing');
+              assert(d.titles.length===3&&/Arquitetura/i.test(d.titles[2]),'mobile continuation');
+              await p.screenshot({path:'/tmp/b2b-mobile.png'});
               console.log('mobile',JSON.stringify(d));
-              await page.close();
+              await p.close();
             }
-
             await desktop(1600,1000,'b2b-1600');
             await desktop(1024,768,'b2b-1024');
             await mobile();
             await browser.close();
-          })().catch(err => { console.error(err); process.exit(1); });
+          })().catch(e=>{console.error(e);process.exit(1)});
           JS
 
-      - name: Upload validation screenshots
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: arco-b2b-browser-validation
           path: |
@@ -255,7 +196,7 @@ jobs:
             /tmp/b2b-mobile.png
           retention-days: 1
 
-      - name: Commit validated corrections to b2b
+      - name: Commit only after browser pass
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
