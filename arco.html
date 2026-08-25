@@ -2403,6 +2403,7 @@ body{
         </div>
 
         <button class="rail__link" type="button" data-anchor="repertorio">Tradução<span class="n">04</span></button>
+        <a class="rail__link rail__link--data" href="data.html">DATA<span class="n">05</span></a>
       </div>
     </div>
 
@@ -2456,12 +2457,31 @@ body{
         <div class="narr">
           <svg class="narr__svg" aria-hidden="true"></svg>
           <ul class="narr__stats">
-            <li class="narr__stat"><b class="narr__n">60,4%</b> <span class="narr__l">taxa de conversão produtiva +16,2 p.p (44,2% inicial)</span></li>
-            <li class="narr__stat"><b class="narr__n">899</b> <span class="narr__l">votos produzidos pela operação no período apurado</span></li>
-            <li class="narr__stat"><b class="narr__n">1.192</b> <span class="narr__l">processos triados em 30 dias; 56% com rota prévia</span></li>
-            <li class="narr__stat"><b class="narr__n">2.758</b> <span class="narr__l">modelos de referência institucional consolidados</span></li>
-            <li class="narr__stat"><b class="narr__n">115.114</b> <span class="narr__l">julgados extraídos para análises de jurimetria</span></li>
-          </ul>
+  <li class="narr__stat" data-step="5">
+    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-5">5</button>
+    <span class="narr__l narr__short">DOMÍNIOS DE ATUAÇÃO</span>
+    <span class="narr__l narr__detail" id="narr-detail-5" hidden>domínios organizam 17 mecanismos, com ao menos 86 nomenclaturas equivalentes no mercado privado.</span>
+  </li>
+  <li class="narr__stat" data-step="4">
+    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-4">4</button>
+    <span class="narr__l narr__short">MÓDULOS DE IA JURÍDICA</span>
+    <span class="narr__l narr__detail" id="narr-detail-4" hidden>módulos de IA jurídica compõem ATRIO: arquitetura local end-to-end, com 175 testes e 115.114 julgados.</span>
+  </li>
+  <li class="narr__stat" data-step="3">
+    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-3">3</button>
+    <span class="narr__l narr__short">NÚCLEOS DE TRABALHO</span>
+    <span class="narr__l narr__detail" id="narr-detail-3" hidden>núcleos estruturam 10 temáticas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.</span>
+  </li>
+  <li class="narr__stat" data-step="2">
+    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-2">2</button>
+    <span class="narr__l narr__short">PROJETOS</span>
+    <span class="narr__l narr__detail" id="narr-detail-2" hidden>projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.</span>
+  </li>
+  <li class="narr__stat" data-step="1">
+    <b class="narr__n">1</b>
+    <span class="narr__l narr__short">PERCURSO</span>
+  </li>
+</ul>
         </div>
 
         <!-- ===== ABERTURA — ficha: marca, nome, tagline, bio, contatos, CV ===== -->
@@ -5354,4 +5374,835 @@ body{
   requestAnimationFrame(() => requestAnimationFrame(sync));
 })();
 </script>
+
+
+<!-- b2b: hero 5→1 / eixo central + encruzilhada; camada de override focada -->
+<style id="hero-5to1-b2b">
+@media (min-width:821px){
+  /* Mantém o mecanismo legado como fallback, mas a diagonal deixa de ser a camada visível. */
+  .narr-zone{ min-height:max(calc(100dvh - var(--pier) - 4rem), 36rem); }
+  .narr__svg{ display:none !important; }
+  .narr{ pointer-events:none; }
+  .narr__stats{
+    position:absolute; inset:0; display:block; z-index:1;
+  }
+  .home.hero-cross-ready .narr__stat{
+    position:absolute !important;
+    left:calc(var(--cross-axis-x, 50%) + clamp(.72rem,1vw,.92rem)) !important;
+    right:0 !important;
+    top:var(--cross-top,0px) !important;
+    width:auto !important; max-width:none !important;
+    display:grid !important;
+    grid-template-columns:max-content minmax(0,1fr);
+    grid-template-rows:auto auto;
+    align-items:baseline;
+    column-gap:clamp(.52rem,.8vw,.72rem);
+    row-gap:.18rem;
+    opacity:0 !important;
+    transform:translateY(9px) !important;
+    pointer-events:none;
+    transition:opacity 620ms var(--ease), transform 620ms var(--ease) !important;
+    transition-delay:0ms !important;
+  }
+  .home.hero-cross-ready.narr-on.cross-sequence .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+    transition-delay:var(--cross-delay,0ms) !important;
+  }
+  .home.hero-cross-ready .narr__n{
+    grid-column:1; grid-row:1; align-self:baseline;
+  }
+  .home.hero-cross-ready button.narr__n{
+    appearance:none; -webkit-appearance:none;
+    border:0; background:none; color:inherit;
+    margin:0; padding:0;
+    font:inherit; font-family:var(--f-display); font-weight:600;
+    font-size:clamp(.85rem,1.35vw,1.18rem); line-height:1;
+    letter-spacing:-.03em; font-variant-numeric:tabular-nums;
+    cursor:pointer; text-align:left; pointer-events:auto;
+  }
+  .home.hero-cross-ready button.narr__n:focus-visible{
+    outline:1px solid currentColor; outline-offset:3px;
+  }
+  .home.hero-cross-ready .narr__short{
+    grid-column:2; grid-row:1;
+    min-width:0; align-self:baseline;
+    text-transform:uppercase; letter-spacing:.045em;
+  }
+  .home.hero-cross-ready .narr__detail{
+    grid-column:2; grid-row:2;
+    min-width:0; max-width:none;
+    padding-right:0;
+    white-space:normal; overflow-wrap:normal;
+  }
+  .home.hero-cross-ready .narr__detail[hidden]{ display:none; }
+  .home.hero-cross-ready .narr__stat.is-open .narr__detail{
+    animation:narr-detail-in 300ms var(--ease) both;
+  }
+  @keyframes narr-detail-in{
+    from{ opacity:0; transform:translateY(3px); }
+    to{ opacity:1; transform:none; }
+  }
+  .hero-cross-axis,
+  .hero-cross-link{
+    position:absolute; display:block;
+    background:var(--ink); opacity:.5;
+    pointer-events:none; z-index:0;
+    will-change:transform;
+  }
+  .hero-cross-axis{
+    width:1px; transform:scaleY(0); transform-origin:50% 100%;
+  }
+  .hero-cross-link{
+    height:1px; transform:scaleX(0); transform-origin:100% 50%;
+  }
+}
+
+@media (max-width:820px){
+  /* No mobile, preserva-se a topologia integrada: muda a copy, não a física. */
+  .hero-cross-axis,.hero-cross-link{ display:none !important; }
+  .narr__short{ display:none !important; }
+  .narr__detail,
+  .narr__detail[hidden]{
+    display:block !important;
+    grid-column:2 !important; grid-row:1 !important;
+    min-width:0;
+    white-space:normal; overflow-wrap:anywhere;
+  }
+  button.narr__n{
+    appearance:none; -webkit-appearance:none;
+    border:0; background:none; color:inherit;
+    margin:0;
+    font:inherit; font-family:var(--f-display); font-weight:600;
+    font-size:clamp(.85rem,1.35vw,1.18rem); line-height:1;
+    letter-spacing:-.03em; font-variant-numeric:tabular-nums;
+    text-align:left;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .home.hero-cross-ready .hero-cross-axis{ transform:scaleY(1) !important; }
+  .home.hero-cross-ready .hero-cross-link{ transform:scaleX(1) !important; }
+  .home.hero-cross-ready .narr__stat{
+    opacity:1 !important; transform:none !important;
+    transition:none !important;
+  }
+  .home.hero-cross-ready .narr__detail{ animation:none !important; }
+}
+</style>
+
+<script id="hero-5to1-b2b-js">
+(() => {
+  'use strict';
+
+  const home = document.querySelector('.view[data-view="home"] .home');
+  const zone = home && home.querySelector('.narr-zone');
+  if (!home || !zone) return;
+
+  const narr = zone.querySelector('.narr');
+  const arc = zone.querySelector('.arc');
+  const head = zone.querySelector('.bio__head');
+  const name = zone.querySelector('.bio__name');
+  const stats = [...zone.querySelectorAll('.narr__stat')];
+  if (!narr || !arc || !head || !name || stats.length !== 5) return;
+
+  const mq = matchMedia('(max-width:820px)');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const numbers = stats.map(stat => stat.querySelector('.narr__n'));
+  if (numbers.some(n => !n)) return;
+
+  let axis = narr.querySelector('.hero-cross-axis');
+  if (!axis){
+    axis = document.createElement('span');
+    axis.className = 'hero-cross-axis';
+    axis.setAttribute('aria-hidden','true');
+    narr.appendChild(axis);
+  }
+  let link = narr.querySelector('.hero-cross-link');
+  if (!link){
+    link = document.createElement('span');
+    link.className = 'hero-cross-link';
+    link.setAttribute('aria-hidden','true');
+    narr.appendChild(link);
+  }
+
+  const detailOf = stat => stat.querySelector('.narr__detail');
+  const buttonOf = stat => stat.querySelector('button.narr__n');
+  const detailStats = stats.filter(stat => detailOf(stat) && buttonOf(stat));
+
+  function closeAll(){
+    detailStats.forEach(stat => {
+      const detail = detailOf(stat);
+      const button = buttonOf(stat);
+      stat.classList.remove('is-open');
+      detail.hidden = true;
+      detail.setAttribute('aria-hidden','true');
+      button.setAttribute('aria-expanded','false');
+    });
+  }
+
+  detailStats.forEach(stat => {
+    const button = buttonOf(stat);
+    const detail = detailOf(stat);
+    button.addEventListener('click', () => {
+      if (mq.matches) return;
+      const shouldOpen = detail.hidden;
+      closeAll();
+      if (shouldOpen){
+        stat.classList.add('is-open');
+        detail.hidden = false;
+        detail.setAttribute('aria-hidden','false');
+        button.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  let geometry = null;
+  let played = false;
+  let axisAnimation = null;
+  let linkAnimation = null;
+  let raf = 0;
+
+  function expandedHeights(){
+    return stats.map(stat => {
+      const detail = detailOf(stat);
+      if (!detail) return Math.ceil(stat.getBoundingClientRect().height);
+      const wasHidden = detail.hidden;
+      const oldVisibility = detail.style.visibility;
+      detail.hidden = false;
+      detail.style.visibility = 'hidden';
+      const h = Math.ceil(stat.getBoundingClientRect().height);
+      detail.style.visibility = oldVisibility;
+      detail.hidden = wasHidden;
+      return h;
+    });
+  }
+
+  function layout(){
+    if (mq.matches) return null;
+
+    const zr = zone.getBoundingClientRect();
+    const ar = arc.getBoundingClientRect();
+    const hr = head.getBoundingClientRect();
+    const nr = name.getBoundingClientRect();
+
+    const axisX = ar.left - zr.left + ar.width / 2;
+    const springY = ar.bottom - zr.top;
+    const arcTop = ar.top - zr.top;
+    narr.style.setProperty('--cross-axis-x', axisX.toFixed(2) + 'px');
+
+    /* Mede todas as estações no estado expandido para que abrir uma
+       legenda nunca invada a estação seguinte. */
+    const heights = expandedHeights();
+    const safeArc = Math.max(18, Math.min(28, innerWidth * .014));
+    const safeTop = hr.bottom - zr.top + 20;
+    const bottomEdge = arcTop - safeArc;
+
+    const pack = gap => {
+      const tops = new Array(stats.length);
+      tops[0] = bottomEdge - heights[0];
+      for (let i = 1; i < stats.length; i++){
+        tops[i] = tops[i - 1] - gap - heights[i];
+      }
+      return tops;
+    };
+
+    let gap = 14;
+    let tops = pack(gap);
+    const spare = tops[4] - safeTop;
+    if (spare > 0){
+      gap += Math.min(24, spare / 4);
+      tops = pack(gap);
+    }
+    if (tops[4] < safeTop){
+      const deficit = safeTop - tops[4];
+      gap = Math.max(7, gap - deficit / 4);
+      tops = pack(gap);
+    }
+
+    stats.forEach((stat, i) => {
+      stat.style.setProperty('--cross-top', tops[i].toFixed(2) + 'px');
+    });
+
+    const points = stats.map((stat, i) => {
+      const numberRect = numbers[i].getBoundingClientRect();
+      return tops[i] + numberRect.height / 2;
+    });
+
+    const axisTop = points[4];
+    const axisHeight = Math.max(1, springY - axisTop);
+    axis.style.left = (axisX - .5).toFixed(2) + 'px';
+    axis.style.top = axisTop.toFixed(2) + 'px';
+    axis.style.height = axisHeight.toFixed(2) + 'px';
+
+    /* A transversal do 1 cresce em direção à identidade, mas para
+       antes do nome. O topo da estação já está abaixo de bio__head. */
+    const nameRight = nr.right - zr.left;
+    const targetX = Math.max(0, Math.min(axisX - 56, nameRight + 24));
+    link.style.left = targetX.toFixed(2) + 'px';
+    link.style.top = (points[4] - .5).toFixed(2) + 'px';
+    link.style.width = Math.max(0, axisX - targetX).toFixed(2) + 'px';
+
+    geometry = { points, axisTop, axisHeight, springY };
+    return geometry;
+  }
+
+  function scheduleLayout(){
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      layout();
+    });
+  }
+
+  function play(){
+    if (played || mq.matches) return;
+    const g = layout();
+    if (!g) return;
+
+    const DRAW = 2200;
+    const HOLD = 120;
+    const total = DRAW + HOLD * 5;
+    const arrivals = g.points.map((point, i) => {
+      const progress = Math.max(0, Math.min(1, (g.springY - point) / g.axisHeight));
+      return progress * DRAW + i * HOLD;
+    });
+
+    stats.forEach((stat, i) => {
+      stat.style.setProperty('--cross-delay', Math.max(0, arrivals[i] - 120).toFixed(0) + 'ms');
+    });
+
+    played = true;
+    home.classList.add('cross-sequence');
+
+    if (reduce){
+      axis.style.transform = 'scaleY(1)';
+      link.style.transform = 'scaleX(1)';
+      return;
+    }
+
+    const frames = [{ transform:'scaleY(0)', offset:0 }];
+    g.points.forEach((point, i) => {
+      const progress = Math.max(0, Math.min(1, (g.springY - point) / g.axisHeight));
+      const arrival = arrivals[i];
+      frames.push({ transform:`scaleY(${progress})`, offset:Math.max(0, Math.min(1, arrival / total)) });
+      frames.push({ transform:`scaleY(${progress})`, offset:Math.max(0, Math.min(1, (arrival + HOLD) / total)) });
+    });
+
+    axisAnimation?.cancel();
+    linkAnimation?.cancel();
+    axisAnimation = axis.animate(frames, {
+      duration:total,
+      easing:'linear',
+      fill:'forwards'
+    });
+
+    linkAnimation = link.animate(
+      [{ transform:'scaleX(0)' }, { transform:'scaleX(1)' }],
+      {
+        duration:420,
+        delay:arrivals[4],
+        easing:'cubic-bezier(.22,1,.36,1)',
+        fill:'forwards'
+      }
+    );
+  }
+
+  function syncMode(){
+    if (mq.matches){
+      detailStats.forEach(stat => {
+        const detail = detailOf(stat);
+        const button = buttonOf(stat);
+        stat.classList.remove('is-open');
+        detail.hidden = false;
+        detail.setAttribute('aria-hidden','false');
+        button.setAttribute('aria-expanded','true');
+      });
+      return;
+    }
+
+    closeAll();
+    requestAnimationFrame(() => {
+      layout();
+      if (home.classList.contains('narr-on')) play();
+      else if (played){
+        axis.style.transform = 'scaleY(1)';
+        link.style.transform = 'scaleX(1)';
+        home.classList.add('cross-sequence');
+      }
+    });
+  }
+
+  home.classList.add('hero-cross-ready');
+  syncMode();
+
+  const mo = new MutationObserver(() => {
+    if (home.classList.contains('narr-on')) play();
+  });
+  mo.observe(home, { attributes:true, attributeFilter:['class'] });
+
+  mq.addEventListener?.('change', syncMode);
+  addEventListener('resize', scheduleLayout, { passive:true });
+  addEventListener('orientationchange', scheduleLayout, { passive:true });
+  document.fonts?.ready.then(() => requestAnimationFrame(scheduleLayout));
+
+  if (typeof ResizeObserver === 'function'){
+    const ro = new ResizeObserver(scheduleLayout);
+    ro.observe(zone);
+    ro.observe(arc);
+    ro.observe(head);
+    ro.observe(name);
+  }
+
+  if (!mq.matches && home.classList.contains('narr-on')) play();
+})();
+</script>
+
+
+
+
+<!-- b2b-v2:start -->
+<style id="hero-5to1-b2b-v2">
+@media (min-width:821px){
+  .home.hero-v2-ready .hero-cross-axis,
+  .home.hero-v2-ready .hero-cross-link{ display:none !important; }
+
+  .home.hero-v2-ready .narr__stats{ z-index:2 !important; }
+  .home.hero-v2-ready .narr__stat{
+    position:absolute !important;
+    left:var(--hero-v2-left,50%) !important;
+    right:0 !important;
+    top:var(--hero-v2-top,0px) !important;
+    width:auto !important;
+    max-width:none !important;
+    display:grid !important;
+    grid-template-columns:max-content minmax(0,1fr) !important;
+    grid-template-rows:auto auto !important;
+    column-gap:clamp(.72rem,1vw,.96rem) !important;
+    row-gap:.12rem !important;
+    align-items:start !important;
+    opacity:0 !important;
+    transform:translateY(4px) !important;
+    transition:opacity 420ms var(--ease), transform 420ms var(--ease) !important;
+    transition-delay:var(--hero-v2-delay,0ms) !important;
+  }
+  .home.hero-v2-ready.hero-v2-play .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .home.hero-v2-ready .narr__n{
+    grid-column:1 !important;
+    grid-row:1 / span 2 !important;
+    align-self:start !important;
+    font-family:var(--f-display) !important;
+    font-weight:700 !important;
+    font-size:clamp(1.95rem,2.35vw,2.55rem) !important;
+    line-height:.86 !important;
+    letter-spacing:-.05em !important;
+    color:var(--ink) !important;
+    background:var(--paper) !important;
+    padding:0 .12em .04em !important;
+    margin:0 !important;
+    position:relative !important;
+    z-index:3 !important;
+  }
+  .home.hero-v2-ready button.narr__n{
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    border:0 !important;
+    cursor:pointer !important;
+    pointer-events:auto !important;
+  }
+  .home.hero-v2-ready .narr__short{
+    grid-column:2 !important;
+    grid-row:1 !important;
+    align-self:center !important;
+    padding-top:.08rem !important;
+  }
+  .home.hero-v2-ready .narr__detail{
+    grid-column:2 !important;
+    grid-row:2 !important;
+    width:100% !important;
+    max-width:none !important;
+    padding-top:.12rem !important;
+  }
+
+  .hero-v2-seg,
+  .hero-v2-link{
+    position:absolute;
+    display:block;
+    background:var(--ink);
+    opacity:.5;
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero-v2-seg{
+    width:1px;
+    transform:scaleY(0);
+    transform-origin:50% 100%;
+    transition:transform var(--hero-v2-dur,260ms) linear var(--hero-v2-seg-delay,0ms);
+  }
+  .hero-v2-link{
+    height:1px;
+    transform:scaleX(0);
+    transform-origin:100% 50%;
+    transition:transform 460ms var(--ease) var(--hero-v2-link-delay,0ms);
+  }
+  .home.hero-v2-play .hero-v2-seg{ transform:scaleY(1); }
+  .home.hero-v2-play .hero-v2-link{ transform:scaleX(1); }
+}
+
+@media (max-width:820px){
+  .hero-v2-seg,.hero-v2-link{ display:none !important; }
+  .narr__n{
+    font-size:clamp(1.15rem,5vw,1.35rem) !important;
+    font-weight:700 !important;
+  }
+  .narr__stat[data-step="1"] .narr__short{
+    display:block !important;
+    grid-column:2 !important;
+    grid-row:1 !important;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .home.hero-v2-ready .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  .home.hero-v2-ready .hero-v2-seg,
+  .home.hero-v2-ready .hero-v2-link{
+    transform:none !important;
+    transition:none !important;
+  }
+}
+</style>
+
+<script id="hero-5to1-b2b-v2-js">
+(() => {
+  'use strict';
+
+  const home = document.querySelector('.view[data-view="home"] .home');
+  const zone = home && home.querySelector('.narr-zone');
+  if (!home || !zone) return;
+
+  const narr = zone.querySelector('.narr');
+  const arc = zone.querySelector('.arc');
+  const head = zone.querySelector('.bio__head');
+  const stats = ['5','4','3','2','1'].map(step => zone.querySelector(`.narr__stat[data-step="${step}"]`));
+  if (!narr || !arc || !head || stats.some(stat => !stat)) return;
+
+  const numbers = stats.map(stat => stat.querySelector('.narr__n'));
+  if (numbers.some(number => !number)) return;
+
+  const mq = matchMedia('(max-width:820px)');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const clamp = (min, value, max) => Math.max(min, Math.min(max, value));
+
+  const segments = Array.from({length:5}, (_, i) => {
+    let el = narr.querySelector(`.hero-v2-seg[data-seg="${i}"]`);
+    if (!el){
+      el = document.createElement('span');
+      el.className = 'hero-v2-seg';
+      el.dataset.seg = String(i);
+      el.setAttribute('aria-hidden','true');
+      narr.appendChild(el);
+    }
+    return el;
+  });
+
+  let link = narr.querySelector('.hero-v2-link');
+  if (!link){
+    link = document.createElement('span');
+    link.className = 'hero-v2-link';
+    link.setAttribute('aria-hidden','true');
+    narr.appendChild(link);
+  }
+
+  function layoutBox(el){
+    let x = 0, y = 0, node = el;
+    while (node && node !== zone){
+      x += node.offsetLeft || 0;
+      y += node.offsetTop || 0;
+      node = node.offsetParent;
+    }
+    if (node === zone){
+      const width = el.offsetWidth || 0;
+      const height = el.offsetHeight || 0;
+      return {x, y, width, height, right:x + width, bottom:y + height};
+    }
+    const zr = zone.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    return {x:r.left-zr.left, y:r.top-zr.top, width:r.width, height:r.height,
+            right:r.right-zr.left, bottom:r.bottom-zr.top};
+  }
+
+  function expandedHeight(stat){
+    const detail = stat.querySelector('.narr__detail');
+    if (!detail) return stat.offsetHeight || 1;
+    const wasHidden = detail.hidden;
+    const wasOpen = stat.classList.contains('is-open');
+    const oldVisibility = detail.style.visibility;
+    detail.hidden = false;
+    stat.classList.add('is-open');
+    detail.style.visibility = 'hidden';
+    const h = stat.offsetHeight || 1;
+    detail.style.visibility = oldVisibility;
+    detail.hidden = wasHidden;
+    stat.classList.toggle('is-open', wasOpen);
+    return h;
+  }
+
+  let played = false;
+  let raf = 0;
+
+  function layout(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      if (mq.matches){
+        home.classList.remove('hero-v2-ready');
+        return;
+      }
+
+      home.classList.add('hero-v2-ready');
+
+      const ar = layoutBox(arc);
+      const hr = layoutBox(head);
+      if (!ar || !hr) return;
+
+      const axisX = ar.x + ar.width / 2;
+      const springY = ar.bottom;
+      const safeArc = clamp(8, innerWidth * .007, 14);
+      const bottomEdge = ar.y - safeArc;
+      const heights = stats.map(expandedHeight);
+      const totalHeight = heights.reduce((sum, h) => sum + h, 0);
+      const targetTop = hr.y + Math.max(0, (hr.height - heights[4]) * .18);
+      const rawGap = (bottomEdge - targetTop - totalHeight) / 4;
+      const gap = clamp(18, rawGap, 92);
+
+      const tops = new Array(5);
+      tops[0] = bottomEdge - heights[0];
+      for (let i = 1; i < 5; i++){
+        tops[i] = tops[i - 1] - gap - heights[i];
+      }
+
+      stats.forEach((stat, i) => {
+        const numberWidth = numbers[i].offsetWidth || 1;
+        stat.style.setProperty('--hero-v2-left', (axisX - numberWidth / 2).toFixed(2) + 'px');
+        stat.style.setProperty('--hero-v2-top', tops[i].toFixed(2) + 'px');
+      });
+
+      void zone.offsetHeight;
+      const numberBoxes = numbers.map(layoutBox);
+      let lower = springY;
+      const interruption = 5;
+      const segmentHeights = [];
+
+      segments.forEach((seg, i) => {
+        const nb = numberBoxes[i];
+        const top = nb.bottom + interruption;
+        const height = Math.max(0, lower - top);
+        seg.style.left = (axisX - .5).toFixed(2) + 'px';
+        seg.style.top = top.toFixed(2) + 'px';
+        seg.style.height = height.toFixed(2) + 'px';
+        segmentHeights.push(height);
+        lower = nb.y - interruption;
+      });
+
+      const n1 = numberBoxes[4];
+      const n1CenterY = n1.y + n1.height / 2;
+      const linkWidth = clamp(48, innerWidth * .042, 72);
+      link.style.left = (axisX - linkWidth).toFixed(2) + 'px';
+      link.style.top = (n1CenterY - .5).toFixed(2) + 'px';
+      link.style.width = linkWidth.toFixed(2) + 'px';
+
+      const DRAW = 2200;
+      const HOLD = 120;
+      const totalLine = Math.max(1, segmentHeights.reduce((sum, h) => sum + h, 0));
+      let cursor = 0;
+      segmentHeights.forEach((height, i) => {
+        const duration = Math.max(160, DRAW * (height / totalLine));
+        segments[i].style.setProperty('--hero-v2-seg-delay', cursor.toFixed(0) + 'ms');
+        segments[i].style.setProperty('--hero-v2-dur', duration.toFixed(0) + 'ms');
+        const arrival = cursor + duration;
+        stats[i].style.setProperty('--hero-v2-delay', Math.max(0, arrival - 80).toFixed(0) + 'ms');
+        cursor = arrival + HOLD;
+      });
+      link.style.setProperty('--hero-v2-link-delay', cursor.toFixed(0) + 'ms');
+
+      if (played) home.classList.add('hero-v2-play');
+    });
+  }
+
+  stats.slice(0,4).forEach((stat, i) => {
+    const button = numbers[i];
+    const detail = stat.querySelector('.narr__detail');
+    if (!detail || button.tagName !== 'BUTTON') return;
+
+    button.addEventListener('click', event => {
+      if (mq.matches) return;
+      event.stopImmediatePropagation();
+      const shouldOpen = detail.hidden;
+      detail.hidden = !shouldOpen;
+      stat.classList.toggle('is-open', shouldOpen);
+      detail.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+      button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    }, true);
+  });
+
+  function play(){
+    if (played || mq.matches) return;
+    played = true;
+    home.classList.add('narr-on');
+    layout();
+    requestAnimationFrame(() => home.classList.add('hero-v2-play'));
+  }
+
+  const triggers = ['scroll','wheel','pointerdown','pointermove','keydown','touchstart'];
+  const activate = () => {
+    play();
+    triggers.forEach(type => window.removeEventListener(type, activate));
+  };
+
+  if (reduce){
+    played = true;
+    home.classList.add('narr-on','hero-v2-play');
+  } else {
+    triggers.forEach(type => window.addEventListener(type, activate, {passive:true}));
+  }
+
+  layout();
+  requestAnimationFrame(layout);
+  window.addEventListener('resize', layout, {passive:true});
+  mq.addEventListener?.('change', layout);
+  document.fonts?.ready?.then(layout);
+
+  if (typeof ResizeObserver === 'function'){
+    const ro = new ResizeObserver(layout);
+    ro.observe(zone);
+    ro.observe(arc);
+    ro.observe(head);
+  }
+})();
+</script>
+<!-- b2b-v2:end -->
+
+
+<!-- b2b-v3:start -->
+<style id="hero-rail-b2b-v3">
+@media (min-width:821px){
+  .home.hero-v3-ready .bio{
+    width:var(--hero-v3-bio-w,auto) !important;
+    max-width:var(--hero-v3-bio-w,50%) !important;
+  }
+  .home.hero-v3-ready .narr-zone .arc{
+    position:relative;
+    top:-8px;
+  }
+}
+
+@media (min-width:1001px){
+  .rail.hero-v3-rail-ready .rail__id{
+    transform:translateY(var(--hero-v3-rail-shift,0px));
+  }
+}
+
+.rail__link--data{ text-decoration:none; }
+.rail__link--data:hover,
+.rail__link--data.is-data-hover{ color:#00455D !important; }
+.rail__link--data:hover .n,
+.rail__link--data.is-data-hover .n{ color:#00455D !important; }
+.rail__link--data::after{ background:#00455D !important; }
+</style>
+
+<script id="hero-rail-b2b-v3-js">
+(() => {
+  'use strict';
+
+  const home = document.querySelector('.view[data-view="home"] .home');
+  const zone = home && home.querySelector('.narr-zone');
+  const bio = zone && zone.querySelector('.bio');
+  const arc = zone && zone.querySelector('.arc');
+  const rail = document.querySelector('.rail');
+  const railTitle = rail && rail.querySelector('.rail__title');
+  const dataLink = rail && rail.querySelector('.rail__link--data');
+  const name = zone && zone.querySelector('.bio__name');
+  if (!home || !zone || !bio || !arc || !rail || !railTitle || !name) return;
+
+  if (dataLink){
+    const dataN = dataLink.querySelector('.n');
+    const on = () => {
+      dataLink.classList.add('is-data-hover');
+      dataLink.style.setProperty('color','#00455D','important');
+      dataN?.style.setProperty('color','#00455D','important');
+    };
+    const off = () => {
+      dataLink.classList.remove('is-data-hover');
+      dataLink.style.removeProperty('color');
+      dataN?.style.removeProperty('color');
+    };
+    dataLink.addEventListener('mouseenter', on);
+    dataLink.addEventListener('pointerenter', on);
+    dataLink.addEventListener('mouseleave', off);
+    dataLink.addEventListener('pointerleave', off);
+    dataLink.addEventListener('focus', on);
+    dataLink.addEventListener('blur', off);
+  }
+
+  const mqDesktopArrow = matchMedia('(min-width:821px)');
+  const mqSideRail = matchMedia('(min-width:1001px)');
+  let raf = 0;
+  let lastBioWidth = null;
+
+  function tune(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      let widthChanged = false;
+
+      if (!mqDesktopArrow.matches){
+        home.classList.remove('hero-v3-ready');
+        bio.style.removeProperty('--hero-v3-bio-w');
+        lastBioWidth = null;
+      } else {
+        home.classList.add('hero-v3-ready');
+        const ar = arc.getBoundingClientRect();
+        const br = bio.getBoundingClientRect();
+        const axisX = ar.left + ar.width / 2;
+        const linkWidth = Math.max(48, Math.min(72, innerWidth * .042));
+        const freeEndX = axisX - linkWidth;
+        const width = Math.max(220, freeEndX - br.left);
+        widthChanged = lastBioWidth === null || Math.abs(width - lastBioWidth) > .5;
+        lastBioWidth = width;
+        bio.style.setProperty('--hero-v3-bio-w', width.toFixed(2) + 'px');
+      }
+
+      if (mqSideRail.matches){
+        rail.classList.add('hero-v3-rail-ready');
+        rail.style.setProperty('--hero-v3-rail-shift','0px');
+        const titleTop = railTitle.getBoundingClientRect().top;
+        const nameTop = name.getBoundingClientRect().top;
+        rail.style.setProperty('--hero-v3-rail-shift', (nameTop - titleTop).toFixed(2) + 'px');
+      } else {
+        rail.classList.remove('hero-v3-rail-ready');
+        rail.style.removeProperty('--hero-v3-rail-shift');
+      }
+
+      if (widthChanged){
+        requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+      }
+    });
+  }
+
+  tune();
+  requestAnimationFrame(tune);
+  window.addEventListener('resize', tune, {passive:true});
+  mqDesktopArrow.addEventListener?.('change', tune);
+  mqSideRail.addEventListener?.('change', tune);
+  document.fonts?.ready?.then(() => requestAnimationFrame(tune));
+})();
+</script>
+<!-- b2b-v3:end -->
+
 </body></html>
