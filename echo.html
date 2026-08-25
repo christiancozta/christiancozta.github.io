@@ -363,7 +363,7 @@ a:hover{color:#181818}
   color:rgba(242,239,233,.34);
 }
 
-/* Quatro famílias — sempre uma coluna */
+/* Quatro famílias - sempre uma coluna */
 .families{
   display:grid;
   grid-template-columns:1fr;
@@ -504,6 +504,17 @@ a:hover{color:#181818}
 .q4{display:grid;grid-template-columns:1fr}
 .q4-strip>div{padding:26px 0 30px;border-bottom:1px solid #2e2e2e}
 .q4-strip>div:last-child{border-bottom:0}
+.echo-metric{position:relative;overflow:hidden;outline:0}
+.echo-metric__source{position:absolute;inset:auto 0 0;z-index:2;margin:0;padding:12px 14px;background:#FFB627;color:#181818;font-size:12px;line-height:1.45;transform:translateY(102%);transition:transform .28s cubic-bezier(.22,.68,0,1)}
+.echo-metric__source strong{display:block;margin-bottom:4px;font-size:9.5px;line-height:1;letter-spacing:.11em;text-transform:uppercase}
+.echo-metric:hover .echo-metric__source,.echo-metric:focus-visible .echo-metric__source{transform:translateY(0)}
+.echo-metric:focus-visible{box-shadow:inset 0 0 0 2px #FFB627}
+.precedent-proof{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:clamp(28px,5vw,88px);align-items:end;background:#FFB627;color:#181818;margin-top:clamp(28px,3.4vw,48px);padding:clamp(28px,3.6vw,52px)}
+.precedent-proof__support{display:grid;gap:16px}
+.precedent-proof__support>div{padding-top:12px;border-top:1px solid rgba(24,24,24,.34)}
+.precedent-proof__support strong{display:block;font-family:'Schibsted Grotesk',sans-serif;font-size:clamp(1.5rem,3vw,2.4rem);line-height:.9;letter-spacing:-.045em}
+.precedent-proof__support span{display:block;margin-top:7px;font-size:12.5px;line-height:1.4}
+@media(max-width:719px){.precedent-proof{grid-template-columns:1fr}.precedent-proof__support{grid-template-columns:1fr 1fr}}
 @media (min-width:600px){
   .q4{grid-template-columns:repeat(2,1fr)}
   .q4-strip>div:nth-child(odd){padding-right:22px;border-right:1px solid #2e2e2e}
@@ -517,7 +528,7 @@ a:hover{color:#181818}
   .q4-strip>div:last-child{padding-right:0;border-right:0}
 }
 
-/* Achados — escala de vernier: a mesma materia em tres granularidades.
+/* Achados - escala de vernier: a mesma materia em tres granularidades.
    Rotulo em HTML e traco non-scaling: o viewBox estica, a tipografia e a
    espessura do traco nao. */
 .escala{margin:clamp(40px,5vw,72px) 0 0;display:grid;gap:clamp(14px,1.8vw,22px)}
@@ -531,14 +542,20 @@ a:hover{color:#181818}
 .escala figcaption{margin-top:4px;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.6);text-wrap:pretty}
 
 /* ==========================================================================
-   RASTRO — indicador contínuo de progresso de rolagem (somente visual).
+   RASTRO - indicador contínuo de progresso de rolagem (somente visual).
    ========================================================================== */
 html{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .echo-trace{position:fixed;top:44px;right:0;bottom:0;width:9px;height:auto;z-index:40;pointer-events:none}
 .echo-trace i{position:absolute;top:0;left:4px;width:1px;height:100%;background:rgba(128,128,128,.34)}
-.echo-trace b{position:absolute;top:0;left:3.5px;width:2px;height:0;background:#FFB627}
+.echo-trace b{position:absolute;top:0;left:3.5px;width:2px;height:100%;background:#FFB627;transform:scaleY(0);transform-origin:top}
 .echo-trace s{position:absolute;left:4.5px;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#FFB627;text-decoration:none}
+@keyframes echo-trace-fill{to{transform:scaleY(1)}}
+@keyframes echo-trace-dot{to{top:100%}}
+@supports (animation-timeline:scroll()){
+  .echo-trace b{animation:echo-trace-fill linear both;animation-timeline:scroll(root block)}
+  .echo-trace s{animation:echo-trace-dot linear both;animation-timeline:scroll(root block)}
+}
 @media(max-width:719px){.echo-trace{display:none}}
 </style>
 </helmet>
@@ -923,49 +940,51 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   </div>
 
   <div data-reveal class="q4 q4-strip" style="margin-top:clamp(40px,5vw,72px);border-top:1px solid #F2EFE9;border-bottom:1px solid #F2EFE9;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div>
+    <div class="echo-metric" tabindex="0">
       <p style="margin:0;font-size:12.5px;font-weight:600">Ementário</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">2.758</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: acervo integral</p>
-      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Modelos de ementa estruturados com código, hierarquia e fundamento, formando uma base recuperável de padrões textuais e jurídicos.</p>
+      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Ementas catalogadas com código, hierarquia e fundamento, formando uma base recuperável de padrões textuais e jurídicos.</p>
       <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> O número mede memória organizada. A relevância não está apenas na quantidade, mas na transformação de recorrências em repertório consultável.</p>
+      <p class="echo-metric__source"><strong>Fonte</strong> Painel TR, Ementário; 2.758 registros de dados.</p>
     </div>
-    <div>
+    <div class="echo-metric" tabindex="0">
       <p style="margin:0;font-size:12.5px;font-weight:600">Acervo triado</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">1.192</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: fluxo recursal</p>
       <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Processos triados e segmentados segundo o fluxo operacional adotado.</p>
       <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> O indicador demonstra aplicação do método sobre volume real, não apenas formulação documental.</p>
+      <p class="echo-metric__source"><strong>Fonte</strong> Planilha de controle do acervo; 1.192 registros anonimizados.</p>
     </div>
-    <div>
-      <p style="margin:0;font-size:12.5px;font-weight:600">Cobertura</p>
-      <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">56%</p>
-      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: acervo do período</p>
-      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Parcela do acervo com diretriz antecipada antes da análise técnica.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A cobertura indica o alcance do trabalho de leitura e estruturação prévia sobre o estoque processual do período.</p>
-    </div>
-    <div>
+    <div class="echo-metric" tabindex="0">
       <p style="margin:0;font-size:12.5px;font-weight:600">Taxonomia</p>
-      <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">102 → 10</p>
-      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: matriz temática · 3 núcleos</p>
-      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Assuntos granulares foram reorganizados em dez localizadores operacionais distribuídos em três núcleos temáticos.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A redução não elimina matéria. Cria uma camada de localização capaz de tornar o acervo mais manejável para classificação e distribuição.</p>
+      <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">90,2%</p>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: mapa temático</p>
+      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Redução de complexidade categorial para uma camada de localização operacional mais manejável.</p>
+      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A redução preserva a matéria e melhora classificação, distribuição e recuperação.</p>
+      <p class="echo-metric__source"><strong>Fonte</strong> Manual Mapa Temático; indicador derivado e auditado.</p>
+    </div>
+    <div class="echo-metric" tabindex="0">
+      <p style="margin:0;font-size:12.5px;font-weight:600">Precedentes</p>
+      <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">631</p>
+      <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: painel temático</p>
+      <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Temas catalogados por matéria, situação, ramo do direito e código de assunto.</p>
+      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A base converte pesquisa de tese dispersa em memória jurídica estruturada e recuperável.</p>
+      <p class="echo-metric__source"><strong>Fonte</strong> Painel TR, Precedentes; 631 temas catalogados.</p>
     </div>
   </div>
 
-  <figure data-reveal class="escala" style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div><p>102 assuntos granulares</p><svg class="regua r1" viewBox="0 0 1440 26" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="tracos"><line x1="0" y1="0" x2="0" y2="25"></line><line x1="14.26" y1="0" x2="14.26" y2="25"></line><line x1="28.51" y1="0" x2="28.51" y2="25"></line><line x1="42.77" y1="0" x2="42.77" y2="25"></line><line x1="57.03" y1="0" x2="57.03" y2="25"></line><line x1="71.29" y1="0" x2="71.29" y2="25"></line><line x1="85.54" y1="0" x2="85.54" y2="25"></line><line x1="99.8" y1="0" x2="99.8" y2="25"></line><line x1="114.06" y1="0" x2="114.06" y2="25"></line><line x1="128.32" y1="0" x2="128.32" y2="25"></line><line x1="142.57" y1="0" x2="142.57" y2="25"></line><line x1="156.83" y1="0" x2="156.83" y2="25"></line><line x1="171.09" y1="0" x2="171.09" y2="25"></line><line x1="185.35" y1="0" x2="185.35" y2="25"></line><line x1="199.6" y1="0" x2="199.6" y2="25"></line><line x1="213.86" y1="0" x2="213.86" y2="25"></line><line x1="228.12" y1="0" x2="228.12" y2="25"></line><line x1="242.38" y1="0" x2="242.38" y2="25"></line><line x1="256.63" y1="0" x2="256.63" y2="25"></line><line x1="270.89" y1="0" x2="270.89" y2="25"></line><line x1="285.15" y1="0" x2="285.15" y2="25"></line><line x1="299.41" y1="0" x2="299.41" y2="25"></line><line x1="313.66" y1="0" x2="313.66" y2="25"></line><line x1="327.92" y1="0" x2="327.92" y2="25"></line><line x1="342.18" y1="0" x2="342.18" y2="25"></line><line x1="356.44" y1="0" x2="356.44" y2="25"></line><line x1="370.69" y1="0" x2="370.69" y2="25"></line><line x1="384.95" y1="0" x2="384.95" y2="25"></line><line x1="399.21" y1="0" x2="399.21" y2="25"></line><line x1="413.47" y1="0" x2="413.47" y2="25"></line><line x1="427.72" y1="0" x2="427.72" y2="25"></line><line x1="441.98" y1="0" x2="441.98" y2="25"></line><line x1="456.24" y1="0" x2="456.24" y2="25"></line><line x1="470.5" y1="0" x2="470.5" y2="25"></line><line x1="484.75" y1="0" x2="484.75" y2="25"></line><line x1="499.01" y1="0" x2="499.01" y2="25"></line><line x1="513.27" y1="0" x2="513.27" y2="25"></line><line x1="527.52" y1="0" x2="527.52" y2="25"></line><line x1="541.78" y1="0" x2="541.78" y2="25"></line><line x1="556.04" y1="0" x2="556.04" y2="25"></line><line x1="570.3" y1="0" x2="570.3" y2="25"></line><line x1="584.55" y1="0" x2="584.55" y2="25"></line><line x1="598.81" y1="0" x2="598.81" y2="25"></line><line x1="613.07" y1="0" x2="613.07" y2="25"></line><line x1="627.33" y1="0" x2="627.33" y2="25"></line><line x1="641.58" y1="0" x2="641.58" y2="25"></line><line x1="655.84" y1="0" x2="655.84" y2="25"></line><line x1="670.1" y1="0" x2="670.1" y2="25"></line><line x1="684.36" y1="0" x2="684.36" y2="25"></line><line x1="698.61" y1="0" x2="698.61" y2="25"></line><line x1="712.87" y1="0" x2="712.87" y2="25"></line><line x1="727.13" y1="0" x2="727.13" y2="25"></line><line x1="741.39" y1="0" x2="741.39" y2="25"></line><line x1="755.64" y1="0" x2="755.64" y2="25"></line><line x1="769.9" y1="0" x2="769.9" y2="25"></line><line x1="784.16" y1="0" x2="784.16" y2="25"></line><line x1="798.42" y1="0" x2="798.42" y2="25"></line><line x1="812.67" y1="0" x2="812.67" y2="25"></line><line x1="826.93" y1="0" x2="826.93" y2="25"></line><line x1="841.19" y1="0" x2="841.19" y2="25"></line><line x1="855.45" y1="0" x2="855.45" y2="25"></line><line x1="869.7" y1="0" x2="869.7" y2="25"></line><line x1="883.96" y1="0" x2="883.96" y2="25"></line><line x1="898.22" y1="0" x2="898.22" y2="25"></line><line x1="912.48" y1="0" x2="912.48" y2="25"></line><line x1="926.73" y1="0" x2="926.73" y2="25"></line><line x1="940.99" y1="0" x2="940.99" y2="25"></line><line x1="955.25" y1="0" x2="955.25" y2="25"></line><line x1="969.5" y1="0" x2="969.5" y2="25"></line><line x1="983.76" y1="0" x2="983.76" y2="25"></line><line x1="998.02" y1="0" x2="998.02" y2="25"></line><line x1="1012.28" y1="0" x2="1012.28" y2="25"></line><line x1="1026.53" y1="0" x2="1026.53" y2="25"></line><line x1="1040.79" y1="0" x2="1040.79" y2="25"></line><line x1="1055.05" y1="0" x2="1055.05" y2="25"></line><line x1="1069.31" y1="0" x2="1069.31" y2="25"></line><line x1="1083.56" y1="0" x2="1083.56" y2="25"></line><line x1="1097.82" y1="0" x2="1097.82" y2="25"></line><line x1="1112.08" y1="0" x2="1112.08" y2="25"></line><line x1="1126.34" y1="0" x2="1126.34" y2="25"></line><line x1="1140.59" y1="0" x2="1140.59" y2="25"></line><line x1="1154.85" y1="0" x2="1154.85" y2="25"></line><line x1="1169.11" y1="0" x2="1169.11" y2="25"></line><line x1="1183.37" y1="0" x2="1183.37" y2="25"></line><line x1="1197.62" y1="0" x2="1197.62" y2="25"></line><line x1="1211.88" y1="0" x2="1211.88" y2="25"></line><line x1="1226.14" y1="0" x2="1226.14" y2="25"></line><line x1="1240.4" y1="0" x2="1240.4" y2="25"></line><line x1="1254.65" y1="0" x2="1254.65" y2="25"></line><line x1="1268.91" y1="0" x2="1268.91" y2="25"></line><line x1="1283.17" y1="0" x2="1283.17" y2="25"></line><line x1="1297.43" y1="0" x2="1297.43" y2="25"></line><line x1="1311.68" y1="0" x2="1311.68" y2="25"></line><line x1="1325.94" y1="0" x2="1325.94" y2="25"></line><line x1="1340.2" y1="0" x2="1340.2" y2="25"></line><line x1="1354.46" y1="0" x2="1354.46" y2="25"></line><line x1="1368.71" y1="0" x2="1368.71" y2="25"></line><line x1="1382.97" y1="0" x2="1382.97" y2="25"></line><line x1="1397.23" y1="0" x2="1397.23" y2="25"></line><line x1="1411.49" y1="0" x2="1411.49" y2="25"></line><line x1="1425.74" y1="0" x2="1425.74" y2="25"></line><line x1="1440" y1="0" x2="1440" y2="25"></line></g><line class="base" x1="0" y1="25" x2="1440" y2="25"></line></svg></div>
-    <div><p>10 localizadores operacionais</p><svg class="regua r2" viewBox="0 0 1440 34" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="tracos"><line x1="0" y1="0" x2="0" y2="33"></line><line x1="160" y1="0" x2="160" y2="33"></line><line x1="320" y1="0" x2="320" y2="33"></line><line x1="480" y1="0" x2="480" y2="33"></line><line x1="640" y1="0" x2="640" y2="33"></line><line x1="800" y1="0" x2="800" y2="33"></line><line x1="960" y1="0" x2="960" y2="33"></line><line x1="1120" y1="0" x2="1120" y2="33"></line><line x1="1280" y1="0" x2="1280" y2="33"></line><line x1="1440" y1="0" x2="1440" y2="33"></line></g><line class="base" x1="0" y1="33" x2="1440" y2="33"></line></svg></div>
-    <div><p>3 núcleos temáticos</p><svg class="regua r3" viewBox="0 0 1440 42" preserveAspectRatio="none" aria-hidden="true" focusable="false"><g class="tracos"><line x1="0" y1="0" x2="0" y2="41"></line><line x1="720" y1="0" x2="720" y2="41"></line><line x1="1440" y1="0" x2="1440" y2="41"></line></g><line class="base" x1="0" y1="41" x2="1440" y2="41"></line></svg></div>
-    <figcaption>A mesma matéria em três resoluções. A redução não elimina assunto: cria a camada de localização que torna o acervo manejável.</figcaption>
-  </figure>
-  <div data-reveal style="background:#FFB627;color:#181818;margin-top:clamp(28px,3.4vw,48px);padding:clamp(28px,3.6vw,52px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <p style="margin:0;font-size:12.5px;font-weight:600">Cadência</p>
-    <p style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(4rem,13vw,10rem);line-height:.84;letter-spacing:-.055em">899</p>
-    <p style="margin:18px 0 0;font-size:clamp(15px,1.8vw,20px);line-height:1.4;font-weight:600;text-wrap:pretty">votos produzidos pela operação no período considerado</p>
-    <div style="display:flex;flex-wrap:wrap;gap:10px clamp(20px,3vw,44px);margin-top:clamp(20px,2.4vw,32px);padding-top:14px;border-top:1px solid rgba(24,24,24,.32)">
-      <p style="flex:0 1 240px;margin:0;font-size:12.5px;line-height:1.5;color:rgba(24,24,24,.74)">Base: 8 assessores; cinco meses; critério amplo</p>
-      <p style="flex:3 1 340px;margin:0;font-size:12.5px;line-height:1.5;color:rgba(24,24,24,.74);text-wrap:pretty"><span style="font-weight:600;color:#181818">Leitura.</span> O dado registra cadência sob o método. Não deve ser apresentado isoladamente como prova causal de superioridade.</p>
+  <div data-reveal class="precedent-proof" style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <div>
+      <p style="margin:0;font-size:12.5px;font-weight:600">Precedentes com tese firmada</p>
+      <p style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(4rem,13vw,10rem);line-height:.84;letter-spacing:-.055em">483</p>
+      <p style="margin:18px 0 0;font-size:clamp(15px,1.8vw,20px);line-height:1.4;font-weight:600;text-wrap:pretty">76,5% dos temas do painel têm tese firmada registrada</p>
+    </div>
+    <div class="precedent-proof__support">
+      <div><strong>245</strong><span>códigos de assunto</span></div>
+      <div><strong>9</strong><span>matérias</span></div>
+      <div><strong>3</strong><span>ramos do direito</span></div>
+      <div><strong>10</strong><span>situações catalogadas</span></div>
     </div>
   </div>
 
@@ -984,20 +1003,20 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
         <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">1.192 processos triados.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Escala produtiva</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">899 votos em cinco meses.</p>
+        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Taxonomia operacional</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">90,2% de redução da complexidade categorial.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Estruturação</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">102 assuntos convertidos em 10 localizadores.</p>
+        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Memória de precedentes</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">631 temas, dos quais 483 com tese firmada.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Memória</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">2.758 modelos de ementa estruturados.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">2.758 ementas catalogadas.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Cobertura</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">56% do acervo do período com diretriz antecipada.</p>
+        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Vocabulário controlado</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">245 códigos de assunto em 9 matérias, 3 ramos e 10 situações.</p>
       </div>
     </div>
   </div>
@@ -1069,15 +1088,15 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
 const MATERIAIS = [
-  {id:'m1',titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada · orientação · cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding · Enablement · Operating Principles',href:'assets/echo/documentos/notas-introdutorias.pdf'},
-  {id:'m2',titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional · diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery · Process Mapping · Stakeholder Interview',href:'assets/echo/documentos/a02.pdf'},
-  {id:'m3',titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada · verificação · quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates · Checklist · SOP · Intake Review',href:'assets/echo/documentos/afinacao-processual.pdf'},
-  {id:'m4',titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação · distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy · Matter Management · Knowledge Classification',href:'assets/echo/documentos/mapa-tematico.pdf'},
-  {id:'m5',titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação · roteamento · filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing · Queue Management · Operational Taxonomy',href:'assets/echo/documentos/a04.pdf'},
-  {id:'m6',titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança · distribuição · supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model · Role Design · People Operations',href:'assets/echo/documentos/a05.pdf'},
-  {id:'m7',titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento · autonomia · qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework · Talent Development · Performance Development',href:'assets/echo/documentos/a06.pdf'},
-  {id:'m8',titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção · pesquisa · memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database · Case Law Retrieval · Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m9',titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento · capacidade · memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management · Legal Data Analytics · Operational Monitoring',href:'assets/echo/documentos/jurimetria_prod.xlsx'}
+  {id:'m1',titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/echo/documentos/notas-introdutorias.pdf'},
+  {id:'m2',titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/a02.pdf'},
+  {id:'m3',titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/echo/documentos/afinacao-processual.pdf'},
+  {id:'m4',titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/data/lastro/mapa_tematico_publico.pdf'},
+  {id:'m5',titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/a04.pdf'},
+  {id:'m6',titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/a05.pdf'},
+  {id:'m7',titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/a06.pdf'},
+  {id:'m8',titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/data/lastro/precedentes_publico.xlsx'},
+  {id:'m9',titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/jurimetria_prod.xlsx'}
 ];
 
 const PERCURSOS = [
@@ -1239,11 +1258,5 @@ class Component extends DCLogic {
 
 </script>
 <div class="echo-trace" aria-hidden="true"><i></i><b></b><s></s></div>
-<script>(function(){var el=document.querySelector('.echo-trace');if(!el)return;var fill=el.querySelector('b'),dot=el.querySelector('s'),f=0;
-function apply(){f=0;var max=document.documentElement.scrollHeight-window.innerHeight;var p=max>0?Math.min(1,Math.max(0,(window.scrollY||document.documentElement.scrollTop)/max)):0;var pct=(p*100)+'%';fill.style.height=pct;dot.style.top=pct;}
-function schedule(){if(!f)f=(window.requestAnimationFrame||function(cb){return setTimeout(cb,16)})(apply);}
-apply();window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule,{passive:true});
-if(window.ResizeObserver){var ro=new ResizeObserver(schedule);ro.observe(document.documentElement);if(document.body)ro.observe(document.body);}
-})();</script>
 </body>
 </html>

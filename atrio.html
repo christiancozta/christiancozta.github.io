@@ -256,7 +256,7 @@
                     <dl><div><dt>Entrada</dt><dd>PDF, DOCX, imagem ou TXT, com detecção de escaneado e OCR local.</dd></div><div><dt>Opera</dt><dd>Extrai, deduplica por hash, pseudonimiza com código estável e inventaria.</dd></div><div><dt>Risco</dt><dd>Dado pessoal e segredo de justiça. Sigilo, OCR duvidoso ou baixa qualidade suspendem o handoff até decisão humana expressa.</dd></div><div><dt>Saída</dt><dd>Base limpa para reuso, inventário circulável sem dado cru, original cifrado no cofre.</dd></div></dl>
                   </section>
                   <section class="module-card__section module-card__operation">
-                    <div class="operation-copy"><p><b>Contexto</b> Acervo público sem API, disperso e tecnicamente inacessível. Disponibilidade não é acessibilidade; acesso sem governança não é reuso seguro.</p><p><b>Aplicação</b> Engenharia reversa do portal de jurisprudência, migração para a API pública do DataJud, ingestão incremental com retomada, pseudonimização reversível e cofre apartado do acervo.</p><p><b>Efeito</b> 115.114 decisões da 2ª Turma Recursal do TJPR, recorte de 2018 a 2026, reorganizadas em base governada. O número CNJ nunca é mascarado: é chave, não dado.</p></div>
+                    <div class="operation-copy"><p><b>Contexto</b> Acervo público sem API, disperso e tecnicamente inacessível. Disponibilidade não é acessibilidade; acesso sem governança não é reuso seguro.</p><p><b>Aplicação</b> Engenharia reversa do portal de jurisprudência, migração para a API pública do DataJud, ingestão incremental com retomada, pseudonimização reversível e cofre apartado do acervo.</p><p><b>Efeito</b> 115.114 registros processuais únicos da 2ª Turma Recursal do TJPR, no recorte de 2018 a 2026, reorganizados em base governada pelo CORPUS.</p></div>
                   </section>
                 </div>
               </article>
@@ -329,22 +329,56 @@
             <h3>Escala, recorte e fluxos</h3>
             <div class="row-body">
               <p>O ATRIO nasce de rotina recursal, acervo volumoso, revisão qualificada e pressão por padronização sem perda de critério.</p>
-              <p><strong>115.114 decisões</strong> da 2ª Turma Recursal do TJPR, recorte de 2018 a 2026, com RI, ED e MS em gramáticas próprias.</p>
+              <p>Os números abaixo expõem escala, arquitetura e efeito observado. Cada métrica preserva seu recorte no hover e no foco por teclado.</p>
             </div>
           </section>
 
-          <section class="metric-row">
-            <strong class="metric-row__number">59,3%</strong>
-            <div><h3>Conversão entre voto e despacho</h3><p>Maior índice da Turma entre assessores de volume comparável no recorte observado.</p></div>
-          </section>
+          <div class="findings-grid">
+            <article class="metric-card metric-card--corpus" tabindex="0">
+              <strong class="metric-card__number">115.114</strong>
+              <div class="metric-card__copy"><h3>Registros processuais únicos</h3><p>governados pelo CORPUS</p></div>
+              <p class="metric-card__source"><span>Lastro</span> Diagnóstico consolidado do CORPUS, com contagem de registros únicos.</p>
+            </article>
 
-          <section class="metric-row">
-            <strong class="metric-row__number">+6 p.p.</strong>
-            <div><h3>Evolução agregada entre adotantes</h3><p>O índice médio subiu de aproximadamente 46% para 52% após a adoção institucional.</p></div>
-          </section>
+            <article class="metric-card metric-card--wide" tabindex="0">
+              <strong class="metric-card__number">59,3%</strong>
+              <div class="metric-card__copy"><h3>Produtividade média individual</h3><p>ante 49,6% entre os pares</p></div>
+              <p class="metric-card__source"><span>Leitura</span> Assessor que utilizou, operou e refinou o sistema desde a criação, comparado aos demais assessores no mesmo recorte.</p>
+            </article>
+
+            <article class="metric-card metric-card--wide" tabindex="0">
+              <strong class="metric-card__number">+6 p.p.</strong>
+              <div class="metric-card__copy"><h3>Evolução agregada entre adotantes</h3><p>46% → 52%, em exibição arredondada</p></div>
+              <p class="metric-card__source"><span>Derivação</span> Média não ponderada de quatro assessores com série nas duas pontas: 45,7% em dez–fev e 51,9% em mar–abr, diferença de +6,3 p.p.</p>
+            </article>
+
+            <article class="metric-card metric-card--compact" tabindex="0">
+              <strong class="metric-card__number">175</strong>
+              <div class="metric-card__copy"><h3>Testes aprovados</h3><p>cobertura local automatizada</p></div>
+              <p class="metric-card__source"><span>Lastro</span> Suíte de testes da operação ATRIO.</p>
+            </article>
+
+            <article class="metric-card metric-card--compact metric-card--routes" tabindex="0">
+              <strong class="metric-card__number"><span class="metric-card__default">23</span><span class="metric-card__hover" aria-hidden="true">24</span></strong>
+              <div class="metric-card__copy"><h3>Rotas sob /v1</h3><p class="metric-card__route-label"><span>caminhos expostos</span><span aria-hidden="true">operações HTTP</span></p></div>
+              <p class="metric-card__source"><span>Contrato</span> 23 caminhos e 24 operações HTTP documentadas no OpenAPI 3.1.</p>
+            </article>
+
+            <article class="metric-card metric-card--compact" tabindex="0">
+              <strong class="metric-card__number">11</strong>
+              <div class="metric-card__copy"><h3>Eixos analíticos</h3><p>lentes independentes de leitura</p></div>
+              <p class="metric-card__source"><span>Arquitetura</span> Onze eixos aplicados ao exame técnico.</p>
+            </article>
+
+            <article class="metric-card metric-card--compact" tabindex="0">
+              <strong class="metric-card__number">4</strong>
+              <div class="metric-card__copy"><h3>Módulos independentes</h3><p>uma arquitetura de IA jurídica</p></div>
+              <p class="metric-card__source"><span>Sistema</span> ATRIO, CORPUS, RATIO e CERNE operam separadamente e compõem a arquitetura.</p>
+            </article>
+          </div>
 
           <section class="full-row methodology-row">
-            <div class="row-body"><p><strong>LEITURA METODOLÓGICA:</strong> O dado indica associação temporal com a operação do sistema, mas não isola causalidade. A evidência é apresentada como indício de rotina governável, não como prova autônoma de superioridade.</p></div>
+            <div class="row-body"><p><strong>LEITURA METODOLÓGICA:</strong> O comparativo de 59,3% observa um usuário contínuo desde a criação do sistema. O +6 p.p. compara dez–fev com mar–abr pela regra ampla e exclui o autor e a integrante sem série completa. Os dados indicam associação temporal com a operação, sem isolar causalidade.</p></div>
           </section>
 
         </article>
@@ -379,6 +413,18 @@
       </div>
     </section>
   </main>
+
+  <nav class="project-sequence" aria-label="Percurso entre projetos">
+    <a class="project-sequence__item project-sequence__item--arco" href="arco.html"><strong>5</strong><span>ARCO</span></a>
+    <span class="project-sequence__arrow" aria-hidden="true">&gt;</span>
+    <span class="project-sequence__item project-sequence__item--atrio" aria-current="page"><strong>4</strong><span>ATRIO</span></span>
+    <span class="project-sequence__arrow" aria-hidden="true">&gt;</span>
+    <a class="project-sequence__item project-sequence__item--echo" href="arco.html#echo"><strong>3</strong><span>ECHO</span></a>
+    <span class="project-sequence__arrow" aria-hidden="true">&gt;</span>
+    <span class="project-sequence__item project-sequence__item--future"><strong>2</strong><span>Em construção</span></span>
+    <span class="project-sequence__arrow" aria-hidden="true">&gt;</span>
+    <span class="project-sequence__item project-sequence__item--future"><strong>1</strong><span>Em construção</span></span>
+  </nav>
 
   <footer class="page-footer">
     <div class="global-grid"><div class="content-stage page-footer__content"><strong>ATRIO</strong><p>Christian da Costa</p><time datetime="2026">2026</time></div></div>
