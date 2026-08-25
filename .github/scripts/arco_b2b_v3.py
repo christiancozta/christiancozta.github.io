@@ -34,8 +34,10 @@ block = r'''
 }
 
 .rail__link--data{ text-decoration:none; }
-.rail__link--data:hover{ color:#00455D !important; }
-.rail__link--data:hover .n{ color:#00455D !important; }
+.rail__link--data:hover,
+.rail__link--data.is-data-hover{ color:#00455D !important; }
+.rail__link--data:hover .n,
+.rail__link--data.is-data-hover .n{ color:#00455D !important; }
 .rail__link--data::after{ background:#00455D !important; }
 </style>
 
@@ -49,8 +51,16 @@ block = r'''
   const arc = zone && zone.querySelector('.arc');
   const rail = document.querySelector('.rail');
   const railTitle = rail && rail.querySelector('.rail__title');
+  const dataLink = rail && rail.querySelector('.rail__link--data');
   const name = zone && zone.querySelector('.bio__name');
   if (!home || !zone || !bio || !arc || !rail || !railTitle || !name) return;
+
+  if (dataLink){
+    dataLink.addEventListener('pointerenter', () => dataLink.classList.add('is-data-hover'));
+    dataLink.addEventListener('pointerleave', () => dataLink.classList.remove('is-data-hover'));
+    dataLink.addEventListener('focus', () => dataLink.classList.add('is-data-hover'));
+    dataLink.addEventListener('blur', () => dataLink.classList.remove('is-data-hover'));
+  }
 
   const mqDesktopArrow = matchMedia('(min-width:821px)');
   const mqSideRail = matchMedia('(min-width:1001px)');
