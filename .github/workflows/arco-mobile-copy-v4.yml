@@ -1,0 +1,52 @@
+name: ARCO mobile metric copy v4
+
+on:
+  push:
+    branches: [b2b]
+    paths:
+      - '.github/workflows/arco-mobile-copy-v4.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate-mobile-copy:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: b2b
+          fetch-depth: 0
+
+      - name: Apply mobile-only metric copy
+        run: python3 .github/scripts/arco_mobile_copy_v4.py
+
+      - name: Install browser harness
+        run: npm install --no-save playwright-core@1.55.0
+
+      - name: Validate desktop unchanged and mobile copy in Chrome
+        run: |
+          export CHROME_PATH="$(which google-chrome || which chromium || which chromium-browser)"
+          test -n "$CHROME_PATH"
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/http.log 2>&1 &
+          PID=$!
+          trap 'kill $PID || true' EXIT
+          sleep 1
+          node .github/scripts/arco_mobile_copy_validate_v4.js
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arco-mobile-copy-v4-validation
+          path: |
+            /tmp/mobile-copy-v4-390.png
+            /tmp/mobile-copy-v4-430.png
+          retention-days: 1
+
+      - name: Commit only after browser pass
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add arco.html
+          git commit -m 'refine(arco): equalize mobile 5→1 metric copy [b2b]'
+          git push origin b2b
