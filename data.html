@@ -389,6 +389,37 @@
     </footer>
   </main>
 
+  <aside class="file-drawer" id="file-drawer" aria-labelledby="file-drawer-title" hidden>
+    <div class="file-drawer__backdrop" data-drawer-close></div>
+    <div class="file-drawer__panel" role="dialog" aria-modal="true">
+      <header class="file-drawer__header">
+        <div>
+          <p class="file-drawer__eyebrow">[ ARQUIVO / LASTRO ]</p>
+          <h2 id="file-drawer-title">Ficha de evidência</h2>
+        </div>
+        <button class="file-drawer__close" type="button" aria-label="Fechar ficha" data-drawer-close>FECHAR ×</button>
+      </header>
+      <div class="file-drawer__body">
+        <nav class="file-drawer__files" aria-label="Arquivos de evidência">
+          <p class="file-drawer__label">ARQUIVOS</p>
+          <button class="file-item is-active" type="button" data-file="metric"><span>01</span><b>métrica selecionada</b><small>proveniência do dado</small></button>
+          <a class="file-item" href="assets/data/jurimetria_prod.xlsx" download><span>02</span><b>jurimetria_prod.xlsx</b><small>base de trabalho</small></a>
+          <a class="file-item" href="assets/data/lastro/README.md"><span>03</span><b>lastro público</b><small>notas de reprodução</small></a>
+        </nav>
+        <section class="file-drawer__evidence" aria-live="polite">
+          <p class="file-drawer__label">REGISTRO ATIVO</p>
+          <dl>
+            <div><dt>FONTE</dt><dd data-drawer-source>Selecione uma métrica para consultar a origem.</dd></div>
+            <div><dt>NUMERADOR</dt><dd data-drawer-numerator>—</dd></div>
+            <div><dt>DENOMINADOR</dt><dd data-drawer-denominator>—</dd></div>
+            <div><dt>PERÍODO</dt><dd data-drawer-period>—</dd></div>
+          </dl>
+          <p class="file-drawer__note">A ficha expõe o caminho do número sem substituir a leitura metodológica. O denominador define o que pode ser comparado.</p>
+        </section>
+      </div>
+    </div>
+  </aside>
+
   <div class="data-tooltip" id="data-tooltip" role="tooltip" hidden>
     <span><b>FONTE</b><em data-tip-source></em></span>
     <span><b>NUMERADOR</b><em data-tip-numerator></em></span>
