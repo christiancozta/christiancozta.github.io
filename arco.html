@@ -2461,25 +2461,30 @@ body{
     <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-5">5</button>
     <span class="narr__l narr__short">DOMÍNIOS DE ATUAÇÃO</span>
     <span class="narr__l narr__detail" id="narr-detail-5" hidden>domínios organizam 17 mecanismos, com ao menos 86 nomenclaturas equivalentes no mercado privado.</span>
+    <span class="narr__l narr__mobile-copy">domínios organizam 17 mecanismos, com ao menos 86 nomenclaturas equivalentes usadas no mercado privado.</span>
   </li>
   <li class="narr__stat" data-step="4">
     <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-4">4</button>
     <span class="narr__l narr__short">MÓDULOS DE IA JURÍDICA</span>
     <span class="narr__l narr__detail" id="narr-detail-4" hidden>módulos de IA jurídica compõem ATRIO: arquitetura local end-to-end, com 175 testes e 115.114 julgados.</span>
+    <span class="narr__l narr__mobile-copy">módulos de IA jurídica compõem ATRIO: arquitetura local end-to-end, com 175 testes e 115.114 julgados.</span>
   </li>
   <li class="narr__stat" data-step="3">
     <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-3">3</button>
     <span class="narr__l narr__short">NÚCLEOS DE TRABALHO</span>
     <span class="narr__l narr__detail" id="narr-detail-3" hidden>núcleos estruturam 10 temáticas de 102 assuntos; taxonomia aplicada à triagem de 1.792 processos.</span>
+    <span class="narr__l narr__mobile-copy">núcleos estruturam 10 temáticas de 102 assuntos, em taxonomia aplicada à triagem de 1.792 processos.</span>
   </li>
   <li class="narr__stat" data-step="2">
     <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-2">2</button>
     <span class="narr__l narr__short">PROJETOS</span>
     <span class="narr__l narr__detail" id="narr-detail-2" hidden>projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.</span>
+    <span class="narr__l narr__mobile-copy">projetos implementados e documentados — ECHO e ATRIO — derivados de uma operação jurídica de alto volume.</span>
   </li>
   <li class="narr__stat" data-step="1">
     <b class="narr__n">1</b>
     <span class="narr__l narr__short">PERCURSO</span>
+    <span class="narr__l narr__mobile-copy">percurso entre gestão, operação e tecnologia, na encruzilhada entre Direito, dados, IA e governança.</span>
   </li>
 </ul>
         </div>
@@ -6204,5 +6209,27 @@ body{
 })();
 </script>
 <!-- b2b-v3:end -->
+
+
+<!-- mobile-copy-v4:start -->
+<style id="mobile-copy-v4">
+.narr__mobile-copy{ display:none !important; }
+@media (max-width:820px){
+  /* Mobile mantém a física validada; troca apenas o texto visível das cinco estações. */
+  .narr__stat .narr__short,
+  .narr__stat[data-step="1"] .narr__short,
+  .narr__stat .narr__detail,
+  .narr__stat .narr__detail[hidden]{ display:none !important; }
+  .narr__stat .narr__mobile-copy{
+    display:block !important;
+    grid-column:2 !important;
+    grid-row:1 !important;
+    min-width:0;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+}
+</style>
+<!-- mobile-copy-v4:end -->
 
 </body></html>
