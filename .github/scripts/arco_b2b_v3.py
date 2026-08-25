@@ -4,12 +4,9 @@ import re
 p = Path('arco.html')
 s = p.read_text(encoding='utf-8')
 
-# Remove a prior v3 layer, if this harness is rerun.
 s = re.sub(r'\n?<!-- b2b-v3:start -->.*?<!-- b2b-v3:end -->\n?', '\n', s, flags=re.S)
 
-# DATA is a first-class destination in the rail, but not a nested view.
 data_link = '<a class="rail__link rail__link--data" href="data.html">DATA<span class="n">05</span></a>'
-# Remove previous v3 insertion if present outside the block.
 s = re.sub(r'\s*<a class="rail__link rail__link--data" href="data\.html">DATA<span class="n">05</span></a>', '', s, count=1)
 translation = '<button class="rail__link" type="button" data-anchor="repertorio">Tradução<span class="n">04</span></button>'
 if translation not in s:
@@ -20,15 +17,10 @@ block = r'''
 <!-- b2b-v3:start -->
 <style id="hero-rail-b2b-v3">
 @media (min-width:821px){
-  /* O limite da bio nasce da própria encruzilhada: sua borda direita
-     coincide com a ponta livre da travessa do 1. */
   .home.hero-v3-ready .bio{
     width:var(--hero-v3-bio-w,auto) !important;
     max-width:var(--hero-v3-bio-w,50%) !important;
   }
-
-  /* Levante óptico, sem reservar área: revela minimamente a spring e não
-     altera a flecha da curva nem cria um novo respiro sob o arco. */
   .home.hero-v3-ready .narr-zone .arc{
     position:relative;
     top:-8px;
@@ -36,13 +28,11 @@ block = r'''
 }
 
 @media (min-width:1001px){
-  /* O bloco inteiro sobe/desce junto; kicker acompanha ARCO. */
   .rail.hero-v3-rail-ready .rail__id{
     transform:translateY(var(--hero-v3-rail-shift,0px));
   }
 }
 
-/* DATA mantém a gramática da rail e recebe apenas seu sinal cromático. */
 .rail__link--data{ text-decoration:none; }
 .rail__link--data:hover{ color:#00455D !important; }
 .rail__link--data:hover .n{ color:#00455D !important; }
@@ -65,23 +55,27 @@ block = r'''
   const mqDesktopArrow = matchMedia('(min-width:821px)');
   const mqSideRail = matchMedia('(min-width:1001px)');
   let raf = 0;
-  let settling = false;
+  let lastBioWidth = null;
 
   function tune(){
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
+      let widthChanged = false;
+
       if (!mqDesktopArrow.matches){
         home.classList.remove('hero-v3-ready');
         bio.style.removeProperty('--hero-v3-bio-w');
+        lastBioWidth = null;
       } else {
         home.classList.add('hero-v3-ready');
-
         const ar = arc.getBoundingClientRect();
         const br = bio.getBoundingClientRect();
         const axisX = ar.left + ar.width / 2;
         const linkWidth = Math.max(48, Math.min(72, innerWidth * .042));
         const freeEndX = axisX - linkWidth;
         const width = Math.max(220, freeEndX - br.left);
+        widthChanged = lastBioWidth === null || Math.abs(width - lastBioWidth) > .5;
+        lastBioWidth = width;
         bio.style.setProperty('--hero-v3-bio-w', width.toFixed(2) + 'px');
       }
 
@@ -96,15 +90,8 @@ block = r'''
         rail.style.removeProperty('--hero-v3-rail-shift');
       }
 
-      /* A alteração de largura da bio pode mudar sua quebra de linha.
-         Uma única segunda medição deixa a geometria v2 recalcular sobre o
-         layout final, sem loop de ResizeObserver. */
-      if (!settling){
-        settling = true;
-        requestAnimationFrame(() => {
-          window.dispatchEvent(new Event('resize'));
-          requestAnimationFrame(() => { settling = false; });
-        });
+      if (widthChanged){
+        requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
       }
     });
   }
