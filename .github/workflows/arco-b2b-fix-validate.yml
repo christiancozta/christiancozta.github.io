@@ -1,4 +1,4 @@
-name: ARCO b2b v2 geometry + browser validation
+name: ARCO b2b final hero + rail validation
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  revise-and-validate:
+  refine-and-validate:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -19,20 +19,27 @@ jobs:
           ref: b2b
           fetch-depth: 0
 
-      - name: Apply v2 hero patch
+      - name: Rebuild validated 5→1 hero layer
         run: python3 .github/scripts/arco_b2b_v2.py
 
-      - name: Validate embedded v2 JavaScript syntax
+      - name: Apply final hero and rail refinements
+        run: python3 .github/scripts/arco_b2b_v3.py
+
+      - name: Validate embedded JavaScript syntax
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
           s = Path('arco.html').read_text(encoding='utf-8')
-          m = re.search(r'<script id="hero-5to1-b2b-v2-js">(.*?)</script>', s, re.S)
-          assert m, 'v2 script not found'
-          Path('/tmp/hero-v2.js').write_text(m.group(1), encoding='utf-8')
+          for ident, target in [
+              ('hero-5to1-b2b-v2-js','/tmp/hero-v2.js'),
+              ('hero-rail-b2b-v3-js','/tmp/hero-v3.js')]:
+              m = re.search(r'<script id="' + re.escape(ident) + r'">(.*?)</script>', s, re.S)
+              assert m, ident + ' not found'
+              Path(target).write_text(m.group(1), encoding='utf-8')
           PY
           node --check /tmp/hero-v2.js
+          node --check /tmp/hero-v3.js
 
       - name: Install browser harness
         run: npm install --no-save playwright-core@1.55.0
@@ -45,15 +52,15 @@ jobs:
           PID=$!
           trap 'kill $PID || true' EXIT
           sleep 1
-          node .github/scripts/arco_b2b_validate.js
+          node .github/scripts/arco_b2b_validate_v3.js
 
       - uses: actions/upload-artifact@v4
         with:
-          name: arco-b2b-v2-browser-validation
+          name: arco-b2b-final-browser-validation
           path: |
-            /tmp/b2b-v2-1600.png
-            /tmp/b2b-v2-1024.png
-            /tmp/b2b-mobile-v2.png
+            /tmp/b2b-v3-1600.png
+            /tmp/b2b-v3-1024.png
+            /tmp/b2b-mobile-v3.png
           retention-days: 1
 
       - name: Commit only after browser pass
@@ -61,5 +68,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add arco.html
-          git commit -m 'refine(arco): interrupt 5→1 axis and raise crossroads [b2b]'
+          git commit -m 'refine(arco): finalize hero geometry and DATA rail [b2b]'
           git push origin b2b
