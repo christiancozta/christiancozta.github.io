@@ -33,6 +33,7 @@ block = r'''
 @media (max-width:820px){
   /* Mobile mantém a física validada; troca apenas o texto visível das cinco estações. */
   .narr__stat .narr__short,
+  .narr__stat[data-step="1"] .narr__short,
   .narr__stat .narr__detail,
   .narr__stat .narr__detail[hidden]{ display:none !important; }
   .narr__stat .narr__mobile-copy{
