@@ -1,0 +1,26 @@
+name: ARCO b2b visual snapshot
+
+on:
+  push:
+    branches: [b2b]
+    paths:
+      - '.github/workflows/arco-b2b-snapshot.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: b2b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arco-b2b-visual
+          path: |
+            arco.html
+            assets/arco
+          if-no-files-found: error
+          retention-days: 1
