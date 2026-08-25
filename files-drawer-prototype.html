@@ -7,72 +7,108 @@
   <link rel="stylesheet" href="files-drawer-prototype.css">
 </head>
 <body>
-  <main class="scene" data-scene>
-    <section class="archive" aria-label="Caixa de métricas">
-      <div class="archive__back" aria-hidden="true"></div>
+  <div class="prototype-shell is-archive-open" data-prototype>
+    <nav class="arco-rail" aria-label="Navegação ARCO">
+      <div class="arco-rail__identity">
+        <span class="arco-rail__title">ARCO</span>
+        <span class="arco-rail__kicker">Portfólio de<br>inteligência jurídica</span>
+      </div>
 
-      <div class="archive__files">
-        <button class="metric-file" type="button" data-key="corpus" style="--i:0;--tab:14px" aria-label="Abrir lastro da métrica 115.114">
-          <span class="metric-file__tab">115.114</span>
-        </button>
-        <button class="metric-file" type="button" data-key="modelos" style="--i:1;--tab:112px" aria-label="Abrir lastro da métrica 2.758">
-          <span class="metric-file__tab">2.758</span>
-        </button>
-        <button class="metric-file" type="button" data-key="mapeados" style="--i:2;--tab:30px" aria-label="Abrir lastro da métrica 1.192">
-          <span class="metric-file__tab">1.192</span>
-        </button>
-        <button class="metric-file" type="button" data-key="votos" style="--i:3;--tab:126px" aria-label="Abrir lastro da métrica 899">
-          <span class="metric-file__tab">899</span>
-        </button>
-        <button class="metric-file" type="button" data-key="produtividade" style="--i:4;--tab:52px" aria-label="Abrir lastro da métrica 60,4%">
-          <span class="metric-file__tab">60,4%</span>
-        </button>
-        <button class="metric-file" type="button" data-key="diretrizes" style="--i:5;--tab:108px" aria-label="Abrir lastro da métrica 56%">
-          <span class="metric-file__tab">56%</span>
+      <div class="arco-rail__index">
+        <span class="arco-rail__link">Percurso <b>01</b></span>
+        <span class="arco-rail__link">ECHO <b>02</b></span>
+        <span class="arco-rail__link">ATRIO <b>03</b></span>
+        <span class="arco-rail__link">Tradução <b>04</b></span>
+        <button class="arco-rail__link arco-rail__link--data" type="button" data-archive-toggle aria-controls="metric-archive" aria-expanded="true">
+          <span>DATA</span><b>05</b>
         </button>
       </div>
 
-      <div class="archive__side" aria-hidden="true"></div>
-      <div class="archive__front" aria-hidden="true">
-        <span class="archive__handle"></span>
+      <div class="arco-rail__foot" aria-hidden="true">
+        <span>Christian da Costa</span>
+        <small>LAW | OPS | AI</small>
       </div>
-    </section>
+    </nav>
 
-    <section class="evidence" data-panel hidden aria-hidden="true" aria-live="polite">
-      <button class="evidence__close" type="button" data-close-panel aria-label="Fechar ficha">×</button>
+    <main class="data-stage">
+      <section class="data-context" aria-hidden="true">
+        <p>ARCO / SYS.AUDIT.DATA</p>
+        <h1>DATA</h1>
+        <div>
+          <strong>O número depende<br>de onde se mede.</strong>
+          <span>evidência operacional / proveniência / método</span>
+        </div>
+      </section>
 
-      <div class="extracted-file" aria-hidden="true">
-        <span data-active-tab>115.114</span>
-      </div>
+      <div class="rail-slot" aria-hidden="true"></div>
 
-      <div class="sheet-window">
-        <article class="sheet">
-          <header class="sheet__top">
-            <span>ARCO / DATA</span>
-            <span data-sheet="fileId">FILE 01</span>
-          </header>
+      <section class="scene" data-scene aria-label="Arquivo de métricas DATA">
+        <section class="archive" id="metric-archive" aria-label="Caixa de métricas" aria-hidden="false">
+          <div class="archive__back" aria-hidden="true"></div>
 
-          <p class="sheet__kicker">DOCUMENTO DE EVIDÊNCIA</p>
-          <h1 data-sheet="value">115.114</h1>
-          <p class="sheet__title" data-sheet="metric">Julgados de base</p>
+          <div class="archive__files">
+            <button class="metric-file" type="button" data-key="corpus" style="--i:0;--tab:14px" aria-label="Abrir lastro da métrica 115.114">
+              <span class="metric-file__tab">115.114</span>
+            </button>
+            <button class="metric-file" type="button" data-key="modelos" style="--i:1;--tab:112px" aria-label="Abrir lastro da métrica 2.758">
+              <span class="metric-file__tab">2.758</span>
+            </button>
+            <button class="metric-file" type="button" data-key="mapeados" style="--i:2;--tab:30px" aria-label="Abrir lastro da métrica 1.192">
+              <span class="metric-file__tab">1.192</span>
+            </button>
+            <button class="metric-file" type="button" data-key="votos" style="--i:3;--tab:126px" aria-label="Abrir lastro da métrica 899">
+              <span class="metric-file__tab">899</span>
+            </button>
+            <button class="metric-file" type="button" data-key="produtividade" style="--i:4;--tab:52px" aria-label="Abrir lastro da métrica 60,4%">
+              <span class="metric-file__tab">60,4%</span>
+            </button>
+            <button class="metric-file" type="button" data-key="diretrizes" style="--i:5;--tab:108px" aria-label="Abrir lastro da métrica 56%">
+              <span class="metric-file__tab">56%</span>
+            </button>
+          </div>
 
-          <dl class="sheet__grid">
-            <div><dt>FONTE</dt><dd data-sheet="source">Corpus CODA</dd></div>
-            <div><dt>NUMERADOR</dt><dd data-sheet="numerator">115.114 julgados</dd></div>
-            <div><dt>DENOMINADOR</dt><dd data-sheet="denominator">n/a — contagem absoluta</dd></div>
-            <div><dt>PERÍODO</dt><dd data-sheet="period">base consolidada</dd></div>
-            <div><dt>CÁLCULO</dt><dd data-sheet="calculation">contagem absoluta</dd></div>
-            <div><dt>DOCUMENTO</dt><dd data-sheet="document">corpus_coda.jsonl</dd></div>
-          </dl>
+          <div class="archive__side" aria-hidden="true"></div>
+          <div class="archive__front" aria-hidden="true">
+            <span class="archive__handle"></span>
+          </div>
+        </section>
 
-          <footer class="sheet__footer">
-            <span>LASTRO / 01</span>
-            <span>DATA</span>
-          </footer>
-        </article>
-      </div>
-    </section>
-  </main>
+        <section class="evidence" data-panel hidden aria-hidden="true" aria-live="polite">
+          <button class="evidence__close" type="button" data-close-panel aria-label="Fechar documento de evidência">×</button>
+
+          <div class="extracted-file" aria-hidden="true"></div>
+
+          <div class="sheet-assembly">
+            <button class="evidence__metric-tab" type="button" data-active-tab data-return-active aria-label="Fechar evidência da métrica 115.114">115.114</button>
+
+            <div class="sheet-window">
+              <article class="sheet">
+                <header class="sheet__top">
+                  <span>ARCO / DATA</span>
+                  <span data-sheet="fileId">PAGE / 01</span>
+                </header>
+
+                <p class="sheet__kicker">PÁGINA / FONTE DE EVIDÊNCIA</p>
+                <div class="sheet__metrics" data-sheet-metrics></div>
+
+                <dl class="sheet__shared">
+                  <div><dt>FONTE COMPARTILHADA</dt><dd data-sheet="source">CORPUS / inventário consolidado</dd></div>
+                  <div><dt>PERÍODO</dt><dd data-sheet="period">2018—2026</dd></div>
+                  <div><dt>DOCUMENTO</dt><dd data-sheet="document">diagnostico_corpus_publico.md</dd></div>
+                  <div class="sheet__method"><dt>MÉTODO / ESCOPO</dt><dd data-sheet="method">Contagem de registros processuais únicos após normalização e deduplicação.</dd></div>
+                </dl>
+
+                <footer class="sheet__footer">
+                  <span data-sheet="pageLabel">LASTRO / 01</span>
+                  <span>DATA</span>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
 
   <script src="files-drawer-prototype.js"></script>
 </body>
