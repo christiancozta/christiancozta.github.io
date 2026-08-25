@@ -30,6 +30,38 @@
 
   let activeDatum = null;
 
+  const drawer = document.getElementById('file-drawer');
+  const drawerCloseButtons = drawer ? drawer.querySelectorAll('[data-drawer-close]') : [];
+  const drawerFields = drawer ? {
+    source: drawer.querySelector('[data-drawer-source]'),
+    numerator: drawer.querySelector('[data-drawer-numerator]'),
+    denominator: drawer.querySelector('[data-drawer-denominator]'),
+    period: drawer.querySelector('[data-drawer-period]')
+  } : null;
+  let drawerReturnFocus = null;
+
+  const openDrawer = (target) => {
+    if (!drawer || !drawerFields) return;
+    drawerReturnFocus = target;
+    drawerFields.source.textContent = target.dataset.source || 'Não informado';
+    drawerFields.numerator.textContent = target.dataset.numerator || 'Não se aplica';
+    drawerFields.denominator.textContent = target.dataset.denominator || 'Não se aplica';
+    drawerFields.period.textContent = target.dataset.period || 'Não informado';
+    drawer.hidden = false;
+    document.body.classList.add('drawer-is-open');
+    drawer.querySelector('.file-drawer__close').focus();
+  };
+
+  const closeDrawer = () => {
+    if (!drawer || drawer.hidden) return;
+    drawer.hidden = true;
+    document.body.classList.remove('drawer-is-open');
+    if (drawerReturnFocus) drawerReturnFocus.focus();
+    drawerReturnFocus = null;
+  };
+
+  drawerCloseButtons.forEach((button) => button.addEventListener('click', closeDrawer));
+
   const positionTooltip = (target) => {
     if (!tooltip || tooltip.hidden) return;
     const rect = target.getBoundingClientRect();
@@ -65,6 +97,7 @@
   };
 
   document.querySelectorAll('[data-datum]').forEach((datum) => {
+    datum.addEventListener('click', () => openDrawer(datum));
     datum.addEventListener('mouseenter', () => showTooltip(datum));
     datum.addEventListener('mouseleave', hideTooltip);
     datum.addEventListener('focus', () => showTooltip(datum));
@@ -87,6 +120,10 @@
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     hideTooltip();
+    if (drawer && !drawer.hidden) {
+      closeDrawer();
+      return;
+    }
     if (methodToggle && methodPanel && !methodPanel.hidden) {
       methodPanel.hidden = true;
       methodToggle.setAttribute('aria-expanded', 'false');
