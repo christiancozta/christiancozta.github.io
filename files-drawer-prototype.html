@@ -3,45 +3,77 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DATA — Gaveta de files</title>
+  <title>DATA — Caixa de métricas</title>
   <link rel="stylesheet" href="files-drawer-prototype.css">
 </head>
 <body>
-  <div class="prototype-shell">
-    <aside class="rail" aria-label="Navegação do ARCO">
-      <div class="rail-brand">ARCO<span>/</span>DATA</div>
-      <div class="rail-rule"></div>
-      <button class="rail-trigger" type="button" data-open-drawer aria-label="Abrir gaveta de files">
-        <span class="rail-dot"></span><span>FILES</span>
-      </button>
-      <div class="rail-bottom">PROTÓTIPO<br>v.01</div>
-    </aside>
-    <main class="stage">
-      <header class="stage-header"><p>DATA / EVIDÊNCIA</p><span>INTERFACE EM VALIDAÇÃO</span></header>
-      <section class="intro"><p class="kicker">[ MÉTRICAS PLACEHOLDER ]</p><h1>Escolha um número<br>para abrir seu lastro.</h1><p class="lede">Clique em qualquer métrica. A gaveta nasce da rail, organiza os files e traz a ficha A4 para a frente.</p></section>
-      <section class="metrics" aria-label="Métricas placeholder">
-        <button class="metric" data-metric="taxa"><span>01 / MÉTRICA</span><strong>72,4%</strong><small>taxa de confirmação</small></button>
-        <button class="metric" data-metric="volume"><span>02 / MÉTRICA</span><strong>1.248</strong><small>processos observados</small></button>
-        <button class="metric" data-metric="tempo"><span>03 / MÉTRICA</span><strong>18,6 d</strong><small>tempo mediano</small></button>
-      </section>
-    </main>
-  </div>
-  <aside class="drawer" data-drawer aria-hidden="true" aria-label="Gaveta de files">
-    <div class="drawer-scrim" data-close-drawer></div>
-    <div class="drawer-body" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
-      <header class="drawer-header"><div><p class="kicker">[ ARQUIVO / LASTRO ]</p><h2 id="drawer-title">Files</h2></div><button class="close" type="button" data-close-drawer aria-label="Fechar gaveta">×</button></header>
-      <div class="drawer-content">
-        <nav class="file-list" aria-label="Lista de files"><p class="label">FILES DISPONÍVEIS</p><button class="file is-active" data-file="metric"><span>01</span><b>ficha da métrica</b><small>registro selecionado</small></button><button class="file" data-file="source"><span>02</span><b>fonte primária</b><small>documento de origem</small></button><button class="file" data-file="preview"><span>03</span><b>nota de método</b><small>cálculo e escopo</small></button></nav>
-        <section class="sheet-wrap" aria-live="polite"><div class="sheet">
-          <header class="sheet-top"><span>ARCO / DATA</span><span>FICHA 01</span></header>
-          <p class="sheet-kicker">DOCUMENTO DE EVIDÊNCIA</p><h3 id="sheet-metric">72,4%</h3><p class="sheet-title">Taxa de confirmação</p>
-          <div class="sheet-grid"><div><span>MÉTRICA</span><b data-sheet="metric">Taxa de confirmação</b></div><div><span>FONTE</span><b data-sheet="source">Corpus público — placeholder</b></div><div><span>NUMERADOR</span><b data-sheet="numerator">904 ocorrências</b></div><div><span>DENOMINADOR</span><b data-sheet="denominator">1.248 observações</b></div><div><span>PERÍODO</span><b data-sheet="period">jan — dez / 2025</b></div><div><span>CÁLCULO</span><b data-sheet="calculation">904 ÷ 1.248 × 100</b></div></div>
-          <div class="document-preview"><span>PRÉVIA REDUZIDA DO DOCUMENTO</span><div class="preview-lines"><i></i><i></i><i></i><i></i><i></i><i></i></div><strong>DOC / fonte primária.pdf</strong></div>
-          <footer class="sheet-actions"><button type="button" class="button button-primary">Abrir</button><button type="button" class="button">Download</button></footer>
-        </div></section>
+  <main class="scene" data-scene>
+    <section class="archive" aria-label="Caixa de métricas">
+      <div class="archive__back" aria-hidden="true"></div>
+
+      <div class="archive__files">
+        <button class="metric-file" type="button" data-key="corpus" style="--i:0;--tab:14px" aria-label="Abrir lastro da métrica 115.114">
+          <span class="metric-file__tab">115.114</span>
+        </button>
+        <button class="metric-file" type="button" data-key="modelos" style="--i:1;--tab:112px" aria-label="Abrir lastro da métrica 2.758">
+          <span class="metric-file__tab">2.758</span>
+        </button>
+        <button class="metric-file" type="button" data-key="mapeados" style="--i:2;--tab:30px" aria-label="Abrir lastro da métrica 1.192">
+          <span class="metric-file__tab">1.192</span>
+        </button>
+        <button class="metric-file" type="button" data-key="votos" style="--i:3;--tab:126px" aria-label="Abrir lastro da métrica 899">
+          <span class="metric-file__tab">899</span>
+        </button>
+        <button class="metric-file" type="button" data-key="produtividade" style="--i:4;--tab:52px" aria-label="Abrir lastro da métrica 60,4%">
+          <span class="metric-file__tab">60,4%</span>
+        </button>
+        <button class="metric-file" type="button" data-key="diretrizes" style="--i:5;--tab:108px" aria-label="Abrir lastro da métrica 56%">
+          <span class="metric-file__tab">56%</span>
+        </button>
       </div>
-    </div>
-  </aside>
+
+      <div class="archive__side" aria-hidden="true"></div>
+      <div class="archive__front" aria-hidden="true">
+        <span class="archive__handle"></span>
+      </div>
+    </section>
+
+    <section class="evidence" data-panel hidden aria-hidden="true" aria-live="polite">
+      <button class="evidence__close" type="button" data-close-panel aria-label="Fechar ficha">×</button>
+
+      <div class="extracted-file" aria-hidden="true">
+        <span data-active-tab>115.114</span>
+      </div>
+
+      <div class="sheet-window">
+        <article class="sheet">
+          <header class="sheet__top">
+            <span>ARCO / DATA</span>
+            <span data-sheet="fileId">FILE 01</span>
+          </header>
+
+          <p class="sheet__kicker">DOCUMENTO DE EVIDÊNCIA</p>
+          <h1 data-sheet="value">115.114</h1>
+          <p class="sheet__title" data-sheet="metric">Julgados de base</p>
+
+          <dl class="sheet__grid">
+            <div><dt>FONTE</dt><dd data-sheet="source">Corpus CODA</dd></div>
+            <div><dt>NUMERADOR</dt><dd data-sheet="numerator">115.114 julgados</dd></div>
+            <div><dt>DENOMINADOR</dt><dd data-sheet="denominator">n/a — contagem absoluta</dd></div>
+            <div><dt>PERÍODO</dt><dd data-sheet="period">base consolidada</dd></div>
+            <div><dt>CÁLCULO</dt><dd data-sheet="calculation">contagem absoluta</dd></div>
+            <div><dt>DOCUMENTO</dt><dd data-sheet="document">corpus_coda.jsonl</dd></div>
+          </dl>
+
+          <footer class="sheet__footer">
+            <span>LASTRO / 01</span>
+            <span>DATA</span>
+          </footer>
+        </article>
+      </div>
+    </section>
+  </main>
+
   <script src="files-drawer-prototype.js"></script>
 </body>
 </html>
