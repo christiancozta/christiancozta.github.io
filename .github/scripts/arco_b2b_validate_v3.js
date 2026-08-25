@@ -96,6 +96,7 @@ const near = (a, b, tolerance, msg) => {
     }
 
     await page.hover('.rail__link--data');
+    await page.waitForTimeout(260);
     const hover = await page.evaluate(() => {
       const el = document.querySelector('.rail__link--data');
       const n = el.querySelector('.n');
