@@ -557,6 +557,53 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .echo-trace s{animation:echo-trace-dot linear both;animation-timeline:scroll(root block)}
 }
 @media(max-width:719px){.echo-trace{display:none}}
+
+/* ACERVO — DESTAQUE EDITORIAL 01–03 */
+#acervo div:has(> aside) > div:first-child > button:nth-child(-n+3)::after{
+  content:"★";
+  position:absolute;
+  left:26px;
+  top:31px;
+  z-index:4;
+  color:#FFB627;
+  font-size:8px;
+  line-height:1;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3){
+  color:#F2EFE9!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:first-child{
+  background:#181818!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:nth-child(2){
+  background:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside{
+  background:#FFB627!important;
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div{
+  border-top-color:rgba(24,24,24,.38)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div{
+  border-bottom-color:rgba(24,24,24,.28)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a{
+  background:#181818!important;
+  color:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a > span{
+  background:#FFB627!important;
+  color:#181818!important;
+}
 </style>
 </helmet>
 
