@@ -1257,6 +1257,15 @@ body{
   display:grid; grid-template-columns:minmax(0,1fr);
 }
 
+/* Na porta Equivalência, a tradução é um índice único: sem classificação
+   intermediária, com todos os verbetes em ordem alfabética. */
+.dict--alphabetical{
+  background:var(--grp-a);
+  padding:.15rem clamp(.9rem,2.2vw,1.6rem) 1.65rem;
+  width:100%; max-width:100%; min-width:0;
+}
+.dict--alphabetical > .verb:first-child{ border-top:0; }
+
 /* o registro: largura inteira do domínio, sem calha morta.
    --chev é a calha do marcador: ele pendura nela sem consumir o recuo. */
 .verb{
@@ -1691,6 +1700,7 @@ body{
   /* o índice no celular: o domínio mantém a massa, o registro perde a calha */
   .grp{ padding-inline:.9rem; }
   .grp__body{ padding-left:.75rem; padding-right:0; }
+  .dict--alphabetical{ padding-inline:.9rem; }
   .verb{ padding-inline:.5rem; --chev:.7rem; }
   .verb > summary{ grid-template-columns:minmax(0,1fr); column-gap:.75rem; row-gap:.35rem; }
   .verb__sig{ grid-column:1 / -1; }
@@ -3516,10 +3526,110 @@ body{
           </div>
 
           <div class="pane" id="pane-termo" role="tabpanel" aria-labelledby="door-termo" tabindex="0" hidden>
-            <div class="dict" id="eq-dicionario">
-          <details class="grp" data-reveal="">
-            <summary><h4>Data &amp; Information Management</h4><span class="grp__n">7</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
+            <div class="dict dict--alphabetical" id="eq-dicionario">
+              <details class="verb" id="iax-01">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Governance</span><span class="verb__p">Governança de inteligência artificial</span></span>
+                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Referência normativa</p><p>Arquitetura alinhada à LGPD e à Resolução CNJ 615/2025.</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Responsible AI; Governance Framework; IA responsável</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-02">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Risk Management</span><span class="verb__p">Gestão de riscos de IA</span></span>
+                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">AI Safety; Segurança de IA; Contenção</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="pro-03">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Process Management</span><span class="verb__p">Gestão de processos de negócio</span></span>
+                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
+                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
+                      <button class="chip" type="button" data-goto="mec-03-3" data-label="KPI &amp; Performance Management">Indicadores</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Operating Model; Operational Excellence; Modelo operacional; Excelência operacional</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="arq-04">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Rules</span><span class="verb__p">Regras de negócio</span></span>
+                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Rules engine; Decision tables; Critérios de bloqueio</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="pro-07">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Change Management</span><span class="verb__p">Gestão da mudança</span></span>
+                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-01-2" data-label="Knowledge Management &amp; Transfer">Transferência</button>
+                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Adoption; Enablement; Adesão</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-09">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Context Engineering</span><span class="verb__p">Engenharia de contexto</span></span>
+                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Context window management; Seleção de contexto</p></div>
+                </div>
+              </details>
 
               <details class="verb" id="dad-01">
                 <summary>
@@ -3571,107 +3681,56 @@ body{
                 </div>
               </details>
 
-              <details class="verb" id="dad-07">
+              <details class="verb" id="arq-03">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Information Retrieval; Findability; Recuperação da informação</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-05">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Enrichment; Structured Extraction; NLP; Document Understanding; Entity Extraction</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-04">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Catalog; Data Modeling; Catálogo de dados; Modelagem de dados</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="dad-06">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Classification; Categorização; Assuntos</p></div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <details class="grp" data-reveal="">
-            <summary><h4>Governance &amp; Assurance for AI</h4><span class="grp__n">10</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
-
-              <details class="verb" id="iax-01">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Governance</span><span class="verb__p">Governança de inteligência artificial</span></span>
-                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Decision Support System</span><span class="verb__p">Sistema de apoio à decisão</span></span>
+                  <span class="verb__sig"><span class="verb__mec">6 mecanismos</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
                       <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
                       <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
                       <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Referência normativa</p><p>Arquitetura alinhada à LGPD e à Resolução CNJ 615/2025.</p></div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Responsible AI; Governance Framework; IA responsável</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Decision Engineering; Decision Intelligence; Engenharia de decisão; Inteligência de decisão</p></div>
                 </div>
               </details>
 
-              <details class="verb" id="iax-02">
+              <details class="verb" id="prd-01">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">AI Risk Management</span><span class="verb__p">Gestão de riscos de IA</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Document Automation</span><span class="verb__p">Automação documental</span></span>
                   <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
                       <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">AI Safety; Segurança de IA; Contenção</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Doc gen; Document Assembly; Templates; Geração assistida</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="con-06">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Documentation</span><span class="verb__p">Documentação técnica</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-01-1" data-label="Knowledge Capture &amp; Documentation">Documentação</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Technical Writing; Content Operations; Content Governance; Redação técnica</p></div>
                 </div>
               </details>
 
@@ -3705,120 +3764,33 @@ body{
                 </div>
               </details>
 
-              <details class="verb" id="iax-07">
+              <details class="verb" id="dad-07">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Model Evaluation</span><span class="verb__p">Avaliação de modelos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Architecture</span><span class="verb__p">Arquitetura da informação</span></span>
                   <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">AI Evaluation; LLM Evaluation; Benchmarking; Eval</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Information Retrieval; Findability; Recuperação da informação</p></div>
                 </div>
               </details>
 
-              <details class="verb" id="iax-03">
+              <details class="verb" id="dad-05">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Privacy by Design</span><span class="verb__p">Privacidade desde a concepção</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Information Extraction</span><span class="verb__p">Extração de informação</span></span>
                   <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">LGPD; Pseudoanonimização; Data Protection; Data Masking; Anonimização; Minimização</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-05">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Quality Gates</span><span class="verb__p">Portões de qualidade</span></span>
-                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Stage-Gate; Quality Assurance; Control Points; Garantia da qualidade</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-06">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Red Teaming</span><span class="verb__p">Confronto adversarial</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Adversarial Review; Devil’s advocate; Estresse</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-12">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Risk Assessment</span><span class="verb__p">Avaliação de riscos</span></span>
-                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Risk matrix; Mitigação; Controles</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-11">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Traceability</span><span class="verb__p">Rastreabilidade</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Auditability; Data Lineage; Decision Traceability; Audit Trail; Auditabilidade; Linhagem</p></div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <details class="grp" data-reveal="">
-            <summary><h4>Knowledge &amp; Content Management</h4><span class="grp__n">6</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
-
-              <details class="verb" id="con-06">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Documentation</span><span class="verb__p">Documentação técnica</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-01-1" data-label="Knowledge Capture &amp; Documentation">Documentação</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Technical Writing; Content Operations; Content Governance; Redação técnica</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Enrichment; Structured Extraction; NLP; Document Understanding; Entity Extraction</p></div>
                 </div>
               </details>
 
@@ -3868,6 +3840,21 @@ body{
                 </div>
               </details>
 
+              <details class="verb" id="pro-09">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">KPI Management</span><span class="verb__p">Gestão de indicadores</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-03-3" data-label="KPI &amp; Performance Management">Indicadores</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Performance Metrics; Operational Reporting; Métricas de desempenho</p></div>
+                </div>
+              </details>
+
               <details class="verb" id="des-01">
                 <summary>
                   <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Design</span><span class="verb__p">Design jurídico</span></span>
@@ -3886,74 +3873,25 @@ body{
                 </div>
               </details>
 
-              <details class="verb" id="con-05">
+              <details class="verb" id="prd-02">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Style Guide</span><span class="verb__p">Guia de estilo</span></span>
-                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Engineering</span><span class="verb__p">Engenharia jurídica</span></span>
+                  <span class="verb__sig"><span class="verb__mec">7 mecanismos</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-01-3" data-label="Content Governance &amp; Controlled Language">Linguagem</button>
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
                       <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                      <span class="chip chip--static">Princípios transversais</span>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Controlled Vocabulary; Controlled Language; Editorial Governance; Manual de estilo</p></div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <details class="grp" data-reveal="">
-            <summary><h4>Process, Operations &amp; Performance</h4><span class="grp__n">12</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
-
-              <details class="verb" id="pro-03">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Process Management</span><span class="verb__p">Gestão de processos de negócio</span></span>
-                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
-                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
-                      <button class="chip" type="button" data-goto="mec-03-3" data-label="KPI &amp; Performance Management">Indicadores</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Operating Model; Operational Excellence; Modelo operacional; Excelência operacional</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="pro-07">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Change Management</span><span class="verb__p">Gestão da mudança</span></span>
-                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-01-2" data-label="Knowledge Management &amp; Transfer">Transferência</button>
-                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Adoption; Enablement; Adesão</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="pro-09">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">KPI Management</span><span class="verb__p">Gestão de indicadores</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-03-3" data-label="KPI &amp; Performance Management">Indicadores</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Performance Metrics; Operational Reporting; Métricas de desempenho</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Legal Tech; Legal Solutions Engineering</p></div>
                 </div>
               </details>
 
@@ -3970,6 +3908,82 @@ body{
                   </div>
                   <div><p class="verb__lbl">Ressalva de escopo</p><p>A equivalência possui cobertura parcial e declarada. A tradução demonstra processo, conhecimento, dados, tecnologia e governança do trabalho jurídico. Não demonstra a dimensão financeira de Legal Operations, como spend management, e-billing, gestão de fornecedores jurídicos ou orçamento de matérias.</p></div>
                   <div><p class="verb__lbl">Também chamado de</p><p class="al">Legal Ops; Legal Service Delivery</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="dad-04">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Metadata Management</span><span class="verb__p">Gestão de metadados</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Data Catalog; Data Modeling; Catálogo de dados; Modelagem de dados</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-07">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Model Evaluation</span><span class="verb__p">Avaliação de modelos</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">AI Evaluation; LLM Evaluation; Benchmarking; Eval</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="arq-01">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Modular Architecture</span><span class="verb__p">Arquitetura modular</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <span class="chip chip--static">Princípios transversais</span>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Systems Architecture; Solution Architecture; Separation of concerns; Arquitetura de sistemas</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="arq-02">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Orchestration</span><span class="verb__p">Orquestração</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Systems Integration; Multi-LLM; Pipeline; Integração de sistemas</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-03">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Privacy by Design</span><span class="verb__p">Privacidade desde a concepção</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">LGPD; Pseudoanonimização; Data Protection; Data Masking; Anonimização; Minimização</p></div>
                 </div>
               </details>
 
@@ -4038,6 +4052,108 @@ body{
                 </div>
               </details>
 
+              <details class="verb" id="prd-04">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Product Thinking</span><span class="verb__p">Pensamento de produto</span></span>
+                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <span class="chip chip--static">Princípios transversais</span>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Business Analysis; Product Strategy; Análise de negócios; Estratégia de produto</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-08">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Prompt Engineering</span><span class="verb__p">Engenharia de prompts</span></span>
+                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Instruction design; System prompt</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-05">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Quality Gates</span><span class="verb__p">Portões de qualidade</span></span>
+                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Stage-Gate; Quality Assurance; Control Points; Garantia da qualidade</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-06">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Red Teaming</span><span class="verb__p">Confronto adversarial</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Adversarial Review; Devil’s advocate; Estresse</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="arq-05">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Requirements Management</span><span class="verb__p">Gestão de requisitos</span></span>
+                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                      <span class="chip chip--static">Princípios transversais</span>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Product Requirements; Requisitos funcionais; Escopo</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-12">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Risk Assessment</span><span class="verb__p">Avaliação de riscos</span></span>
+                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
+                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Risk matrix; Mitigação; Controles</p></div>
+                </div>
+              </details>
+
               <details class="verb" id="pro-06">
                 <summary>
                   <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Root Cause Analysis</span><span class="verb__p">Análise de causa raiz</span></span>
@@ -4087,203 +4203,19 @@ body{
                 </div>
               </details>
 
-              <details class="verb" id="pro-04">
+              <details class="verb" id="con-05">
                 <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Workflow Design</span><span class="verb__p">Desenho de fluxos de trabalho</span></span>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Style Guide</span><span class="verb__p">Guia de estilo</span></span>
                   <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
                 </summary>
                 <div class="verb__body">
                   <div><p class="verb__lbl">Demonstrada por</p>
                     <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Process Design; Fluxo operacional</p></div>
-                </div>
-              </details>
-
-            </div>
-          </details>
-
-          <details class="grp" data-reveal="">
-            <summary><h4>Systems Architecture &amp; Legal Technology</h4><span class="grp__n">11</span><span class="grp__x" aria-hidden="true"></span></summary>
-            <div class="grp__body">
-
-              <details class="verb" id="arq-04">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Business Rules</span><span class="verb__p">Regras de negócio</span></span>
-                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Rules engine; Decision tables; Critérios de bloqueio</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-09">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Context Engineering</span><span class="verb__p">Engenharia de contexto</span></span>
-                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
-                      <button class="chip" type="button" data-goto="mec-02-4" data-label="Information Extraction &amp; Enrichment">Extração</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Context window management; Seleção de contexto</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="arq-03">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Decision Support System</span><span class="verb__p">Sistema de apoio à decisão</span></span>
-                  <span class="verb__sig"><span class="verb__mec">6 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
-                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Decision Engineering; Decision Intelligence; Engenharia de decisão; Inteligência de decisão</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="prd-01">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Document Automation</span><span class="verb__p">Automação documental</span></span>
-                  <span class="verb__sig"><span class="verb__mec">4 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-03-2" data-label="SOP &amp; Playbook Design">Procedimentos</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Doc gen; Document Assembly; Templates; Geração assistida</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="prd-02">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Legal Engineering</span><span class="verb__p">Engenharia jurídica</span></span>
-                  <span class="verb__sig"><span class="verb__mec">7 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
-                      <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
-                      <button class="chip" type="button" data-goto="mec-05-1" data-label="Privacy by Design &amp; Pseudonymization">Privacidade</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
-                      <span class="chip chip--static">Princípios transversais</span>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Legal Tech; Legal Solutions Engineering</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="arq-01">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Modular Architecture</span><span class="verb__p">Arquitetura modular</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <span class="chip chip--static">Princípios transversais</span>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Systems Architecture; Solution Architecture; Separation of concerns; Arquitetura de sistemas</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="arq-02">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Orchestration</span><span class="verb__p">Orquestração</span></span>
-                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Systems Integration; Multi-LLM; Pipeline; Integração de sistemas</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="prd-04">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Product Thinking</span><span class="verb__p">Pensamento de produto</span></span>
-                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <span class="chip chip--static">Princípios transversais</span>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Business Analysis; Product Strategy; Análise de negócios; Estratégia de produto</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="iax-08">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Prompt Engineering</span><span class="verb__p">Engenharia de prompts</span></span>
-                  <span class="verb__sig"><span class="verb__mec">3 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-2" data-label="Decision Workflow Engineering">Fluxo decisório</button>
-                      <button class="chip" type="button" data-goto="mec-04-3" data-label="Adversarial Evaluation">Avaliação adversarial</button>
+                      <button class="chip" type="button" data-goto="mec-01-3" data-label="Content Governance &amp; Controlled Language">Linguagem</button>
                       <button class="chip" type="button" data-goto="mec-04-4" data-label="Controlled Generation">Geração controlada</button>
                     </div>
                   </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Instruction design; System prompt</p></div>
-                </div>
-              </details>
-
-              <details class="verb" id="arq-05">
-                <summary>
-                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Requirements Management</span><span class="verb__p">Gestão de requisitos</span></span>
-                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
-                </summary>
-                <div class="verb__body">
-                  <div><p class="verb__lbl">Demonstrada por</p>
-                    <div class="chips">
-                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
-                      <button class="chip" type="button" data-goto="mec-05-2" data-label="Human-in-the-Loop &amp; Quality Gates">Gates</button>
-                      <span class="chip chip--static">Princípios transversais</span>
-                    </div>
-                  </div>
-                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Product Requirements; Requisitos funcionais; Escopo</p></div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Controlled Vocabulary; Controlled Language; Editorial Governance; Manual de estilo</p></div>
                 </div>
               </details>
 
@@ -4303,8 +4235,51 @@ body{
                 </div>
               </details>
 
-            </div>
-          </details>
+              <details class="verb" id="dad-06">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Taxonomy</span><span class="verb__p">Taxonomia</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-02-3" data-label="Metadata, Taxonomy &amp; Information Architecture">Taxonomia</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Classification; Categorização; Assuntos</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="iax-11">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Traceability</span><span class="verb__p">Rastreabilidade</span></span>
+                  <span class="verb__sig"><span class="verb__mec">1 mecanismo</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-05-3" data-label="Traceability &amp; Auditability">Rastreabilidade</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Auditability; Data Lineage; Decision Traceability; Audit Trail; Auditabilidade; Linhagem</p></div>
+                </div>
+              </details>
+
+              <details class="verb" id="pro-04">
+                <summary>
+                  <span class="verb__hd"><span class="verb__x" aria-hidden="true"></span><span class="verb__t">Workflow Design</span><span class="verb__p">Desenho de fluxos de trabalho</span></span>
+                  <span class="verb__sig"><span class="verb__mec">2 mecanismos</span></span>
+                </summary>
+                <div class="verb__body">
+                  <div><p class="verb__lbl">Demonstrada por</p>
+                    <div class="chips">
+                      <button class="chip" type="button" data-goto="mec-03-1" data-label="Process Mapping &amp; Workflow Design">Mapeamento</button>
+                      <button class="chip" type="button" data-goto="mec-04-1" data-label="Systems Orchestration &amp; Business Rules">Orquestração</button>
+                    </div>
+                  </div>
+                  <div><p class="verb__lbl">Também chamado de</p><p class="al">Process Design; Fluxo operacional</p></div>
+                </div>
+              </details>
             </div>
           </div>
           </div>
