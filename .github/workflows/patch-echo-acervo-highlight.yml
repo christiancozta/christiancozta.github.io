@@ -1,0 +1,100 @@
+name: Patch echo acervo highlight
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply acervo highlight styles
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('echo.html')
+          text = path.read_text(encoding='utf-8')
+          marker = '/* ACERVO — DESTAQUE EDITORIAL 01–03 */'
+          if marker in text:
+              raise SystemExit('marker already present; refusing duplicate patch')
+
+          css = r'''
+
+/* ACERVO — DESTAQUE EDITORIAL 01–03 */
+#acervo div:has(> aside) > div:first-child > button:nth-child(-n+3)::after{
+  content:"★";
+  position:absolute;
+  left:26px;
+  top:31px;
+  z-index:4;
+  color:#FFB627;
+  font-size:8px;
+  line-height:1;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3){
+  color:#F2EFE9!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:first-child{
+  background:#181818!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:nth-child(2){
+  background:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside{
+  background:#FFB627!important;
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div{
+  border-top-color:rgba(24,24,24,.38)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div{
+  border-bottom-color:rgba(24,24,24,.28)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a{
+  background:#181818!important;
+  color:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a > span{
+  background:#FFB627!important;
+  color:#181818!important;
+}
+'''
+
+          needle = '</style>\n</helmet>'
+          if needle not in text:
+              raise SystemExit('style closing marker not found')
+          text = text.replace(needle, css + '\n</style>\n</helmet>', 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit patch and remove one-off workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/patch-echo-acervo-highlight.yml
+          git add echo.html
+          git diff --cached --check
+          git commit -m "feat: highlight first three echo acervo materials"
+          git push origin HEAD:main
