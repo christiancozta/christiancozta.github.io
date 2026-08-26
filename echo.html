@@ -558,18 +558,33 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 @media(max-width:719px){.echo-trace{display:none}}
 
-/* ACERVO — DESTAQUE EDITORIAL 01–03 */
+/* ACERVO — DOCUMENTOS FUNDADORES 01–03 */
+#acervo-ficha{
+  border-left:1px solid #FFB627;
+  transition:
+    background-color .38s cubic-bezier(.22,.68,0,1),
+    color .38s cubic-bezier(.22,.68,0,1),
+    border-color .38s cubic-bezier(.22,.68,0,1),
+    box-shadow .38s cubic-bezier(.22,.68,0,1);
+  will-change:transform,opacity;
+}
 #acervo div:has(> aside) > div:first-child > button:nth-child(-n+3)::after{
   content:"★";
   position:absolute;
   left:26px;
-  top:31px;
+  top:calc(50% + 10px);
   z-index:4;
   color:#FFB627;
-  font-size:8px;
+  font-size:13px;
   line-height:1;
-  transform:translateX(-50%);
+  transform:translate(-50%,-50%);
   pointer-events:none;
+}
+#acervo div:has(> aside) > div:first-child > button:nth-child(3) .acervo-item__funcao{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
 }
 #acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3){
   color:#F2EFE9!important;
@@ -583,6 +598,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 #acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside{
   background:#FFB627!important;
   color:#181818!important;
+  border-left-color:#181818!important;
 }
 #acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > p:first-child{
   color:#181818!important;
@@ -604,6 +620,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   background:#FFB627!important;
   color:#181818!important;
 }
+
 </style>
 </helmet>
 
@@ -964,17 +981,17 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
           <sc-if value="{{ m.apagado }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;inset:0;background:rgba(242,239,233,.68);pointer-events:none;z-index:2"></span>
           </sc-if>
-          <span style="position:relative;z-index:1;font-family:'Azeret Mono',ui-monospace,monospace;font-size:11px;width:24px;flex:none">{{ m.num }}</span>
+          <span class="acervo-item__num" style="position:relative;z-index:1;font-family:'Azeret Mono',ui-monospace,monospace;font-size:11px;width:24px;flex:none">{{ m.num }}</span>
           <span style="position:relative;z-index:1;flex:1 1 200px;min-width:0">
             <span style="display:block;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16.5px;letter-spacing:-.025em">{{ m.titulo }}</span>
-            <span style="display:block;margin-top:4px;font-size:12.5px;line-height:1.45">{{ m.funcao }}</span>
+            <span class="acervo-item__funcao" style="display:block;margin-top:4px;font-size:12.5px;line-height:1.45">{{ m.funcao }}</span>
           </span>
           <span style="position:relative;z-index:1;flex:none;font-size:12.5px;font-weight:600">{{ m.familia }}</span>
         </button>
       </sc-for>
     </div>
 
-    <aside style="position:sticky;top:24px;min-width:0;background:#181818;color:#F2EFE9;padding:clamp(24px,2.6vw,38px)">
+    <aside id="acervo-ficha" style="position:sticky;top:24px;min-width:0;background:#181818;color:#F2EFE9;padding:clamp(24px,2.6vw,38px)">
       <p style="margin:0;font-size:12.5px;font-weight:600;color:#FFB627">{{ ficha.kicker }}</p>
       <h3 style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.04;letter-spacing:-.04em;text-wrap:pretty">{{ ficha.titulo }}</h3>
       <p style="margin:14px 0 0;font-size:14.5px;line-height:1.55">{{ ficha.lead }}</p>
@@ -1201,6 +1218,21 @@ class Component extends DCLogic {
   componentDidUpdate(prevProps, prevState) {
     this._sweep();
 
+    if (prevState.sel !== this.state.sel || prevState.perc !== this.state.perc) {
+      requestAnimationFrame(() => {
+        const card = document.getElementById('acervo-ficha');
+        if (!card || typeof card.animate !== 'function') return;
+        if (this._acervoAnimation) this._acervoAnimation.cancel();
+        this._acervoAnimation = card.animate(
+          [
+            { opacity: .72, transform: 'translateY(8px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ],
+          { duration: 360, easing: 'cubic-bezier(.22,.68,0,1)', fill: 'both' }
+        );
+      });
+    }
+
     if (!prevState.nota && this.state.nota) {
       requestAnimationFrame(() => {
         const note = document.getElementById('legal-ops-note');
@@ -1221,6 +1253,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this._io) this._io.disconnect();
+    if (this._acervoAnimation) this._acervoAnimation.cancel();
     clearTimeout(this._t1);
     clearTimeout(this._t2);
     if (this._legalOpsKeydown) document.removeEventListener('keydown', this._legalOpsKeydown);
