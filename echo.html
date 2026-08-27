@@ -557,6 +557,70 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .echo-trace s{animation:echo-trace-dot linear both;animation-timeline:scroll(root block)}
 }
 @media(max-width:719px){.echo-trace{display:none}}
+
+/* ACERVO — DOCUMENTOS FUNDADORES 01–03 */
+#acervo-ficha{
+  border-left:1px solid #FFB627;
+  transition:
+    background-color .38s cubic-bezier(.22,.68,0,1),
+    color .38s cubic-bezier(.22,.68,0,1),
+    border-color .38s cubic-bezier(.22,.68,0,1),
+    box-shadow .38s cubic-bezier(.22,.68,0,1);
+  will-change:transform,opacity;
+}
+#acervo div:has(> aside) > div:first-child > button:nth-child(-n+3)::after{
+  content:"★";
+  position:absolute;
+  left:26px;
+  top:calc(50% + 10px);
+  z-index:4;
+  color:#FFB627;
+  font-size:13px;
+  line-height:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+#acervo div:has(> aside) > div:first-child > button:nth-child(3) .acervo-item__funcao{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3){
+  color:#F2EFE9!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:first-child{
+  background:#181818!important;
+}
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:nth-child(2){
+  background:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside{
+  background:#FFB627!important;
+  color:#181818!important;
+  border-left-color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div{
+  border-top-color:rgba(24,24,24,.38)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div{
+  border-bottom-color:rgba(24,24,24,.28)!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div > p:first-child{
+  color:#181818!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a{
+  background:#181818!important;
+  color:#FFB627!important;
+}
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a > span{
+  background:#FFB627!important;
+  color:#181818!important;
+}
+
 </style>
 </helmet>
 
@@ -618,9 +682,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
             <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
           </tr>
           <tr>
-            <th>Roteiro de Entrevistas</th>
-            <td><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
+            <th>Mapa Temático</th>
+            <td class="muted"></td>
+            <td class="route-start"><span class="matrix-dot"></span></td>
+            <td class="route-end"><span class="matrix-dot"></span></td>
+            <td class="muted"></td><td class="muted"></td><td class="muted"></td>
           </tr>
           <tr>
             <th>Afinação Processual</th>
@@ -631,11 +697,25 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
             <td class="muted"></td><td class="muted"></td>
           </tr>
           <tr>
-            <th>Mapa Temático</th>
+            <th>Controle de Produtividade</th>
+            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
+            <td><span class="matrix-dot"></span></td>
+          </tr>
+          <tr>
+            <th>Ementário</th>
             <td class="muted"></td>
             <td class="route-start"><span class="matrix-dot"></span></td>
+            <td class="route-mid"></td>
+            <td class="route-mid"></td>
+            <td class="route-mid"></td>
             <td class="route-end"><span class="matrix-dot"></span></td>
+          </tr>
+          <tr>
+            <th>Guia de Estilo</th>
             <td class="muted"></td><td class="muted"></td><td class="muted"></td>
+            <td class="route-start"><span class="matrix-dot"></span></td>
+            <td class="route-end"><span class="matrix-dot"></span></td>
+            <td class="muted"></td>
           </tr>
           <tr>
             <th>Mapa de Localizadores</th>
@@ -645,18 +725,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
             <td class="muted"></td><td class="muted"></td><td class="muted"></td>
           </tr>
           <tr>
-            <th>Matriz de Papéis</th>
-            <td class="muted"></td><td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
             <th>Matriz de Competências</th>
             <td class="muted"></td><td class="muted"></td><td class="muted"></td>
             <td class="route-start"><span class="matrix-dot"></span></td>
             <td class="route-end"><span class="matrix-dot"></span></td>
             <td class="muted"></td>
+          </tr>
+          <tr>
+            <th>Matriz de Papéis</th>
+            <td class="muted"></td><td class="muted"></td>
+            <td class="route-start"><span class="matrix-dot"></span></td>
+            <td class="route-end"><span class="matrix-dot"></span></td>
+            <td class="muted"></td><td class="muted"></td>
           </tr>
           <tr>
             <th>Precedentes</th>
@@ -665,9 +745,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
             <td class="route-end"><span class="matrix-dot"></span></td>
           </tr>
           <tr>
-            <th>Controle de Produtividade</th>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
+            <th>Roteiro de Entrevistas</th>
             <td><span class="matrix-dot"></span></td>
+            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
           </tr>
         </tbody>
       </table>
@@ -901,17 +981,17 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
           <sc-if value="{{ m.apagado }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;inset:0;background:rgba(242,239,233,.68);pointer-events:none;z-index:2"></span>
           </sc-if>
-          <span style="position:relative;z-index:1;font-family:'Azeret Mono',ui-monospace,monospace;font-size:11px;width:24px;flex:none">{{ m.num }}</span>
+          <span class="acervo-item__num" style="position:relative;z-index:1;font-family:'Azeret Mono',ui-monospace,monospace;font-size:11px;width:24px;flex:none">{{ m.num }}</span>
           <span style="position:relative;z-index:1;flex:1 1 200px;min-width:0">
             <span style="display:block;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16.5px;letter-spacing:-.025em">{{ m.titulo }}</span>
-            <span style="display:block;margin-top:4px;font-size:12.5px;line-height:1.45">{{ m.funcao }}</span>
+            <span class="acervo-item__funcao" style="display:block;margin-top:4px;font-size:12.5px;line-height:1.45">{{ m.funcao }}</span>
           </span>
           <span style="position:relative;z-index:1;flex:none;font-size:12.5px;font-weight:600">{{ m.familia }}</span>
         </button>
       </sc-for>
     </div>
 
-    <aside style="position:sticky;top:24px;min-width:0;background:#181818;color:#F2EFE9;padding:clamp(24px,2.6vw,38px)">
+    <aside id="acervo-ficha" style="position:sticky;top:24px;min-width:0;background:#181818;color:#F2EFE9;padding:clamp(24px,2.6vw,38px)">
       <p style="margin:0;font-size:12.5px;font-weight:600;color:#FFB627">{{ ficha.kicker }}</p>
       <h3 style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.04;letter-spacing:-.04em;text-wrap:pretty">{{ ficha.titulo }}</h3>
       <p style="margin:14px 0 0;font-size:14.5px;line-height:1.55">{{ ficha.lead }}</p>
@@ -1138,6 +1218,21 @@ class Component extends DCLogic {
   componentDidUpdate(prevProps, prevState) {
     this._sweep();
 
+    if (prevState.sel !== this.state.sel || prevState.perc !== this.state.perc) {
+      requestAnimationFrame(() => {
+        const card = document.getElementById('acervo-ficha');
+        if (!card || typeof card.animate !== 'function') return;
+        if (this._acervoAnimation) this._acervoAnimation.cancel();
+        this._acervoAnimation = card.animate(
+          [
+            { opacity: .72, transform: 'translateY(8px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ],
+          { duration: 360, easing: 'cubic-bezier(.22,.68,0,1)', fill: 'both' }
+        );
+      });
+    }
+
     if (!prevState.nota && this.state.nota) {
       requestAnimationFrame(() => {
         const note = document.getElementById('legal-ops-note');
@@ -1158,6 +1253,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this._io) this._io.disconnect();
+    if (this._acervoAnimation) this._acervoAnimation.cancel();
     clearTimeout(this._t1);
     clearTimeout(this._t2);
     if (this._legalOpsKeydown) document.removeEventListener('keydown', this._legalOpsKeydown);
