@@ -1495,3 +1495,101 @@
   mqSideRail.addEventListener?.('change', tune);
   document.fonts?.ready?.then(() => requestAnimationFrame(tune));
 })();
+
+/* Camada de comprovação: um tooltip compartilhado por todas as métricas. */
+(() => {
+  "use strict";
+
+  const tooltip = document.getElementById("data-tooltip");
+  if (!tooltip) return;
+
+  const REGIMES = {
+    lastro: { nome: "Lastro documental", campos: ["FONTE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] },
+    derivacao: { nome: "Derivação", campos: ["DERIVA DE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] }
+  };
+  const TIP_KEYS = ["source", "numerator", "denominator", "period", "detail"];
+  const DATUM_SELECTOR = "[data-datum][data-regime]";
+  const tipFields = {
+    source: tooltip.querySelector("[data-tip-source]"),
+    numerator: tooltip.querySelector("[data-tip-numerator]"),
+    denominator: tooltip.querySelector("[data-tip-denominator]"),
+    period: tooltip.querySelector("[data-tip-period]")
+  };
+  let activeDatum = null;
+
+  const datumFrom = node => node instanceof Element ? node.closest(DATUM_SELECTOR) : null;
+
+  const positionTooltip = target => {
+    if (tooltip.hidden) return;
+    const rect = target.getBoundingClientRect();
+    const gap = 12;
+    const tipRect = tooltip.getBoundingClientRect();
+    let left = rect.left + (rect.width - tipRect.width) / 2;
+    let top = rect.top - tipRect.height - gap;
+
+    left = Math.max(gap, Math.min(left, window.innerWidth - tipRect.width - gap));
+    if (top < gap) top = Math.min(window.innerHeight - tipRect.height - gap, rect.bottom + gap);
+
+    tooltip.style.left = left + "px";
+    tooltip.style.top = top + "px";
+  };
+
+  const showTooltip = target => {
+    const regime = REGIMES[target.dataset.regime];
+    if (!regime) return;
+    if (activeDatum && activeDatum !== target) activeDatum.removeAttribute("aria-describedby");
+    activeDatum = target;
+    tooltip.className = "data-tooltip is-" + target.dataset.regime;
+    tooltip.querySelector("[data-tip-regime]").textContent = regime.nome;
+    TIP_KEYS.forEach((key, index) => {
+      const label = tooltip.querySelector(`[data-tip-label="${key}"]`);
+      if (label) label.textContent = regime.campos[index];
+    });
+    tipFields.source.textContent = target.dataset.source || "Não informado";
+    tipFields.numerator.textContent = target.dataset.numerator || "Não se aplica";
+    tipFields.denominator.textContent = target.dataset.denominator || "Não se aplica";
+    tipFields.period.textContent = target.dataset.period || "Não informado";
+    const detailSlot = tooltip.querySelector("[data-tip-slot=\"detail\"]");
+    const detailValue = tooltip.querySelector("[data-tip-detail]");
+    detailValue.textContent = target.dataset.detail || "";
+    detailSlot.hidden = !target.dataset.detail;
+    target.setAttribute("aria-describedby", tooltip.id);
+    tooltip.hidden = false;
+    requestAnimationFrame(() => positionTooltip(target));
+  };
+
+  const hideTooltip = () => {
+    if (activeDatum) activeDatum.removeAttribute("aria-describedby");
+    activeDatum = null;
+    tooltip.hidden = true;
+  };
+
+  document.addEventListener("mouseover", event => {
+    const target = datumFrom(event.target);
+    if (!target || target === datumFrom(event.relatedTarget)) return;
+    showTooltip(target);
+  });
+  document.addEventListener("mouseout", event => {
+    const target = datumFrom(event.target);
+    if (!target || target !== activeDatum) return;
+    const next = datumFrom(event.relatedTarget);
+    if (next && next !== target) showTooltip(next);
+    else if (!next) hideTooltip();
+  });
+  document.addEventListener("focusin", event => {
+    const target = datumFrom(event.target);
+    if (target) showTooltip(target);
+  });
+  document.addEventListener("focusout", event => {
+    const target = datumFrom(event.target);
+    if (!target || target !== activeDatum) return;
+    const next = datumFrom(event.relatedTarget);
+    if (next) showTooltip(next);
+    else hideTooltip();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") hideTooltip();
+  });
+  window.addEventListener("scroll", hideTooltip, { passive: true });
+  window.addEventListener("resize", hideTooltip, { passive: true });
+})();
