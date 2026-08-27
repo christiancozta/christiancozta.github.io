@@ -521,8 +521,8 @@ const ro=new ResizeObserver(measure);ro.observe(document.documentElement);const 
   if (!tooltip) return;
 
   const REGIMES = {
-    lastro: { nome: "Lastro documental", campos: ["FONTE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] },
-    derivacao: { nome: "Derivação", campos: ["DERIVA DE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] }
+    lastro: { nome: "Lastro documental", campos: ["FONTE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "RASTRO"] },
+    derivacao: { nome: "Derivação", campos: ["DERIVA DE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "RASTRO"] }
   };
   const TIP_KEYS = ["source", "numerator", "denominator", "period", "detail"];
   const DATUM_SELECTOR = "[data-datum][data-regime]";
