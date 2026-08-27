@@ -21,6 +21,13 @@
     revealItems.forEach((item) => revealObserver.observe(item));
   }
 
+  const REGIMES = {
+    lastro:     { nome: 'Lastro documental', campos: ['FONTE', 'NUMERADOR', 'DENOMINADOR', 'PERÍODO', 'VER EM'] },
+    derivacao:  { nome: 'Derivação',         campos: ['DERIVA DE', 'NUMERADOR', 'DENOMINADOR', 'PERÍODO', 'VER EM'] },
+    declaracao: { nome: 'Declaração',        campos: ['NATUREZA', 'O QUE AFIRMA', 'BASE DECLARADA', 'PERÍODO', 'VERIFICÁVEL EM'] }
+  };
+  const TIP_KEYS = ['source', 'numerator', 'denominator', 'period', 'detail'];
+
   const tipFields = tooltip ? {
     source: tooltip.querySelector('[data-tip-source]'),
     numerator: tooltip.querySelector('[data-tip-numerator]'),
@@ -49,10 +56,24 @@
     if (!tooltip || !tipFields) return;
     if (activeDatum && activeDatum !== target) activeDatum.removeAttribute('aria-describedby');
     activeDatum = target;
+    const regime = REGIMES[target.dataset.regime] ? target.dataset.regime : 'lastro';
+    tooltip.className = 'data-tooltip is-' + regime;
+    const regimeLine = tooltip.querySelector('[data-tip-regime]');
+    if (regimeLine) regimeLine.textContent = REGIMES[regime].nome;
+    TIP_KEYS.forEach((key, i) => {
+      const label = tooltip.querySelector('[data-tip-label="' + key + '"]');
+      if (label) label.textContent = REGIMES[regime].campos[i];
+    });
     tipFields.source.textContent = target.dataset.source || 'Não informado';
     tipFields.numerator.textContent = target.dataset.numerator || 'Não se aplica';
     tipFields.denominator.textContent = target.dataset.denominator || 'Não se aplica';
     tipFields.period.textContent = target.dataset.period || 'Não informado';
+    const detailSlot = tooltip.querySelector('[data-tip-slot="detail"]');
+    const detailValue = tooltip.querySelector('[data-tip-detail]');
+    if (detailSlot && detailValue) {
+      detailValue.textContent = target.dataset.detail || '';
+      detailSlot.hidden = !target.dataset.detail;
+    }
     target.setAttribute('aria-describedby', tooltip.id);
     tooltip.hidden = false;
     requestAnimationFrame(() => positionTooltip(target));

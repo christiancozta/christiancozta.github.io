@@ -23,7 +23,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 76,5% com tese firmada | derivada | `precedentes_publico.xlsx` |
 | 245 códigos, 9 matérias, 3 ramos e 10 situações | direta | `precedentes_publico.xlsx` |
 | 115.114 registros únicos | direta | `diagnostico_corpus_publico.md` |
-| 23 caminhos, 24 operações e 175 testes | direta | `operacao_atrio_publica.md` |
+| 31 caminhos, 33 operações e 188 testes | direta | `operacao_atrio_publica.md` |
 
 ## Exclusões de privacidade
 
