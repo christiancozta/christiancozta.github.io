@@ -1322,7 +1322,9 @@
       const hr = layoutBox(head);
       if (!ar || !hr) return;
 
-      const axisX = ar.x + ar.width / 2;
+      /* A coluna dos numeros sai do centro do arco e afasta-se da coluna de
+         texto: o eixo passa a 56% da largura, nao a 50%. */
+      const axisX = ar.x + ar.width * .56;
       const springY = ar.bottom;
       const safeArc = clamp(8, innerWidth * .007, 14);
       const bottomEdge = ar.y - safeArc;
@@ -1330,12 +1332,16 @@
       const totalHeight = heights.reduce((sum, h) => sum + h, 0);
       const targetTop = hr.y + Math.max(0, (hr.height - heights[4]) * .18);
       const rawGap = (bottomEdge - targetTop - totalHeight) / 4;
-      const gap = clamp(18, rawGap, 92);
+      /* ritmo vertical mais fechado: a coluna comprime em vez de ocupar toda
+         a altura disponivel */
+      const gap = clamp(14, rawGap * .74, 62);
 
+      /* Leitura 5 -> 1, de cima para baixo. stats esta em ordem de DOM
+         (5,4,3,2,1), entao o pe da coluna e o ultimo item, nao o primeiro. */
       const tops = new Array(5);
-      tops[0] = bottomEdge - heights[0];
-      for (let i = 1; i < 5; i++){
-        tops[i] = tops[i - 1] - gap - heights[i];
+      tops[4] = bottomEdge - heights[4];
+      for (let i = 3; i >= 0; i--){
+        tops[i] = tops[i + 1] - gap - heights[i];
       }
 
       stats.forEach((stat, i) => {

@@ -422,8 +422,10 @@ body{
 .arc .spring{ stroke-opacity:.28; }
 /* o pilar nasce na nascenca e entrega a carga no filete do bloco */
 .arc .pilar{ stroke:var(--ink); stroke-opacity:.18; }
+/* Repouso permanente: os pilares nao se desenham sozinhos. Entram com o
+   resto do hero, no mesmo acionamento por movimento ou clique. */
 @media (prefers-reduced-motion:no-preference){
-  .arc.is-in .pilar{ transition:stroke-dashoffset 620ms var(--ease) 1200ms; stroke-dashoffset:0; }
+  .home.narr-on .arc .pilar{ transition:stroke-dashoffset 620ms var(--ease) 1200ms; stroke-dashoffset:0; }
 }
 
 /* ===========================================================================
@@ -1461,6 +1463,8 @@ body{
   font-family:var(--f-micro); font-size:.58rem; letter-spacing:.02em; line-height:1.4;
   color:var(--ink-62); text-transform:none; text-align:left;
 }
+/* O titulo do numero sobe 1pt e ganha peso; o texto de apoio segue igual. */
+.narr__short{ font-size:.673rem; font-weight:700; color:var(--ink); }
 @media (prefers-reduced-motion:reduce){
   .narr{ transition:none; }
   .narr__stat{ opacity:1; transform:none; }
@@ -2144,7 +2148,7 @@ body{
   .home.hero-v2-ready .narr__stat{
     position:absolute !important;
     left:var(--hero-v2-left,50%) !important;
-    right:0 !important;
+    right:clamp(1rem,7vw,7.5rem) !important;
     top:var(--hero-v2-top,0px) !important;
     width:auto !important;
     max-width:none !important;
