@@ -1401,7 +1401,13 @@ body{
 }
 /* três âncoras, uma tela: a ficha no topo, o percurso no meio, o arco no pé.
    As duas folgas automáticas repartem a sobra — em tela alta nada fica órfão. */
-.hero__txt, .narr-zone .arc{ margin-top:auto; }
+/* (b) O Itinerario sobe e encosta no cabecalho; so o arco continua no pe. */
+.narr-zone .arc{ margin-top:auto; }
+.hero__txt{ margin-top:clamp(1.1rem,2.4vw,2.2rem); }
+@media (min-width:821px){
+  /* deixa a faixa da direita livre para a coluna dos numeros */
+  .hero__txt{ max-width:clamp(13rem,26%,19rem); }
+}
 
 /* O mini-texto do Itinerario recua atras de um filete; o filete e que passa
    a observar a margem esquerda de credenciais, nome e titulo. A entrelinha
@@ -1643,7 +1649,10 @@ body{
 /* ABERTURA — ficha de abertura (marca; nome; tagline; bio justificada; contatos; CV) */
 /* estreita de propósito: abre a calha da direita para a régua subir até a
    altura do nome sem disputar espaço com a prosa */
-.bio{ max-width:50%; margin:0 0 clamp(1.5rem,3vw,2.4rem); }
+/* (a) A faixa de cabecalho e cheia: os numeros desceram para a coluna da
+   direita, entao a ficha nao divide mais a largura com eles. O creed cabe em
+   uma linha e as tags de contato caem na seguinte. */
+.bio{ max-width:none; margin:0 0 clamp(1.1rem,2.2vw,1.7rem); }
 /* sem régua não há calha a proteger: a ficha volta à largura da coluna */
 @media (max-width:820px){ .bio{ max-width:none; } }
 .bio__head{ display:flex; align-items:flex-start; gap:clamp(.7rem,1.3vw,1.05rem); margin:0 0 clamp(.85rem,1.7vw,1.2rem); }
@@ -1691,19 +1700,23 @@ body{
 .bio__run .mov__t{ display:inline; }
 .bio__end{ white-space:nowrap; }
 .bio__list{
-  list-style:none; margin:0; padding:0; display:inline-flex; align-items:baseline;
-  flex-wrap:nowrap; gap:clamp(.65rem,1vw,1rem); vertical-align:baseline;
-  font-family:var(--f-body); font-size:clamp(.78rem,.95vw,.88rem); color:var(--ink);
+  list-style:none; margin:clamp(.7rem,1.3vw,1.05rem) 0 0; padding:0;
+  display:flex; flex-wrap:wrap; align-items:center;
+  gap:clamp(.4rem,.7vw,.6rem);
+  font-family:var(--f-micro); font-size:.673rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-62);
 }
 .bio__list::before{
-  content:""; flex:none; align-self:center;
-  width:clamp(1.35rem,1.55vw,1.8rem); height:1px;
-  margin:0 clamp(.1rem,.35vw,.35rem) 0 clamp(.35rem,.6vw,.65rem);
-  background:var(--ink);
+  content:none;
 }
 .bio__list li{ white-space:nowrap; }
-.bio__list a{ color:var(--ink); text-decoration:none; background-image:linear-gradient(var(--hair),var(--hair)); background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%; padding-bottom:1px; transition:background-image var(--fast) var(--ease); }
-.bio__list a:hover{ background-image:linear-gradient(currentColor,currentColor); }
+.bio__list a{
+  display:inline-block; padding:.44em .78em;
+  color:inherit; text-decoration:none; background:none;
+  border:1px solid var(--hair);
+  transition:color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.bio__list a:hover,.bio__list a:focus-visible{ color:var(--ink); border-color:var(--ink); }
 .cv--bio{ white-space:nowrap; }
 
 /* ========================================================================== */
@@ -2148,9 +2161,9 @@ body{
   .home.hero-v2-ready .narr__stat{
     position:absolute !important;
     left:var(--hero-v2-left,50%) !important;
-    right:clamp(1rem,7vw,7.5rem) !important;
+    right:auto !important;
     top:var(--hero-v2-top,0px) !important;
-    width:auto !important;
+    width:var(--hero-v2-width,auto) !important;
     max-width:none !important;
     display:grid !important;
     grid-template-columns:max-content minmax(0,1fr) !important;
@@ -2261,8 +2274,11 @@ body{
 /* ========================================================================== */
 @media (min-width:821px){
   .home.hero-v3-ready .bio{
-    width:var(--hero-v3-bio-w,auto) !important;
-    max-width:var(--hero-v3-bio-w,50%) !important;
+    /* A largura da ficha era medida em JS para nao colidir com a coluna dos
+       numeros, que ficava ao lado. Os numeros desceram: a faixa e cheia e a
+       medida deixa de existir. */
+    width:auto !important;
+    max-width:none !important;
   }
   .home.hero-v3-ready .narr-zone .arc{
     position:relative;

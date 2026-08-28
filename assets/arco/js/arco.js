@@ -1241,6 +1241,7 @@
   const narr = zone.querySelector('.narr');
   const arc = zone.querySelector('.arc');
   const head = zone.querySelector('.bio__head');
+  const heroTxt = zone.querySelector('.hero__txt');
   const stats = ['5','4','3','2','1'].map(step => zone.querySelector(`.narr__stat[data-step="${step}"]`));
   if (!narr || !arc || !head || stats.some(stat => !stat)) return;
 
@@ -1322,33 +1323,61 @@
       const hr = layoutBox(head);
       if (!ar || !hr) return;
 
-      /* A coluna dos numeros sai do centro do arco e afasta-se da coluna de
-         texto: o eixo passa a 56% da largura, nao a 50%. */
-      const axisX = ar.x + ar.width * .56;
+      /* (c) A coluna nasce a direita da coluna de texto e fecha na margem
+         direita da pagina, como a faixa de cabecalho. */
+      /* A coluna mede pela zona, nao pelo arco: o arco desconta a barra de
+         rolagem e fecha 5px antes da margem da pagina. O cabecalho usa a
+         zona, e a coluna tem de fechar na mesma linha que ele. */
+      const zw = zone.getBoundingClientRect().width;
+      const colLeft = zw * .37;
       const springY = ar.bottom;
       const safeArc = clamp(8, innerWidth * .007, 14);
       const bottomEdge = ar.y - safeArc;
       const heights = stats.map(expandedHeight);
       const totalHeight = heights.reduce((sum, h) => sum + h, 0);
-      const targetTop = hr.y + Math.max(0, (hr.height - heights[4]) * .18);
-      const rawGap = (bottomEdge - targetTop - totalHeight) / 4;
-      /* ritmo vertical mais fechado: a coluna comprime em vez de ocupar toda
-         a altura disponivel */
-      const gap = clamp(14, rawGap * .74, 62);
 
-      /* Leitura 5 -> 1, de cima para baixo. stats esta em ordem de DOM
-         (5,4,3,2,1), entao o pe da coluna e o ultimo item, nao o primeiro. */
+      /* O topo da coluna e o topo do Itinerario: as duas colunas partem da
+         mesma margem. Da para o pe do arco, os cinco numeros repartem a
+         sobra — a coluna cabe inteira, sem depender de colapsar detalhe. */
+      const tr = layoutBox(heroTxt);
+      const topStart = tr ? tr.y : hr.bottom;
+      const rawGap = (bottomEdge - topStart - totalHeight) / 4;
+      const gap = clamp(10, rawGap, 46);
+
+      /* Leitura 5 -> 1, de cima para baixo, na ordem do DOM. */
       const tops = new Array(5);
-      tops[4] = bottomEdge - heights[4];
-      for (let i = 3; i >= 0; i--){
-        tops[i] = tops[i + 1] - gap - heights[i];
+      tops[0] = topStart;
+      for (let i = 1; i < 5; i++){
+        tops[i] = tops[i - 1] + heights[i - 1] + gap;
       }
 
+      const colWidth = zw - colLeft;
       stats.forEach((stat, i) => {
-        const numberWidth = numbers[i].offsetWidth || 1;
-        stat.style.setProperty('--hero-v2-left', (axisX - numberWidth / 2).toFixed(2) + 'px');
+        stat.style.setProperty('--hero-v2-left', colLeft.toFixed(2) + 'px');
         stat.style.setProperty('--hero-v2-top', tops[i].toFixed(2) + 'px');
+        stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
       });
+
+      /* A caixa resultante nao pousa exatamente na coordenada pedida — sobra
+         o offset do proprio item na lista. Em vez de adivinhar de onde vem,
+         mede-se o desvio uma vez e desconta-se. */
+      const zr0 = stats[0].getBoundingClientRect();
+      const zz = zone.getBoundingClientRect();
+      const desvioY = (zr0.top - zz.top) - tops[0];
+      const desvioX = (zr0.left - zz.left) - colLeft;
+      if (Math.abs(desvioY) > .5){
+        stats.forEach((stat, i) => {
+          stat.style.setProperty('--hero-v2-top', (tops[i] - desvioY).toFixed(2) + 'px');
+        });
+      }
+      if (Math.abs(desvioX) > .5){
+        /* a coluna nasce onde nasce; o que precisa fechar na margem e a borda
+           direita, entao a largura absorve o desvio */
+        stats.forEach(stat => {
+          stat.style.setProperty('--hero-v2-width', (colWidth + desvioX * -1).toFixed(2) + 'px');
+        });
+      }
+      const axisX = colLeft + (numbers[0].offsetWidth || 1) / 2;
 
       void zone.offsetHeight;
       const numberBoxes = numbers.map(layoutBox);
@@ -1397,14 +1426,26 @@
     const detail = stat.querySelector('.narr__detail');
     if (!detail || button.tagName !== 'BUTTON') return;
 
-    button.addEventListener('click', event => {
+    const set = shouldOpen => {
       if (mq.matches) return;
-      event.stopImmediatePropagation();
-      const shouldOpen = detail.hidden;
       detail.hidden = !shouldOpen;
       stat.classList.toggle('is-open', shouldOpen);
       detail.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
       button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+    };
+
+    /* Passar o cursor ja abre; o clique fixa, para quem quiser ler sem
+       manter o ponteiro parado. Teclado usa foco, pelo mesmo caminho. */
+    stat.addEventListener('pointerenter', () => { if (!stat.dataset.fixo) set(true); });
+    stat.addEventListener('pointerleave', () => { if (!stat.dataset.fixo) set(false); });
+    stat.addEventListener('focusin', () => set(true));
+    stat.addEventListener('focusout', () => { if (!stat.dataset.fixo) set(false); });
+
+    button.addEventListener('click', event => {
+      if (mq.matches) return;
+      event.stopImmediatePropagation();
+      if (stat.dataset.fixo){ delete stat.dataset.fixo; set(false); }
+      else { stat.dataset.fixo = '1'; set(true); }
     }, true);
   });
 
@@ -1440,6 +1481,11 @@
     ro.observe(zone);
     ro.observe(arc);
     ro.observe(head);
+    /* o topo da coluna e o topo do Itinerario, e o Itinerario desce quando a
+       ficha muda de altura: os dois precisam reposicionar a coluna */
+    if (heroTxt) ro.observe(heroTxt);
+    const ficha = zone.querySelector('.bio');
+    if (ficha) ro.observe(ficha);
   }
 })();
 
