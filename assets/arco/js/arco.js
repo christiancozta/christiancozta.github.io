@@ -1448,6 +1448,23 @@
           stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
         });
       }
+      /* O algarismo e tabular: todos ocupam a mesma largura de avanco, mas o
+         glifo fica centrado nela — sobra um vao a esquerda que muda de digito
+         para digito, e e por isso que a coluna lia desencostada da linha
+         mesmo com as caixas alinhadas. Mede-se a tinta de cada um e desconta-
+         se o vao, de modo que o traco encoste no desenho, nao na caixa. A
+         largura de avanco fica intacta, entao os rotulos nao se mexem. */
+      numbers.forEach(numero => {
+        if (!numero) return;
+        numero.style.transform = 'none';
+        const caixa = numero.getBoundingClientRect();
+        const alcance = document.createRange();
+        alcance.selectNodeContents(numero);
+        const tinta = alcance.getBoundingClientRect();
+        const vao = tinta.left - caixa.left;
+        numero.style.transform = vao > .2 ? `translateX(${(-vao).toFixed(2)}px)` : 'none';
+      });
+
       const axisX = pilar2;
 
       void zone.offsetHeight;
