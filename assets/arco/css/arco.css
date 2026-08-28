@@ -71,9 +71,6 @@
   /* altura do pilar sob o arco — e, no hero, a folga sob a linha de nascença.
      Medida em vh: é ela que sobe o arco para dentro do campo. */
   --pier:   clamp(2rem, 7vh, 4.5rem);
-  /* quanto o pilar sobe acima da nascenca. A caixa diz que 1px bastaria; a
-     tela diz que nao. Um numero so, para afinar sem cacar a regra. */
-  --pilar-cruza: 12px;
   --read:   58ch;   /* ~72 caracteres reais — o ch é mais largo que a média */
   /* folga do topo do palco — o cordão usa a mesma para nascer na linha do nome */
   --home-top: clamp(2rem, min(7vw, 10dvh), 6.5rem);
@@ -423,6 +420,11 @@ body{
 /* a nascença é o datum da página: os pilares pousam nela e a diagonal nasce
    dela. Uma junta precisa precisa ser vista — .18 não recebia um traço a .5. */
 .arc .spring{ stroke-opacity:.28; }
+/* o pilar nasce na nascenca e entrega a carga no filete do bloco */
+.arc .pilar{ stroke:var(--ink); stroke-opacity:.18; }
+@media (prefers-reduced-motion:no-preference){
+  .arc.is-in .pilar{ transition:stroke-dashoffset 620ms var(--ease) 1200ms; stroke-dashoffset:0; }
+}
 
 /* ===========================================================================
    ARCADA — os três blocos justificados. Vindos do case-integrado:
@@ -441,11 +443,8 @@ body{
   border-top:1px solid var(--ink);
   padding-top:.9rem;
 }
-/* o pilar: desce da linha de nascença e entrega a carga no filete do bloco */
-.mov::before{
-  content:""; position:absolute; left:0; top:calc(var(--pier) * -1 - var(--pilar-cruza));
-  width:1px; height:calc(var(--pier) + var(--pilar-cruza)); background:var(--hair);
-}
+/* O pilar deixou de ser ::before do bloco: agora e uma linha dentro do SVG
+   do arco, no mesmo sistema de coordenadas da nascenca. Ver .arc .pilar. */
 .mov__n{
   display:block;
   font-family:var(--f-micro); font-size:.66rem; font-weight:500;
@@ -1376,13 +1375,6 @@ body{
   .arc.is-in .intra { transition:stroke-dashoffset 1500ms var(--ease) 340ms;  stroke-dashoffset:0; }
   .arc.is-in .spring{ transition:stroke-dashoffset 900ms  var(--ease) 1000ms; stroke-dashoffset:0; }
 
-  /* os pilares descem depois que o arco fecha */
-  .js-reveal .mov::before{
-    transform:scaleY(0); transform-origin:0 0;
-    transition:transform 620ms var(--ease);
-    transition-delay:calc(var(--i,0) * 110ms + 340ms);
-  }
-  .js-reveal .mov.is-in::before{ transform:scaleY(1); }
 }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }

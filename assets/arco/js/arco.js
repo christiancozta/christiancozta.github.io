@@ -258,6 +258,38 @@
       spring.setAttribute("x1", 0);      spring.setAttribute("y1", y(238));
       spring.setAttribute("x2", x(1000)); spring.setAttribute("y2", y(238));
 
+      /* Os pilares do percurso passam a ser desenhados aqui dentro, no mesmo
+         sistema de coordenadas da nascenca. Enquanto eram ::before de cada
+         bloco, viviam noutra caixa e a junta dependia de um ajuste em pixel
+         que nunca fechava nas duas pontas. Agora partem de y(238) — a propria
+         nascenca — por construcao. O comprimento e a distancia medida ate o
+         filete do bloco, nao o valor declarado de --pier. */
+      const movs = [...document.querySelectorAll('.view[data-view="home"] .arcade .mov')];
+      const semPilares = matchMedia("(max-width:820px)").matches || movs.length < 2;
+      const antigos = [...arc.querySelectorAll(".pilar")];
+      if (semPilares){
+        antigos.forEach(el => el.remove());
+      } else {
+        const base = y(238);
+        const vao = Math.max(0, movs[0].getBoundingClientRect().top - r.bottom);
+        movs.forEach((mov, i) => {
+          let linha = antigos[i];
+          if (!linha){
+            linha = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            linha.setAttribute("class", "pilar");
+            arc.appendChild(linha);
+          }
+          const px = +(mov.getBoundingClientRect().left - r.left).toFixed(2);
+          linha.setAttribute("x1", px); linha.setAttribute("x2", px);
+          linha.setAttribute("y1", base); linha.setAttribute("y2", +(base + vao).toFixed(2));
+          if (!reduce){
+            linha.setAttribute("stroke-dasharray", vao.toFixed(2));
+            linha.setAttribute("stroke-dashoffset", vao.toFixed(2));
+          }
+        });
+        antigos.slice(movs.length).forEach(el => el.remove());
+      }
+
       [extra, intra, spring].forEach(el => {
         el.removeAttribute("vector-effect");
         if (reduce) return;
