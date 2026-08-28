@@ -1468,21 +1468,13 @@
         bio.style.setProperty('--hero-v3-bio-w', width.toFixed(2) + 'px');
       }
 
-      if (mqSideRail.matches){
-        rail.classList.add('hero-v3-rail-ready');
-        rail.style.setProperty('--hero-v3-rail-shift','0px');
-        /* O rail e fixed: o titulo nao rola. O nome esta no fluxo e rola.
-           Comparar os dois em coordenada de viewport so fecha com a pagina no
-           topo — recarregada rolada, a conta dava a distancia rolada inteira e
-           empurrava o rail para fora da tela. O nome entra em coordenada de
-           documento; o titulo, que nao rola, ja esta nela. */
-        const titleTop = railTitle.getBoundingClientRect().top;
-        const nameTop = name.getBoundingClientRect().top + window.scrollY;
-        rail.style.setProperty('--hero-v3-rail-shift', (nameTop - titleTop).toFixed(2) + 'px');
-      } else {
-        rail.classList.remove('hero-v3-rail-ready');
-        rail.style.removeProperty('--hero-v3-rail-shift');
-      }
+      /* O alinhamento entre ARCO e o nome deixou de ser medido: rail e
+         conteudo partem do mesmo --home-top e as duas caixas sao aparadas na
+         caixa alta, entao a linha e a mesma por construcao. Medir aqui so
+         reintroduzia dependencia de quando o script roda — foi o que fez o
+         rail sumir ao recarregar a pagina rolada. */
+      rail.classList.toggle('hero-v3-rail-ready', mqSideRail.matches);
+      rail.style.removeProperty('--hero-v3-rail-shift');
 
       if (widthChanged){
         requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
