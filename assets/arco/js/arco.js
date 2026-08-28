@@ -1355,8 +1355,11 @@
          inteiro a direita dela. */
       const colLeft = pilar2;
       const springY = ar.bottom;
-      /* folga real ate o arco: o ultimo bloco nao pode encostar na curva */
-      const safeArc = clamp(16, innerWidth * .014, 30);
+      /* Folga ate o arco. Eu a tinha dobrado para conter o 1 invadindo a
+         curva; a causa era outra — a coluna dimensionada pela altura
+         expandida. Corrigida essa, a folga volta perto do valor original e o
+         bloco 1 encosta como encostava. */
+      const safeArc = clamp(10, innerWidth * .0075, 15);
       const bottomEdge = ar.y - safeArc;
       /* Alturas do estado padrao, nao do expandido. Reservar o expandido
          deixava a coluna terminando ~100px acima do arco em repouso, que e o
