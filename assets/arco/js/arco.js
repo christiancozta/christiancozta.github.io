@@ -1290,6 +1290,19 @@
             right:r.right-zr.left, bottom:r.bottom-zr.top};
   }
 
+  function alturaEmRepouso(stat){
+    const detail = stat.querySelector('.narr__detail');
+    if (!detail) return stat.offsetHeight || 1;
+    const wasHidden = detail.hidden;
+    const wasOpen = stat.classList.contains('is-open');
+    detail.hidden = true;
+    stat.classList.remove('is-open');
+    const h = stat.offsetHeight || 1;
+    detail.hidden = wasHidden;
+    stat.classList.toggle('is-open', wasOpen);
+    return h;
+  }
+
   function expandedHeight(stat){
     const detail = stat.querySelector('.narr__detail');
     if (!detail) return stat.offsetHeight || 1;
@@ -1337,15 +1350,20 @@
       const pilar2 = arcadeMovs[1]
         ? arcadeMovs[1].getBoundingClientRect().left - zBox.left
         : zw * .37 + numW / 2;
-      /* O eixo fica onde esta — nasce no segundo pilar e nao se move. Quem
-         se ajusta e o algarismo: encosta nele pela direita, em vez de ficar
-         atravessado por ele. */
-      const colLeft = pilar2 - numW;
+      /* O eixo e a borda esquerda do bloco, como os pilares sao embaixo na
+         arcada: a linha corre rente ao algarismo e o par numero+rotulo fica
+         inteiro a direita dela. */
+      const colLeft = pilar2;
       const springY = ar.bottom;
       /* folga real ate o arco: o ultimo bloco nao pode encostar na curva */
       const safeArc = clamp(16, innerWidth * .014, 30);
       const bottomEdge = ar.y - safeArc;
-      const heights = stats.map(expandedHeight);
+      /* Alturas do estado padrao, nao do expandido. Reservar o expandido
+         deixava a coluna terminando ~100px acima do arco em repouso, que e o
+         que se ve quase sempre. Como os blocos sao absolutos, abrir um nao
+         empurra o seguinte: o unico custo e o ultimo bloco crescer alguns
+         pixels em direcao ao arco, dentro da folga. */
+      const heights = stats.map(alturaEmRepouso);
       const totalHeight = heights.reduce((sum, h) => sum + h, 0);
 
       /* O topo da coluna e o topo do Itinerario: as duas colunas partem da
