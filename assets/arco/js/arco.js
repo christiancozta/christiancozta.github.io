@@ -1355,7 +1355,7 @@
       /* respiro entre os BLOCOS — meio termo entre o apertado de antes e o
          espacado que empurrava o 1 contra o arco. O intervalo interno de cada
          bloco (rotulo + texto) nao e tocado aqui. */
-      const gap = clamp(16, rawGap, 58);
+      const gap = clamp(16, rawGap, 96);
 
       /* Leitura 5 -> 1, de cima para baixo, na ordem do DOM. */
       const tops = new Array(5);
