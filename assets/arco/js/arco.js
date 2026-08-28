@@ -1471,8 +1471,13 @@
       if (mqSideRail.matches){
         rail.classList.add('hero-v3-rail-ready');
         rail.style.setProperty('--hero-v3-rail-shift','0px');
+        /* O rail e fixed: o titulo nao rola. O nome esta no fluxo e rola.
+           Comparar os dois em coordenada de viewport so fecha com a pagina no
+           topo — recarregada rolada, a conta dava a distancia rolada inteira e
+           empurrava o rail para fora da tela. O nome entra em coordenada de
+           documento; o titulo, que nao rola, ja esta nela. */
         const titleTop = railTitle.getBoundingClientRect().top;
-        const nameTop = name.getBoundingClientRect().top;
+        const nameTop = name.getBoundingClientRect().top + window.scrollY;
         rail.style.setProperty('--hero-v3-rail-shift', (nameTop - titleTop).toFixed(2) + 'px');
       } else {
         rail.classList.remove('hero-v3-rail-ready');
