@@ -439,8 +439,8 @@ body{
 }
 /* o pilar: desce da linha de nascença e entrega a carga no filete do bloco */
 .mov::before{
-  content:""; position:absolute; left:0; top:calc(var(--pier) * -1);
-  width:1px; height:var(--pier); background:var(--hair);
+  content:""; position:absolute; left:0; top:calc(var(--pier) * -1 - 1px);
+  width:1px; height:calc(var(--pier) + 1px); background:var(--hair);
 }
 .mov__n{
   display:block;
@@ -1358,6 +1358,9 @@ body{
     transition-delay:calc(var(--i,0) * 90ms);
   }
   .js-reveal [data-reveal].is-in{ opacity:1; transform:none; }
+  /* A arcada nao desliza. O pilar nasce na linha de nascenca e nao pode
+     descolar dela enquanto o bloco entra: o bloco entra so por opacidade. */
+  .js-reveal .mov[data-reveal]{ transform:none; }
 
   /* o arco se desenha: extradorso primeiro, intradorso atrás, nascença por fim */
   .arc.is-in .extra { transition:stroke-dashoffset 1500ms var(--ease) 120ms;  stroke-dashoffset:0; }
@@ -1403,7 +1406,7 @@ body{
 .hero__txt .mov__t{
   line-height:1.55;
   font-style:italic;
-  border-left:2px solid rgba(24,24,24,.30);
+  border-left:2px solid rgba(24,24,24,.5);
   padding-left:clamp(.9rem,1.6vw,1.45rem);
 }
 .hero__txt .mov__t em{ font-style:normal; }
@@ -2169,8 +2172,8 @@ body{
   .hero-v2-link{
     position:absolute;
     display:block;
-    background:var(--ink);
-    opacity:.5;
+    background:var(--hair);
+    opacity:1;
     pointer-events:none;
     z-index:0;
   }
