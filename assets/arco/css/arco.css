@@ -1398,13 +1398,16 @@ body{
   display:flex; flex-direction:column;
   padding-top:var(--home-top);
   --nascenca:clamp(.9rem,2.6vh,2.1rem);
-  min-height:calc(100dvh - var(--pier) - 4rem - var(--nascenca));
+  /* A zona cedia pilar + 4rem + nascenca, o que erguia o arco uns 140px
+     acima da dobra sem necessidade. Cede so a nascenca e um fio: a linha de
+     base fica quase colada no fim da tela, e ainda dentro dela. */
+  min-height:calc(100dvh - var(--nascenca) - .5rem);
 }
 /* três âncoras, uma tela: a ficha no topo, o percurso no meio, o arco no pé.
    As duas folgas automáticas repartem a sobra — em tela alta nada fica órfão. */
 /* (b) O Itinerario sobe e encosta no cabecalho; so o arco continua no pe. */
 .narr-zone .arc{ margin-top:auto; }
-.hero__txt{ margin-top:clamp(.1rem,.25vw,.22rem); }
+.hero__txt{ margin-top:clamp(.8rem,1.6vw,1.4rem); }
 @media (min-width:821px){
   /* deixa a faixa da direita livre para a coluna dos numeros */
   .hero__txt{ max-width:clamp(13rem,26%,19rem); }
@@ -1501,7 +1504,7 @@ body{
   .narr__l{ min-width:0; }
   .ruleline--hero::before{ opacity:1; }
   /* o cordão virou topo: o hero mede o que sobra da tela */
-  .narr-zone{ min-height:calc(100dvh - var(--rail-h) - var(--pier) - 4rem - var(--nascenca)); }
+  .narr-zone{ min-height:calc(100dvh - var(--rail-h) - var(--nascenca) - .5rem); }
   /* a camada de dados entrou no fluxo: o arco cede a folga que ela ocupa */
   .narr-zone .arc{ margin-top:clamp(1.5rem,5vw,2.5rem); }
 }
@@ -1654,7 +1657,7 @@ body{
 /* (a) A faixa de cabecalho e cheia: os numeros desceram para a coluna da
    direita, entao a ficha nao divide mais a largura com eles. O creed cabe em
    uma linha e as tags de contato caem na seguinte. */
-.bio{ max-width:none; margin:0 0 clamp(.1rem,.2vw,.18rem); }
+.bio{ max-width:none; margin:0 0 clamp(.8rem,1.6vw,1.35rem); }
 /* sem régua não há calha a proteger: a ficha volta à largura da coluna */
 @media (max-width:820px){ .bio{ max-width:none; } }
 .bio__head{ display:flex; align-items:flex-start; gap:clamp(.7rem,1.3vw,1.05rem); margin:0 0 clamp(.85rem,1.7vw,1.2rem); }
@@ -2042,7 +2045,11 @@ body{
 /* ========================================================================== */
 @media (min-width:821px){
   /* Mantém o mecanismo legado como fallback, mas a diagonal deixa de ser a camada visível. */
-  .narr-zone{ min-height:max(calc(100dvh - var(--pier) - 4rem), 36rem); }
+  /* Esta e a regra que manda no desktop — vem depois e dentro de media que
+     casa. Cedia pilar + 4rem, o que erguia o arco ~140px acima da dobra.
+     Cede so a faixa da nascenca e um fio: a linha de base fica quase colada
+     no fim da tela, e ainda dentro dela. */
+  .narr-zone{ min-height:max(calc(100dvh - var(--nascenca) - .5rem), 36rem); }
   .narr__svg{ display:none !important; }
   .narr{ pointer-events:none; }
   .narr__stats{
