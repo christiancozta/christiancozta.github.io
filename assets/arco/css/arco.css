@@ -1358,9 +1358,14 @@ body{
     transition-delay:calc(var(--i,0) * 90ms);
   }
   .js-reveal [data-reveal].is-in{ opacity:1; transform:none; }
-  /* A arcada nao desliza. O pilar nasce na linha de nascenca e nao pode
-     descolar dela enquanto o bloco entra: o bloco entra so por opacidade. */
-  .js-reveal .mov[data-reveal]{ transform:none; }
+  /* A junta arco-pilar nao pode depender da revelacao. O pilar e um ::before
+     do bloco e vive na posicao de layout; o arco, se deslizar, pinta a
+     nascenca fora dessa posicao e a junta abre — com folga variavel, porque
+     depende de quanto da pagina ja estava rolada quando o observer disparou.
+     Os dois ficam presos: entram por opacidade, e o arco mantem o desenho
+     proprio (stroke-dashoffset do extradorso, intradorso e nascenca). */
+  .js-reveal .mov[data-reveal],
+  .js-reveal .arc[data-reveal]{ transform:none; }
 
   /* o arco se desenha: extradorso primeiro, intradorso atrás, nascença por fim */
   .arc.is-in .extra { transition:stroke-dashoffset 1500ms var(--ease) 120ms;  stroke-dashoffset:0; }
