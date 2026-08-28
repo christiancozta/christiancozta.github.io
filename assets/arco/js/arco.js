@@ -605,13 +605,12 @@
   if(!rail || !fill) return;
   if(matchMedia("(prefers-reduced-motion: reduce)").matches) rail.dataset.motion = "off";
 
-  const HOME_CHECKPOINTS = [
-    '.view[data-view="home"] .arcade',
-    '#repertorio',
-    '#eq-fronteira',
-    '#parte-i',
-    '#eq-metodo'
-  ];
+  /* Pontos de parada: o Percurso (a arcada dos tres blocos, que dividem a
+     mesma profundidade de rolagem) e a propria Traducao. */
+  const homeCheckpoints = () => [
+    document.querySelector('.view[data-view="home"] .arcade'),
+    document.querySelector('#repertorio')
+  ].filter(Boolean);
   let raf = 0, marks = [], bound = null, lastH = -1;
 
   const activeView = () =>
@@ -663,9 +662,7 @@
     if(rail.dataset.mode !== "percurso") return;
     const {el, max} = metrics(t);
     if(max <= 0 || t.doc !== document) return;
-    HOME_CHECKPOINTS.forEach(selector => {
-      const checkpoint = document.querySelector(selector);
-      if(!checkpoint) return;
+    homeCheckpoints().forEach(checkpoint => {
       const top = checkpoint.getBoundingClientRect().top + el.scrollTop;
       const ratio = Math.min(1, Math.max(0, top / max));
       const node = document.createElement("span");
