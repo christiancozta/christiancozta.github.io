@@ -1355,7 +1355,12 @@
       /* respiro entre os BLOCOS — meio termo entre o apertado de antes e o
          espacado que empurrava o 1 contra o arco. O intervalo interno de cada
          bloco (rotulo + texto) nao e tocado aqui. */
-      const gap = clamp(16, rawGap, 96);
+      /* Sem teto: os dois extremos sao ancoras — o 5 na caixa alta do
+         Itinerario e o 1 a distancia fixa do arco, descendo com ele. O que
+         sobra entre elas reparte-se igualmente pelos quatro intervalos. Um
+         teto quebraria a ancora de baixo em tela alta: o 1 pararia de
+         acompanhar a curva. */
+      const gap = Math.max(16, rawGap);
 
       /* Leitura 5 -> 1, de cima para baixo, na ordem do DOM. */
       const tops = new Array(5);
@@ -1378,15 +1383,38 @@
       const zr0 = stats[0].getBoundingClientRect();
       const nr0 = numbers[0].getBoundingClientRect();
       const zz = zone.getBoundingClientRect();
-      /* alinha a caixa alta do algarismo com a do "Itinerario", nao a caixa
-         do bloco: e o topo da letra que o olho compara */
-      const desvioY = (nr0.top - zz.top) - tops[0];
+      /* Alinha a caixa alta do algarismo com a do "Itinerario" — e o topo da
+         letra que o olho compara. O alvo e relido agora, nao o capturado no
+         inicio da passada: a ficha pode ter assentado no meio do caminho e
+         empurrado o titulo, e a coluna tem de seguir a posicao atual. */
+      const alvoAgora = alvoTopo
+        ? alvoTopo.getBoundingClientRect().top - zz.top
+        : tops[0];
       const desvioX = (zr0.left - zz.left) - colLeft;
-      if (Math.abs(desvioY) > .5){
-        stats.forEach((stat, i) => {
-          stat.style.setProperty('--hero-v2-top', (tops[i] - desvioY).toFixed(2) + 'px');
-        });
+
+      /* Duas ancoras, nao uma: em cima a caixa alta do algarismo encontra a
+         do "Itinerario"; embaixo o ultimo bloco guarda distancia fixa do arco
+         e desce com ele. Deslocar a coluna inteira so satisfaz uma das duas —
+         o intervalo tem de ser recalculado entre as duas posicoes reais, e ai
+         o que sobra reparte-se igualmente pelos quatro. */
+      /* As contas acima estao em coordenada da zona; --hero-v2-top e lida pelo
+         pai posicionado, que nao coincide com ela. O desvio e medido na
+         primeira passada e descontado nos dois extremos — como e o mesmo nos
+         dois, o intervalo entre eles nao muda. */
+      const desvioCaixa = (zr0.top - zz.top) - tops[0];
+      const dentroDoBloco = nr0.top - zr0.top;
+      const topo0 = alvoAgora - dentroDoBloco - desvioCaixa;
+      const topo4 = bottomEdge - heights[4] - desvioCaixa;
+      const somaMeio = heights[0] + heights[1] + heights[2] + heights[3];
+      const gapFinal = Math.max(16, (topo4 - topo0 - somaMeio) / 4);
+      const finais = new Array(5);
+      finais[0] = topo0;
+      for (let i = 1; i < 5; i++){
+        finais[i] = finais[i - 1] + heights[i - 1] + gapFinal;
       }
+      stats.forEach((stat, i) => {
+        stat.style.setProperty('--hero-v2-top', finais[i].toFixed(2) + 'px');
+      });
       if (Math.abs(desvioX) > .5){
         /* O algarismo tem de ficar centrado no pilar, entao a esquerda e
            corrigida; a largura acompanha para a borda direita seguir fechando
