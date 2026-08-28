@@ -1440,7 +1440,8 @@
     });
   }
 
-  stats.slice(0,4).forEach((stat, i) => {
+  /* os cinco, agora: o passo 1 deixou de ser rotulo solto e ganhou conteudo */
+  stats.forEach((stat, i) => {
     const button = numbers[i];
     const detail = stat.querySelector('.narr__detail');
     if (!detail || button.tagName !== 'BUTTON') return;
