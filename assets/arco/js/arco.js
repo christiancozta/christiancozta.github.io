@@ -1454,15 +1454,28 @@
          mesmo com as caixas alinhadas. Mede-se a tinta de cada um e desconta-
          se o vao, de modo que o traco encoste no desenho, nao na caixa. A
          largura de avanco fica intacta, entao os rotulos nao se mexem. */
+      /* O algarismo e tabular: todo digito ocupa a mesma largura de avanco e o
+         desenho fica centrado nela. A sobra a esquerda muda de digito para
+         digito — no "1" e quase o dobro — e e por isso que a coluna le torta
+         mesmo com as caixas alinhadas.
+
+         Range nao serve aqui: devolve a caixa de avanco, nao o desenho (mede
+         a mesma largura para o 1 e para o 5). A medida vem do canvas, que
+         reporta a extensao real da tinta. Como o canvas mede o digito
+         proporcional e a pagina desenha o tabular, soma-se a metade da
+         diferenca entre os dois avancos, que e como a fonte constroi a versao
+         tabular: reparte a folga dos dois lados. */
+      const estilo = getComputedStyle(numbers[0]);
+      const pincel = layout.pincel || (layout.pincel = document.createElement('canvas').getContext('2d'));
+      pincel.font = `${estilo.fontWeight} ${estilo.fontSize} ${estilo.fontFamily}`;
       numbers.forEach(numero => {
         if (!numero) return;
         numero.style.transform = 'none';
-        const caixa = numero.getBoundingClientRect();
-        const alcance = document.createRange();
-        alcance.selectNodeContents(numero);
-        const tinta = alcance.getBoundingClientRect();
-        const vao = tinta.left - caixa.left;
-        numero.style.transform = vao > .2 ? `translateX(${(-vao).toFixed(2)}px)` : 'none';
+        const avancoTabular = numero.getBoundingClientRect().width;
+        const medida = pincel.measureText(numero.textContent.trim());
+        const sobraProporcional = -medida.actualBoundingBoxLeft;
+        const sobra = sobraProporcional + (avancoTabular - medida.width) / 2;
+        numero.style.transform = sobra > .2 ? `translateX(${(-sobra).toFixed(2)}px)` : 'none';
       });
 
       const axisX = pilar2;
