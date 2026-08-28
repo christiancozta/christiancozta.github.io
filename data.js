@@ -22,18 +22,22 @@
   }
 
   const REGIMES = {
-    lastro:     { nome: 'Lastro documental', campos: ['FONTE', 'NUMERADOR', 'DENOMINADOR', 'PERÍODO', 'VER EM'] },
-    derivacao:  { nome: 'Derivação',         campos: ['DERIVA DE', 'NUMERADOR', 'DENOMINADOR', 'PERÍODO', 'VER EM'] },
-    declaracao: { nome: 'Declaração',        campos: ['NATUREZA', 'O QUE AFIRMA', 'BASE DECLARADA', 'PERÍODO', 'VERIFICÁVEL EM'] }
+    lastro: { nome: 'Rastro documental', campos: ['FONTE', 'CONTAGEM', 'UNIVERSO', 'RECORTE', 'VER EM'] },
+    derivacao: { nome: 'Rastro derivado', campos: ['DERIVA DE', 'CONTAGEM', 'UNIVERSO', 'RECORTE', 'VER EM'] }
   };
   const TIP_KEYS = ['source', 'numerator', 'denominator', 'period', 'detail'];
-
-  const tipFields = tooltip ? {
-    source: tooltip.querySelector('[data-tip-source]'),
-    numerator: tooltip.querySelector('[data-tip-numerator]'),
-    denominator: tooltip.querySelector('[data-tip-denominator]'),
-    period: tooltip.querySelector('[data-tip-period]')
-  } : null;
+  const LASTRO_KEYS = ['numerator', 'denominator', 'period'];
+  const SLOT_ORDER = ['source', 'detail', 'numerator', 'denominator', 'period'];
+  const DATUM_SELECTOR = '[data-datum][data-regime]';
+  const tipFields = {};
+  const tipLabels = {};
+  const tipSlots = {};
+  if (tooltip) TIP_KEYS.forEach((key) => {
+    tipFields[key] = tooltip.querySelector(`[data-tip-${key}]`);
+    tipLabels[key] = tooltip.querySelector(`[data-tip-label="${key}"]`);
+    tipSlots[key] = tooltip.querySelector(`[data-tip-slot="${key}"]`);
+  });
+  const lastroHead = tooltip && tooltip.querySelector('[data-tip-lastro]');
 
   let activeDatum = null;
 
@@ -53,27 +57,28 @@
   };
 
   const showTooltip = (target) => {
-    if (!tooltip || !tipFields) return;
+    if (!tooltip) return;
     if (activeDatum && activeDatum !== target) activeDatum.removeAttribute('aria-describedby');
     activeDatum = target;
-    const regime = REGIMES[target.dataset.regime] ? target.dataset.regime : 'lastro';
-    tooltip.className = 'data-tooltip is-' + regime;
-    const regimeLine = tooltip.querySelector('[data-tip-regime]');
-    if (regimeLine) regimeLine.textContent = REGIMES[regime].nome;
-    TIP_KEYS.forEach((key, i) => {
-      const label = tooltip.querySelector('[data-tip-label="' + key + '"]');
-      if (label) label.textContent = REGIMES[regime].campos[i];
+    const regimeKey = REGIMES[target.dataset.regime] ? target.dataset.regime : 'lastro';
+    const regime = REGIMES[regimeKey];
+    tooltip.className = 'data-tooltip is-' + regimeKey;
+    tooltip.querySelector('[data-tip-regime]').textContent = regime.nome;
+    TIP_KEYS.forEach((key, index) => {
+      const value = target.dataset[key] || '';
+      if (tipLabels[key]) tipLabels[key].textContent = regime.campos[index];
+      if (tipFields[key]) tipFields[key].textContent = value;
+      if (tipSlots[key]) tipSlots[key].hidden = !value;
     });
-    tipFields.source.textContent = target.dataset.source || 'Não informado';
-    tipFields.numerator.textContent = target.dataset.numerator || 'Não se aplica';
-    tipFields.denominator.textContent = target.dataset.denominator || 'Não se aplica';
-    tipFields.period.textContent = target.dataset.period || 'Não informado';
-    const detailSlot = tooltip.querySelector('[data-tip-slot="detail"]');
-    const detailValue = tooltip.querySelector('[data-tip-detail]');
-    if (detailSlot && detailValue) {
-      detailValue.textContent = target.dataset.detail || '';
-      detailSlot.hidden = !target.dataset.detail;
-    }
+    lastroHead.hidden = !LASTRO_KEYS.some((key) => target.dataset[key]);
+    let lastVisible = null;
+    SLOT_ORDER.forEach((key) => {
+      const slot = tipSlots[key];
+      if (!slot) return;
+      slot.classList.remove('is-last');
+      if (!slot.hidden) lastVisible = slot;
+    });
+    if (lastVisible) lastVisible.classList.add('is-last');
     target.setAttribute('aria-describedby', tooltip.id);
     tooltip.hidden = false;
     requestAnimationFrame(() => positionTooltip(target));
@@ -85,7 +90,7 @@
     if (tooltip) tooltip.hidden = true;
   };
 
-  document.querySelectorAll('[data-datum]').forEach((datum) => {
+  document.querySelectorAll(DATUM_SELECTOR).forEach((datum) => {
     datum.addEventListener('mouseenter', () => showTooltip(datum));
     datum.addEventListener('mouseleave', hideTooltip);
     datum.addEventListener('focus', () => showTooltip(datum));
