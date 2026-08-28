@@ -521,17 +521,22 @@ const ro=new ResizeObserver(measure);ro.observe(document.documentElement);const 
   if (!tooltip) return;
 
   const REGIMES = {
-    lastro: { nome: "Lastro documental", campos: ["FONTE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] },
-    derivacao: { nome: "Derivação", campos: ["DERIVA DE", "NUMERADOR", "DENOMINADOR", "PERÍODO", "VER EM"] }
+    lastro: { nome: "Rastro documental", campos: ["FONTE", "CONTAGEM", "UNIVERSO", "RECORTE", "VER EM"] },
+    derivacao: { nome: "Rastro derivado", campos: ["DERIVA DE", "CONTAGEM", "UNIVERSO", "RECORTE", "VER EM"] }
   };
   const TIP_KEYS = ["source", "numerator", "denominator", "period", "detail"];
+  const LASTRO_KEYS = ["numerator", "denominator", "period"];
+  const SLOT_ORDER = ["source", "detail", "numerator", "denominator", "period"];
   const DATUM_SELECTOR = "[data-datum][data-regime]";
-  const tipFields = {
-    source: tooltip.querySelector("[data-tip-source]"),
-    numerator: tooltip.querySelector("[data-tip-numerator]"),
-    denominator: tooltip.querySelector("[data-tip-denominator]"),
-    period: tooltip.querySelector("[data-tip-period]")
-  };
+  const tipFields = {};
+  const tipLabels = {};
+  const tipSlots = {};
+  TIP_KEYS.forEach((key) => {
+    tipFields[key] = tooltip.querySelector(`[data-tip-${key}]`);
+    tipLabels[key] = tooltip.querySelector(`[data-tip-label="${key}"]`);
+    tipSlots[key] = tooltip.querySelector(`[data-tip-slot="${key}"]`);
+  });
+  const lastroHead = tooltip.querySelector("[data-tip-lastro]");
   let activeDatum = null;
 
   const datumFrom = node => node instanceof Element ? node.closest(DATUM_SELECTOR) : null;
@@ -559,17 +564,20 @@ const ro=new ResizeObserver(measure);ro.observe(document.documentElement);const 
     tooltip.className = "data-tooltip is-" + target.dataset.regime;
     tooltip.querySelector("[data-tip-regime]").textContent = regime.nome;
     TIP_KEYS.forEach((key, index) => {
-      const label = tooltip.querySelector(`[data-tip-label="${key}"]`);
-      if (label) label.textContent = regime.campos[index];
+      const value = target.dataset[key] || "";
+      if (tipLabels[key]) tipLabels[key].textContent = regime.campos[index];
+      if (tipFields[key]) tipFields[key].textContent = value;
+      if (tipSlots[key]) tipSlots[key].hidden = !value;
     });
-    tipFields.source.textContent = target.dataset.source || "Não informado";
-    tipFields.numerator.textContent = target.dataset.numerator || "Não se aplica";
-    tipFields.denominator.textContent = target.dataset.denominator || "Não se aplica";
-    tipFields.period.textContent = target.dataset.period || "Não informado";
-    const detailSlot = tooltip.querySelector("[data-tip-slot=\"detail\"]");
-    const detailValue = tooltip.querySelector("[data-tip-detail]");
-    detailValue.textContent = target.dataset.detail || "";
-    detailSlot.hidden = !target.dataset.detail;
+    lastroHead.hidden = !LASTRO_KEYS.some((key) => target.dataset[key]);
+    let lastVisible = null;
+    SLOT_ORDER.forEach((key) => {
+      const slot = tipSlots[key];
+      if (!slot) return;
+      slot.classList.remove("is-last");
+      if (!slot.hidden) lastVisible = slot;
+    });
+    if (lastVisible) lastVisible.classList.add("is-last");
     target.setAttribute("aria-describedby", tooltip.id);
     tooltip.hidden = false;
     requestAnimationFrame(() => positionTooltip(target));

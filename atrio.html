@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600&family=Science+Gothic:wght@500..800&family=Schibsted+Grotesk:wght@400;500;600;700&family=Zalando+Sans+Expanded:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="atrio.css?v=20260827-azul">
+  <link rel="stylesheet" href="atrio.css?v=20260827-g0">
   <link rel="stylesheet" href="atrio-arquitetura.css?v=20260820-tipo3">
 </head>
 <body>
@@ -334,7 +334,7 @@
           </section>
 
           <div class="findings-grid">
-            <article class="metric-card metric-card--corpus" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/diagnostico_corpus_publico.md" data-numerator="115.114 registros processuais únicos" data-denominator="não se aplica | após normalização e deduplicação" data-period="2018 — 2026 | Turma Recursal TJPR">
+            <article class="metric-card metric-card--corpus" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/diagnostico_corpus_publico.md" data-denominator="após normalização e deduplicação" data-period="2018 — 2026 | Turma Recursal TJPR">
               <strong class="metric-card__number">115.114</strong>
               <div class="metric-card__copy"><h3>Registros processuais únicos</h3><p>governados pelo CORPUS</p></div>
               <p class="metric-card__source"><span>Lastro</span> Diagnóstico consolidado do CORPUS, com contagem de registros únicos.</p>
@@ -352,19 +352,19 @@
               <p class="metric-card__source"><span>Lastro</span> Seis servidores com série nas duas pontas: todos avançaram, nenhum recuou. O teste de robustez descarta a entrada de pessoal novo, que responde por 0,28 p.p., e o ganho concentrado em uma pessoa.</p>
             </article>
 
-            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-numerator="188 testes aprovados" data-denominator="não se aplica" data-period="Suíte local | medição de 26.08.2026">
+            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-denominator="contagem absoluta" data-period="Suíte local | medição de 26.08.2026">
               <strong class="metric-card__number">188</strong>
               <div class="metric-card__copy"><h3>Testes aprovados</h3><p>cobertura local automatizada</p></div>
               <p class="metric-card__source"><span>Lastro</span> Suíte local da operação ATRIO, medição de 26.08.2026.</p>
             </article>
 
-            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-numerator="31 caminhos distintos sob /v1" data-denominator="33 operações HTTP | corpus/documents e cerne/audit admitem GET e POST" data-period="Contagem sobre as rotas declaradas em api.py">
+            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-denominator="33 operações HTTP" data-period="Contagem sobre as rotas declaradas em api.py">
               <strong class="metric-card__number">31</strong>
               <div class="metric-card__copy"><h3>Rotas sob /v1</h3><p>caminhos expostos pela aplicação</p></div>
-              <p class="metric-card__source"><span>Lastro</span> 31 caminhos distintos e <span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="31 caminhos sob /v1" data-numerator="33 operações" data-denominator="corpus/documents e cerne/audit admitem GET e POST" data-period="Contagem sobre as rotas declaradas em api.py">33</span> operações HTTP: dois caminhos admitem GET e POST. Contagem determinística sobre as rotas declaradas em <code>api.py</code>.</p>
+              <p class="metric-card__source"><span>Lastro</span> 31 caminhos distintos e <span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="31 caminhos sob /v1" data-denominator="31 caminhos | corpus/documents e cerne/audit admitem GET e POST" data-period="Contagem sobre as rotas declaradas em api.py">33</span> operações HTTP: dois caminhos admitem GET e POST. Contagem determinística sobre as rotas declaradas em <code>api.py</code>.</p>
             </article>
 
-            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-numerator="11 eixos de exame" data-denominator="CERNE | linhas distintas de teoria da argumentação e do direito" data-period="Arquitetura corrente">
+            <article class="metric-card metric-card--compact" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-denominator="CERNE | linhas distintas de teoria da argumentação e do direito" data-period="Arquitetura corrente">
               <strong class="metric-card__number">11</strong>
               <div class="metric-card__copy"><h3>Eixos analíticos</h3><p>lentes independentes de leitura</p></div>
               <p class="metric-card__source"><span>Arquitetura</span> Onze eixos aplicados ao exame técnico.</p>
@@ -431,12 +431,13 @@
   </footer>
   <div class="data-tooltip" id="data-tooltip" role="tooltip" hidden>
     <p class="data-tooltip__regime" data-tip-regime></p>
-    <span><b data-tip-label="source">FONTE</b><em data-tip-source></em></span>
-    <span><b data-tip-label="numerator">NUMERADOR</b><em data-tip-numerator></em></span>
-    <span><b data-tip-label="denominator">DENOMINADOR</b><em data-tip-denominator></em></span>
-    <span><b data-tip-label="period">PERÍODO</b><em data-tip-period></em></span>
+    <span data-tip-slot="source"><b data-tip-label="source">FONTE</b><em data-tip-source></em></span>
     <span data-tip-slot="detail" hidden><b data-tip-label="detail">VER EM</b><em data-tip-detail></em></span>
+    <p class="data-tooltip__lastro" data-tip-lastro hidden>LASTRO</p>
+    <span data-tip-slot="numerator" hidden><b data-tip-label="numerator">CONTAGEM</b><em data-tip-numerator></em></span>
+    <span data-tip-slot="denominator" hidden><b data-tip-label="denominator">UNIVERSO</b><em data-tip-denominator></em></span>
+    <span data-tip-slot="period" hidden><b data-tip-label="period">RECORTE</b><em data-tip-period></em></span>
   </div>
-  <script src="atrio.js?v=20260827-lastro"></script>
+  <script src="atrio.js?v=20260827-g0"></script>
 </body>
 </html>
