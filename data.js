@@ -90,6 +90,15 @@
     if (tooltip) tooltip.hidden = true;
   };
 
+  const datumFrom = (node) => node instanceof Element ? node.closest(DATUM_SELECTOR) : null;
+
+  // M3: no toque nao ha hover. O ponteiro abre sobre o dado e fecha fora dele.
+  document.addEventListener('pointerdown', (event) => {
+    const target = datumFrom(event.target);
+    if (target) showTooltip(target);
+    else if (activeDatum) hideTooltip();
+  });
+
   document.querySelectorAll(DATUM_SELECTOR).forEach((datum) => {
     datum.addEventListener('mouseenter', () => showTooltip(datum));
     datum.addEventListener('mouseleave', hideTooltip);

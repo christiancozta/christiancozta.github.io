@@ -1595,6 +1595,13 @@
     if (next) showTooltip(next);
     else hideTooltip();
   });
+// M3: no toque nao ha hover. O ponteiro abre sobre o dado e fecha fora dele.
+  document.addEventListener("pointerdown", event => {
+    const target = datumFrom(event.target);
+    if (target) showTooltip(target);
+    else if (activeDatum) hideTooltip();
+  });
+
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") hideTooltip();
   });
