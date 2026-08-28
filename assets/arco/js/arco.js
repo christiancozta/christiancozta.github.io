@@ -1337,7 +1337,10 @@
       const pilar2 = arcadeMovs[1]
         ? arcadeMovs[1].getBoundingClientRect().left - zBox.left
         : zw * .37 + numW / 2;
-      const colLeft = pilar2 - numW / 2;
+      /* O eixo fica onde esta — nasce no segundo pilar e nao se move. Quem
+         se ajusta e o algarismo: encosta nele pela direita, em vez de ficar
+         atravessado por ele. */
+      const colLeft = pilar2 - numW;
       const springY = ar.bottom;
       /* folga real ate o arco: o ultimo bloco nao pode encostar na curva */
       const safeArc = clamp(16, innerWidth * .014, 30);
@@ -1424,7 +1427,7 @@
           stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
         });
       }
-      const axisX = colLeft + numW / 2;
+      const axisX = pilar2;
 
       void zone.offsetHeight;
       const numberBoxes = numbers.map(layoutBox);
