@@ -1328,8 +1328,16 @@
       /* A coluna mede pela zona, nao pelo arco: o arco desconta a barra de
          rolagem e fecha 5px antes da margem da pagina. O cabecalho usa a
          zona, e a coluna tem de fechar na mesma linha que ele. */
-      const zw = zone.getBoundingClientRect().width;
-      const colLeft = zw * .37;
+      const zBox = zone.getBoundingClientRect();
+      const zw = zBox.width;
+      /* O eixo que sobe parte do segundo pilar da arcada — o mesmo x de onde
+         a linha desce da nascenca. Nao e proporcao: e a coluna do meio. */
+      const arcadeMovs = document.querySelectorAll('.view[data-view="home"] .arcade .mov');
+      const numW = numbers[0].offsetWidth || 1;
+      const pilar2 = arcadeMovs[1]
+        ? arcadeMovs[1].getBoundingClientRect().left - zBox.left
+        : zw * .37 + numW / 2;
+      const colLeft = pilar2 - numW / 2;
       const springY = ar.bottom;
       const safeArc = clamp(8, innerWidth * .007, 14);
       const bottomEdge = ar.y - safeArc;
@@ -1339,10 +1347,12 @@
       /* O topo da coluna e o topo do Itinerario: as duas colunas partem da
          mesma margem. Da para o pe do arco, os cinco numeros repartem a
          sobra — a coluna cabe inteira, sem depender de colapsar detalhe. */
-      const tr = layoutBox(heroTxt);
+      const alvoTopo = (heroTxt && heroTxt.querySelector('.mov__h')) || heroTxt;
+      const tr = alvoTopo ? layoutBox(alvoTopo) : null;
       const topStart = tr ? tr.y : hr.bottom;
       const rawGap = (bottomEdge - topStart - totalHeight) / 4;
-      const gap = clamp(10, rawGap, 46);
+      /* respiro maior entre os cinco blocos */
+      const gap = clamp(22, rawGap, 88);
 
       /* Leitura 5 -> 1, de cima para baixo, na ordem do DOM. */
       const tops = new Array(5);
@@ -1352,6 +1362,7 @@
       }
 
       const colWidth = zw - colLeft;
+      void numW;
       stats.forEach((stat, i) => {
         stat.style.setProperty('--hero-v2-left', colLeft.toFixed(2) + 'px');
         stat.style.setProperty('--hero-v2-top', tops[i].toFixed(2) + 'px');
@@ -1362,8 +1373,11 @@
          o offset do proprio item na lista. Em vez de adivinhar de onde vem,
          mede-se o desvio uma vez e desconta-se. */
       const zr0 = stats[0].getBoundingClientRect();
+      const nr0 = numbers[0].getBoundingClientRect();
       const zz = zone.getBoundingClientRect();
-      const desvioY = (zr0.top - zz.top) - tops[0];
+      /* alinha a caixa alta do algarismo com a do "Itinerario", nao a caixa
+         do bloco: e o topo da letra que o olho compara */
+      const desvioY = (nr0.top - zz.top) - tops[0];
       const desvioX = (zr0.left - zz.left) - colLeft;
       if (Math.abs(desvioY) > .5){
         stats.forEach((stat, i) => {
@@ -1371,13 +1385,15 @@
         });
       }
       if (Math.abs(desvioX) > .5){
-        /* a coluna nasce onde nasce; o que precisa fechar na margem e a borda
-           direita, entao a largura absorve o desvio */
+        /* O algarismo tem de ficar centrado no pilar, entao a esquerda e
+           corrigida; a largura acompanha para a borda direita seguir fechando
+           na margem da pagina. */
         stats.forEach(stat => {
-          stat.style.setProperty('--hero-v2-width', (colWidth + desvioX * -1).toFixed(2) + 'px');
+          stat.style.setProperty('--hero-v2-left', (colLeft - desvioX).toFixed(2) + 'px');
+          stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
         });
       }
-      const axisX = colLeft + (numbers[0].offsetWidth || 1) / 2;
+      const axisX = colLeft + numW / 2;
 
       void zone.offsetHeight;
       const numberBoxes = numbers.map(layoutBox);
