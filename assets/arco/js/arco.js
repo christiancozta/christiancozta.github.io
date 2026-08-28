@@ -1339,7 +1339,8 @@
         : zw * .37 + numW / 2;
       const colLeft = pilar2 - numW / 2;
       const springY = ar.bottom;
-      const safeArc = clamp(8, innerWidth * .007, 14);
+      /* folga real ate o arco: o ultimo bloco nao pode encostar na curva */
+      const safeArc = clamp(16, innerWidth * .014, 30);
       const bottomEdge = ar.y - safeArc;
       const heights = stats.map(expandedHeight);
       const totalHeight = heights.reduce((sum, h) => sum + h, 0);
@@ -1351,8 +1352,10 @@
       const tr = alvoTopo ? layoutBox(alvoTopo) : null;
       const topStart = tr ? tr.y : hr.bottom;
       const rawGap = (bottomEdge - topStart - totalHeight) / 4;
-      /* respiro maior entre os cinco blocos */
-      const gap = clamp(22, rawGap, 88);
+      /* respiro entre os BLOCOS — meio termo entre o apertado de antes e o
+         espacado que empurrava o 1 contra o arco. O intervalo interno de cada
+         bloco (rotulo + texto) nao e tocado aqui. */
+      const gap = clamp(16, rawGap, 58);
 
       /* Leitura 5 -> 1, de cima para baixo, na ordem do DOM. */
       const tops = new Array(5);
