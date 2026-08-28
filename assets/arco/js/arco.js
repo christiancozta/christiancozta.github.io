@@ -1327,10 +1327,12 @@
     raf = requestAnimationFrame(() => {
       if (mq.matches){
         home.classList.remove('hero-v2-ready');
+        stats.forEach(stat => stat.style.removeProperty('translate'));
         return;
       }
 
       home.classList.add('hero-v2-ready');
+      stats.forEach(stat => stat.style.removeProperty('translate'));
 
       const ar = layoutBox(arc);
       const hr = layoutBox(head);
@@ -1346,13 +1348,12 @@
       /* O eixo que sobe parte do segundo pilar da arcada — o mesmo x de onde
          a linha desce da nascenca. Nao e proporcao: e a coluna do meio. */
       const arcadeMovs = document.querySelectorAll('.view[data-view="home"] .arcade .mov');
-      const numW = numbers[0].offsetWidth || 1;
+      const numWInicial = numbers[0].offsetWidth || 1;
       const pilar2 = arcadeMovs[1]
         ? arcadeMovs[1].getBoundingClientRect().left - zBox.left
-        : zw * .37 + numW / 2;
-      /* O eixo e a borda esquerda do bloco, como os pilares sao embaixo na
-         arcada: a linha corre rente ao algarismo e o par numero+rotulo fica
-         inteiro a direita dela. */
+        : zw * .37 + numWInicial / 2;
+      /* Primeira passagem: assenta o grid no eixo para obter a largura final
+         do algarismo. A centralizacao acontece depois dessa medida. */
       const colLeft = pilar2;
       const springY = ar.bottom;
       /* Folga ate o arco. Eu a tinha dobrado para conter o 1 invadindo a
@@ -1394,7 +1395,6 @@
       }
 
       const colWidth = zw - colLeft;
-      void numW;
       stats.forEach((stat, i) => {
         stat.style.setProperty('--hero-v2-left', colLeft.toFixed(2) + 'px');
         stat.style.setProperty('--hero-v2-top', tops[i].toFixed(2) + 'px');
@@ -1439,43 +1439,28 @@
       stats.forEach((stat, i) => {
         stat.style.setProperty('--hero-v2-top', finais[i].toFixed(2) + 'px');
       });
-      if (Math.abs(desvioX) > .5){
-        /* O algarismo tem de ficar centrado no pilar, entao a esquerda e
-           corrigida; a largura acompanha para a borda direita seguir fechando
-           na margem da pagina. */
-        stats.forEach(stat => {
-          stat.style.setProperty('--hero-v2-left', (colLeft - desvioX).toFixed(2) + 'px');
-          stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
-        });
-      }
-      /* O algarismo e tabular: todos ocupam a mesma largura de avanco, mas o
-         glifo fica centrado nela — sobra um vao a esquerda que muda de digito
-         para digito, e e por isso que a coluna lia desencostada da linha
-         mesmo com as caixas alinhadas. Mede-se a tinta de cada um e desconta-
-         se o vao, de modo que o traco encoste no desenho, nao na caixa. A
-         largura de avanco fica intacta, entao os rotulos nao se mexem. */
-      /* O algarismo e tabular: todo digito ocupa a mesma largura de avanco e o
-         desenho fica centrado nela. A sobra a esquerda muda de digito para
-         digito — no "1" e quase o dobro — e e por isso que a coluna le torta
-         mesmo com as caixas alinhadas.
-
-         Range nao serve aqui: devolve a caixa de avanco, nao o desenho (mede
-         a mesma largura para o 1 e para o 5). A medida vem do canvas, que
-         reporta a extensao real da tinta. Como o canvas mede o digito
-         proporcional e a pagina desenha o tabular, soma-se a metade da
-         diferenca entre os dois avancos, que e como a fonte constroi a versao
-         tabular: reparte a folga dos dois lados. */
-      const estilo = getComputedStyle(numbers[0]);
-      const pincel = layout.pincel || (layout.pincel = document.createElement('canvas').getContext('2d'));
-      pincel.font = `${estilo.fontWeight} ${estilo.fontSize} ${estilo.fontFamily}`;
+      /* O alinhamento e da unidade completa, nao do desenho isolado de cada
+         glifo. O avanco tabular ja oferece uma caixa comum aos cinco digitos;
+         limpando os transforms individuais, numero e conteudo permanecem no
+         mesmo sistema de coordenadas e cruzam o eixo pelo centro. */
       numbers.forEach(numero => {
-        if (!numero) return;
         numero.style.transform = 'none';
-        const avancoTabular = numero.getBoundingClientRect().width;
-        const medida = pincel.measureText(numero.textContent.trim());
-        const sobraProporcional = -medida.actualBoundingBoxLeft;
-        const sobra = sobraProporcional + (avancoTabular - medida.width) / 2;
-        numero.style.transform = sobra > .2 ? `translateX(${(-sobra).toFixed(2)}px)` : 'none';
+      });
+
+      /* Segunda passagem: a largura agora e a definitiva do grid. O eixo nao
+         se move; cada bloco inteiro recua meia largura do numeral. O desvio
+         da caixa ancestral e descontado da variavel de posicao, e a largura
+         cresce na mesma medida para a borda direita continuar na margem. */
+      void zone.offsetHeight;
+      const numW = numbers[0].getBoundingClientRect().width;
+      const blocoLeft = pilar2 - numW / 2;
+      const ajusteEntreCaixas = 2.06;
+      const blocoVarLeft = blocoLeft - desvioX;
+      const blocoWidth = zw - blocoLeft;
+      stats.forEach(stat => {
+        stat.style.setProperty('--hero-v2-left', blocoVarLeft.toFixed(2) + 'px');
+        stat.style.setProperty('--hero-v2-width', blocoWidth.toFixed(2) + 'px');
+        stat.style.translate = (-ajusteEntreCaixas).toFixed(2) + 'px 0';
       });
 
       const axisX = pilar2;
