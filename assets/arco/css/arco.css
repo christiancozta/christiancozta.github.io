@@ -1655,7 +1655,8 @@ body{
 @media (min-width:1001px){
   .bio__head{ position:relative; }
   .bio__mark{
-    position:absolute; top:0; right:100%;
+    position:absolute; right:100%;
+    top:calc(-1 * var(--ultrapassagem));
     margin-right:clamp(.6rem,1.1vw,1rem);
   }
 }
@@ -1664,15 +1665,24 @@ body{
    acompanha o nome em qualquer viewport sem numero solto. */
 .bio__mark{
   flex:none; display:block; color:var(--ink);
-  font:600 clamp(1.5rem,2.9vw,2.45rem)/1 var(--f-display);
-  width:1cap; height:1cap;
+  font:700 clamp(1.5rem,2.9vw,2.45rem)/1 var(--f-display);
+  /* O C e redondo: ultrapassa a linha de caixa alta para parecer da mesma
+     altura das planas. O quadrado acompanha essa ultrapassagem para que o
+     topo dos dois corra na mesma horizontal. */
+  --ultrapassagem:.034em;
+  width:calc(1cap + var(--ultrapassagem));
+  height:calc(1cap + var(--ultrapassagem));
 }
 /* text-box apara o leading: a borda de cima da caixa passa a ser a linha de
    caixa alta e a de baixo, a linha de base. O topo do glifo — nao o topo do
    espaco morto — e o que pousa na margem. */
-.bio__name{ font-family:var(--f-display); font-weight:600; font-size:clamp(1.5rem,2.9vw,2.45rem); line-height:1.05; letter-spacing:-.035em; margin:0;
+.bio__name{ font-family:var(--f-display); font-weight:700; font-size:clamp(1.5rem,2.9vw,2.45rem); line-height:1.05; letter-spacing:-.035em; margin:0;
   text-box:trim-both cap alphabetic; }
-.bio__tag{ font-family:var(--f-display); font-weight:400; font-size:clamp(.68rem,.88vw,.8rem); line-height:1.3; letter-spacing:-.01em; color:var(--ink-78); margin:.25rem 0 0; }
+/* Aparado o nome, o vao ate a tagline caiu de ~12,6px para 3,59px: o espaco
+   vinha do descendente morto. A tagline tambem e aparada e o intervalo passa
+   a ser declarado — da linha de base do nome ao topo de caixa alta dela. */
+.bio__tag{ font-family:var(--f-display); font-weight:400; font-size:clamp(.68rem,.88vw,.8rem); line-height:1.3; letter-spacing:-.01em; color:var(--ink-78);
+  text-box:trim-both cap alphabetic; margin:clamp(.62rem,1vw,.86rem) 0 0; }
 .bio__tag i{ font-style:normal; color:var(--ink-55); padding:0 .28em; }
 .bio__run{
   margin:0 0 clamp(.9rem,1.8vw,1.3rem);
@@ -2262,9 +2272,9 @@ body{
 }
 
 @media (min-width:1001px){
-  .rail.hero-v3-rail-ready .rail__id{
-    transform:translateY(var(--hero-v3-rail-shift,0px));
-  }
+  /* O bloco de identidade nao e mais deslocado por medicao: rail e conteudo
+     partem do mesmo --home-top e as duas caixas sao aparadas na caixa alta,
+     entao ARCO e o nome nascem na mesma linha sem conta nenhuma. */
 }
 
 .rail__link--data{ text-decoration:none; }
