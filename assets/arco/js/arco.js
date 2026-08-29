@@ -1356,12 +1356,16 @@
          do algarismo. A centralizacao acontece depois dessa medida. */
       const colLeft = pilar2;
       const springY = ar.bottom;
-      /* Folga ate o arco. Eu a tinha dobrado para conter o 1 invadindo a
-         curva; a causa era outra — a coluna dimensionada pela altura
-         expandida. Corrigida essa, a folga volta perto do valor original e o
-         bloco 1 encosta como encostava. */
-      const safeArc = clamp(10, innerWidth * .0075, 15);
-      const bottomEdge = ar.y - safeArc;
+      /* Folga ate o arco. O piso era ar.y — o topo da CAIXA do svg, que
+         comeca cerca de 65px acima da tinta da curva. O 1 parava no ar
+         guardando distancia de uma borda invisivel, e o vao desperdicado
+         saia dos quatro intervalos, que e onde ele fazia falta. Mede-se
+         agora a curva de fora, que e o que o olho enxerga; a folga cresce na
+         mesma proporcao porque agora ela e contada da linha certa. */
+      const curvaExterna = arc.querySelector('.extra') || arc;
+      const arcTinta = curvaExterna.getBoundingClientRect().top - zBox.top;
+      const safeArc = clamp(24, innerWidth * .022, 42);
+      const bottomEdge = arcTinta - safeArc;
       /* Alturas do estado padrao, nao do expandido. Reservar o expandido
          deixava a coluna terminando ~100px acima do arco em repouso, que e o
          que se ve quase sempre. Como os blocos sao absolutos, abrir um nao
