@@ -1327,12 +1327,21 @@
     raf = requestAnimationFrame(() => {
       if (mq.matches){
         home.classList.remove('hero-v2-ready');
-        stats.forEach(stat => stat.style.removeProperty('translate'));
+        narr.style.removeProperty('--hero-axis-x');
+        stats.forEach(stat => {
+          stat.style.removeProperty('translate');
+          stat.style.removeProperty('--hero-v2-left');
+          stat.style.removeProperty('--hero-v2-width');
+        });
         return;
       }
 
       home.classList.add('hero-v2-ready');
-      stats.forEach(stat => stat.style.removeProperty('translate'));
+      stats.forEach(stat => {
+        stat.style.removeProperty('translate');
+        stat.style.removeProperty('--hero-v2-left');
+        stat.style.removeProperty('--hero-v2-width');
+      });
 
       const ar = layoutBox(arc);
       const hr = layoutBox(head);
@@ -1348,13 +1357,11 @@
       /* O eixo que sobe parte do segundo pilar da arcada — o mesmo x de onde
          a linha desce da nascenca. Nao e proporcao: e a coluna do meio. */
       const arcadeMovs = document.querySelectorAll('.view[data-view="home"] .arcade .mov');
-      const numWInicial = numbers[0].offsetWidth || 1;
       const pilar2 = arcadeMovs[1]
         ? arcadeMovs[1].getBoundingClientRect().left - zBox.left
-        : zw * .37 + numWInicial / 2;
-      /* Primeira passagem: assenta o grid no eixo para obter a largura final
-         do algarismo. A centralizacao acontece depois dessa medida. */
-      const colLeft = pilar2;
+        : zw * .37;
+      /* O eixo e coluna real do grid: numeros a esquerda, rotulos a direita. */
+      narr.style.setProperty('--hero-axis-x', pilar2.toFixed(2) + 'px');
       const springY = ar.bottom;
       /* Folga ate o arco. Eu a tinha dobrado para conter o 1 invadindo a
          curva; a causa era outra — a coluna dimensionada pela altura
@@ -1394,11 +1401,8 @@
         tops[i] = tops[i - 1] + heights[i - 1] + gap;
       }
 
-      const colWidth = zw - colLeft;
       stats.forEach((stat, i) => {
-        stat.style.setProperty('--hero-v2-left', colLeft.toFixed(2) + 'px');
         stat.style.setProperty('--hero-v2-top', tops[i].toFixed(2) + 'px');
-        stat.style.setProperty('--hero-v2-width', colWidth.toFixed(2) + 'px');
       });
 
       /* A caixa resultante nao pousa exatamente na coordenada pedida — sobra
@@ -1414,7 +1418,6 @@
       const alvoAgora = alvoTopo
         ? alvoTopo.getBoundingClientRect().top - zz.top
         : tops[0];
-      const desvioX = (zr0.left - zz.left) - colLeft;
 
       /* Duas ancoras, nao uma: em cima a caixa alta do algarismo encontra a
          do "Itinerario"; embaixo o ultimo bloco guarda distancia fixa do arco
@@ -1445,22 +1448,6 @@
          mesmo sistema de coordenadas e cruzam o eixo pelo centro. */
       numbers.forEach(numero => {
         numero.style.transform = 'none';
-      });
-
-      /* Segunda passagem: a largura agora e a definitiva do grid. O eixo nao
-         se move; cada bloco inteiro recua meia largura do numeral. O desvio
-         da caixa ancestral e descontado da variavel de posicao, e a largura
-         cresce na mesma medida para a borda direita continuar na margem. */
-      void zone.offsetHeight;
-      const numW = numbers[0].getBoundingClientRect().width;
-      const blocoLeft = pilar2 - numW / 2;
-      const ajusteEntreCaixas = 2.06;
-      const blocoVarLeft = blocoLeft - desvioX;
-      const blocoWidth = zw - blocoLeft;
-      stats.forEach(stat => {
-        stat.style.setProperty('--hero-v2-left', blocoVarLeft.toFixed(2) + 'px');
-        stat.style.setProperty('--hero-v2-width', blocoWidth.toFixed(2) + 'px');
-        stat.style.translate = (-ajusteEntreCaixas).toFixed(2) + 'px 0';
       });
 
       const axisX = pilar2;

@@ -2172,13 +2172,13 @@ body{
   .home.hero-v2-ready .narr__stats{ z-index:2 !important; }
   .home.hero-v2-ready .narr__stat{
     position:absolute !important;
-    left:var(--hero-v2-left,50%) !important;
-    right:auto !important;
+    left:0 !important;
+    right:0 !important;
     top:var(--hero-v2-top,0px) !important;
-    width:var(--hero-v2-width,auto) !important;
+    width:auto !important;
     max-width:none !important;
     display:grid !important;
-    grid-template-columns:max-content minmax(0,1fr) !important;
+    grid-template-columns:var(--hero-axis-x,50%) minmax(0,1fr) !important;
     grid-template-rows:auto auto !important;
     column-gap:clamp(.72rem,1vw,.96rem) !important;
     row-gap:0 !important;
@@ -2196,6 +2196,7 @@ body{
   .home.hero-v2-ready .narr__n{
     grid-column:1 !important;
     grid-row:1 / span 2 !important;
+    justify-self:end !important;
     align-self:start !important;
     font-family:var(--f-display) !important;
     font-weight:700 !important;
@@ -2205,10 +2206,29 @@ body{
     color:var(--ink) !important;
     background:var(--paper) !important;
     padding:0 .12em .04em !important;
+    /* Respiro comum entre a tinta e o eixo. O grid encosta a CAIXA do
+       algarismo na coluna; a tinta, nao. Cada desenho guarda um vao proprio
+       dentro do avanco tabular — o "1" guarda .176em, o "4" guarda .022em —
+       e por isso o 1 parava ao dobro da distancia do 4. Aqui o vao de cada
+       desenho e descontado do respiro: a borda da caixa nao sai do eixo, o
+       que anda e a tinta dentro dela. */
+    --tinta-eixo:.185em;
+    padding-right:calc(var(--tinta-eixo) - var(--tinta-vao,0em)) !important;
     margin:0 !important;
     position:relative !important;
     z-index:3 !important;
   }
+  /* Vao a direita de cada algarismo, medido no desenho da Schibsted Grotesk
+     em avanco tabular. Sao metricas da fonte, nao ajuste de tela: mudam se a
+     fonte mudar, e nao antes. Medido varrendo o pixel pintado, nao pela
+     metrica do canvas — actualBoundingBoxRight estoura a tinta, e estoura
+     diferente em cada algarismo: 5,25px no "5" contra 1,63px no "4" a 600px.
+     Era dai que vinha o desalinho que sobrava no 5. */
+  .home.hero-v2-ready .narr__stat[data-step="5"] .narr__n{ --tinta-vao:.0405em; }
+  .home.hero-v2-ready .narr__stat[data-step="4"] .narr__n{ --tinta-vao:.0244em; }
+  .home.hero-v2-ready .narr__stat[data-step="3"] .narr__n{ --tinta-vao:.0470em; }
+  .home.hero-v2-ready .narr__stat[data-step="2"] .narr__n{ --tinta-vao:.0591em; }
+  .home.hero-v2-ready .narr__stat[data-step="1"] .narr__n{ --tinta-vao:.1845em; }
   .home.hero-v2-ready button.narr__n{
     appearance:none !important;
     -webkit-appearance:none !important;
