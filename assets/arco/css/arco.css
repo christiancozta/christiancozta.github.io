@@ -857,48 +857,47 @@ body{
 }
 .dict--alphabetical > .verb:first-child{ border-top:0; }
 
-/* o registro: largura inteira do domínio, sem calha morta.
-   --chev é a calha do marcador: ele pendura nela sem consumir o recuo. */
+/* o registro: a mesma gaveta do mecanismo — cabeça à esquerda, assinatura na
+   calha do meio, marcador fechando a linha. */
 .verb{
-  position:relative; --chev:1.15rem;
   width:100%; max-width:100%; min-width:0;
   padding:0 .8rem;
   border-top:1px solid var(--hair);
 }
 .verb:first-of-type{ border-top:0; }
-/* estado aberto sem depender do símbolo: o fundo não muda — o conteúdo fecha
-   com um fio branco que o separa da equivalência de baixo */
-.verb[open]{ border-bottom:1px solid var(--paper); }
-.verb[open] + .verb{ border-top-color:transparent; }   /* uma linha só, e ela é branca */
 .verb > summary{
   list-style:none; cursor:pointer;
-  display:grid; grid-template-columns:minmax(0,1fr) auto;
-  column-gap:1rem; align-items:baseline;
-  padding:.62rem 0;
+  display:grid; grid-template-columns:minmax(0,1fr) auto auto;
+  column-gap:clamp(1rem,2.4vw,2rem); align-items:start;
+  padding:1.15rem 0;
   width:100%; max-width:100%; min-width:0;
 }
 .verb > summary::-webkit-details-marker{ display:none; }
 .verb__hd{ min-width:0; }
 .verb > summary:hover .verb__t{ background-size:100% 1px; }
 .verb__t{
-  font-weight:500; font-size:.97rem; letter-spacing:-.012em; line-height:1.25;
+  display:inline; font-weight:500; font-size:1.02rem; letter-spacing:-.014em; line-height:1.25;
   background-image:linear-gradient(currentColor,currentColor);
   background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%;
   transition:background-size var(--slow) var(--ease);
   padding-bottom:1px;
 }
 .verb[open] > summary .verb__t{ color:var(--ink); }
-.verb__p{ display:block; margin-top:.05rem; color:var(--ink-70); font-size:.75rem; font-weight:400; line-height:1.3; }
-.verb__sig{ display:flex; gap:.35rem; align-self:center; }
-/* chevron: › fechado, ⌄ aberto. Pendura à esquerda, na calha do recuo: sai do
-   fluxo, então o título não anda um pixel e o recuo atual fica intacto.
-   Sem `top`: a posição estática o mantém na linha de base do título. */
+.verb__p{
+  display:block; margin-top:.1rem; color:var(--ink-70);
+  font-size:.78rem; font-weight:400; line-height:1.3; font-style:italic;
+}
+/* a assinatura ocupa a calha do selo de origem do mecanismo */
+.verb__sig{
+  display:grid; grid-template-columns:max-content;
+  justify-content:start; align-content:start;
+  gap:.35rem .4rem; min-width:0; padding-top:.22rem;
+}
+/* marcador: › fechado, ⌄ aberto — na direita, como no mecanismo */
 .verb__x{
-  position:absolute; left:calc(var(--chev) * -1);
-  display:inline-block; width:1em; text-align:center;
+  display:inline-block; width:1em; text-align:center; flex:none;
   font-family:"Azeret Mono","Segoe UI Symbol",ui-monospace,monospace;
-  font-size:.86rem; line-height:1.27; color:var(--ink-70);
-  transform:translateY(.3em);   /* pousa no eixo óptico da primeira linha */
+  font-size:1rem; line-height:1.35; color:var(--ink-70);
   transition:color var(--fast) var(--ease);
 }
 .verb__x::before{ content:"\203A"; }                            /* › */
@@ -906,18 +905,14 @@ body{
 .verb > summary:hover .verb__x, .verb[open] > summary .verb__x{ color:var(--ink); }
 
 .verb__body{
-  padding:0 0 1.5rem;
+  padding:0 0 1.8rem;
   margin-left:0;
   display:grid; grid-template-columns:minmax(0,1fr); gap:1.15rem;
   width:100%; max-width:100%; min-width:0;
 }
 /* aberto ocupa toda a largura disponível do domínio */
 .verb__body p{ margin:0; font-size:.85rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; max-width:none; }
-.verb__body p.verb__lbl{
-  font-family:var(--f-micro); font-size:.63rem; line-height:1.4; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink); font-weight:700; margin:0 0 .45rem;
-}
-.verb__body p.al{ font-size:.78rem; color:var(--ink-62); }
+.verb__body p.verb__lbl{ font-weight:700; color:var(--ink); }
 
 /* a marca nomeada — a caixa é da marca: echo é sempre minúsculo, ATRIO sempre alto */
 /* a pintura da faixa vem do bloco único lá em cima — aqui só a métrica */
@@ -994,6 +989,12 @@ body{
 .axioms{ display:grid; grid-template-columns:minmax(0,1fr); gap:1.15rem; max-width:none; }
 .axioms p{ margin:0; font-size:.86rem; line-height:1.68; color:var(--ink-78); text-wrap:pretty; }
 .chips{ display:flex; flex-wrap:wrap; gap:.4rem; }
+/* o princípio transversal não é mecanismo: sai da fileira contada e volta como
+   moldura, marcada pelo mais que soma sem entrar na conta */
+.chips--cross{ align-items:baseline; }
+.chips--cross::before{
+  content:"+"; font-family:var(--f-micro); font-size:.62rem; color:var(--ink-62);
+}
 /* o dicionário conta mecanismos, não territórios: a assinatura do verbete
    passou a ser a contagem que sustenta a entrada */
 .verb__mec{
@@ -1210,10 +1211,8 @@ body{
   .arcade{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .proof{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   .verb__body{ margin-left:0; }
-  /* o recuo aperta antes de o registro perder largura; a calha do marcador
-     aperta junto, para o chevron não sair da massa do domínio */
+  /* o recuo aperta antes de o registro perder largura */
   .grp__body{ padding-left:clamp(.9rem,2vw,1.5rem); }
-  .verb{ --chev:.95rem; }
   /* a calha do verbete deixa de ser a última: a legenda vira para a esquerda */
   .chip[data-label]::after{ left:0; right:auto; }
   .chip[data-label]::before{ left:.62rem; right:auto; }
@@ -1292,9 +1291,9 @@ body{
   .grp{ padding-inline:.9rem; }
   .grp__body{ padding-left:.75rem; padding-right:0; }
   .dict--alphabetical{ padding-inline:.9rem; }
-  .verb{ padding-inline:.5rem; --chev:.7rem; }
-  .verb > summary{ grid-template-columns:minmax(0,1fr); column-gap:.75rem; row-gap:.35rem; }
-  .verb__sig{ grid-column:1 / -1; }
+  .verb{ padding-inline:.5rem; }
+  .verb > summary{ grid-template-columns:minmax(0,1fr) auto; column-gap:.75rem; }
+  .verb__sig{ grid-column:1; grid-row:2; padding-top:0; margin-top:.55rem; }
   .verb__body{ margin-left:0; }
   .border2{ grid-template-columns:1fr; }
   .eqhead{ flex-direction:column; align-items:flex-start; gap:.6rem; }
