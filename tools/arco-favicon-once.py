@@ -1,0 +1,33 @@
+from pathlib import Path
+import base64
+
+ASSETS = {
+    "simbolo-preto-16x16.png": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAH3AAAB9wEeuin8AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAOhJREFUOI3tkzFKA1EYhL8JW1gEzGMXWVc9gZ0oBAsRtLD3EPapvIJXMFewt9HKRlA8gyAmQR/uEwQDPvPbycKua5HGwimHmWHmh1952jPmQGce898LKCU7Aj5a9J9gxwahscHoOZyqoz2wSc0qvGEHYx9OBNYYADB6erlKSDbBriv0HZGtiQ8XbRO+8eD9Y9e97pppaKZh14XtcVneN2l/O6JJtjCdrv6oS5rItSxbiSyeSdYHiO9v68vOHTa1qCUXS24nEm9B/Qq9QcJNnvX2WwOK1A1sxiUor48hEzovUjeo0vr/Bb4AbRtLCseIrusAAAAASUVORK5CYII=",
+    "simbolo-preto-24x24.png": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAALzAAAC8wHS6QoqAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAWRJREFUSIntVT1Lw2AQfi5GaLFgglHSajYnxUUqFgcRdHB3EJyc9CfoT1AXZ+2ikw7+gA7dXBTFxaWLIATboKFNodKKsY9rtTVJKQWH3nj3fNzL3fGKOaYRfQyln+IDg39rIEcAHruXYoGC41ADkeaTGk8sAjiPrs1LqrG0AhZCDQDAtu16ya1si3AXwGeA9BfAfadc3XIc570TIHAGxTfvVBRZBei0FQUuwfWS6x2S/PNYQ4dcfC1fq1DTAG9a0g/wseC4Xj6MH2mLbNd9SejVFVKypGQTurdUqlSeo3C7XVOKMNZoTEXmqVFAlmFM+hi9EmEGAPx6bTap6xtRXhHaSWpCX/bh3wOSaUnPQ8WdaWhrPRmkxrUdNpEHxGwrEoZAcklD2xMR6crAsqx40tDPSDkBMBzQwxAgB6ahX5imOdIJ0DYDNpVpv167BTAXIPyLxE3xP2ZIJQf5eRIy+NEGBj3HN4MBeeIpSqguAAAAAElFTkSuQmCC",
+    "simbolo-preto-48x48.png": "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAXnAAAF5wGk6LX5AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAudJREFUaIHtmb9v01AQx7+XmCqI0trJS7BTIpYORQgGVErEgJBgQJU6oA78WOhEd5b2T2gG/gDKUiZAomKoVDF0YymlQgIGOlQqCDU2wXGcqqhRcXwMMFRqFduxg4Xkz/jeO99933t39ySTmpMZ/zGpuAMISyIgbhIBcZMIiJtEQNwkAuLGUwAxPgBUAfBP30zMNA/CR691ngKY4OimNcvMdwH8jCS6zuwBmDLq1jQYv7wW+75CRt1+kUJ6FODPocLrzCa7dFk3G0/9GgTKgW3T3NjndJmBV8Fj84B5uc/hMcOyPgUxC5zE9Xp953vdngR4FoAb1P4IGKCKYTUnvtp2I6hxV1WImVk37QpSNAEgsNMD7BAw+TfHutqMUGVUr1nL7ZQ7BiDQsf+BNwjpctVshLqOoftArdbczJy0xwD4TjwwP2cpM1o1zdAFIZJGtrXFLd1sTBHxNNCx9LUBnjWs5j3DMCIpyZF24uoPe55SdB1g49AkwWTwTd20K8wcWVOM/ClRrVlvJEijAK8eGH4PB5cM016J2l9P3kLfTHO7X2leY6YnzPSkX7Gv6I3Gl1746vVjjok402qd7pkfqRcfLQkx5GDwJRGXAcDZ2z2nKcpkL04h8p0pFpSrDpx1gMoHhi9CwjtVyDei9hepgGJefsAuVgBSD00yBIFea0KeISKKymckAkql0nFNKAvM9BjAsQ5L0wDNqUJ5pqrqiSh8hxZQKAwOO3u7bwHc923EfJuc1npRiLNh/YcSoBWy42k3tQbgfHBrGmG0V4tCuRUmhq4EEBFpQp6By0sAlBD+BxhY1ER2joi6iiWwUS6XGziVkxcBmuvG/ggI4Bk1O7h0RpYDb0agAIaEGOmj9ioBoY79SIjG9yVaU7PZQNfRtwA1n73jor0OUOjE68Awpdw1TSi+C4JnJyaGpOWVR8R4GC42v1AGwIKWVy4QQ2KPjkHJP7KYSQTETSIgbhIBcZMIiJtEQNz8BqKO+LLkFknAAAAAAElFTkSuQmCC",
+    "simbolo-preto-64x64.png": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAffAAAH3wHPRUmFAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAABAdJREFUeJztms9rHGUYx7/P7DZErMnMzmSdzRr00ENEvJQ0LmKlYA+l0IPk4I9D7cXm2GPyJyRXb00uVcEfYPFQKD1UEKMQ09CLB3MotCK7M25mdyehkjTdnW8PFYkkprsz78wLOp/j7rzPfPkw877P+zLi2ibxP8bQHUA3uQDdAXSTC9AdQDe5AN0BdJML0B1AN7kA3QF0kwvQHUA3uQDdAXQzmABiRYBPUsqigs8p+GmQAQMJEMGjRtC5AuAjADuDjE2ZRyKc9YLORYOD5Yr1CnhB5zND+BaAB3HGq4RAnTTONDbDpTjjY88B9c3wrrHXOyXA7bg1EkP8EBnHpvxWazVuiUSTYH17O/Ba4TlAFgFkerZIypLfDs82m00/SZ3EqwDJnhe050l+AODPpPX6YAfAJb/VniX5OGkxZcug3wq/NlCYAvirqpqHcI+RvOEFnU9VFVTaB9SDYGOPhRqBb1XWBQCQN4e6nPbb7V9UllXeCLVare0/WuEMwHkAkYKSBGTRb29d+C0MOwrq/YNUOkGS9IJwEYZcAJAk9LYAM3/NMSpkHiDVVthrtm/2jGgaQIzHlhuCQq0RdNS/TvtIfS/QbG7dG34hnAbQ/8RFfsXi8FQjCNKcUAFktBm6f5+7XtC5JMJZAEctXT2A835760Pf97NYUrPdDTY2wyUx5B2AB5sXQUDwnBeEiyQza6oy3w43mu2VIopTAPe3r3fRxSk/CDNvq7WcB/weBPXj1tYZUpZJWT5uhW96nc4DHVl0H4hQhMO7uy9py1HUcdMJx6l2MfqNCGsA0N15+FrFsmZ0PAWZmx8vW2930V0HpLbv55Mo4o7rmGezzpOpgPEx8zIj3AbEPfAn4QjkVsUx50REssqUiYCJiYnnKo51jZSrAI4dcWkBkAXXsb50Xff5LLKlLqBcHj3R3Xn4M56eI/YH+Z50d9fHHefV9JI9JVUBlXLpfCEy1gC8PvhomSR6q+OO9a7yYPtIRYCISMUx5xDxBgArQakRAtcrTmlBRFLJqryobdsjL9rmdUAWFNUXgHNuafTGy6aZROahKBVQdZzJIemtCqD+sRU5v1eUNbdUivE6/TvKBLhjpfcj9NYBSXPiOiFGtFZxrP4n1GeQWICIFCpOaUHILwBksHTJMIBrrl26KiJHLal9kUhAdWTEqdjmLYBzADJrXgBAhJfdkvlduVw+2FQNQGwB1THzZDRUuEMg8/b1bwSnjejxumvbtWdffDixBFQc62JE+RHAK3FvrAoBqiLR965tXYk1fqDP5YkVQjZE+HGcm6UNKcsCTkJwut8xgwn4D6L7QEQ7uQDdAXSTC9AdQDe5AN0BdJML0B1AN7kA3QF0kwvQHUA3uQDdAXTzBBEZTrNU8RsbAAAAAElFTkSuQmCC",
+}
+
+brand = Path("assets/arco/brand")
+brand.mkdir(parents=True, exist_ok=True)
+for name, encoded in ASSETS.items():
+    (brand / name).write_bytes(base64.b64decode(encoded))
+
+page = Path("arco.html")
+text = page.read_text(encoding="utf-8")
+marker = '<meta name="theme-color" content="#FCFCFC">\n'
+icon_block = '''
+<link rel="icon" href="assets/arco/brand/favicon.svg?v=20260829" type="image/svg+xml" sizes="any">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-96x96.png?v=20260829" type="image/png" sizes="96x96">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-64x64.png?v=20260829" type="image/png" sizes="64x64">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-48x48.png?v=20260829" type="image/png" sizes="48x48">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-32x32.png?v=20260829" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-24x24.png?v=20260829" type="image/png" sizes="24x24">
+<link rel="icon" href="assets/arco/brand/simbolo-preto-16x16.png?v=20260829" type="image/png" sizes="16x16">
+<link rel="shortcut icon" href="assets/arco/brand/favicon.ico?v=20260829" type="image/x-icon">
+'''
+
+if "simbolo-preto-16x16.png?v=20260829" not in text:
+    if marker not in text:
+        raise SystemExit("theme-color marker not found in arco.html")
+    page.write_text(text.replace(marker, marker + icon_block, 1), encoding="utf-8")
