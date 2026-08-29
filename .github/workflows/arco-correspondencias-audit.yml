@@ -220,7 +220,10 @@ jobs:
           PY
 
           git diff --check -- arco.html
-          git diff --quiet -- arco.html && { echo 'No arco.html changes'; exit 1; }
+          if git diff --quiet -- arco.html; then
+            echo 'No arco.html changes'
+            exit 1
+          fi
 
       - name: Commit to main
         shell: bash
