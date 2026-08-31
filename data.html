@@ -2,12 +2,491 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DATA. Ecossistema ARCO</title>
+  <meta name="description" content="DATA. Camada de jurimetria, evidência operacional e auditoria do Ecossistema ARCO.">
   <meta name="theme-color" content="#FCFCFC">
-  <title>DATA · Ecossistema ARCO</title>
+  <link rel="icon" href="assets/arco/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/arco/fontes/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/arco/fontes/azeret-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="data.css?v=20260828-r8">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
-  <script src="data/loader.js?v=20260831-etapa1"></script>
-  <noscript>DATA requer JavaScript para carregar a experiência interativa.</noscript>
+  <a class="skip-link" href="#conteudo">Ir ao conteúdo</a>
+
+  <header class="masthead">
+    <div class="masthead__id">
+      <a class="masthead__mark" href="arco.html" aria-label="ARCO, voltar ao percurso">ARCO</a>
+      <span class="masthead__sys">SYS.AUDIT.DATA</span>
+    </div>
+    <nav aria-label="Ecossistema ARCO">
+      <a href="echo.html">ECHO</a>
+      <a href="atrio.html">ATRIO</a>
+      <span class="masthead__here">DATA</span>
+    </nav>
+  </header>
+
+  <main id="conteudo" tabindex="-1">
+
+    <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="hero" id="topo" aria-labelledby="data-title">
+      <div class="hero__main">
+        <div>
+          <p class="hero__layer">LAYER.01 / JURIMETRIA</p>
+          <h1 id="data-title">DATA</h1>
+        </div>
+        <p class="hero__thesis">O número depende de onde se mede.</p>
+      </div>
+
+      <aside class="hero__ledger" aria-labelledby="hero-aside-title">
+        <div>
+          <h2 id="hero-aside-title">Estrutura de auditoria</h2>
+          <p>Bases, séries, denominadores e limites de interpretação. DATA torna explícito o lastro metodológico dos resultados publicados.</p>
+          <dl class="hero__terms">
+            <div><dt>Fonte</dt><dd>jurimetria.xlsx</dd></div>
+            <div><dt>Janela</dt><dd>28.11.2025 a 05.05.2026</dd></div>
+            <div><dt>Unidade</dt><dd>2ª Turma Recursal</dd></div>
+          </dl>
+        </div>
+        <a class="hero__get" href="assets/data/jurimetria.xlsx" download>
+          <b>Base, regra de contagem e teste de robustez</b>
+          <i aria-hidden="true">↓</i>
+        </a>
+      </aside>
+    </section>
+
+    <!-- ── 01 Medida ────────────────────────────────────────────────────── -->
+    <section class="plate plate--paper shell" id="medida" aria-labelledby="medida-title">
+      <div class="rail"><b>01</b><span id="medida-title">Medida</span></div>
+
+      <div class="field">
+        <div class="measure" data-reveal>
+          <div class="headline" tabindex="0" role="note" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="899 votos" data-denominator="1.761 despachos" data-period="28.11.2025 a 05.05.2026" aria-label="Conversão publicada: 51,05 por cento, 899 votos em 1.761 despachos.">
+            <strong>51,05%</strong>
+            <em>Conversão publicada</em>
+            <small>899 votos sobre 1.761 despachos</small>
+          </div>
+
+          <dl class="equation" aria-label="Formação do denominador">
+            <div><dt>Registros</dt><dd>1.896</dd></div>
+            <div><dt>Sem despacho</dt><dd>− 135</dd></div>
+            <div class="is-result"><dt>Despachos proferidos</dt><dd>1.761</dd></div>
+          </dl>
+        </div>
+
+        <p class="lead" data-reveal>O mês é definido pela data do despacho, quando o trabalho do assessor existe. A análise posterior registra etapa de outro setor e não integra o indicador.</p>
+
+        <div class="tests" data-reveal>
+          <article class="test">
+            <h3>Publicado sobre despachos</h3>
+            <button class="test__fig" type="button" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="899 votos" data-denominator="1.761 despachos" data-period="28.11.2025 a 05.05.2026"><b>51,05%</b></button>
+            <p>O denominador contém apenas os despachos efetivamente proferidos.</p>
+          </article>
+
+          <hr aria-hidden="true">
+
+          <article class="test test--out">
+            <h3>Teste adversarial sobre o bruto</h3>
+            <button class="test__fig" type="button" data-datum data-regime="lastro" data-source="Teste de robustez sobre jurimetria.xlsx" data-numerator="899 votos" data-denominator="1.896 registros brutos" data-period="28.11.2025 a 05.05.2026"><b>47,41%</b></button>
+            <p class="test__verdict">Descartado</p>
+            <p>O denominador bruto inclui 135 processos atribuídos e ainda não despachados.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 02 Série temporal ────────────────────────────────────────────── -->
+    <section class="plate plate--ink shell" id="serie" aria-labelledby="serie-title">
+      <div class="rail"><b>02</b><span id="serie-title">Série temporal</span></div>
+
+      <div class="field">
+        <div class="series-head" data-reveal>
+          <h2>Cinco meses integrais entre duas bordas que não se comparam.</h2>
+          <p class="key">O campo azul é o recorte comparável. Fora dele, dois meses de borda que a linha não conecta.</p>
+        </div>
+
+        <figure class="chart-frame" data-reveal>
+          <div class="chart-scroll" tabindex="0" role="group" aria-label="Gráfico mensal. Em telas estreitas, deslize horizontalmente para consultar todos os meses.">
+            <svg class="series-chart" viewBox="0 0 1240 600" role="img" aria-labelledby="series-svg-title series-svg-desc">
+              <title id="series-svg-title">Conversão e volume mensal de novembro de 2025 a maio de 2026</title>
+              <desc id="series-svg-desc">O campo azul marca os cinco meses integrais, de dezembro a abril, que formam a série comparável. Novembro e maio ficam fora do campo: são meses de borda e não se conectam à linha. O campo inferior mostra o volume mensal de votos.</desc>
+
+              <rect class="ch-band" x="230.83" y="56" width="808.33" height="464"></rect>
+
+              <g class="ch-grid" aria-hidden="true">
+                <line class="on-ink" x1="120" y1="330" x2="230.83" y2="330"></line>
+                <line class="on-blue" x1="230.83" y1="330" x2="1039.17" y2="330"></line>
+                <line class="on-ink" x1="1039.17" y1="330" x2="1180" y2="330"></line>
+                <line class="on-ink" x1="120" y1="255.71" x2="230.83" y2="255.71"></line>
+                <line class="on-blue" x1="230.83" y1="255.71" x2="1039.17" y2="255.71"></line>
+                <line class="on-ink" x1="1039.17" y1="255.71" x2="1180" y2="255.71"></line>
+                <line class="on-ink" x1="120" y1="181.43" x2="230.83" y2="181.43"></line>
+                <line class="on-blue" x1="230.83" y1="181.43" x2="1039.17" y2="181.43"></line>
+                <line class="on-ink" x1="1039.17" y1="181.43" x2="1180" y2="181.43"></line>
+                <line class="on-ink" x1="120" y1="107.14" x2="230.83" y2="107.14"></line>
+                <line class="on-blue" x1="230.83" y1="107.14" x2="1039.17" y2="107.14"></line>
+                <line class="on-ink" x1="1039.17" y1="107.14" x2="1180" y2="107.14"></line>
+              </g>
+              <g class="ch-axis-y" aria-hidden="true">
+                <text x="108" y="335">0%</text>
+                <text x="108" y="260.71">20%</text>
+                <text x="108" y="186.43">40%</text>
+                <text x="108" y="112.14">60%</text>
+              </g>
+
+              <g class="ch-frame" aria-hidden="true">
+                <text class="ch-scale" x="120" y="30">Taxa de conversão</text>
+                <text class="ch-scale" x="120" y="590">Volume de votos</text>
+                <text class="ch-band-label" x="635" y="30">Recorte comparável</text>
+                <line class="ch-baseline" x1="120" y1="520" x2="1180" y2="520"></line>
+              </g>
+
+              <g class="ch-delta" aria-hidden="true">
+                <line class="ch-delta-ref" x1="311.67" y1="165.79" x2="958.33" y2="165.79"></line>
+                <line class="ch-delta-bar" x1="958.33" y1="165.79" x2="958.33" y2="105.71"></line>
+                <line class="ch-delta-cap" x1="947.33" y1="105.71" x2="969.33" y2="105.71"></line>
+                <line class="ch-delta-cap" x1="947.33" y1="165.79" x2="969.33" y2="165.79"></line>
+                <text class="ch-delta-label" x="936.33" y="200">+16,18 p.p.</text>
+              </g>
+
+              <path class="ch-line" pathLength="1" d="M311.67 165.79 L473.33 154.46 L635 139.47 L796.67 141.8 L958.33 105.71"></path>
+
+              <g class="ch-point ch-point--edge" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="0 votos" data-denominator="2 despachos" data-period="NOV/25 | mês de borda" aria-label="NOV/25: 0,00 por cento, 0 votos em 2 despachos.">
+                <circle cx="150" cy="330" r="10"></circle>
+                <text class="ch-value" x="150" y="303">0,00%</text>
+                <text class="ch-note" x="150" y="364">fora do recorte</text>
+              </g>
+              <g class="ch-point" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="126 votos" data-denominator="285 despachos" data-period="DEZ/25 | mês integral" aria-label="DEZ/25: 44,21 por cento, 126 votos em 285 despachos.">
+                <circle cx="311.67" cy="165.79" r="8"></circle>
+                <text class="ch-value" x="311.67" y="138.79">44,21%</text>
+              </g>
+              <g class="ch-point" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="138 votos" data-denominator="292 despachos" data-period="JAN/26 | mês integral" aria-label="JAN/26: 47,26 por cento, 138 votos em 292 despachos.">
+                <circle cx="473.33" cy="154.46" r="8"></circle>
+                <text class="ch-value" x="473.33" y="127.46">47,26%</text>
+              </g>
+              <g class="ch-point" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="178 votos" data-denominator="347 despachos" data-period="FEV/26 | mês integral" aria-label="FEV/26: 51,30 por cento, 178 votos em 347 despachos.">
+                <circle cx="635" cy="139.47" r="8"></circle>
+                <text class="ch-value" x="635" y="112.47">51,30%</text>
+              </g>
+              <g class="ch-point" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="189 votos" data-denominator="373 despachos" data-period="MAR/26 | mês integral" aria-label="MAR/26: 50,67 por cento, 189 votos em 373 despachos.">
+                <circle cx="796.67" cy="141.8" r="8"></circle>
+                <text class="ch-value" x="796.67" y="114.8">50,67%</text>
+              </g>
+              <g class="ch-point" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="250 votos" data-denominator="414 despachos" data-period="ABR/26 | mês integral" aria-label="ABR/26: 60,39 por cento, 250 votos em 414 despachos.">
+                <circle cx="958.33" cy="105.71" r="8"></circle>
+                <text class="ch-value" x="958.33" y="78.71">60,39%</text>
+              </g>
+              <g class="ch-point ch-point--edge" tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="18 votos" data-denominator="48 despachos" data-period="MAI/26 | cinco dias" aria-label="MAI/26: 37,50 por cento, 18 votos em 48 despachos.">
+                <circle cx="1120" cy="190.71" r="10"></circle>
+                <text class="ch-value" x="1120" y="163.71">37,50%</text>
+                <text class="ch-note" x="1120" y="224.71">cinco dias</text>
+              </g>
+
+              <g class="ch-bars">
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="0 votos" data-denominator="2 despachos" data-period="NOV/25 | mês de borda" aria-label="NOV/25: 0 votos em 2 despachos.">
+                  <rect x="130" y="517" width="40" height="3"></rect>
+                  <text x="150" y="503">0</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="126 votos" data-denominator="285 despachos" data-period="DEZ/25" aria-label="DEZ/25: 126 votos em 285 despachos.">
+                  <rect x="291.67" y="459.52" width="40" height="60.48"></rect>
+                  <text x="311.67" y="445.52">126</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="138 votos" data-denominator="292 despachos" data-period="JAN/26" aria-label="JAN/26: 138 votos em 292 despachos.">
+                  <rect x="453.33" y="453.76" width="40" height="66.24"></rect>
+                  <text x="473.33" y="439.76">138</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="178 votos" data-denominator="347 despachos" data-period="FEV/26" aria-label="FEV/26: 178 votos em 347 despachos.">
+                  <rect x="615" y="434.56" width="40" height="85.44"></rect>
+                  <text x="635" y="420.56">178</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="189 votos" data-denominator="373 despachos" data-period="MAR/26" aria-label="MAR/26: 189 votos em 373 despachos.">
+                  <rect x="776.67" y="429.28" width="40" height="90.72"></rect>
+                  <text x="796.67" y="415.28">189</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="250 votos" data-denominator="414 despachos" data-period="ABR/26" aria-label="ABR/26: 250 votos em 414 despachos.">
+                  <rect x="938.33" y="400" width="40" height="120"></rect>
+                  <text x="958.33" y="386">250</text>
+                </g>
+                <g tabindex="0" role="img" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="18 votos" data-denominator="48 despachos" data-period="MAI/26 | cinco dias" aria-label="MAI/26: 18 votos em 48 despachos.">
+                  <rect x="1100" y="511.36" width="40" height="8.64"></rect>
+                  <text x="1120" y="497.36">18</text>
+                </g>
+              </g>
+
+              <g class="ch-axis-x" aria-hidden="true">
+                <text x="150" y="558">NOV/25</text>
+                <text x="311.67" y="558">DEZ/25</text>
+                <text x="473.33" y="558">JAN/26</text>
+                <text x="635" y="558">FEV/26</text>
+                <text x="796.67" y="558">MAR/26</text>
+                <text x="958.33" y="558">ABR/26</text>
+                <text x="1120" y="558">MAI/26</text>
+              </g>
+            </svg>
+          </div>
+        </figure>
+
+        <div class="ledger-shell" data-reveal>
+          <table class="ledger series-ledger">
+            <caption>Série mensal oficial, conversão e volume de votos</caption>
+            <thead>
+              <tr>
+                <th scope="col">Mês</th>
+                <th scope="col" class="n">Votos</th>
+                <th scope="col" class="n">Despachos</th>
+                <th scope="col" class="n">Conversão</th>
+                <th scope="col" class="n">Condição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="is-edge"><th scope="row">Novembro de 2025</th><td class="n">0</td><td class="n">2</td><td class="n is-rate">0,00%</td><td class="n">Borda</td></tr>
+              <tr><th scope="row">Dezembro de 2025</th><td class="n">126</td><td class="n">285</td><td class="n is-rate">44,21%</td><td class="n">Integral</td></tr>
+              <tr><th scope="row">Janeiro de 2026</th><td class="n">138</td><td class="n">292</td><td class="n is-rate">47,26%</td><td class="n">Integral</td></tr>
+              <tr><th scope="row">Fevereiro de 2026</th><td class="n">178</td><td class="n">347</td><td class="n is-rate">51,30%</td><td class="n">Integral</td></tr>
+              <tr><th scope="row">Março de 2026</th><td class="n">189</td><td class="n">373</td><td class="n is-rate">50,67%</td><td class="n">Integral</td></tr>
+              <tr><th scope="row">Abril de 2026</th><td class="n">250</td><td class="n">414</td><td class="n is-rate">60,39%</td><td class="n">Integral</td></tr>
+              <tr class="is-edge"><th scope="row">Maio de 2026</th><td class="n">18</td><td class="n">48</td><td class="n is-rate">37,50%</td><td class="n">Cinco dias</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><th scope="row">Janela completa</th><td class="n">899</td><td class="n">1.761</td><td class="n is-rate">51,05%</td><td class="n">Com bordas</td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="tests" data-reveal>
+          <article class="test">
+            <h3>Recorte integral</h3>
+            <p class="test__fig"><b>51,49%</b></p>
+            <p>881 votos em 1.711 despachos. Cinco meses integrais, de dezembro de 2025 a abril de 2026.</p>
+          </article>
+
+          <hr aria-hidden="true">
+
+          <article class="test">
+            <h3>Diferença observada</h3>
+            <p class="test__fig"><b>+16,18 p.p.</b></p>
+            <p>Distância entre o primeiro e o último mês integral da série. Ponto percentual, não percentual.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 03 Comparação ────────────────────────────────────────────────── -->
+    <section class="plate plate--paper shell" id="comparacao" aria-labelledby="comparacao-title">
+      <div class="rail"><b>03</b><span id="comparacao-title">Comparação</span></div>
+
+      <div class="field">
+        <div class="ledger-shell" data-reveal>
+          <table class="ledger compare">
+            <caption>Mesma base, mesma regra de despacho, de 28.11.2025 a 05.05.2026</caption>
+            <thead>
+              <tr>
+                <th scope="col">Recorte</th>
+                <th scope="col" class="n">Votos</th>
+                <th scope="col" class="n">Despachos</th>
+                <th scope="col" class="n">Conversão</th>
+                <th scope="col" class="track-col">Escala de 0 a 100%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Individual, autor</th>
+                <td class="n">153</td>
+                <td class="n">258</td>
+                <td class="n"><button class="rate" type="button" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="153 votos" data-denominator="258 despachos" data-period="28.11.2025 a 05.05.2026">59,30%</button></td>
+                <td class="track-col">
+                  <span class="track" style="--v:.593;--d:.1s" aria-hidden="true"><i></i></span>
+                  <span class="track-note" aria-hidden="true"><span>0</span><span>50</span><span>100</span></span>
+                </td>
+              </tr>
+              <tr class="is-others">
+                <th scope="row">Demais assessores</th>
+                <td class="n">746</td>
+                <td class="n">1.503</td>
+                <td class="n"><button class="rate" type="button" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-numerator="746 votos" data-denominator="1.503 despachos" data-period="28.11.2025 a 05.05.2026">49,63%</button></td>
+                <td class="track-col">
+                  <span class="track" style="--v:.4963;--d:.25s" aria-hidden="true"><i></i></span>
+                  <span class="track-note" aria-hidden="true"><span>0</span><span>50</span><span>100</span></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="volume-scale" data-reveal>
+          <h3>A escala acima normaliza cada universo em 100%. Em escala real, os universos não têm o mesmo tamanho.</h3>
+          <div>
+            <span>Individual, autor</span>
+            <span class="vbar" style="--v:.17165;--d:.1s" aria-hidden="true"><i></i></span>
+            <b>258</b>
+          </div>
+          <div>
+            <span>Demais assessores</span>
+            <span class="vbar vbar--blue" style="--v:1;--d:.25s" aria-hidden="true"><i></i></span>
+            <b>1.503</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="delta-band" data-reveal>
+      <div class="delta-band__fig">
+        <strong>+9,7 p.p.</strong>
+        <span>Diferença observada</span>
+      </div>
+      <div class="delta-band__note">
+        <p class="eq">258 + 1.503 = 1.761 despachos</p>
+        <p>258 despachos é o menor volume entre os assessores de volume comparável. A taxa independe do volume; a estabilidade da estimativa, não.</p>
+      </div>
+    </div>
+
+    <!-- ── 04 Origem dos dados ──────────────────────────────────────────── -->
+    <section class="plate plate--paper plate--tight shell" id="origem" aria-labelledby="origem-title">
+      <div class="rail"><b>04</b><span id="origem-title">Origem dos dados</span></div>
+      <div class="field">
+        <p class="lead" data-reveal>ECHO e ATRIO foram desenvolvidos em unidades distintas: 4ª e 2ª Turma Recursal. Os números dos dois painéis não compõem, não somam e não pertencem à mesma operação. A base das seções 01 a 03 é a 2ª Turma.</p>
+      </div>
+    </section>
+
+    <div class="origin-split">
+      <article class="origin-panel origin-panel--echo" id="echo" aria-labelledby="echo-title" data-reveal>
+        <header>
+          <h3 id="echo-title">ECHO</h3>
+          <p>Camada operacional, 4ª Turma</p>
+        </header>
+        <dl>
+          <div>
+            <dt><button type="button" data-datum data-regime="lastro" data-source="assets/data/lastro/acervo_publico.xlsx" data-denominator="1.192 registros públicos anonimizados" data-period="Operação | 4ª Turma">1.192</button></dt>
+            <dd>processos triados<small>Lastro público anonimizado</small></dd>
+          </div>
+          <div>
+            <dt><button type="button" data-datum data-regime="derivacao" data-source="10 temáticas de 102 assuntos | mapa_tematico_publico.pdf" data-numerator="92 categorias suprimidas" data-denominator="102 assuntos de origem | 1 − 10/102 = 90,196%" data-period="Taxonomia | operação recursal">90,2%</button></dt>
+            <dd>redução categorial<small>Derivação publicada</small></dd>
+          </div>
+          <div>
+            <dt><button type="button" data-datum data-regime="lastro" data-source="assets/data/lastro/precedentes_publico.xlsx" data-denominator="483 com tese firmada" data-period="Operação | 4ª Turma">631</button></dt>
+            <dd>temas de precedentes<small>483 com tese firmada</small></dd>
+          </div>
+        </dl>
+        <a class="out" href="assets/data/lastro/README.md">Ver lastro público do ECHO<i aria-hidden="true">↗</i></a>
+      </article>
+
+      <article class="origin-panel origin-panel--atrio" id="atrio" aria-labelledby="atrio-title" data-reveal>
+        <header>
+          <h3 id="atrio-title">ATRIO</h3>
+          <p>Camada estrutural, 2ª Turma</p>
+        </header>
+        <dl>
+          <div>
+            <dt><button type="button" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-denominator="33 operações HTTP" data-period="Contagem sobre as rotas declaradas em api.py">31</button></dt>
+            <dd>rotas /v1<small>33 operações HTTP</small></dd>
+          </div>
+          <div>
+            <dt><button type="button" data-datum data-regime="lastro" data-source="assets/data/lastro/operacao_atrio_publica.md" data-denominator="contagem absoluta" data-period="Suíte local | medição de 26.08.2026">188</button></dt>
+            <dd>testes automatizados<small>Suíte local</small></dd>
+          </div>
+          <div>
+            <dt><button class="is-word" type="button">LOCAL</button></dt>
+            <dd>execução</dd>
+          </div>
+        </dl>
+        <a class="out" href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener">Repositório atrio-api<i aria-hidden="true">↗</i></a>
+      </article>
+    </div>
+
+    <!-- ── 05 Lastro ────────────────────────────────────────────────────── -->
+    <section class="plate plate--paper shell" id="lastro" aria-labelledby="lastro-title">
+      <div class="rail"><b>05</b><span id="lastro-title">Lastro</span></div>
+
+      <div class="field">
+        <div class="ledger-shell" data-reveal>
+          <table class="ledger evidence">
+            <caption>Tipos de evidência e onde cada um aparece nesta página</caption>
+            <thead>
+              <tr>
+                <th scope="col">Tipo</th>
+                <th scope="col">Definição</th>
+                <th scope="col">Nesta página</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Direta</th>
+                <td>Registrada na fonte canônica</td>
+                <td class="values">1.896 · 1.761 · 135 · 899 · 258 · 153 · 2.758 · 1.192 · 631 · 483 · 245 · 115.114 · 36.000 · 31 · 33 · 188 · 18 · 11</td>
+              </tr>
+              <tr class="is-derived">
+                <th scope="row">Derivada</th>
+                <td>Calculada a partir de dados comprovados</td>
+                <td class="values">51,05% · 59,30% · 49,63% · +16,18 p.p. · +9,7 p.p. · 90,2% · 76,5%</td>
+              </tr>
+              <tr>
+                <th scope="row">Associativa</th>
+                <td>Relação temporal ou comparativa sem causalidade</td>
+                <td>
+                  <p>Curva de conversão e adoção do sistema</p>
+                  <ul class="factors">
+                    <li>sem registro individual de uso</li>
+                    <li>dois colaboradores ingressaram em folha em março</li>
+                    <li>abril teve força-tarefa sazonal</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="method" data-reveal>
+          <button id="method-toggle" type="button" aria-expanded="false" aria-controls="method-panel">Ver método<i aria-hidden="true">+</i></button>
+          <div id="method-panel" hidden>
+            <p><strong>Fonte</strong>A base canônica das seções 01 a 03 é jurimetria.xlsx, relativa à 2ª Turma Recursal.</p>
+            <p><strong>Contagem</strong>O mês é definido pela data do despacho quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p>
+            <p><strong>Robustez</strong>O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p>
+            <p><strong>Lastro ECHO e ATRIO</strong>Os derivados públicos anonimizados estão em assets/data/lastro e preservam somente as dimensões necessárias para reproduzir as métricas expostas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rules-plate" aria-labelledby="rules-title" data-reveal>
+      <h2 id="rules-title">O que esta página não afirma</h2>
+      <div class="rules">
+        <p><b>volume</b><span><i aria-hidden="true">≠</i>desempenho</span></p>
+        <p><b>percentual</b><span><i aria-hidden="true">≠</i>ponto percentual</span></p>
+        <p><b>associação</b><span><i aria-hidden="true">≠</i>causalidade</span></p>
+        <p><b>mês de borda</b><span><i aria-hidden="true">≠</i>mês integral</span></p>
+        <p><b>ausência de prova</b><span><i aria-hidden="true">≠</i>falsidade</span></p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="foot__row">
+        <div class="foot__id">
+          <a href="arco.html">ARCO</a>
+          <p>Data layer, jurimetria</p>
+        </div>
+        <nav aria-label="Saída de DATA">
+          <a href="assets/data/jurimetria.xlsx" download>Ver base</a>
+          <a href="assets/data/lastro/README.md">Ver lastro público</a>
+          <a href="#lastro">Ver método</a>
+          <a href="arco.html">Voltar ao ARCO</a>
+        </nav>
+      </div>
+      <p>Projeto autoral em contexto profissional, não oficial do TJPR. Base pública anonimizada.</p>
+    </footer>
+  </main>
+
+  <div class="data-tooltip" id="data-tooltip" role="tooltip" hidden>
+    <p class="data-tooltip__regime" data-tip-regime></p>
+    <span data-tip-slot="source"><b data-tip-label="source">FONTE</b><em data-tip-source></em></span>
+    <span data-tip-slot="detail" hidden><b data-tip-label="detail">VER EM</b><em data-tip-detail></em></span>
+    <p class="data-tooltip__lastro" data-tip-lastro hidden>LASTRO</p>
+    <span data-tip-slot="numerator" hidden><b data-tip-label="numerator">CONTAGEM</b><em data-tip-numerator></em></span>
+    <span data-tip-slot="denominator" hidden><b data-tip-label="denominator">UNIVERSO</b><em data-tip-denominator></em></span>
+    <span data-tip-slot="period" hidden><b data-tip-label="period">RECORTE</b><em data-tip-period></em></span>
+  </div>
+
+  <script src="data.js?v=20260828-r8"></script>
 </body>
 </html>
