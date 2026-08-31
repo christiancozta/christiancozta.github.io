@@ -104,10 +104,10 @@ button{font:inherit;color:inherit}
           <div style="display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-width:0">
             <span style="display:block;margin-bottom:10px;font:600 clamp(11px,1.25vw,17px)/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap">{{ b.texto }}</span>
             <sc-if value="{{ b.cheia }}" hint-placeholder-val="{{ true }}">
-              <div tabindex="0" role="note" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-num="{{ b.num }}" data-den="{{ b.den }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};background:#2E71FF;outline:0;cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
+              <div tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};background:#2E71FF;outline:0;cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
             </sc-if>
             <sc-if value="{{ b.vazada }}" hint-placeholder-val="{{ false }}">
-              <div tabindex="0" role="note" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-num="{{ b.num }}" data-den="{{ b.den }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};border:1px solid #181818;background:repeating-linear-gradient(135deg,transparent 0 5px,#E4E4E1 5px 10px);cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
+              <div tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};border:1px solid #181818;background:repeating-linear-gradient(135deg,transparent 0 5px,#E4E4E1 5px 10px);cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
             </sc-if>
           </div>
         </sc-for>
@@ -157,13 +157,13 @@ button{font:inherit;color:inherit}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;margin-top:clamp(30px,4vh,52px);border-top:1px solid #181818">
       <div style="padding:26px 32px 30px 0;border-bottom:1px solid #E2E2E0">
         <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">VOTOS</p>
-        <p tabindex="0" role="note" data-datum data-regime="derivacao" data-source="jurimetria.xlsx" data-num="Data Despacho − Data Envio, média dos votos" data-den="899 votos publicados" data-recorte="28.11.2025 a 05.05.2026" style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#2E71FF">13,2 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
+        <p tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="Data Despacho − Data Envio, média dos votos" data-fundamento="899 votos publicados" data-recorte="28.11.2025 a 05.05.2026" style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#2E71FF">13,2 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
         <div style="height:22px;margin-top:22px;background:#2E71FF;width:100%"></div>
         <p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Fila média até a publicação do voto. Inclui o intervalo institucional entre a conclusão do trabalho e a inclusão formal em pauta.</p>
       </div>
       <div style="padding:26px 0 30px 32px;border-left:1px solid #E2E2E0;border-bottom:1px solid #E2E2E0">
         <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DEMAIS DESPACHOS</p>
-        <p tabindex="0" role="note" data-datum data-regime="derivacao" data-source="jurimetria.xlsx" data-num="Data Despacho − Data Envio, média dos não-votos" data-den="862 despachos sem voto" data-recorte="28.11.2025 a 05.05.2026" style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums">6,9 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
+        <p tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="Data Despacho − Data Envio, média dos não-votos" data-fundamento="862 despachos sem voto" data-recorte="28.11.2025 a 05.05.2026" style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums">6,9 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
         <div style="height:22px;margin-top:22px;background:#181818;width:52.27%"></div>
         <p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Despachos sem voto. Metade do tempo, sem a etapa de pauta e sem a redação do mérito.</p>
       </div>
@@ -182,10 +182,10 @@ button{font:inherit;color:inherit}
           <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">4ª TURMA</p>
         </div>
         <div style="display:grid;gap:13px;margin-top:24px">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="lastro" data-source="acervo_publico.xlsx" data-den="1.192 registros públicos anonimizados" data-recorte="Operação, 4ª Turma" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">1.192</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos triados</span></div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="mapa_tematico_publico.pdf" data-num="92 categorias suprimidas" data-den="102 assuntos de origem, 1 − 10/102" data-recorte="Taxonomia operacional" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">90,2%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">redução categorial</span></div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="lastro" data-source="precedentes_publico.xlsx" data-den="483 com tese firmada" data-recorte="Painel temático" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">631</span><span style="font-size:13px;text-align:right;color:#3D3D3A">temas de precedentes</span></div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="lastro" data-source="ementario_publico.xlsx" data-den="contagem absoluta" data-recorte="Acervo integral" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">2.758</span><span style="font-size:13px;text-align:right;color:#3D3D3A">ementas catalogadas</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="acervo_publico.xlsx" data-fundamento="1.192 registros públicos anonimizados" data-recorte="Operação, 4ª Turma" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">1.192</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos triados</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="mapa_tematico_publico.pdf" data-calculo="1 − 10/102" data-fundamento="102 assuntos de origem, 92 categorias suprimidas" data-recorte="Taxonomia operacional" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">90,2%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">redução categorial</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="precedentes_publico.xlsx" data-fundamento="483 com tese firmada" data-recorte="Painel temático" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">631</span><span style="font-size:13px;text-align:right;color:#3D3D3A">temas de precedentes</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="ementario_publico.xlsx" data-fundamento="contagem absoluta" data-recorte="Acervo integral" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">2.758</span><span style="font-size:13px;text-align:right;color:#3D3D3A">ementas catalogadas</span></div>
         </div>
         <a href="assets/data/lastro/README.md" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #2E71FF;padding-bottom:3px">LASTRO PÚBLICO ↗</a>
       </div>
@@ -195,8 +195,8 @@ button{font:inherit;color:inherit}
           <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">2ª TURMA</p>
         </div>
         <div style="display:grid;gap:13px;margin-top:24px">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="lastro" data-source="operacao_atrio_publica.md" data-den="33 operações HTTP declaradas" data-recorte="Rotas de api.py" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">31</span><span style="font-size:13px;text-align:right;color:#3D3D3A">rotas /v1</span></div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-regime="lastro" data-source="operacao_atrio_publica.md" data-den="contagem absoluta" data-recorte="Suíte local, 26.08.2026" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">188</span><span style="font-size:13px;text-align:right;color:#3D3D3A">testes automatizados</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="33 operações HTTP declaradas" data-recorte="Rotas de api.py" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">31</span><span style="font-size:13px;text-align:right;color:#3D3D3A">rotas /v1</span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="contagem absoluta" data-recorte="Suíte local, 26.08.2026" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#2E71FF">188</span><span style="font-size:13px;text-align:right;color:#3D3D3A">testes automatizados</span></div>
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em">LOCAL</span><span style="font-size:13px;text-align:right;color:#3D3D3A">execução</span></div>
         </div>
         <a href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #2E71FF;padding-bottom:3px">REPOSITÓRIO ATRIO-API ↗</a>
@@ -206,7 +206,7 @@ button{font:inherit;color:inherit}
           <p style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;letter-spacing:-.01em">CORPUS</p>
           <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">BASE GOVERNADA</p>
         </div>
-        <p tabindex="0" role="note" data-datum data-regime="lastro" data-source="diagnostico_corpus_publico.md" data-den="contagem após identificação e deduplicação" data-recorte="Recorte operacional publicado" style="margin:24px 0 0;font:600 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:#2E71FF">115.114</p>
+        <p tabindex="0" role="note" data-datum data-fonte="diagnostico_corpus_publico.md" data-fundamento="contagem após identificação e deduplicação" data-recorte="Recorte operacional publicado" style="margin:24px 0 0;font:600 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:#2E71FF">115.114</p>
         <p style="margin:14px 0 0;font-size:13px;line-height:1.55;color:#3D3D3A">Registros processuais únicos, após identificação e deduplicação. Mede escala de base, não qualidade decisória.</p>
       </div>
     </div>
@@ -247,6 +247,21 @@ button{font:inherit;color:inherit}
       </div>
     </div>
   </div>
+
+  <div style="padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)">
+    <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">MÉTODO E ROBUSTEZ</p>
+    <div style="margin-top:18px;border-top:1px solid #181818">
+      <button type="button" onClick="{{ alternarMetodo }}" aria-expanded="{{ metodoAberto }}" style="display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;padding:20px 0;border:0;background:none;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;text-align:left" style-hover="color:#2A66E8">FONTE, CONTAGEM, ROBUSTEZ E DERIVADOS PÚBLICOS<span style="font-size:16px">{{ metodoSinal }}</span></button>
+      <sc-if value="{{ metodoAberto }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(20px,3vw,56px);padding:6px 0 34px">
+          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">FONTE</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A base canônica é jurimetria.xlsx, relativa à 2ª Turma Recursal.</p></div>
+          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CONTAGEM</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O mês é definido pela data do despacho, quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p></div>
+          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ROBUSTEZ</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p></div>
+          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">Os derivados anonimizados de ECHO e ATRIO estão em assets/data/lastro e preservam somente as dimensões necessárias para reproduzir as métricas expostas.</p></div>
+        </div>
+      </sc-if>
+    </div>
+  </div>
 </section>
 
 <section id="lastro" aria-labelledby="h-lastro">
@@ -259,7 +274,7 @@ button{font:inherit;color:inherit}
     <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">MEDIDA · FORMAÇÃO DO DENOMINADOR</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(24px,4vw,80px);margin-top:20px;align-items:end">
       <div>
-        <p style="margin:0;font:600 clamp(4rem,10vw,8rem)/.82 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#5B8DFF" tabindex="0" role="note" data-datum data-regime="derivacao" data-source="jurimetria.xlsx" data-num="899 votos publicados" data-den="1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026">51,05%</p>
+        <p style="margin:0;font:600 clamp(4rem,10vw,8rem)/.82 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#5B8DFF" tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026">51,05%</p>
         <p style="margin:18px 0 0;font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.25;letter-spacing:-.02em">Conversão publicada</p>
         <p style="margin:8px 0 0;font:500 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.66)">899 votos ÷ 1.761 despachos</p>
       </div>
@@ -286,7 +301,7 @@ button{font:inherit;color:inherit}
         <span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#5B8DFF">899<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;862</span></span>
       </div>
       <div style="display:flex;height:56px;gap:2px">
-        <div style="flex:0 0 47.42%;background:#2E71FF" tabindex="0" role="note" data-datum data-regime="lastro" data-source="jurimetria.xlsx" data-num="899 votos publicados" data-den="1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026"></div>
+        <div style="flex:0 0 47.42%;background:#2E71FF" tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026"></div>
         <div style="flex:0 0 45.46%;border:1px solid rgba(252,252,252,.6)"></div>
         <div style="flex:1 1 auto"></div>
       </div>
@@ -337,7 +352,7 @@ button{font:inherit;color:inherit}
           <div style="display:flex;align-items:flex-end;gap:clamp(16px,2.5vw,40px);margin-top:16px">
             <div style="flex:1 1 auto;min-width:0">
               <div style="height:clamp(26px,3.4vh,40px);background:#2A2A2A">
-                <div style="width:{{ k.w }};height:100%;background:{{ k.cor }};transition:width .55s cubic-bezier(.32,.72,0,1)" tabindex="0" role="note" data-datum data-regime="{{ k.regime }}" data-source="jurimetria.xlsx" data-num="{{ k.num }}" data-den="{{ k.den }}" data-recorte="28.11.2025 a 05.05.2026"></div>
+                <div style="width:{{ k.w }};height:100%;background:{{ k.cor }};transition:width .55s cubic-bezier(.32,.72,0,1)" tabindex="0" role="note" data-datum data-fonte="jurimetria.xlsx" data-calculo="{{ k.cardCalculo }}" data-fundamento="{{ k.cardFundamento }}" data-recorte="28.11.2025 a 05.05.2026"></div>
               </div>
               <div style="display:flex;justify-content:space-between;margin-top:7px;font:400 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.12em;color:rgba(252,252,252,.6)">
                 <span>{{ escalaMin }}</span><span>{{ escalaMeio }}</span><span>{{ escalaMax }}</span>
@@ -376,20 +391,7 @@ button{font:inherit;color:inherit}
   </div>
 
   <div style="padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)">
-    <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">MÉTODO E ROBUSTEZ</p>
-    <div style="margin-top:18px;border-top:1px solid #181818">
-      <button type="button" onClick="{{ alternarMetodo }}" aria-expanded="{{ metodoAberto }}" style="display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;padding:20px 0;border:0;background:none;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;text-align:left" style-hover="color:#2A66E8">FONTE, CONTAGEM, ROBUSTEZ E DERIVADOS PÚBLICOS<span style="font-size:16px">{{ metodoSinal }}</span></button>
-      <sc-if value="{{ metodoAberto }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(20px,3vw,56px);padding:6px 0 34px">
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">FONTE</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A base canônica é jurimetria.xlsx, relativa à 2ª Turma Recursal.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CONTAGEM</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O mês é definido pela data do despacho, quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ROBUSTEZ</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">Os derivados anonimizados de ECHO e ATRIO estão em assets/data/lastro e preservam somente as dimensões necessárias para reproduzir as métricas expostas.</p></div>
-        </div>
-      </sc-if>
-    </div>
-
-    <p style="margin:clamp(48px,7vh,88px) 0 0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">LIMITES DE INTERPRETAÇÃO</p>
+    <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">LIMITES DE INTERPRETAÇÃO</p>
     <div style="margin-top:18px">
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">VOLUME</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#2E71FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">DESEMPENHO</span></div>
       <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PERCENTUAL</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#2E71FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PONTO PERCENTUAL</span></div>
@@ -427,12 +429,12 @@ button{font:inherit;color:inherit}
 </footer>
 
 <div id="dt" role="tooltip" style="display:none;position:fixed;left:0;top:0;z-index:90;max-width:340px;padding:14px 16px 15px;background:#181818;color:#FCFCFC;pointer-events:none;box-shadow:0 0 0 1px rgba(252,252,252,.25);animation:dt-in .16s cubic-bezier(.32,.72,0,1) both">
-  <p id="dt-regime" style="margin:0 0 10px;font:600 9px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.24em;color:#5B8DFF"></p>
-  <div style="display:grid;gap:7px">
-    <p id="dt-s" style="margin:0;display:grid;grid-template-columns:64px 1fr;gap:10px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">FONTE</b><em id="dt-s-v" style="font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-n" style="margin:0;display:grid;grid-template-columns:64px 1fr;gap:10px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">CÁLCULO</b><em id="dt-n-v" style="font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-d" style="margin:0;display:grid;grid-template-columns:64px 1fr;gap:10px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">UNIVERSO</b><em id="dt-d-v" style="font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-r" style="margin:0;display:grid;grid-template-columns:64px 1fr;gap:10px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">RECORTE</b><em id="dt-r-v" style="font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
+  <div style="display:grid;gap:11px">
+    <p id="dt-fonte" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">FONTE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#5B8DFF">RASTRO</b></span><em id="dt-fonte-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
+    <p id="dt-calculo" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">CÁLCULO</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#5B8DFF">RASTRO</b></span><em id="dt-calculo-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
+    <p id="dt-recorte" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">RECORTE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#5B8DFF">RASTRO</b></span><em id="dt-recorte-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
+    <p id="dt-fundamento" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">FUNDAMENTO</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#FCFCFC">LASTRO</b></span><em id="dt-fundamento-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
+    <p id="dt-limite" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">LIMITE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#FCFCFC">LASTRO</b></span><em id="dt-limite-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
   </div>
 </div>
 
@@ -492,6 +494,11 @@ const RANKING = [
 
 const mil = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
+// Modelo unico dos cards de evidencia. A ordem aqui e a ordem exibida no tooltip.
+// Cada chave corresponde a um data-<chave> no elemento e ao par #dt-<chave> / #dt-<chave>-v
+// no markup. Campo ausente ou vazio nao e exibido. Nao ha distincao por origem.
+const CAMPOS_CARD = ['fonte', 'calculo', 'recorte', 'fundamento', 'limite'];
+
 class Component extends DCLogic {
   state = {
     metrica: this.props.serieMetricaInicial || 'taxa',
@@ -505,13 +512,11 @@ class Component extends DCLogic {
   componentDidMount() {
     const tip = document.getElementById('dt');
     if (!tip) return;
-    const el = {
-      regime: document.getElementById('dt-regime'),
-      s: document.getElementById('dt-s'), sv: document.getElementById('dt-s-v'),
-      n: document.getElementById('dt-n'), nv: document.getElementById('dt-n-v'),
-      d: document.getElementById('dt-d'), dv: document.getElementById('dt-d-v'),
-      r: document.getElementById('dt-r'), rv: document.getElementById('dt-r-v')
-    };
+    const campos = CAMPOS_CARD.map((chave) => ({
+      chave,
+      linha: document.getElementById('dt-' + chave),
+      valor: document.getElementById('dt-' + chave + '-v')
+    })).filter((c) => c.linha && c.valor);
     const find = (node) => (node instanceof Element ? node.closest('[data-datum]') : null);
 
     const place = (target) => {
@@ -525,23 +530,22 @@ class Component extends DCLogic {
       tip.style.top = top + 'px';
     };
 
+    const hide = () => { this._active = null; tip.style.display = 'none'; };
+
     const show = (target) => {
       const d = target.dataset;
-      el.regime.textContent = d.regime === 'derivacao' ? 'RASTRO DERIVADO' : 'RASTRO DOCUMENTAL';
-      el.sv.textContent = d.source || '';
-      el.nv.textContent = d.num || '';
-      el.dv.textContent = d.den || '';
-      el.rv.textContent = d.recorte || '';
-      el.s.style.display = d.source ? 'grid' : 'none';
-      el.n.style.display = d.num ? 'grid' : 'none';
-      el.d.style.display = d.den ? 'grid' : 'none';
-      el.r.style.display = d.recorte ? 'grid' : 'none';
+      let preenchidos = 0;
+      for (const c of campos) {
+        const v = d[c.chave] || '';
+        c.valor.textContent = v;
+        c.linha.style.display = v ? 'block' : 'none';
+        if (v) preenchidos++;
+      }
+      if (!preenchidos) { hide(); return; }
       this._active = target;
       tip.style.display = 'block';
       requestAnimationFrame(() => place(target));
     };
-
-    const hide = () => { this._active = null; tip.style.display = 'none'; };
     this._hide = hide;
     this._over = (e) => { const t = find(e.target); if (t && t !== this._active) show(t); };
     this._out = (e) => { const t = find(e.target); if (t && t === this._active && !find(e.relatedTarget)) hide(); };
@@ -605,8 +609,12 @@ class Component extends DCLogic {
         h: alto.toFixed(2) + '%',
         cheia: !r.edge,
         vazada: r.edge,
-        num: r.votos + ' votos',
-        den: r.despachos + ' despachos',
+        calculo: met.id === 'taxa'
+          ? r.votos + ' votos ÷ ' + mil(r.despachos) + ' despachos'
+          : '',
+        fundamento: met.id === 'taxa'
+          ? ''
+          : r.votos + ' votos em ' + mil(r.despachos) + ' despachos',
         recorte: r.nome + (r.edge ? ', mês de borda' : ', mês integral')
       };
     });
@@ -647,9 +655,12 @@ class Component extends DCLogic {
       figura: porTaxa ? k.figuraTaxa : mil(k.despachos),
       cor: k.destaque ? '#2E71FF' : '#FCFCFC',
       corTexto: k.destaque ? '#5B8DFF' : '#FCFCFC',
-      regime: porTaxa ? 'derivacao' : 'lastro',
-      num: k.votos + ' votos',
-      den: mil(k.despachos) + ' despachos'
+      cardCalculo: porTaxa
+        ? k.votos + ' votos ÷ ' + mil(k.despachos) + ' despachos'
+        : '',
+      cardFundamento: porTaxa
+        ? ''
+        : mil(k.despachos) + ' despachos, ' + k.votos + ' votos'
     }));
 
     const escalas = [{ id: 'taxa', rotulo: 'NORMALIZADA' }, { id: 'volume', rotulo: 'REAL' }].map((e) => ({
