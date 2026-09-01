@@ -219,3 +219,33 @@ body .echo-trace{
     animation-range:100dvh 100%!important;
   }
 }
+
+/* ============================================================
+   Hero / shell containment
+   A palavra pode sangrar visualmente, mas nunca amplia a área
+   rolável. A centralização passa a ser geométrica em qualquer
+   viewport, inclusive quando ECHO roda dentro do iframe do ARCO.
+   ============================================================ */
+html,
+body{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:clip!important;
+}
+
+.echo-hero,
+.echo-intro{
+  width:100%!important;
+  max-width:100%!important;
+}
+
+.echo-word{
+  left:50%!important;
+}
+
+/* O ARCO injeta uma regra que oculta a trilha do filho. ECHO conserva a sua
+   própria scrollbar/rastro também no iframe, sem reativar a barra nativa. */
+body .echo-trace{
+  display:block!important;
+  right:0!important;
+}
