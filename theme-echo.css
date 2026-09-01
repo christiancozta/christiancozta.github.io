@@ -159,3 +159,63 @@
 .data-tooltip em{color:rgba(255,255,255,.78);font:400 11.5px/1.42 "Commissioner",system-ui,sans-serif;font-style:normal}
 [data-datum][data-regime]{cursor:help}
 [data-datum][data-regime="derivacao"]{box-shadow:inset 2px 0 0 #7d7d7d}
+
+/* ============================================================
+   Rastro global — ECHO
+   A hero permanece completamente limpa. A trilha passa a existir
+   apenas depois de 100dvh e mede o percurso restante da página.
+   O trecho percorrido e o faltante usam o mesmo accent; a diferença
+   é somente de densidade. O marcador permanece uma bolinha mínima.
+   ============================================================ */
+@keyframes echo-trace-after-hero-reveal{from{opacity:1}to{opacity:1}}
+@keyframes echo-trace-after-hero-fill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes echo-trace-after-hero-dot{from{top:0}to{top:100%}}
+
+body .echo-trace{
+  opacity:0!important;
+}
+
+@supports (animation-timeline:scroll()){
+  body .echo-trace{
+    opacity:0!important;
+    animation-name:echo-trace-after-hero-reveal!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:forwards!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+  body .echo-trace i{
+    left:4px!important;
+    width:1px!important;
+    background:#FFB627!important;
+    opacity:.28!important;
+  }
+  body .echo-trace b{
+    left:4px!important;
+    width:1px!important;
+    background:#FFB627!important;
+    transform:scaleY(0)!important;
+    transform-origin:top!important;
+    animation-name:echo-trace-after-hero-fill!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:both!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+  body .echo-trace s{
+    left:4.5px!important;
+    width:4px!important;
+    height:4px!important;
+    margin:-2px 0 0 -2px!important;
+    border-radius:50%!important;
+    background:#FFB627!important;
+    animation-name:echo-trace-after-hero-dot!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:both!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+}
