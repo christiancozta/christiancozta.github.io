@@ -33,6 +33,167 @@
 <link rel="stylesheet" href="assets/arco/css/fonts.css">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20260829-piso">
 <script src="assets/arco/js/arco.js?v=20260829-piso" defer></script>
+<style id="arco-tale-card-design">
+/* ARCO — fichas de identidade herdam a linguagem dos cards originais. */
+@font-face{
+  font-family:"ARCO TWK Everett";
+  src:url("assets/atrio/fonts/TWKEverett-Medium.woff2") format("woff2");
+  font-weight:500;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:"ARCO TWK Everett";
+  src:url("assets/atrio/fonts/TWKEverett-Bold.woff2") format("woff2");
+  font-weight:700;font-style:normal;font-display:swap;
+}
+
+.tale.tale--echo,
+.tale.tale--atrio{
+  position:fixed!important;
+  top:clamp(10px,2vw,28px)!important;
+  right:clamp(10px,2vw,28px)!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:min(440px,calc(100% - 20px))!important;
+  max-width:none!important;
+  height:auto!important;
+  max-height:min(78dvh,760px)!important;
+  margin:0!important;
+  padding:clamp(20px,2.4vw,30px)!important;
+  overflow:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.42)!important;
+  z-index:80!important;
+}
+.tale.tale--echo{
+  border-top:6px solid #FFB627!important;
+  background:#F2EFE9!important;
+  color:#181818!important;
+  scrollbar-width:thin;
+  scrollbar-color:#FFB627 transparent;
+}
+.tale.tale--atrio{
+  border-top:6px solid #A63A23!important;
+  background:#FAFAFA!important;
+  color:#2A2529!important;
+  scrollbar-width:thin;
+  scrollbar-color:#A63A23 transparent;
+}
+.tale.tale--echo::backdrop,
+.tale.tale--atrio::backdrop{background:transparent!important;}
+
+.tale .tale__inner{width:100%!important;padding:0!important;}
+.tale .tale__mark{
+  display:block!important;
+  margin:0!important;
+  padding:0 52px 0 0!important;
+}
+.tale .tale__mark::before{display:none!important;content:none!important;}
+.tale .tale__k{
+  display:block!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  text-transform:uppercase!important;
+}
+.tale--echo .tale__k{
+  color:rgba(24,24,24,.60)!important;
+  font:500 9.5px/1 "Azeret Mono",ui-monospace,monospace!important;
+  letter-spacing:.24em!important;
+}
+.tale--atrio .tale__k{
+  color:rgba(42,37,41,.62)!important;
+  font:500 9.5px/1 "ARCO TWK Everett","Schibsted Grotesk",system-ui,sans-serif!important;
+  letter-spacing:.12em!important;
+}
+.tale .tale__title{
+  max-width:22ch!important;
+  margin:14px 0 0!important;
+  color:inherit!important;
+  text-wrap:balance!important;
+}
+.tale--echo .tale__title{
+  font:700 italic clamp(20px,2.2vw,27.2px)/1.06 "Schibsted Grotesk",system-ui,sans-serif!important;
+  letter-spacing:-.035em!important;
+}
+.tale--atrio .tale__title{
+  font:700 clamp(20px,2.2vw,27.2px)/1.06 "ARCO TWK Everett","Schibsted Grotesk",system-ui,sans-serif!important;
+  letter-spacing:-.025em!important;
+}
+.tale .tale__prose{margin:0!important;padding:0!important;}
+.tale .tale__prose p,
+.tale .tale__prose .open{
+  position:static!important;
+  padding:0!important;
+  margin:12px 0 0!important;
+  font:400 14px/1.6 "Commissioner",system-ui,sans-serif!important;
+  color:inherit!important;
+  text-wrap:pretty!important;
+}
+.tale .tale__prose .open{margin-top:18px!important;}
+.tale .tale__prose .open::before{display:none!important;content:none!important;}
+.tale .tale__prose p:nth-last-child(2){padding-top:14px!important;}
+.tale--echo .tale__prose p:nth-last-child(2){border-top:1px solid rgba(24,24,24,.24)!important;}
+.tale--atrio .tale__prose p:nth-last-child(2){border-top:1px solid rgba(42,37,41,.24)!important;}
+.tale .tale__prose em,
+.tale .tale__prose strong,
+.tale .n-echo,
+.tale .n-atrio{color:inherit!important;}
+
+.tale .tale__close{
+  position:absolute!important;
+  top:clamp(20px,2.4vw,30px)!important;
+  right:clamp(20px,2.4vw,30px)!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:36px!important;
+  height:36px!important;
+  display:grid!important;
+  place-items:center!important;
+  gap:0!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:999px!important;
+  background:transparent!important;
+  cursor:pointer!important;
+  font-size:0!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+.tale .tale__close::before{content:"×";font-size:16px;line-height:1;}
+.tale--echo .tale__close{
+  border:1px solid rgba(24,24,24,.32)!important;
+  color:#181818!important;
+  font-family:"Commissioner",system-ui,sans-serif!important;
+}
+.tale--echo .tale__close:hover{
+  background:#181818!important;color:#F2EFE9!important;border-color:#181818!important;
+}
+.tale--echo .tale__close:focus-visible{outline:2px solid #FFB627!important;outline-offset:2px!important;}
+.tale--atrio .tale__close{
+  border:1px solid rgba(42,37,41,.32)!important;
+  color:#2A2529!important;
+  font-family:"ARCO TWK Everett","Schibsted Grotesk",system-ui,sans-serif!important;
+}
+.tale--atrio .tale__close:hover{
+  background:#2A2529!important;color:#FAFAFA!important;border-color:#2A2529!important;
+}
+.tale--atrio .tale__close:focus-visible{outline:2px solid #A63A23!important;outline-offset:2px!important;}
+
+@media(max-width:760px){
+  .tale.tale--echo,
+  .tale.tale--atrio{
+    top:10px!important;
+    right:10px!important;
+    width:calc(100% - 20px)!important;
+    padding:20px!important;
+  }
+  .tale .tale__close{top:20px!important;right:20px!important;}
+}
+</style>
 </head>
 <body>
 
@@ -2055,7 +2216,7 @@
 <!-- IDENTIDADE CONCEITUAL — echo -->
 <dialog class="tale tale--echo" id="tale-echo" aria-label="Identidade conceitual — echo">
   <div class="tale__inner">
-    <p class="tale__mark"><span class="t-echo tale__k">ECHO</span></p>
+    <p class="tale__mark"><span class="tale__k">legal ops</span></p>
     <h2 class="tale__title">Quando não havia a quem perguntar</h2>
     <div class="tale__prose">
       <p class="open">Na passagem para a instância recursal, o primeiro diagnóstico foi o silêncio.</p>
@@ -2073,7 +2234,7 @@
 <!-- IDENTIDADE CONCEITUAL — ATRIO -->
 <dialog class="tale tale--atrio" id="tale-atrio" aria-label="Identidade conceitual — ATRIO">
   <div class="tale__inner">
-    <p class="tale__mark"><span class="t-atrio tale__k">ATRIO</span></p>
+    <p class="tale__mark"><span class="tale__k">legal tech</span></p>
     <h2 class="tale__title">Quando o raciocínio acelerou antes do método</h2>
     <div class="tale__prose">
       <p class="open">A primeira notícia da IA não veio como projeto, mas como curva.</p>
