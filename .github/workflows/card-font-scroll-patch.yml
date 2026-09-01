@@ -1,0 +1,114 @@
+name: Patch card typography and scrollbars
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/card-font-scroll-patch.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-cards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply 13px body and invisible scrollbars
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              s = p.read_text(encoding='utf-8')
+              if old not in s:
+                  raise SystemExit(f'Expected pattern not found in {path}: {old[:100]!r}')
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+
+          # ARCO: both identity cards.
+          replace_once(
+              'arco.html',
+              '  scrollbar-width:thin;\n  scrollbar-color:#FFB627 transparent;',
+              '  scrollbar-width:none;\n  -ms-overflow-style:none;'
+          )
+          replace_once(
+              'arco.html',
+              '  scrollbar-width:thin;\n  scrollbar-color:#A63A23 transparent;',
+              '  scrollbar-width:none;\n  -ms-overflow-style:none;'
+          )
+          replace_once(
+              'arco.html',
+              '.tale.tale--echo::backdrop,\n.tale.tale--atrio::backdrop{background:transparent!important;}',
+              '.tale.tale--echo::-webkit-scrollbar,\n.tale.tale--atrio::-webkit-scrollbar{width:0;height:0;display:none;}\n.tale.tale--echo::backdrop,\n.tale.tale--atrio::backdrop{background:transparent!important;}'
+          )
+          replace_once(
+              'arco.html',
+              '  font:400 14px/1.6 "Commissioner",system-ui,sans-serif!important;',
+              '  font:400 13px/1.6 "Commissioner",system-ui,sans-serif!important;'
+          )
+
+          # ECHO: Legal Ops card.
+          replace_once(
+              'echo.html',
+              '  scrollbar-width:thin;\n  scrollbar-color:var(--amber) transparent;',
+              '  scrollbar-width:none;\n  -ms-overflow-style:none;'
+          )
+          replace_once(
+              'echo.html',
+              '.legal-ops-note[hidden]{display:none}',
+              '.legal-ops-note::-webkit-scrollbar{width:0;height:0;display:none}\n.legal-ops-note[hidden]{display:none}'
+          )
+          replace_once(
+              'echo.html',
+              '  margin:12px 0 0;font:400 14px/1.6 var(--body);text-wrap:pretty;',
+              '  margin:12px 0 0;font:400 13px/1.6 var(--body);text-wrap:pretty;'
+          )
+
+          # ATRIO: Legal Tech card lives in atrio.css.
+          replace_once(
+              'atrio.css',
+              '  scrollbar-width:thin;scrollbar-color:var(--terra) transparent\n}',
+              '  scrollbar-width:none;-ms-overflow-style:none\n}'
+          )
+          replace_once(
+              'atrio.css',
+              '.legal-tech-note[hidden]{display:none}',
+              '.legal-tech-note::-webkit-scrollbar{width:0;height:0;display:none}\n.legal-tech-note[hidden]{display:none}'
+          )
+          replace_once(
+              'atrio.css',
+              '.legal-tech-note>p:not(.legal-tech-note__kicker){margin-top:12px;font-size:14px;line-height:1.6;text-wrap:pretty}',
+              '.legal-tech-note>p:not(.legal-tech-note__kicker){margin-top:12px;font-size:13px;line-height:1.6;text-wrap:pretty}'
+          )
+
+          # Bust ATRIO CSS cache.
+          replace_once(
+              'atrio.html',
+              'atrio.css?v=20260827-m',
+              'atrio.css?v=20260901-card13'
+          )
+
+      - name: Validate edits
+        shell: bash
+        run: |
+          grep -q 'font:400 13px/1.6 "Commissioner"' arco.html
+          grep -q 'font:400 13px/1.6 var(--body)' echo.html
+          grep -q 'font-size:13px;line-height:1.6' atrio.css
+          grep -q 'scrollbar-width:none' arco.html
+          grep -q 'scrollbar-width:none' echo.html
+          grep -q 'scrollbar-width:none' atrio.css
+          grep -q 'v=20260901-card13' atrio.html
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add arco.html echo.html atrio.css atrio.html
+          git commit -m 'Set identity cards to 13px and hide scrollbars'
+          git push origin main
