@@ -19,7 +19,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 |---|---|---|
 | 899 votos / 1.761 despachos = 51,05% | derivada | `jurimetria_derivada.csv` |
 | 881 / 1.711 = 51,49% no recorte integral | derivada | `jurimetria_derivada.csv` |
-| 899 / 1.896 = 47,41% como denominador adversarial rejeitado | derivada | `jurimetria_derivada.csv` |
+| 899 / 1.896 = 47,42% como denominador adversarial rejeitado | derivada | `jurimetria_derivada.csv` |
 | série mensal NOV/25–MAI/26 e amplitude de +16,18 p.p. | derivada | `jurimetria_derivada.csv` |
 | 13,2 d / 6,9 d / 10,1 d de fila média publicada | agregada | `jurimetria_derivada.csv` |
 | 153 / 258 = 59,30% do autor | derivada | `jurimetria_derivada.csv` |
