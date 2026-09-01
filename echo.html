@@ -122,8 +122,8 @@ a:hover{color:#181818}
   z-index:80;
   right:clamp(10px,2vw,28px);
   top:clamp(10px,2vw,28px);
-  width:min(440px,calc(100% - 20px));
-  max-height:min(78dvh,760px);
+  width:min(480px,calc(100% - 20px));
+  max-height:min(88dvh,780px);
   overflow:auto;
   overscroll-behavior:contain;
   padding:clamp(20px,2.4vw,30px);
@@ -131,9 +131,10 @@ a:hover{color:#181818}
   background:var(--paper);
   color:var(--ink);
   box-shadow:0 24px 70px rgba(0,0,0,.42);
-  scrollbar-width:thin;
-  scrollbar-color:var(--amber) transparent;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+.legal-ops-note::-webkit-scrollbar{width:0;height:0;display:none}
 .legal-ops-note[hidden]{display:none}
 .legal-ops-note__head{
   display:flex;
@@ -178,7 +179,7 @@ a:hover{color:#181818}
 }
 .legal-ops-note>p:not(.legal-ops-note__kicker){
   margin:12px 0 0;
-  font:400 14px/1.6 var(--body);
+  font:400 13px/1.58 var(--body);
   text-wrap:pretty;
 }
 .legal-ops-note>h2+p{margin-top:18px}

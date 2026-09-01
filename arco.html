@@ -53,10 +53,10 @@
   right:clamp(10px,2vw,28px)!important;
   bottom:auto!important;
   left:auto!important;
-  width:min(440px,calc(100% - 20px))!important;
+  width:min(480px,calc(100% - 20px))!important;
   max-width:none!important;
   height:auto!important;
-  max-height:min(78dvh,760px)!important;
+  max-height:min(88dvh,780px)!important;
   margin:0!important;
   padding:clamp(20px,2.4vw,30px)!important;
   overflow:auto!important;
@@ -71,16 +71,18 @@
   border-top:6px solid #FFB627!important;
   background:#F2EFE9!important;
   color:#181818!important;
-  scrollbar-width:thin;
-  scrollbar-color:#FFB627 transparent;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
 .tale.tale--atrio{
   border-top:6px solid #A63A23!important;
   background:#FAFAFA!important;
   color:#2A2529!important;
-  scrollbar-width:thin;
-  scrollbar-color:#A63A23 transparent;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+.tale.tale--echo::-webkit-scrollbar,
+.tale.tale--atrio::-webkit-scrollbar{width:0;height:0;display:none;}
 .tale.tale--echo::backdrop,
 .tale.tale--atrio::backdrop{background:transparent!important;}
 
@@ -128,7 +130,7 @@
   position:static!important;
   padding:0!important;
   margin:12px 0 0!important;
-  font:400 14px/1.6 "Commissioner",system-ui,sans-serif!important;
+  font:400 13px/1.58 "Commissioner",system-ui,sans-serif!important;
   color:inherit!important;
   text-wrap:pretty!important;
 }
