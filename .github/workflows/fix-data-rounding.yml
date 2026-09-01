@@ -1,0 +1,27 @@
+name: Fix DATA adversarial rounding
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-data-rounding.yml'
+      - 'tools/fix_data_rounding.py'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - run: python tools/fix_data_rounding.py
+      - name: Commit validated rounding correction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Correct DATA adversarial denominator rounding"
+          git push origin HEAD:main
