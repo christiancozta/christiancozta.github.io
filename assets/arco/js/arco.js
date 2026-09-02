@@ -78,7 +78,7 @@
       frame.src = frame.dataset.src;
     }
 
-    document.querySelectorAll('.rail__sec[data-sec="echo"], .rail__sec[data-sec="atrio"]')
+    document.querySelectorAll('.rail__sec[data-sec]')
       .forEach(s => s.dataset.on = String(s.dataset.sec === view));
 
     const wanted = view === "home" ? "" : view;
@@ -138,7 +138,7 @@
   const childTracking = new WeakMap();
   function bindChildTracking(frame){
     const view = frame.closest(".view")?.dataset.view;
-    if (view !== "echo" && view !== "atrio") return;
+    if (!childLinks.some(link => link.dataset.child === view)) return;
 
     let win, doc;
     try { win = frame.contentWindow; doc = frame.contentDocument; }
@@ -178,7 +178,7 @@
     schedule();
   }
 
-  document.querySelectorAll('.view[data-view="echo"] iframe, .view[data-view="atrio"] iframe')
+  document.querySelectorAll('.view iframe.child__frame')
     .forEach(frame => frame.addEventListener("load", () => bindChildTracking(frame)));
 
   /* O ATRIO já publica a seção realmente visível. A mãe passa a consumir esse
