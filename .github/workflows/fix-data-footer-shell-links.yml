@@ -1,0 +1,46 @@
+name: Fix DATA footer shell links
+
+on:
+  push:
+    paths:
+      - '.github/data-footer-shell-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Apply footer shell links
+        run: python3 .github/scripts/fix_data_footer_shell_links.py
+
+      - name: Guard scope
+        shell: bash
+        run: |
+          changed=$(git diff --name-only)
+          test "$changed" = "data.html" || {
+            echo "Unexpected files changed:"
+            echo "$changed"
+            exit 1
+          }
+
+      - name: Validate target top links
+        shell: bash
+        run: |
+          grep -q 'href="arco.html#echo" target="_top"' data.html
+          grep -q 'href="arco.html#atrio" target="_top"' data.html
+          grep -q 'href="arco.html" target="_top".*VOLTAR AO ARCO' data.html
+
+      - name: Commit footer integration
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.html
+          git commit -m "Route DATA footer through ARCO shell"
+          git push origin main
