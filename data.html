@@ -136,6 +136,85 @@ button{font:inherit;color:inherit}
   }
 }
 
+
+/* DATA_GRAPH_PAPER_20260902 */
+:root{
+  --data-paper:#FCFCFC;
+  --data-grid-size:65px;
+  --data-grid-line:rgba(46,113,255,.105);
+  --data-margin-line:rgba(214,69,69,.42);
+  --data-margin-x:130px;
+}
+body{
+  background-color:var(--data-paper)!important;
+  background-image:
+    linear-gradient(to right,
+      transparent 0 calc(var(--data-margin-x) - .5px),
+      var(--data-margin-line) calc(var(--data-margin-x) - .5px),
+      var(--data-margin-line) calc(var(--data-margin-x) + .5px),
+      transparent calc(var(--data-margin-x) + .5px)),
+    linear-gradient(to right,var(--data-grid-line) 1px,transparent 1px),
+    linear-gradient(to bottom,var(--data-grid-line) 1px,transparent 1px)!important;
+  background-size:
+    100% 100%,
+    var(--data-grid-size) var(--data-grid-size),
+    var(--data-grid-size) var(--data-grid-size)!important;
+  background-position:0 0!important;
+}
+
+/* Only the RASTRO and LASTRO title bands remain full-bleed section changes. */
+#topo{
+  background:transparent!important;
+  color:#181818!important;
+}
+#topo>div:first-child>div:first-child>p:first-child{
+  color:#181818!important;
+  opacity:.62!important;
+}
+#h-data{color:#2E71FF!important;}
+#topo>div:first-child>div:first-child>p:last-child{color:#181818!important;}
+
+#rastro>div:nth-of-type(3){
+  background:transparent!important;
+  color:#181818!important;
+}
+#rastro>div:nth-of-type(3) [style*="color:rgba(252,252,252"]{color:#6E6E6A!important;}
+#rastro>div:nth-of-type(3) [style*="color:#FCFCFC"]{color:#181818!important;}
+#rastro>div:nth-of-type(3) [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
+#rastro>div:nth-of-type(3) [role="row"]>span{color:#181818!important;}
+#rastro>div:nth-of-type(3) [role="row"]>span:first-child{color:#2E71FF!important;}
+#rastro>div:nth-of-type(3) button[aria-pressed="true"]{
+  color:#181818!important;
+  border-bottom-color:#2E71FF!important;
+}
+#rastro>div:nth-of-type(3) button[aria-pressed="false"]{color:#6E6E6A!important;}
+#rastro>div:nth-of-type(3) [role="row"]:hover{background:rgba(46,113,255,.045)!important;}
+
+#lastro>div:nth-of-type(2){
+  background:transparent!important;
+  color:#181818!important;
+}
+#lastro>div:nth-of-type(2) [style*="color:rgba(252,252,252"]{color:#5F5F5B!important;}
+#lastro>div:nth-of-type(2) [style*="color:#FCFCFC"]{color:#181818!important;}
+#lastro>div:nth-of-type(2) [style*="color:#5B8DFF"]{color:#2E71FF!important;}
+#lastro>div:nth-of-type(2) [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
+#lastro>div:nth-of-type(2) [style*="background:#FCFCFC"]{background:#181818!important;}
+#lastro>div:nth-of-type(2) [style*="repeating-linear-gradient"]{
+  background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(24,24,24,.18) 4px 8px)!important;
+}
+
+footer{
+  background:transparent!important;
+  color:#181818!important;
+}
+footer [style*="color:rgba(252,252,252"]{color:#6E6E6A!important;}
+footer [style*="color:#5B8DFF"]{color:#2E71FF!important;}
+footer [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
+footer a:hover{color:#181818!important;}
+
+@media(max-width:700px){
+  :root{--data-margin-x:65px;}
+}
 </style>
 </helmet>
 
