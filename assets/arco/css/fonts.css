@@ -16,6 +16,7 @@
 }
 
 .rail__sec[data-sec="echo"] .rail__seclink[data-target="acervo"],
+.rail__sec[data-sec="data"] .rail__seclink,
 .rail__modlink{
   font-size:.64rem!important;
   text-transform:uppercase!important;
@@ -47,4 +48,21 @@
   .rail__sec{
     display:none!important;
   }
+}
+
+
+/* DATA — território azul apenas no rail e na subseção corrente. */
+.rail .rail__link.rail__link--data[aria-current="true"],
+.rail .rail__link.rail__link--data[aria-current="true"] .n,
+.rail .rail__link.rail__link--data:hover,
+.rail .rail__link.rail__link--data.is-data-hover{
+  color:#2E71FF!important;
+}
+.rail .rail__link.rail__link--data[aria-current="true"]::after,
+.rail .rail__link.rail__link--data:hover::after,
+.rail .rail__link.rail__link--data.is-data-hover::after{
+  background:#2E71FF!important;
+}
+.rail__sec[data-sec="data"] .rail__seclink[aria-current="location"]{
+  color:#2E71FF!important;
 }
