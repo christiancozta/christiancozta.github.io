@@ -21,7 +21,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@125,900&family=Azeret+Mono:wght@400;500;600&family=Commissioner:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,125,900;1,125,900&family=Azeret+Mono:wght@400;500;600&family=Cause:wght@400;500;600&family=Caveat:wght@500;600;700&family=Commissioner:wght@300;400;500;600;700&family=Jura:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -31,111 +31,6 @@ a:hover{color:#181818}
 button{font:inherit;color:inherit}
 ::selection{background:#0057FF;color:#FCFCFC}
 @keyframes dt-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-
-/* DATA_HERO_20260901 */
-#topo{
-  position:relative!important;
-  overflow:hidden!important;
-  min-height:100svh!important;
-  padding:0!important;
-  background:#0057FF!important;
-  color:#FCFCFC!important;
-}
-#topo>div:first-child{
-  position:relative!important;
-  display:block!important;
-  width:100%!important;
-  min-height:100svh!important;
-}
-#topo>div:first-child>div:first-child{
-  position:relative!important;
-  z-index:2!important;
-  width:min(46vw,700px)!important;
-  padding:clamp(64px,10vh,118px) 0 64px clamp(20px,5vw,96px)!important;
-}
-#topo>div:first-child>div:first-child>p:first-child{
-  margin:0!important;
-  font-family:'Commissioner',system-ui,sans-serif!important;
-  font-size:clamp(9px,.72vw,11px)!important;
-  font-weight:600!important;
-  line-height:1!important;
-  letter-spacing:.25em!important;
-  color:#FCFCFC!important;
-  opacity:.78!important;
-  text-transform:uppercase!important;
-}
-#h-data{
-  margin:clamp(18px,3vh,30px) 0 0!important;
-  font-family:'Anybody',system-ui,sans-serif!important;
-  font-weight:900!important;
-  font-style:italic!important;
-  font-stretch:125%!important;
-  font-size:clamp(5.2rem,11vw,10rem);
-  line-height:.78!important;
-  letter-spacing:-.045em!important;
-  color:#FCFCFC!important;
-  text-transform:uppercase!important;
-}
-#topo>div:first-child>div:first-child>p:last-child{
-  margin:clamp(36px,6vh,68px) 0 0!important;
-  max-width:none!important;
-  width:max-content!important;
-  white-space:nowrap!important;
-  overflow:visible!important;
-  font-family:'Commissioner',system-ui,sans-serif!important;
-  font-size:clamp(.7rem,1vw,.9rem);
-  font-weight:400!important;
-  line-height:1.08!important;
-  letter-spacing:-.035em!important;
-  color:#FCFCFC!important;
-  text-transform:uppercase!important;
-}
-#topo>div:first-child>div:nth-child(2){
-  position:absolute!important;
-  inset:0!important;
-  z-index:1!important;
-  min-width:0!important;
-  margin:0!important;
-  pointer-events:none!important;
-}
-#topo>div:first-child>div:nth-child(2){
-  position:absolute!important;
-  inset:0 0 0 42%!important;
-  z-index:1!important;
-  min-width:0!important;
-  margin:0!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:flex-end!important;
-  pointer-events:none!important;
-}
-#topo>div:first-child>div:nth-child(2)>img{
-  display:block!important;
-  width:min(62vw,980px)!important;
-  height:auto!important;
-  max-width:none!important;
-  margin:0!important;
-  object-fit:contain!important;
-  object-position:right center!important;
-  mix-blend-mode:normal!important;
-  transform:translate(8%,2%)!important;
-}
-@media(max-width:700px){
-  #topo>div:first-child>div:nth-child(2){
-    inset:auto -42% -2% 20%!important;
-    height:58%!important;
-    align-items:flex-end!important;
-    justify-content:flex-end!important;
-  }
-  #topo>div:first-child>div:nth-child(2)>img{
-    width:min(95vw,720px)!important;
-    height:auto!important;
-    object-fit:contain!important;
-    object-position:right bottom!important;
-    transform:translate(10%,0)!important;
-  }
-}
-
 
 /* DATA_GRAPH_PAPER_20260902 — reescrito em DATA_PAPEL_TECNICO_20260902 */
 :root{
@@ -285,34 +180,330 @@ footer a:hover{color:#181818!important;}
 }
 
 
-/* --- hero: gravura Dalton, tinta sobre o papel --------------------------- */
+/* ============================================================
+   DATA_TIPOGRAFIA_20260902
+   DATA rompe deliberadamente o padrao de ARCO, ECHO e ATRIO.
+   Anybody manifesta. Azeret organiza. Cause explica.
+   Jura mede. Commissioner conecta — e o elo fica no overlay.
+   ============================================================ */
+:root{
+  --data-display:'Anybody',system-ui,sans-serif;
+  --data-titulo:'Jura',ui-monospace,monospace;
+  --data-corpo:'Cause','Commissioner',system-ui,sans-serif;
+  --data-micro:'Azeret Mono',ui-monospace,monospace;
+  --data-numero:'Jura',ui-monospace,monospace;
+  --data-elo:'Commissioner',system-ui,sans-serif;
+  --dt-rotulo:94px;
+}
+
+/* CORPO — Cause 500 e a voz textual corrente de DATA. */
+body{font-family:var(--data-corpo)!important;font-weight:500!important}
+
+/* MICRO — Azeret Mono inscreve o instrumental: labels, indices, categorias,
+   unidades, legendas tecnicas, metadata e controles. Todo o Azeret inline do
+   documento ja ocupava esses papeis; permanece onde estava. */
+[style*="Azeret Mono"]{
+  font-family:var(--data-micro)!important;
+}
+
+/* NUMEROS — Jura 700 mede: percentuais, volumes, contagens, metricas,
+   escalas, valores de grafico e indicadores. A marca deles no documento
+   e o font-variant-numeric declarado. */
+[style*="tabular-nums"]{
+  font-family:var(--data-numero)!important;
+  font-weight:700!important;
+}
+/* Jura tem olho mais largo que Azeret: as compressoes herdadas afrouxam. */
+[style*="tabular-nums"][style*="letter-spacing: -"],
+[style*="tabular-nums"][style*="letter-spacing:-"]{letter-spacing:-.025em!important}
+
+/* TITULOS — Jura 700 organiza a estrutura. Sao as frases-guia dos blocos,
+   os unicos textos declarados em font-weight:300 no documento. */
+[style*="font-weight: 300"],
+[style*="font-weight:300"]{
+  font-family:var(--data-titulo)!important;
+  font-weight:700!important;
+  letter-spacing:-.02em!important;
+}
+/* subtitulos estruturais de escala media */
+#lastro [style*="font-size: clamp(1.05rem, 1.7vw, 1.3rem)"],
+#lastro [style*="font-size:clamp(1.05rem,1.7vw,1.3rem)"]{
+  font-family:var(--data-titulo)!important;
+  font-weight:700!important;
+  letter-spacing:-.015em!important;
+}
+
+
+/* ============================================================
+   DATA_HERO_20260902B — fechamento da hero
+   A maquina toma a altura do palco e sangra 5svh na base.
+   DATA no meio vertical do palco, encostado a esquerda.
+   ============================================================ */
+#topo{
+  position:relative!important;
+  overflow:hidden!important;
+  /* o gutter fica no bloco de metadados; o palco rompe para sangrar */
+  padding:0 clamp(20px,5vw,96px) clamp(48px,7vh,96px)!important;
+}
+#topo>div:first-child{
+  display:block!important;
+  position:relative!important;
+  overflow:hidden!important;
+  height:100svh!important;
+  min-height:600px!important;
+  margin:0 calc(-1 * clamp(20px,5vw,96px))!important;
+  gap:0!important;
+}
+#topo>div:nth-child(2){
+  margin-top:clamp(30px,4.5vh,58px)!important;
+}
+#topo>div:first-child>div:first-child{
+  position:absolute!important;
+  top:0!important;bottom:0!important;right:auto!important;
+  left:clamp(20px,5vw,96px)!important;
+  z-index:2!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  width:min(46vw,720px)!important;
+  /* o eixo do meio e o da palavra DATA, nao o do grupo: a reserva superior
+     compensa a linha tripla que pesa abaixo do logotipo. */
+  padding:clamp(36px,7.4vh,84px) 0 0!important;
+}
+/* MICRO — camada transversal de jurimetria, em Jura */
+#topo>div:first-child>div:first-child>p:first-child{
+  margin:0!important;
+  font-family:var(--data-titulo)!important;
+  font-weight:700!important;
+  font-size:clamp(10px,.84vw,13px)!important;
+  line-height:1.4!important;
+  letter-spacing:.30em!important;
+  color:#181818!important;
+  opacity:.72!important;
+  text-transform:uppercase!important;
+}
+#h-data{
+  margin:clamp(12px,2.2vh,26px) 0 0!important;
+  font-family:var(--data-display)!important;
+  font-weight:900!important;
+  font-style:italic!important;
+  font-stretch:125%!important;
+  font-size:clamp(5.4rem,12.4vw,12rem)!important;
+  line-height:.76!important;
+  letter-spacing:-.045em!important;
+  color:#0057FF!important;
+  text-transform:uppercase!important;
+}
+#topo>div:first-child>div:first-child>p:last-child{
+  margin:clamp(24px,4vh,48px) 0 0!important;
+  font-family:var(--data-micro)!important;
+  font-weight:500!important;
+  font-size:clamp(10px,.84vw,13px)!important;
+  line-height:1.85!important;
+  letter-spacing:.24em!important;
+  color:#181818!important;
+  opacity:.86!important;
+  white-space:nowrap!important;
+  text-transform:uppercase!important;
+}
+/* a maquina: ancorada a direita, altura do palco, 5svh fora da base */
 #topo>div:first-child>div:nth-child(2){
-  inset:0 0 0 38%!important;
-  align-items:center!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  display:block!important;
+  min-width:0!important;
+  margin:0!important;
+  overflow:visible!important;
+  pointer-events:none!important;
 }
 #topo>div:first-child>div:nth-child(2)>img{
-  width:auto!important;
-  height:min(88svh,940px)!important;
-  max-width:58vw!important;
+  position:absolute!important;
+  top:auto!important;left:auto!important;
+  right:0!important;
+  bottom:-5svh!important;
+  /* 0.7707 = 978/1269, a proporcao da gravura.
+     a largura cede primeiro em tela baixa e larga; a altura, em tela alta. */
+  width:min(53vw,calc(105svh * 0.7707))!important;
+  height:auto!important;
+  max-width:none!important;
   object-fit:contain!important;
-  object-position:right center!important;
-  transform:translate(1.5%,1%)!important;
+  transform:none!important;
   mix-blend-mode:normal!important;
 }
-@media(max-width:700px){
-  #topo>div:first-child>div:nth-child(2){
-    inset:auto -6% 0 24%!important;
-    height:52%!important;
-    align-items:flex-end!important;
-    justify-content:flex-end!important;
+@media(max-width:820px){
+  #topo>div:first-child{height:auto!important;min-height:100svh!important}
+  #topo>div:first-child>div:nth-child(2){height:auto!important}
+  #topo>div:first-child>div:first-child{
+    position:relative!important;
+    top:auto!important;bottom:auto!important;left:auto!important;
+    width:auto!important;
+    padding:clamp(184px,26vh,240px) clamp(20px,5vw,96px) 0!important;
+    justify-content:flex-start!important;
   }
   #topo>div:first-child>div:nth-child(2)>img{
-    width:auto!important;
-    height:100%!important;
-    max-width:none!important;
-    object-position:right bottom!important;
-    transform:none!important;
+    right:-7vw!important;
+    bottom:-2svh!important;
+    /* em coluna a maquina vira faixa de base: cede altura para o texto respirar */
+    width:min(94vw,calc(58svh * 0.7707))!important;
   }
+}
+
+
+/* ============================================================
+   DATA_BILHETES_20260902
+   Dois papeis colados sobre a folha: a base e a ressalva.
+   Manuscrito porque nao sao dado publicado — sao anotacao de quem mede.
+   ============================================================ */
+#topo dl,
+#topo [data-bilhete]{
+  position:absolute!important;
+  z-index:3!important;
+  margin:0!important;
+  border:0!important;
+  border-top:0!important;
+  background:#FCFCFC!important;
+  box-shadow:0 1px 0 rgba(0,87,255,.18),0 2px 3px -1px rgba(24,24,24,.12),0 22px 40px -26px rgba(24,24,24,.6)!important;
+  font-family:'Caveat',ui-rounded,cursive!important;
+  color:#181818!important;
+}
+
+/* bilhete 1 · a base, no topo esquerdo, acima de DATA */
+#topo dl{
+  top:clamp(26px,6.5vh,80px)!important;
+  left:clamp(20px,5vw,96px)!important;
+  display:block!important;
+  width:min(304px,68vw)!important;
+  padding:14px 18px 16px!important;
+  transform:rotate(-1.7deg)!important;
+  transform-origin:0 0!important;
+}
+#topo dl>div{
+  display:flex!important;
+  align-items:baseline!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  padding:4px 0!important;
+}
+#topo dl>div+div{border-top:1px dotted rgba(24,24,24,.18)!important}
+#topo dl dt{
+  font-family:'Caveat',ui-rounded,cursive!important;
+  font-weight:600!important;
+  font-size:17px!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+  text-transform:lowercase!important;
+  color:rgba(24,24,24,.5)!important;
+}
+#topo dl dd{
+  margin:0!important;
+  font-family:'Caveat',ui-rounded,cursive!important;
+  font-weight:700!important;
+  font-size:18.5px!important;
+  line-height:1.2!important;
+  letter-spacing:0!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+  color:#0057FF!important;
+}
+
+/* bilhete 2 · a ressalva, na base do palco */
+#topo [data-bilhete]{
+  top:calc(100svh - clamp(126px,17vh,178px))!important;
+  left:clamp(20px,5vw,96px)!important;
+  width:min(252px,60vw)!important;
+  padding:15px 18px 17px!important;
+  transform:rotate(1.9deg)!important;
+  transform-origin:0 100%!important;
+  font-weight:600!important;
+  font-size:clamp(21px,2.1vw,26px)!important;
+  line-height:1.12!important;
+  letter-spacing:0!important;
+  color:#181818!important;
+  text-wrap:balance!important;
+}
+
+@media(max-width:820px){
+  #topo dl{
+    top:clamp(20px,3.5vh,36px)!important;
+    width:min(268px,74vw)!important;
+  }
+  /* em coluna o segundo bilhete volta ao fluxo, colado sob o paragrafo:
+     ancorado ao rodape do #topo ele cairia sobre os links de saida. */
+  #topo [data-bilhete]{
+    position:static!important;
+    top:auto!important;
+    width:min(248px,72vw)!important;
+    margin:20px 0 0!important;
+    font-size:23px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #topo dl,#topo [data-bilhete]{transform:none!important}
+}
+
+
+/* ============================================================
+   DATA_OVERLAY_20260902 — a evidencia emerge do proprio dado
+   Sem card flutuante: o overlay trava na malha e sobe de dentro
+   da celula do dado. Uma ocorrencia = uma linha.
+   RASTRO (fonte) em #0057FF. LASTRO (calculo, recorte, fundamento,
+   limite) em #181818 com o titulo em #0057FF.
+   ============================================================ */
+@keyframes dt-sobe{
+  from{opacity:0;transform:translateY(8px) scaleY(.9)}
+  to{opacity:1;transform:none}
+}
+#dt{
+  position:fixed!important;
+  left:0;top:0;z-index:90;
+  display:none;
+  max-width:none;
+  padding:0;
+  background:#181818;
+  color:#FCFCFC;
+  /* o filete claro separa o overlay quando ele sobe dentro do bloco #181818 */
+  box-shadow:0 0 0 1px rgba(252,252,252,.20),0 18px 40px -28px rgba(24,24,24,.85);
+  pointer-events:none;
+  transform-origin:50% 100%;
+  animation:dt-sobe .18s cubic-bezier(.32,.72,0,1) both;
+}
+#dt .dt-linha{
+  display:grid;
+  grid-template-columns:var(--dt-rotulo) minmax(0,1fr);
+  gap:0 14px;
+  align-items:baseline;
+  padding:5px 14px 6px;
+  border-top:1px solid rgba(252,252,252,.14);
+}
+#dt .dt-linha:first-child,
+#dt .dt-rastro,
+#dt .dt-rastro+.dt-linha{border-top:0}
+#dt .dt-linha>b{
+  font-family:var(--data-elo)!important;
+  font-weight:700;
+  font-size:8.5px;
+  line-height:1.7;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:#0057FF;
+}
+#dt .dt-linha>em{
+  font-family:var(--data-numero)!important;
+  font-weight:700;
+  font-style:normal;
+  font-size:11px;
+  line-height:1.5;
+  letter-spacing:.005em;
+  color:#FCFCFC;
+  overflow-wrap:anywhere;
+}
+#dt .dt-rastro{background:#0057FF}
+#dt .dt-rastro>b,#dt .dt-rastro>em{color:#FCFCFC}
+[data-datum]{scroll-margin:96px}
+[data-datum]:focus-visible{outline:2px solid #0057FF;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+  #dt{animation:none}
 }
 
 </style>
@@ -330,7 +521,8 @@ footer a:hover{color:#181818!important;}
     </div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(26px,4vw,80px);margin-top:clamp(34px,5vh,64px);padding-top:26px;border-top:1px solid #181818">
-    <p style="margin:0;font-size:15.5px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">Critérios de validação de dados e indicadores de jurimetria. O número depende de onde se mede.</p>
+    <p style="margin:0;font-size:15.5px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">Critérios de validação de dados e indicadores de jurimetria.</p>
+      <p data-bilhete>O número depende de onde se mede.</p>
     <div style="display:flex;flex-direction:column;gap:22px">
       <dl style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px 24px;margin:0;padding-top:18px;border-top:1px solid #E2E2E0">
         <div><dt style="font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">BASE</dt><dd style="margin:9px 0 0;font:400 13px/1.4 'Azeret Mono',ui-monospace,monospace">jurimetria.xlsx</dd></div>
@@ -672,14 +864,12 @@ footer a:hover{color:#181818!important;}
   <p style="margin:22px 0 0;font:400 11px/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em;color:rgba(252,252,252,.55)">ARCO · SYS.AUDIT.DATA</p>
 </footer>
 
-<div id="dt" role="tooltip" style="display:none;position:fixed;left:0;top:0;z-index:90;max-width:340px;padding:14px 16px 15px;background:#181818;color:#FCFCFC;pointer-events:none;box-shadow:0 0 0 1px rgba(252,252,252,.25);animation:dt-in .16s cubic-bezier(.32,.72,0,1) both">
-  <div style="display:grid;gap:11px">
-    <p id="dt-fonte" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">FONTE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#0057FF">RASTRO</b></span><em id="dt-fonte-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-calculo" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">CÁLCULO</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#0057FF">RASTRO</b></span><em id="dt-calculo-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-recorte" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">RECORTE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#0057FF">RASTRO</b></span><em id="dt-recorte-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-fundamento" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">FUNDAMENTO</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#FCFCFC">LASTRO</b></span><em id="dt-fundamento-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-    <p id="dt-limite" style="margin:0"><span style="display:flex;align-items:baseline;justify-content:space-between;gap:16px"><b style="font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">LIMITE</b><b style="font:600 8.5px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.22em;color:#FCFCFC">LASTRO</b></span><em id="dt-limite-v" style="display:block;margin-top:3px;font:400 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;font-style:normal"></em></p>
-  </div>
+<div id="dt" role="tooltip">
+  <div id="dt-fonte" class="dt-linha dt-rastro"><b>FONTE</b><em id="dt-fonte-v"></em></div>
+  <div id="dt-calculo" class="dt-linha"><b>CÁLCULO</b><em id="dt-calculo-v"></em></div>
+  <div id="dt-recorte" class="dt-linha"><b>RECORTE</b><em id="dt-recorte-v"></em></div>
+  <div id="dt-fundamento" class="dt-linha"><b>FUNDAMENTO</b><em id="dt-fundamento-v"></em></div>
+  <div id="dt-limite" class="dt-linha"><b>LIMITE</b><em id="dt-limite-v"></em></div>
 </div>
 
 </x-dc>
@@ -755,15 +945,38 @@ class Component extends DCLogic {
     })).filter((c) => c.linha && c.valor);
     const find = (node) => (node instanceof Element ? node.closest('[data-datum]') : null);
 
+    // A malha e a regra. O overlay le a mesma origem e o mesmo modulo do papel,
+    // trava neles e sobe de dentro da celula do dado. Nao flutua fora dela.
+    const regua = document.createElement('div');
+    regua.setAttribute('aria-hidden', 'true');
+    regua.style.cssText = 'position:absolute;top:0;left:0;height:0;visibility:hidden;pointer-events:none;width:var(--data-gx)';
+    const modulo = document.createElement('div');
+    modulo.style.cssText = 'height:0;width:var(--data-module)';
+    regua.appendChild(modulo);
+    document.body.appendChild(regua);
+    this._regua = regua;
+    const gx = () => regua.getBoundingClientRect().width || 20;
+    const mod = () => modulo.getBoundingClientRect().width || 64;
+
     const place = (target) => {
-      const rect = target.getBoundingClientRect();
-      const box = tip.getBoundingClientRect();
-      let left = rect.left + (rect.width - box.width) / 2;
-      let top = rect.top - box.height - 12;
-      left = Math.max(12, Math.min(left, window.innerWidth - box.width - 12));
-      if (top < 12) top = Math.min(window.innerHeight - box.height - 12, rect.bottom + 12);
+      const g = gx();
+      const m = mod();
+      const r = target.getBoundingClientRect();
+      const linha = (x) => g + Math.round((x - g) / m) * m;
+      const maxLargura = Math.min(window.innerWidth - g * 2, m * 9);
+      let left = Math.max(g, linha(r.left - m / 2));
+      let largura = Math.max(m * 5, linha(r.right + m / 2) - left);
+      largura = Math.min(largura, maxLargura);
+      if (left + largura > window.innerWidth - g) left = Math.max(g, window.innerWidth - g - largura);
       tip.style.left = left + 'px';
-      tip.style.top = top + 'px';
+      tip.style.width = largura + 'px';
+      // offsetHeight, nao getBoundingClientRect: a animacao de entrada aplica
+      // scaleY e o rect devolveria a altura ainda em transicao.
+      const alto = tip.offsetHeight;
+      // a compactacao acontece dentro da celula: o overlay sobe da base do dado.
+      let top = r.bottom - alto;
+      if (top < 8) top = Math.min(r.top, window.innerHeight - alto - 8);
+      tip.style.top = Math.max(8, top) + 'px';
     };
 
     const hide = () => { this._active = null; tip.style.display = 'none'; };
@@ -774,27 +987,46 @@ class Component extends DCLogic {
       for (const c of campos) {
         const v = d[c.chave] || '';
         c.valor.textContent = v;
-        c.linha.style.display = v ? 'block' : 'none';
+        c.linha.style.display = v ? '' : 'none';
         if (v) preenchidos++;
       }
       if (!preenchidos) { hide(); return; }
       this._active = target;
       tip.style.display = 'block';
-      requestAnimationFrame(() => place(target));
+      place(target);
     };
     this._hide = hide;
     this._over = (e) => { const t = find(e.target); if (t && t !== this._active) show(t); };
     this._out = (e) => { const t = find(e.target); if (t && t === this._active && !find(e.relatedTarget)) hide(); };
-    this._in = (e) => { const t = find(e.target); if (t) { this._focusGuardUntil = performance.now() + 180; show(t); } };
-    this._scroll = () => { if (performance.now() < (this._focusGuardUntil || 0)) return; hide(); };
+    this._in = (e) => { const t = find(e.target); if (t) show(t); };
     this._blur = (e) => { const t = find(e.target); if (t && t === this._active) hide(); };
     this._key = (e) => { if (e.key === 'Escape') hide(); };
+    // toque: abre no tap e permanece ate a proxima interacao correspondente.
+    this._tap = (e) => {
+      const t = find(e.target);
+      if (!t) { if (matchMedia('(hover: none)').matches) hide(); return; }
+      if (t === this._active && matchMedia('(hover: none)').matches) hide(); else show(t);
+    };
+    // o overlay esta preso a celula: em rolagem ele acompanha, nao desaparece.
+    this._scroll = () => {
+      if (!this._active || this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = 0;
+        const alvo = this._active;
+        if (!alvo) return;
+        const r = alvo.getBoundingClientRect();
+        // fora da janela o dado nao existe mais em tela: a evidencia se recolhe
+        if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; }
+        place(alvo);
+      });
+    };
 
     document.addEventListener('mouseover', this._over);
     document.addEventListener('mouseout', this._out);
     document.addEventListener('focusin', this._in);
     document.addEventListener('focusout', this._blur);
     document.addEventListener('keydown', this._key);
+    document.addEventListener('click', this._tap);
     window.addEventListener('scroll', this._scroll, { passive: true });
     window.addEventListener('resize', hide, { passive: true });
   }
@@ -805,10 +1037,13 @@ class Component extends DCLogic {
     document.removeEventListener('focusin', this._in);
     document.removeEventListener('focusout', this._blur);
     document.removeEventListener('keydown', this._key);
+    document.removeEventListener('click', this._tap);
     if (this._hide) {
       window.removeEventListener('scroll', this._scroll);
       window.removeEventListener('resize', this._hide);
     }
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._regua) this._regua.remove();
   }
 
   _cols(defs, sort, key, escuro) {
