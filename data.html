@@ -367,14 +367,17 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
   display:block!important;
   width:min(268px,66vw)!important;
   margin:0!important;
-  padding:16px 18px 20px!important;
+  padding:34px 18px 18px!important;
   border:0!important;
   border-top:0!important;
-  /* o degrade escurece a aba de baixo: e a face que descolou da folha */
-  background:linear-gradient(180deg,#FFB627 0%,#FFB627 72%,#F7A614 92%,#EE9C0B 100%)!important;
-  box-shadow:0 1px 2px rgba(24,24,24,.10),0 16px 26px -18px rgba(24,24,24,.45)!important;
+  /* duas camadas: a faixa de cola em #FFB627 no topo, unica parte presa,
+     e o corpo em tinta clara do mesmo tom, escurecendo so na aba que descolou */
+  background:
+    linear-gradient(180deg,#FFB627 0,#FFB627 21px,rgba(24,24,24,.07) 21px,rgba(24,24,24,.07) 22px,transparent 22px),
+    linear-gradient(180deg,#FFEFCD 0%,#FFEFCD 80%,#FBE4B0 93%,#F4D896 100%)!important;
+  box-shadow:0 1px 2px rgba(24,24,24,.07),0 14px 22px -16px rgba(24,24,24,.34)!important;
   /* preso so em cima: o eixo de giro fica na borda colada e a base levanta */
-  transform:perspective(760px) rotateX(2.4deg) rotate(-1.3deg)!important;
+  transform:perspective(820px) rotateX(2deg) rotate(-1.1deg)!important;
   transform-origin:50% 0!important;
   font-family:'Shantell Sans',ui-rounded,cursive!important;
   color:#181818!important;
@@ -386,10 +389,10 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
   z-index:-1;
   left:5%;
   right:5%;
-  bottom:-7px;
-  height:16px;
-  background:rgba(24,24,24,.34);
-  filter:blur(8px);
+  bottom:-6px;
+  height:14px;
+  background:rgba(24,24,24,.24);
+  filter:blur(9px);
   border-radius:50%;
 }
 #topo dl>div{
@@ -399,15 +402,15 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
   gap:16px!important;
   padding:4px 0!important;
 }
-#topo dl>div+div{border-top:1px solid rgba(24,24,24,.16)!important}
+#topo dl>div+div{border-top:1px solid rgba(24,24,24,.11)!important}
 #topo dl dt{
   font-family:'Shantell Sans',ui-rounded,cursive!important;
   font-weight:500!important;
-  font-size:14px!important;
-  line-height:1.3!important;
+  font-size:13.5px!important;
+  line-height:1.35!important;
   letter-spacing:0!important;
   text-transform:lowercase!important;
-  color:rgba(24,24,24,.62)!important;
+  color:rgba(24,24,24,.5)!important;
 }
 #topo dl dd{
   margin:0!important;
@@ -425,10 +428,12 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 #topo [data-bilhete]{
   position:absolute!important;
   z-index:3!important;
-  top:clamp(26px,6.5vh,80px)!important;
-  left:50%!important;
-  right:auto!important;
-  width:min(356px,34vw)!important;
+  /* fora do alcance de DATA e longe do post-it: a faixa livre entre o fim da
+     triade e a aresta da gravura, rente a base do palco. */
+  top:calc(100svh - clamp(212px,26svh,268px))!important;
+  left:auto!important;
+  right:calc(min(53vw,105svh * 0.7707) + clamp(14px,1.8vw,36px))!important;
+  width:min(340px,31vw)!important;
   margin:0!important;
   /* a reserva assimetrica poe as tres linhas dentro do laco, nao sobre ele */
   padding:30px 22px 32px 60px!important;
@@ -451,7 +456,7 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
   bottom:auto!important;
   left:auto!important;
   /* encosta na aresta esquerda da gravura: mesma expressao que dimensiona a maquina */
-  right:calc(min(53vw,105svh * 0.7707) + clamp(8px,1vw,20px))!important;
+  right:clamp(20px,5vw,96px)!important;
   display:flex!important;
   gap:10px!important;
   width:auto!important;
@@ -466,20 +471,14 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
   background:#181818!important;
   color:#FCFCFC!important;
   white-space:nowrap!important;
+  /* pousam sobre a tinta da gravura: o filete claro devolve a aresta */
+  box-shadow:0 0 0 1px rgba(252,252,252,.92),0 12px 24px -14px rgba(24,24,24,.8)!important;
   transition:background .18s cubic-bezier(.32,.72,0,1),transform .18s cubic-bezier(.32,.72,0,1);
 }
-#topo [data-saidas] a:hover{background:#0057FF!important}
+#topo [data-saidas] a:hover{background:#0057FF!important;box-shadow:0 0 0 1px rgba(252,252,252,.92),0 12px 24px -14px rgba(0,87,255,.6)!important}
 #topo [data-saidas] a:active{transform:translateY(1px)!important}
 #topo [data-saidas] a:focus-visible{outline:2px solid #0057FF!important;outline-offset:3px!important}
 
-@media(max-width:1180px){
-  /* sem largura para a meia coluna, a anotacao desce para baixo do post-it */
-  #topo [data-bilhete]{
-    left:clamp(20px,5vw,96px)!important;
-    top:calc(clamp(26px,6.5vh,80px) + clamp(150px,20vh,190px))!important;
-    width:min(292px,72vw)!important;
-  }
-}
 @media(max-width:820px){
   #topo dl{
     top:clamp(20px,3.5vh,36px)!important;
@@ -493,6 +492,7 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
     font-size:21px!important;
   }
   #topo{padding-bottom:clamp(34px,6vh,64px)!important}
+  #topo [data-saidas] a{box-shadow:none!important}
   #topo [data-saidas]{
     position:static!important;
     right:auto!important;top:auto!important;bottom:auto!important;
