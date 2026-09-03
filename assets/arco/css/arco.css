@@ -212,8 +212,19 @@ body{
              visibility 0s linear var(--slow);
 }
 .rail__sec > div{ overflow:hidden; min-height:0; display:flex; flex-direction:column; }
-.rail__sec[data-on="true"]{
+/* o subindice e consulta, nao estado: abre sob o cursor no titulo e se
+   mantem enquanto o ponteiro estiver nele ou dentro dele. Onde nao ha
+   ponteiro fino, volta a seguir a parte em campo. */
+.rail__link:hover + .rail__sec,
+.rail__link:focus-visible + .rail__sec,
+.rail__sec:hover,
+.rail__sec:focus-within{
   grid-template-rows:1fr; opacity:1; visibility:visible; transition-delay:0s;
+}
+@media (hover:none){
+  .rail__sec[data-on="true"]{
+    grid-template-rows:1fr; opacity:1; visibility:visible; transition-delay:0s;
+  }
 }
 .rail__seclink{
   appearance:none; -webkit-appearance:none; background:none; border:0;
@@ -225,6 +236,14 @@ body{
 .rail__seclink:first-child{ padding-top:.5rem; }
 .rail__seclink:last-child{ padding-bottom:.65rem; }
 .rail__seclink:hover{ color:var(--paper); }
+/* o subindice herda o territorio: no hover cada filho veste a cor da propria
+   pagina, como ja fazia o titulo acima dele */
+.rail__seclink[data-child="echo"]:hover,
+.rail__modlink[data-child="echo"]:hover{ color:var(--echo); }
+.rail__seclink[data-child="atrio"]:hover,
+.rail__modlink[data-child="atrio"]:hover{ color:var(--atrio); }
+.rail__seclink[data-child="data"]:hover,
+.rail__modlink[data-child="data"]:hover{ color:#00455D; }
 .rail__sub i{ font-style:normal; color:var(--hair-inv); margin:0 .2rem; }
 /* a frase autoral: revezamento com a ficha da hero — enquanto ela está em
    campo, o cordão cala. Pousa acima do nome, em corpo menor que a assinatura:
@@ -2348,5 +2367,47 @@ body{
     min-width:0;
     white-space:normal;
     overflow-wrap:anywhere;
+  }
+}
+
+/* ========================================================================== */
+/* Fonte original: hero-5to1-b2b-v2 — cronologia da revelacao                 */
+/* O bloco deixa de entrar como unidade. Quem sobe com a linha e o algarismo; */
+/* a legenda so comeca depois que os cinco assentaram.                        */
+/* ========================================================================== */
+@media (min-width:821px){
+  .home.hero-v2-ready .narr__stat{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  .home.hero-v2-ready .narr__n,
+  .home.hero-v2-ready .narr__short,
+  .home.hero-v2-ready .narr__detail{
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity 420ms var(--ease), transform 420ms var(--ease);
+  }
+  .home.hero-v2-ready .narr__n{
+    transition-delay:var(--hero-v2-num-delay,0ms);
+  }
+  .home.hero-v2-ready .narr__short,
+  .home.hero-v2-ready .narr__detail{
+    transition-delay:var(--hero-v2-leg-delay,0ms);
+  }
+  .home.hero-v2-ready.hero-v2-play .narr__n,
+  .home.hero-v2-ready.hero-v2-play .narr__short,
+  .home.hero-v2-ready.hero-v2-play .narr__detail{
+    opacity:1;
+    transform:none;
+  }
+}
+@media (min-width:821px) and (prefers-reduced-motion:reduce){
+  .home.hero-v2-ready .narr__n,
+  .home.hero-v2-ready .narr__short,
+  .home.hero-v2-ready .narr__detail{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
   }
 }
