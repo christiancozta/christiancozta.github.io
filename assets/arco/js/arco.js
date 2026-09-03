@@ -1474,6 +1474,7 @@
       let lower = springY;
       const interruption = 5;
       const segmentHeights = [];
+      const segmentTops = [];
 
       segments.forEach((seg, i) => {
         const nb = numberBoxes[i];
@@ -1483,6 +1484,7 @@
         seg.style.top = top.toFixed(2) + 'px';
         seg.style.height = height.toFixed(2) + 'px';
         segmentHeights.push(height);
+        segmentTops.push(top);
         lower = nb.y - interruption;
       });
 
@@ -1495,17 +1497,65 @@
 
       const DRAW = 2200;
       const HOLD = 120;
+      const NUM_IN = 420;    // duracao da entrada de um algarismo
+      const LEG_STEP = 95;   // escalonamento entre as legendas
       const totalLine = Math.max(1, segmentHeights.reduce((sum, h) => sum + h, 0));
+      const traco = [];
       let cursor = 0;
       segmentHeights.forEach((height, i) => {
         const duration = Math.max(160, DRAW * (height / totalLine));
         segments[i].style.setProperty('--hero-v2-seg-delay', cursor.toFixed(0) + 'ms');
         segments[i].style.setProperty('--hero-v2-dur', duration.toFixed(0) + 'ms');
-        const arrival = cursor + duration;
-        stats[i].style.setProperty('--hero-v2-delay', Math.max(0, arrival - 80).toFixed(0) + 'ms');
-        cursor = arrival + HOLD;
+        traco.push({
+          start: cursor,
+          duration,
+          top: segmentTops[i],
+          bottom: segmentTops[i] + height,
+          height
+        });
+        cursor += duration + HOLD;
       });
-      link.style.setProperty('--hero-v2-link-delay', cursor.toFixed(0) + 'ms');
+
+      /* A ponta do traco sobe da nascenca. Cada algarismo acende quando ela
+         passa pela altura dele — nao depois que ela termina. Como o 1 e o
+         mais baixo e o 5 o mais alto, a ordem que sai daqui e 1 -> 5. */
+      /* os vaos de altura zero nao desenham nada: o fim do traco e o fim do
+         ultimo vao que tem extensao. Sem isso o algarismo mais alto esperava
+         os vaos degenerados e abria um vao morto na sequencia. */
+      const fimDoTraco = traco.reduce(
+        (t, vao) => vao.height > 0 ? Math.max(t, vao.start + vao.duration) : t, 0);
+      const tempoNaAltura = (y) => {
+        for (const vao of traco){
+          if (!vao.height) continue;
+          if (y >= vao.bottom) return vao.start;
+          if (y > vao.top){
+            return vao.start + clamp(0, (vao.bottom - y) / vao.height, 1) * vao.duration;
+          }
+        }
+        return fimDoTraco;
+      };
+
+      const atrasoNum = numberBoxes.map(nb =>
+        Math.max(0, Math.round(tempoNaAltura(nb.y + nb.height / 2))));
+      stats.forEach((stat, i) => {
+        stat.style.setProperty('--hero-v2-num-delay', atrasoNum[i] + 'ms');
+        stat.style.removeProperty('--hero-v2-delay');
+      });
+
+      /* Os cinco algarismos primeiro. So depois de o ultimo assentar a
+         legenda comeca a surgir, na mesma direcao do traco. */
+      const assentado = Math.max(...atrasoNum) + NUM_IN;
+      const ordem = atrasoNum
+        .map((atraso, i) => [atraso, i])
+        .sort((a, b) => a[0] - b[0]);
+      ordem.forEach(([, i], pos) => {
+        stats[i].style.setProperty('--hero-v2-leg-delay',
+          (assentado + pos * LEG_STEP) + 'ms');
+      });
+
+      /* o pe horizontal marca o 1: entra logo depois dele, nao no fim de tudo */
+      link.style.setProperty('--hero-v2-link-delay',
+        (Math.min(...atrasoNum) + 200) + 'ms');
 
       if (played) home.classList.add('hero-v2-play');
     });
