@@ -458,6 +458,11 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 #topo [data-saidas] a:hover{background:#0057FF!important}
 #topo [data-saidas] a:active{transform:translateY(1px)!important}
 #topo [data-saidas] a:focus-visible{outline:2px solid #0057FF!important;outline-offset:3px!important}
+#topo [data-saidas]{
+  left:clamp(20px,5vw,96px)!important;
+  right:auto!important;
+  justify-content:flex-start!important;
+}
 
 /* --- faixas de titulo: a altura vinha do respiro, nao do corpo ----------- */
 #rastro>div:first-of-type,
@@ -796,7 +801,7 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
           <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">FONTE</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A fonte original é jurimetria.xlsx, base de trabalho extraída de sistema interno e usada pelo autor para formular os indicadores. Não é dado oficial do TJPR, e a base bruta não integra os artefatos públicos atuais.</p></div>
           <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CONTAGEM</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O mês é definido pela data do despacho, quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p></div>
           <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ROBUSTEZ</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A verificação pública usa jurimetria_derivada.csv e o hash SHA-256 da fonte, além dos derivados mínimos de ECHO e ATRIO em assets/data/lastro. O derivado agregado permite recalcular as figuras publicadas sem expor linhas processuais ou dados de terceiros.</p></div>
+          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A verificação pública usa jurimetria_derivada.csv e o hash SHA-256 da fonte, além dos derivados mínimos de ECHO, ATRIO e da operação de execuções fiscais (Res. 574) em assets/data/lastro. Os derivados agregados permitem recalcular as figuras publicadas sem expor linhas processuais ou dados de terceiros.</p></div>
         </div>
       </sc-if>
     </div>
@@ -962,6 +967,9 @@ const METRICAS = [
 ];
 
 const INDICE = [
+  { valor: '520', ord: 520, oque: 'Saneamentos por extinção', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },
+  { valor: '600', ord: 600, oque: 'Processos tratados', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },
+  { valor: '86,7%', ord: 86.7, oque: 'Parcela do universo com saneamento por extinção', tipo: 'Derivada', fonte: '520 ÷ 600', unidade: 'FUNDAÇÃO' },
   { valor: '1.896', ord: 1896, oque: 'Registros atribuídos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
   { valor: '135', ord: 135, oque: 'Registros sem despacho', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
   { valor: '1.761', ord: 1761, oque: 'Despachos proferidos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
