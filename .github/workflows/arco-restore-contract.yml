@@ -5,35 +5,63 @@ on:
     branches:
       - audit/arco-contract-fix-20260906c
     paths:
-      - '.arco-audit/restore-contract.flag'
+      - '.arco-audit/restore-contract-audit.flag'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply:
+  audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Checkout audit branch
+      - name: Checkout candidate
         uses: actions/checkout@v4
         with:
-          ref: audit/arco-contract-fix-20260906c
-          fetch-depth: 0
+          ref: ${{ github.sha }}
+          path: current
 
-      - name: Restore semantic and presentation contract
-        run: python .arco-audit/restore_contract.py
+      - name: Checkout immutable baseline
+        uses: actions/checkout@v4
+        with:
+          ref: f116a1d3d9671f2ac016b9147d85004c59955935
+          path: baseline
 
-      - name: Syntax and whitespace checks
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install browser audit dependencies
         run: |
-          node --check assets/arco/js/arco.js
-          node --check assets/arco/js/arco-core.js
-          node --check assets/arco/js/arco-mobile-viewport.js
-          git diff --check
+          python -m pip install --disable-pip-version-check 'playwright==1.55.0' 'Pillow==11.3.0'
+          python -m playwright install --with-deps chromium
 
-      - name: Commit candidate fix
+      - name: Serve baseline and candidate locally
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/arco/js/arco.js
-          git commit -m 'fix(arco): preserve hero contract after legacy removal'
-          git push origin HEAD:audit/arco-contract-fix-20260906c
+          python -m http.server 4173 --bind 127.0.0.1 --directory baseline >/tmp/arco-baseline-server.log 2>&1 &
+          python -m http.server 4183 --bind 127.0.0.1 --directory current >/tmp/arco-current-server.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:4173/arco.html >/dev/null
+          curl --fail --silent http://127.0.0.1:4183/arco.html >/dev/null
+
+      - name: Audit baseline against candidate
+        run: |
+          python current/.arco-audit/audit_final.py \
+            --baseline-url http://127.0.0.1:4173 \
+            --current-url http://127.0.0.1:4183 \
+            --out current/.arco-audit/results
+
+      - name: Print audit summary
+        if: always()
+        run: |
+          if [ -f current/.arco-audit/results/summary.json ]; then cat current/.arco-audit/results/summary.json; fi
+
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arco-contract-proof-${{ github.run_id }}
+          path: current/.arco-audit/results
+          if-no-files-found: warn
+          retention-days: 7
