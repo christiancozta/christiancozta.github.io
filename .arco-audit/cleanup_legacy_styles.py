@@ -101,6 +101,11 @@ css = re.sub(
 css = re.sub(
     r'\s*\.hero-cross-axis\s*,\s*\.hero-cross-link\s*\{[^}]*\}\s*',
     '\n', css, flags=re.S)
+# A later rule hides both old and current horizontal connectors. Keep the
+# current hero-v2 behavior while dropping the nonexistent old node selector.
+css = re.sub(
+    r'\.hero-v2-link\s*,\s*\.hero-cross-link\s*\{\s*display\s*:\s*none\s*!important\s*;\s*\}',
+    '.hero-v2-link{ display:none !important; }', css)
 
 compat = '''    /* Temporary compatibility contract: hero-cross runtime is gone, but these\n       classes still select baseline-active CSS until the style cleanup pass. */\n    home.classList.add("hero-cross-ready");\n\n'''
 if compat not in js:
