@@ -643,7 +643,6 @@
   if (numbers.some(number => !number)) return;
 
   const mq = matchMedia('(max-width:820px)');
-  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
   const clamp = (min, value, max) => Math.max(min, Math.min(max, value));
 
   const segments = Array.from({length:5}, (_, i) => {
@@ -713,7 +712,6 @@
     return h;
   }
 
-  let played = false;
   let raf = 0;
 
   function layout(){
@@ -951,59 +949,11 @@
       link.style.setProperty('--hero-v2-link-delay',
         (Math.min(...atrasoNum) + 200) + 'ms');
 
-      if (played) home.classList.add('hero-v2-play');
     });
   }
 
-  /* os cinco, agora: o passo 1 deixou de ser rotulo solto e ganhou conteudo */
-  stats.forEach((stat, i) => {
-    const button = numbers[i];
-    const detail = stat.querySelector('.narr__detail');
-    if (!detail || button.tagName !== 'BUTTON') return;
-
-    const set = shouldOpen => {
-      if (mq.matches) return;
-      detail.hidden = !shouldOpen;
-      stat.classList.toggle('is-open', shouldOpen);
-      detail.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
-      button.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
-    };
-
-    /* Passar o cursor ja abre; o clique fixa, para quem quiser ler sem
-       manter o ponteiro parado. Teclado usa foco, pelo mesmo caminho. */
-    stat.addEventListener('pointerenter', () => { if (!stat.dataset.fixo) set(true); });
-    stat.addEventListener('pointerleave', () => { if (!stat.dataset.fixo) set(false); });
-    stat.addEventListener('focusin', () => set(true));
-    stat.addEventListener('focusout', () => { if (!stat.dataset.fixo) set(false); });
-
-    button.addEventListener('click', event => {
-      if (mq.matches) return;
-      event.stopImmediatePropagation();
-      if (stat.dataset.fixo){ delete stat.dataset.fixo; set(false); }
-      else { stat.dataset.fixo = '1'; set(true); }
-    }, true);
-  });
-
-  function play(){
-    if (played || mq.matches) return;
-    played = true;
-    home.classList.add('narr-on');
-    layout();
-    requestAnimationFrame(() => home.classList.add('hero-v2-play'));
-  }
-
-  const triggers = ['scroll','wheel','pointerdown','pointermove','keydown','touchstart'];
-  const activate = () => {
-    play();
-    triggers.forEach(type => window.removeEventListener(type, activate));
-  };
-
-  if (reduce){
-    played = true;
-    home.classList.add('narr-on','hero-v2-play');
-  } else {
-    triggers.forEach(type => window.addEventListener(type, activate, {passive:true}));
-  }
+  /* A geometria e publica para o coordenador, mas nao possui estado narrativo. */
+  window.__ARCO_HERO_V2_GEOMETRY__ = Object.freeze({ layout });
 
   layout();
   requestAnimationFrame(layout);
