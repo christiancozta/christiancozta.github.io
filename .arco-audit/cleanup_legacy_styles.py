@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 CSS = Path('assets/arco/css/arco.css')
 JS = Path('assets/arco/js/arco.js')
@@ -14,7 +15,7 @@ if start < 0 or end < 0:
     raise SystemExit('legacy style boundaries not found')
 
 legacy_contract = '''/* HERO desktop — contrato de apresentação que permanece ativo no v2. */
-/* O runtime hero-cross foi removido; só as propriedades que ainda participavam
+/* O runtime antigo foi removido; só as propriedades que ainda participavam
    da cascata visual/interativa são mantidas diretamente sob hero-v2-ready. */
 @media (min-width:821px){
   .narr-zone{ min-height:max(calc(100dvh - 1.2rem), 36rem); }
@@ -91,8 +92,15 @@ legacy_contract = '''/* HERO desktop — contrato de apresentação que permanec
 '''
 css = css[:start] + legacy_contract + css[end:]
 
-# hero-cross auxiliary nodes no longer exist after the validated runtime cut.
-css = css.replace('''  .home.hero-v2-ready .hero-cross-axis,\n  .home.hero-v2-ready .hero-cross-link{ display:none !important; }\n\n''', '', 1)
+# Auxiliary cross nodes no longer exist after the validated runtime cut. Remove
+# any residual hiding rule regardless of whitespace/minification shape.
+css = re.sub(
+    r'\s*\.home\.hero-v2-ready\s+\.hero-cross-axis\s*,\s*'
+    r'\.home\.hero-v2-ready\s+\.hero-cross-link\s*\{[^}]*\}\s*',
+    '\n', css, count=1, flags=re.S)
+css = re.sub(
+    r'\s*\.hero-cross-axis\s*,\s*\.hero-cross-link\s*\{[^}]*\}\s*',
+    '\n', css, flags=re.S)
 
 compat = '''    /* Temporary compatibility contract: hero-cross runtime is gone, but these\n       classes still select baseline-active CSS until the style cleanup pass. */\n    home.classList.add("hero-cross-ready");\n\n'''
 if compat not in js:
@@ -115,8 +123,11 @@ if helper_start >= 0:
 
 if 'hero-cross-ready' in js or 'cross-sequence' in js:
     raise SystemExit('legacy state class remains in production JS')
-if 'hero-cross-axis' in css or 'hero-cross-link' in css or 'hero-cross-ready' in css or 'cross-sequence' in css:
-    raise SystemExit('legacy hero-cross selector remains in production CSS')
+for residue in ('hero-cross-axis', 'hero-cross-link', 'hero-cross-ready', 'cross-sequence', '--cross-'):
+    if residue in css:
+        at = css.index(residue)
+        context = css[max(0, at-120):at+180].replace('\n', ' ')
+        raise SystemExit(f'legacy selector remains in production CSS: {residue}: {context}')
 
 CSS.write_text(css, encoding='utf-8')
 JS.write_text(js, encoding='utf-8')
