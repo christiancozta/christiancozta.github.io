@@ -76,6 +76,12 @@
       stat.querySelector(".narr__detail")
     ].filter(Boolean);
 
+    const clearLegendLock = () => {
+      stats.forEach(stat => {
+        textNodes(stat).forEach(node => node.style.removeProperty("opacity"));
+      });
+    };
+
     const lockLegends = () => {
       if (mq.matches || reduce || legendsReleased) return;
       stats.forEach(stat => {
@@ -92,9 +98,9 @@
         .sort((a, b) => Number(a.dataset.step) - Number(b.dataset.step))
         .forEach((stat, index) => {
           stat.style.setProperty("--hero-v2-leg-delay", `${index * LEGEND_STEP}ms`);
-          textNodes(stat).forEach(node => node.style.removeProperty("opacity"));
         });
 
+      clearLegendLock();
       home.classList.add("hero-v2-legends-released");
     };
 
@@ -114,6 +120,17 @@
     };
 
     lockLegends();
+    mq.addEventListener?.("change", event => {
+      if (event.matches){
+        if (legendTimer) clearTimeout(legendTimer);
+        clearLegendLock();
+        return;
+      }
+      if (!legendsReleased){
+        lockLegends();
+        armLegendRelease();
+      }
+    });
 
     /* ----------------------------------------------------------------------
        DETALHES — hover/foco acumulativo e permanente no desktop.
