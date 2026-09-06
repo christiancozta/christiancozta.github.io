@@ -1,0 +1,45 @@
+name: ARCO cleanup legacy hero styles
+
+on:
+  push:
+    branches:
+      - audit/arco-contract-fix-20260906c
+    paths:
+      - '.arco-audit/cleanup-legacy-styles.flag'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout audit branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/arco-contract-fix-20260906c
+          fetch-depth: 0
+
+      - name: Migrate active legacy style contract
+        run: python .arco-audit/cleanup_legacy_styles.py
+
+      - name: Syntax and whitespace checks
+        run: |
+          node --check assets/arco/js/arco.js
+          node --check assets/arco/js/arco-core.js
+          node --check assets/arco/js/arco-mobile-viewport.js
+          git diff --check
+
+      - name: Assert hero-cross production residue is gone
+        run: |
+          ! grep -R -n -E 'hero-cross|cross-sequence|--cross-' assets/arco/css assets/arco/js
+          grep -q 'hero-v2-ready .narr__short' assets/arco/css/arco.css
+          grep -q 'letter-spacing:.045em' assets/arco/css/arco.css
+
+      - name: Commit style cleanup candidate
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/arco/css/arco.css assets/arco/js/arco.js
+          git commit -m 'chore(arco): remove dead hero styles and observers'
+          git push origin HEAD:audit/arco-contract-fix-20260906c
