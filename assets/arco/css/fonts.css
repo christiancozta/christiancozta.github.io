@@ -40,6 +40,43 @@
     gap:0!important;
     padding:.1rem 0 .35rem 1rem!important;
   }
+
+  /* HERO 5→1 — correção geométrica apenas no desktop.
+     1) O JS já centraliza a caixa do algarismo no eixo. Um translate residual
+        de -2.06px deslocava toda a estação para a esquerda depois da conta;
+        esta regra neutraliza esse segundo deslocamento sem tocar na animação. */
+  .home.hero-v2-ready .narr__stat{
+    translate:0 0!important;
+  }
+
+  /* 2) O traço permanece contínuo, mas cada algarismo abre a mesma janela de
+        papel ao redor da própria caixa. Assim o encontro linha/número deixa de
+        depender do desenho particular de 1, 2, 3, 4 ou 5 e passa a ter 5px de
+        respiro óptico uniforme nos dois sentidos. */
+  .home.hero-v2-ready .narr__n{
+    box-shadow:0 0 0 5px var(--paper)!important;
+  }
+
+  /* 3) A home continua mensurável quando uma página-filha está ativa. Antes,
+        display:none zerava a largura durante callbacks de resize/observer; ao
+        voltar, a coluna podia conservar alturas calculadas com caixas espremidas.
+        Mantê-la fora do fluxo, invisível e recortada preserva a largura real sem
+        interferir no scroll, foco ou clique da view corrente. */
+  .stage{
+    position:relative;
+  }
+  .view[data-view="home"]:not([data-active="true"]){
+    display:block!important;
+    position:absolute!important;
+    left:0!important;
+    right:0!important;
+    top:0!important;
+    width:100%!important;
+    height:100dvh!important;
+    overflow:hidden!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
 }
 
 @media (max-width:820px){
