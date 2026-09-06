@@ -39,6 +39,37 @@
     const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
     const stats = [...zone.querySelectorAll(".narr__stat")];
 
+    /* Compatibility contract only: the superseded hero-cross runtime is gone,
+       but its state classes still feed active CSS until the style cleanup phase. */
+    home.classList.add("hero-cross-ready");
+
+    const exposeMobileDetails = () => {
+      stats.forEach(stat => {
+        const button = stat.querySelector("button.narr__n");
+        const detail = stat.querySelector(".narr__detail");
+        delete stat.dataset.fixo;
+        stat.classList.remove("is-open");
+        if (detail){
+          detail.hidden = false;
+          detail.setAttribute("aria-hidden", "false");
+        }
+        button?.setAttribute("aria-expanded", "true");
+      });
+    };
+
+    const closeDesktopDetails = () => {
+      stats.forEach(stat => {
+        const button = stat.querySelector("button.narr__n");
+        const detail = stat.querySelector(".narr__detail");
+        stat.classList.remove("is-open");
+        if (detail){
+          detail.hidden = true;
+          detail.setAttribute("aria-hidden", "true");
+        }
+        button?.setAttribute("aria-expanded", "false");
+      });
+    };
+
     const timeList = value => value.split(",").map(item => {
       const token = item.trim();
       if (token.endsWith("ms")) return parseFloat(token) || 0;
@@ -184,15 +215,17 @@
 
     lockLegends();
     lockDetails();
+    if (mq.matches) exposeMobileDetails();
 
     mq.addEventListener?.("change", event => {
       if (event.matches){
         if (legendTimer) clearTimeout(legendTimer);
         if (detailTimer) clearTimeout(detailTimer);
         clearLegendLock();
-        clearPrematureDetailLockForMobile();
+        exposeMobileDetails();
         return;
       }
+      closeDesktopDetails();
       if (!detailsReady) lockDetails();
       if (!legendsReleased){
         lockLegends();
@@ -330,7 +363,10 @@
     const homeObserver = new MutationObserver(() => {
       if (mutatingGate) return;
 
-      if (home.classList.contains("narr-on")) requested = true;
+      if (home.classList.contains("narr-on")){
+        requested = true;
+        if (!home.classList.contains("cross-sequence")) home.classList.add("cross-sequence");
+      }
       if (home.classList.contains("hero-v2-play")) requested = true;
 
       if (!gateOpen && home.classList.contains("hero-v2-play")){
@@ -351,6 +387,8 @@
 
     /* Se o usuário já interagiu enquanto o núcleo carregava, narr-on registra
        o pedido. Se ainda não, o próprio núcleo continuará escutando o gesto. */
+    if (home.classList.contains("narr-on")) home.classList.add("cross-sequence");
+
     if (!gateOpen && home.classList.contains("hero-v2-play")){
       requested = true;
       home.classList.remove("hero-v2-play");
