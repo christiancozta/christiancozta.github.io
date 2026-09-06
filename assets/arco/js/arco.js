@@ -1,9 +1,9 @@
 /* ========================================================================== 
-   ARCO — coordenador do núcleo + refinamentos da narrativa desktop
-   O núcleo permanece local em arco-core.js. Esta camada só coordena:
-   1) linha 1→5 após a nascença do arco estar assentada;
-   2) detalhes cumulativos por hover/foco em número ou título;
-   3) nenhuma ação de fechamento por clique.
+   ARCO — coordenador do núcleo + refinamentos da narrativa
+   O núcleo permanece local em arco-core.js. As camadas laterais coordenam:
+   1) desktop: linha 1→5 após a nascença do arco estar assentada;
+   2) desktop: detalhes cumulativos por hover/foco em número ou título;
+   3) mobile: progressão por entrada real no viewport e remedição responsiva.
    ========================================================================== */
 (() => {
   "use strict";
@@ -15,7 +15,14 @@
   const core = document.createElement("script");
   core.src = coreUrl.href;
   core.async = false;
-  core.onload = installDesktopNarrativeCoordination;
+  core.onload = () => {
+    installDesktopNarrativeCoordination();
+    const mobile = document.createElement("script");
+    mobile.src = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src).href;
+    mobile.async = false;
+    mobile.onerror = () => console.error("ARCO: falha ao carregar a coordenação mobile.");
+    document.head.appendChild(mobile);
+  };
   core.onerror = () => console.error("ARCO: falha ao carregar o núcleo local.");
   document.head.appendChild(core);
 
