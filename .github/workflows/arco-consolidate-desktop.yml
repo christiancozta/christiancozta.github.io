@@ -1,0 +1,49 @@
+name: ARCO consolidate desktop candidate
+
+on:
+  push:
+    branches:
+      - audit/arco-contract-fix-20260906c
+    paths:
+      - '.arco-audit/consolidate-desktop.flag'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/arco-contract-fix-20260906c
+          fetch-depth: 0
+
+      - name: Consolidate desktop authority
+        run: |
+          python .arco-audit/consolidate_desktop.py
+          python .arco-audit/consolidate_desktop_contract_post.py
+
+      - name: Syntax and whitespace checks
+        run: |
+          node --check assets/arco/js/arco-core.js
+          node --check assets/arco/js/arco.js
+          node --check assets/arco/js/arco-mobile-viewport.js
+          git diff --check
+
+      - name: Assert superseded desktop ownership is gone
+        run: |
+          ! grep -q "stat.addEventListener('pointerleave'" assets/arco/js/arco-core.js
+          ! grep -q "stat.addEventListener('focusout'" assets/arco/js/arco-core.js
+          ! grep -q "const triggers = \['scroll','wheel','pointerdown','pointermove','keydown','touchstart'\]" assets/arco/js/arco-core.js
+          grep -q '__ARCO_HERO_V2_GEOMETRY__' assets/arco/js/arco-core.js
+          grep -q '__ARCO_DESKTOP_HERO_STATE__' assets/arco/js/arco.js
+
+      - name: Commit isolated desktop candidate
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/arco/js/arco-core.js assets/arco/js/arco.js
+          git commit -m 'refactor(arco): consolidate desktop hero controller'
+          git push origin HEAD:audit/arco-contract-fix-20260906c
