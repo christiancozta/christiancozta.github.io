@@ -1,0 +1,39 @@
+name: ARCO legacy runtime removal
+
+on:
+  push:
+    branches:
+      - audit/arco-hero-consolidation-20260906
+
+permissions:
+  contents: write
+
+jobs:
+  remove:
+    if: github.event.head_commit.message == 'ci(arco): run legacy runtime removal'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout audit branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/arco-hero-consolidation-20260906
+          fetch-depth: 0
+
+      - name: Remove superseded hero runtimes
+        run: python .arco-audit/remove_legacy_runtime.py
+
+      - name: Static validation
+        run: |
+          git diff --check
+          node --check assets/arco/js/arco-core.js
+          ! grep -q 'mobile-arrow-integrated-js' assets/arco/js/arco-core.js
+          ! grep -q 'hero-5to1-b2b-js' assets/arco/js/arco-core.js
+          grep -q 'hero-5to1-b2b-v2-js' assets/arco/js/arco-core.js
+
+      - name: Commit isolated product change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/arco/js/arco-core.js
+          git commit -m 'refactor(arco): remove superseded hero runtime'
+          git push origin HEAD:audit/arco-hero-consolidation-20260906
