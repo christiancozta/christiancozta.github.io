@@ -38,10 +38,6 @@
     const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
     const stats = [...zone.querySelectorAll(".narr__stat")];
 
-    /* Temporary compatibility contract: hero-cross runtime is gone, but these
-       classes still select baseline-active CSS until the style cleanup pass. */
-    home.classList.add("hero-cross-ready");
-
     const exposeMobileDetails = () => {
       stats.forEach(stat => {
         const button = stat.querySelector("button.narr__n");
@@ -128,21 +124,6 @@
         const detail = stat.querySelector(".narr__detail");
         stat.dataset.fixo = "1";
         stat.classList.remove("is-open");
-        if (detail){
-          detail.hidden = true;
-          detail.setAttribute("aria-hidden", "true");
-        }
-        button?.setAttribute("aria-expanded", "false");
-      });
-    };
-
-    const clearPrematureDetailLockForMobile = () => {
-      if (detailsReady) return;
-      stats.forEach(stat => {
-        delete stat.dataset.fixo;
-        stat.classList.remove("is-open");
-        const button = stat.querySelector("button.narr__n");
-        const detail = stat.querySelector(".narr__detail");
         if (detail){
           detail.hidden = true;
           detail.setAttribute("aria-hidden", "true");
@@ -281,7 +262,7 @@
       requested = true;
       disarmRequest();
       setPhase("arc-requested");
-      home.classList.add("narr-on", "cross-sequence");
+      home.classList.add("narr-on");
       geometry.layout();
       if (gateOpen) revealLine();
       else armSpring();
@@ -303,7 +284,7 @@
     if (mq.matches) exposeMobileDetails();
 
     if (reduce){
-      home.classList.add("narr-on", "cross-sequence", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
+      home.classList.add("narr-on", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
       clearLegendLock();
     } else {
       armRequest();
@@ -324,7 +305,7 @@
       if (!detailsReady) lockDetails();
       if (!legendsReleased) lockLegends();
       if (reduce){
-        home.classList.add("narr-on", "cross-sequence", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
+        home.classList.add("narr-on", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
         clearLegendLock();
         return;
       }
