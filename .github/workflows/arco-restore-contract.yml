@@ -1,0 +1,39 @@
+name: ARCO restore baseline contract
+
+on:
+  push:
+    branches:
+      - audit/arco-contract-fix-20260906c
+    paths:
+      - '.arco-audit/restore-contract.flag'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout audit branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/arco-contract-fix-20260906c
+          fetch-depth: 0
+
+      - name: Restore semantic and presentation contract
+        run: python .arco-audit/restore_contract.py
+
+      - name: Syntax and whitespace checks
+        run: |
+          node --check assets/arco/js/arco.js
+          node --check assets/arco/js/arco-core.js
+          node --check assets/arco/js/arco-mobile-viewport.js
+          git diff --check
+
+      - name: Commit candidate fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/arco/js/arco.js
+          git commit -m 'fix(arco): preserve hero contract after legacy removal'
+          git push origin HEAD:audit/arco-contract-fix-20260906c
