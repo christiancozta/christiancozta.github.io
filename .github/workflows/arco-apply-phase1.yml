@@ -21,7 +21,9 @@ jobs:
           fetch-depth: 0
 
       - name: Apply deterministic phase 1 transformation
-        run: python .arco-audit/refactor_phase1.py
+        run: |
+          python .arco-audit/refactor_phase1.py
+          python .arco-audit/refactor_phase1_post.py
 
       - name: Syntax and whitespace checks
         run: |
