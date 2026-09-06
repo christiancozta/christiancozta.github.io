@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -38,7 +37,6 @@ def desktop_probe(browser, w, h):
     ctx=browser.new_context(viewport={"width":w,"height":h})
     p=ctx.new_page(); p.goto(BASE_URL, wait_until='load'); wait_fonts(p)
     before=state(p)
-    # Two real user gestures, separated, so the probe cannot miss a narrow-layout hit target.
     p.mouse.move(max(12,w//2), max(12,h//2))
     request_t=p.evaluate('performance.now()')
     samples=[]
@@ -58,13 +56,11 @@ def derive_visual(probe):
         for s in ss:
             if pred(s): return s['t']
         return None
-    # Visible line means an actual segment has acquired measurable height.
     line_start=first(lambda s:any(v>0.5 for v in s['segHeights']))
     numbers_all=first(lambda s:len(s['numOpacity'])==5 and all(v>=.99 for v in s['numOpacity']))
     title_start=first(lambda s:any(v>.01 for v in s['shortOpacity']))
     titles_all=first(lambda s:len(s['shortOpacity'])==5 and all(v>=.99 for v in s['shortOpacity']))
     details=first(lambda s:s['detailsReady'])
-    # Spring is considered settled only after it has visibly moved and then reaches ~0.
     moved=False; spring_settled=None
     for s in ss:
         d=s['springDash']
@@ -91,9 +87,9 @@ def mobile_probe(browser,w,h):
       '.arcade > .mov:nth-child(2) .mov__h',
       '.arcade > .mov:nth-child(3) .mov__h']
     def snap(label):
-      return p.evaluate("""sels=>({label:arguments[1],scrollY,
+      return p.evaluate("""arg=>({label:arg.label,scrollY,
         seen:[...document.querySelectorAll('[data-arrow-seen="true"]')].map(e=>e.matches('.narr__stat')?e.dataset.step:(e.textContent||'').trim().slice(0,50)),
-        points:sels.map(sel=>{const e=document.querySelector(sel); if(!e)return {sel,missing:true}; const r=e.getBoundingClientRect(); return {sel,seen:e.dataset.arrowSeen==='true',top:r.top,bottom:r.bottom,intersects:r.bottom>0&&r.top<innerHeight};})})""", selectors, label)
+        points:arg.sels.map(sel=>{const e=document.querySelector(sel); if(!e)return {sel,missing:true}; const r=e.getBoundingClientRect(); return {sel,seen:e.dataset.arrowSeen==='true',top:r.top,bottom:r.bottom,intersects:r.bottom>0&&r.top<innerHeight};})})""", {"sels":selectors,"label":label})
     snaps=[snap('initial')]
     for i,sel in enumerate(selectors):
       p.locator(sel).scroll_into_view_if_needed(); p.wait_for_timeout(500); snaps.append(snap(str(i)))
@@ -110,7 +106,6 @@ def main():
     browser.close()
   result={"desktop":desktops,"mobile":mobiles}
   OUT.write_text(json.dumps(result,indent=2),encoding='utf-8')
-  # compact console summary
   print(json.dumps({"desktop":[{"viewport":d['probe']['viewport'],**d['derived']} for d in desktops],
                     "mobile":[{"viewport":m['viewport'],"initial":m['snapshots'][0],"final":m['snapshots'][-1]} for m in mobiles]},indent=2))
 
