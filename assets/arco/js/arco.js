@@ -3,8 +3,9 @@
    O núcleo permanece local em arco-core.js. As camadas laterais coordenam:
    1) desktop: linha 1→5 após a nascença do arco estar assentada;
    2) desktop: números completos antes de qualquer legenda;
-   3) desktop: detalhes cumulativos por hover/foco em número ou título;
-   4) mobile: progressão por entrada real no viewport e remedição responsiva.
+   3) desktop: detalhes cinza só depois de todos os títulos assentarem;
+   4) desktop: detalhes cumulativos por hover/foco, sem fechamento;
+   5) mobile: progressão por entrada real no viewport e remedição responsiva.
    ========================================================================== */
 (() => {
   "use strict";
@@ -70,6 +71,8 @@
     const LEGEND_STEP = 95;
     let legendsReleased = reduce;
     let legendTimer = 0;
+    let detailsReady = reduce;
+    let detailTimer = 0;
 
     const textNodes = stat => [
       stat.querySelector(".narr__short"),
@@ -89,6 +92,65 @@
       });
     };
 
+    /* ----------------------------------------------------------------------
+       DETALHES CINZA — nenhum hover pode furar a apresentação.
+       O núcleo antigo abre no pointerenter da estação inteira; data-fixo
+       neutraliza esse listener até todos os títulos terminarem. Foco e clique
+       também são interceptados. Hover antecipado não é enfileirado: depois da
+       liberação é preciso haver uma nova entrada real do ponteiro/foco.
+       ---------------------------------------------------------------------- */
+    const lockDetails = () => {
+      if (mq.matches || reduce || detailsReady) return;
+      stats.forEach(stat => {
+        const button = stat.querySelector("button.narr__n");
+        const detail = stat.querySelector(".narr__detail");
+        stat.dataset.fixo = "1";
+        stat.classList.remove("is-open");
+        if (detail){
+          detail.hidden = true;
+          detail.setAttribute("aria-hidden", "true");
+        }
+        button?.setAttribute("aria-expanded", "false");
+      });
+    };
+
+    const clearPrematureDetailLockForMobile = () => {
+      if (detailsReady) return;
+      stats.forEach(stat => {
+        delete stat.dataset.fixo;
+        stat.classList.remove("is-open");
+        const button = stat.querySelector("button.narr__n");
+        const detail = stat.querySelector(".narr__detail");
+        if (detail){
+          detail.hidden = true;
+          detail.setAttribute("aria-hidden", "true");
+        }
+        button?.setAttribute("aria-expanded", "false");
+      });
+    };
+
+    const releaseDetails = () => {
+      if (detailsReady || mq.matches) return;
+      detailsReady = true;
+      if (detailTimer) clearTimeout(detailTimer);
+      home.classList.add("hero-v2-details-ready");
+    };
+
+    const armDetailRelease = () => {
+      if (detailsReady || mq.matches || reduce || !legendsReleased) return;
+      lockDetails();
+
+      requestAnimationFrame(() => {
+        if (detailsReady || mq.matches || !legendsReleased) return;
+        const titles = stats
+          .map(stat => stat.querySelector(".narr__short"))
+          .filter(Boolean);
+        const lastTitleAt = Math.max(0, ...titles.map(transitionBudget));
+        if (detailTimer) clearTimeout(detailTimer);
+        detailTimer = window.setTimeout(releaseDetails, Math.ceil(lastTitleAt) + 24);
+      });
+    };
+
     const releaseLegends = () => {
       if (legendsReleased || mq.matches) return;
       legendsReleased = true;
@@ -102,6 +164,7 @@
 
       clearLegendLock();
       home.classList.add("hero-v2-legends-released");
+      armDetailRelease();
     };
 
     const armLegendRelease = () => {
@@ -120,25 +183,31 @@
     };
 
     lockLegends();
+    lockDetails();
+
     mq.addEventListener?.("change", event => {
       if (event.matches){
         if (legendTimer) clearTimeout(legendTimer);
+        if (detailTimer) clearTimeout(detailTimer);
         clearLegendLock();
+        clearPrematureDetailLockForMobile();
         return;
       }
+      if (!detailsReady) lockDetails();
       if (!legendsReleased){
         lockLegends();
         armLegendRelease();
+      } else if (!detailsReady){
+        armDetailRelease();
       }
     });
 
     /* ----------------------------------------------------------------------
-       DETALHES — hover/foco acumulativo e permanente no desktop.
-       O núcleo já conhece a abertura. Aqui a estação é marcada como fixa
-       no primeiro contato e nunca mais recebe comando de fechamento.
+       DETALHES — depois do gate, hover/foco é cumulativo e permanente.
+       Nenhuma estação já aberta recebe comando de fechamento.
        ---------------------------------------------------------------------- */
     const openStat = stat => {
-      if (!stat || mq.matches) return;
+      if (!stat || mq.matches || !detailsReady) return;
       const button = stat.querySelector("button.narr__n");
       const title = stat.querySelector(".narr__short");
       const detail = stat.querySelector(".narr__detail");
@@ -157,19 +226,23 @@
     };
 
     stats.forEach(stat => {
-      const button = stat.querySelector("button.narr__n");
-      const title = stat.querySelector(".narr__short");
-      if (!button) return;
-
-      [button, title].filter(Boolean).forEach(target => {
-        target.style.pointerEvents = "auto";
-        target.addEventListener("pointerenter", () => openStat(stat));
-        target.addEventListener("focusin", () => openStat(stat));
-      });
+      stat.addEventListener("pointerenter", () => openStat(stat));
+      stat.addEventListener("focusin", () => openStat(stat));
     });
 
+    /* O foco antigo abre incondicionalmente. Antes do gate, a captura impede
+       que esse evento chegue ao listener do núcleo e também ao nosso. */
+    zone.addEventListener("focusin", event => {
+      if (mq.matches || detailsReady) return;
+      const stat = event.target instanceof Element
+        ? event.target.closest(".narr__stat")
+        : null;
+      if (!stat || !zone.contains(stat)) return;
+      event.stopImmediatePropagation();
+    }, true);
+
     /* O handler antigo de clique alternava abrir/fechar. Capturamos antes do
-       botão: clique deixa de ser toggle e só reafirma o estado aberto. */
+       botão: antes do gate ele não faz nada; depois só reafirma estado aberto. */
     document.addEventListener("click", event => {
       if (mq.matches) return;
       const button = event.target instanceof Element
@@ -180,6 +253,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
+      if (!detailsReady) return;
       openStat(button.closest(".narr__stat"));
     }, true);
 
@@ -263,6 +337,7 @@
         mutatingGate = true;
         home.classList.remove("hero-v2-play");
         lockLegends();
+        lockDetails();
         queueMicrotask(() => { mutatingGate = false; });
         return;
       }
@@ -280,6 +355,7 @@
       requested = true;
       home.classList.remove("hero-v2-play");
       lockLegends();
+      lockDetails();
     }
   }
 })();
