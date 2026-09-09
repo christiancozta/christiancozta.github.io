@@ -1,0 +1,263 @@
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@700&display=swap");
+
+.page--echo {
+  /* ACENTO ÚNICO. Um verde só, claro ou escuro. Sem variante clareada. */
+  --accent: #FFB627;
+  --accent-on-light: #FFB627;
+  --accent-on-dark: #FFB627;
+  /* Texto sobre o acento é escuro: branco sobre #FFB627 dá 3.0:1 (reprova AA). */
+  --accent-foreground: #181818;
+  --font-hero: "Funnel Display", system-ui, sans-serif;
+  --hero-weight: 700;
+  --hero-tracking: -.045em;
+}
+
+/* ============================================================
+   Seção 04 — Construção · Acervo metodológico
+   Cards accordion em grade 3×3. Regras específicas do echo
+   (antes embutidas no <style> de echo.html). Acento único
+   var(--accent-on-light); cantos retos (--radius-control: 0).
+   ============================================================ */
+.page--echo #construcao .technical-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 999px) { .page--echo #construcao .technical-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 819px) { .page--echo #construcao .technical-grid { grid-template-columns: 1fr; } }
+
+.page--echo #construcao .tech-accordion { padding: 0; overflow: hidden; transition: border-color var(--standard) var(--ease); }
+.page--echo #construcao .tech-details { width: 100%; }
+
+/* --- estado fechado --- */
+.page--echo #construcao .tech-summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+  padding: 22px;
+}
+.page--echo #construcao .tech-summary::-webkit-details-marker { display: none; }
+.page--echo #construcao .tech-summary-main { display: flex; flex-direction: column; min-width: 0; }
+
+.page--echo #construcao .tech-meta {
+  font-family: var(--font-micro); font-size: var(--text-micro); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--accent-on-light);
+}
+.page--echo #construcao .technical-title {
+  margin-top: 9px; font-family: var(--font-structure);
+  font-size: 1.12rem; line-height: 1.18; font-weight: 600; letter-spacing: -.02em;
+  transition: color var(--standard) var(--ease);
+}
+.page--echo #construcao .tech-function {
+  margin-top: 11px; font-family: var(--font-body);
+  font-size: var(--text-small); line-height: var(--text-small-leading); color: var(--muted);
+}
+
+/* --- coluna à direita: tipo do material + download --- */
+.page--echo #construcao .tech-aside { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+.page--echo #construcao .tech-kind {
+  font-family: var(--font-micro); font-size: 9px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted-2); white-space: nowrap;
+}
+.page--echo #construcao .tech-download {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; flex-shrink: 0;
+  background: var(--accent-on-light); color: var(--accent-foreground); text-decoration: none;
+  transition: transform var(--fast) var(--ease), opacity var(--fast) var(--ease);
+}
+.page--echo #construcao .tech-download:hover { opacity: .88; transform: translateY(-1px); }
+
+/* --- hover do card fechado: realce sóbrio, sem inundar de cor --- */
+.page--echo #construcao .tech-accordion:hover:not(:has(details[open])) { border-color: var(--accent-on-light); }
+.page--echo #construcao .tech-accordion:hover:not(:has(details[open])) .technical-title { color: var(--accent-on-light); }
+
+/* --- estado aberto --- */
+.page--echo #construcao .tech-details[open] .tech-summary { border-bottom: 1px solid var(--line); }
+.page--echo #construcao .tech-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 16px; }
+.page--echo #construcao .tech-body .spec-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 0; border: 0; background: none; }
+.page--echo #construcao .tech-body .spec-cell { display: grid; grid-template-columns: 84px 1fr; gap: 14px; align-items: baseline; }
+.page--echo #construcao .tech-body .spec-key { margin: 0; font-family: var(--font-micro); font-size: 9px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.page--echo #construcao .tech-body .spec-value { margin: 0; font-size: var(--text-small); line-height: 1.5; color: var(--ink); }
+.page--echo #construcao .tech-body .tags { margin-top: 4px; }
+
+/* --- placeholder --- */
+.page--echo #construcao .tech-placeholder { border-style: dashed; }
+.page--echo #construcao .tech-placeholder .tech-download { background: var(--muted-2); }
+
+/* ============================================================
+   Hero · Filosofia (diapasão)
+   Cada princípio ganha índice mono e filete de afinação; a
+   legenda expande no hover/focus. Coluna mantida no lugar.
+   ============================================================ */
+.page--echo .hero-creed-list { border-top: 1px solid var(--line-dark-soft); }
+.page--echo .hero-creed-list li { padding: 0; border-bottom: 1px solid var(--line-dark-soft); }
+
+.page--echo .creed-item { cursor: default; outline: none; transition: background var(--standard) var(--ease); }
+.page--echo .creed-item:hover,
+.page--echo .creed-item:focus-visible { background: rgba(232, 236, 239, .045); }
+
+.page--echo .creed-row { display: grid; grid-template-columns: 26px 1fr 14px; align-items: center; gap: 12px; padding: 11px 10px 11px 0; }
+.page--echo .creed-index {
+  font-family: var(--font-micro); font-size: 10px; font-weight: 600; letter-spacing: .04em;
+  color: var(--muted-2); transition: color var(--standard) var(--ease); align-self: baseline;
+}
+.page--echo .creed-name {
+  font-family: var(--font-structure); font-size: 14px; line-height: 1.25; font-weight: 500;
+  color: rgba(232, 236, 239, .80); transition: color var(--standard) var(--ease); align-self: baseline;
+}
+.page--echo .creed-tick {
+  width: 14px; height: 1px; background: var(--line-dark);
+  transform-origin: right center; transform: scaleX(.45);
+  transition: transform var(--standard) var(--ease), background var(--standard) var(--ease);
+}
+.page--echo .creed-item:hover .creed-index,
+.page--echo .creed-item:focus-visible .creed-index { color: var(--accent-on-dark); }
+.page--echo .creed-item:hover .creed-name,
+.page--echo .creed-item:focus-visible .creed-name { color: var(--cloud); }
+.page--echo .creed-item:hover .creed-tick,
+.page--echo .creed-item:focus-visible .creed-tick { transform: scaleX(1); background: var(--accent-on-dark); }
+
+/* legenda: expansão suave (grid-rows 0fr→1fr) + fade */
+.page--echo .creed-legend { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--expand) var(--ease); }
+.page--echo .creed-legend > p {
+  overflow: hidden; margin: 0; padding-left: 38px; padding-right: 14px;
+  font-family: var(--font-body); font-size: 12.5px; line-height: 1.5;
+  color: rgba(232, 236, 239, 0);
+  transition: color var(--standard) var(--ease), padding-bottom var(--expand) var(--ease);
+}
+.page--echo .creed-item:hover .creed-legend,
+.page--echo .creed-item:focus-visible .creed-legend { grid-template-rows: 1fr; }
+.page--echo .creed-item:hover .creed-legend > p,
+.page--echo .creed-item:focus-visible .creed-legend > p { color: rgba(232, 236, 239, .66); padding-bottom: 13px; }
+
+/* ============================================================
+   Mobile · remove a faixa de assinatura da composição.
+   No Safari/iOS, o sticky inferior era promovido a uma camada
+   de viewport e o fundo amarelo cobria o hero. O rodapé comum
+   já contém autoria e contatos, portanto a faixa é redundante.
+   ============================================================ */
+@media (max-width: 819px) {
+  .page--echo .signature-band {
+    display: none !important;
+    position: static !important;
+    inset: auto !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+/* Camada de comprovação no hover/foco. */
+.data-tooltip{position:fixed;z-index:80;width:min(336px,calc(100vw - 32px));padding:15px 17px;background:#181818;color:#F2EFE9;border-top:2px solid #2e71ff;box-shadow:0 16px 48px rgba(0,0,0,.2);pointer-events:none}
+.data-tooltip[hidden]{display:none}
+.data-tooltip span{display:grid;grid-template-columns:94px minmax(0,1fr);gap:11px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.11)}
+.data-tooltip span.is-last{border-bottom:0}
+.data-tooltip span[hidden]{display:none}
+.data-tooltip__regime,.data-tooltip__lastro{margin:0 0 8px;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.18);font:700 9.5px/1.3 "Azeret Mono",ui-monospace,SFMono-Regular,monospace;letter-spacing:.15em;text-transform:uppercase}
+.data-tooltip__lastro{margin:13px 0 8px;color:rgba(255,255,255,.5)}
+.data-tooltip__lastro[hidden]{display:none}
+.data-tooltip.is-lastro{border-top-color:#2e71ff}
+.data-tooltip.is-lastro .data-tooltip__regime{color:#2e71ff}
+.data-tooltip.is-derivacao{border-top-color:#7d7d7d}
+.data-tooltip.is-derivacao .data-tooltip__regime{color:#c9c9c9}
+.data-tooltip b{color:rgba(255,255,255,.62);font:600 9.5px/1.45 "Azeret Mono",ui-monospace,SFMono-Regular,monospace;letter-spacing:.07em}
+.data-tooltip em{color:rgba(255,255,255,.78);font:400 11.5px/1.42 "Commissioner",system-ui,sans-serif;font-style:normal}
+[data-datum][data-regime]{cursor:help}
+[data-datum][data-regime="derivacao"]{box-shadow:inset 2px 0 0 #7d7d7d}
+
+/* ============================================================
+   Rastro global — ECHO
+   A hero permanece completamente limpa. A trilha passa a existir
+   apenas depois de 100dvh e mede o percurso restante da página.
+   O trecho percorrido e o faltante usam o mesmo accent; a diferença
+   é somente de densidade. O marcador permanece uma bolinha mínima.
+   ============================================================ */
+@keyframes echo-trace-after-hero-reveal{from{opacity:1}to{opacity:1}}
+@keyframes echo-trace-after-hero-fill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes echo-trace-after-hero-dot{from{top:0}to{top:100%}}
+
+body .echo-trace{
+  opacity:0!important;
+}
+
+@supports (animation-timeline:scroll()){
+  body .echo-trace{
+    opacity:0!important;
+    animation-name:echo-trace-after-hero-reveal!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:forwards!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+  body .echo-trace i{
+    left:4px!important;
+    width:1px!important;
+    background:#FFB627!important;
+    opacity:.28!important;
+  }
+  body .echo-trace b{
+    left:4px!important;
+    width:1px!important;
+    background:#FFB627!important;
+    transform:scaleY(0)!important;
+    transform-origin:top!important;
+    animation-name:echo-trace-after-hero-fill!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:both!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+  body .echo-trace s{
+    left:4.5px!important;
+    width:4px!important;
+    height:4px!important;
+    margin:-2px 0 0 -2px!important;
+    border-radius:50%!important;
+    background:#FFB627!important;
+    animation-name:echo-trace-after-hero-dot!important;
+    animation-duration:1s!important;
+    animation-timing-function:linear!important;
+    animation-fill-mode:both!important;
+    animation-timeline:scroll(root block)!important;
+    animation-range:100dvh 100%!important;
+  }
+}
+
+/* ============================================================
+   Hero / shell containment
+   A palavra pode sangrar visualmente, mas nunca amplia a área
+   rolável. A centralização passa a ser geométrica em qualquer
+   viewport, inclusive quando ECHO roda dentro do iframe do ARCO.
+   ============================================================ */
+html,
+body{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:clip!important;
+}
+
+.echo-hero,
+.echo-intro{
+  width:100%!important;
+  max-width:100%!important;
+}
+
+.echo-word{
+  left:50%!important;
+}
+
+/* O ARCO injeta uma regra que oculta a trilha do filho. ECHO conserva a sua
+   própria scrollbar/rastro também no iframe, sem reativar a barra nativa. */
+body .echo-trace{
+  display:block!important;
+  right:0!important;
+}
+
+/* Mobile — a palavra permanece integralmente dentro da viewport.
+   O vazamento inferior da hero continua inalterado. */
+@media (max-width:720px){
+  html,
+  body{
+    overscroll-behavior-x:none;
+  }
+  .echo-word{
+    font-size:40vw!important;
+  }
+}

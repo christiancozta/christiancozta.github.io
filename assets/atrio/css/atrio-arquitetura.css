@@ -1,0 +1,309 @@
+/* ========================================================================== 
+   ATRIO — Seção 02 / Arquitetura: interação determinística
+   --------------------------------------------------------------------------
+   Desktop converge cinco origens para um único landing central. Mobile mantém
+   a linguagem de microjogadas já aprovada. A geometria não depende do conteúdo.
+   ========================================================================== */
+
+.field-light--architecture .section-shell{grid-template-rows:var(--board-row) auto var(--tline)}
+
+.field-light--architecture .architecture-system{
+  --architecture-unit:42px;--architecture-piece:108px;--architecture-rail-pad:24px;
+  --architecture-rail-height:214px;--architecture-landing-y:118px;--architecture-corridor-gap:10px;
+  --architecture-micro:8px;--architecture-piece-rest-opacity:.62;
+  grid-column:1/-1;display:grid;grid-template-columns:repeat(6,var(--cell));min-height:0;
+  border-bottom:1px solid var(--rule);background:transparent;overflow:visible
+}
+.field-light--architecture .module-piece-column{
+  position:relative;z-index:4;grid-column:1/-1;width:100%;height:var(--architecture-rail-height);
+  min-height:0;display:block;padding:0;border:0;overflow:visible
+}
+.field-light--architecture .module-piece{
+  position:absolute;z-index:4;top:var(--architecture-rail-pad);width:var(--architecture-piece);height:var(--architecture-piece);
+  aspect-ratio:1;margin-left:calc(var(--architecture-piece)*-.5);padding:0;justify-self:auto;border:0;background:transparent;
+  color:inherit;cursor:pointer;opacity:var(--architecture-piece-rest-opacity);transform:none;transform-origin:50% 50%;will-change:transform;
+  transition:opacity .3s cubic-bezier(.22,.68,0,1),filter .3s cubic-bezier(.22,.68,0,1)
+}
+.field-light--architecture .module-piece[data-module-piece="corpus"]{left:10.4167%}
+.field-light--architecture .module-piece[data-module-piece="ratio"]{left:30.2083%}
+.field-light--architecture .module-piece[data-module-piece="atrio"]{left:50%}
+.field-light--architecture .module-piece[data-module-piece="cerne"]{left:69.7917%}
+.field-light--architecture .module-piece[data-module-piece="lux"]{left:89.5833%}
+.field-light--architecture .module-piece img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.field-light--architecture .module-piece-column:hover .module-piece{opacity:.3}
+.field-light--architecture .module-piece:focus-visible{opacity:var(--architecture-piece-rest-opacity);filter:none;outline:1px solid transparent}
+.field-light--architecture .module-piece-column .module-piece:hover{opacity:1;filter:contrast(1.05);transform:none}
+.field-light--architecture .module-piece[aria-expanded="true"],
+.field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"]{opacity:1;filter:none}
+.field-light--architecture .module-piece:active{transform:none}
+
+/* Etiqueta de identificacao: so no ponteiro fino, so na peca que ainda nao foi
+   aberta. Resolve a peca sem rotulo sem povoar o trilho de texto permanente. */
+@media(hover:hover) and (pointer:fine){
+  .field-light--architecture .module-piece::after{
+    content:attr(data-label);
+    position:absolute;z-index:5;left:50%;top:100%;
+    transform:translate(-50%,4px);
+    padding:4px 9px;background:#141013;color:#FAFAFA;
+    font:500 .58rem/1 var(--font-ui);letter-spacing:.13em;text-transform:uppercase;
+    white-space:nowrap;pointer-events:none;opacity:0;
+    transition:opacity .18s cubic-bezier(.22,.68,0,1),transform .18s cubic-bezier(.22,.68,0,1);
+  }
+  .field-light--architecture .module-piece:hover::after{opacity:1;transform:translate(-50%,8px)}
+  .field-light--architecture .module-piece[aria-expanded="true"]::after,
+  .field-light--architecture .architecture-system[data-module-phase="moving"] .module-piece::after,
+  .field-light--architecture .architecture-system[data-module-phase="returning"] .module-piece::after{
+    content:none;
+  }
+}
+.field-light--architecture .architecture-system[data-module-phase="moving"] .module-piece:not([aria-expanded="true"]),
+.field-light--architecture .architecture-system[data-module-phase="returning"] .module-piece:not([aria-expanded="true"]){opacity:.22}
+
+.field-light--architecture .module-piece:focus,
+.field-light--architecture .module-card__title-trigger:focus,
+.field-light--architecture .module-sample-sheet:focus{outline:1px solid transparent}
+html[data-architecture-input="keyboard"] .field-light--architecture .module-piece:focus{
+  outline:1px solid rgba(166,58,35,.82);outline-offset:6px;box-shadow:0 0 0 3px rgba(166,58,35,.11);opacity:1
+}
+html[data-architecture-input="keyboard"] .field-light--architecture .module-card__title-trigger:focus,
+html[data-architecture-input="keyboard"] .field-light--architecture .module-sample-sheet:focus{
+  outline:1px solid var(--architecture-card-accent,var(--terra));outline-offset:4px;box-shadow:0 0 0 3px rgba(250,250,250,.10)
+}
+
+.field-light--architecture .module-card-stage{
+  --architecture-card-bg:#2A2529;--architecture-card-accent:var(--terra);--architecture-card-rule:rgba(250,250,250,.15);
+  position:relative;z-index:1;grid-column:1/-1;min-width:0;min-height:0;height:auto;overflow:visible;
+  display:flex;flex-direction:column;align-self:start;border-top:1px solid var(--terra);
+  background:var(--architecture-card-bg);color:var(--text-light);transition:background-color .3s cubic-bezier(.22,.68,0,1)
+}
+.field-light--architecture .architecture-system[data-active-module="atrio"] .module-card-stage{
+  --architecture-card-bg:#B04730;--architecture-card-accent:var(--text-light);--architecture-card-rule:rgba(250,250,250,.30)
+}
+.field-light--architecture .module-stream__vision,
+.field-light--architecture .module-card__back,
+.field-light--architecture .operational-sample-trigger{display:none!important}
+.field-light--architecture .module-card{
+  position:relative;flex:none;width:100%;min-height:0;display:flex;flex-direction:column;background:transparent;color:var(--text-light)
+}
+.field-light--architecture .module-card[hidden]{display:none}
+
+.field-light--architecture .module-card--overview{min-height:0;padding:clamp(44px,5.5vh,64px) clamp(18px,calc(var(--cell)*.13),24px)}
+.field-light--architecture .module-card--overview::before{display:none}
+.field-light--architecture .module-card__idle-prompt{
+  display:flex;flex-direction:column;align-items:flex-start;gap:4px;max-width:18ch;color:var(--text-light);
+  font:700 clamp(1.75rem,calc(var(--cell)*.235),2.85rem)/1.01 var(--font-heading);letter-spacing:-.025em;text-wrap:balance
+}
+.field-light--architecture .module-card__idle-prompt strong{font:inherit;font-weight:700}
+.field-light--architecture .module-card__idle-prompt span{color:rgba(250,250,250,.54)}
+
+.field-light--architecture .module-card--detail{min-height:0;padding:0;border:0}
+.field-light--architecture .module-card--detail::before{
+  content:"";position:absolute;z-index:2;top:-2px;left:50%;transform:translateX(-50%);
+  width:clamp(36px,8%,58px);height:3px;background:var(--architecture-card-accent)
+}
+.field-light--architecture .module-card--detail .module-card__header{
+  position:static;box-sizing:border-box;width:100%;max-width:none;
+  margin:calc(var(--architecture-piece)*.34) 0 0;
+  padding:0 clamp(18px,calc(var(--cell)*.13),24px);text-align:center
+}
+.field-light--architecture .module-card--detail .module-card__subtitle{margin-left:0;margin-right:0}
+.field-light--architecture .module-card--detail .module-card__piece{display:none!important}
+.field-light--architecture .module-card--detail .module-card__header h3,
+.field-light--architecture .module-card--detail .module-card__subtitle{margin-left:auto;margin-right:auto}
+.field-light--architecture .module-card__title-trigger{
+  appearance:none;display:inline;margin:0;padding:0;border:0;border-bottom:1px solid transparent;background:transparent;
+  color:inherit;font:inherit;letter-spacing:inherit;text-align:inherit;cursor:pointer
+}
+.field-light--architecture .module-card__title-trigger:hover{border-bottom-color:var(--architecture-card-accent)}
+.field-light--architecture .module-card--detail .module-card__header h3{
+  max-width:none;margin-top:0;font:650 clamp(1.7rem,calc(var(--cell)*.22),2.45rem)/.98 var(--font-brand);
+  letter-spacing:-.025em;text-wrap:balance
+}
+.field-light--architecture .module-card--detail .module-card__subtitle{
+  max-width:none;margin-top:8px;color:rgba(250,250,250,.64);
+  font:700 clamp(.48rem,calc(var(--cell)*.052),.56rem)/1.35 var(--font-heading);
+  letter-spacing:.09em;text-transform:uppercase;text-wrap:pretty
+}
+
+.field-light--architecture .module-card--detail .module-card__flow,
+.field-light--architecture .module-card--detail .module-card__mother{
+  width:100%;margin-top:clamp(34px,5vh,52px);padding-left:clamp(18px,calc(var(--cell)*.13),24px);
+  padding-right:clamp(18px,calc(var(--cell)*.13),24px);text-align:left
+}
+.field-light--architecture .module-card--detail .module-card__flow{
+  display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+  /* A segunda faixa recebe o rodape da coluna 2. A primeira coluna atravessa as
+     duas, entao o fundo das duas colunas cai sempre na mesma linha. */
+  grid-template-rows:auto 1fr;
+  gap:clamp(28px,calc(var(--cell)*.2),38px);row-gap:clamp(20px,2.8vh,28px);
+  align-items:start;padding-bottom:clamp(28px,4vh,42px)
+}
+.field-light--architecture .module-card--detail .module-card__architecture{grid-column:1;grid-row:1/3;align-self:stretch}
+.field-light--architecture .module-card--detail .module-card__operation{grid-column:2;grid-row:1}
+.field-light--architecture .module-card--detail .module-card__mother{
+  max-width:none;padding-top:var(--base);padding-bottom:clamp(28px,4vh,42px);border-top:1px solid var(--architecture-card-rule)
+}
+.field-light--architecture .module-lead{
+  margin-bottom:calc(var(--base)*.5);max-width:none;font-size:clamp(.9rem,calc(var(--cell)*.108),1.05rem);font-weight:500;line-height:1.5;text-wrap:pretty
+}
+.field-light--architecture .module-card__architecture dl{margin-top:clamp(20px,3vh,26px);gap:var(--base)}
+.field-light--architecture .module-card__section dt,
+.field-light--architecture .operation-copy b{
+  color:var(--architecture-card-accent);font:700 clamp(.58rem,calc(var(--cell)*.068),.68rem)/1.25 var(--font-heading);
+  letter-spacing:.08em;text-transform:uppercase
+}
+.field-light--architecture .module-card__section dd,
+.field-light--architecture .operation-copy p{
+  color:rgba(250,250,250,.72);font-size:var(--corpo);line-height:var(--corpo-altura);text-wrap:pretty
+}
+.field-light--architecture .module-card__section dd{margin-top:5px}
+.field-light--architecture .operation-copy{gap:var(--base)}
+.field-light--architecture .module-card__index li{font-size:clamp(.72rem,calc(var(--cell)*.086),.84rem);line-height:1.45}
+.field-light--architecture .module-card__index strong{color:var(--architecture-card-accent);font-family:var(--font-brand)}
+.field-light--architecture .module-card__index span{color:rgba(250,250,250,.72)}
+.field-light--architecture .module-card__mother p,
+.field-light--architecture .module-card__flow--atrio .module-card__regency p{
+  color:rgba(250,250,250,.74);font-size:clamp(.78rem,calc(var(--cell)*.094),.92rem);line-height:1.55
+}
+.field-light--architecture .module-card__mother strong,
+.field-light--architecture .module-card__flow--atrio .module-card__regency strong{
+  color:var(--architecture-card-accent);font:500 clamp(.7rem,calc(var(--cell)*.082),.82rem)/1.45 var(--font-heading)
+}
+.field-light--architecture .module-card__flow--atrio .module-card__index{margin-top:clamp(24px,3.5vh,34px)}
+.field-light--architecture .module-card__flow--atrio .module-card__regency{padding-top:0}
+.field-light--architecture .module-card__flow--atrio .module-card__regency strong{display:block;margin-top:var(--base)}
+
+/* VERSÃO: selo visual sob a coluna operacional / EFEITO. */
+.field-light--architecture .module-card__footer{
+  grid-column:2;grid-row:2;align-self:end;
+  display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;width:auto;margin:0;
+}
+.field-light--architecture .module-sample-button{
+  appearance:none;flex:1 1 0;min-width:0;
+  display:inline-flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:34px;padding:0 11px;
+  border:1px solid rgba(250,250,250,.28);background:transparent;color:rgba(250,250,250,.82);
+  cursor:pointer;text-align:left;
+  font:500 clamp(.56rem,calc(var(--cell)*.064),.65rem)/1 var(--font-ui);
+  letter-spacing:.09em;text-transform:uppercase;
+  transition:color .22s cubic-bezier(.22,.68,0,1),border-color .22s cubic-bezier(.22,.68,0,1),background-color .22s cubic-bezier(.22,.68,0,1);
+}
+.field-light--architecture .module-sample-button__mark{
+  flex:none;font-size:.9em;transition:transform .22s cubic-bezier(.22,.68,0,1);
+}
+@media(hover:hover) and (pointer:fine){
+  .field-light--architecture .module-sample-button:hover{
+    color:#FAFAFA;border-color:var(--architecture-card-accent);
+    background:rgba(250,250,250,.05);
+  }
+  .field-light--architecture .module-sample-button:hover .module-sample-button__mark{transform:translate(2px,-2px)}
+}
+.field-light--architecture .module-sample-button[data-placeholder="true"]{border-style:dashed}
+.field-light--architecture .module-card__version{
+  flex:none;width:auto;margin:0;padding:0;border:0;display:block;background:transparent;color:#FAFAFA
+}
+.field-light--architecture .module-card__version-label{
+  appearance:none;border:0;cursor:pointer;
+  display:inline-flex;align-items:center;min-height:34px;padding:0 14px;background:var(--terra);color:#FAFAFA;
+  font:700 clamp(.56rem,calc(var(--cell)*.064),.65rem)/1 var(--font-heading);letter-spacing:.12em;text-transform:uppercase
+}
+.field-light--architecture .module-card__version[data-module-version="atrio"] .module-card__version-label{background:#2A2529;color:#FAFAFA}
+.field-light--architecture .module-card__version-value{display:none}
+
+
+/* Carrossel: único conteúdo posterior à linha de separação. */
+@media(hover:hover){
+  .field-light--architecture .module-sample-sheet:hover{
+    transform:scale(1.045);border-color:rgba(250,250,250,.58);box-shadow:0 10px 24px rgba(0,0,0,.24)
+  }
+}
+
+@media(max-width:980px) and (min-width:761px){
+}
+
+@media(max-width:760px){
+  .field-light--architecture .architecture-system{
+    --architecture-piece-rest-opacity:.72;display:flex;flex-direction:column;min-height:0;background-size:var(--cell) var(--grid-row);overflow:visible
+  }
+  .field-light--architecture .module-piece-column{
+    order:1;position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:none;align-items:center;
+    width:100%;height:auto;min-height:0;padding:18px 8px;border-right:0;border-bottom:1px solid var(--terra);overflow:visible
+  }
+  .field-light--architecture .module-piece{
+    position:relative;top:auto;left:auto!important;width:clamp(54px,17vw,82px);height:auto;margin:0;justify-self:center;opacity:.72;transform:none
+  }
+  .field-light--architecture .module-piece::after{content:none}
+  .field-light--architecture .module-piece-column:hover .module-piece{opacity:.72}
+  .field-light--architecture .module-piece-column .module-piece:hover{opacity:1}
+  .field-light--architecture .module-piece[aria-expanded="true"],
+  .field-light--architecture .module-piece-column:hover .module-piece[aria-expanded="true"]{opacity:1;filter:none}
+
+  .field-light--architecture .module-card-stage{order:2;min-height:0;height:auto;align-self:stretch;border-top:0}
+  .field-light--architecture .module-card--overview{min-height:0;padding:32px 16px 34px}
+  .field-light--architecture .module-card__idle-prompt{max-width:16ch;gap:3px;font-size:clamp(1.55rem,7.5vw,2.2rem)}
+  .field-light--architecture .module-card--detail{min-height:0;padding:0}
+  .field-light--architecture .module-card--detail::before{display:none}
+  .field-light--architecture .module-card--detail .module-card__header{width:auto;max-width:none;margin:0;padding:28px 16px 0;transform:none;text-align:left}
+  .field-light--architecture .module-card--detail .module-card__subtitle{margin-left:0;margin-right:0}
+  .field-light--architecture .module-card--detail .module-card__flow,
+  .field-light--architecture .module-card--detail .module-card__mother{width:auto;margin-top:28px;padding-left:16px;padding-right:16px;text-align:left}
+  .field-light--architecture .module-card--detail .module-card__flow{display:block;padding-bottom:28px}
+  .field-light--architecture .module-card--detail .module-card__mother{padding-bottom:28px}
+  .field-light--architecture .module-card--detail .module-card__section+.module-card__section{margin-top:28px}
+  .field-light--architecture .module-lead{max-width:none;font-size:clamp(.9rem,4.1vw,1.02rem)}
+  .field-light--architecture .module-card__section dd,.field-light--architecture .operation-copy p{font-size:clamp(.78rem,3.55vw,.9rem)}
+  .field-light--architecture .module-card__mother p,.field-light--architecture .module-card__flow--atrio .module-card__regency p{font-size:clamp(.8rem,3.65vw,.92rem)}
+  .field-light--architecture .module-card__footer{
+  grid-column:2;grid-row:2;align-self:end;
+  display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;width:auto;margin:0;
+}
+.field-light--architecture .module-sample-button{
+  appearance:none;flex:1 1 0;min-width:0;
+  display:inline-flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:34px;padding:0 11px;
+  border:1px solid rgba(250,250,250,.28);background:transparent;color:rgba(250,250,250,.82);
+  cursor:pointer;text-align:left;
+  font:500 clamp(.56rem,calc(var(--cell)*.064),.65rem)/1 var(--font-ui);
+  letter-spacing:.09em;text-transform:uppercase;
+  transition:color .22s cubic-bezier(.22,.68,0,1),border-color .22s cubic-bezier(.22,.68,0,1),background-color .22s cubic-bezier(.22,.68,0,1);
+}
+.field-light--architecture .module-sample-button__mark{
+  flex:none;font-size:.9em;transition:transform .22s cubic-bezier(.22,.68,0,1);
+}
+@media(hover:hover) and (pointer:fine){
+  .field-light--architecture .module-sample-button:hover{
+    color:#FAFAFA;border-color:var(--architecture-card-accent);
+    background:rgba(250,250,250,.05);
+  }
+  .field-light--architecture .module-sample-button:hover .module-sample-button__mark{transform:translate(2px,-2px)}
+}
+.field-light--architecture .module-sample-button[data-placeholder="true"]{border-style:dashed}
+.field-light--architecture .module-card__version{width:auto;align-self:flex-start;margin:28px 0 0}
+      .field-light--architecture .module-card__flow--atrio .module-card__regency{margin-top:28px}
+}
+
+@media(forced-colors:active){
+  html[data-architecture-input="keyboard"] .field-light--architecture .module-piece:focus,
+  html[data-architecture-input="keyboard"] .field-light--architecture .module-card__title-trigger:focus,
+  html[data-architecture-input="keyboard"] .field-light--architecture .module-sample-sheet:focus{outline:2px solid CanvasText;box-shadow:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .field-light--architecture .module-piece,.field-light--architecture .module-card-stage,
+  .field-light--architecture .module-card--detail .module-card__header h3,
+  .field-light--architecture .module-card--detail .module-card__subtitle,
+  .field-light--architecture .module-card--detail .module-card__flow,
+  .field-light--architecture .module-card--detail .module-card__mother,
+  .field-light--architecture .module-card__version,.field-light--architecture .module-sample-strip,
+  }
+
+/* Status do modulo: anuncio para leitor de tela, fora do fluxo visual. */
+.field-light--architecture .module-status{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+@media(hover:hover) and (pointer:fine){
+  .field-light--architecture .module-card__version-label:hover{background:#8F2F1B}
+}
+.field-light--architecture .module-card__version-label:focus-visible{outline:2px solid #FAFAFA;outline-offset:2px}
