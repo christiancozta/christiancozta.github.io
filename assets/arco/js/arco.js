@@ -242,7 +242,7 @@
     const stationMeta = {
       "5": {
         title:"ÁREAS DE ATUAÇÃO", tag:"ARCO", cls:"arco",
-        detail:"que organizam mecanismos construídos para problemas também reconhecíveis no mercado privado, traduzidos por correspondências terminológicas."
+        detail:"que organizam mecanismos e suas correspondências construídos para problemas reconhecíveis no mercado privado."
       },
       "4": {
         title:"MÓDULOS DE IA JURÍDICA", tag:"ATRIO", cls:"atrio",
