@@ -1,16 +1,18 @@
 /* ========================================================================== 
-   ARCO — autoridade narrativa do HERO
-   O núcleo mede e posiciona. Este arquivo governa estado e interação:
-   idle → arc-requested → arc-settled → line-running → numbers-settled →
-   titles-running → titles-settled → interactive.
-   O mobile permanece em arco-mobile-viewport.js.
+   ARCO — COMMIT 01 · HERO desktop
+   Geometria + mecânica narrativa + persistência + tipografia 5→1.
+   Mobile permanece sob arco-mobile-viewport.js.
    ========================================================================== */
 (() => {
   "use strict";
 
   const current = document.currentScript;
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
-  const coreUrl = new URL("arco-core.js?v=20260906-desktop-consolidated", src);
+  const coreUrl = new URL("arco-core.js?v=20260909-commit01", src);
+  const mobileUrl = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src);
+
+  installCommit01Styles();
+  preloadGinger();
 
   const core = document.createElement("script");
   core.src = coreUrl.href;
@@ -18,7 +20,7 @@
   core.onload = () => {
     installDesktopHeroController();
     const mobile = document.createElement("script");
-    mobile.src = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src).href;
+    mobile.src = mobileUrl.href;
     mobile.async = false;
     mobile.onerror = () => console.error("ARCO: falha ao carregar a coordenação mobile.");
     document.head.appendChild(mobile);
@@ -26,186 +28,328 @@
   core.onerror = () => console.error("ARCO: falha ao carregar o núcleo local.");
   document.head.appendChild(core);
 
+  function preloadGinger(){
+    const href = new URL("../fonts/RestartGinger-SemiBold.woff2", src).href;
+    if (document.querySelector(`link[rel="preload"][href="${href}"]`)) return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "font";
+    link.type = "font/woff2";
+    link.crossOrigin = "anonymous";
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function installCommit01Styles(){
+    if (document.getElementById("arco-commit01-style")) return;
+    const style = document.createElement("style");
+    style.id = "arco-commit01-style";
+    style.textContent = String.raw`
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+:root{--f-display:"ARCO Restart Ginger","Schibsted Grotesk",system-ui,sans-serif}
+
+@media (min-width:821px){
+  /* nascenca quase colada ao limite inferior da primeira viewport */
+  .view[data-view="home"] .narr-zone{
+    min-height:max(calc(100dvh - 6px),36rem)!important;
+  }
+  .view[data-view="home"] .home.hero-v3-ready .narr-zone .arc{
+    top:0!important;
+  }
+
+  /* os pilares só entram quando a arcada alcança a viewport */
+  .view[data-view="home"] .arc .pilar{
+    opacity:0!important;
+    transition:opacity 180ms var(--ease)!important;
+  }
+  .view[data-view="home"] .home.hero-pillars-visible .arc .pilar{
+    opacity:.18!important;
+  }
+
+  /* número = aparato; título = linguagem editorial */
+  .view[data-view="home"] .home.hero-v2-ready .narr__n,
+  .view[data-view="home"] .home.hero-v2-ready button.narr__n{
+    font-family:var(--f-micro)!important;
+    font-weight:700!important;
+    letter-spacing:-.045em!important;
+  }
+  .view[data-view="home"] .home.hero-v2-ready .narr__short{
+    display:flex!important;
+    align-items:baseline!important;
+    flex-wrap:wrap!important;
+    gap:.34rem!important;
+    font-family:var(--f-body)!important;
+    font-weight:600!important;
+    font-size:clamp(.62rem,.76vw,.72rem)!important;
+    line-height:1.06!important;
+    letter-spacing:.032em!important;
+    text-transform:uppercase!important;
+    color:var(--ink-78)!important;
+  }
+  .view[data-view="home"] .home.hero-v2-ready .narr__detail{
+    font-family:var(--f-body)!important;
+    font-size:.64rem!important;
+    line-height:1.45!important;
+  }
+
+  .narr__tag{
+    display:inline-flex;
+    align-items:center;
+    min-height:1.42em;
+    padding:.08em .38em .12em;
+    border-radius:0;
+    font-family:var(--f-micro);
+    font-size:.54rem;
+    font-weight:700;
+    line-height:1.2;
+    letter-spacing:.085em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    opacity:0;
+    transform:translateY(2px);
+    pointer-events:auto;
+  }
+  .narr__tag--arco{background:#181818;color:#FCFCFC}
+  .narr__tag--atrio{background:var(--atrio-band);color:var(--atrio-ink)}
+  .narr__tag--echo{background:var(--echo-band);color:var(--echo-ink)}
+  .narr__tag--data{background:#2E71FF;color:#FCFCFC}
+
+  /* construção: número + título são um único acontecimento; detalhe/tag ficam fora */
+  .view[data-view="home"] .home.hero-commit01-ready .narr__n,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__short{
+    opacity:0!important;
+    transform:translateY(4px)!important;
+    transition:opacity 420ms var(--ease),transform 420ms var(--ease)!important;
+    transition-delay:var(--hero-v2-num-delay,0ms)!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__n,
+  .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__short{
+    opacity:1!important;
+    transform:none!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__detail[hidden],
+  .view[data-view="home"] .home.hero-commit01-ready .narr__tag{
+    opacity:0!important;
+    transform:translateY(2px)!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready .narr__detail[hidden]{display:none!important}
+
+  .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__tag{
+    opacity:1!important;
+    transform:none!important;
+    transition:opacity 300ms var(--ease),transform 300ms var(--ease)!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready .narr__stat{
+    pointer-events:auto!important;
+    cursor:pointer;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready .narr__stat .narr__short,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__stat .narr__detail{
+    pointer-events:auto!important;
+  }
+
+  /* estado final: nenhum flash, nenhuma espera */
+  .view[data-view="home"] .home.hero-commit01-final .narr,
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat,
+  .view[data-view="home"] .home.hero-commit01-final .narr__n,
+  .view[data-view="home"] .home.hero-commit01-final .narr__short,
+  .view[data-view="home"] .home.hero-commit01-final .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-final .narr__tag{
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__detail[hidden]{display:block!important}
+  .view[data-view="home"] .home.hero-commit01-final .hero-v2-seg{
+    transform:scaleY(1)!important;
+    transition:none!important;
+  }
+}
+
+@media (max-width:820px){
+  .narr__tag{display:none!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .view[data-view="home"] .home.hero-commit01-ready .narr__n,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__short,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-ready .narr__tag{
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+  }
+}
+`;
+    document.head.appendChild(style);
+  }
+
   function installDesktopHeroController(){
-    const home = document.querySelector('.view[data-view="home"] .home');
+    const homeView = document.querySelector('.view[data-view="home"]');
+    const home = homeView?.querySelector(".home");
     const zone = home?.querySelector(".narr-zone");
     const arc = zone?.querySelector(".arc");
     const spring = arc?.querySelector(".spring");
+    const arcade = home?.querySelector(".arcade");
     const geometry = window.__ARCO_HERO_V2_GEOMETRY__;
-    if (!home || !zone || !arc || !spring || !geometry?.layout) return;
+    if (!homeView || !home || !zone || !arc || !spring || !geometry?.layout) return;
 
     const mq = matchMedia("(max-width:820px)");
     const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
     const stats = [...zone.querySelectorAll(".narr__stat")];
+    if (stats.length !== 5) return;
 
-    const exposeMobileDetails = () => {
-      stats.forEach(stat => {
-        const button = stat.querySelector("button.narr__n");
-        const detail = stat.querySelector(".narr__detail");
-        delete stat.dataset.fixo;
-        stat.classList.remove("is-open");
-        if (detail){
-          detail.hidden = false;
-          detail.setAttribute("aria-hidden", "false");
-        }
-        button?.setAttribute("aria-expanded", "true");
-      });
-    };
-
-    const closeDesktopDetails = () => {
-      stats.forEach(stat => {
-        const button = stat.querySelector("button.narr__n");
-        const detail = stat.querySelector(".narr__detail");
-        stat.classList.remove("is-open");
-        if (detail){
-          detail.hidden = true;
-          detail.setAttribute("aria-hidden", "true");
-        }
-        button?.setAttribute("aria-expanded", "false");
-      });
-    };
-
+    const SESSION_KEY = "arco:hero:commit01:discovered";
     const REQUEST_EVENTS = ["scroll","wheel","pointerdown","pointermove","keydown","touchstart"];
-    const LEGEND_STEP = 95;
+    const REST_AFTER_BUILD = 680;
+    const REVEAL_MS = 300;
+    const BETWEEN_STATIONS = 90;
 
-    let phase = reduce ? "interactive" : "idle";
-    let requested = reduce;
-    let gateOpen = reduce;
-    let springArmed = false;
+    let disposed = false;
+    let requested = false;
+    let gateOpen = false;
     let requestArmed = false;
-    let legendsReleased = reduce;
-    let detailsReady = reduce;
-    let legendTimer = 0;
-    let detailTimer = 0;
     let fallbackTimer = 0;
+    let runToken = 0;
+    let activeAnimations = new Set();
 
-    const setPhase = next => { phase = next; };
-
-    const timeList = value => value.split(",").map(item => {
-      const token = item.trim();
-      if (token.endsWith("ms")) return parseFloat(token) || 0;
-      if (token.endsWith("s")) return (parseFloat(token) || 0) * 1000;
-      return 0;
-    });
-
-    const transitionBudget = el => {
-      const cs = getComputedStyle(el);
-      const durations = timeList(cs.transitionDuration);
-      const delays = timeList(cs.transitionDelay);
-      const n = Math.max(durations.length, delays.length, 1);
-      let max = 0;
-      for (let i = 0; i < n; i++){
-        max = Math.max(max,
-          (durations[i % durations.length] || 0) +
-          (delays[i % delays.length] || 0));
-      }
-      return max;
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const readDiscovered = () => {
+      try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; }
+    };
+    const markDiscovered = () => {
+      try { sessionStorage.setItem(SESSION_KEY, "1"); } catch {}
     };
 
-    const textNodes = stat => [
-      stat.querySelector(".narr__short"),
-      stat.querySelector(".narr__detail")
-    ].filter(Boolean);
-
-    const clearLegendLock = () => {
-      stats.forEach(stat => textNodes(stat).forEach(node => node.style.removeProperty("opacity")));
-    };
-
-    const lockLegends = () => {
-      if (mq.matches || reduce || legendsReleased) return;
-      stats.forEach(stat => textNodes(stat).forEach(node =>
-        node.style.setProperty("opacity", "0", "important")));
-    };
-
-    const lockDetails = () => {
-      if (mq.matches || reduce || detailsReady) return;
-      stats.forEach(stat => {
-        const button = stat.querySelector("button.narr__n");
-        const detail = stat.querySelector(".narr__detail");
-        stat.dataset.fixo = "1";
-        stat.classList.remove("is-open");
-        if (detail){
-          detail.hidden = true;
-          detail.setAttribute("aria-hidden", "true");
-        }
-        button?.setAttribute("aria-expanded", "false");
-      });
-    };
-
-    const releaseDetails = () => {
-      if (detailsReady || mq.matches) return;
-      setPhase("titles-settled");
-      detailsReady = true;
-      if (detailTimer) clearTimeout(detailTimer);
-      home.classList.add("hero-v2-details-ready");
-      setPhase("interactive");
-    };
-
-    const armDetailRelease = () => {
-      if (detailsReady || mq.matches || reduce || !legendsReleased) return;
-      lockDetails();
-      requestAnimationFrame(() => {
-        if (detailsReady || mq.matches || !legendsReleased) return;
-        const titles = stats.map(stat => stat.querySelector(".narr__short")).filter(Boolean);
-        const lastTitleAt = Math.max(0, ...titles.map(transitionBudget));
-        if (detailTimer) clearTimeout(detailTimer);
-        detailTimer = window.setTimeout(releaseDetails, Math.ceil(lastTitleAt) + 24);
-      });
-    };
-
-    const releaseLegends = () => {
-      if (legendsReleased || mq.matches) return;
-      setPhase("numbers-settled");
-      legendsReleased = true;
-      if (legendTimer) clearTimeout(legendTimer);
-      [...stats]
-        .sort((a, b) => Number(a.dataset.step) - Number(b.dataset.step))
-        .forEach((stat, index) =>
-          stat.style.setProperty("--hero-v2-leg-delay", `${index * LEGEND_STEP}ms`));
-      clearLegendLock();
-      home.classList.add("hero-v2-legends-released");
-      setPhase("titles-running");
-      armDetailRelease();
-    };
-
-    const armLegendRelease = () => {
-      if (legendsReleased || mq.matches || reduce || !home.classList.contains("hero-v2-play")) return;
-      lockLegends();
-      requestAnimationFrame(() => {
-        if (legendsReleased || mq.matches || !home.classList.contains("hero-v2-play")) return;
-        const numbers = stats.map(stat => stat.querySelector(".narr__n")).filter(Boolean);
-        const lastNumberAt = Math.max(0, ...numbers.map(transitionBudget));
-        if (legendTimer) clearTimeout(legendTimer);
-        legendTimer = window.setTimeout(releaseLegends, Math.ceil(lastNumberAt) + 24);
-      });
-    };
-
-    const openStat = stat => {
-      if (!stat || mq.matches || !detailsReady) return;
-      const button = stat.querySelector("button.narr__n");
-      const title = stat.querySelector(".narr__short");
-      const detail = stat.querySelector(".narr__detail");
-      if (!button || !detail) return;
-      stat.dataset.fixo = "1";
-      stat.classList.add("is-open");
-      detail.hidden = false;
-      detail.setAttribute("aria-hidden", "false");
-      button.setAttribute("aria-expanded", "true");
-      if (title){
-        title.style.pointerEvents = "auto";
-        title.style.cursor = "default";
-      }
+    const stationMeta = {
+      "5": {title:"ÁREAS DE ATUAÇÃO", tag:"ARCO", cls:"arco"},
+      "4": {title:"MÓDULOS DE IA JURÍDICA", tag:"ATRIO", cls:"atrio"},
+      "3": {title:"EIXOS OPERACIONAIS", tag:"ECHO", cls:"echo"},
+      "2": {title:"CRITÉRIOS METODOLÓGICOS", tag:"DATA", cls:"data"},
+      "1": {title:"PROFISSIONAL", tag:"", cls:""}
     };
 
     stats.forEach(stat => {
-      stat.addEventListener("pointerenter", () => openStat(stat));
-      stat.addEventListener("focusin", () => openStat(stat));
-      stat.querySelector("button.narr__n")?.addEventListener("click", event => {
-        if (mq.matches) return;
-        event.preventDefault();
-        if (detailsReady) openStat(stat);
-      });
+      const step = stat.dataset.step;
+      const meta = stationMeta[step];
+      const short = stat.querySelector(".narr__short");
+      const detail = stat.querySelector(".narr__detail");
+      const button = stat.querySelector("button.narr__n");
+      if (!meta || !short || !detail || !button) return;
+
+      short.textContent = meta.title;
+      if (meta.tag){
+        const tag = document.createElement("span");
+        tag.className = `narr__tag narr__tag--${meta.cls}`;
+        tag.textContent = meta.tag;
+        tag.setAttribute("aria-label", `Proveniência: ${meta.tag}`);
+        short.appendChild(tag);
+      }
+      if (step === "1"){
+        detail.textContent = "integra a capacidade de medir, organizar e arquitetar sistemas jurídicos na encruzilhada entre dados, operações e tecnologia.";
+      }
+      detail.hidden = true;
+      detail.setAttribute("aria-hidden", "true");
+      button.setAttribute("aria-expanded", "false");
     });
+
+    const cancelAnimations = () => {
+      runToken += 1;
+      activeAnimations.forEach(animation => {
+        try { animation.cancel(); } catch {}
+      });
+      activeAnimations.clear();
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      fallbackTimer = 0;
+    };
+
+    const revealStation = stat => {
+      const detail = stat.querySelector(".narr__detail");
+      const button = stat.querySelector("button.narr__n");
+      stat.classList.add("is-revealed");
+      if (detail){
+        detail.hidden = false;
+        detail.setAttribute("aria-hidden", "false");
+      }
+      button?.setAttribute("aria-expanded", "true");
+    };
+
+    const revealAll = ({persist = true} = {}) => {
+      cancelAnimations();
+      if (persist) markDiscovered();
+      home.classList.add("narr-on","hero-v2-play","hero-commit01-ready","hero-commit01-final");
+      stats.forEach(revealStation);
+      geometry.layout();
+    };
+
+    const blinkRound = async (number, duration, token) => {
+      const animation = number.animate(
+        [{filter:"opacity(1)"},{filter:"opacity(.38)",offset:.5},{filter:"opacity(1)"}],
+        {duration,iterations:3,easing:"cubic-bezier(.4,0,.2,1)"}
+      );
+      activeAnimations.add(animation);
+      try { await animation.finished; } catch {}
+      activeAnimations.delete(animation);
+      if (token !== runToken || disposed) throw new Error("cancelled");
+    };
+
+    const cycleStation = async (stat, index, token) => {
+      const number = stat.querySelector(".narr__n");
+      if (!number) return;
+      const duration = 150 + index * 5;
+      for (let round = 0; round < 3; round++){
+        await blinkRound(number, duration, token);
+        if (round < 2) await sleep(150 + index * 8);
+        if (token !== runToken || disposed) throw new Error("cancelled");
+      }
+      revealStation(stat);
+      await sleep(REVEAL_MS + index * 10);
+    };
+
+    const constructionBudget = () => {
+      const parseMs = value => {
+        const token = String(value || "").trim();
+        if (token.endsWith("ms")) return parseFloat(token) || 0;
+        if (token.endsWith("s")) return (parseFloat(token) || 0) * 1000;
+        return parseFloat(token) || 0;
+      };
+      let max = 0;
+      stats.forEach(stat => {
+        const n = stat.querySelector(".narr__n");
+        const cs = n ? getComputedStyle(n) : null;
+        const delay = parseMs(stat.style.getPropertyValue("--hero-v2-num-delay"));
+        const duration = cs ? Math.max(...cs.transitionDuration.split(",").map(parseMs)) : 420;
+        max = Math.max(max, delay + duration);
+      });
+      const segs = [...zone.querySelectorAll(".hero-v2-seg")];
+      segs.forEach(seg => {
+        max = Math.max(max,
+          parseMs(seg.style.getPropertyValue("--hero-v2-seg-delay")) +
+          parseMs(seg.style.getPropertyValue("--hero-v2-dur")));
+      });
+      return Math.max(1200, max + 80);
+    };
+
+    const runAutomaticRead = async () => {
+      const token = ++runToken;
+      try {
+        await sleep(constructionBudget() + REST_AFTER_BUILD);
+        if (token !== runToken || disposed || readDiscovered()) return;
+        const order = [...stats].sort((a,b) => Number(b.dataset.step) - Number(a.dataset.step));
+        for (let i = 0; i < order.length; i++){
+          await cycleStation(order[i], i, token);
+          if (i < order.length - 1) await sleep(BETWEEN_STATIONS);
+          if (token !== runToken || disposed || readDiscovered()) return;
+        }
+        home.classList.add("hero-commit01-final");
+      } catch (error) {
+        if (error?.message !== "cancelled") console.error("ARCO hero:", error);
+      }
+    };
 
     const springSettled = () => {
       if (!arc.classList.contains("is-in")) return false;
@@ -213,31 +357,17 @@
       return Number.isFinite(value) ? Math.abs(value) < 0.5 : false;
     };
 
-    const revealLine = () => {
-      if (!gateOpen || !requested || mq.matches) return;
-      if (!home.classList.contains("hero-v2-play")){
-        setPhase("arc-settled");
-        home.classList.add("hero-v2-play");
-        setPhase("line-running");
-      }
-      armLegendRelease();
-    };
-
     const openGate = () => {
-      if (gateOpen) return;
+      if (gateOpen || mq.matches || disposed) return;
       gateOpen = true;
-      springArmed = false;
       if (fallbackTimer) clearTimeout(fallbackTimer);
-      revealLine();
+      fallbackTimer = 0;
+      if (requested && !readDiscovered()) startConstruction();
     };
 
     const armSpring = () => {
-      if (gateOpen || springArmed || !arc.classList.contains("is-in")) return;
-      springArmed = true;
-      if (springSettled()){
-        openGate();
-        return;
-      }
+      if (gateOpen || mq.matches || disposed || !arc.classList.contains("is-in")) return;
+      if (springSettled()) return openGate();
       const finish = event => {
         if (event.target !== spring) return;
         if (event.propertyName && event.propertyName !== "stroke-dashoffset") return;
@@ -247,8 +377,7 @@
       };
       spring.addEventListener("transitionend", finish);
       spring.addEventListener("transitioncancel", finish);
-      const budget = transitionBudget(spring);
-      fallbackTimer = window.setTimeout(openGate, Math.max(60, budget + 80));
+      fallbackTimer = window.setTimeout(openGate, 2200);
     };
 
     const disarmRequest = () => {
@@ -257,35 +386,92 @@
       REQUEST_EVENTS.forEach(type => window.removeEventListener(type, requestNarrative));
     };
 
+    const startConstruction = () => {
+      if (home.classList.contains("hero-v2-play") || mq.matches || readDiscovered()) return;
+      home.classList.add("narr-on","hero-commit01-ready");
+      geometry.layout();
+      requestAnimationFrame(() => {
+        geometry.layout();
+        requestAnimationFrame(() => {
+          home.classList.add("hero-v2-play");
+          runAutomaticRead();
+        });
+      });
+    };
+
     function requestNarrative(){
-      if (mq.matches || requested) return;
+      if (mq.matches || requested || disposed || readDiscovered()) return;
       requested = true;
       disarmRequest();
-      setPhase("arc-requested");
-      home.classList.add("narr-on");
+      home.classList.add("narr-on","hero-commit01-ready");
       geometry.layout();
-      if (gateOpen) revealLine();
+      if (gateOpen) startConstruction();
       else armSpring();
     }
 
     const armRequest = () => {
-      if (reduce || mq.matches || requested || requestArmed) return;
+      if (reduce || mq.matches || requested || requestArmed || readDiscovered()) return;
       requestArmed = true;
       REQUEST_EVENTS.forEach(type => window.addEventListener(type, requestNarrative, {passive:true}));
     };
 
+    stats.forEach(stat => {
+      stat.addEventListener("click", event => {
+        if (mq.matches) return;
+        event.preventDefault();
+        revealAll({persist:true});
+      });
+      stat.addEventListener("keydown", event => {
+        if (mq.matches || (event.key !== "Enter" && event.key !== " ")) return;
+        event.preventDefault();
+        revealAll({persist:true});
+      });
+    });
+
     const arcObserver = new MutationObserver(() => {
       if (arc.classList.contains("is-in")) armSpring();
     });
-    arcObserver.observe(arc, {attributes:true, attributeFilter:["class"]});
+    arcObserver.observe(arc,{attributes:true,attributeFilter:["class"]});
 
-    lockLegends();
-    lockDetails();
-    if (mq.matches) exposeMobileDetails();
+    if (arcade && "IntersectionObserver" in window){
+      const pillarsObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          home.classList.toggle("hero-pillars-visible", entry.isIntersecting);
+        });
+      },{threshold:0,rootMargin:"0px 0px -1px 0px"});
+      pillarsObserver.observe(arcade);
+    }
 
-    if (reduce){
-      home.classList.add("narr-on", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
-      clearLegendLock();
+    const viewObserver = new MutationObserver(() => {
+      if (homeView.dataset.active === "true"){
+        if (readDiscovered() && !mq.matches) revealAll({persist:false});
+        return;
+      }
+      if (!mq.matches){
+        markDiscovered();
+        cancelAnimations();
+      }
+    });
+    viewObserver.observe(homeView,{attributes:true,attributeFilter:["data-active"]});
+
+    if (mq.matches){
+      stats.forEach(stat => {
+        const detail = stat.querySelector(".narr__detail");
+        const button = stat.querySelector("button.narr__n");
+        if (detail){
+          detail.hidden = false;
+          detail.setAttribute("aria-hidden", "false");
+        }
+        button?.setAttribute("aria-expanded", "true");
+      });
+      return;
+    }
+
+    home.classList.add("hero-commit01-ready");
+    geometry.layout();
+
+    if (reduce || readDiscovered()){
+      revealAll({persist:false});
     } else {
       armRequest();
       armSpring();
@@ -294,28 +480,24 @@
     mq.addEventListener?.("change", event => {
       if (event.matches){
         disarmRequest();
-        if (legendTimer) clearTimeout(legendTimer);
-        if (detailTimer) clearTimeout(detailTimer);
-        clearLegendLock();
-        exposeMobileDetails();
+        cancelAnimations();
         return;
       }
-      closeDesktopDetails();
       geometry.layout();
-      if (!detailsReady) lockDetails();
-      if (!legendsReleased) lockLegends();
-      if (reduce){
-        home.classList.add("narr-on", "hero-v2-play", "hero-v2-legends-released", "hero-v2-details-ready");
-        clearLegendLock();
-        return;
+      if (reduce || readDiscovered()) revealAll({persist:false});
+      else {
+        requested = false;
+        gateOpen = springSettled();
+        armRequest();
+        armSpring();
       }
-      if (!requested) armRequest();
-      if (!gateOpen) armSpring();
-      revealLine();
-      if (legendsReleased && !detailsReady) armDetailRelease();
     });
 
-    /* Estado disponível apenas para diagnóstico/teste; não participa do layout. */
-    window.__ARCO_DESKTOP_HERO_STATE__ = () => ({phase, requested, gateOpen, legendsReleased, detailsReady});
+    window.__ARCO_DESKTOP_HERO_STATE__ = () => ({
+      discovered: readDiscovered(),
+      requested,
+      gateOpen,
+      final: home.classList.contains("hero-commit01-final")
+    });
   }
 })();
