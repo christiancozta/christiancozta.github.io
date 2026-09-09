@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script src="./support.js?v=20260831-1"></script>
+<script src="assets/shared/js/support.js?v=20260831-1"></script>
 <title>DATA | Jurimetria</title>
 <meta name="description" content="Camada transversal de jurimetria, evidência operacional e auditoria de dados e indicadores.">
 <meta name="theme-color" content="#FCFCFC">
@@ -15,13 +15,11 @@
 <meta property="og:description" content="Camada transversal de jurimetria, evidência operacional e auditoria de dados e indicadores.">
 <meta property="og:image" content="https://christiancozta.github.io/assets/arco/brand/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=20260909-assets-reorg">
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wdth,wght@0,125,900;1,125,900&family=Azeret+Mono:wght@400;500;600&family=Cause:wght@400;500;600&family=Shantell+Sans:wght@300;400;500;600;700&family=Commissioner:wght@300;400;500;600;700&family=Jura:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -36,11 +34,9 @@ button{font:inherit;color:inherit}
 :root{
   --data-paper:#FCFCFC;
   --data-ink:#0057FF;
-  /* gutter do conteudo: mesma expressao dos paddings inline das secoes.
-     e o que garante que malha e conteudo partam da mesma origem. */
   --data-gx:clamp(20px,5vw,96px);
-  --data-unit:16px;    /* quadricula fina — escala de papel */
-  --data-module:64px;  /* 4 x unit — modulo de layout */
+  --data-unit:16px;
+  --data-module:64px;
   --data-grid-fine:rgba(0,87,255,.055);
   --data-grid-strong:rgba(0,87,255,.125);
   --data-margin-line:rgba(0,87,255,.30);
@@ -49,521 +45,85 @@ button{font:inherit;color:inherit}
 body{
   background-color:var(--data-paper)!important;
   background-image:
-    linear-gradient(to right,
-      transparent 0 calc(var(--data-margin-x) - .5px),
-      var(--data-margin-line) calc(var(--data-margin-x) - .5px),
-      var(--data-margin-line) calc(var(--data-margin-x) + .5px),
-      transparent calc(var(--data-margin-x) + .5px)),
+    linear-gradient(to right,transparent 0 calc(var(--data-margin-x) - .5px),var(--data-margin-line) calc(var(--data-margin-x) - .5px),var(--data-margin-line) calc(var(--data-margin-x) + .5px),transparent calc(var(--data-margin-x) + .5px)),
     linear-gradient(to right,var(--data-grid-strong) 1px,transparent 1px),
     linear-gradient(to bottom,var(--data-grid-strong) 1px,transparent 1px),
     linear-gradient(to right,var(--data-grid-fine) 1px,transparent 1px),
     linear-gradient(to bottom,var(--data-grid-fine) 1px,transparent 1px)!important;
-  background-size:
-    100% 100%,
-    var(--data-module) var(--data-module),
-    var(--data-module) var(--data-module),
-    var(--data-unit) var(--data-unit),
-    var(--data-unit) var(--data-unit)!important;
-  background-position:
-    0 0,
-    var(--data-gx) 0,
-    var(--data-gx) 0,
-    var(--data-gx) 0,
-    var(--data-gx) 0!important;
+  background-size:100% 100%,var(--data-module) var(--data-module),var(--data-module) var(--data-module),var(--data-unit) var(--data-unit),var(--data-unit) var(--data-unit)!important;
+  background-position:0 0,var(--data-gx) 0,var(--data-gx) 0,var(--data-gx) 0,var(--data-gx) 0!important;
   background-repeat:repeat!important;
 }
-
-/* Only the RASTRO and LASTRO title bands remain full-bleed section changes. */
-#topo{
-  background:transparent!important;
-  color:#181818!important;
-}
-#topo>div:first-child>div:first-child>p:first-child{
-  color:#181818!important;
-  opacity:.62!important;
-}
-#h-data{color:#0057FF!important;}
-#topo>div:first-child>div:first-child>p:last-child{color:#181818!important;}
-
-#rastro>div:nth-of-type(3){
-  background:transparent!important;
-  color:#181818!important;
-}
-#rastro>div:nth-of-type(3) [style*="color:rgba(252,252,252"],
-  #rastro>div:nth-of-type(3) [style*="color: rgba(252, 252, 252"]{color:#6E6E6A!important;}
-#rastro>div:nth-of-type(3) [style*="color:#FCFCFC"],
-  #rastro>div:nth-of-type(3) [style*="color: rgb(252, 252, 252)"]{color:#181818!important;}
-#rastro>div:nth-of-type(3) [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
-#rastro>div:nth-of-type(3) [role="row"]>span{color:#181818!important;}
-#rastro>div:nth-of-type(3) [role="row"]>span:first-child{color:#0057FF!important;}
-#rastro>div:nth-of-type(3) button[aria-pressed="true"]{
-  color:#181818!important;
-  border-bottom-color:#0057FF!important;
-}
-#rastro>div:nth-of-type(3) button[aria-pressed="false"]{color:#6E6E6A!important;}
-#rastro>div:nth-of-type(3) [role="row"]:hover{background:rgba(0,87,255,.045)!important;}
-
-#lastro>div:nth-of-type(2){
-  background:transparent!important;
-  color:#181818!important;
-}
-#lastro>div:nth-of-type(2) [style*="color:rgba(252,252,252"],
-  #lastro>div:nth-of-type(2) [style*="color: rgba(252, 252, 252"]{color:#5F5F5B!important;}
-#lastro>div:nth-of-type(2) [style*="color:#FCFCFC"],
-  #lastro>div:nth-of-type(2) [style*="color: rgb(252, 252, 252)"]{color:#181818!important;}
-#lastro>div:nth-of-type(2) [style*="color:#0057FF"],
-  #lastro>div:nth-of-type(2) [style*="color: rgb(0, 87, 255)"]{color:#0057FF!important;}
-#lastro>div:nth-of-type(2) [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
-#lastro>div:nth-of-type(2) [style*="background:#FCFCFC"],
-  #lastro>div:nth-of-type(2) [style*="background: rgb(252, 252, 252)"]{background:#181818!important;}
-#lastro>div:nth-of-type(2) [style*="repeating-linear-gradient"]{
-  background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(24,24,24,.18) 4px 8px)!important;
-}
-
-footer{
-  background:transparent!important;
-  color:#181818!important;
-}
-footer [style*="color:rgba(252,252,252"],
-  footer [style*="color: rgba(252, 252, 252"]{color:#6E6E6A!important;}
-footer [style*="color:#0057FF"],
-  footer [style*="color: rgb(0, 87, 255)"]{color:#0057FF!important;}
-footer [style*="border"]{border-color:rgba(24,24,24,.24)!important;}
-footer a:hover{color:#181818!important;}
-
-
-/* ============================================================
-   DATA_PAPEL_TECNICO_20260902
-   Um so sistema de pauta por regiao. Dois idiomas declarados:
-     A · colado no papel  — o objeto de dado vira ficha opaca; a malha some.
-     B · escrito no papel — o objeto abandona a pauta propria; a malha e a pauta.
-   ============================================================ */
-
-/* --- A · fichas coladas: tudo que ja tem regua propria -------------------- */
-#rastro figure,
-#lastro figure,
-#rastro div[style*="overflow-x: auto"],
-#lastro div[style*="overflow-x: auto"],
-#rastro div[style*="minmax(280px, 1fr)"]{
-  border-top:0!important;
-  position:relative!important;
-  z-index:1!important;
-  background-color:var(--data-paper)!important;
-  box-shadow:0 0 0 1px rgba(0,87,255,.16),0 16px 38px -26px rgba(24,24,24,.55)!important;
-  padding:clamp(16px,2.2vw,28px)!important;
-}
-
-/* --- B · escrito no papel: bloco de fila (13,2 / 6,9 dias) ---------------- */
-#rastro div[style*="minmax(300px, 1fr)"]{border-top:0!important;}
-#rastro div[style*="minmax(300px, 1fr)"]>div{
-  border-bottom:0!important;
-  border-left:0!important;
-}
-#rastro div[style*="minmax(300px, 1fr)"] div[style*="height: 22px"]{
-  height:var(--data-unit)!important;
-  margin-top:calc(var(--data-unit)*1.5)!important;
-  background-image:repeating-linear-gradient(to right,
-    rgba(252,252,252,.5) 0 1px,transparent 1px var(--data-unit))!important;
-}
-@media(min-width:1000px){
-  /* escala declarada: 1 quadricula = 0,5 dia */
-  #rastro div[style*="minmax(300px, 1fr)"]>div:first-child div[style*="height: 22px"]{
-    width:calc(var(--data-unit)*26.4)!important;   /* 13,2 dias */
-  }
-  #rastro div[style*="minmax(300px, 1fr)"]>div:last-child div[style*="height: 22px"]{
-    width:calc(var(--data-unit)*13.8)!important;   /* 6,9 dias */
-  }
-}
-@media(max-width:999px){
-  /* abaixo disso as barras voltam a ser proporcionais: a escala nao vale */
-  #escala-fila{display:none!important;}
-}
-
-
-/* ============================================================
-   DATA_TIPOGRAFIA_20260902
-   DATA rompe deliberadamente o padrao de ARCO, ECHO e ATRIO.
-   Anybody manifesta. Azeret organiza. Cause explica.
-   Jura mede. Commissioner conecta — e o elo fica no overlay.
-   ============================================================ */
-:root{
-  --data-display:'Anybody',system-ui,sans-serif;
-  --data-titulo:'Jura',ui-monospace,monospace;
-  --data-corpo:'Cause','Commissioner',system-ui,sans-serif;
-  --data-micro:'Azeret Mono',ui-monospace,monospace;
-  --data-numero:'Jura',ui-monospace,monospace;
-  --data-elo:'Commissioner',system-ui,sans-serif;
-  --dt-rotulo:94px;
-}
-
-/* CORPO — Cause 500 e a voz textual corrente de DATA. */
+#topo{background:transparent!important;color:#181818!important}
+#topo>div:first-child>div:first-child>p:first-child{color:#181818!important;opacity:.62!important}
+#h-data{color:#0057FF!important}
+#topo>div:first-child>div:first-child>p:last-child{color:#181818!important}
+#rastro>div:nth-of-type(3){background:transparent!important;color:#181818!important}
+#rastro>div:nth-of-type(3) [style*="color:rgba(252,252,252"],#rastro>div:nth-of-type(3) [style*="color: rgba(252, 252, 252"]{color:#6E6E6A!important}
+#rastro>div:nth-of-type(3) [style*="color:#FCFCFC"],#rastro>div:nth-of-type(3) [style*="color: rgb(252, 252, 252)"]{color:#181818!important}
+#rastro>div:nth-of-type(3) [style*="border"]{border-color:rgba(24,24,24,.24)!important}
+#rastro>div:nth-of-type(3) [role="row"]>span{color:#181818!important}
+#rastro>div:nth-of-type(3) [role="row"]>span:first-child{color:#0057FF!important}
+#rastro>div:nth-of-type(3) button[aria-pressed="true"]{color:#181818!important;border-bottom-color:#0057FF!important}
+#rastro>div:nth-of-type(3) button[aria-pressed="false"]{color:#6E6E6A!important}
+#rastro>div:nth-of-type(3) [role="row"]:hover{background:rgba(0,87,255,.045)!important}
+#lastro>div:nth-of-type(2){background:transparent!important;color:#181818!important}
+#lastro>div:nth-of-type(2) [style*="color:rgba(252,252,252"],#lastro>div:nth-of-type(2) [style*="color: rgba(252, 252, 252"]{color:#5F5F5B!important}
+#lastro>div:nth-of-type(2) [style*="color:#FCFCFC"],#lastro>div:nth-of-type(2) [style*="color: rgb(252, 252, 252)"]{color:#181818!important}
+#lastro>div:nth-of-type(2) [style*="color:#0057FF"],#lastro>div:nth-of-type(2) [style*="color: rgb(0, 87, 255)"]{color:#0057FF!important}
+#lastro>div:nth-of-type(2) [style*="border"]{border-color:rgba(24,24,24,.24)!important}
+#lastro>div:nth-of-type(2) [style*="background:#FCFCFC"],#lastro>div:nth-of-type(2) [style*="background: rgb(252, 252, 252)"]{background:#181818!important}
+#lastro>div:nth-of-type(2) [style*="repeating-linear-gradient"]{background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(24,24,24,.18) 4px 8px)!important}
+footer{background:transparent!important;color:#181818!important}
+footer [style*="color:rgba(252,252,252"],footer [style*="color: rgba(252, 252, 252"]{color:#6E6E6A!important}
+footer [style*="color:#0057FF"],footer [style*="color: rgb(0, 87, 255)"]{color:#0057FF!important}
+footer [style*="border"]{border-color:rgba(24,24,24,.24)!important}
+footer a:hover{color:#181818!important}
+#rastro figure,#lastro figure,#rastro div[style*="overflow-x: auto"],#lastro div[style*="overflow-x: auto"],#rastro div[style*="minmax(280px, 1fr)"]{border-top:0!important;position:relative!important;z-index:1!important;background-color:var(--data-paper)!important;box-shadow:0 0 0 1px rgba(0,87,255,.16),0 16px 38px -26px rgba(24,24,24,.55)!important;padding:clamp(16px,2.2vw,28px)!important}
+#rastro div[style*="minmax(300px, 1fr)"]{border-top:0!important}
+#rastro div[style*="minmax(300px, 1fr)"]>div{border-bottom:0!important;border-left:0!important}
+#rastro div[style*="minmax(300px, 1fr)"] div[style*="height: 22px"]{height:var(--data-unit)!important;margin-top:calc(var(--data-unit)*1.5)!important;background-image:repeating-linear-gradient(to right,rgba(252,252,252,.5) 0 1px,transparent 1px var(--data-unit))!important}
+@media(min-width:1000px){#rastro div[style*="minmax(300px, 1fr)"]>div:first-child div[style*="height: 22px"]{width:calc(var(--data-unit)*26.4)!important}#rastro div[style*="minmax(300px, 1fr)"]>div:last-child div[style*="height: 22px"]{width:calc(var(--data-unit)*13.8)!important}}
+@media(max-width:999px){#escala-fila{display:none!important}}
+:root{--data-display:'Anybody',system-ui,sans-serif;--data-titulo:'Jura',ui-monospace,monospace;--data-corpo:'Cause','Commissioner',system-ui,sans-serif;--data-micro:'Azeret Mono',ui-monospace,monospace;--data-numero:'Jura',ui-monospace,monospace;--data-elo:'Commissioner',system-ui,sans-serif;--dt-rotulo:94px}
 body{font-family:var(--data-corpo)!important;font-weight:500!important}
-
-/* MICRO — Azeret Mono inscreve o instrumental: labels, indices, categorias,
-   unidades, legendas tecnicas, metadata e controles. Todo o Azeret inline do
-   documento ja ocupava esses papeis; permanece onde estava. */
-[style*="Azeret Mono"]{
-  font-family:var(--data-micro)!important;
-}
-
-/* NUMEROS — Jura 700 mede: percentuais, volumes, contagens, metricas,
-   escalas, valores de grafico e indicadores. A marca deles no documento
-   e o font-variant-numeric declarado. */
-[style*="tabular-nums"]{
-  font-family:var(--data-numero)!important;
-  font-weight:700!important;
-}
-/* Jura tem olho mais largo que Azeret: as compressoes herdadas afrouxam. */
-[style*="tabular-nums"][style*="letter-spacing: -"],
-[style*="tabular-nums"][style*="letter-spacing:-"]{letter-spacing:-.025em!important}
-
-/* TITULOS — Jura 700 organiza a estrutura. Sao as frases-guia dos blocos,
-   os unicos textos declarados em font-weight:300 no documento. */
-[style*="font-weight: 300"],
-[style*="font-weight:300"]{
-  font-family:var(--data-titulo)!important;
-  font-weight:700!important;
-  letter-spacing:-.02em!important;
-}
-/* subtitulos estruturais de escala media */
-#lastro [style*="font-size: clamp(1.05rem, 1.7vw, 1.3rem)"],
-#lastro [style*="font-size:clamp(1.05rem,1.7vw,1.3rem)"]{
-  font-family:var(--data-titulo)!important;
-  font-weight:700!important;
-  letter-spacing:-.015em!important;
-}
-
-
-/* ============================================================
-   DATA_HERO_20260902B — fechamento da hero
-   A maquina toma a altura do palco e sangra 5svh na base.
-   DATA no meio vertical do palco, encostado a esquerda.
-   ============================================================ */
-#topo{
-  position:relative!important;
-  overflow:hidden!important;
-  /* o palco e a secao inteira: post-it, anotacao e saidas moram dentro dele.
-     o gutter horizontal serve de referencia a esses tres; o palco rompe. */
-  padding:0 clamp(20px,5vw,96px)!important;
-}
-/* o antigo bloco de metadados perde a caixa: sobrou so o que virou objeto */
-#topo>div:nth-child(2),
-#topo>div:nth-child(2)>div{display:contents!important}
-#topo>div:first-child{
-  display:block!important;
-  position:relative!important;
-  overflow:hidden!important;
-  height:100svh!important;
-  min-height:600px!important;
-  margin:0 calc(-1 * clamp(20px,5vw,96px))!important;
-  gap:0!important;
-}
-
-#topo>div:first-child>div:first-child{
-  position:absolute!important;
-  top:0!important;bottom:0!important;right:auto!important;
-  left:clamp(20px,5vw,96px)!important;
-  z-index:2!important;
-  display:flex!important;
-  flex-direction:column!important;
-  justify-content:center!important;
-  width:min(46vw,720px)!important;
-  /* o eixo do meio e o da palavra DATA, nao o do grupo: com a triade acima,
-     a reserva passa para baixo. */
-  padding:0 0 clamp(58px,10.5vh,108px)!important;
-}
-/* a triade abre a pilha, com respiro ate o logotipo */
-#topo>div:first-child>div:first-child>p:first-child{
-  margin:0 0 clamp(30px,5vh,62px)!important;
-  font-family:var(--data-micro)!important;
-  font-weight:500!important;
-  font-size:clamp(10px,.84vw,13px)!important;
-  line-height:1.9!important;
-  letter-spacing:.24em!important;
-  color:#181818!important;
-  opacity:.86!important;
-  white-space:nowrap!important;
-  text-transform:uppercase!important;
-}
-#h-data{
-  margin:0!important;
-  font-family:var(--data-display)!important;
-  font-weight:900!important;
-  font-style:italic!important;
-  font-stretch:125%!important;
-  font-size:clamp(5.4rem,12.4vw,12rem)!important;
-  line-height:.76!important;
-  letter-spacing:-.045em!important;
-  color:#0057FF!important;
-  text-transform:uppercase!important;
-}
-/* MICRO — camada transversal de jurimetria, em Jura, colada ao logotipo */
-#topo>div:first-child>div:first-child>p:last-child{
-  margin:clamp(8px,1.3vh,16px) 0 0!important;
-  font-family:var(--data-titulo)!important;
-  font-weight:700!important;
-  font-size:clamp(10px,.84vw,13px)!important;
-  line-height:1.4!important;
-  letter-spacing:.30em!important;
-  color:#181818!important;
-  opacity:.72!important;
-  white-space:normal!important;
-  text-transform:uppercase!important;
-}
-/* a maquina: ancorada a direita, altura do palco, 5svh fora da base */
-#topo>div:first-child>div:nth-child(2){
-  position:absolute!important;
-  inset:0!important;
-  z-index:1!important;
-  display:block!important;
-  min-width:0!important;
-  margin:0!important;
-  overflow:visible!important;
-  pointer-events:none!important;
-}
-#topo>div:first-child>div:nth-child(2)>img{
-  position:absolute!important;
-  top:auto!important;left:auto!important;
-  right:0!important;
-  bottom:-5svh!important;
-  /* 0.7707 = 978/1269, a proporcao da gravura.
-     a largura cede primeiro em tela baixa e larga; a altura, em tela alta. */
-  width:min(53vw,calc(105svh * 0.7707))!important;
-  height:auto!important;
-  max-width:none!important;
-  object-fit:contain!important;
-  transform:none!important;
-  mix-blend-mode:normal!important;
-}
-@media(max-width:820px){
-  #topo>div:first-child{height:auto!important;min-height:100svh!important}
-  #topo>div:first-child>div:nth-child(2){height:auto!important}
-  #topo>div:first-child>div:first-child{
-    position:relative!important;
-    top:auto!important;bottom:auto!important;left:auto!important;
-    width:auto!important;
-    padding:clamp(184px,26vh,240px) clamp(20px,5vw,96px) 0!important;
-    justify-content:flex-start!important;
-  }
-  #topo>div:first-child>div:nth-child(2)>img{
-    right:-7vw!important;
-    bottom:-2svh!important;
-    /* em coluna a maquina vira faixa de base: cede altura para o texto respirar */
-    width:min(94vw,calc(58svh * 0.7707))!important;
-  }
-}
-
-
-/* ============================================================
-   DATA_BILHETES_20260903
-   Um post-it discreto, preso so pela faixa de cola, e duas saidas
-   rentes ao canto inferior direito da gravura.
-   ============================================================ */
-
-/* --- post-it: a base do calculo, no canto inferior esquerdo do palco ------ */
-#topo dl{
-  position:absolute!important;
-  z-index:3!important;
-  top:clamp(22px,4.5svh,58px)!important;
-  left:clamp(196px,26vw,430px)!important;
-  display:block!important;
-  width:min(238px,58vw)!important;
-  margin:0!important;
-  padding:26px 15px 14px!important;
-  border:0!important;
-  border-top:0!important;
-  /* a faixa de cola em #FFB627 e a unica parte presa; o corpo e o mesmo
-     matiz em tinta clara, escurecendo so na aba que descolou */
-  background:
-    linear-gradient(180deg,#FFB627 0,#FFB627 15px,rgba(24,24,24,.06) 15px,rgba(24,24,24,.06) 16px,transparent 16px),
-    linear-gradient(180deg,#FFF3DC 0%,#FFF3DC 82%,#FCE9C1 94%,#F7DFAC 100%)!important;
-  box-shadow:0 1px 2px rgba(24,24,24,.05),0 12px 20px -16px rgba(24,24,24,.28)!important;
-  /* preso so em cima: o eixo de giro fica na aba colada e a base levanta */
-  transform:perspective(860px) rotateX(1.6deg) rotate(-.9deg)!important;
-  transform-origin:50% 0!important;
-  font-family:'Shantell Sans',ui-rounded,cursive!important;
-  color:#181818!important;
-}
-#topo dl::after{
-  content:'';
-  position:absolute;
-  z-index:-1;
-  left:6%;
-  right:6%;
-  bottom:-5px;
-  height:12px;
-  background:rgba(24,24,24,.18);
-  filter:blur(9px);
-  border-radius:50%;
-}
-#topo dl>div{
-  display:flex!important;
-  align-items:baseline!important;
-  justify-content:space-between!important;
-  gap:14px!important;
-  padding:3px 0!important;
-}
+[style*="Azeret Mono"]{font-family:var(--data-micro)!important}
+[style*="tabular-nums"]{font-family:var(--data-numero)!important;font-weight:700!important}
+[style*="tabular-nums"][style*="letter-spacing: -"],[style*="tabular-nums"][style*="letter-spacing:-"]{letter-spacing:-.025em!important}
+[style*="font-weight: 300"],[style*="font-weight:300"]{font-family:var(--data-titulo)!important;font-weight:700!important;letter-spacing:-.02em!important}
+#lastro [style*="font-size: clamp(1.05rem, 1.7vw, 1.3rem)"],#lastro [style*="font-size:clamp(1.05rem,1.7vw,1.3rem)"]{font-family:var(--data-titulo)!important;font-weight:700!important;letter-spacing:-.015em!important}
+#topo{position:relative!important;overflow:hidden!important;padding:0 clamp(20px,5vw,96px)!important}
+#topo>div:nth-child(2),#topo>div:nth-child(2)>div{display:contents!important}
+#topo>div:first-child{display:block!important;position:relative!important;overflow:hidden!important;height:100svh!important;min-height:600px!important;margin:0 calc(-1 * clamp(20px,5vw,96px))!important;gap:0!important}
+#topo>div:first-child>div:first-child{position:absolute!important;top:0!important;bottom:0!important;right:auto!important;left:clamp(20px,5vw,96px)!important;z-index:2!important;display:flex!important;flex-direction:column!important;justify-content:center!important;width:min(46vw,720px)!important;padding:0 0 clamp(58px,10.5vh,108px)!important}
+#topo>div:first-child>div:first-child>p:first-child{margin:0 0 clamp(30px,5vh,62px)!important;font-family:var(--data-micro)!important;font-weight:500!important;font-size:clamp(10px,.84vw,13px)!important;line-height:1.9!important;letter-spacing:.24em!important;color:#181818!important;opacity:.86!important;white-space:nowrap!important;text-transform:uppercase!important}
+#h-data{margin:0!important;font-family:var(--data-display)!important;font-weight:900!important;font-style:italic!important;font-stretch:125%!important;font-size:clamp(5.4rem,12.4vw,12rem)!important;line-height:.76!important;letter-spacing:-.045em!important;color:#0057FF!important;text-transform:uppercase!important}
+#topo>div:first-child>div:first-child>p:last-child{margin:clamp(8px,1.3vh,16px) 0 0!important;font-family:var(--data-titulo)!important;font-weight:700!important;font-size:clamp(10px,.84vw,13px)!important;line-height:1.4!important;letter-spacing:.30em!important;color:#181818!important;opacity:.72!important;white-space:normal!important;text-transform:uppercase!important}
+#topo>div:first-child>div:nth-child(2){position:absolute!important;inset:0!important;z-index:1!important;display:block!important;min-width:0!important;margin:0!important;overflow:visible!important;pointer-events:none!important}
+#topo>div:first-child>div:nth-child(2)>img{position:absolute!important;top:auto!important;left:auto!important;right:0!important;bottom:-5svh!important;width:min(53vw,calc(105svh * 0.7707))!important;height:auto!important;max-width:none!important;object-fit:contain!important;transform:none!important;mix-blend-mode:normal!important}
+@media(max-width:820px){#topo>div:first-child{height:auto!important;min-height:100svh!important}#topo>div:first-child>div:nth-child(2){height:auto!important}#topo>div:first-child>div:first-child{position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;width:auto!important;padding:clamp(184px,26vh,240px) clamp(20px,5vw,96px) 0!important;justify-content:flex-start!important}#topo>div:first-child>div:nth-child(2)>img{right:-7vw!important;bottom:-2svh!important;width:min(94vw,calc(58svh * 0.7707))!important}}
+#topo dl{position:absolute!important;z-index:3!important;top:clamp(22px,4.5svh,58px)!important;left:clamp(196px,26vw,430px)!important;display:block!important;width:min(238px,58vw)!important;margin:0!important;padding:26px 15px 14px!important;border:0!important;border-top:0!important;background:linear-gradient(180deg,#FFB627 0,#FFB627 15px,rgba(24,24,24,.06) 15px,rgba(24,24,24,.06) 16px,transparent 16px),linear-gradient(180deg,#FFF3DC 0%,#FFF3DC 82%,#FCE9C1 94%,#F7DFAC 100%)!important;box-shadow:0 1px 2px rgba(24,24,24,.05),0 12px 20px -16px rgba(24,24,24,.28)!important;transform:perspective(860px) rotateX(1.6deg) rotate(-.9deg)!important;transform-origin:50% 0!important;font-family:'Shantell Sans',ui-rounded,cursive!important;color:#181818!important}
+#topo dl::after{content:'';position:absolute;z-index:-1;left:6%;right:6%;bottom:-5px;height:12px;background:rgba(24,24,24,.18);filter:blur(9px);border-radius:50%}
+#topo dl>div{display:flex!important;align-items:baseline!important;justify-content:space-between!important;gap:14px!important;padding:3px 0!important}
 #topo dl>div+div{border-top:1px solid rgba(24,24,24,.09)!important}
-#topo dl dt{
-  font-family:'Shantell Sans',ui-rounded,cursive!important;
-  font-weight:300!important;
-  font-size:11.5px!important;
-  line-height:1.45!important;
-  letter-spacing:0!important;
-  text-transform:lowercase!important;
-  color:rgba(24,24,24,.38)!important;
-}
-#topo dl dd{
-  margin:0!important;
-  font-family:'Shantell Sans',ui-rounded,cursive!important;
-  /* 300 e o minimo do eixo: abaixo disso so reduzindo a tinta */
-  font-weight:300!important;
-  font-size:12.5px!important;
-  line-height:1.45!important;
-  letter-spacing:0!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-  color:rgba(24,24,24,.72)!important;
-}
-
-/* --- saidas: rentes ao canto inferior direito da coluna da gravura ------- */
-#topo [data-saidas]{
-  position:absolute!important;
-  z-index:3!important;
-  top:calc(100svh - clamp(58px,7.4svh,78px))!important;
-  bottom:auto!important;
-  left:auto!important;
-  right:clamp(12px,2.2vw,40px)!important;
-  display:flex!important;
-  gap:6px!important;
-  width:auto!important;
-  padding:0!important;
-  border:0!important;
-}
-#topo [data-saidas] a{
-  display:flex!important;
-  align-items:center!important;
-  gap:9px!important;
-  padding:7px 11px!important;
-  background:#181818!important;
-  color:#FCFCFC!important;
-  font-size:8.5px!important;
-  letter-spacing:.12em!important;
-  white-space:nowrap!important;
-  /* pousam sobre a tinta da gravura: o filete claro devolve a aresta */
-  box-shadow:0 0 0 1px rgba(252,252,252,.9)!important;
-  transition:background .18s cubic-bezier(.32,.72,0,1),transform .18s cubic-bezier(.32,.72,0,1);
-}
-#topo [data-saidas] a>span{font-size:11px!important}
-#topo [data-saidas] a:hover{background:#0057FF!important}
-#topo [data-saidas] a:active{transform:translateY(1px)!important}
-#topo [data-saidas] a:focus-visible{outline:2px solid #0057FF!important;outline-offset:3px!important}
-#topo [data-saidas]{
-  left:clamp(20px,5vw,96px)!important;
-  right:auto!important;
-  justify-content:flex-start!important;
-}
-
-/* --- faixas de titulo: a altura vinha do respiro, nao do corpo ----------- */
-#rastro>div:first-of-type,
-#lastro>div:first-of-type{
-  gap:clamp(10px,1.4vh,18px) clamp(20px,4vw,72px)!important;
-  padding:clamp(24px,3.4vh,44px) clamp(20px,5vw,96px) clamp(20px,2.8vh,36px)!important;
-}
-#rastro>div:first-of-type>p,
-#lastro>div:first-of-type>p{
-  font-size:clamp(1rem,1.5vw,1.36rem)!important;
-  line-height:1.16!important;
-}
-
-@media(max-width:820px){
-  #topo{padding-bottom:clamp(34px,6vh,64px)!important}
-  #topo dl{
-    position:static!important;
-    top:auto!important;left:auto!important;
-    width:min(238px,66vw)!important;
-    margin:26px 0 0!important;
-  }
-  #topo [data-saidas] a{box-shadow:none!important;padding:10px 14px!important;font-size:9.5px!important}
-  #topo [data-saidas]{
-    position:static!important;
-    right:auto!important;top:auto!important;bottom:auto!important;
-    margin-top:22px!important;
-    gap:10px!important;
-    flex-wrap:wrap!important;
-  }
-}
-@media(prefers-reduced-motion:reduce){
-  #topo dl{transform:none!important}
-}
-
-
-/* ============================================================
-   DATA_OVERLAY_20260902 — a evidencia emerge do proprio dado
-   Sem card flutuante: o overlay trava na malha e sobe de dentro
-   da celula do dado. Uma ocorrencia = uma linha.
-   RASTRO (fonte) em #0057FF. LASTRO (calculo, recorte, fundamento,
-   limite) em #181818 com o titulo em #0057FF.
-   ============================================================ */
-@keyframes dt-sobe{
-  from{opacity:0;transform:translateY(8px) scaleY(.9)}
-  to{opacity:1;transform:none}
-}
-#dt{
-  position:fixed!important;
-  left:0;top:0;z-index:90;
-  display:none;
-  max-width:none;
-  padding:0;
-  background:#181818;
-  color:#FCFCFC;
-  /* o filete claro separa o overlay quando ele sobe dentro do bloco #181818 */
-  box-shadow:0 0 0 1px rgba(252,252,252,.20),0 18px 40px -28px rgba(24,24,24,.85);
-  pointer-events:none;
-  transform-origin:50% 100%;
-  animation:dt-sobe .18s cubic-bezier(.32,.72,0,1) both;
-}
-#dt .dt-linha{
-  display:grid;
-  grid-template-columns:var(--dt-rotulo) minmax(0,1fr);
-  gap:0 14px;
-  align-items:baseline;
-  padding:5px 14px 6px;
-  border-top:1px solid rgba(252,252,252,.14);
-}
-#dt .dt-linha:first-child,
-#dt .dt-rastro,
-#dt .dt-rastro+.dt-linha{border-top:0}
-#dt .dt-linha>b{
-  font-family:var(--data-elo)!important;
-  font-weight:700;
-  font-size:8.5px;
-  line-height:1.7;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  color:#0057FF;
-}
-#dt .dt-linha>em{
-  font-family:var(--data-numero)!important;
-  font-weight:700;
-  font-style:normal;
-  font-size:11px;
-  line-height:1.5;
-  letter-spacing:.005em;
-  color:#FCFCFC;
-  overflow-wrap:anywhere;
-}
-#dt .dt-rastro{background:#0057FF}
-#dt .dt-rastro>b,#dt .dt-rastro>em{color:#FCFCFC}
-[data-datum]{scroll-margin:96px}
-[data-datum]:focus-visible{outline:2px solid #0057FF;outline-offset:3px}
-@media(prefers-reduced-motion:reduce){
-  #dt{animation:none}
-}
-
+#topo dl dt{font-family:'Shantell Sans',ui-rounded,cursive!important;font-weight:300!important;font-size:11.5px!important;line-height:1.45!important;letter-spacing:0!important;text-transform:lowercase!important;color:rgba(24,24,24,.38)!important}
+#topo dl dd{margin:0!important;font-family:'Shantell Sans',ui-rounded,cursive!important;font-weight:300!important;font-size:12.5px!important;line-height:1.45!important;letter-spacing:0!important;text-align:right!important;white-space:nowrap!important;color:rgba(24,24,24,.72)!important}
+#topo [data-saidas]{position:absolute!important;z-index:3!important;top:calc(100svh - clamp(58px,7.4svh,78px))!important;bottom:auto!important;left:clamp(20px,5vw,96px)!important;right:auto!important;display:flex!important;gap:6px!important;width:auto!important;padding:0!important;border:0!important;justify-content:flex-start!important}
+#topo [data-saidas] a{display:flex!important;align-items:center!important;gap:9px!important;padding:7px 11px!important;background:#181818!important;color:#FCFCFC!important;font-size:8.5px!important;letter-spacing:.12em!important;white-space:nowrap!important;box-shadow:0 0 0 1px rgba(252,252,252,.9)!important;transition:background .18s cubic-bezier(.32,.72,0,1),transform .18s cubic-bezier(.32,.72,0,1)}
+#topo [data-saidas] a>span{font-size:11px!important}#topo [data-saidas] a:hover{background:#0057FF!important}#topo [data-saidas] a:active{transform:translateY(1px)!important}#topo [data-saidas] a:focus-visible{outline:2px solid #0057FF!important;outline-offset:3px!important}
+#rastro>div:first-of-type,#lastro>div:first-of-type{gap:clamp(10px,1.4vh,18px) clamp(20px,4vw,72px)!important;padding:clamp(24px,3.4vh,44px) clamp(20px,5vw,96px) clamp(20px,2.8vh,36px)!important}
+#rastro>div:first-of-type>p,#lastro>div:first-of-type>p{font-size:clamp(1rem,1.5vw,1.36rem)!important;line-height:1.16!important}
+@media(max-width:820px){#topo{padding-bottom:clamp(34px,6vh,64px)!important}#topo dl{position:static!important;top:auto!important;left:auto!important;width:min(238px,66vw)!important;margin:26px 0 0!important}#topo [data-saidas] a{box-shadow:none!important;padding:10px 14px!important;font-size:9.5px!important}#topo [data-saidas]{position:static!important;right:auto!important;top:auto!important;bottom:auto!important;margin-top:22px!important;gap:10px!important;flex-wrap:wrap!important}}
+@media(prefers-reduced-motion:reduce){#topo dl{transform:none!important}}
+@keyframes dt-sobe{from{opacity:0;transform:translateY(8px) scaleY(.9)}to{opacity:1;transform:none}}
+#dt{position:fixed!important;left:0;top:0;z-index:90;display:none;max-width:none;padding:0;background:#181818;color:#FCFCFC;box-shadow:0 0 0 1px rgba(252,252,252,.20),0 18px 40px -28px rgba(24,24,24,.85);pointer-events:none;transform-origin:50% 100%;animation:dt-sobe .18s cubic-bezier(.32,.72,0,1) both}
+#dt .dt-linha{display:grid;grid-template-columns:var(--dt-rotulo) minmax(0,1fr);gap:0 14px;align-items:baseline;padding:5px 14px 6px;border-top:1px solid rgba(252,252,252,.14)}
+#dt .dt-linha:first-child,#dt .dt-rastro,#dt .dt-rastro+.dt-linha{border-top:0}
+#dt .dt-linha>b{font-family:var(--data-elo)!important;font-weight:700;font-size:8.5px;line-height:1.7;letter-spacing:.13em;text-transform:uppercase;color:#0057FF}
+#dt .dt-linha>em{font-family:var(--data-numero)!important;font-weight:700;font-style:normal;font-size:11px;line-height:1.5;letter-spacing:.005em;color:#FCFCFC;overflow-wrap:anywhere}
+#dt .dt-rastro{background:#0057FF}#dt .dt-rastro>b,#dt .dt-rastro>em{color:#FCFCFC}[data-datum]{scroll-margin:96px}[data-datum]:focus-visible{outline:2px solid #0057FF;outline-offset:3px}@media(prefers-reduced-motion:reduce){#dt{animation:none}}
 </style>
 </helmet>
-
 <section id="topo" aria-labelledby="h-data" style="position:relative;overflow:hidden;padding:clamp(48px,8vh,104px) clamp(20px,5vw,96px) clamp(48px,7vh,96px)">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(24px,4vw,72px);align-items:center">
     <div>
@@ -610,12 +170,8 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
       <span style="font:500 9.5px/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">VER</span>
       <sc-for list="{{ metricas }}" as="mt" hint-placeholder-count="3">
         <span>
-          <sc-if value="{{ mt.on }}" hint-placeholder-val="{{ false }}">
-            <button type="button" onClick="{{ mt.pick }}" aria-pressed="true" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#181818;border-bottom:2px solid #0057FF">{{ mt.rotulo }}</button>
-          </sc-if>
-          <sc-if value="{{ mt.off }}" hint-placeholder-val="{{ true }}">
-            <button type="button" onClick="{{ mt.pick }}" aria-pressed="false" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:500 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86;border-bottom:2px solid transparent" style-hover="color:#181818">{{ mt.rotulo }}</button>
-          </sc-if>
+          <sc-if value="{{ mt.on }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ mt.pick }}" aria-pressed="true" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#181818;border-bottom:2px solid #0057FF">{{ mt.rotulo }}</button></sc-if>
+          <sc-if value="{{ mt.off }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ mt.pick }}" aria-pressed="false" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:500 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86;border-bottom:2px solid transparent" style-hover="color:#181818">{{ mt.rotulo }}</button></sc-if>
         </span>
       </sc-for>
     </div>
@@ -625,328 +181,72 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
         <sc-for list="{{ barras }}" as="b" hint-placeholder-count="7">
           <div style="display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-width:0">
             <span style="display:block;margin-bottom:10px;font:600 clamp(11px,1.25vw,17px)/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap">{{ b.texto }}</span>
-            <sc-if value="{{ b.cheia }}" hint-placeholder-val="{{ true }}">
-              <div tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};background:#0057FF;outline:0;cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
-            </sc-if>
-            <sc-if value="{{ b.vazada }}" hint-placeholder-val="{{ false }}">
-              <div tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};border:1px solid #181818;background:repeating-linear-gradient(135deg,transparent 0 5px,#E4E4E1 5px 10px);cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div>
-            </sc-if>
+            <sc-if value="{{ b.cheia }}" hint-placeholder-val="{{ true }}"><div tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};background:#0057FF;outline:0;cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div></sc-if>
+            <sc-if value="{{ b.vazada }}" hint-placeholder-val="{{ false }}"><div tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="{{ b.calculo }}" data-fundamento="{{ b.fundamento }}" data-recorte="{{ b.recorte }}" style="height:{{ b.h }};border:1px solid #181818;background:repeating-linear-gradient(135deg,transparent 0 5px,#E4E4E1 5px 10px);cursor:default" style-focus="box-shadow:0 0 0 3px #181818"></div></sc-if>
           </div>
         </sc-for>
       </div>
       <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:clamp(6px,1.4vw,20px);margin-top:10px;padding-top:10px;border-top:1px solid #181818">
-        <sc-for list="{{ barras }}" as="b" hint-placeholder-count="7">
-          <div style="min-width:0;text-align:center">
-            <p style="margin:0;font:600 clamp(8px,.8vw,10px)/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em">{{ b.mes }}</p>
-            <p style="margin:6px 0 0;font:400 clamp(8px,.75vw,9.5px)/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.06em;color:#8A8A86">{{ b.nota }}</p>
-          </div>
-        </sc-for>
+        <sc-for list="{{ barras }}" as="b" hint-placeholder-count="7"><div style="min-width:0;text-align:center"><p style="margin:0;font:600 clamp(8px,.8vw,10px)/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em">{{ b.mes }}</p><p style="margin:6px 0 0;font:400 clamp(8px,.75vw,9.5px)/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.06em;color:#8A8A86">{{ b.nota }}</p></div></sc-for>
       </div>
     </figure>
 
     <div style="overflow-x:auto;margin-top:clamp(34px,5vh,60px)">
       <div role="table" style="min-width:660px">
-        <div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:0 0 10px;border-bottom:1px solid #181818">
-          <sc-for list="{{ colunasSerie }}" as="c" hint-placeholder-count="5">
-            <button type="button" role="columnheader" onClick="{{ c.sort }}" aria-sort="{{ c.aria }}" style="display:flex;align-items:center;gap:7px;justify-content:{{ c.just }};border:0;background:none;padding:0;cursor:pointer;font:600 9.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;color:{{ c.cor }};text-align:left" style-hover="color:#181818">{{ c.rotulo }}<span style="font-size:11px;opacity:{{ c.seta }}">{{ c.dir }}</span></button>
-          </sc-for>
-        </div>
-        <sc-for list="{{ linhasSerie }}" as="r" hint-placeholder-count="7">
-          <div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:13px 0;border-bottom:1px solid #E2E2E0;color:{{ r.cor }}">
-            <span style="font-size:13.5px;font-weight:500">{{ r.nome }}</span>
-            <span style="text-align:right;font:500 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.votos }}</span>
-            <span style="text-align:right;font:500 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.despachos }}</span>
-            <span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.taxaTxt }}</span>
-            <span style="text-align:right;font:400 11px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.08em">{{ r.cond }}</span>
-          </div>
-        </sc-for>
-        <div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:16px 0 0;border-top:2px solid #181818;margin-top:-1px">
-          <span style="font-size:13.5px;font-weight:600">Janela completa</span>
-          <span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">899</span>
-          <span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">1.761</span>
-          <span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;color:#0057FF">51,05%</span>
-          <span style="text-align:right;font:400 11px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.08em">Com bordas</span>
-        </div>
+        <div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:0 0 10px;border-bottom:1px solid #181818"><sc-for list="{{ colunasSerie }}" as="c" hint-placeholder-count="5"><button type="button" role="columnheader" onClick="{{ c.sort }}" aria-sort="{{ c.aria }}" style="display:flex;align-items:center;gap:7px;justify-content:{{ c.just }};border:0;background:none;padding:0;cursor:pointer;font:600 9.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;color:{{ c.cor }};text-align:left" style-hover="color:#181818">{{ c.rotulo }}<span style="font-size:11px;opacity:{{ c.seta }}">{{ c.dir }}</span></button></sc-for></div>
+        <sc-for list="{{ linhasSerie }}" as="r" hint-placeholder-count="7"><div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:13px 0;border-bottom:1px solid #E2E2E0;color:{{ r.cor }}"><span style="font-size:13.5px;font-weight:500">{{ r.nome }}</span><span style="text-align:right;font:500 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.votos }}</span><span style="text-align:right;font:500 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.despachos }}</span><span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">{{ r.taxaTxt }}</span><span style="text-align:right;font:400 11px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.08em">{{ r.cond }}</span></div></sc-for>
+        <div role="row" style="display:grid;grid-template-columns:minmax(160px,1.6fr) repeat(4,minmax(90px,1fr));gap:16px;padding:16px 0 0;border-top:2px solid #181818;margin-top:-1px"><span style="font-size:13.5px;font-weight:600">Janela completa</span><span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">899</span><span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums">1.761</span><span style="text-align:right;font:600 13px/1.3 'Azeret Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;color:#0057FF">51,05%</span><span style="text-align:right;font:400 11px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.08em">Com bordas</span></div>
       </div>
     </div>
 
     <p style="margin:clamp(56px,8vh,104px) 0 0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">TEMPO DE FILA · DATA DESPACHO − DATA ENVIO</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(22px,4vw,72px);margin-top:18px;align-items:end">
-      <p style="margin:0;font-weight:300;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.035em">A média geral é um composto de dois fluxos que quase dobram entre si.</p>
-      <p style="margin:0;font-size:14.5px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">Publicar 10,1 dias seria correto e inútil. O que o número esconde é a segregação: voto e despacho sem voto são trabalhos distintos, com filas distintas, e só separados a medida diz alguma coisa.</p>
-    </div>
-
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(22px,4vw,72px);margin-top:18px;align-items:end"><p style="margin:0;font-weight:300;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.035em">A média geral é um composto de dois fluxos que quase dobram entre si.</p><p style="margin:0;font-size:14.5px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">Publicar 10,1 dias seria correto e inútil. O que o número esconde é a segregação: voto e despacho sem voto são trabalhos distintos, com filas distintas, e só separados a medida diz alguma coisa.</p></div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;margin-top:clamp(30px,4vh,52px);border-top:1px solid #181818">
-      <div style="padding:26px 32px 30px 0;border-bottom:1px solid #E2E2E0">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">VOTOS</p>
-        <p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="Data Despacho − Data Envio, média dos votos" data-fundamento="899 votos publicados" data-recorte="28.11.2025 a 05.05.2026" data-limite="Intervalo inclui fila da unidade e tempo de trabalho; não mede desempenho individual." style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF">13,2 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
-        <div style="height:22px;margin-top:22px;background:#0057FF;width:100%"></div>
-        <p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Fila média até a publicação do voto. Inclui o intervalo institucional entre a conclusão do trabalho e a inclusão formal em pauta.</p>
-      </div>
-      <div style="padding:26px 0 30px 32px;border-left:1px solid #E2E2E0;border-bottom:1px solid #E2E2E0">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DEMAIS DESPACHOS</p>
-        <p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="Data Despacho − Data Envio, média dos não-votos" data-fundamento="862 despachos sem voto" data-recorte="28.11.2025 a 05.05.2026" data-limite="Intervalo inclui fila da unidade e tempo de trabalho; não mede desempenho individual." style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums">6,9 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p>
-        <div style="height:22px;margin-top:22px;background:#181818;width:52.27%"></div>
-        <p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Despachos sem voto. Metade do tempo, sem a etapa de pauta e sem a redação do mérito.</p>
-      </div>
+      <div style="padding:26px 32px 30px 0;border-bottom:1px solid #E2E2E0"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">VOTOS</p><p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="Data Despacho − Data Envio, média dos votos" data-fundamento="899 votos publicados" data-recorte="28.11.2025 a 05.05.2026" data-limite="Intervalo inclui fila da unidade e tempo de trabalho; não mede desempenho individual." style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF">13,2 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p><div style="height:22px;margin-top:22px;background:#0057FF;width:100%"></div><p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Fila média até a publicação do voto. Inclui o intervalo institucional entre a conclusão do trabalho e a inclusão formal em pauta.</p></div>
+      <div style="padding:26px 0 30px 32px;border-left:1px solid #E2E2E0;border-bottom:1px solid #E2E2E0"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DEMAIS DESPACHOS</p><p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="Data Despacho − Data Envio, média dos não-votos" data-fundamento="862 despachos sem voto" data-recorte="28.11.2025 a 05.05.2026" data-limite="Intervalo inclui fila da unidade e tempo de trabalho; não mede desempenho individual." style="margin:16px 0 0;font:600 clamp(3rem,7vw,5.4rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums">6,9 <span style="font-size:.4em;letter-spacing:.02em">DIAS</span></p><div style="height:22px;margin-top:22px;background:#181818;width:52.27%"></div><p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Despachos sem voto. Metade do tempo, sem a etapa de pauta e sem a redação do mérito.</p></div>
     </div>
-
     <p id="escala-fila" style="margin:16px 0 0;font:500 10px/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">ESCALA · 1 QUADRÍCULA = 0,5 DIA</p>
-
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px 40px;margin-top:26px;padding-top:18px;border-top:1px solid #E2E2E0">
-      <p style="margin:0;font:500 12px/1.6 'Azeret Mono',ui-monospace,monospace;color:#6E6E6A">Composto dos dois fluxos: <span style="color:#181818;font-weight:600">10,1 dias</span> — publicado apenas como referência, não como indicador.</p>
-      <p style="margin:0;font:400 11.5px/1.6 'Azeret Mono',ui-monospace,monospace;color:#8A8A86">Mediana e P90 pendentes de extração</p>
-    </div>
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px 40px;margin-top:26px;padding-top:18px;border-top:1px solid #E2E2E0"><p style="margin:0;font:500 12px/1.6 'Azeret Mono',ui-monospace,monospace;color:#6E6E6A">Composto dos dois fluxos: <span style="color:#181818;font-weight:600">10,1 dias</span> — publicado apenas como referência, não como indicador.</p><p style="margin:0;font:400 11.5px/1.6 'Azeret Mono',ui-monospace,monospace;color:#8A8A86">Mediana e P90 pendentes de extração</p></div>
 
     <p style="margin:clamp(56px,8vh,104px) 0 0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ORIGEM · QUATRO BASES QUE NÃO SOMAM</p>
-  <p style="margin:14px 0 0;max-width:72ch;font-size:13.5px;line-height:1.6;color:#6E6E6A">A operação de execuções fiscais antecede os sistemas e entra aqui como fundação. ECHO, ATRIO e CORPUS pertencem a universos e períodos próprios; os valores documentam uma cadeia de trabalho, não uma soma acumulada.</p>
-
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:0;margin-top:22px;border-top:1px solid #181818">
-    <div style="padding:26px 28px 30px 0">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
-        <p style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;letter-spacing:-.01em;color:#0057FF">FUNDAÇÃO</p>
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">EXECUÇÕES FISCAIS</p>
-      </div>
-      <div style="margin-top:24px;padding-bottom:14px;border-bottom:1px solid #E2E2E0">
-        <p tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-calculo="264 + 256 = 520; 520 / 600 = 86,67%" data-fundamento="264 processos enquadrados na Resolução + 256 encaminhados à extinção" data-recorte="Universo tratado: 600 processos" data-limite="Saneamento por extinção não equivale, por si só, à baixa processual definitiva." style="margin:0;font:700 clamp(3rem,5.3vw,4.5rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.06em;font-variant-numeric:tabular-nums;color:#0057FF">520</p>
-        <p style="margin:12px 0 0;font-size:13px;line-height:1.45;color:#3D3D3A">saneamentos por extinção</p>
-      </div>
-      <div style="display:grid;gap:12px;margin-top:14px">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-fundamento="universo consolidado da operação" data-recorte="Operação de execuções fiscais" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#0057FF">600</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos tratados</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-calculo="520 ÷ 600" data-fundamento="520 saneamentos por extinção em 600 processos" data-recorte="mesmo universo" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#0057FF">86,7%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">do universo</span></div>
-      </div>
-      <p style="margin:16px 0 0;font-size:12.5px;line-height:1.55;color:#6E6E6A"><span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#181818">264</span> enquadrados na Resolução + <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#181818">256</span> encaminhados à extinção.</p>
-      <a href="assets/data/lastro/exec_fiscais_res574_derivada.csv" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #0057FF;padding-bottom:3px">DERIVADO PÚBLICO ↗</a>
-    </div>
-
-    <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
-        <p style="margin:0"><span style="display:inline-block;background:#FFB627;color:#181818;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">ECHO</span></p>
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">4ª TURMA</p>
-      </div>
-      <div style="display:grid;gap:13px;margin-top:24px">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="acervo_publico.xlsx" data-fundamento="1.192 registros públicos anonimizados" data-recorte="Operação, 4ª Turma" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">1.192</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos triados</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="mapa_tematico_publico.pdf" data-calculo="1 − 10/102" data-fundamento="102 assuntos de origem, 92 categorias suprimidas" data-recorte="Taxonomia operacional" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">90,2%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">redução categorial</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="precedentes_publico.xlsx" data-fundamento="483 com tese firmada" data-recorte="Painel temático" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">631</span><span style="font-size:13px;text-align:right;color:#3D3D3A">temas de precedentes</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="ementario_publico.xlsx" data-fundamento="contagem absoluta" data-recorte="Acervo integral" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">2.758</span><span style="font-size:13px;text-align:right;color:#3D3D3A">ementas catalogadas</span></div>
-      </div>
-      <a href="assets/data/lastro/README.md" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #FFB627;padding-bottom:3px">LASTRO PÚBLICO ↗</a>
-    </div>
-
-    <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
-        <p style="margin:0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">ATRIO</span></p>
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">2ª TURMA</p>
-      </div>
-      <div style="display:grid;gap:13px;margin-top:24px">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="33 operações HTTP declaradas" data-recorte="Rotas de api.py" style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">31</span><span style="font-size:13px;text-align:right;color:#3D3D3A">rotas /v1</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="contagem absoluta" data-recorte="Suíte local, 26.08.2026" style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">188</span><span style="font-size:13px;text-align:right;color:#3D3D3A">testes automatizados</span></div>
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em">LOCAL</span><span style="font-size:13px;text-align:right;color:#3D3D3A">execução</span></div>
-      </div>
-      <a href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #A63A23;padding-bottom:3px">REPOSITÓRIO ATRIO-API ↗</a>
-    </div>
-
-    <div style="padding:26px 0 30px 28px;border-left:1px solid #E2E2E0">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px">
-        <p style="margin:0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">CORPUS</span></p>
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">BASE GOVERNADA</p>
-      </div>
-      <p tabindex="0" role="note" data-datum data-fonte="diagnostico_corpus_publico.md" data-fundamento="contagem após identificação e deduplicação" data-recorte="Recorte operacional publicado" style="margin:24px 0 0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .22em .13em;font:700 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">115.114</span></p>
-      <p style="margin:14px 0 0;font-size:13px;line-height:1.55;color:#3D3D3A">Registros processuais únicos, após identificação e deduplicação. Mede escala de base, não qualidade decisória.</p>
+    <p style="margin:14px 0 0;max-width:72ch;font-size:13.5px;line-height:1.6;color:#6E6E6A">A operação de execuções fiscais antecede os sistemas e entra aqui como fundação. ECHO, ATRIO e CORPUS pertencem a universos e períodos próprios; os valores documentam uma cadeia de trabalho, não uma soma acumulada.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:0;margin-top:22px;border-top:1px solid #181818">
+      <div style="padding:26px 28px 30px 0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;letter-spacing:-.01em;color:#0057FF">FUNDAÇÃO</p><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">EXECUÇÕES FISCAIS</p></div><div style="margin-top:24px;padding-bottom:14px;border-bottom:1px solid #E2E2E0"><p tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-calculo="264 + 256 = 520; 520 / 600 = 86,67%" data-fundamento="264 processos enquadrados na Resolução + 256 encaminhados à extinção" data-recorte="Universo tratado: 600 processos" data-limite="Saneamento por extinção não equivale, por si só, à baixa processual definitiva." style="margin:0;font:700 clamp(3rem,5.3vw,4.5rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.06em;font-variant-numeric:tabular-nums;color:#0057FF">520</p><p style="margin:12px 0 0;font-size:13px;line-height:1.45;color:#3D3D3A">saneamentos por extinção</p></div><div style="display:grid;gap:12px;margin-top:14px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-fundamento="universo consolidado da operação" data-recorte="Operação de execuções fiscais" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#0057FF">600</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos tratados</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res574_derivada.csv" data-calculo="520 ÷ 600" data-fundamento="520 saneamentos por extinção em 600 processos" data-recorte="mesmo universo" style="font:600 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#0057FF">86,7%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">do universo</span></div></div><p style="margin:16px 0 0;font-size:12.5px;line-height:1.55;color:#6E6E6A"><span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#181818">264</span> enquadrados na Resolução + <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#181818">256</span> encaminhados à extinção.</p><a href="assets/data/lastro/exec_fiscais_res574_derivada.csv" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #0057FF;padding-bottom:3px">DERIVADO PÚBLICO ↗</a></div>
+      <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#FFB627;color:#181818;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">ECHO</span></p><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">4ª TURMA</p></div><div style="display:grid;gap:13px;margin-top:24px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="acervo_publico.xlsx" data-fundamento="1.192 registros públicos anonimizados" data-recorte="Operação, 4ª Turma" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">1.192</span><span style="font-size:13px;text-align:right;color:#3D3D3A">processos triados</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="mapa_tematico_publico.pdf" data-calculo="1 − 10/102" data-fundamento="102 assuntos de origem, 92 categorias suprimidas" data-recorte="Taxonomia operacional" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">90,2%</span><span style="font-size:13px;text-align:right;color:#3D3D3A">redução categorial</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="precedentes_publico.xlsx" data-fundamento="483 com tese firmada" data-recorte="Painel temático" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">631</span><span style="font-size:13px;text-align:right;color:#3D3D3A">temas de precedentes</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="ementario_publico.xlsx" data-fundamento="contagem absoluta" data-recorte="Acervo integral" style="display:inline-block;background:#FFB627;color:#181818;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">2.758</span><span style="font-size:13px;text-align:right;color:#3D3D3A">ementas catalogadas</span></div></div><a href="assets/data/lastro/README.md" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #FFB627;padding-bottom:3px">LASTRO PÚBLICO ↗</a></div>
+      <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">ATRIO</span></p><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">2ª TURMA</p></div><div style="display:grid;gap:13px;margin-top:24px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="33 operações HTTP declaradas" data-recorte="Rotas de api.py" style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">31</span><span style="font-size:13px;text-align:right;color:#3D3D3A">rotas /v1</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="contagem absoluta" data-recorte="Suíte local, 26.08.2026" style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">188</span><span style="font-size:13px;text-align:right;color:#3D3D3A">testes automatizados</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.7rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em">LOCAL</span><span style="font-size:13px;text-align:right;color:#3D3D3A">execução</span></div></div><a href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #A63A23;padding-bottom:3px">REPOSITÓRIO ATRIO-API ↗</a></div>
+      <div style="padding:26px 0 30px 28px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.3rem;line-height:1;letter-spacing:-.01em">CORPUS</span></p><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">BASE GOVERNADA</p></div><p tabindex="0" role="note" data-datum data-fonte="diagnostico_corpus_publico.md" data-fundamento="contagem após identificação e deduplicação" data-recorte="Recorte operacional publicado" style="margin:24px 0 0"><span style="display:inline-block;background:#A63A23;color:#FCFCFC;padding:.10em .22em .13em;font:700 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">115.114</span></p><p style="margin:14px 0 0;font-size:13px;line-height:1.55;color:#3D3D3A">Registros processuais únicos, após identificação e deduplicação. Mede escala de base, não qualidade decisória.</p></div>
     </div>
   </div>
-</div>
+
   <div style="background:#0057FF;color:#FCFCFC;padding:clamp(44px,6vh,80px) clamp(20px,5vw,96px) clamp(52px,7vh,92px)">
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px 40px">
-      <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em">ÍNDICE DE RASTRO · {{ contagemIndice }}</p>
-      <div role="group" aria-label="Filtro por tipo de figura" style="display:flex;flex-wrap:wrap;gap:24px">
-        <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="3">
-          <span>
-            <sc-if value="{{ f.on }}" hint-placeholder-val="{{ false }}">
-              <button type="button" onClick="{{ f.pick }}" aria-pressed="true" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#FCFCFC;border-bottom:2px solid #FCFCFC">{{ f.rotulo }}</button>
-            </sc-if>
-            <sc-if value="{{ f.off }}" hint-placeholder-val="{{ true }}">
-              <button type="button" onClick="{{ f.pick }}" aria-pressed="false" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:500 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:rgba(252,252,252,.66);border-bottom:2px solid transparent" style-hover="color:#FCFCFC">{{ f.rotulo }}</button>
-            </sc-if>
-          </span>
-        </sc-for>
-      </div>
-    </div>
-    <div style="overflow-x:auto;margin-top:22px">
-      <div role="table" style="min-width:900px">
-        <div role="row" style="display:grid;grid-template-columns:130px minmax(220px,2fr) 110px minmax(190px,1.5fr) 130px;gap:20px;padding:0 0 10px;border-bottom:1px solid #FCFCFC">
-          <sc-for list="{{ colunasIndice }}" as="c" hint-placeholder-count="5">
-            <button type="button" role="columnheader" onClick="{{ c.sort }}" aria-sort="{{ c.aria }}" style="display:flex;align-items:center;gap:7px;justify-content:{{ c.just }};border:0;background:none;padding:0;cursor:pointer;font:600 9.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;color:{{ c.cor }};text-align:left" style-hover="color:#FCFCFC">{{ c.rotulo }}<span style="font-size:11px;opacity:{{ c.seta }}">{{ c.dir }}</span></button>
-          </sc-for>
-        </div>
-        <sc-for list="{{ linhasIndice }}" as="r" hint-placeholder-count="12">
-          <div role="row" style="display:grid;grid-template-columns:130px minmax(220px,2fr) 110px minmax(190px,1.5fr) 130px;gap:20px;padding:12px 0;border-bottom:1px solid rgba(252,252,252,.32)" style-hover="background:rgba(252,252,252,.1)">
-            <span style="font:600 15.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:{{ r.cor }}">{{ r.valor }}</span>
-            <span style="font-size:13.5px;line-height:1.4">{{ r.oque }}</span>
-            <span style="font:500 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;color:rgba(252,252,252,.72)">{{ r.tipo }}</span>
-            <span style="font:400 11.5px/1.45 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.72);word-break:break-word">{{ r.fonte }}</span>
-            <span style="font:500 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.12em;color:rgba(252,252,252,.72)">{{ r.unidade }}</span>
-          </div>
-        </sc-for>
-      </div>
-    </div>
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px 40px"><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em">ÍNDICE DE RASTRO · {{ contagemIndice }}</p><div role="group" aria-label="Filtro por tipo de figura" style="display:flex;flex-wrap:wrap;gap:24px"><sc-for list="{{ filtros }}" as="f" hint-placeholder-count="3"><span><sc-if value="{{ f.on }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ f.pick }}" aria-pressed="true" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#FCFCFC;border-bottom:2px solid #FCFCFC">{{ f.rotulo }}</button></sc-if><sc-if value="{{ f.off }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ f.pick }}" aria-pressed="false" style="border:0;background:none;padding:0 0 4px;cursor:pointer;font:500 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:rgba(252,252,252,.66);border-bottom:2px solid transparent" style-hover="color:#FCFCFC">{{ f.rotulo }}</button></sc-if></span></sc-for></div></div>
+    <div style="overflow-x:auto;margin-top:22px"><div role="table" style="min-width:900px"><div role="row" style="display:grid;grid-template-columns:130px minmax(220px,2fr) 110px minmax(190px,1.5fr) 130px;gap:20px;padding:0 0 10px;border-bottom:1px solid #FCFCFC"><sc-for list="{{ colunasIndice }}" as="c" hint-placeholder-count="5"><button type="button" role="columnheader" onClick="{{ c.sort }}" aria-sort="{{ c.aria }}" style="display:flex;align-items:center;gap:7px;justify-content:{{ c.just }};border:0;background:none;padding:0;cursor:pointer;font:600 9.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;color:{{ c.cor }};text-align:left" style-hover="color:#FCFCFC">{{ c.rotulo }}<span style="font-size:11px;opacity:{{ c.seta }}">{{ c.dir }}</span></button></sc-for></div><sc-for list="{{ linhasIndice }}" as="r" hint-placeholder-count="12"><div role="row" style="display:grid;grid-template-columns:130px minmax(220px,2fr) 110px minmax(190px,1.5fr) 130px;gap:20px;padding:12px 0;border-bottom:1px solid rgba(252,252,252,.32)" style-hover="background:rgba(252,252,252,.1)"><span style="font:600 15.5px/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:{{ r.cor }}">{{ r.valor }}</span><span style="font-size:13.5px;line-height:1.4">{{ r.oque }}</span><span style="font:500 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;color:rgba(252,252,252,.72)">{{ r.tipo }}</span><span style="font:400 11.5px/1.45 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.72);word-break:break-word">{{ r.fonte }}</span><span style="font:500 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.12em;color:rgba(252,252,252,.72)">{{ r.unidade }}</span></div></sc-for></div></div>
   </div>
 
   <div style="padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)">
     <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">MÉTODO E ROBUSTEZ</p>
-    <div style="margin-top:18px;border-top:1px solid #181818">
-      <button type="button" onClick="{{ alternarMetodo }}" aria-expanded="{{ metodoAberto }}" style="display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;padding:20px 0;border:0;background:none;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;text-align:left" style-hover="color:#0057FF">FONTE, CONTAGEM, ROBUSTEZ E DERIVADOS PÚBLICOS<span style="font-size:16px">{{ metodoSinal }}</span></button>
-      <sc-if value="{{ metodoAberto }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(20px,3vw,56px);padding:6px 0 34px">
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">FONTE</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A fonte original é jurimetria.xlsx, base de trabalho extraída de sistema interno e usada pelo autor para formular os indicadores. Não é dado oficial do TJPR, e a base bruta não integra os artefatos públicos atuais.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CONTAGEM</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O mês é definido pela data do despacho, quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ROBUSTEZ</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p></div>
-          <div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A verificação pública usa jurimetria_derivada.csv e o hash SHA-256 da fonte, além dos derivados mínimos de ECHO, ATRIO e da operação de execuções fiscais (Res. 574) em assets/data/lastro. Os derivados agregados permitem recalcular as figuras publicadas sem expor linhas processuais ou dados de terceiros.</p></div>
-        </div>
-      </sc-if>
-    </div>
+    <div style="margin-top:18px;border-top:1px solid #181818"><button type="button" onClick="{{ alternarMetodo }}" aria-expanded="{{ metodoAberto }}" style="display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;padding:20px 0;border:0;background:none;cursor:pointer;font:600 11px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.18em;text-align:left" style-hover="color:#0057FF">FONTE, CONTAGEM, ROBUSTEZ E DERIVADOS PÚBLICOS<span style="font-size:16px">{{ metodoSinal }}</span></button><sc-if value="{{ metodoAberto }}" hint-placeholder-val="{{ false }}"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(20px,3vw,56px);padding:6px 0 34px"><div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">FONTE</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A fonte original é jurimetria.xlsx, base de trabalho extraída de sistema interno e usada pelo autor para formular os indicadores. Não é dado oficial do TJPR, e a base bruta não integra os artefatos públicos atuais.</p></div><div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CONTAGEM</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O mês é definido pela data do despacho, quando existe atuação do assessor. A análise posterior de outro setor não integra o indicador.</p></div><div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">ROBUSTEZ</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">O teste com denominador bruto é exibido e rejeitado porque inclui 135 registros ainda sem despacho.</p></div><div><p style="margin:0;font:600 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">DERIVADOS PÚBLICOS</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.6;color:#3D3D3A">A verificação pública usa jurimetria_derivada.csv e o hash SHA-256 da fonte, além dos derivados mínimos de ECHO, ATRIO e da operação de execuções fiscais (Res. 574) em assets/data/lastro. Os derivados agregados permitem recalcular as figuras publicadas sem expor linhas processuais ou dados de terceiros.</p></div></div></sc-if></div>
   </div>
 </section>
 
 <section id="lastro" aria-labelledby="h-lastro">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:clamp(20px,4vw,72px);align-items:end;background:#181818;color:#FCFCFC;padding:clamp(40px,6vh,76px) clamp(20px,5vw,96px) clamp(34px,5vh,60px)">
-    <h2 id="h-lastro" style="margin:0;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(14px,2vw,30px)"><span style="font:600 clamp(11px,1.4vw,15px)/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.75)">02</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(2.4rem,6.4vw,7rem);line-height:.85;overflow-wrap:anywhere;letter-spacing:-.02em">LASTRO</span></h2>
-    <p style="margin:0;font-weight:300;font-size:clamp(1.2rem,2.2vw,1.8rem);line-height:1.14;letter-spacing:-.03em">Por que esta medida se sustenta.</p>
-  </div>
-
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:clamp(20px,4vw,72px);align-items:end;background:#181818;color:#FCFCFC;padding:clamp(40px,6vh,76px) clamp(20px,5vw,96px) clamp(34px,5vh,60px)"><h2 id="h-lastro" style="margin:0;min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(14px,2vw,30px)"><span style="font:600 clamp(11px,1.4vw,15px)/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.75)">02</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(2.4rem,6.4vw,7rem);line-height:.85;overflow-wrap:anywhere;letter-spacing:-.02em">LASTRO</span></h2><p style="margin:0;font-weight:300;font-size:clamp(1.2rem,2.2vw,1.8rem);line-height:1.14;letter-spacing:-.03em">Por que esta medida se sustenta.</p></div>
   <div style="background:#181818;color:#FCFCFC;padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)">
     <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">MEDIDA · FORMAÇÃO DO DENOMINADOR</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(24px,4vw,80px);margin-top:20px;align-items:end">
-      <div>
-        <p style="margin:0;font:600 clamp(4rem,10vw,8rem)/.82 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF" tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026">51,05%</p>
-        <p style="margin:18px 0 0;font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.25;letter-spacing:-.02em">Conversão publicada</p>
-        <p style="margin:8px 0 0;font:500 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.66)">899 votos ÷ 1.761 despachos</p>
-      </div>
-      <p style="margin:0;font-size:15px;line-height:1.65;color:rgba(252,252,252,.86);text-wrap:pretty">O mês é definido pela data do despacho, quando o trabalho do assessor existe. A análise posterior registra etapa de outro setor e não integra o indicador. O denominador contém apenas os despachos efetivamente proferidos.</p>
-    </div>
-
-    <figure style="margin:clamp(40px,6vh,80px) 0 0">
-      <figcaption style="margin:0 0 18px;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">DECOMPOSIÇÃO DO UNIVERSO · 1.896 REGISTROS ATRIBUÍDOS</figcaption>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding-bottom:8px">
-        <span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em">REGISTROS ATRIBUÍDOS</span>
-        <span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums">1.896</span>
-      </div>
-      <div style="height:56px;background:#FCFCFC"></div>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:26px 0 8px">
-        <span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em">DESPACHOS PROFERIDOS<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;SEM DESPACHO</span></span>
-        <span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums">1.761<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;135</span></span>
-      </div>
-      <div style="display:flex;height:56px;gap:2px">
-        <div style="flex:0 0 92.88%;background:#FCFCFC"></div>
-        <div style="flex:1 1 auto;border:1px solid rgba(252,252,252,.5);background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(252,252,252,.22) 4px 8px)"></div>
-      </div>
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:26px 0 8px">
-        <span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;color:#0057FF">VOTOS PUBLICADOS<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;DESPACHO SEM VOTO</span></span>
-        <span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#0057FF">899<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;862</span></span>
-      </div>
-      <div style="display:flex;height:56px;gap:2px">
-        <div style="flex:0 0 47.42%;background:#0057FF" tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026"></div>
-        <div style="flex:0 0 45.46%;border:1px solid rgba(252,252,252,.6)"></div>
-        <div style="flex:1 1 auto"></div>
-      </div>
-    </figure>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;margin-top:clamp(40px,6vh,80px);border-top:1px solid #FCFCFC">
-      <div style="padding:24px 32px 24px 0;border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">ACEITO</p>
-        <p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">51,05%</p>
-        <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">Publicado sobre despachos. O denominador contém apenas os despachos efetivamente proferidos.</p>
-      </div>
-      <div style="padding:24px 32px 24px 0;border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">DESCARTADO</p>
-        <p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:rgba(252,252,252,.5);text-decoration:line-through;text-decoration-thickness:2px">47,42%</p>
-        <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">Teste adversarial sobre o bruto. O denominador de 1.896 inclui 135 processos atribuídos e ainda não despachados.</p>
-      </div>
-      <div style="padding:24px 0;border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">RECORTE INTEGRAL</p>
-        <p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">51,49%</p>
-        <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">881 votos em 1.711 despachos, nos cinco meses integrais. A exclusão das bordas move o resultado em 0,44 p.p.</p>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px 40px;margin:clamp(48px,7vh,88px) 0 0">
-      <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">RECORTE INDIVIDUAL · AUTOR</p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(24px,4vw,72px);align-items:end;margin-top:clamp(26px,4vh,44px);padding:clamp(22px,3vh,34px) 0;border-top:1px solid #FCFCFC;border-bottom:1px solid rgba(252,252,252,.3)">
-      <p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="153 votos ÷ 258 despachos" data-fundamento="Fonte original: jurimetria.xlsx; integridade registrada em jurimetria.sha256" data-recorte="28.11.2025 a 05.05.2026 | autor" style="margin:0;font:600 clamp(2.6rem,6vw,4.6rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF">59,30%</p>
-      <div>
-        <p style="margin:0;font-size:clamp(1.05rem,1.7vw,1.3rem);font-weight:500;letter-spacing:-.02em">153 votos em 258 despachos</p>
-        <p style="margin:12px 0 0;font-size:14.5px;line-height:1.6;color:rgba(252,252,252,.86);text-wrap:pretty">Indicador individual autônomo, publicado sem benchmark de produtividade de terceiros.</p>
-      </div>
-    </div>
-
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(24px,4vw,80px);margin-top:20px;align-items:end"><div><p style="margin:0;font:600 clamp(4rem,10vw,8rem)/.82 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF" tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026">51,05%</p><p style="margin:18px 0 0;font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.25;letter-spacing:-.02em">Conversão publicada</p><p style="margin:8px 0 0;font:500 11.5px/1.5 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.66)">899 votos ÷ 1.761 despachos</p></div><p style="margin:0;font-size:15px;line-height:1.65;color:rgba(252,252,252,.86);text-wrap:pretty">O mês é definido pela data do despacho, quando o trabalho do assessor existe. A análise posterior registra etapa de outro setor e não integra o indicador. O denominador contém apenas os despachos efetivamente proferidos.</p></div>
+    <figure style="margin:clamp(40px,6vh,80px) 0 0"><figcaption style="margin:0 0 18px;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">DECOMPOSIÇÃO DO UNIVERSO · 1.896 REGISTROS ATRIBUÍDOS</figcaption><div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding-bottom:8px"><span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em">REGISTROS ATRIBUÍDOS</span><span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums">1.896</span></div><div style="height:56px;background:#FCFCFC"></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:26px 0 8px"><span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em">DESPACHOS PROFERIDOS<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;SEM DESPACHO</span></span><span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums">1.761<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;135</span></span></div><div style="display:flex;height:56px;gap:2px"><div style="flex:0 0 92.88%;background:#FCFCFC"></div><div style="flex:1 1 auto;border:1px solid rgba(252,252,252,.5);background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(252,252,252,.22) 4px 8px)"></div></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;padding:26px 0 8px"><span style="font:500 10.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;color:#0057FF">VOTOS PUBLICADOS<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;DESPACHO SEM VOTO</span></span><span style="font:600 20px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#0057FF">899<span style="color:rgba(252,252,252,.55)">&nbsp;/&nbsp;862</span></span></div><div style="display:flex;height:56px;gap:2px"><div style="flex:0 0 47.42%;background:#0057FF" tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="899 votos ÷ 1.761 despachos proferidos" data-recorte="28.11.2025 a 05.05.2026"></div><div style="flex:0 0 45.46%;border:1px solid rgba(252,252,252,.6)"></div><div style="flex:1 1 auto"></div></div></figure>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;margin-top:clamp(40px,6vh,80px);border-top:1px solid #FCFCFC"><div style="padding:24px 32px 24px 0;border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">ACEITO</p><p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">51,05%</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">Publicado sobre despachos. O denominador contém apenas os despachos efetivamente proferidos.</p></div><div style="padding:24px 32px 24px 0;border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">DESCARTADO</p><p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:rgba(252,252,252,.5);text-decoration:line-through;text-decoration-thickness:2px">47,42%</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">Teste adversarial sobre o bruto. O denominador de 1.896 inclui 135 processos atribuídos e ainda não despachados.</p></div><div style="padding:24px 0;border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">RECORTE INTEGRAL</p><p style="margin:14px 0 0;font:600 clamp(2.1rem,3.8vw,2.9rem)/.9 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">51,49%</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;color:rgba(252,252,252,.82)">881 votos em 1.711 despachos, nos cinco meses integrais. A exclusão das bordas move o resultado em 0,44 p.p.</p></div></div>
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:16px 40px;margin:clamp(48px,7vh,88px) 0 0"><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">RECORTE INDIVIDUAL · AUTOR</p></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(24px,4vw,72px);align-items:end;margin-top:clamp(26px,4vh,44px);padding:clamp(22px,3vh,34px) 0;border-top:1px solid #FCFCFC;border-bottom:1px solid rgba(252,252,252,.3)"><p tabindex="0" role="note" data-datum data-fonte="jurimetria_derivada.csv" data-calculo="153 votos ÷ 258 despachos" data-fundamento="Fonte original: jurimetria.xlsx; integridade registrada em jurimetria.sha256" data-recorte="28.11.2025 a 05.05.2026 | autor" style="margin:0;font:600 clamp(2.6rem,6vw,4.6rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#0057FF">59,30%</p><div><p style="margin:0;font-size:clamp(1.05rem,1.7vw,1.3rem);font-weight:500;letter-spacing:-.02em">153 votos em 258 despachos</p><p style="margin:12px 0 0;font-size:14.5px;line-height:1.6;color:rgba(252,252,252,.86);text-wrap:pretty">Indicador individual autônomo, publicado sem benchmark de produtividade de terceiros.</p></div></div>
     <p style="margin:clamp(48px,7vh,88px) 0 0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.62)">FUNDAMENTO DA FILA · O QUE 13,2 E 6,9 DIAS MEDEM</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;margin-top:18px;border-top:1px solid #FCFCFC">
-      <div style="padding:24px 32px 26px 0;border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">MARCO INICIAL</p>
-        <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Data Envio. Registra a chegada ao gabinete, não a atribuição individual ao assessor.</p>
-      </div>
-      <div style="padding:24px 32px 26px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">MARCO TERMINAL</p>
-        <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Data Despacho. Nos votos, associada à inclusão formal em pauta, o que agrega uma camada institucional ao intervalo.</p>
-      </div>
-      <div style="padding:24px 32px 26px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">SEGREGAÇÃO</p>
-        <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Votos e despachos sem voto são medidos separadamente. A média composta de 10,1 dias não é publicada como indicador.</p>
-      </div>
-      <div style="padding:24px 0 26px 32px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)">
-        <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">LIMITAÇÃO</p>
-        <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">O intervalo incorpora fila da unidade somada ao tempo de trabalho. Não é medida de desempenho individual.</p>
-      </div>
-    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;margin-top:18px;border-top:1px solid #FCFCFC"><div style="padding:24px 32px 26px 0;border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">MARCO INICIAL</p><p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Data Envio. Registra a chegada ao gabinete, não a atribuição individual ao assessor.</p></div><div style="padding:24px 32px 26px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">MARCO TERMINAL</p><p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Data Despacho. Nos votos, associada à inclusão formal em pauta, o que agrega uma camada institucional ao intervalo.</p></div><div style="padding:24px 32px 26px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">SEGREGAÇÃO</p><p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">Votos e despachos sem voto são medidos separadamente. A média composta de 10,1 dias não é publicada como indicador.</p></div><div style="padding:24px 0 26px 32px;border-left:1px solid rgba(252,252,252,.3);border-bottom:1px solid rgba(252,252,252,.3)"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#0057FF">LIMITAÇÃO</p><p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:rgba(252,252,252,.86)">O intervalo incorpora fila da unidade somada ao tempo de trabalho. Não é medida de desempenho individual.</p></div></div>
   </div>
-
-  <div style="padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)">
-    <p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">LIMITES DE INTERPRETAÇÃO</p>
-    <div style="margin-top:18px">
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">VOLUME</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">DESEMPENHO</span></div>
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PERCENTUAL</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PONTO PERCENTUAL</span></div>
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">FILA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">TEMPO DE TRABALHO</span></div>
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">ASSOCIAÇÃO</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">CAUSALIDADE</span></div>
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">MÊS DE BORDA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">MÊS INTEGRAL</span></div>
-      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818;border-bottom:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">AUSÊNCIA DE PROVA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">FALSIDADE</span></div>
-    </div>
-    <p style="margin:26px 0 0;font-size:14px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">A curva de conversão coincide com a adoção do sistema, e a coincidência não é prova. Não há registro individual de uso, dois colaboradores ingressaram em folha em março e abril teve força-tarefa sazonal.</p>
-  </div>
+  <div style="padding:clamp(48px,7vh,96px) clamp(20px,5vw,96px) clamp(56px,8vh,104px)"><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">LIMITES DE INTERPRETAÇÃO</p><div style="margin-top:18px"><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">VOLUME</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">DESEMPENHO</span></div><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PERCENTUAL</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">PONTO PERCENTUAL</span></div><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">FILA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">TEMPO DE TRABALHO</span></div><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">ASSOCIAÇÃO</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">CAUSALIDADE</span></div><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">MÊS DE BORDA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">MÊS INTEGRAL</span></div><div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(14px,2.2vw,36px);padding:clamp(14px,2.2vh,24px) 0;border-top:1px solid #181818;border-bottom:1px solid #181818"><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">AUSÊNCIA DE PROVA</span><span style="font-size:clamp(1.2rem,2.6vw,2.1rem);color:#0057FF">≠</span><span style="font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.3rem,3.6vw,2.8rem);line-height:1;letter-spacing:-.02em">FALSIDADE</span></div></div><p style="margin:26px 0 0;font-size:14px;line-height:1.6;color:#3D3D3A;text-wrap:pretty">A curva de conversão coincide com a adoção do sistema, e a coincidência não é prova. Não há registro individual de uso, dois colaboradores ingressaram em folha em março e abril teve força-tarefa sazonal.</p></div>
 </section>
 
-<footer aria-labelledby="h-autoria" style="background:#181818;color:#FCFCFC;padding:clamp(44px,6vh,80px) clamp(20px,5vw,96px)">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(24px,4vw,72px);padding-bottom:26px;border-bottom:1px solid rgba(252,252,252,.4)">
-    <div>
-      <h2 id="h-autoria" style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:.9;letter-spacing:-.02em">AUTORIA</h2>
-      <p style="margin:16px 0 0;font-size:14.5px;line-height:1.6;color:rgba(252,252,252,.86);text-wrap:pretty">Christian da Costa. Projeto autoral em contexto profissional, não oficial do TJPR. A base original foi extraída de sistema interno e contém dados de terceiros; não integra os artefatos públicos atuais. São disponibilizados apenas derivados agregados e o hash de integridade da fonte.</p>
-    </div>
-    <div>
-      <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.6)">BASE</p>
-      <p style="margin:12px 0 0;font:400 13px/1.7 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.86)">jurimetria.xlsx<br>2ª Turma Recursal<br>28.11.2025 — 05.05.2026</p>
-    </div>
-    <nav aria-label="Saídas de DATA">
-      <p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.6)">SAÍDAS</p>
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:11px;margin-top:14px;font:500 10.5px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em">
-        <a href="assets/data/lastro/jurimetria_derivada.csv" download style="color:#0057FF" style-hover="color:#FCFCFC">DADOS DERIVADOS</a>
-        <a href="assets/data/lastro/jurimetria.sha256" style="color:#0057FF" style-hover="color:#FCFCFC">HASH SHA-256</a>
-        <a href="assets/data/lastro/README.md" style="color:#0057FF" style-hover="color:#FCFCFC">LASTRO PÚBLICO</a>
-        <a href="arco.html#echo" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">ECHO</a>
-        <a href="arco.html#atrio" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">ATRIO</a>
-        <a href="arco.html" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">VOLTAR AO ARCO</a>
-      </div>
-    </nav>
-  </div>
-  <p style="margin:22px 0 0;font:400 11px/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em;color:rgba(252,252,252,.55)">ARCO · SYS.AUDIT.DATA</p>
-</footer>
+<footer aria-labelledby="h-autoria" style="background:#181818;color:#FCFCFC;padding:clamp(44px,6vh,80px) clamp(20px,5vw,96px)"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(24px,4vw,72px);padding-bottom:26px;border-bottom:1px solid rgba(252,252,252,.4)"><div><h2 id="h-autoria" style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:clamp(1.6rem,3.6vw,2.6rem);line-height:.9;letter-spacing:-.02em">AUTORIA</h2><p style="margin:16px 0 0;font-size:14.5px;line-height:1.6;color:rgba(252,252,252,.86);text-wrap:pretty">Christian da Costa. Projeto autoral em contexto profissional, não oficial do TJPR. A base original foi extraída de sistema interno e contém dados de terceiros; não integra os artefatos públicos atuais. São disponibilizados apenas derivados agregados e o hash de integridade da fonte.</p></div><div><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.6)">BASE</p><p style="margin:12px 0 0;font:400 13px/1.7 'Azeret Mono',ui-monospace,monospace;color:rgba(252,252,252,.86)">jurimetria.xlsx<br>2ª Turma Recursal<br>28.11.2025 — 05.05.2026</p></div><nav aria-label="Saídas de DATA"><p style="margin:0;font:500 9.5px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:rgba(252,252,252,.6)">SAÍDAS</p><div style="display:flex;flex-direction:column;align-items:flex-start;gap:11px;margin-top:14px;font:500 10.5px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em"><a href="assets/data/lastro/jurimetria_derivada.csv" download style="color:#0057FF" style-hover="color:#FCFCFC">DADOS DERIVADOS</a><a href="assets/data/lastro/jurimetria.sha256" style="color:#0057FF" style-hover="color:#FCFCFC">HASH SHA-256</a><a href="assets/data/lastro/README.md" style="color:#0057FF" style-hover="color:#FCFCFC">LASTRO PÚBLICO</a><a href="arco.html#echo" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">ECHO</a><a href="arco.html#atrio" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">ATRIO</a><a href="arco.html" target="_top" style="color:#0057FF" style-hover="color:#FCFCFC">VOLTAR AO ARCO</a></div></nav></div><p style="margin:22px 0 0;font:400 11px/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em;color:rgba(252,252,252,.55)">ARCO · SYS.AUDIT.DATA</p></footer>
 
-<div id="dt" role="tooltip">
-  <div id="dt-fonte" class="dt-linha dt-rastro"><b>FONTE</b><em id="dt-fonte-v"></em></div>
-  <div id="dt-calculo" class="dt-linha"><b>CÁLCULO</b><em id="dt-calculo-v"></em></div>
-  <div id="dt-recorte" class="dt-linha"><b>RECORTE</b><em id="dt-recorte-v"></em></div>
-  <div id="dt-fundamento" class="dt-linha"><b>FUNDAMENTO</b><em id="dt-fundamento-v"></em></div>
-  <div id="dt-limite" class="dt-linha"><b>LIMITE</b><em id="dt-limite-v"></em></div>
-</div>
+<div id="dt" role="tooltip"><div id="dt-fonte" class="dt-linha dt-rastro"><b>FONTE</b><em id="dt-fonte-v"></em></div><div id="dt-calculo" class="dt-linha"><b>CÁLCULO</b><em id="dt-calculo-v"></em></div><div id="dt-recorte" class="dt-linha"><b>RECORTE</b><em id="dt-recorte-v"></em></div><div id="dt-fundamento" class="dt-linha"><b>FUNDAMENTO</b><em id="dt-fundamento-v"></em></div><div id="dt-limite" class="dt-linha"><b>LIMITE</b><em id="dt-limite-v"></em></div></div>
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440},&quot;serieMetricaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;taxa&quot;,&quot;votos&quot;,&quot;despachos&quot;],&quot;default&quot;:&quot;taxa&quot;,&quot;tsType&quot;:&quot;'taxa'|'votos'|'despachos'&quot;,&quot;section&quot;:&quot;Rastro&quot;},&quot;escalaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;taxa&quot;,&quot;volume&quot;],&quot;default&quot;:&quot;taxa&quot;,&quot;tsType&quot;:&quot;'taxa'|'volume'&quot;,&quot;section&quot;:&quot;Lastro&quot;}}">
@@ -959,278 +259,46 @@ const SERIE = [
   { mes: 'ABR/26', nome: 'Abril de 2026', votos: 250, despachos: 414, taxa: 60.39, taxaTxt: '60,39%', cond: 'Integral', nota: '', edge: false, i: 5 },
   { mes: 'MAI/26', nome: 'Maio de 2026', votos: 18, despachos: 48, taxa: 37.50, taxaTxt: '37,50%', cond: 'Cinco dias', nota: 'cinco dias', edge: true, i: 6 }
 ];
-
-const METRICAS = [
-  { id: 'taxa', rotulo: 'CONVERSÃO', max: 62 },
-  { id: 'votos', rotulo: 'VOTOS', max: 260 },
-  { id: 'despachos', rotulo: 'DESPACHOS', max: 430 }
-];
-
+const METRICAS = [{ id: 'taxa', rotulo: 'CONVERSÃO', max: 62 },{ id: 'votos', rotulo: 'VOTOS', max: 260 },{ id: 'despachos', rotulo: 'DESPACHOS', max: 430 }];
 const INDICE = [
-  { valor: '520', ord: 520, oque: 'Saneamentos por extinção', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },
-  { valor: '600', ord: 600, oque: 'Processos tratados', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },
-  { valor: '86,7%', ord: 86.7, oque: 'Parcela do universo com saneamento por extinção', tipo: 'Derivada', fonte: '520 ÷ 600', unidade: 'FUNDAÇÃO' },
-  { valor: '1.896', ord: 1896, oque: 'Registros atribuídos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '135', ord: 135, oque: 'Registros sem despacho', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '1.761', ord: 1761, oque: 'Despachos proferidos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '899', ord: 899, oque: 'Votos publicados', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '51,05%', ord: 51.05, oque: 'Conversão publicada', tipo: 'Derivada', fonte: '899 ÷ 1.761', unidade: '2ª TURMA' },
-  { valor: '51,49%', ord: 51.49, oque: 'Conversão, recorte integral', tipo: 'Derivada', fonte: '881 ÷ 1.711', unidade: '2ª TURMA' },
-  { valor: '+16,18 p.p.', ord: 16.18, oque: 'Amplitude da série integral', tipo: 'Derivada', fonte: '60,39 − 44,21', unidade: '2ª TURMA' },
-  { valor: '13,2 d', ord: 13.2, oque: 'Fila média até o voto', tipo: 'Derivada', fonte: 'Data Despacho − Data Envio', unidade: '2ª TURMA' },
-  { valor: '6,9 d', ord: 6.9, oque: 'Fila média dos demais despachos', tipo: 'Derivada', fonte: 'Data Despacho − Data Envio', unidade: '2ª TURMA' },
-  { valor: '10,1 d', ord: 10.1, oque: 'Fila média composta, referência', tipo: 'Derivada', fonte: 'Média dos dois fluxos', unidade: '2ª TURMA' },
-  { valor: '258', ord: 258, oque: 'Despachos, autor', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '153', ord: 153, oque: 'Votos, autor', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },
-  { valor: '59,30%', ord: 59.30, oque: 'Conversão, autor', tipo: 'Derivada', fonte: '153 ÷ 258', unidade: '2ª TURMA' },
-  { valor: '115.114', ord: 115114, oque: 'Registros processuais únicos', tipo: 'Direta', fonte: 'diagnostico_corpus_publico.md', unidade: 'CORPUS' },
-  { valor: '1.192', ord: 1192, oque: 'Processos triados', tipo: 'Direta', fonte: 'acervo_publico.xlsx', unidade: '4ª TURMA' },
-  { valor: '90,2%', ord: 90.2, oque: 'Redução categorial', tipo: 'Derivada', fonte: '1 − 10/102', unidade: '4ª TURMA' },
-  { valor: '2.758', ord: 2758, oque: 'Ementas catalogadas', tipo: 'Direta', fonte: 'ementario_publico.xlsx', unidade: '4ª TURMA' },
-  { valor: '631', ord: 631, oque: 'Temas de precedentes', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },
-  { valor: '483', ord: 483, oque: 'Temas com tese firmada', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },
-  { valor: '76,5%', ord: 76.5, oque: 'Proporção com tese firmada', tipo: 'Derivada', fonte: '483 ÷ 631', unidade: '4ª TURMA' },
-  { valor: '245', ord: 245, oque: 'Códigos de assunto', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },
-  { valor: '31', ord: 31, oque: 'Rotas /v1', tipo: 'Direta', fonte: 'api.py', unidade: 'ATRIO' },
-  { valor: '33', ord: 33, oque: 'Operações HTTP declaradas', tipo: 'Direta', fonte: 'api.py', unidade: 'ATRIO' },
-  { valor: '188', ord: 188, oque: 'Testes automatizados', tipo: 'Direta', fonte: 'suíte local', unidade: 'ATRIO' }
+  { valor: '520', ord: 520, oque: 'Saneamentos por extinção', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },{ valor: '600', ord: 600, oque: 'Processos tratados', tipo: 'Direta', fonte: 'exec_fiscais_res574_derivada.csv', unidade: 'FUNDAÇÃO' },{ valor: '86,7%', ord: 86.7, oque: 'Parcela do universo com saneamento por extinção', tipo: 'Derivada', fonte: '520 ÷ 600', unidade: 'FUNDAÇÃO' },{ valor: '1.896', ord: 1896, oque: 'Registros atribuídos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '135', ord: 135, oque: 'Registros sem despacho', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '1.761', ord: 1761, oque: 'Despachos proferidos', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '899', ord: 899, oque: 'Votos publicados', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '51,05%', ord: 51.05, oque: 'Conversão publicada', tipo: 'Derivada', fonte: '899 ÷ 1.761', unidade: '2ª TURMA' },{ valor: '51,49%', ord: 51.49, oque: 'Conversão, recorte integral', tipo: 'Derivada', fonte: '881 ÷ 1.711', unidade: '2ª TURMA' },{ valor: '+16,18 p.p.', ord: 16.18, oque: 'Amplitude da série integral', tipo: 'Derivada', fonte: '60,39 − 44,21', unidade: '2ª TURMA' },{ valor: '13,2 d', ord: 13.2, oque: 'Fila média até o voto', tipo: 'Derivada', fonte: 'Data Despacho − Data Envio', unidade: '2ª TURMA' },{ valor: '6,9 d', ord: 6.9, oque: 'Fila média dos demais despachos', tipo: 'Derivada', fonte: 'Data Despacho − Data Envio', unidade: '2ª TURMA' },{ valor: '10,1 d', ord: 10.1, oque: 'Fila média composta, referência', tipo: 'Derivada', fonte: 'Média dos dois fluxos', unidade: '2ª TURMA' },{ valor: '258', ord: 258, oque: 'Despachos, autor', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '153', ord: 153, oque: 'Votos, autor', tipo: 'Direta', fonte: 'jurimetria_derivada.csv', unidade: '2ª TURMA' },{ valor: '59,30%', ord: 59.30, oque: 'Conversão, autor', tipo: 'Derivada', fonte: '153 ÷ 258', unidade: '2ª TURMA' },{ valor: '115.114', ord: 115114, oque: 'Registros processuais únicos', tipo: 'Direta', fonte: 'diagnostico_corpus_publico.md', unidade: 'CORPUS' },{ valor: '1.192', ord: 1192, oque: 'Processos triados', tipo: 'Direta', fonte: 'acervo_publico.xlsx', unidade: '4ª TURMA' },{ valor: '90,2%', ord: 90.2, oque: 'Redução categorial', tipo: 'Derivada', fonte: '1 − 10/102', unidade: '4ª TURMA' },{ valor: '2.758', ord: 2758, oque: 'Ementas catalogadas', tipo: 'Direta', fonte: 'ementario_publico.xlsx', unidade: '4ª TURMA' },{ valor: '631', ord: 631, oque: 'Temas de precedentes', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },{ valor: '483', ord: 483, oque: 'Temas com tese firmada', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },{ valor: '76,5%', ord: 76.5, oque: 'Proporção com tese firmada', tipo: 'Derivada', fonte: '483 ÷ 631', unidade: '4ª TURMA' },{ valor: '245', ord: 245, oque: 'Códigos de assunto', tipo: 'Direta', fonte: 'precedentes_publico.xlsx', unidade: '4ª TURMA' },{ valor: '31', ord: 31, oque: 'Rotas /v1', tipo: 'Direta', fonte: 'api.py', unidade: 'ATRIO' },{ valor: '33', ord: 33, oque: 'Operações HTTP declaradas', tipo: 'Direta', fonte: 'api.py', unidade: 'ATRIO' },{ valor: '188', ord: 188, oque: 'Testes automatizados', tipo: 'Direta', fonte: 'suíte local', unidade: 'ATRIO' }
 ];
-
-
 const mil = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-// Modelo unico dos cards de evidencia. A ordem aqui e a ordem exibida no tooltip.
-// Cada chave corresponde a um data-<chave> no elemento e ao par #dt-<chave> / #dt-<chave>-v
-// no markup. Campo ausente ou vazio nao e exibido. Nao ha distincao por origem.
 const CAMPOS_CARD = ['fonte', 'calculo', 'recorte', 'fundamento', 'limite'];
-
 class Component extends DCLogic {
-  state = {
-    metrica: this.props.serieMetricaInicial || 'taxa',
-    escala: this.props.escalaInicial || 'taxa',
-    serieSort: { col: 'i', dir: 'asc' },
-    indiceSort: { col: 'ord', dir: 'desc' },
-    filtro: 'Todos',
-    metodo: false
-  };
-
+  state = {metrica: this.props.serieMetricaInicial || 'taxa',escala: this.props.escalaInicial || 'taxa',serieSort: { col: 'i', dir: 'asc' },indiceSort: { col: 'ord', dir: 'desc' },filtro: 'Todos',metodo: false};
   componentDidMount() {
-    const tip = document.getElementById('dt');
-    if (!tip) return;
-    const campos = CAMPOS_CARD.map((chave) => ({
-      chave,
-      linha: document.getElementById('dt-' + chave),
-      valor: document.getElementById('dt-' + chave + '-v')
-    })).filter((c) => c.linha && c.valor);
+    const tip = document.getElementById('dt'); if (!tip) return;
+    const campos = CAMPOS_CARD.map((chave) => ({chave,linha: document.getElementById('dt-' + chave),valor: document.getElementById('dt-' + chave + '-v')})).filter((c) => c.linha && c.valor);
     const find = (node) => (node instanceof Element ? node.closest('[data-datum]') : null);
-
-    // A malha e a regra. O overlay le a mesma origem e o mesmo modulo do papel,
-    // trava neles e sobe de dentro da celula do dado. Nao flutua fora dela.
-    const regua = document.createElement('div');
-    regua.setAttribute('aria-hidden', 'true');
-    regua.style.cssText = 'position:absolute;top:0;left:0;height:0;visibility:hidden;pointer-events:none;width:var(--data-gx)';
-    const modulo = document.createElement('div');
-    modulo.style.cssText = 'height:0;width:var(--data-module)';
-    regua.appendChild(modulo);
-    document.body.appendChild(regua);
-    this._regua = regua;
-    const gx = () => regua.getBoundingClientRect().width || 20;
-    const mod = () => modulo.getBoundingClientRect().width || 64;
-
-    const place = (target) => {
-      const g = gx();
-      const m = mod();
-      const r = target.getBoundingClientRect();
-      const linha = (x) => g + Math.round((x - g) / m) * m;
-      const maxLargura = Math.min(window.innerWidth - g * 2, m * 9);
-      let left = Math.max(g, linha(r.left - m / 2));
-      let largura = Math.max(m * 5, linha(r.right + m / 2) - left);
-      largura = Math.min(largura, maxLargura);
-      if (left + largura > window.innerWidth - g) left = Math.max(g, window.innerWidth - g - largura);
-      tip.style.left = left + 'px';
-      tip.style.width = largura + 'px';
-      // offsetHeight, nao getBoundingClientRect: a animacao de entrada aplica
-      // scaleY e o rect devolveria a altura ainda em transicao.
-      const alto = tip.offsetHeight;
-      // a compactacao acontece dentro da celula: o overlay sobe da base do dado.
-      let top = r.bottom - alto;
-      if (top < 8) top = Math.min(r.top, window.innerHeight - alto - 8);
-      tip.style.top = Math.max(8, top) + 'px';
-    };
-
+    const regua = document.createElement('div'); regua.setAttribute('aria-hidden', 'true'); regua.style.cssText = 'position:absolute;top:0;left:0;height:0;visibility:hidden;pointer-events:none;width:var(--data-gx)';
+    const modulo = document.createElement('div'); modulo.style.cssText = 'height:0;width:var(--data-module)'; regua.appendChild(modulo); document.body.appendChild(regua); this._regua = regua;
+    const gx = () => regua.getBoundingClientRect().width || 20; const mod = () => modulo.getBoundingClientRect().width || 64;
+    const place = (target) => {const g = gx(); const m = mod(); const r = target.getBoundingClientRect(); const linha = (x) => g + Math.round((x - g) / m) * m; const maxLargura = Math.min(window.innerWidth - g * 2, m * 9); let left = Math.max(g, linha(r.left - m / 2)); let largura = Math.max(m * 5, linha(r.right + m / 2) - left); largura = Math.min(largura, maxLargura); if (left + largura > window.innerWidth - g) left = Math.max(g, window.innerWidth - g - largura); tip.style.left = left + 'px'; tip.style.width = largura + 'px'; const alto = tip.offsetHeight; let top = r.bottom - alto; if (top < 8) top = Math.min(r.top, window.innerHeight - alto - 8); tip.style.top = Math.max(8, top) + 'px';};
     const hide = () => { this._active = null; tip.style.display = 'none'; };
-
-    const show = (target) => {
-      const d = target.dataset;
-      let preenchidos = 0;
-      for (const c of campos) {
-        const v = d[c.chave] || '';
-        c.valor.textContent = v;
-        c.linha.style.display = v ? '' : 'none';
-        if (v) preenchidos++;
-      }
-      if (!preenchidos) { hide(); return; }
-      this._active = target;
-      tip.style.display = 'block';
-      place(target);
-    };
-    this._hide = hide;
-    this._over = (e) => { const t = find(e.target); if (t && t !== this._active) show(t); };
-    this._out = (e) => { const t = find(e.target); if (t && t === this._active && !find(e.relatedTarget)) hide(); };
-    this._in = (e) => { const t = find(e.target); if (t) show(t); };
-    this._blur = (e) => { const t = find(e.target); if (t && t === this._active) hide(); };
-    this._key = (e) => { if (e.key === 'Escape') hide(); };
-    // toque: abre no tap e permanece ate a proxima interacao correspondente.
-    this._tap = (e) => {
-      const t = find(e.target);
-      if (!t) { if (matchMedia('(hover: none)').matches) hide(); return; }
-      if (t === this._active && matchMedia('(hover: none)').matches) hide(); else show(t);
-    };
-    // o overlay esta preso a celula: em rolagem ele acompanha, nao desaparece.
-    this._scroll = () => {
-      if (!this._active || this._raf) return;
-      this._raf = requestAnimationFrame(() => {
-        this._raf = 0;
-        const alvo = this._active;
-        if (!alvo) return;
-        const r = alvo.getBoundingClientRect();
-        // fora da janela o dado nao existe mais em tela: a evidencia se recolhe
-        if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; }
-        place(alvo);
-      });
-    };
-
-    document.addEventListener('mouseover', this._over);
-    document.addEventListener('mouseout', this._out);
-    document.addEventListener('focusin', this._in);
-    document.addEventListener('focusout', this._blur);
-    document.addEventListener('keydown', this._key);
-    document.addEventListener('click', this._tap);
-    window.addEventListener('scroll', this._scroll, { passive: true });
-    window.addEventListener('resize', hide, { passive: true });
+    const show = (target) => {const d = target.dataset; let preenchidos = 0; for (const c of campos) {const v = d[c.chave] || ''; c.valor.textContent = v; c.linha.style.display = v ? '' : 'none'; if (v) preenchidos++;} if (!preenchidos) { hide(); return; } this._active = target; tip.style.display = 'block'; place(target);};
+    this._hide = hide; this._over = (e) => { const t = find(e.target); if (t && t !== this._active) show(t); }; this._out = (e) => { const t = find(e.target); if (t && t === this._active && !find(e.relatedTarget)) hide(); }; this._in = (e) => { const t = find(e.target); if (t) show(t); }; this._blur = (e) => { const t = find(e.target); if (t && t === this._active) hide(); }; this._key = (e) => { if (e.key === 'Escape') hide(); };
+    this._tap = (e) => {const t = find(e.target); if (!t) { if (matchMedia('(hover: none)').matches) hide(); return; } if (t === this._active && matchMedia('(hover: none)').matches) hide(); else show(t);};
+    this._scroll = () => {if (!this._active || this._raf) return; this._raf = requestAnimationFrame(() => {this._raf = 0; const alvo = this._active; if (!alvo) return; const r = alvo.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; } place(alvo);});};
+    document.addEventListener('mouseover', this._over); document.addEventListener('mouseout', this._out); document.addEventListener('focusin', this._in); document.addEventListener('focusout', this._blur); document.addEventListener('keydown', this._key); document.addEventListener('click', this._tap); window.addEventListener('scroll', this._scroll, { passive: true }); window.addEventListener('resize', hide, { passive: true });
   }
-
-  componentWillUnmount() {
-    document.removeEventListener('mouseover', this._over);
-    document.removeEventListener('mouseout', this._out);
-    document.removeEventListener('focusin', this._in);
-    document.removeEventListener('focusout', this._blur);
-    document.removeEventListener('keydown', this._key);
-    document.removeEventListener('click', this._tap);
-    if (this._hide) {
-      window.removeEventListener('scroll', this._scroll);
-      window.removeEventListener('resize', this._hide);
-    }
-    if (this._raf) cancelAnimationFrame(this._raf);
-    if (this._regua) this._regua.remove();
-  }
-
-  _cols(defs, sort, key, escuro) {
-    return defs.map((d) => {
-      const on = sort.col === d.col;
-      return {
-        rotulo: d.rotulo,
-        just: d.num ? 'flex-end' : 'flex-start',
-        cor: on ? (escuro ? '#FCFCFC' : '#181818') : (escuro ? 'rgba(252,252,252,.66)' : '#8A8A86'),
-        seta: on ? '1' : '0',
-        dir: on && sort.dir === 'desc' ? '↓' : '↑',
-        aria: on ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none',
-        sort: () => this.setState((s) => {
-          const cur = s[key];
-          const dir = cur.col === d.col && cur.dir === 'asc' ? 'desc' : 'asc';
-          const next = {};
-          next[key] = { col: d.col, dir };
-          return next;
-        })
-      };
-    });
-  }
-
+  componentWillUnmount() {document.removeEventListener('mouseover', this._over);document.removeEventListener('mouseout', this._out);document.removeEventListener('focusin', this._in);document.removeEventListener('focusout', this._blur);document.removeEventListener('keydown', this._key);document.removeEventListener('click', this._tap);if (this._hide) {window.removeEventListener('scroll', this._scroll);window.removeEventListener('resize', this._hide);}if (this._raf) cancelAnimationFrame(this._raf);if (this._regua) this._regua.remove();}
+  _cols(defs, sort, key, escuro) {return defs.map((d) => {const on = sort.col === d.col;return {rotulo: d.rotulo,just: d.num ? 'flex-end' : 'flex-start',cor: on ? (escuro ? '#FCFCFC' : '#181818') : (escuro ? 'rgba(252,252,252,.66)' : '#8A8A86'),seta: on ? '1' : '0',dir: on && sort.dir === 'desc' ? '↓' : '↑',aria: on ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none',sort: () => this.setState((s) => {const cur = s[key];const dir = cur.col === d.col && cur.dir === 'asc' ? 'desc' : 'asc';const next = {};next[key] = { col: d.col, dir };return next;})};});}
   renderVals() {
     const { metrica, serieSort, indiceSort, filtro, metodo } = this.state;
-
     const met = METRICAS.find((m) => m.id === metrica) || METRICAS[0];
-    const barras = SERIE.map((r) => {
-      const v = r[met.id];
-      const alto = Math.max(1.2, (v / met.max) * 86);
-      return {
-        mes: r.mes,
-        nota: r.nota,
-        texto: met.id === 'taxa' ? r.taxaTxt : mil(v),
-        h: alto.toFixed(2) + '%',
-        cheia: !r.edge,
-        vazada: r.edge,
-        calculo: met.id === 'taxa'
-          ? r.votos + ' votos ÷ ' + mil(r.despachos) + ' despachos'
-          : '',
-        fundamento: met.id === 'taxa'
-          ? ''
-          : r.votos + ' votos em ' + mil(r.despachos) + ' despachos',
-        recorte: r.nome + (r.edge ? ', mês de borda' : ', mês integral')
-      };
-    });
-
-    const metricas = METRICAS.map((m) => ({
-      rotulo: m.rotulo,
-      on: m.id === metrica,
-      off: m.id !== metrica,
-      pick: () => this.setState({ metrica: m.id })
-    }));
-
+    const barras = SERIE.map((r) => {const v = r[met.id]; const alto = Math.max(1.2, (v / met.max) * 86); return {mes:r.mes,nota:r.nota,texto:met.id === 'taxa' ? r.taxaTxt : mil(v),h:alto.toFixed(2) + '%',cheia:!r.edge,vazada:r.edge,calculo:met.id === 'taxa' ? r.votos + ' votos ÷ ' + mil(r.despachos) + ' despachos' : '',fundamento:met.id === 'taxa' ? '' : r.votos + ' votos em ' + mil(r.despachos) + ' despachos',recorte:r.nome + (r.edge ? ', mês de borda' : ', mês integral')};});
+    const metricas = METRICAS.map((m) => ({rotulo:m.rotulo,on:m.id === metrica,off:m.id !== metrica,pick:() => this.setState({ metrica: m.id })}));
     const sDir = serieSort.dir === 'asc' ? 1 : -1;
-    const linhasSerie = SERIE.slice().sort((a, b) => {
-      const x = a[serieSort.col]; const y = b[serieSort.col];
-      return typeof x === 'string' ? x.localeCompare(y, 'pt-BR') * sDir : (x - y) * sDir;
-    }).map((r) => ({
-      nome: r.nome,
-      votos: String(r.votos),
-      despachos: mil(r.despachos),
-      taxaTxt: r.taxaTxt,
-      cond: r.cond,
-      cor: r.edge ? '#8A8A86' : '#181818'
-    }));
-
-    const colunasSerie = this._cols([
-      { col: 'i', rotulo: 'MÊS' },
-      { col: 'votos', rotulo: 'VOTOS', num: true },
-      { col: 'despachos', rotulo: 'DESPACHOS', num: true },
-      { col: 'taxa', rotulo: 'CONVERSÃO', num: true },
-      { col: 'cond', rotulo: 'CONDIÇÃO', num: true }
-    ], serieSort, 'serieSort', false);
-
-    const filtrado = filtro === 'Todos' ? INDICE : INDICE.filter((r) => r.tipo === filtro);
-    const iDir = indiceSort.dir === 'asc' ? 1 : -1;
-    const linhasIndice = filtrado.slice().sort((a, b) => {
-      const x = a[indiceSort.col]; const y = b[indiceSort.col];
-      return typeof x === 'string' ? x.localeCompare(y, 'pt-BR') * iDir : (x - y) * iDir;
-    }).map((r) => Object.assign({}, r, { cor: r.tipo === 'Derivada' ? '#BFD3FF' : '#FCFCFC' }));
-
-    const colunasIndice = this._cols([
-      { col: 'ord', rotulo: 'FIGURA' },
-      { col: 'oque', rotulo: 'O QUE MEDE' },
-      { col: 'tipo', rotulo: 'TIPO' },
-      { col: 'fonte', rotulo: 'FONTE OU CÁLCULO' },
-      { col: 'unidade', rotulo: 'UNIDADE' }
-    ], indiceSort, 'indiceSort', true);
-
-    const filtros = ['Todos', 'Direta', 'Derivada'].map((f) => ({
-      rotulo: f.toUpperCase(),
-      on: f === filtro,
-      off: f !== filtro,
-      pick: () => this.setState({ filtro: f })
-    }));
-
-    return {
-      barras, metricas, linhasSerie, colunasSerie,
-      linhasIndice, colunasIndice, filtros,
-      contagemIndice: linhasIndice.length + ' FIGURAS INDEXADAS',
-      metodoAberto: metodo,
-      metodoSinal: metodo ? '−' : '+',
-      alternarMetodo: () => this.setState((s) => ({ metodo: !s.metodo }))
-    };
+    const linhasSerie = SERIE.slice().sort((a,b)=>{const x=a[serieSort.col],y=b[serieSort.col];return typeof x==='string'?x.localeCompare(y,'pt-BR')*sDir:(x-y)*sDir;}).map((r)=>({nome:r.nome,votos:String(r.votos),despachos:mil(r.despachos),taxaTxt:r.taxaTxt,cond:r.cond,cor:r.edge?'#8A8A86':'#181818'}));
+    const colunasSerie = this._cols([{ col:'i',rotulo:'MÊS'},{col:'votos',rotulo:'VOTOS',num:true},{col:'despachos',rotulo:'DESPACHOS',num:true},{col:'taxa',rotulo:'CONVERSÃO',num:true},{col:'cond',rotulo:'CONDIÇÃO',num:true}],serieSort,'serieSort',false);
+    const filtrado = filtro === 'Todos' ? INDICE : INDICE.filter((r) => r.tipo === filtro); const iDir = indiceSort.dir === 'asc' ? 1 : -1;
+    const linhasIndice = filtrado.slice().sort((a,b)=>{const x=a[indiceSort.col],y=b[indiceSort.col];return typeof x==='string'?x.localeCompare(y,'pt-BR')*iDir:(x-y)*iDir;}).map((r)=>Object.assign({},r,{cor:r.tipo==='Derivada'?'#BFD3FF':'#FCFCFC'}));
+    const colunasIndice = this._cols([{col:'ord',rotulo:'FIGURA'},{col:'oque',rotulo:'O QUE MEDE'},{col:'tipo',rotulo:'TIPO'},{col:'fonte',rotulo:'FONTE OU CÁLCULO'},{col:'unidade',rotulo:'UNIDADE'}],indiceSort,'indiceSort',true);
+    const filtros = ['Todos','Direta','Derivada'].map((f)=>({rotulo:f.toUpperCase(),on:f===filtro,off:f!==filtro,pick:()=>this.setState({filtro:f})}));
+    return {barras,metricas,linhasSerie,colunasSerie,linhasIndice,colunasIndice,filtros,contagemIndice:linhasIndice.length + ' FIGURAS INDEXADAS',metodoAberto:metodo,metodoSinal:metodo ? '−' : '+',alternarMetodo:()=>this.setState((s)=>({metodo:!s.metodo}))};
   }
 }
-
 </script>
 </body>
 </html>
