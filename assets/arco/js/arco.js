@@ -29,7 +29,7 @@
   document.head.appendChild(core);
 
   function preloadGinger(){
-    const href = new URL("../fonts/RestartGinger-SemiBold.woff2", src).href;
+    const href = new URL("../../fonts/RestartGinger-SemiBold.woff2", src).href;
     if (document.querySelector(`link[rel="preload"][href="${href}"]`)) return;
     const link = document.createElement("link");
     link.rel = "preload";
@@ -45,9 +45,9 @@
     const style = document.createElement("style");
     style.id = "arco-commit01-style";
     style.textContent = String.raw`
-@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:"ARCO Restart Ginger";src:url("assets/arco/fonts/RestartGinger-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{--f-display:"ARCO Restart Ginger","Schibsted Grotesk",system-ui,sans-serif}
 
 @media (min-width:821px){
