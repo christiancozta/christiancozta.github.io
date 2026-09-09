@@ -1,13 +1,8 @@
-@import url("../../fonts/fonts.css?v=20260909-ginger550-final");
+@import url("../../fonts/fonts.css?v=20260909-ginger600-final");
 
-/* ARCO — Ginger é a voz display. O 550 custom é a medida aprovada;
-   não se deixa o browser resolver estes pontos em 600 por aproximação. */
-.bio__name{
-  font-family:"ARCO Restart Ginger Name 550",system-ui,sans-serif!important;
-  font-weight:550!important;
-  font-synthesis:none!important;
-}
-
+/* ARCO — Ginger e a voz display. Fechado no SemiBold nativo 600:
+   sem interpolacao 550, sem face especial do nome, sem sintese do browser. */
+.bio__name,
 .hero__t,
 .shead h2,
 .aname,
@@ -20,12 +15,11 @@
 .mobile-cred__name,
 .door__t{
   font-family:"ARCO Restart Ginger",system-ui,sans-serif!important;
-  font-weight:550!important;
+  font-weight:600!important;
   font-synthesis:none!important;
 }
 
-/* HERO 5→1 — os algarismos pertencem ao aparato, não à voz display.
-   Esta regra encerra a disputa antiga 550/600 e devolve Azeret 700 ao eixo. */
+/* HERO 5→1 — os algarismos pertencem ao aparato, nao a voz display. */
 .home.hero-v2-ready .narr__n,
 .home.hero-v2-ready button.narr__n,
 button.narr__n{
@@ -58,9 +52,7 @@ button.narr__n{
 
 @media (min-width:821px){
   /* A abertura do subindice deixou de morar aqui: quem manda e a regra de
-     hover em arco.css. Este bloco cuida so do arranjo interno — forcar
-     grid-template-rows/opacity/visibility com !important mantinha os tres
-     subindices abertos o tempo todo. */
+     hover em arco.css. Este bloco cuida so do arranjo interno. */
   .rail__sec > div{
     display:flex!important;
     flex-direction:column!important;
@@ -75,24 +67,18 @@ button.narr__n{
     padding:.1rem 0 .35rem 1rem!important;
   }
 
-  /* HERO 5→1 — correção geométrica apenas no desktop.
-     1) O JS já centraliza a caixa do algarismo no eixo. Um translate residual
-        de -2.06px deslocava toda a estação para a esquerda depois da conta;
-        esta regra neutraliza esse segundo deslocamento sem tocar na animação. */
+  /* HERO 5→1 — correcao geometrica apenas no desktop. */
   .home.hero-v2-ready .narr__stat{
     translate:0 0!important;
   }
 
-  /* 2) O traço permanece contínuo, mas cada algarismo abre a mesma janela de
-        papel ao redor da própria caixa. Assim o encontro linha/número deixa de
-        depender do desenho particular de 1, 2, 3, 4 ou 5 e passa a ter 5px de
-        respiro óptico uniforme nos dois sentidos. */
+  /* O traco permanece continuo, mas cada algarismo abre a mesma janela de
+     papel ao redor da propria caixa: 5px de respiro optico uniforme. */
   .home.hero-v2-ready .narr__n{
     box-shadow:0 0 0 5px var(--paper)!important;
   }
 
-  /* As tags do 5→1 são literalmente a mesma família de microtags de Tradução:
-     mesma caixa, mesma escala, mesmo peso e mesma traçagem. */
+  /* As tags do 5→1 sao literalmente a mesma familia de microtags de Traducao. */
   .home.hero-v2-ready .narr__tag{
     display:inline-flex!important;
     justify-content:center!important;
@@ -117,11 +103,7 @@ button.narr__n{
     color:#FCFCFC!important;
   }
 
-  /* 3) A home continua mensurável quando uma página-filha está ativa. Antes,
-        display:none zerava a largura durante callbacks de resize/observer; ao
-        voltar, a coluna podia conservar alturas calculadas com caixas espremidas.
-        Mantê-la fora do fluxo, invisível e recortada preserva a largura real sem
-        interferir no scroll, foco ou clique da view corrente. */
+  /* A home continua mensuravel quando uma pagina-filha esta ativa. */
   .stage{
     position:relative;
   }
@@ -145,8 +127,7 @@ button.narr__n{
   }
 }
 
-
-/* DATA — território azul apenas no rail e na subseção corrente. */
+/* DATA — territorio azul apenas no rail e na subsecao corrente. */
 .rail .rail__link.rail__link--data[aria-current="true"],
 .rail .rail__link.rail__link--data[aria-current="true"] .n,
 .rail .rail__link.rail__link--data:hover,
