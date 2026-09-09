@@ -1,12 +1,13 @@
-@import url("../../fonts/fonts.css?v=20260909-ginger550-split-v2");
+@import url("../../fonts/fonts.css?v=20260909-ginger550-final");
 
-/* Nome aprovado: preserva exatamente o espécime 550 com kerning próprio. */
+/* ARCO — Ginger é a voz display. O 550 custom é a medida aprovada;
+   não se deixa o browser resolver estes pontos em 600 por aproximação. */
 .bio__name{
-  font-family:"ARCO Restart Ginger Name 550",var(--f-display)!important;
+  font-family:"ARCO Restart Ginger Name 550",system-ui,sans-serif!important;
   font-weight:550!important;
+  font-synthesis:none!important;
 }
 
-/* ARCO — 550 custom nos demais pontos de display antes em 600. */
 .hero__t,
 .shead h2,
 .aname,
@@ -16,13 +17,21 @@
 .eqhead h2,
 .eqhead h3,
 .grp > summary h4,
-.tale__title,
 .mobile-cred__name,
-.narr__n,
-.door__t,
+.door__t{
+  font-family:"ARCO Restart Ginger",system-ui,sans-serif!important;
+  font-weight:550!important;
+  font-synthesis:none!important;
+}
+
+/* HERO 5→1 — os algarismos pertencem ao aparato, não à voz display.
+   Esta regra encerra a disputa antiga 550/600 e devolve Azeret 700 ao eixo. */
+.home.hero-v2-ready .narr__n,
 .home.hero-v2-ready button.narr__n,
 button.narr__n{
-  font-weight:550!important;
+  font-family:var(--f-micro)!important;
+  font-weight:700!important;
+  font-synthesis:none!important;
 }
 
 /* Rail menu — hierarquia reduzida e tipografia 1–2 pt menor. */
@@ -80,6 +89,32 @@ button.narr__n{
         respiro óptico uniforme nos dois sentidos. */
   .home.hero-v2-ready .narr__n{
     box-shadow:0 0 0 5px var(--paper)!important;
+  }
+
+  /* As tags do 5→1 são literalmente a mesma família de microtags de Tradução:
+     mesma caixa, mesma escala, mesmo peso e mesma traçagem. */
+  .home.hero-v2-ready .narr__tag{
+    display:inline-flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+    box-sizing:content-box!important;
+    min-width:calc(5ch + .35em)!important;
+    min-height:0!important;
+    padding:.12rem .3rem .16rem!important;
+    border:0!important;
+    border-radius:0!important;
+    font-family:var(--f-micro)!important;
+    font-size:.6rem!important;
+    font-weight:600!important;
+    letter-spacing:.07em!important;
+    line-height:1.35!important;
+    text-transform:uppercase!important;
+    font-variant-numeric:tabular-nums!important;
+    white-space:nowrap!important;
+  }
+  .home.hero-v2-ready .narr__tag--data{
+    background:#0057FF!important;
+    color:#FCFCFC!important;
   }
 
   /* 3) A home continua mensurável quando uma página-filha está ativa. Antes,
