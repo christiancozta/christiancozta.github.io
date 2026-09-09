@@ -115,11 +115,11 @@
   .narr__tag--echo{background:var(--echo-band);color:var(--echo-ink)}
   .narr__tag--data{background:#2E71FF;color:#FCFCFC}
 
-  /* construção: linha sobe; número + título surgem juntos, sem deslocamento */
+  /* construção: linha sobe; número + título surgem juntos, lentamente e sem deslocamento */
   .view[data-view="home"] .home.hero-commit01-ready .narr__n,
   .view[data-view="home"] .home.hero-commit01-ready .narr__short{
     opacity:0!important;
-    transition:opacity 720ms cubic-bezier(.22,.68,0,1)!important;
+    transition:opacity 900ms cubic-bezier(.22,.68,0,1)!important;
     transition-delay:var(--hero-v2-num-delay,0ms)!important;
   }
   .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__n,
@@ -175,9 +175,9 @@
     pointer-events:none!important;
     cursor:default!important;
   }
-  .view[data-view="home"] .home.hero-commit01-final .narr__detail[hidden]{
-    display:block!important;
-  }
+  /* Não forçar [hidden] a display:block no estado final: a geometria mede
+     deliberadamente a altura em repouso e precisa conseguir ocultar o detalhe
+     durante essa medição sem comprimir a coluna ao encerrar a sequência. */
   .view[data-view="home"] .home.hero-commit01-final .hero-v2-seg{
     transform:scaleY(1)!important;
     transition:none!important;
@@ -240,11 +240,26 @@
     };
 
     const stationMeta = {
-      "5": {title:"ÁREAS DE ATUAÇÃO", tag:"ARCO", cls:"arco"},
-      "4": {title:"MÓDULOS DE IA JURÍDICA", tag:"ATRIO", cls:"atrio"},
-      "3": {title:"EIXOS OPERACIONAIS", tag:"ECHO", cls:"echo"},
-      "2": {title:"CRITÉRIOS METODOLÓGICOS", tag:"DATA", cls:"data"},
-      "1": {title:"PROFISSIONAL", tag:"", cls:""}
+      "5": {
+        title:"ÁREAS DE ATUAÇÃO", tag:"ARCO", cls:"arco",
+        detail:"que organizam mecanismos construídos para problemas também reconhecíveis no mercado privado, traduzidos por correspondências terminológicas."
+      },
+      "4": {
+        title:"MÓDULOS DE IA JURÍDICA", tag:"ATRIO", cls:"atrio",
+        detail:"reunidos em uma arquitetura de raciocínio jurídico para apoio decisório, aplicada à rotina de gabinete judicial."
+      },
+      "3": {
+        title:"EIXOS OPERACIONAIS", tag:"ECHO", cls:"echo",
+        detail:"estruturados por uma metodologia de operações jurídicas, construída para ambientes de alto volume."
+      },
+      "2": {
+        title:"CRITÉRIOS METODOLÓGICOS", tag:"DATA", cls:"data",
+        detail:"para validar dados e indicadores jurimétricos: evidência (Lastro) e rastreabilidade (Rastro)."
+      },
+      "1": {
+        title:"PROFISSIONAL", tag:"", cls:"",
+        detail:"capaz de medir, organizar e arquitetar sistemas jurídicos na encruzilhada atravessada por Direito, tecnologia e dados."
+      }
     };
 
     stats.forEach(stat => {
@@ -263,9 +278,7 @@
         tag.setAttribute("aria-label", `Proveniência: ${meta.tag}`);
         short.appendChild(tag);
       }
-      if (step === "1"){
-        detail.textContent = "integra a capacidade de medir, organizar e arquitetar sistemas jurídicos na encruzilhada entre dados, operações e tecnologia.";
-      }
+      detail.textContent = meta.detail;
 
       detail.hidden = true;
       detail.setAttribute("aria-hidden", "true");
@@ -334,7 +347,7 @@
         const delay = parseMs(stat.style.getPropertyValue("--hero-v2-num-delay"));
         const duration = cs
           ? Math.max(...cs.transitionDuration.split(",").map(parseMs))
-          : 720;
+          : 900;
         max = Math.max(max, delay + duration);
       });
 
