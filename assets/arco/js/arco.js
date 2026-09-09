@@ -1,5 +1,5 @@
 /* ========================================================================== 
-   ARCO — COMMIT 01 · HERO desktop
+   ARCO — HERO desktop
    Geometria + mecânica narrativa + persistência + tipografia 5→1.
    Mobile permanece sob arco-mobile-viewport.js.
    ========================================================================== */
@@ -11,7 +11,7 @@
   const coreUrl = new URL("arco-core.js?v=20260909-commit01", src);
   const mobileUrl = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src);
 
-  installCommit01Styles();
+  installHeroStyles();
   preloadGinger();
 
   const core = document.createElement("script");
@@ -40,7 +40,7 @@
     document.head.appendChild(link);
   }
 
-  function installCommit01Styles(){
+  function installHeroStyles(){
     if (document.getElementById("arco-commit01-style")) return;
     const style = document.createElement("style");
     style.id = "arco-commit01-style";
@@ -51,7 +51,7 @@
 :root{--f-display:"ARCO Restart Ginger","Schibsted Grotesk",system-ui,sans-serif}
 
 @media (min-width:821px){
-  /* nascenca quase colada ao limite inferior da primeira viewport */
+  /* nascimento quase colado ao limite inferior da primeira viewport */
   .view[data-view="home"] .narr-zone{
     min-height:max(calc(100dvh - 6px),36rem)!important;
   }
@@ -108,7 +108,6 @@
     text-transform:uppercase;
     white-space:nowrap;
     opacity:0;
-    transform:translateY(2px);
     pointer-events:auto;
   }
   .narr__tag--arco{background:#181818;color:#FCFCFC}
@@ -116,43 +115,48 @@
   .narr__tag--echo{background:var(--echo-band);color:var(--echo-ink)}
   .narr__tag--data{background:#2E71FF;color:#FCFCFC}
 
-  /* construção: número + título são um único acontecimento; detalhe/tag ficam fora */
+  /* construção: linha sobe; número + título surgem juntos, sem deslocamento */
   .view[data-view="home"] .home.hero-commit01-ready .narr__n,
   .view[data-view="home"] .home.hero-commit01-ready .narr__short{
     opacity:0!important;
-    transform:translateY(4px)!important;
-    transition:opacity 420ms var(--ease),transform 420ms var(--ease)!important;
+    transition:opacity 520ms cubic-bezier(.22,.68,0,1)!important;
     transition-delay:var(--hero-v2-num-delay,0ms)!important;
   }
   .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__n,
   .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__short{
     opacity:1!important;
-    transform:none!important;
   }
+
+  /* tag + detalhe aguardam o repouso e entram por fade puro */
   .view[data-view="home"] .home.hero-commit01-ready .narr__detail,
   .view[data-view="home"] .home.hero-commit01-ready .narr__detail[hidden],
   .view[data-view="home"] .home.hero-commit01-ready .narr__tag{
     opacity:0!important;
-    transform:translateY(2px)!important;
   }
-  .view[data-view="home"] .home.hero-commit01-ready .narr__detail[hidden]{display:none!important}
+  .view[data-view="home"] .home.hero-commit01-ready .narr__detail[hidden]{
+    display:none!important;
+  }
 
   .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__detail,
   .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__tag{
     opacity:1!important;
-    transform:none!important;
-    transition:opacity 300ms var(--ease),transform 300ms var(--ease)!important;
-  }
-  .view[data-view="home"] .home.hero-commit01-ready .narr__stat{
-    pointer-events:auto!important;
-    cursor:pointer;
-  }
-  .view[data-view="home"] .home.hero-commit01-ready .narr__stat .narr__short,
-  .view[data-view="home"] .home.hero-commit01-ready .narr__stat .narr__detail{
-    pointer-events:auto!important;
+    transition:opacity 560ms cubic-bezier(.22,.68,0,1)!important;
   }
 
-  /* estado final: nenhum flash, nenhuma espera */
+  /* enquanto houver algo a descobrir, a estação inteira obedece à regra-mãe */
+  .view[data-view="home"] .home.hero-commit01-ready:not(.hero-commit01-final) .narr__stat{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-ready:not(.hero-commit01-final) .narr__stat .narr__n,
+  .view[data-view="home"] .home.hero-commit01-ready:not(.hero-commit01-final) .narr__stat .narr__short,
+  .view[data-view="home"] .home.hero-commit01-ready:not(.hero-commit01-final) .narr__stat .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-ready:not(.hero-commit01-final) .narr__stat .narr__tag{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+  }
+
+  /* estado final = prancha estática: sem hover semântico, clique ou bump */
   .view[data-view="home"] .home.hero-commit01-final .narr,
   .view[data-view="home"] .home.hero-commit01-final .narr__stat,
   .view[data-view="home"] .home.hero-commit01-final .narr__n,
@@ -160,10 +164,20 @@
   .view[data-view="home"] .home.hero-commit01-final .narr__detail,
   .view[data-view="home"] .home.hero-commit01-final .narr__tag{
     opacity:1!important;
-    transform:none!important;
     transition:none!important;
   }
-  .view[data-view="home"] .home.hero-commit01-final .narr__detail[hidden]{display:block!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat,
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat *,
+  .view[data-view="home"] .home.hero-commit01-final .narr__n,
+  .view[data-view="home"] .home.hero-commit01-final .narr__short,
+  .view[data-view="home"] .home.hero-commit01-final .narr__detail,
+  .view[data-view="home"] .home.hero-commit01-final .narr__tag{
+    pointer-events:none!important;
+    cursor:default!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__detail[hidden]{
+    display:block!important;
+  }
   .view[data-view="home"] .home.hero-commit01-final .hero-v2-seg{
     transform:scaleY(1)!important;
     transition:none!important;
@@ -180,7 +194,6 @@
   .view[data-view="home"] .home.hero-commit01-ready .narr__detail,
   .view[data-view="home"] .home.hero-commit01-ready .narr__tag{
     opacity:1!important;
-    transform:none!important;
     transition:none!important;
   }
 }
@@ -205,9 +218,11 @@
 
     const SESSION_KEY = "arco:hero:commit01:discovered";
     const REQUEST_EVENTS = ["scroll","wheel","pointerdown","pointermove","keydown","touchstart"];
-    const REST_AFTER_BUILD = 680;
-    const REVEAL_MS = 300;
-    const BETWEEN_STATIONS = 90;
+
+    /* ritmo editorial: um repouso curto e cinco revelações idênticas */
+    const REST_AFTER_BUILD = 720;
+    const REVEAL_MS = 560;
+    const BETWEEN_STATIONS = 320;
 
     let disposed = false;
     let requested = false;
@@ -215,7 +230,6 @@
     let requestArmed = false;
     let fallbackTimer = 0;
     let runToken = 0;
-    let activeAnimations = new Set();
 
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     const readDiscovered = () => {
@@ -252,62 +266,57 @@
       if (step === "1"){
         detail.textContent = "integra a capacidade de medir, organizar e arquitetar sistemas jurídicos na encruzilhada entre dados, operações e tecnologia.";
       }
+
       detail.hidden = true;
       detail.setAttribute("aria-hidden", "true");
       button.setAttribute("aria-expanded", "false");
+      button.removeAttribute("aria-disabled");
     });
 
-    const cancelAnimations = () => {
+    const cancelSequence = () => {
       runToken += 1;
-      activeAnimations.forEach(animation => {
-        try { animation.cancel(); } catch {}
-      });
-      activeAnimations.clear();
       if (fallbackTimer) clearTimeout(fallbackTimer);
       fallbackTimer = 0;
     };
 
-    const revealStation = stat => {
+    const setStaticFinal = () => {
+      stats.forEach(stat => {
+        const button = stat.querySelector("button.narr__n");
+        if (!button) return;
+        button.tabIndex = -1;
+        button.setAttribute("aria-disabled", "true");
+      });
+    };
+
+    const revealStation = (stat, {animate = true} = {}) => {
       const detail = stat.querySelector(".narr__detail");
       const button = stat.querySelector("button.narr__n");
-      stat.classList.add("is-revealed");
+
       if (detail){
         detail.hidden = false;
         detail.setAttribute("aria-hidden", "false");
       }
       button?.setAttribute("aria-expanded", "true");
+
+      /* garante que o fade parta realmente de opacity:0, sem salto de display:none */
+      if (animate) void stat.offsetWidth;
+      stat.classList.add("is-revealed");
     };
 
     const revealAll = ({persist = true} = {}) => {
-      cancelAnimations();
+      cancelSequence();
       if (persist) markDiscovered();
-      home.classList.add("narr-on","hero-v2-play","hero-commit01-ready","hero-commit01-final");
-      stats.forEach(revealStation);
-      geometry.layout();
-    };
 
-    const blinkRound = async (number, duration, token) => {
-      const animation = number.animate(
-        [{filter:"opacity(1)"},{filter:"opacity(.38)",offset:.5},{filter:"opacity(1)"}],
-        {duration,iterations:3,easing:"cubic-bezier(.4,0,.2,1)"}
+      home.classList.add(
+        "narr-on",
+        "hero-v2-play",
+        "hero-commit01-ready",
+        "hero-commit01-final"
       );
-      activeAnimations.add(animation);
-      try { await animation.finished; } catch {}
-      activeAnimations.delete(animation);
-      if (token !== runToken || disposed) throw new Error("cancelled");
-    };
 
-    const cycleStation = async (stat, index, token) => {
-      const number = stat.querySelector(".narr__n");
-      if (!number) return;
-      const duration = 150 + index * 5;
-      for (let round = 0; round < 3; round++){
-        await blinkRound(number, duration, token);
-        if (round < 2) await sleep(150 + index * 8);
-        if (token !== runToken || disposed) throw new Error("cancelled");
-      }
-      revealStation(stat);
-      await sleep(REVEAL_MS + index * 10);
+      stats.forEach(stat => revealStation(stat, {animate:false}));
+      setStaticFinal();
+      geometry.layout();
     };
 
     const constructionBudget = () => {
@@ -317,37 +326,55 @@
         if (token.endsWith("s")) return (parseFloat(token) || 0) * 1000;
         return parseFloat(token) || 0;
       };
+
       let max = 0;
       stats.forEach(stat => {
         const n = stat.querySelector(".narr__n");
         const cs = n ? getComputedStyle(n) : null;
         const delay = parseMs(stat.style.getPropertyValue("--hero-v2-num-delay"));
-        const duration = cs ? Math.max(...cs.transitionDuration.split(",").map(parseMs)) : 420;
+        const duration = cs
+          ? Math.max(...cs.transitionDuration.split(",").map(parseMs))
+          : 520;
         max = Math.max(max, delay + duration);
       });
-      const segs = [...zone.querySelectorAll(".hero-v2-seg")];
-      segs.forEach(seg => {
-        max = Math.max(max,
+
+      [...zone.querySelectorAll(".hero-v2-seg")].forEach(seg => {
+        max = Math.max(
+          max,
           parseMs(seg.style.getPropertyValue("--hero-v2-seg-delay")) +
-          parseMs(seg.style.getPropertyValue("--hero-v2-dur")));
+          parseMs(seg.style.getPropertyValue("--hero-v2-dur"))
+        );
       });
+
       return Math.max(1200, max + 80);
     };
 
     const runAutomaticRead = async () => {
       const token = ++runToken;
+
       try {
         await sleep(constructionBudget() + REST_AFTER_BUILD);
         if (token !== runToken || disposed || readDiscovered()) return;
-        const order = [...stats].sort((a,b) => Number(b.dataset.step) - Number(a.dataset.step));
+
+        const order = [...stats].sort(
+          (a,b) => Number(b.dataset.step) - Number(a.dataset.step)
+        );
+
         for (let i = 0; i < order.length; i++){
-          await cycleStation(order[i], i, token);
+          revealStation(order[i], {animate:true});
+          await sleep(REVEAL_MS);
+
+          if (token !== runToken || disposed || readDiscovered()) return;
           if (i < order.length - 1) await sleep(BETWEEN_STATIONS);
           if (token !== runToken || disposed || readDiscovered()) return;
         }
+
+        markDiscovered();
         home.classList.add("hero-commit01-final");
+        setStaticFinal();
+        geometry.layout();
       } catch (error) {
-        if (error?.message !== "cancelled") console.error("ARCO hero:", error);
+        console.error("ARCO hero:", error);
       }
     };
 
@@ -368,6 +395,7 @@
     const armSpring = () => {
       if (gateOpen || mq.matches || disposed || !arc.classList.contains("is-in")) return;
       if (springSettled()) return openGate();
+
       const finish = event => {
         if (event.target !== spring) return;
         if (event.propertyName && event.propertyName !== "stroke-dashoffset") return;
@@ -375,6 +403,7 @@
         spring.removeEventListener("transitioncancel", finish);
         openGate();
       };
+
       spring.addEventListener("transitionend", finish);
       spring.addEventListener("transitioncancel", finish);
       fallbackTimer = window.setTimeout(openGate, 2200);
@@ -388,8 +417,10 @@
 
     const startConstruction = () => {
       if (home.classList.contains("hero-v2-play") || mq.matches || readDiscovered()) return;
+
       home.classList.add("narr-on","hero-commit01-ready");
       geometry.layout();
+
       requestAnimationFrame(() => {
         geometry.layout();
         requestAnimationFrame(() => {
@@ -401,10 +432,12 @@
 
     function requestNarrative(){
       if (mq.matches || requested || disposed || readDiscovered()) return;
+
       requested = true;
       disarmRequest();
       home.classList.add("narr-on","hero-commit01-ready");
       geometry.layout();
+
       if (gateOpen) startConstruction();
       else armSpring();
     }
@@ -412,17 +445,26 @@
     const armRequest = () => {
       if (reduce || mq.matches || requested || requestArmed || readDiscovered()) return;
       requestArmed = true;
-      REQUEST_EVENTS.forEach(type => window.addEventListener(type, requestNarrative, {passive:true}));
+      REQUEST_EVENTS.forEach(
+        type => window.addEventListener(type, requestNarrative, {passive:true})
+      );
     };
 
+    /* REGRA-MÃE: enquanto a prancha não estiver final, um gesto revela tudo. */
     stats.forEach(stat => {
       stat.addEventListener("click", event => {
-        if (mq.matches) return;
+        if (mq.matches || home.classList.contains("hero-commit01-final")) return;
         event.preventDefault();
         revealAll({persist:true});
       });
+
       stat.addEventListener("keydown", event => {
-        if (mq.matches || (event.key !== "Enter" && event.key !== " ")) return;
+        if (
+          mq.matches ||
+          home.classList.contains("hero-commit01-final") ||
+          (event.key !== "Enter" && event.key !== " ")
+        ) return;
+
         event.preventDefault();
         revealAll({persist:true});
       });
@@ -447,9 +489,10 @@
         if (readDiscovered() && !mq.matches) revealAll({persist:false});
         return;
       }
+
       if (!mq.matches){
         markDiscovered();
-        cancelAnimations();
+        cancelSequence();
       }
     });
     viewObserver.observe(homeView,{attributes:true,attributeFilter:["data-active"]});
@@ -458,6 +501,7 @@
       stats.forEach(stat => {
         const detail = stat.querySelector(".narr__detail");
         const button = stat.querySelector("button.narr__n");
+
         if (detail){
           detail.hidden = false;
           detail.setAttribute("aria-hidden", "false");
@@ -480,12 +524,15 @@
     mq.addEventListener?.("change", event => {
       if (event.matches){
         disarmRequest();
-        cancelAnimations();
+        cancelSequence();
         return;
       }
+
       geometry.layout();
-      if (reduce || readDiscovered()) revealAll({persist:false});
-      else {
+
+      if (reduce || readDiscovered()){
+        revealAll({persist:false});
+      } else {
         requested = false;
         gateOpen = springSettled();
         armRequest();
