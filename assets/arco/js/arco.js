@@ -119,7 +119,7 @@
   .view[data-view="home"] .home.hero-commit01-ready .narr__n,
   .view[data-view="home"] .home.hero-commit01-ready .narr__short{
     opacity:0!important;
-    transition:opacity 520ms cubic-bezier(.22,.68,0,1)!important;
+    transition:opacity 720ms cubic-bezier(.22,.68,0,1)!important;
     transition-delay:var(--hero-v2-num-delay,0ms)!important;
   }
   .view[data-view="home"] .home.hero-commit01-ready.hero-v2-play .narr__n,
@@ -140,7 +140,7 @@
   .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__detail,
   .view[data-view="home"] .home.hero-commit01-ready .narr__stat.is-revealed .narr__tag{
     opacity:1!important;
-    transition:opacity 560ms cubic-bezier(.22,.68,0,1)!important;
+    transition:opacity 900ms cubic-bezier(.22,.68,0,1)!important;
   }
 
   /* enquanto houver algo a descobrir, a estação inteira obedece à regra-mãe */
@@ -219,10 +219,10 @@
     const SESSION_KEY = "arco:hero:commit01:discovered";
     const REQUEST_EVENTS = ["scroll","wheel","pointerdown","pointermove","keydown","touchstart"];
 
-    /* ritmo editorial: um repouso curto e cinco revelações idênticas */
-    const REST_AFTER_BUILD = 720;
-    const REVEAL_MS = 560;
-    const BETWEEN_STATIONS = 320;
+    /* ritmo editorial: cadência uniforme, deliberada e respirada */
+    const REST_AFTER_BUILD = 1100;
+    const REVEAL_MS = 900;
+    const BETWEEN_STATIONS = 600;
 
     let disposed = false;
     let requested = false;
@@ -334,7 +334,7 @@
         const delay = parseMs(stat.style.getPropertyValue("--hero-v2-num-delay"));
         const duration = cs
           ? Math.max(...cs.transitionDuration.split(",").map(parseMs))
-          : 520;
+          : 720;
         max = Math.max(max, delay + duration);
       });
 
