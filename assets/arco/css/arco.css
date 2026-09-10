@@ -2364,3 +2364,20 @@ body{
     transition:none !important;
   }
 }
+
+/* ========================================================================== */
+/* Fonte original: indice-filete-de-chamada                                   */
+/* ========================================================================== */
+/* No índice dos domínios o marcador ›  ficava a ~950px do título, órfão na
+   outra ponta da linha, com o contador colado ao nome. Entre os dois entra o
+   que sempre entrou num sumário bem composto: um filete de chamada. Nada
+   além disso muda — nem corpo, nem folga, nem cor. */
+.grp > summary::after{
+  content:""; order:2; flex:1 1 auto; align-self:center;
+  height:1px; min-width:2rem; margin:0 1.1rem;
+  background:var(--hair);
+  transition:background-color var(--fast) var(--ease);
+}
+.grp__n{ order:1; }
+.grp__x{ order:3; margin-left:0; }
+.grp > summary:hover::after{ background:var(--ink-62); }
