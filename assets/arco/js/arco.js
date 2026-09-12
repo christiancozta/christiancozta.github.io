@@ -58,7 +58,7 @@
   .view[data-view="home"] .bio__list li:first-child a{
     background:none!important;
     color:inherit!important;
-    border:2px solid var(--hair)!important;
+    border:2px solid #8A8A8A!important;
     padding:calc(.44em - 1px) calc(.78em - 1px)!important;
     font-weight:600!important;
     transition:color var(--fast) var(--ease), border-color var(--fast) var(--ease)!important;
@@ -67,7 +67,7 @@
   .view[data-view="home"] .bio__list li:first-child a:focus-visible{
     background:none!important;
     color:var(--ink)!important;
-    border-color:var(--ink)!important;
+    border-color:#8A8A8A!important;
   }
 
   /* O final segue sem clique; o hover desenha um quadrado independente da
