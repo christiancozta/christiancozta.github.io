@@ -32,6 +32,18 @@
       "2": {tag:"DATA", cls:"data"}
     };
 
+    /* O algarismo fica em uma camada própria para o quadrado de hover crescer
+       sem mexer na geometria que posiciona as cinco estações. */
+    stats.forEach(stat => {
+      const button = stat.querySelector(".narr__n");
+      if (!button || button.querySelector(".narr__glyph")) return;
+      const glyph = document.createElement("span");
+      glyph.className = "narr__glyph";
+      glyph.textContent = button.textContent.trim();
+      button.textContent = "";
+      button.appendChild(glyph);
+    });
+
     if (!document.getElementById("arco-provenance-hover-style")){
       const style = document.createElement("style");
       style.id = "arco-provenance-hover-style";
@@ -42,24 +54,75 @@
     display:none!important;
   }
 
-  /* O final segue sem clique; somente o número responde à faixa explorada. */
-  .view[data-view="home"] .home.hero-commit01-final .narr__n{
-    transition:background-color 120ms cubic-bezier(.22,.68,0,1), color 120ms cubic-bezier(.22,.68,0,1)!important;
-  }
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n{
+  /* CV da hero: repouso escuro, hover em inversão. */
+  .view[data-view="home"] .bio__list li:first-child a{
     background:#181818!important;
     color:#FCFCFC!important;
+    border-color:#181818!important;
+    transition:background-color var(--fast) var(--ease), color var(--fast) var(--ease), border-color var(--fast) var(--ease)!important;
   }
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n{
-    background:#A63A23!important;
+  .view[data-view="home"] .bio__list li:first-child a:hover,
+  .view[data-view="home"] .bio__list li:first-child a:focus-visible{
+    background:#FCFCFC!important;
+    color:#181818!important;
+    border-color:#181818!important;
+  }
+
+  /* O final segue sem clique; o hover desenha um quadrado independente da
+     caixa tipográfica, portanto não desloca título, detalhe, eixo ou linha. */
+  .view[data-view="home"] .home.hero-commit01-final .narr__n{
+    position:relative!important;
+    isolation:isolate!important;
+    overflow:visible!important;
+    transition:color 120ms cubic-bezier(.22,.68,0,1)!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__n::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:42px;
+    height:42px;
+    transform:translate(-50%,-50%);
+    background:transparent;
+    opacity:0;
+    z-index:0;
+    pointer-events:none;
+    transition:opacity 120ms cubic-bezier(.22,.68,0,1), background-color 120ms cubic-bezier(.22,.68,0,1);
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__glyph{
+    position:relative;
+    z-index:1;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n{
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n::before{
+    opacity:1;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n::before{
+    background:#181818;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n{
     color:#FCFCFC!important;
   }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n::before{
+    background:#A63A23;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n{
+    color:#FCFCFC!important;
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n::before{
+    background:#FFB627;
+  }
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n{
-    background:#FFB627!important;
     color:#181818!important;
   }
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n::before{
+    background:#0057FF;
+  }
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n{
-    background:#0057FF!important;
     color:#FCFCFC!important;
   }
 
@@ -102,7 +165,8 @@
 
 @media (prefers-reduced-motion:reduce){
   .arco-provenance-tag,
-  .view[data-view="home"] .home.hero-commit01-final .narr__n{
+  .view[data-view="home"] .home.hero-commit01-final .narr__n,
+  .view[data-view="home"] .home.hero-commit01-final .narr__n::before{
     transition:none!important;
   }
 }
