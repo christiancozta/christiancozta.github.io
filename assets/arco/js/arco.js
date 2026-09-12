@@ -54,18 +54,20 @@
     display:none!important;
   }
 
-  /* CV da hero: repouso escuro, hover em inversão. */
+  /* CV da hero: mesma paleta dos demais contatos, com ênfase só em peso e borda. */
   .view[data-view="home"] .bio__list li:first-child a{
-    background:#181818!important;
-    color:#FCFCFC!important;
-    border-color:#181818!important;
-    transition:background-color var(--fast) var(--ease), color var(--fast) var(--ease), border-color var(--fast) var(--ease)!important;
+    background:none!important;
+    color:inherit!important;
+    border:2px solid var(--hair)!important;
+    padding:calc(.44em - 1px) calc(.78em - 1px)!important;
+    font-weight:600!important;
+    transition:color var(--fast) var(--ease), border-color var(--fast) var(--ease)!important;
   }
   .view[data-view="home"] .bio__list li:first-child a:hover,
   .view[data-view="home"] .bio__list li:first-child a:focus-visible{
-    background:#FCFCFC!important;
-    color:#181818!important;
-    border-color:#181818!important;
+    background:none!important;
+    color:var(--ink)!important;
+    border-color:var(--ink)!important;
   }
 
   /* O final segue sem clique; o hover desenha um quadrado independente da
