@@ -233,7 +233,6 @@
       const style = document.createElement('style');
       style.id = 'arco-contact-orbit-style';
       style.textContent = String.raw`
-/* Contatos pertencem à marca durante a leitura; deixam de duplicar o rail. */
 .rail__creed{display:none!important}
 .arco-contact-orbit{--orbit-size:42px;--orbit-left:24px;--orbit-top:22px;color:var(--ink,#181818)}
 .arco-contact-orbit__brand,.arco-contact-orbit__link{
@@ -248,31 +247,26 @@
 @media (min-width:821px){
   .arco-contact-orbit{
     position:fixed;z-index:72;left:var(--orbit-left);top:var(--orbit-top);width:var(--orbit-size);
-    opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-4px);
-    transition:opacity 150ms cubic-bezier(.22,.68,0,1),transform 150ms cubic-bezier(.22,.68,0,1),visibility 0s linear 150ms
+    opacity:0;visibility:hidden;pointer-events:none
   }
-  .arco-contact-orbit.is-sticky,.arco-contact-orbit.is-external-view{
-    opacity:1;visibility:visible;pointer-events:auto;transform:none;transition-delay:0s
+  .arco-contact-orbit.is-collected,.arco-contact-orbit.is-external-view{
+    opacity:1;visibility:visible;pointer-events:auto
   }
-  .arco-contact-orbit__brand{width:var(--orbit-size);height:var(--orbit-size);padding:0}
+  .arco-contact-orbit__brand{display:none;width:var(--orbit-size);height:var(--orbit-size);padding:0}
+  .arco-contact-orbit.is-external-view .arco-contact-orbit__brand{display:grid}
   .arco-contact-orbit__links{
-    display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px;width:var(--orbit-size);
-    opacity:0;visibility:hidden;transform:translateY(-6px);pointer-events:none;
-    transition:opacity 130ms cubic-bezier(.22,.68,0,1),transform 130ms cubic-bezier(.22,.68,0,1),visibility 0s linear 130ms
+    display:grid;grid-template-columns:1fr;gap:6px;width:var(--orbit-size);
+    margin-top:calc(var(--orbit-size) + 8px);
+    opacity:0;visibility:hidden;pointer-events:none
   }
   .arco-contact-orbit.is-collected .arco-contact-orbit__links,
   .arco-contact-orbit.is-external-view .arco-contact-orbit__links{
-    opacity:1;visibility:visible;transform:none;pointer-events:auto;transition-delay:0s
+    opacity:1;visibility:visible;pointer-events:auto
   }
   .arco-contact-orbit__link{
     width:var(--orbit-size);height:var(--orbit-size);border:1px solid color-mix(in srgb,var(--ink,#181818) 52%,transparent)
   }
-  .view[data-view="home"].arco-mark-sticky .bio__mark{visibility:hidden!important}
   .view[data-view="home"].arco-contacts-collected .bio__list{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-}
-
-@media (min-width:821px) and (max-width:1000px){
-  .arco-contact-orbit{--orbit-top:18px}
 }
 
 @media (max-width:820px){
@@ -301,7 +295,7 @@
 }
 
 @media (prefers-reduced-motion:reduce){
-  .arco-contact-orbit,.arco-contact-orbit__links{transition:none!important}
+  .arco-contact-orbit{transition:none!important}
 }`;
       document.head.appendChild(style);
     }
@@ -309,56 +303,120 @@
     railCreed?.setAttribute('aria-hidden','true');
     legacyMobileCred?.setAttribute('aria-hidden','true');
 
+    const initialMarkStyle = mark.getAttribute('style');
+    const initialRole = mark.getAttribute('role');
+    const initialTabIndex = mark.getAttribute('tabindex');
+
+    const restoreMark = () => {
+      if (initialMarkStyle == null) mark.removeAttribute('style');
+      else mark.setAttribute('style',initialMarkStyle);
+      if (initialRole == null) mark.removeAttribute('role');
+      else mark.setAttribute('role',initialRole);
+      if (initialTabIndex == null) mark.removeAttribute('tabindex');
+      else mark.setAttribute('tabindex',initialTabIndex);
+      mark.removeAttribute('aria-label');
+    };
+
     const returnHome = () => {
       const homeTrigger = document.querySelector('.rail__title[data-view="home"]') || document.querySelector('[data-view="home"]');
       if (homeView.dataset.active === 'false') homeTrigger?.click();
       requestAnimationFrame(() => window.scrollTo({top:0,behavior:mqReduce.matches ? 'auto' : 'smooth'}));
     };
     brand.addEventListener('click',returnHome);
+    mark.addEventListener('click',() => {
+      if (mark.dataset.floating === 'true') returnHome();
+    });
+    mark.addEventListener('keydown',event => {
+      if (mark.dataset.floating !== 'true') return;
+      if (event.key === 'Enter' || event.key === ' '){
+        event.preventDefault();
+        returnHome();
+      }
+    });
 
     let raf = 0;
-    let anchorLeft = null;
-    let anchorSize = null;
+    let floating = false;
+    let originTopDoc = null;
+    let originLeft = null;
+    let originWidth = null;
+    let originHeight = null;
     const stickyTop = () => innerWidth <= 1000 ? 18 : Math.max(20,Math.min(28,innerWidth * .02));
+
+    const captureOrigin = () => {
+      const rect = mark.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      originTopDoc = rect.top + scrollY;
+      originLeft = rect.left;
+      originWidth = rect.width;
+      originHeight = rect.height;
+    };
+
+    const floatMark = top => {
+      if (originLeft == null || originWidth == null || originHeight == null) return;
+      floating = true;
+      mark.dataset.floating = 'true';
+      mark.setAttribute('role','button');
+      mark.setAttribute('tabindex','0');
+      mark.setAttribute('aria-label','ARCO — voltar ao início');
+      mark.style.setProperty('position','fixed','important');
+      mark.style.setProperty('left',`${originLeft}px`,'important');
+      mark.style.setProperty('right','auto','important');
+      mark.style.setProperty('top',`${top}px`,'important');
+      mark.style.setProperty('margin','0','important');
+      mark.style.setProperty('width',`${originWidth}px`,'important');
+      mark.style.setProperty('height',`${originHeight}px`,'important');
+      mark.style.setProperty('z-index','73','important');
+      mark.style.setProperty('cursor','pointer','important');
+    };
+
+    const unfloatMark = () => {
+      floating = false;
+      delete mark.dataset.floating;
+      restoreMark();
+    };
 
     const sync = () => {
       raf = 0;
       const mobile = mqMobile.matches;
       const homeActive = homeView.dataset.active !== 'false';
-      const markRect = mark.getBoundingClientRect();
-      const listRect = contactList.getBoundingClientRect();
       const top = stickyTop();
 
-      /* Desktop: a versão fixa é geometricamente idêntica à marca original.
-         Nada de clamp, escala mínima ou arredondamento: só a coordenada Y muda. */
-      if (homeActive && markRect.width > 0 && markRect.height > 0){
-        anchorLeft = markRect.left;
-        anchorSize = Math.min(markRect.width,markRect.height);
-      }
-      if (anchorLeft == null) anchorLeft = 20;
-      if (anchorSize == null) anchorSize = 42;
-      const size = anchorSize;
+      if (mobile || !homeActive){
+        if (floating) unfloatMark();
+        orbit.classList.remove('is-collected','is-mobile-visible');
+        orbit.classList.toggle('is-external-view',!homeActive);
+        homeView.classList.remove('arco-contacts-collected');
 
-      orbit.style.setProperty('--orbit-left',`${anchorLeft}px`);
+        if (mobile && homeActive){
+          const listRect = contactList.getBoundingClientRect();
+          orbit.classList.remove('is-external-view');
+          orbit.classList.toggle('is-mobile-visible',listRect.bottom <= 8);
+        }
+        return;
+      }
+
+      orbit.classList.remove('is-mobile-visible','is-external-view');
+
+      if (!floating) captureOrigin();
+      if (originTopDoc == null || originLeft == null || originWidth == null || originHeight == null) return;
+
+      const shouldFloat = scrollY + top >= originTopDoc;
+      if (shouldFloat){
+        floatMark(top);
+      }else if (floating){
+        unfloatMark();
+        captureOrigin();
+      }
+
+      const size = originWidth;
+      orbit.style.setProperty('--orbit-left',`${originLeft}px`);
       orbit.style.setProperty('--orbit-size',`${size}px`);
       orbit.style.setProperty('--orbit-top',`${top}px`);
 
-      orbit.classList.toggle('is-external-view',!homeActive);
-
-      if (mobile){
-        homeView.classList.remove('arco-mark-sticky','arco-contacts-collected');
-        orbit.classList.remove('is-sticky','is-collected');
-        const passedContacts = listRect.bottom <= Math.max(8,top);
-        orbit.classList.toggle('is-mobile-visible',homeActive && passedContacts);
-      }else{
-        orbit.classList.remove('is-mobile-visible');
-        const sticky = homeActive && markRect.top <= top;
-        const collected = sticky && listRect.top <= top + size + 12;
-        orbit.classList.toggle('is-sticky',sticky);
-        orbit.classList.toggle('is-collected',collected);
-        homeView.classList.toggle('arco-mark-sticky',sticky);
-        homeView.classList.toggle('arco-contacts-collected',collected);
-      }
+      const listRect = contactList.getBoundingClientRect();
+      const collected = shouldFloat && listRect.top <= top + originHeight + 12;
+      orbit.classList.toggle('is-collected',collected);
+      homeView.classList.toggle('arco-contacts-collected',collected);
     };
 
     const requestSync = () => {
@@ -367,11 +425,18 @@
     };
 
     window.addEventListener('scroll',requestSync,{passive:true});
-    window.addEventListener('resize',requestSync,{passive:true});
+    window.addEventListener('resize',() => {
+      if (floating) unfloatMark();
+      originTopDoc = originLeft = originWidth = originHeight = null;
+      requestSync();
+    },{passive:true});
     window.addEventListener('orientationchange',requestSync,{passive:true});
-    mqMobile.addEventListener?.('change',requestSync);
+    mqMobile.addEventListener?.('change',() => {
+      if (floating) unfloatMark();
+      originTopDoc = originLeft = originWidth = originHeight = null;
+      requestSync();
+    });
     new MutationObserver(requestSync).observe(homeView,{attributes:true,attributeFilter:['data-active']});
-    if ('ResizeObserver' in window) new ResizeObserver(requestSync).observe(mark);
     sync();
   }
 })();
