@@ -328,9 +328,12 @@
       const markRect = mark.getBoundingClientRect();
       const listRect = contactList.getBoundingClientRect();
       const top = stickyTop();
-      if (homeActive && markRect.width > 0){
-        anchorLeft = Math.max(10,markRect.left);
-        anchorSize = Math.max(36,Math.min(48,markRect.width));
+
+      /* Desktop: a versão fixa é geometricamente idêntica à marca original.
+         Nada de clamp, escala mínima ou arredondamento: só a coordenada Y muda. */
+      if (homeActive && markRect.width > 0 && markRect.height > 0){
+        anchorLeft = markRect.left;
+        anchorSize = Math.min(markRect.width,markRect.height);
       }
       if (anchorLeft == null) anchorLeft = 20;
       if (anchorSize == null) anchorSize = 42;
