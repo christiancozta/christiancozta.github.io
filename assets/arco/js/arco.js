@@ -180,6 +180,8 @@
     const homeView = document.querySelector('.view[data-view="home"]');
     const mark = homeView?.querySelector('.bio__mark');
     const contactList = homeView?.querySelector('.bio__list');
+    const rail = document.querySelector('.rail');
+    const contentEdge = homeView?.querySelector('.bio__head > div');
     const railCreed = document.querySelector('.rail__creed');
     const legacyMobileCred = document.querySelector('.mobile-cred');
     if (!homeView || !mark || !contactList) return;
@@ -340,7 +342,20 @@
     let originLeft = null;
     let originWidth = null;
     let originHeight = null;
+    let gutterLeft = null;
     const stickyTop = () => innerWidth <= 1000 ? 18 : Math.max(20,Math.min(28,innerWidth * .02));
+
+    const centeredGutterLeft = () => {
+      if (originWidth == null) return originLeft;
+      const railRect = rail?.getBoundingClientRect();
+      const contentRect = contentEdge?.getBoundingClientRect();
+      if (!railRect || !contentRect) return originLeft;
+      const start = railRect.right;
+      const end = contentRect.left;
+      const free = end - start;
+      if (free <= originWidth) return originLeft;
+      return start + (free - originWidth) / 2;
+    };
 
     const captureOrigin = () => {
       const rect = mark.getBoundingClientRect();
@@ -349,17 +364,20 @@
       originLeft = rect.left;
       originWidth = rect.width;
       originHeight = rect.height;
+      gutterLeft = centeredGutterLeft();
     };
 
     const floatMark = top => {
       if (originLeft == null || originWidth == null || originHeight == null) return;
+      gutterLeft = centeredGutterLeft();
+      const left = gutterLeft ?? originLeft;
       floating = true;
       mark.dataset.floating = 'true';
       mark.setAttribute('role','button');
       mark.setAttribute('tabindex','0');
       mark.setAttribute('aria-label','ARCO — voltar ao início');
       mark.style.setProperty('position','fixed','important');
-      mark.style.setProperty('left',`${originLeft}px`,'important');
+      mark.style.setProperty('left',`${left}px`,'important');
       mark.style.setProperty('right','auto','important');
       mark.style.setProperty('top',`${top}px`,'important');
       mark.style.setProperty('margin','0','important');
@@ -400,6 +418,8 @@
       if (!floating) captureOrigin();
       if (originTopDoc == null || originLeft == null || originWidth == null || originHeight == null) return;
 
+      gutterLeft = centeredGutterLeft();
+      const dockLeft = gutterLeft ?? originLeft;
       const shouldFloat = scrollY + top >= originTopDoc;
       if (shouldFloat){
         floatMark(top);
@@ -409,7 +429,7 @@
       }
 
       const size = originWidth;
-      orbit.style.setProperty('--orbit-left',`${originLeft}px`);
+      orbit.style.setProperty('--orbit-left',`${dockLeft}px`);
       orbit.style.setProperty('--orbit-size',`${size}px`);
       orbit.style.setProperty('--orbit-top',`${top}px`);
 
@@ -427,13 +447,13 @@
     window.addEventListener('scroll',requestSync,{passive:true});
     window.addEventListener('resize',() => {
       if (floating) unfloatMark();
-      originTopDoc = originLeft = originWidth = originHeight = null;
+      originTopDoc = originLeft = originWidth = originHeight = gutterLeft = null;
       requestSync();
     },{passive:true});
     window.addEventListener('orientationchange',requestSync,{passive:true});
     mqMobile.addEventListener?.('change',() => {
       if (floating) unfloatMark();
-      originTopDoc = originLeft = originWidth = originHeight = null;
+      originTopDoc = originLeft = originWidth = originHeight = gutterLeft = null;
       requestSync();
     });
     new MutationObserver(requestSync).observe(homeView,{attributes:true,attributeFilter:['data-active']});
