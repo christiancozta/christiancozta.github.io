@@ -212,6 +212,7 @@
     const stats = opening?.querySelector('.eq__stats--rank');
     const frontierText = opening?.querySelector('.band--fronteira .fronteira-txt');
     const introLead = document.querySelector('#h-repertorio')?.parentElement?.querySelector('.eq__lead');
+    const repertoire = document.querySelector('#repertorio');
     const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
     const sourceChips = limitSection?.querySelector('.outchips');
     if (!opening || !stats || !frontierText) return;
@@ -224,7 +225,7 @@
         second.className = 'eq__lead translation-intro__second';
         introLead.after(second);
       }
-      second.textContent = 'A presente seção apresenta o que foi construído na prática, traduzido em problemas, mecanismos e linguagem profissional reconhecível.';
+      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> dores reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
     }
 
     stats.className = 'translation-method';
@@ -273,6 +274,7 @@
       style.id = 'arco-translation-frontier-style';
       style.textContent = String.raw`
 .translation-intro__second{margin-top:.65rem!important}
+.translation-intro__second strong{font-weight:700;color:inherit}
 .translation-method{
   min-width:0;
   font-family:var(--f-body);
@@ -314,11 +316,48 @@
 }
 .band--fronteira .outchips{margin-top:.7rem}
 .progress-rail__mark{display:none!important}
+.doors{background:var(--paper)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.translation-end-space{display:block;width:100%;height:var(--translation-end-space,6rem);background:transparent;pointer-events:none}
+@media (max-width:820px){
+  .translation-end-space{height:max(clamp(5rem,12vh,8rem),calc(5rem + env(safe-area-inset-bottom,0px)))}
+}
 `;
       document.head.appendChild(style);
     }
 
     limitSection?.remove();
+
+    if (repertoire){
+      let endSpace = repertoire.querySelector(':scope > .translation-end-space');
+      if (!endSpace){
+        endSpace = document.createElement('div');
+        endSpace.className = 'translation-end-space';
+        endSpace.setAttribute('aria-hidden','true');
+        repertoire.appendChild(endSpace);
+      }
+
+      const mqMobile = matchMedia('(max-width:820px)');
+      let endRaf = 0;
+      const measureEndSpace = () => {
+        endRaf = 0;
+        if (mqMobile.matches){
+          endSpace.style.removeProperty('--translation-end-space');
+          return;
+        }
+        const railName = document.querySelector('.rail__name');
+        const top = railName?.getBoundingClientRect().top;
+        const height = Number.isFinite(top) ? Math.max(0,innerHeight - top) : 0;
+        endSpace.style.setProperty('--translation-end-space',`${height}px`);
+      };
+      const scheduleEndSpace = () => {
+        if (endRaf) return;
+        endRaf = requestAnimationFrame(measureEndSpace);
+      };
+      scheduleEndSpace();
+      window.addEventListener('resize',scheduleEndSpace,{passive:true});
+      window.addEventListener('orientationchange',scheduleEndSpace,{passive:true});
+      mqMobile.addEventListener?.('change',scheduleEndSpace);
+    }
   }
 
   function installProvenanceHover(){
