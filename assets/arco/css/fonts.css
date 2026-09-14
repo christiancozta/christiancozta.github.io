@@ -142,3 +142,50 @@ button.narr__n{
 .rail__sec[data-sec="data"] .rail__seclink[aria-current="location"]{
   color:#0057FF!important;
 }
+
+/* MENU — ordem conceitual: medir, organizar, arquitetar. A ordem e a mesma
+   no rail lateral e no topo mobile; os subindices acompanham seus projetos. */
+.rail__link[data-view="data"]{order:10}
+.rail__sec[data-sec="data"]{order:11}
+.rail__link[data-view="echo"]{order:20}
+.rail__sec[data-sec="echo"]{order:21}
+.rail__link[data-view="atrio"]{order:30}
+.rail__sec[data-sec="atrio"]{order:31}
+.rail__link[data-anchor="repertorio"]{order:40}
+
+/* No rail lateral, a categoria reconhecivel antecede o nome autoral sem virar
+   metadata: mesma voz de corpo, italico discreto e proximidade de uma unidade. */
+@media (min-width:1001px){
+  .rail__link[data-view="data"],
+  .rail__link[data-view="echo"],
+  .rail__link[data-view="atrio"]{
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:.08rem!important;
+    padding:.48rem .1rem .56rem!important;
+  }
+  .rail__link[data-view="data"]::before,
+  .rail__link[data-view="echo"]::before,
+  .rail__link[data-view="atrio"]::before{
+    display:block;
+    font-family:var(--f-body);
+    font-size:.56rem;
+    font-weight:400;
+    font-style:italic;
+    line-height:1.15;
+    letter-spacing:0;
+    text-transform:none;
+    color:#FCFCFC;
+    white-space:nowrap;
+  }
+  .rail__link[data-view="data"]::before{content:"a medida da Jurimetria"}
+  .rail__link[data-view="echo"]::before{content:"a metodologia de Legal Ops"}
+  .rail__link[data-view="atrio"]::before{content:"a arquitetura de Legal Tech"}
+
+  /* LUX e o ultimo item visivel do ATRIO. A faixa vazia abaixo dele amplia a
+     geometria de permanencia do hover sem timer, overlay ou captura de clique. */
+  .rail__sec[data-sec="atrio"] .rail__mods{
+    padding-bottom:1.2rem!important;
+  }
+}
