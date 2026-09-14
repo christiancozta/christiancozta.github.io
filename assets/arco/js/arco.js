@@ -14,49 +14,63 @@
   runtime.src = runtimeUrl.href;
   runtime.async = false;
   runtime.onload = () => {
-    installDataOrigin();
+    installArcadeNarrative();
     installProvenanceHover();
     installContactOrbit();
   };
   runtime.onerror = () => console.error("ARCO: falha ao carregar o runtime estabilizado.");
   document.head.appendChild(runtime);
 
-  function installDataOrigin(){
-    const paragraph = document.querySelector('.view[data-view="home"] .arcade .mov:first-child .mov__t');
-    if (!paragraph || paragraph.querySelector('.b-data')) return;
+  function installArcadeNarrative(){
+    const home = document.querySelector('.view[data-view="home"] .home');
+    const movements = [...(home?.querySelectorAll('.arcade > .mov') || [])];
+    if (!home || movements.length < 2) return;
 
-    const pattern = /Ali se\s+formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o\s+acervo legível\./;
-    const tail = [...paragraph.childNodes].find(node =>
-      node.nodeType === Node.TEXT_NODE && pattern.test(node.nodeValue || ""));
-    if (!tail) return;
+    const foundation = movements[0].querySelector('.mov__t');
+    if (foundation){
+      foundation.innerHTML = foundation.innerHTML.replace(
+        'O primeiro movimento ocorreu na Vara de Execuções Fiscais',
+        'O primeiro movimento ocorreu em gabinete judicial de primeira instância'
+      );
+      if (!foundation.querySelector('.b-data')){
+        foundation.innerHTML = foundation.innerHTML.replace(
+          /Ali se\s+formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o\s+acervo legível\./,
+          'Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível e a atuação mensurável. Daí viria <button class="b-data" type="button">DATA</button>.'
+        );
+      }
+      foundation.querySelector('.b-data')?.addEventListener('click',() =>
+        document.querySelector('.rail__link--data[data-view="data"]')?.click());
+    }
 
-    const text = tail.nodeValue || "";
-    const match = text.match(pattern);
-    if (!match || match.index == null) return;
+    const regency = movements[1];
+    const paragraph = regency.querySelector('.mov__t');
+    const legacyStory = regency.querySelector('.idlink--echo[data-tale="tale-echo"]');
+    if (paragraph && !paragraph.querySelector('.storylink--echo')){
+      paragraph.innerHTML = `
+        O segundo movimento amadureceu em instância recursal, com a passagem da gestão de volume
+        para a regência do fluxo decisório. <em><button class="storylink storylink--echo" type="button">Como não havia a quem perguntar</button>, o <button class="b-echo" type="button">ECHO</button> nasce como método de estruturação operacional</em>:
+        organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades,
+        gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte
+        em método de operação jurídica.
+      `;
 
-    const before = text.slice(0, match.index);
-    const after = text.slice(match.index + match[0].length);
-    const fragment = document.createDocumentFragment();
-    fragment.append(document.createTextNode(
-      `${before}Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível e a atuação mensurável. Daí viria `
-    ));
+      const echo = paragraph.querySelector('.b-echo');
+      echo?.addEventListener('click',() =>
+        document.querySelector('.rail__link[data-view="echo"]')?.click());
 
-    const data = document.createElement('button');
-    data.className = 'b-data';
-    data.type = 'button';
-    data.dataset.view = 'data';
-    data.textContent = 'DATA';
-    data.setAttribute('aria-label','Abrir DATA');
-    data.addEventListener('click',() =>
-      document.querySelector('.rail__link--data[data-view="data"]')?.click());
+      const story = paragraph.querySelector('.storylink--echo');
+      story?.addEventListener('click',() => legacyStory?.click());
 
-    fragment.append(data, document.createTextNode(`.${after}`));
-    tail.replaceWith(fragment);
+      if (legacyStory){
+        legacyStory.hidden = true;
+        legacyStory.setAttribute('aria-hidden','true');
+        legacyStory.tabIndex = -1;
+      }
 
-    if (!document.getElementById('arco-data-origin-style')){
-      const style = document.createElement('style');
-      style.id = 'arco-data-origin-style';
-      style.textContent = String.raw`
+      if (!document.getElementById('arco-arcade-narrative-style')){
+        const style = document.createElement('style');
+        style.id = 'arco-arcade-narrative-style';
+        style.textContent = String.raw`
 .b-data{
   display:inline;padding:.1em .36em .14em;margin:0 .02em;border:0;
   font:inherit;font-weight:600;letter-spacing:.008em;text-decoration:none;
@@ -65,8 +79,50 @@
   transition:box-shadow var(--fast) var(--ease)
 }
 .b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
+.storylink{
+  display:inline;appearance:none;-webkit-appearance:none;
+  margin:0;padding:0;border:0;background:none;color:inherit;
+  font:inherit;font-style:inherit;cursor:pointer;
+  text-decoration-line:underline;text-decoration-thickness:1px;
+  text-underline-offset:.14em;text-decoration-color:currentColor;
+  transition:text-decoration-color var(--fast) var(--ease)
+}
+.storylink:hover,.storylink:focus-visible{text-decoration-color:transparent}
 `;
-      document.head.appendChild(style);
+        document.head.appendChild(style);
+      }
+
+      const mq = matchMedia('(max-width:820px)');
+      const tag = document.createElement('span');
+      tag.className = 'arco-provenance-tag arco-provenance-tag--echo';
+      tag.textContent = 'ECHO';
+      tag.setAttribute('aria-hidden','true');
+      document.body.appendChild(tag);
+
+      const moveTag = event => {
+        const gapX = 14,gapY = 12,margin = 8;
+        const rect = tag.getBoundingClientRect();
+        let x = event.clientX + gapX;
+        let y = event.clientY + gapY;
+        if (x + rect.width + margin > innerWidth) x = event.clientX - rect.width - gapX;
+        if (y + rect.height + margin > innerHeight) y = event.clientY - rect.height - gapY;
+        tag.style.left = `${Math.max(margin, x)}px`;
+        tag.style.top = `${Math.max(margin, y)}px`;
+      };
+      const hideTag = () => tag.classList.remove('is-visible');
+      story?.addEventListener('pointerenter',event => {
+        if (mq.matches || (event.pointerType && event.pointerType !== 'mouse')) return;
+        tag.classList.add('is-visible');
+        moveTag(event);
+      });
+      story?.addEventListener('pointermove',event => {
+        if (!mq.matches && (!event.pointerType || event.pointerType === 'mouse')) moveTag(event);
+      });
+      story?.addEventListener('pointerleave',hideTag);
+      story?.addEventListener('click',hideTag);
+      window.addEventListener('scroll',hideTag,{passive:true,capture:true});
+      window.addEventListener('blur',hideTag);
+      mq.addEventListener?.('change',hideTag);
     }
   }
 
