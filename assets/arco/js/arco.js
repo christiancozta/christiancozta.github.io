@@ -26,6 +26,17 @@
     const movements = [...(home?.querySelectorAll('.arcade > .mov') || [])];
     if (!home || movements.length < 3) return;
 
+    const openTale = (id, trigger) => {
+      const tale = document.getElementById(id);
+      if (!tale) return;
+      if (!tale.open) tale.showModal();
+      tale.scrollTop = 0;
+      tale.addEventListener('close',() => trigger?.focus(),{once:true});
+    };
+
+    const atrioTaleTitle = document.querySelector('#tale-atrio .tale__title');
+    if (atrioTaleTitle) atrioTaleTitle.textContent = 'Quando o raciocínio tentou acelerar antes do método';
+
     const foundation = movements[0].querySelector('.mov__t');
     if (foundation){
       foundation.innerHTML = foundation.innerHTML.replace(
@@ -59,7 +70,7 @@
         document.querySelector('.rail__link[data-view="echo"]')?.click());
 
       const story = paragraph.querySelector('.storylink--echo');
-      const openStory = () => legacyStory?.click();
+      const openStory = () => openTale('tale-echo',story);
       story?.addEventListener('click',openStory);
       story?.addEventListener('keydown',event => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -151,7 +162,7 @@
         document.querySelector('.rail__link[data-view="atrio"]')?.click());
 
       const architectureStory = architectureParagraph.querySelector('.storylink--atrio');
-      const openArchitectureStory = () => legacyArchitectureStory?.click();
+      const openArchitectureStory = () => openTale('tale-atrio',architectureStory);
       architectureStory?.addEventListener('click',openArchitectureStory);
       architectureStory?.addEventListener('keydown',event => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
