@@ -6,6 +6,7 @@
   const spring = arc?.querySelector('.spring');
   const stats = [...(home?.querySelectorAll('.narr__stat') || [])];
   const titles = [...(home?.querySelectorAll('.arcade > .mov > .mov__h') || [])];
+  const movementCopies = [...(home?.querySelectorAll('.arcade > .mov > .mov__t') || [])];
   if (!home || !arc || !spring || stats.length !== 5 || titles.length !== 3) return;
 
   const numbers = stats.map(stat => stat.querySelector('.narr__n'));
@@ -293,6 +294,16 @@
     ro.observe(arc);
     stats.forEach(node => ro.observe(node));
     titles.forEach(node => ro.observe(node));
+    movementCopies.forEach(node => ro.observe(node));
+  }
+
+  if (movementCopies.length){
+    const copyObserver = new MutationObserver(scheduleMeasure);
+    movementCopies.forEach(node => copyObserver.observe(node, {
+      subtree:true,
+      childList:true,
+      characterData:true
+    }));
   }
 
   if (mq.matches){
