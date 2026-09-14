@@ -24,7 +24,7 @@
   function installArcadeNarrative(){
     const home = document.querySelector('.view[data-view="home"] .home');
     const movements = [...(home?.querySelectorAll('.arcade > .mov') || [])];
-    if (!home || movements.length < 2) return;
+    if (!home || movements.length < 3) return;
 
     const foundation = movements[0].querySelector('.mov__t');
     if (foundation){
@@ -68,11 +68,7 @@
         openStory();
       });
 
-      if (legacyStory){
-        legacyStory.hidden = true;
-        legacyStory.setAttribute('aria-hidden','true');
-        legacyStory.tabIndex = -1;
-      }
+      legacyStory?.remove();
 
       if (!document.getElementById('arco-arcade-narrative-style')){
         const style = document.createElement('style');
@@ -86,11 +82,13 @@
   transition:box-shadow var(--fast) var(--ease)
 }
 .b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
-.view[data-view="home"] .arcade > .mov:nth-child(2) .mov__t{
+.view[data-view="home"] .arcade > .mov:nth-child(2) .mov__t,
+.view[data-view="home"] .arcade > .mov:nth-child(3) .mov__t{
   -webkit-hyphens:auto;
   hyphens:auto;
 }
-.view[data-view="home"] .arcade > .mov:nth-child(2) > .idlink--echo{
+.view[data-view="home"] .arcade > .mov:nth-child(2) > .idlink--echo,
+.view[data-view="home"] .arcade > .mov:nth-child(3) > .idlink--atrio{
   display:none!important;
 }
 .storylink{
@@ -135,6 +133,63 @@
       });
       story?.addEventListener('pointerleave',hideTag);
       story?.addEventListener('click',hideTag);
+      window.addEventListener('scroll',hideTag,{passive:true,capture:true});
+      window.addEventListener('blur',hideTag);
+      mq.addEventListener?.('change',hideTag);
+    }
+
+    const architecture = movements[2];
+    const architectureParagraph = architecture.querySelector('.mov__t');
+    const legacyArchitectureStory = architecture.querySelector('.idlink--atrio[data-tale="tale-atrio"]');
+    if (architectureParagraph && !architectureParagraph.querySelector('.storylink--atrio')){
+      architectureParagraph.lang = 'pt-BR';
+      architectureParagraph.innerHTML = `
+        O terceiro movimento surge quando o raciocínio, <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="pt-BR">ao encontrar a inteligência artificial, tentou acelerar antes do método</span>. O <button class="b-atrio" type="button">ATRIO</button> transforma a lógica já construída em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.
+      `;
+
+      const atrio = architectureParagraph.querySelector('.b-atrio');
+      atrio?.addEventListener('click',() =>
+        document.querySelector('.rail__link[data-view="atrio"]')?.click());
+
+      const architectureStory = architectureParagraph.querySelector('.storylink--atrio');
+      const openArchitectureStory = () => legacyArchitectureStory?.click();
+      architectureStory?.addEventListener('click',openArchitectureStory);
+      architectureStory?.addEventListener('keydown',event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openArchitectureStory();
+      });
+
+      legacyArchitectureStory?.remove();
+
+      const mq = matchMedia('(max-width:820px)');
+      const tag = document.createElement('span');
+      tag.className = 'arco-provenance-tag arco-provenance-tag--atrio';
+      tag.textContent = 'ATRIO';
+      tag.setAttribute('aria-hidden','true');
+      document.body.appendChild(tag);
+
+      const moveTag = event => {
+        const gapX = 14,gapY = 12,margin = 8;
+        const rect = tag.getBoundingClientRect();
+        let x = event.clientX + gapX;
+        let y = event.clientY + gapY;
+        if (x + rect.width + margin > innerWidth) x = event.clientX - rect.width - gapX;
+        if (y + rect.height + margin > innerHeight) y = event.clientY - rect.height - gapY;
+        tag.style.left = `${Math.max(margin, x)}px`;
+        tag.style.top = `${Math.max(margin, y)}px`;
+      };
+      const hideTag = () => tag.classList.remove('is-visible');
+      architectureStory?.addEventListener('pointerenter',event => {
+        if (mq.matches || (event.pointerType && event.pointerType !== 'mouse')) return;
+        tag.classList.add('is-visible');
+        moveTag(event);
+      });
+      architectureStory?.addEventListener('pointermove',event => {
+        if (!mq.matches && (!event.pointerType || event.pointerType === 'mouse')) moveTag(event);
+      });
+      architectureStory?.addEventListener('pointerleave',hideTag);
+      architectureStory?.addEventListener('click',hideTag);
       window.addEventListener('scroll',hideTag,{passive:true,capture:true});
       window.addEventListener('blur',hideTag);
       mq.addEventListener?.('change',hideTag);
