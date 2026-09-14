@@ -208,23 +208,33 @@
   }
 
   function installTranslationFrontier(){
-    const frontierText = document.querySelector('.band--fronteira .fronteira-txt');
+    const opening = document.querySelector('.abertura');
+    const stats = opening?.querySelector('.eq__stats--rank');
+    const frontierText = opening?.querySelector('.band--fronteira .fronteira-txt');
     const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
-    const sourceParagraph = limitSection?.querySelector('.coda > p');
     const sourceChips = limitSection?.querySelector('.outchips');
-    if (!frontierText || !limitSection || !sourceParagraph) return;
+    if (!opening || !stats || !frontierText) return;
 
-    if (frontierText.querySelector('.fronteira-limit')){
-      limitSection.remove();
-      return;
-    }
+    stats.className = 'translation-method';
+    stats.innerHTML = `
+      <p class="translation-method__title">Como a tradução é atualizada</p>
+      <ol class="translation-method__list">
+        <li>só entra o que possui implementação e evidência;</li>
+        <li>aliases não aumentam a contagem;</li>
+        <li>uma correspondência pode ser demonstrada por mais de uma classe;</li>
+        <li>uma classe pode sustentar várias correspondências;</li>
+        <li>uma nova ferramenta ou tecnologia não cria automaticamente nova classe;</li>
+        <li>o número só muda quando surge unidade com função própria, evidência específica e possibilidade de teste independente.</li>
+      </ol>
+    `;
+
+    const lead = frontierText.querySelector('p')?.cloneNode(true);
+    frontierText.replaceChildren();
+    if (lead) frontierText.appendChild(lead);
 
     const limitCopy = document.createElement('p');
     limitCopy.className = 'fronteira-limit';
-    const label = document.createElement('strong');
-    label.textContent = 'Ainda não demonstrado';
-    const copy = sourceParagraph.textContent.replace(/\s+/g,' ').trim();
-    limitCopy.append(label,document.createTextNode(`: ${copy}`));
+    limitCopy.textContent = 'O que ainda não foi demonstrado. Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e documentado é o acerto pelo método. Nenhuma entrada toca a face financeira de Legal Ops. Não há evidência para reivindicá-la. RAG e busca semântica ficam de fora porque preparo não é mecanismo; os demais, porque analogia não é transferência desenhada. Declarar a fronteira custa menos do que deixá-la ser descoberta.';
     frontierText.appendChild(limitCopy);
 
     if (sourceChips){
@@ -242,16 +252,35 @@
       const style = document.createElement('style');
       style.id = 'arco-translation-frontier-style';
       style.textContent = String.raw`
-.band--fronteira .fronteira-limit strong{
-  font-family:inherit;font-size:inherit;line-height:inherit;font-style:inherit;
-  font-weight:700;color:inherit;letter-spacing:inherit;text-transform:none
+.translation-method{
+  min-width:0;
+  font-family:var(--f-body);
+  color:var(--ink-78)
 }
+.translation-method__title{
+  margin:0 0 .75rem;
+  font-family:var(--f-body);
+  font-size:.78rem;
+  line-height:1.6;
+  font-weight:700;
+  color:var(--ink)
+}
+.translation-method__list{
+  margin:0;
+  padding-left:1.35rem;
+  font-family:var(--f-body);
+  font-size:.78rem;
+  line-height:1.6;
+  color:var(--ink-78)
+}
+.translation-method__list li + li{margin-top:.22rem}
 .band--fronteira .outchips{margin-top:.7rem}
+.progress-rail__mark{display:none!important}
 `;
       document.head.appendChild(style);
     }
 
-    limitSection.remove();
+    limitSection?.remove();
   }
 
   function installProvenanceHover(){
