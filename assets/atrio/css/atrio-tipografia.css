@@ -1,0 +1,139 @@
+/* ========================================================================== 
+   ATRIO — camada tipográfica canônica
+   --------------------------------------------------------------------------
+   Taxonomia:
+   - assets/fonts/fonts.css: registro físico das famílias e pesos;
+   - atrio.css: sistema visual e geometria-base;
+   - atrio-arquitetura.css: comportamento específico da Seção 02;
+   - atrio-tipografia.css: escala editorial, peso de corpo e cor tipográfica.
+   ========================================================================== */
+
+:root{
+  --l1:#FCFCFC;
+  --l2:#FCFCFC;
+  --text-light:#FCFCFC;
+  --muted-on-dark:#FCFCFC;
+  --corpo:1.0625rem; /* 17px com raiz de 16px */
+  --corpo-altura:1.58;
+}
+
+body{
+  font-family:var(--font-body);
+  font-size:var(--corpo);
+  font-weight:500;
+  line-height:var(--corpo-altura);
+}
+
+/* Títulos de seção: TWK Everett Extrabold, escala preservada no sistema-base. */
+.board-header h2{font-weight:750}
+
+/* Corpo editorial: Commissioner 500 / 17px. Microcopy, labels e metadata ficam fora. */
+.legal-tech-note>p:not(.legal-tech-note__kicker),
+.brand-note__prose p,
+.sample-note__notice,
+.sample-note__content>p,
+.prelim-card p,
+.full-row p,
+.tension-row p,
+.issue-ledger p,
+.module-card__instruction,
+.module-card__index li,
+.module-card__mother p,
+.module-lead,
+.module-card__section dd,
+.operation-copy p,
+.findings-context p,
+.metric-card__copy p,
+.metric-card__source,
+.metric-row p,
+.methodology-row p,
+.authorship-row p,
+.relation-echo p,
+.relation-arco p,
+.version-note__list span,
+.field-light--architecture .module-lead,
+.field-light--architecture .module-card__section dd,
+.field-light--architecture .operation-copy p,
+.field-light--architecture .module-card__index li,
+.field-light--architecture .module-card__mother p,
+.field-light--architecture .module-card__flow--atrio .module-card__regency p{
+  font-family:var(--font-body);
+  font-size:var(--corpo);
+  font-weight:500;
+  line-height:var(--corpo-altura);
+}
+
+/* Commissioner em microcamadas mantém a escala própria, mas não cai para peso 400. */
+.data-tooltip em{font-weight:500}
+
+/* Texto claro: branco editorial único. Não altera cinzas escuros sobre superfícies claras. */
+.sample-note__panel,
+.sample-note__notice,
+.sample-note__close,
+.sample-note__close:hover,
+.sample-note__content>p,
+.closing-row .closing-row__creed,
+.section-index,
+.section-index span,
+.prelim-card--partido,
+.module-card-stage,
+.module-stream__vision,
+.module-stream__vision:hover,
+.module-card,
+.module-card__back,
+.module-card__back:hover,
+.module-card__subtitle,
+.module-card__instruction,
+.module-card__index span,
+.module-card__mother p,
+.module-card__section dd,
+.operation-copy p,
+.metric-card__source,
+.methodology-row p,
+.methodology-row p strong,
+.relation-arco,
+.relation-arco h3,
+.relation-arco p,
+.page-footer,
+.page-footer p,
+.page-footer time,
+.version-note__panel,
+.version-note__close,
+.version-note__close:hover,
+.version-note__list span,
+.data-tooltip__lastro,
+.data-tooltip.is-derivacao .data-tooltip__regime,
+.data-tooltip b,
+.data-tooltip em,
+.field-light--architecture .module-card__idle-prompt span,
+.field-light--architecture .module-card--detail .module-card__subtitle,
+.field-light--architecture .module-card__section dd,
+.field-light--architecture .operation-copy p,
+.field-light--architecture .module-card__index span,
+.field-light--architecture .module-card__mother p,
+.field-light--architecture .module-card__flow--atrio .module-card__regency p,
+.field-light--architecture .module-sample-button,
+.field-light--architecture .module-sample-button:hover,
+.field-light--architecture .module-card__version,
+.field-light--architecture .module-card__version-label,
+.field-light--architecture .module-card__version[data-module-version="atrio"] .module-card__version-label{
+  color:#FCFCFC;
+}
+
+/* Fundos escuros que usam --muted passam a branco por token, inclusive em mobile. */
+.field-dark{--muted:#FCFCFC}
+.prelim-card--partido{--muted:#FCFCFC}
+.final-row{--muted:#FCFCFC}
+
+/* Overrides responsivos anteriores não podem rebaixar o corpo editorial. */
+@media(max-width:760px){
+  .methodology-row p,
+  .field-light--architecture .module-lead,
+  .field-light--architecture .module-card__section dd,
+  .field-light--architecture .operation-copy p,
+  .field-light--architecture .module-card__mother p,
+  .field-light--architecture .module-card__flow--atrio .module-card__regency p{
+    font-size:var(--corpo);
+    line-height:var(--corpo-altura);
+  }
+}
