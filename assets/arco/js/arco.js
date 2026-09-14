@@ -14,11 +14,61 @@
   runtime.src = runtimeUrl.href;
   runtime.async = false;
   runtime.onload = () => {
+    installDataOrigin();
     installProvenanceHover();
     installContactOrbit();
   };
   runtime.onerror = () => console.error("ARCO: falha ao carregar o runtime estabilizado.");
   document.head.appendChild(runtime);
+
+  function installDataOrigin(){
+    const paragraph = document.querySelector('.view[data-view="home"] .arcade .mov:first-child .mov__t');
+    if (!paragraph || paragraph.querySelector('.b-data')) return;
+
+    const pattern = /Ali se\s+formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o\s+acervo legível\./;
+    const tail = [...paragraph.childNodes].find(node =>
+      node.nodeType === Node.TEXT_NODE && pattern.test(node.nodeValue || ""));
+    if (!tail) return;
+
+    const text = tail.nodeValue || "";
+    const match = text.match(pattern);
+    if (!match || match.index == null) return;
+
+    const before = text.slice(0, match.index);
+    const after = text.slice(match.index + match[0].length);
+    const fragment = document.createDocumentFragment();
+    fragment.append(document.createTextNode(
+      `${before}Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível e a atuação mensurável. Daí viria `
+    ));
+
+    const data = document.createElement('button');
+    data.className = 'b-data';
+    data.type = 'button';
+    data.dataset.view = 'data';
+    data.textContent = 'DATA';
+    data.setAttribute('aria-label','Abrir DATA');
+    data.addEventListener('click',() =>
+      document.querySelector('.rail__link--data[data-view="data"]')?.click());
+
+    fragment.append(data, document.createTextNode(`.${after}`));
+    tail.replaceWith(fragment);
+
+    if (!document.getElementById('arco-data-origin-style')){
+      const style = document.createElement('style');
+      style.id = 'arco-data-origin-style';
+      style.textContent = String.raw`
+.b-data{
+  display:inline;padding:.1em .36em .14em;margin:0 .02em;border:0;
+  font:inherit;font-weight:600;letter-spacing:.008em;text-decoration:none;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  background:#0057FF;color:#FCFCFC;cursor:pointer;
+  transition:box-shadow var(--fast) var(--ease)
+}
+.b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
+`;
+      document.head.appendChild(style);
+    }
+  }
 
   function installProvenanceHover(){
     const homeView = document.querySelector('.view[data-view="home"]');
