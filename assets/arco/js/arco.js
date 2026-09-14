@@ -46,9 +46,10 @@
     const paragraph = regency.querySelector('.mov__t');
     const legacyStory = regency.querySelector('.idlink--echo[data-tale="tale-echo"]');
     if (paragraph && !paragraph.querySelector('.storylink--echo')){
+      paragraph.lang = 'pt-BR';
       paragraph.innerHTML = `
         O segundo movimento amadureceu em instância recursal, com a passagem da gestão de volume
-        para a regência do fluxo decisório. <em><button class="storylink storylink--echo" type="button">Como não havia a quem perguntar</button>, o <button class="b-echo" type="button">ECHO</button> nasce como método de estruturação operacional</em>:
+        para a regência do fluxo decisório. <span class="storylink storylink--echo" role="button" tabindex="0" aria-haspopup="dialog" lang="pt-BR">Como não havia a quem perguntar</span>, o <button class="b-echo" type="button">ECHO</button> nasce como método de estruturação operacional:
         organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades,
         gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte
         em método de operação jurídica.
@@ -59,7 +60,13 @@
         document.querySelector('.rail__link[data-view="echo"]')?.click());
 
       const story = paragraph.querySelector('.storylink--echo');
-      story?.addEventListener('click',() => legacyStory?.click());
+      const openStory = () => legacyStory?.click();
+      story?.addEventListener('click',openStory);
+      story?.addEventListener('keydown',event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openStory();
+      });
 
       if (legacyStory){
         legacyStory.hidden = true;
@@ -79,10 +86,18 @@
   transition:box-shadow var(--fast) var(--ease)
 }
 .b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
+.view[data-view="home"] .arcade > .mov:nth-child(2) .mov__t{
+  -webkit-hyphens:auto;
+  hyphens:auto;
+}
+.view[data-view="home"] .arcade > .mov:nth-child(2) > .idlink--echo{
+  display:none!important;
+}
 .storylink{
-  display:inline;appearance:none;-webkit-appearance:none;
+  display:inline;
   margin:0;padding:0;border:0;background:none;color:inherit;
-  font:inherit;font-style:inherit;cursor:pointer;
+  font:inherit;font-style:normal;font-weight:700;cursor:pointer;
+  -webkit-hyphens:auto;hyphens:auto;
   text-decoration-line:underline;text-decoration-thickness:1px;
   text-underline-offset:.14em;text-decoration-color:currentColor;
   transition:text-decoration-color var(--fast) var(--ease)
