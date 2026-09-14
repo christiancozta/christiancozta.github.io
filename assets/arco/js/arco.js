@@ -50,9 +50,8 @@
       paragraph.innerHTML = `
         O segundo movimento amadureceu em instância recursal, com a passagem da gestão de volume
         para a regência do fluxo decisório. <span class="storylink storylink--echo" role="button" tabindex="0" aria-haspopup="dialog" lang="pt-BR">Como não havia a quem perguntar</span>, o <button class="b-echo" type="button">ECHO</button> nasce como método de estruturação operacional:
-        organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades,
-        gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte
-        em método de operação jurídica.
+        organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades
+        e qualidade de minutas. É o ponto em que a experiência se converte em método de operação jurídica.
       `;
 
       const echo = paragraph.querySelector('.b-echo');
@@ -144,7 +143,7 @@
     if (architectureParagraph && !architectureParagraph.querySelector('.storylink--atrio')){
       architectureParagraph.lang = 'pt-BR';
       architectureParagraph.innerHTML = `
-        O terceiro movimento surge quando o raciocínio, <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="pt-BR">ao encontrar a inteligência artificial, tentou acelerar antes do método</span>. O <button class="b-atrio" type="button">ATRIO</button> transforma a lógica já construída em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.
+        O terceiro movimento surge quando o raciocínio, ao encontrar a inteligência artificial, <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="pt-BR">tentou acelerar antes do método</span>. O <button class="b-atrio" type="button">ATRIO</button> transforma a lógica já construída em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.
       `;
 
       const atrio = architectureParagraph.querySelector('.b-atrio');
