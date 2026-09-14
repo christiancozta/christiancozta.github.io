@@ -211,13 +211,28 @@
     const opening = document.querySelector('.abertura');
     const stats = opening?.querySelector('.eq__stats--rank');
     const frontierText = opening?.querySelector('.band--fronteira .fronteira-txt');
+    const introLead = document.querySelector('#h-repertorio')?.parentElement?.querySelector('.eq__lead');
     const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
     const sourceChips = limitSection?.querySelector('.outchips');
     if (!opening || !stats || !frontierText) return;
 
+    if (introLead){
+      introLead.textContent = 'Desenvolvi ferramentas sem saber que já eram batizadas. Reformulei o que “sempre foi assim” quando ele não respondia ao problema.';
+      let second = introLead.parentElement?.querySelector('.translation-intro__second');
+      if (!second){
+        second = document.createElement('p');
+        second.className = 'eq__lead translation-intro__second';
+        introLead.after(second);
+      }
+      second.textContent = 'A presente seção apresenta o que foi construído na prática, traduzido em problemas, mecanismos e linguagem profissional reconhecível.';
+    }
+
     stats.className = 'translation-method';
     stats.innerHTML = `
-      <p class="translation-method__title">Como a tradução é atualizada</p>
+      <header class="eqhead translation-method__head">
+        <h3>Como a tradução é atualizada</h3>
+      </header>
+      <p class="translation-method__intro">Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e documentado é o acerto pelo método.</p>
       <ol class="translation-method__list">
         <li>só entra o que possui implementação e evidência;</li>
         <li>aliases não aumentam a contagem;</li>
@@ -228,13 +243,18 @@
       </ol>
     `;
 
-    const lead = frontierText.querySelector('p')?.cloneNode(true);
     frontierText.replaceChildren();
-    if (lead) frontierText.appendChild(lead);
+
+    const dataBoundary = document.createElement('p');
+    dataBoundary.className = 'fronteira-data';
+    dataBoundary.innerHTML = 'Extraí métricas e calculei indicadores a partir de listas que o sistema entregava brutas. Durante a experiência profissional, porém, a mensuração sistemática restringiu-se ao indicador de produtividade dos colaboradores. Os demais indicadores foram calculados posteriormente, em exercício retrospectivo, para desenvolvimento da habilidade. Por isso, este exercício não contabiliza mecanismos de jurimetria atribuídos a <button class="b-data" type="button">DATA</button>.';
+    frontierText.appendChild(dataBoundary);
+    dataBoundary.querySelector('.b-data')?.addEventListener('click',() =>
+      document.querySelector('.rail__link--data[data-view="data"]')?.click());
 
     const limitCopy = document.createElement('p');
     limitCopy.className = 'fronteira-limit';
-    limitCopy.textContent = 'O que ainda não foi demonstrado. Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e documentado é o acerto pelo método. Nenhuma entrada toca a face financeira de Legal Ops. Não há evidência para reivindicá-la. RAG e busca semântica ficam de fora porque preparo não é mecanismo; os demais, porque analogia não é transferência desenhada. Declarar a fronteira custa menos do que deixá-la ser descoberta.';
+    limitCopy.innerHTML = '<strong>Ainda não demonstrado:</strong> Nenhuma entrada toca a face financeira de Legal Ops. Não há evidência para reivindicá-la. RAG e busca semântica ficam de fora porque preparo não é mecanismo; os demais, porque analogia não é transferência desenhada. Declarar a fronteira custa menos do que deixá-la ser descoberta.';
     frontierText.appendChild(limitCopy);
 
     if (sourceChips){
@@ -252,28 +272,46 @@
       const style = document.createElement('style');
       style.id = 'arco-translation-frontier-style';
       style.textContent = String.raw`
+.translation-intro__second{margin-top:.65rem!important}
 .translation-method{
   min-width:0;
   font-family:var(--f-body);
   color:var(--ink-78)
 }
-.translation-method__title{
-  margin:0 0 .75rem;
-  font-family:var(--f-body);
-  font-size:.78rem;
-  line-height:1.6;
+.translation-method__head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  margin:0 0 .75rem;padding-top:.85rem;border-top:1px solid var(--hair)
+}
+.translation-method__head h3{
+  margin:0;
+  font-family:var(--f-display);
   font-weight:700;
+  font-size:clamp(.98rem,1.45vw,1.14rem);
+  line-height:1.1;
+  letter-spacing:-.018em;
   color:var(--ink)
 }
-.translation-method__list{
-  margin:0;
-  padding-left:1.35rem;
+.translation-method__intro{
+  margin:0 0 .8rem;
   font-family:var(--f-body);
   font-size:.78rem;
   line-height:1.6;
   color:var(--ink-78)
 }
-.translation-method__list li + li{margin-top:.22rem}
+.translation-method__list{
+  margin:0;
+  padding-left:1.45rem;
+  font-family:var(--f-body);
+  font-size:.78rem;
+  line-height:1.6;
+  color:var(--ink-78)
+}
+.translation-method__list li{padding-left:.48rem}
+.translation-method__list li + li{margin-top:.28rem}
+.band--fronteira .fronteira-limit strong{
+  font-family:var(--f-body);font-size:inherit;line-height:inherit;font-style:normal;
+  font-weight:700;color:inherit;letter-spacing:inherit;text-transform:none
+}
 .band--fronteira .outchips{margin-top:.7rem}
 .progress-rail__mark{display:none!important}
 `;
