@@ -15,6 +15,7 @@
   runtime.async = false;
   runtime.onload = () => {
     installArcadeNarrative();
+    installTranslationFrontier();
     installProvenanceHover();
     installContactOrbit();
   };
@@ -204,6 +205,53 @@
       window.addEventListener('blur',hideTag);
       mq.addEventListener?.('change',hideTag);
     }
+  }
+
+  function installTranslationFrontier(){
+    const frontierText = document.querySelector('.band--fronteira .fronteira-txt');
+    const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
+    const sourceParagraph = limitSection?.querySelector('.coda > p');
+    const sourceChips = limitSection?.querySelector('.outchips');
+    if (!frontierText || !limitSection || !sourceParagraph) return;
+
+    if (frontierText.querySelector('.fronteira-limit')){
+      limitSection.remove();
+      return;
+    }
+
+    const limitCopy = document.createElement('p');
+    limitCopy.className = 'fronteira-limit';
+    const label = document.createElement('strong');
+    label.textContent = 'Ainda não demonstrado';
+    const copy = sourceParagraph.textContent.replace(/\s+/g,' ').trim();
+    limitCopy.append(label,document.createTextNode(`: ${copy}`));
+    frontierText.appendChild(limitCopy);
+
+    if (sourceChips){
+      const allowed = new Set([
+        'e-billing','spend management','outside counsel management','vendor management',
+        'matter budgeting','rag','busca semântica'
+      ]);
+      [...sourceChips.querySelectorAll('.chip')].forEach(chip => {
+        if (!allowed.has(chip.textContent.trim().toLocaleLowerCase('pt-BR'))) chip.remove();
+      });
+      frontierText.appendChild(sourceChips);
+    }
+
+    if (!document.getElementById('arco-translation-frontier-style')){
+      const style = document.createElement('style');
+      style.id = 'arco-translation-frontier-style';
+      style.textContent = String.raw`
+.band--fronteira .fronteira-limit strong{
+  font-family:inherit;font-size:inherit;line-height:inherit;font-style:inherit;
+  font-weight:700;color:inherit;letter-spacing:inherit;text-transform:none
+}
+.band--fronteira .outchips{margin-top:.7rem}
+`;
+      document.head.appendChild(style);
+    }
+
+    limitSection.remove();
   }
 
   function installProvenanceHover(){
