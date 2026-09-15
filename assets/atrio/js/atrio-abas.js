@@ -10,6 +10,7 @@ const EVOLUTION_COPY = {
   cerne: "Versão do contrato de confronto crítico, com gate técnico em cinco estados.",
   lux: "Versão do refinamento formal, com anonimização propagada aos três blocos."
 };
+const FINDING_DATA_KEYS = ["regime","source","numerator","denominator","period","detail"];
 
 const cards = [...document.querySelectorAll(".module-card--detail[data-module-card]")];
 const architectureSystem = document.getElementById("architecture-system");
@@ -147,6 +148,23 @@ function buildCardTabs(card){
   syncCard(card);
 }
 
+function bindFindingEvidence(card){
+  const number=card.querySelector(".metric-card__number");
+  if(!number) return;
+  number.setAttribute("data-datum","");
+  FINDING_DATA_KEYS.forEach(key=>{
+    const value=card.dataset[key];
+    if(value) number.dataset[key]=value;
+    card.removeAttribute(`data-${key}`);
+  });
+  card.removeAttribute("data-datum");
+  card.removeAttribute("tabindex");
+  card.querySelector(".metric-card__source")?.remove();
+  number.tabIndex=0;
+  const title=card.querySelector(".metric-card__copy h3")?.textContent.trim()||"métrica";
+  number.setAttribute("aria-label",`${number.textContent.trim()}. ${title}. Ver lastro documental.`);
+}
+
 function curateFindings(){
   const section=document.getElementById("achados");
   const grid=section?.querySelector(".findings-grid");
@@ -189,6 +207,8 @@ function curateFindings(){
     if(title) title.textContent="Variação no período";
     if(copy) copy.textContent="44,21% em dez/2025 → 60,39% em abr/2026";
   }
+
+  [...grid.querySelectorAll(".metric-card")].forEach(bindFindingEvidence);
 
   const methodology=section.querySelector(".methodology-row p");
   if(methodology){
