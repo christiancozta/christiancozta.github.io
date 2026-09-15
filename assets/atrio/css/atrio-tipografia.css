@@ -120,10 +120,21 @@ body{
   color:#FCFCFC;
 }
 
-/* Fundos escuros que usam --muted passam a branco por token, inclusive em mobile. */
+/* Fundos escuros: cor textual explícita. Evita qualquer retorno ao antigo #8E959D. */
 .field-dark{--muted:#FCFCFC}
 .prelim-card--partido{--muted:#FCFCFC}
 .final-row{--muted:#FCFCFC}
+.field-dark .prelim-card p,
+.field-dark .tension-row p,
+.field-dark .issue-ledger p,
+.field-dark .findings-context p,
+.field-dark .metric-card__copy p,
+.field-dark .metric-row p,
+.field-dark .methodology-row p,
+.field-dark .marker,
+.field-dark .full-row>h3:first-child{
+  color:#FCFCFC;
+}
 
 /* Overrides responsivos anteriores não podem rebaixar o corpo editorial. */
 @media(max-width:760px){
