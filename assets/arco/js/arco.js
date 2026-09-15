@@ -13,7 +13,7 @@
   base.async = false;
   base.onload = () => {
     const finalLayer = document.createElement("script");
-    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap3", src).href;
+    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap4", src).href;
     finalLayer.async = false;
     finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final consolidada.");
     document.head.appendChild(finalLayer);
