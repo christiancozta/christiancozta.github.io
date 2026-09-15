@@ -208,6 +208,21 @@ body{
 #preliminares .closing-row{order:7}
 
 @media(min-width:761px){
+  /* Bloco de tensão: título e conteúdo formam uma única coluna central. */
+  #preliminares .tension-row{
+    grid-template-columns:repeat(6,var(--cell));
+    align-content:center;
+    align-items:start;
+    row-gap:var(--base);
+  }
+  #preliminares .tension-row h3,
+  #preliminares .tension-row>div{
+    grid-column:3/span 3;
+    padding-left:var(--gutter);
+    padding-right:var(--gutter);
+  }
+  #preliminares .tension-row h3{margin:0}
+
   #preliminares .prelim-card:nth-of-type(3){border-right:0}
   #preliminares .prelim-card:nth-of-type(4){border-right:1px solid var(--terra)}
 }
