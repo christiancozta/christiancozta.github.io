@@ -1,0 +1,74 @@
+/* ========================================================================== 
+   ATRIO — Seção 02 / abas internas
+   --------------------------------------------------------------------------
+   Reorganiza o conteúdo dos cards sem alterar identidade cromática, escala
+   tipográfica ou largura editorial. Fluxo, Aplicação e Evolução ocupam sempre
+   uma única coluna integral.
+   ========================================================================== */
+
+.field-light--architecture .module-card--detail .module-card__flow{
+  display:block;grid-template-columns:none;grid-template-rows:none;gap:0;row-gap:0;
+  width:100%;max-width:none
+}
+.field-light--architecture .module-card--detail .module-card__architecture,
+.field-light--architecture .module-card--detail .module-card__operation{
+  grid-column:auto;grid-row:auto;align-self:auto;width:100%;max-width:none
+}
+.field-light--architecture .module-card__tab-lead{width:100%;max-width:none;margin:0}
+.field-light--architecture .module-card__tabs{
+  display:flex;align-items:stretch;gap:8px;width:100%;max-width:none;
+  margin-top:calc(var(--base)*1.05);padding-top:calc(var(--base)*.8);
+  border-top:1px solid var(--architecture-card-rule)
+}
+.field-light--architecture .module-card__tab{
+  appearance:none;min-height:34px;padding:0 14px;
+  border:1px solid rgba(250,250,250,.28);background:transparent;color:#FCFCFC;cursor:pointer;
+  font-family:var(--font-heading);font-size:.75rem;font-weight:700;line-height:1.25;
+  letter-spacing:.08em;text-transform:uppercase;
+  transition:background-color .2s cubic-bezier(.22,.68,0,1),border-color .2s cubic-bezier(.22,.68,0,1),color .2s cubic-bezier(.22,.68,0,1)
+}
+.field-light--architecture .module-card__tab[aria-selected="true"]{
+  background:var(--terra);border-color:var(--terra);color:#FCFCFC
+}
+.field-light--architecture .module-card__tab:hover{border-color:var(--architecture-card-accent)}
+.field-light--architecture .module-card__tab:focus-visible{outline:2px solid #FCFCFC;outline-offset:2px}
+.field-light--architecture .module-card__tab-panel{
+  display:block;width:100%;max-width:none;margin-top:clamp(24px,3.4vh,32px);padding:0
+}
+.field-light--architecture .module-card__tab-panel[hidden]{display:none!important}
+.field-light--architecture .module-card__tab-panel.module-card__architecture dl{
+  display:grid;grid-template-columns:1fr;width:100%;max-width:none;margin-top:0;gap:var(--base)
+}
+.field-light--architecture .module-card__tab-panel .operation-copy{
+  display:grid;grid-template-columns:1fr;width:100%;max-width:none;gap:var(--base)
+}
+.field-light--architecture .module-card__evolution-version{
+  display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--base)*.8);
+  width:100%;max-width:none
+}
+.field-light--architecture .module-card__evolution-text{
+  width:100%;max-width:none;margin:0;color:var(--body-on-dark,rgba(250,250,250,.72));
+  font-family:var(--font-body);font-size:var(--corpo);font-weight:400;line-height:var(--corpo-altura);text-wrap:pretty
+}
+.field-light--architecture .module-card__evolution .module-card__version{
+  width:auto;align-self:flex-start;margin:0;padding:0
+}
+.field-light--architecture .module-card__evolution-records{
+  display:grid;grid-template-columns:1fr;gap:8px;width:100%;max-width:none;
+  margin-top:calc(var(--base)*1.15);padding-top:calc(var(--base)*.8);
+  border-top:1px solid var(--architecture-card-rule)
+}
+.field-light--architecture .module-card__evolution-records .module-sample-button{
+  flex:none;width:100%;max-width:none
+}
+
+@media(max-width:760px){
+  .field-light--architecture .module-card__tabs{gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
+  .field-light--architecture .module-card__tab{flex:1 1 0;min-width:0;padding:0 8px}
+  .field-light--architecture .module-card__tab-panel{margin-top:24px}
+  .field-light--architecture .module-card__evolution .module-card__version{margin:0}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .field-light--architecture .module-card__tab{transition:none}
+}
