@@ -18,10 +18,11 @@
   --surface-light-architecture:#FCFCFC;
   --surface-light-authorship:#FCFCFC;
   --text-light:#FCFCFC;
-  --muted-on-dark:#FCFCFC;
+  --body-on-dark:#E4E4E4;
+  --muted-on-dark:#E4E4E4;
   --grid-dark:#303030;
   --grid-light:#ECECEC;
-  --corpo:1.0625rem; /* 17px com raiz de 16px */
+  --corpo:1rem; /* 16px com raiz de 16px */
   --corpo-altura:1.58;
 }
 
@@ -35,7 +36,7 @@ body{
 /* Títulos de seção: TWK Everett Extrabold, escala preservada no sistema-base. */
 .board-header h2{font-weight:750}
 
-/* Corpo editorial: Commissioner 400 / 17px. Microcopy, labels e metadata ficam fora. */
+/* Corpo editorial: Commissioner 400 / 16px. Microcopy, labels e metadata ficam fora. */
 .legal-tech-note>p:not(.legal-tech-note__kicker),
 .brand-note__lead,
 .brand-note__prose p,
@@ -99,12 +100,10 @@ body{
   background-color:#FCFCFC;
 }
 
-/* Texto claro: branco editorial único. Não altera cinzas escuros sobre superfícies claras. */
+/* Elementos tipográficos de interface permanecem no branco máximo. */
 .sample-note__panel,
-.sample-note__notice,
 .sample-note__close,
 .sample-note__close:hover,
-.sample-note__content>p,
 .closing-row .closing-row__creed,
 .section-index,
 .section-index span,
@@ -116,35 +115,20 @@ body{
 .module-card__back,
 .module-card__back:hover,
 .module-card__subtitle,
-.module-card__instruction,
 .module-card__index span,
-.module-card__mother p,
-.module-card__section dd,
-.operation-copy p,
-.metric-card__source,
-.methodology-row p,
 .methodology-row p strong,
 .relation-arco,
 .relation-arco h3,
-.relation-arco p,
 .page-footer,
-.page-footer p,
-.page-footer time,
 .version-note__panel,
 .version-note__close,
 .version-note__close:hover,
-.version-note__list span,
 .data-tooltip__lastro,
 .data-tooltip.is-derivacao .data-tooltip__regime,
 .data-tooltip b,
-.data-tooltip em,
 .field-light--architecture .module-card__idle-prompt span,
 .field-light--architecture .module-card--detail .module-card__subtitle,
-.field-light--architecture .module-card__section dd,
-.field-light--architecture .operation-copy p,
 .field-light--architecture .module-card__index span,
-.field-light--architecture .module-card__mother p,
-.field-light--architecture .module-card__flow--atrio .module-card__regency p,
 .field-light--architecture .module-sample-button,
 .field-light--architecture .module-sample-button:hover,
 .field-light--architecture .module-card__version,
@@ -153,10 +137,10 @@ body{
   color:#FCFCFC;
 }
 
-/* Fundos escuros: cor textual explícita. */
-.field-dark{--muted:#FCFCFC}
-.prelim-card--partido{--muted:#FCFCFC}
-.final-row{--muted:#FCFCFC}
+/* Corpo Commissioner sobre superfícies escuras: cinza editorial #E4E4E4. */
+.field-dark{--muted:var(--body-on-dark)}
+.prelim-card--partido{--muted:var(--body-on-dark)}
+.final-row{--muted:var(--body-on-dark)}
 .field-dark .prelim-card p,
 .field-dark .tension-row p,
 .field-dark .issue-ledger p,
@@ -164,9 +148,53 @@ body{
 .field-dark .metric-card__copy p,
 .field-dark .metric-row p,
 .field-dark .methodology-row p,
-.field-dark .marker,
-.field-dark .full-row>h3:first-child{
+.sample-note__notice,
+.sample-note__content>p,
+.module-card__instruction,
+.module-card__index li,
+.module-card__mother p,
+.module-card__section dd,
+.operation-copy p,
+.module-lead,
+.metric-card__source,
+.relation-arco p,
+.page-footer p,
+.page-footer time,
+.version-note__list span,
+.data-tooltip em,
+.field-light--architecture .module-lead,
+.field-light--architecture .module-card__section dd,
+.field-light--architecture .operation-copy p,
+.field-light--architecture .module-card__mother p,
+.field-light--architecture .module-card__flow--atrio .module-card__regency p{
+  color:var(--body-on-dark);
+}
+
+/* 01 PRELIMINARES — subtítulos uniformes e composição vertical dos quatro cards. */
+.field-dark--prelim .prelim-card h3,
+.field-dark--prelim .tension-row h3,
+.field-dark--prelim .issue-ledger h3{
+  font-family:var(--font-heading);
+  font-size:1.0625rem;
+  font-weight:500;
+  line-height:1.15;
   color:#FCFCFC;
+}
+.field-dark--prelim .prelim-card{
+  grid-template-rows:auto 1fr;
+  align-content:stretch;
+  padding:var(--base) var(--gutter);
+}
+.field-dark--prelim .prelim-card h3{
+  align-self:start;
+  margin:0;
+}
+.field-dark--prelim .prelim-card .row-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding-bottom:0;
 }
 
 /* Grid aparente: contraste distinto conforme o campo. */
