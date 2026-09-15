@@ -159,7 +159,7 @@ function showDefaultAtrio(){
   });
   atrioCard.hidden=false;
   atrioCard.dataset.detailPhase="active";
-  architectureSystem.dataset.activeModule="atrio";
+  if(architectureSystem.dataset.activeModule!=="atrio") architectureSystem.dataset.activeModule="atrio";
   syncCard(atrioCard);
 }
 
