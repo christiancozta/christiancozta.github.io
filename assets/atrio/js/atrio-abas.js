@@ -10,6 +10,12 @@ const EVOLUTION_COPY = {
   cerne: "Versão do contrato de confronto crítico, com onze eixos, vinte e três confrontos e gate técnico em três estados.",
   lux: "Versão do refinamento formal, com pseudonimização orientada pelo destino e pelos princípios da LGPD e da Resolução CNJ 615/2025."
 };
+const CERNE_HISTORY = [
+  {v:"2.0.0",d:"18/08/2026",t:"Consolidação canônica. Core e Cartuchos de Domínio, VIGOR versionado, Audit Bundle e adjudicação humana no contrato."},
+  {v:"1.2.0",d:"data não recuperável",t:"Identidade de módulo na integração com o ATRIO. Auditoria adversarial a partir do handoff do RATIO, com cinco gates."},
+  {v:"0.2.0",d:"data não recuperável",t:"Segunda versão autônoma da API. Onze eixos e saídas para interface e relatório técnico."},
+  {v:"0.1.0",d:"data não recuperável",t:"Primeiro protótipo executável: triagem, roteamento por modo decisório e dois eixos fixos."}
+];
 
 const cards = [...document.querySelectorAll(".module-card--detail[data-module-card]")];
 const architectureSystem = document.getElementById("architecture-system");
@@ -147,6 +153,28 @@ function buildCardTabs(card){
   syncCard(card);
 }
 
+function patchCerneVersionLabel(){
+  const label=document.querySelector('.module-card__version[data-module-version="cerne"] .module-card__version-label');
+  if(label) label.textContent="CERNE 3.0.0";
+}
+
+function patchCerneVersionDialog(){
+  const title=document.getElementById("version-note-title");
+  const current=document.getElementById("version-note-current");
+  const list=document.getElementById("version-note-list");
+  if(!title||!current||!list||title.textContent.trim()!=="CERNE") return;
+  current.textContent="Versão corrente 3.0.0 — 09/09/2026";
+  list.replaceChildren(...CERNE_HISTORY.map(item=>{
+    const li=document.createElement("li");
+    const mark=document.createElement("b");
+    mark.textContent=`v. ${item.v} (${item.d})`;
+    const text=document.createElement("span");
+    text.textContent=item.t;
+    li.append(mark,text);
+    return li;
+  }));
+}
+
 function activateDefaultAtrio(){
   defaultFrame=0;
   if(!architectureSystem || !atrioCard || typeof window.atrioActivateModule!=="function") return;
@@ -162,6 +190,12 @@ function scheduleDefaultAtrio(){
 }
 
 cards.forEach(buildCardTabs);
+patchCerneVersionLabel();
+
+document.addEventListener("click",event=>{
+  const versionLabel=event.target instanceof Element ? event.target.closest('.module-card__version[data-module-version="cerne"] .module-card__version-label') : null;
+  if(versionLabel) requestAnimationFrame(patchCerneVersionDialog);
+},false);
 
 if(architectureSystem && atrioCard){
   architectureSystem.dataset.defaultModule="atrio";
