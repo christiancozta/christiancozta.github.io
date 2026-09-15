@@ -9,10 +9,18 @@
    ========================================================================== */
 
 :root{
+  --g1:#1B1B1B;
+  --g2:#1B1B1B;
+  --g3:#1B1B1B;
+  --g4:#1B1B1B;
   --l1:#FCFCFC;
   --l2:#FCFCFC;
+  --surface-light-architecture:#FCFCFC;
+  --surface-light-authorship:#FCFCFC;
   --text-light:#FCFCFC;
   --muted-on-dark:#FCFCFC;
+  --grid-dark:#A3A3A3;
+  --grid-light:#A3A3A3;
   --corpo:1.0625rem; /* 17px com raiz de 16px */
   --corpo-altura:1.58;
 }
@@ -20,15 +28,16 @@
 body{
   font-family:var(--font-body);
   font-size:var(--corpo);
-  font-weight:500;
+  font-weight:400;
   line-height:var(--corpo-altura);
 }
 
 /* Títulos de seção: TWK Everett Extrabold, escala preservada no sistema-base. */
 .board-header h2{font-weight:750}
 
-/* Corpo editorial: Commissioner 500 / 17px. Microcopy, labels e metadata ficam fora. */
+/* Corpo editorial: Commissioner 400 / 17px. Microcopy, labels e metadata ficam fora. */
 .legal-tech-note>p:not(.legal-tech-note__kicker),
+.brand-note__lead,
 .brand-note__prose p,
 .sample-note__notice,
 .sample-note__content>p,
@@ -59,12 +68,36 @@ body{
 .field-light--architecture .module-card__flow--atrio .module-card__regency p{
   font-family:var(--font-body);
   font-size:var(--corpo);
-  font-weight:500;
+  font-weight:400;
   line-height:var(--corpo-altura);
 }
 
-/* Commissioner em microcamadas mantém a escala própria, mas não cai para peso 400. */
-.data-tooltip em{font-weight:500}
+/* Commissioner em microcamadas preserva a escala própria com peso Regular. */
+.data-tooltip em{font-weight:400}
+
+/* Superfícies escuras: substituição canônica do antigo grafite #2A2529. */
+.field-dark--prelim,
+.field-dark--findings,
+.page-footer,
+.sample-note__panel,
+.version-note__panel,
+.data-tooltip{
+  background-color:#1B1B1B;
+}
+.field-light--architecture .module-card-stage{
+  --architecture-card-bg:#1B1B1B;
+}
+.field-light--architecture .module-card__version[data-module-version="atrio"] .module-card__version-label{
+  background:#1B1B1B;
+}
+
+/* Superfícies claras: branco editorial único. */
+.field-light--architecture,
+.field-light--authorship,
+.legal-tech-note,
+.brand-note__panel{
+  background-color:#FCFCFC;
+}
 
 /* Texto claro: branco editorial único. Não altera cinzas escuros sobre superfícies claras. */
 .sample-note__panel,
@@ -120,7 +153,7 @@ body{
   color:#FCFCFC;
 }
 
-/* Fundos escuros: cor textual explícita. Evita qualquer retorno ao antigo #8E959D. */
+/* Fundos escuros: cor textual explícita. */
 .field-dark{--muted:#FCFCFC}
 .prelim-card--partido{--muted:#FCFCFC}
 .final-row{--muted:#FCFCFC}
@@ -134,6 +167,14 @@ body{
 .field-dark .marker,
 .field-dark .full-row>h3:first-child{
   color:#FCFCFC;
+}
+
+/* Grid aparente: tom único nas superfícies claras e escuras. */
+.field-dark,
+.field-light,
+.page-footer{
+  --grid-dark:#A3A3A3;
+  --grid-light:#A3A3A3;
 }
 
 /* Overrides responsivos anteriores não podem rebaixar o corpo editorial. */
