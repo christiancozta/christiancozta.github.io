@@ -58,8 +58,8 @@
   width:100%;height:${FOOTER_H}px;min-height:${FOOTER_H}px;
   margin:0;padding:0;
   overflow:hidden;
-  background:#181818;color:#FCFCFC;
-  border:0;
+  background:#181818!important;color:#FCFCFC!important;
+  border:0!important;
 }
 .arco-unified-footer__seal{
   position:absolute;left:37.5%;top:50%;transform:translate(-50%,-50%);
@@ -67,7 +67,7 @@
   font-family:"Azeret Mono",ui-monospace,monospace;
   font-size:.58rem;font-weight:500;line-height:1.3;
   letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
-  color:#FCFCFC;text-align:center;
+  color:#FCFCFC!important;text-align:center;
 }
 .arco-unified-footer__method{
   position:absolute;right:clamp(18px,2.1vw,34px);top:50%;transform:translateY(-50%);
