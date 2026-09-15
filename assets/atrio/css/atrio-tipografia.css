@@ -197,6 +197,21 @@ body{
   padding-bottom:0;
 }
 
+/* Ordem editorial: na segunda dupla, Quem decide? vem antes de Onde se aplica?. */
+#preliminares .board-header{order:0}
+#preliminares .prelim-card:nth-of-type(1){order:1}
+#preliminares .prelim-card:nth-of-type(2){order:2}
+#preliminares .prelim-card:nth-of-type(3){order:4}
+#preliminares .prelim-card:nth-of-type(4){order:3}
+#preliminares .tension-row{order:5}
+#preliminares .issue-ledger{order:6}
+#preliminares .closing-row{order:7}
+
+@media(min-width:761px){
+  #preliminares .prelim-card:nth-of-type(3){border-right:0}
+  #preliminares .prelim-card:nth-of-type(4){border-right:1px solid var(--terra)}
+}
+
 /* Grid aparente: contraste distinto conforme o campo. */
 .field-dark,
 .page-footer{
@@ -208,6 +223,7 @@ body{
 
 /* Overrides responsivos anteriores não podem rebaixar o corpo editorial. */
 @media(max-width:760px){
+  #preliminares .board{display:flex;flex-direction:column}
   .methodology-row p,
   .field-light--architecture .module-lead,
   .field-light--architecture .module-card__section dd,
