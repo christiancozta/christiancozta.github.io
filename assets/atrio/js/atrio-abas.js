@@ -13,10 +13,8 @@ const EVOLUTION_COPY = {
 
 const cards = [...document.querySelectorAll(".module-card--detail[data-module-card]")];
 const architectureSystem = document.getElementById("architecture-system");
-const overviewCard = document.querySelector('[data-module-card="overview"]');
 const atrioCard = document.querySelector('[data-module-card="atrio"]');
 let activeTab = "fluxo";
-let intendedModule = null;
 let defaultFrame = 0;
 
 function tabsFor(card){return [...card.querySelectorAll(".module-card__tab[role='tab']")]}
@@ -149,25 +147,18 @@ function buildCardTabs(card){
   syncCard(card);
 }
 
-function showDefaultAtrio(){
+function activateDefaultAtrio(){
   defaultFrame=0;
-  if(!architectureSystem || !atrioCard || architectureSystem.dataset.modulePhase!=="idle" || intendedModule) return;
-  if(overviewCard) overviewCard.hidden=true;
-  cards.forEach(card=>{
-    card.hidden=card!==atrioCard;
-    if(card!==atrioCard) card.removeAttribute("data-detail-phase");
-  });
-  atrioCard.hidden=false;
-  atrioCard.dataset.detailPhase="active";
-  if(architectureSystem.dataset.activeModule!=="atrio") architectureSystem.dataset.activeModule="atrio";
-  syncCard(atrioCard);
+  if(!architectureSystem || !atrioCard || typeof window.atrioActivateModule!=="function") return;
+  const phase=architectureSystem.dataset.modulePhase;
+  const active=architectureSystem.dataset.activeModule;
+  if(phase!=="idle" || active==="atrio") return;
+  window.atrioActivateModule("atrio");
 }
 
 function scheduleDefaultAtrio(){
   if(defaultFrame) cancelAnimationFrame(defaultFrame);
-  defaultFrame=requestAnimationFrame(()=>{
-    defaultFrame=requestAnimationFrame(showDefaultAtrio);
-  });
+  defaultFrame=requestAnimationFrame(activateDefaultAtrio);
 }
 
 cards.forEach(buildCardTabs);
@@ -175,22 +166,21 @@ cards.forEach(buildCardTabs);
 if(architectureSystem && atrioCard){
   architectureSystem.dataset.defaultModule="atrio";
 
+  /* ATRIO é a posição de repouso da arquitetura. Quando já está selecionado,
+     um novo clique não o recolhe para o overview: card e peça permanecem
+     estacionados no landing central, em desktop e mobile. */
   document.addEventListener("click",event=>{
     const piece=event.target instanceof Element ? event.target.closest("[data-module-piece]") : null;
-    if(!piece || !architectureSystem.contains(piece)) return;
-    const key=piece.dataset.modulePiece||null;
-    const phase=architectureSystem.dataset.modulePhase;
-    const active=architectureSystem.dataset.activeModule;
-    intendedModule=phase==="active" && active===key ? null : key;
+    if(!piece || !architectureSystem.contains(piece) || piece.dataset.modulePiece!=="atrio") return;
+    if(architectureSystem.dataset.modulePhase==="active" && architectureSystem.dataset.activeModule==="atrio"){
+      event.preventDefault();
+      event.stopPropagation();
+    }
   },true);
 
   const observer=new MutationObserver(()=>{
-    const phase=architectureSystem.dataset.modulePhase;
-    const active=architectureSystem.dataset.activeModule;
-    if((phase==="moving" || phase==="active") && intendedModule && active===intendedModule){
-      intendedModule=null;
-    }
-    if(phase==="idle") scheduleDefaultAtrio();
+    if(architectureSystem.dataset.modulePhase==="idle") scheduleDefaultAtrio();
+    if(architectureSystem.dataset.modulePhase==="active" && architectureSystem.dataset.activeModule==="atrio") syncCard(atrioCard);
   });
   observer.observe(architectureSystem,{attributes:true,attributeFilter:["data-module-phase","data-active-module"]});
   scheduleDefaultAtrio();
