@@ -78,11 +78,47 @@
 }
 .field-light--architecture .module-card__title-accent{color:#A63A23}
 
+/* 03 ACHADOS — dois recortes bastam: escala documental e efeito observado. */
+#achados .findings-grid--curated{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  border-bottom:1px solid var(--rule)
+}
+#achados .findings-grid--curated .metric-card,
+#achados .findings-grid--curated .metric-card--corpus,
+#achados .findings-grid--curated .metric-card--wide{
+  grid-column:auto;min-height:calc(var(--board-row)*1.08);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:calc(var(--base)*1.05) var(--gutter) var(--base);
+  border-right:1px solid var(--rule);border-bottom:0
+}
+#achados .findings-grid--curated .metric-card:last-child{border-right:0}
+#achados .findings-grid--curated .metric-card__number,
+#achados .findings-grid--curated .metric-card--corpus .metric-card__number{
+  font-size:clamp(2.2rem,calc(var(--cell)*.34),3.8rem);
+  line-height:.9;letter-spacing:-.045em
+}
+#achados .findings-grid--curated .metric-card__copy,
+#achados .findings-grid--curated .metric-card--corpus .metric-card__copy{
+  margin-top:calc(var(--base)*.65);padding:0
+}
+
 @media(max-width:760px){
   .field-light--architecture .module-card__tabs{justify-content:center;gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
   .field-light--architecture .module-card__tab{flex:0 0 auto;min-width:0;padding:0 8px}
   .field-light--architecture .module-card__tab-panel{margin-top:24px}
   .field-light--architecture .module-card__evolution .module-card__version{margin:0}
+
+  #achados .findings-grid--curated{display:block}
+  #achados .findings-grid--curated .metric-card,
+  #achados .findings-grid--curated .metric-card--corpus,
+  #achados .findings-grid--curated .metric-card--wide{
+    min-height:180px;padding:1rem;border-right:0;border-bottom:1px solid var(--rule)
+  }
+  #achados .findings-grid--curated .metric-card:last-child{border-bottom:0}
+  #achados .findings-grid--curated .metric-card__number,
+  #achados .findings-grid--curated .metric-card--corpus .metric-card__number{
+    font-size:clamp(2rem,13vw,3.15rem)
+  }
 }
 
 @media(prefers-reduced-motion:reduce){
