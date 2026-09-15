@@ -81,7 +81,7 @@
 /* 03 ACHADOS — dois recortes bastam: escala documental e efeito observado. */
 #achados .findings-grid--curated{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  border-bottom:1px solid var(--rule)
+  border-bottom:0
 }
 #achados .findings-grid--curated .metric-card,
 #achados .findings-grid--curated .metric-card--corpus,
@@ -89,18 +89,23 @@
   grid-column:auto;min-height:calc(var(--board-row)*1.08);
   display:flex;flex-direction:column;justify-content:flex-end;
   padding:calc(var(--base)*1.05) var(--gutter) var(--base);
-  border-right:1px solid var(--rule);border-bottom:0
+  border:0;background:transparent;pointer-events:none
 }
-#achados .findings-grid--curated .metric-card:last-child{border-right:0}
 #achados .findings-grid--curated .metric-card__number,
 #achados .findings-grid--curated .metric-card--corpus .metric-card__number{
+  display:inline-block;width:max-content;max-width:100%;pointer-events:auto;cursor:help;
   font-size:clamp(2.2rem,calc(var(--cell)*.34),3.8rem);
   line-height:.9;letter-spacing:-.045em
 }
+#achados .findings-grid--curated .metric-card__number:focus-visible{
+  outline:1px solid var(--terra);outline-offset:6px
+}
+#achados .findings-grid--curated .metric-card:focus-visible{box-shadow:none}
 #achados .findings-grid--curated .metric-card__copy,
 #achados .findings-grid--curated .metric-card--corpus .metric-card__copy{
   margin-top:calc(var(--base)*.65);padding:0
 }
+#achados .findings-grid--curated .metric-card__source{display:none!important}
 
 @media(max-width:760px){
   .field-light--architecture .module-card__tabs{justify-content:center;gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
@@ -112,9 +117,8 @@
   #achados .findings-grid--curated .metric-card,
   #achados .findings-grid--curated .metric-card--corpus,
   #achados .findings-grid--curated .metric-card--wide{
-    min-height:180px;padding:1rem;border-right:0;border-bottom:1px solid var(--rule)
+    min-height:180px;padding:1rem;border:0
   }
-  #achados .findings-grid--curated .metric-card:last-child{border-bottom:0}
   #achados .findings-grid--curated .metric-card__number,
   #achados .findings-grid--curated .metric-card--corpus .metric-card__number{
     font-size:clamp(2rem,13vw,3.15rem)
