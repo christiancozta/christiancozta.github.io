@@ -4,13 +4,12 @@
 const TAB_ORDER = ["fluxo", "aplicacao", "evolucao"];
 const TAB_LABELS = { fluxo: "Fluxo", aplicacao: "Aplicação", evolucao: "Evolução" };
 const EVOLUTION_COPY = {
-  atrio: "Release única e imutável: os quatro módulos avançam sob a mesma versão registrada.",
+  atrio: "A execução registra a composição de versões dos quatro módulos, preservando o estado técnico sob o qual o percurso foi realizado.",
   corpus: "Versão da base governada, com ingestão incremental e cofre apartado do acervo.",
   ratio: "Versão da máquina de estados, com as três vias processuais isoladas.",
-  cerne: "Versão do contrato de confronto crítico, com gate técnico em cinco estados.",
-  lux: "Versão do refinamento formal, com anonimização propagada aos três blocos."
+  cerne: "Versão do contrato de confronto crítico, com onze eixos, vinte e três confrontos e gate técnico em três estados.",
+  lux: "Versão do refinamento formal, com pseudonimização orientada pelo destino e pelos princípios da LGPD e da Resolução CNJ 615/2025."
 };
-const FINDING_DATA_KEYS = ["regime","source","numerator","denominator","period","detail"];
 
 const cards = [...document.querySelectorAll(".module-card--detail[data-module-card]")];
 const architectureSystem = document.getElementById("architecture-system");
@@ -148,79 +147,6 @@ function buildCardTabs(card){
   syncCard(card);
 }
 
-function bindFindingEvidence(card){
-  const number=card.querySelector(".metric-card__number");
-  if(!number) return;
-  number.setAttribute("data-datum","");
-  FINDING_DATA_KEYS.forEach(key=>{
-    const value=card.dataset[key];
-    if(value) number.dataset[key]=value;
-    card.removeAttribute(`data-${key}`);
-  });
-  card.removeAttribute("data-datum");
-  card.removeAttribute("tabindex");
-  card.querySelector(".metric-card__source")?.remove();
-  number.tabIndex=0;
-  const title=card.querySelector(".metric-card__copy h3")?.textContent.trim()||"métrica";
-  number.setAttribute("aria-label",`${number.textContent.trim()}. ${title}. Ver lastro documental.`);
-}
-
-function curateFindings(){
-  const section=document.getElementById("achados");
-  const grid=section?.querySelector(".findings-grid");
-  if(!section||!grid||grid.dataset.curated==="true") return;
-
-  const removeTitles=new Set([
-    "Conversão individual",
-    "Testes aprovados",
-    "Rotas sob /v1",
-    "Eixos analíticos",
-    "Módulos independentes"
-  ]);
-
-  [...grid.querySelectorAll(".metric-card")].forEach(card=>{
-    const title=card.querySelector(".metric-card__copy h3")?.textContent.trim()||"";
-    if(removeTitles.has(title)) card.remove();
-  });
-
-  grid.classList.add("findings-grid--curated");
-  grid.dataset.curated="true";
-
-  const contextTitle=section.querySelector(".findings-context h3");
-  const contextCopy=section.querySelector(".findings-context .row-body p");
-  if(contextTitle) contextTitle.textContent="Escala e efeito observado";
-  if(contextCopy) contextCopy.textContent="O ATRIO nasce de rotina recursal, acervo volumoso, revisão qualificada e pressão por padronização sem perda de critério. A seção preserva dois recortes verificáveis: escala documental e variação operacional.";
-
-  const corpus=grid.querySelector(".metric-card--corpus");
-  if(corpus){
-    const title=corpus.querySelector(".metric-card__copy h3");
-    const copy=corpus.querySelector(".metric-card__copy p");
-    if(title) title.textContent="Base documental do CORPUS";
-    if(copy) copy.textContent="Registros processuais únicos após normalização e deduplicação";
-  }
-
-  const effect=[...grid.querySelectorAll(".metric-card")].find(card=>card.querySelector(".metric-card__number")?.textContent.includes("+16,18"));
-  if(effect){
-    effect.classList.add("metric-card--effect");
-    const title=effect.querySelector(".metric-card__copy h3");
-    const copy=effect.querySelector(".metric-card__copy p");
-    if(title) title.textContent="Variação no período";
-    if(copy) copy.textContent="44,21% em dez/2025 → 60,39% em abr/2026";
-  }
-
-  [...grid.querySelectorAll(".metric-card")].forEach(bindFindingEvidence);
-
-  const methodology=section.querySelector(".methodology-row p");
-  if(methodology){
-    const label=document.createElement("strong");
-    label.textContent="LEITURA METODOLÓGICA:";
-    methodology.replaceChildren(
-      label,
-      document.createTextNode(" Os +16,18 p.p. comparam a série agregada da unidade entre os meses de cobertura integral. Excluídos os servidores que ingressaram no período, abril fica em 60,11%; nenhum servidor presente nas duas pontas recuou. O dado indica associação temporal com a operação e não isola causalidade.")
-    );
-  }
-}
-
 function activateDefaultAtrio(){
   defaultFrame=0;
   if(!architectureSystem || !atrioCard || typeof window.atrioActivateModule!=="function") return;
@@ -236,7 +162,6 @@ function scheduleDefaultAtrio(){
 }
 
 cards.forEach(buildCardTabs);
-curateFindings();
 
 if(architectureSystem && atrioCard){
   architectureSystem.dataset.defaultModule="atrio";
