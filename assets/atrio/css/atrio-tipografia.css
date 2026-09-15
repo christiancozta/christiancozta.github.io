@@ -18,8 +18,8 @@
   --surface-light-architecture:#FCFCFC;
   --surface-light-authorship:#FCFCFC;
   --text-light:#FCFCFC;
-  --body-on-dark:#A8A8A8;
-  --muted-on-dark:#A8A8A8;
+  --body-on-dark:#E4E4E4;
+  --muted-on-dark:#E4E4E4;
   --grid-dark:#303030;
   --grid-light:#ECECEC;
   --corpo:1rem; /* 16px com raiz de 16px */
@@ -137,7 +137,7 @@ body{
   color:#FCFCFC;
 }
 
-/* Corpo Commissioner sobre superfícies escuras: cinza editorial #A8A8A8. */
+/* Corpo Commissioner sobre superfícies escuras: cinza editorial #E4E4E4. */
 .field-dark{--muted:var(--body-on-dark)}
 .prelim-card--partido{--muted:var(--body-on-dark)}
 .final-row{--muted:var(--body-on-dark)}
@@ -170,22 +170,16 @@ body{
   color:var(--body-on-dark);
 }
 
-/* 01 PRELIMINARES — perguntas como rótulos editoriais; demais subtítulos preservam 17px. */
-.field-dark--prelim .prelim-card h3{
-  font-family:var(--font-heading);
-  font-size:.75rem;
-  font-weight:700;
-  line-height:1.25;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:var(--terra);
-}
+/* 01 PRELIMINARES — títulos internos uniformes. */
+.field-dark--prelim .prelim-card h3,
 .field-dark--prelim .tension-row h3,
 .field-dark--prelim .issue-ledger h3{
   font-family:var(--font-heading);
   font-size:1.0625rem;
   font-weight:500;
   line-height:1.15;
+  letter-spacing:0;
+  text-transform:none;
   color:#FCFCFC;
 }
 .field-dark--prelim .prelim-card{
@@ -216,7 +210,7 @@ body{
 #preliminares .closing-row{order:7}
 
 @media(min-width:761px){
-  /* Bloco de tensão: título e conteúdo formam uma única coluna central. */
+  /* Bloco de tensão: coluna única ancorada à margem esquerda do board. */
   #preliminares .tension-row{
     grid-template-columns:repeat(6,var(--cell));
     align-content:center;
@@ -225,7 +219,7 @@ body{
   }
   #preliminares .tension-row h3,
   #preliminares .tension-row>div{
-    grid-column:3/span 3;
+    grid-column:1/span 3;
     padding-left:var(--gutter);
     padding-right:var(--gutter);
   }
