@@ -11,7 +11,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 - `precedentes_publico.xlsx`: 631 temas; somente dimensões categóricas, códigos de assunto e presença de tese.
 - `mapa_tematico_publico.pdf`: síntese do indicador de 90,2% e da estrutura operacional.
 - `diagnostico_corpus_publico.md`: síntese do total de 115.114 registros únicos.
-- `operacao_atrio_publica.md`: síntese de rotas, operações HTTP, testes, eixos e módulos.
+- `operacao_atrio_publica.md`: síntese de rotas, testes, eixos, fases e módulos.
 
 ## Métricas reproduzidas
 
@@ -31,7 +31,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 76,5% com tese firmada | derivada | `precedentes_publico.xlsx` |
 | 245 códigos, 9 matérias, 3 ramos e 10 situações | direta | `precedentes_publico.xlsx` |
 | 115.114 registros únicos | direta | `diagnostico_corpus_publico.md` |
-| 31 caminhos, 33 operações e 188 testes | direta | `operacao_atrio_publica.md` |
+| 23 rotas e 188 testes | direta | `operacao_atrio_publica.md` |
 
 ## Limites da verificação
 
