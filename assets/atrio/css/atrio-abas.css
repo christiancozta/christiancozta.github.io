@@ -1,9 +1,8 @@
 /* ========================================================================== 
-   ATRIO — Seção 02 / abas internas
+   ATRIO — camada editorial complementar
    --------------------------------------------------------------------------
-   Reorganiza o conteúdo dos cards sem alterar identidade cromática, escala
-   tipográfica ou largura editorial. Fluxo, Aplicação e Evolução ocupam sempre
-   uma única coluna integral.
+   Reorganiza os cards da Seção 02 em abas, fixa a curadoria canônica dos
+   Achados e aplica os acabamentos finais de Autoria e percurso de projetos.
    ========================================================================== */
 
 .field-light--architecture .module-card--detail .module-card__flow{
@@ -78,7 +77,7 @@
 }
 .field-light--architecture .module-card__title-accent{color:#A63A23}
 
-/* 03 ACHADOS — dois recortes bastam: escala documental e efeito observado. */
+/* 03 ACHADOS — dois recortes canônicos: escala documental e efeito observado. */
 #achados .findings-grid--curated{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
   border-bottom:0
@@ -112,6 +111,23 @@
 .data-tooltip span{border-bottom:0}
 .data-tooltip__regime,.data-tooltip__lastro{border-bottom:0}
 
+/* 04 AUTORIA — fecho sem card cromático, na mesma voz tipográfica do credo 01. */
+#autoria .final-row{
+  min-height:var(--board-row);display:flex;align-items:center;justify-content:center;
+  padding:calc(var(--base)*2.5) var(--gutter);background:transparent;color:#A63A23;
+  border-bottom:0
+}
+#autoria .final-row .row-body{display:block;flex:none;width:100%;padding:0;text-align:center}
+#autoria .final-row p{
+  margin:0;color:#A63A23;
+  font-family:var(--font-heading);font-weight:500;
+  font-size:clamp(.8rem,2.3vw,2rem);line-height:1.12;
+  letter-spacing:-.028em;text-align:center;white-space:nowrap
+}
+
+/* Percurso: accents próprios de cada projeto. */
+.project-sequence__item--data{background:#0057FF;color:#FCFCFC}
+
 @media(max-width:760px){
   .field-light--architecture .module-card__tabs{justify-content:center;gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
   .field-light--architecture .module-card__tab{flex:0 0 auto;min-width:0;padding:0 8px}
@@ -128,6 +144,8 @@
   #achados .findings-grid--curated .metric-card--corpus .metric-card__number{
     font-size:clamp(2rem,13vw,3.15rem)
   }
+  #autoria .final-row{min-height:var(--board-row);padding:2rem 1rem}
+  #autoria .final-row p{font-size:clamp(1.15rem,6vw,1.65rem);white-space:normal;text-wrap:balance}
 }
 
 @media(prefers-reduced-motion:reduce){
