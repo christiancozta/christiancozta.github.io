@@ -228,23 +228,99 @@ body{
     padding:0;
   }
 
-  /* Bloco de tensão: coluna única ancorada à margem esquerda do board. */
+  /* Blocos editoriais: mesma coordenada vertical dos quatro cards. */
+  #preliminares .tension-row,
+  #achados .findings-context,
+  #achados .methodology-row,
+  #autoria .authorship-row article,
+  #autoria .relations-row article{
+    position:relative;
+    display:block;
+    padding:86px var(--gutter) var(--base);
+    align-content:initial;
+    justify-content:initial;
+  }
+
+  #preliminares .tension-row h3,
+  #achados .findings-context h3,
+  #autoria .authorship-row h3,
+  #autoria .relations-row h3,
+  #achados .methodology-row p strong{
+    position:absolute;
+    top:31px;
+    left:var(--gutter);
+    right:var(--gutter);
+    margin:0;
+  }
+
+  #preliminares .tension-row>div,
+  #achados .findings-context .row-body,
+  #autoria .authorship-row article>p,
+  #autoria .relations-row article>p,
+  #achados .methodology-row .row-body{
+    display:block;
+    width:auto;
+    max-width:none;
+    margin:0;
+    padding:0;
+  }
+
+  /* O jurídico... ocupa a largura editorial inteira; não existe coluna intermediária. */
   #preliminares .tension-row{
-    grid-template-columns:repeat(6,var(--cell));
-    align-content:center;
-    align-items:start;
-    row-gap:var(--base);
+    grid-template-columns:none;
+    min-height:var(--board-row);
   }
   #preliminares .tension-row h3,
   #preliminares .tension-row>div{
-    grid-column:1/span 3;
-    padding-left:var(--gutter);
-    padding-right:var(--gutter);
+    grid-column:auto;
+    width:auto;
+    max-width:none;
+    padding-left:0;
+    padding-right:0;
   }
-  #preliminares .tension-row h3{margin:0}
+
+  /* Seção 03 — rótulo metodológico separado do corpo. */
+  #achados .methodology-row p{margin:0}
+  #achados .methodology-row p strong{display:block}
+
+  /* Seção 04 — só muda geometria; cor do corpo permanece a já existente. */
+  #autoria .authorship-row article>p,
+  #autoria .relations-row article>p{
+    color:inherit;
+  }
+
+  /* ATRIO usa o mesmo fundo dos demais módulos; diferenciação somente pela borda terracota. */
+  #arquitetura .architecture-system[data-active-module="atrio"] .module-card-stage{
+    --architecture-card-bg:#1B1B1B;
+    --architecture-card-accent:var(--terra);
+    --architecture-card-rule:rgba(250,250,250,.15);
+  }
+  #arquitetura #module-card-atrio{
+    border:1px solid var(--terra);
+    background:transparent;
+  }
 
   #preliminares .prelim-card:nth-of-type(3){border-right:0}
   #preliminares .prelim-card:nth-of-type(4){border-right:1px solid var(--terra)}
+}
+
+/* 01 — marcadores geométricos brancos substituem a numeração do ledger. */
+#preliminares .ledger-mark strong{
+  position:relative;
+  width:.5rem;
+  min-width:.5rem;
+  height:.5rem;
+  flex:0 0 .5rem;
+  overflow:hidden;
+  color:transparent;
+  font-size:0;
+  line-height:0;
+}
+#preliminares .ledger-mark strong::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:#FCFCFC;
 }
 
 /* Grid aparente: contraste distinto conforme o campo. */
