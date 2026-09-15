@@ -87,13 +87,14 @@
 #achados .findings-grid--curated .metric-card--corpus,
 #achados .findings-grid--curated .metric-card--wide{
   grid-column:auto;min-height:calc(var(--board-row)*1.08);
-  display:flex;flex-direction:column;justify-content:flex-end;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:0;
   padding:calc(var(--base)*1.05) var(--gutter) var(--base);
   border:0;background:transparent;pointer-events:none
 }
 #achados .findings-grid--curated .metric-card__number,
 #achados .findings-grid--curated .metric-card--corpus .metric-card__number{
-  display:inline-block;width:max-content;max-width:100%;pointer-events:auto;cursor:help;
+  display:inline-block;align-self:flex-start;justify-self:start;width:max-content;max-width:100%;margin-left:0;
+  pointer-events:auto;cursor:help;text-align:left;
   font-size:clamp(2.2rem,calc(var(--cell)*.34),3.8rem);
   line-height:.9;letter-spacing:-.045em
 }
@@ -103,9 +104,13 @@
 #achados .findings-grid--curated .metric-card:focus-visible{box-shadow:none}
 #achados .findings-grid--curated .metric-card__copy,
 #achados .findings-grid--curated .metric-card--corpus .metric-card__copy{
-  margin-top:calc(var(--base)*.65);padding:0
+  align-self:stretch;margin-top:calc(var(--base)*.65);padding:0
 }
 #achados .findings-grid--curated .metric-card__source{display:none!important}
+
+/* Lastro documental: uma única camada, sem divisórias internas herdadas. */
+.data-tooltip span{border-bottom:0}
+.data-tooltip__regime,.data-tooltip__lastro{border-bottom:0}
 
 @media(max-width:760px){
   .field-light--architecture .module-card__tabs{justify-content:center;gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
