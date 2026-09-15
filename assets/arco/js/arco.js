@@ -1,6 +1,6 @@
 /* ========================================================================== 
    ARCO — loader final 15.09.2026
-   Mantém a base estabilizada intacta e aplica as camadas finais de fechamento.
+   Mantém a base estabilizada intacta e aplica a camada final consolidada.
    ========================================================================== */
 (() => {
   "use strict";
@@ -13,16 +13,9 @@
   base.async = false;
   base.onload = () => {
     const finalLayer = document.createElement("script");
-    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap2", src).href;
+    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap3", src).href;
     finalLayer.async = false;
-    finalLayer.onload = () => {
-      const childLayer = document.createElement("script");
-      childLayer.src = new URL("arco-child-final-20260915.js?v=20260915-child1", src).href;
-      childLayer.async = false;
-      childLayer.onerror = () => console.error("ARCO: falha ao carregar o acabamento das páginas filhas.");
-      document.head.appendChild(childLayer);
-    };
-    finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final v2.");
+    finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final consolidada.");
     document.head.appendChild(finalLayer);
   };
   base.onerror = () => console.error("ARCO: falha ao carregar a base estabilizada.");
