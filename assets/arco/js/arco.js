@@ -9,13 +9,13 @@
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
 
   const base = document.createElement("script");
-  base.src = new URL("arco-base-20260915.js?v=20260915-endcap1", src).href;
+  base.src = new URL("arco-base-20260915.js?v=20260915-endcap2", src).href;
   base.async = false;
   base.onload = () => {
     const finalLayer = document.createElement("script");
-    finalLayer.src = new URL("arco-final-20260915.js?v=20260915-endcap1", src).href;
+    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap2", src).href;
     finalLayer.async = false;
-    finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final.");
+    finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final v2.");
     document.head.appendChild(finalLayer);
   };
   base.onerror = () => console.error("ARCO: falha ao carregar a base estabilizada.");
