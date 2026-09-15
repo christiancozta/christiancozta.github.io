@@ -4,8 +4,9 @@
    1) órbita/marca flutuante existe apenas na Home ARCO;
    2) rodapé comum entra no fluxo natural, sem efeito de revelar/ocultar;
    3) rail + rodapé formam uma única faixa preta no fim da página;
-   4) nenhuma repetição de nome/headlines no rodapé;
-   5) ARCO © 2026 no centro geométrico da viewport; Base e Método à direita.
+   4) ECHO/ATRIO encerram diretamente no rodapé comum;
+   5) DATA recebe o mesmo rodapé comum;
+   6) ECHO, ATRIO e DATA compartilham uma única scrollbar estrutural.
    ========================================================================== */
 (() => {
   "use strict";
@@ -14,8 +15,16 @@
   const TOP_RAIL_MQ = matchMedia('(max-width:1000px)');
   const homeView = document.querySelector('.view[data-view="home"]');
   const dataTrigger = document.querySelector('.rail__link--data[data-view="data"]');
+  const stage = document.querySelector('.stage');
+  const childStates = new WeakMap();
+  const childProgressInk = {
+    echo:'#181818',
+    atrio:'#A63A23',
+    data:'#0057FF'
+  };
 
   cleanupPreviousEndcap();
+  installHostProgressOverride();
   installHomeFooter();
   installChildFooters();
   waitForContactOrbit();
@@ -109,13 +118,42 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
     homeView.appendChild(footerMarkup());
   }
 
+  function installHostProgressOverride(){
+    if (!document.getElementById('arco-child-progress-host-style')){
+      const style = document.createElement('style');
+      style.id = 'arco-child-progress-host-style';
+      style.textContent = 'html[data-arco-child-active="true"] #progress-rail{display:none!important}';
+      document.head.appendChild(style);
+    }
+
+    const sync = () => {
+      const active = document.querySelector('.view[data-active="true"]')?.dataset.view || 'home';
+      document.documentElement.dataset.arcoChildActive = String(active !== 'home');
+    };
+    sync();
+    if (stage){
+      new MutationObserver(sync).observe(stage,{
+        subtree:true,
+        attributes:true,
+        attributeFilter:['data-active']
+      });
+    }
+  }
+
   function installChildFooters(){
     document.querySelectorAll('iframe.child__frame').forEach(frame => {
       const prepare = () => {
-        let doc;
-        try { doc = frame.contentDocument; }
-        catch { return; }
-        if (!doc?.documentElement || !doc.body) return;
+        let win,doc;
+        try {
+          win = frame.contentWindow;
+          doc = frame.contentDocument;
+        } catch {
+          return;
+        }
+        if (!win || !doc?.documentElement || !doc.body) return;
+
+        const view = frame.closest('.view')?.dataset.view;
+        if (!view || !['echo','atrio','data'].includes(view)) return;
 
         doc.documentElement.dataset.arcoEmbedded = 'true';
         installStyle(doc,true);
@@ -126,9 +164,13 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
           link.setAttribute('target','_top');
         });
 
+        cleanupChild(view,doc);
+
         if (!doc.body.querySelector(':scope > .arco-unified-footer')){
           doc.body.appendChild(footerMarkup());
         }
+
+        prepareChildScrollbar(frame,win,doc,view);
       };
 
       frame.addEventListener('load',prepare);
@@ -136,6 +178,143 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
         if (frame.contentDocument?.readyState === 'complete' && frame.getAttribute('src') !== 'about:blank') prepare();
       } catch {}
     });
+  }
+
+  function cleanupChild(view,doc){
+    if (view === 'echo'){
+      const ecosystemLabel = [...doc.querySelectorAll('p')]
+        .find(node => node.textContent.trim() === 'Ecossistema');
+      const ecosystemBlock = ecosystemLabel?.closest('div[data-reveal]') || ecosystemLabel?.parentElement;
+      ecosystemBlock?.remove();
+
+      const legacyFooter = [...doc.querySelectorAll('div')].find(node => {
+        const children = [...node.children];
+        if (children.length !== 3 || children.some(child => child.tagName !== 'SPAN')) return false;
+        return children[0].textContent.trim() === 'ECHO' &&
+          children[1].textContent.trim() === 'Christian da Costa, Curitiba, Brasil' &&
+          children[2].textContent.trim() === '2026';
+      });
+      legacyFooter?.remove();
+    }
+
+    if (view === 'atrio'){
+      doc.querySelector('.project-sequence')?.remove();
+    }
+  }
+
+  function prepareChildScrollbar(frame,win,doc,view){
+    const previous = childStates.get(frame);
+    if (previous){
+      previous.win.removeEventListener('scroll',previous.schedule);
+      previous.win.removeEventListener('resize',previous.schedule);
+      previous.resizeObserver?.disconnect();
+      previous.cleanupObserver?.disconnect();
+    }
+
+    installChildScrollbarStyle(view,doc);
+    const progress = ensureChildScrollbar(view,doc);
+
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const root = doc.scrollingElement || doc.documentElement;
+      if (!root || !progress?.rail || !progress?.fill) return;
+      const max = Math.max(0,root.scrollHeight - win.innerHeight);
+      const ratio = max > 0 ? Math.min(1,Math.max(0,root.scrollTop / max)) : 0;
+      progress.fill.style.transform = `scaleY(${ratio})`;
+      progress.rail.hidden = max <= 1;
+    };
+    const schedule = () => {
+      if (raf) return;
+      raf = win.requestAnimationFrame(update);
+    };
+
+    win.addEventListener('scroll',schedule,{passive:true});
+    win.addEventListener('resize',schedule,{passive:true});
+
+    let resizeObserver = null;
+    if ('ResizeObserver' in win){
+      resizeObserver = new win.ResizeObserver(schedule);
+      resizeObserver.observe(doc.documentElement);
+      resizeObserver.observe(doc.body);
+    }
+
+    /* ECHO é montado por runtime. Durante a estabilização inicial, qualquer
+       recomposição que tente devolver os blocos legados é limpa novamente. */
+    let cleanupRaf = 0;
+    const scheduleCleanup = () => {
+      if (cleanupRaf) return;
+      cleanupRaf = win.requestAnimationFrame(() => {
+        cleanupRaf = 0;
+        cleanupChild(view,doc);
+        schedule();
+      });
+    };
+    let cleanupObserver = null;
+    if ('MutationObserver' in win){
+      cleanupObserver = new win.MutationObserver(scheduleCleanup);
+      cleanupObserver.observe(doc.body,{childList:true,subtree:true});
+      win.setTimeout(() => cleanupObserver?.disconnect(),4000);
+    }
+
+    childStates.set(frame,{win,doc,schedule,resizeObserver,cleanupObserver});
+    schedule();
+    [60,260,900,2200].forEach(delay => win.setTimeout(scheduleCleanup,delay));
+  }
+
+  function installChildScrollbarStyle(view,doc){
+    let style = doc.getElementById('arco-child-scrollbar-style');
+    if (!style){
+      style = doc.createElement('style');
+      style.id = 'arco-child-scrollbar-style';
+      style.textContent = `
+html[data-arco-embedded="true"]{
+  scrollbar-width:none!important;
+  -ms-overflow-style:none!important;
+}
+html[data-arco-embedded="true"]::-webkit-scrollbar,
+html[data-arco-embedded="true"] body::-webkit-scrollbar{
+  width:0!important;height:0!important;display:none!important;
+}
+html[data-arco-embedded="true"] .atrio-progress,
+html[data-arco-embedded="true"] .echo-trace{
+  display:none!important;
+}
+.arco-child-scrollbar{
+  position:fixed;top:0;right:2px;bottom:0;z-index:2147483000;
+  width:2px;overflow:hidden;pointer-events:none;
+  background:rgba(128,128,128,.24);
+}
+.arco-child-scrollbar__fill{
+  position:absolute;inset:0 0 auto 0;width:100%;height:100%;
+  transform:scaleY(0);transform-origin:50% 0;
+  background:var(--arco-child-progress-ink,#181818);
+  box-shadow:0 0 0 .5px rgba(252,252,252,.52);
+  will-change:transform;
+}
+@media(max-width:760px){
+  .arco-child-scrollbar{right:1px;width:2px}
+}
+@media(prefers-reduced-motion:reduce){
+  .arco-child-scrollbar__fill{transition:none!important}
+}`;
+      doc.head.appendChild(style);
+    }
+    doc.documentElement.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#181818');
+  }
+
+  function ensureChildScrollbar(view,doc){
+    let rail = doc.getElementById('arco-child-scrollbar');
+    if (!rail){
+      rail = doc.createElement('div');
+      rail.id = 'arco-child-scrollbar';
+      rail.className = 'arco-child-scrollbar';
+      rail.setAttribute('aria-hidden','true');
+      rail.innerHTML = '<span class="arco-child-scrollbar__fill"></span>';
+      doc.body.appendChild(rail);
+    }
+    rail.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#181818');
+    return {rail,fill:rail.querySelector('.arco-child-scrollbar__fill')};
   }
 
   function waitForContactOrbit(){
