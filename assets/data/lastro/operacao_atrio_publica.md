@@ -1,10 +1,10 @@
 # ATRIO | operação pública
 
-## Indicadores auditados
+## Indicadores publicados
 
 | Indicador | Valor | Como se confere |
 |---|---|---|
-| Rotas sob `/v1` | 23 | matriz canônica da versão atual |
+| Rotas sob `/v1` | 23 | registro da versão corrente confirmado pelo autor |
 | Testes aprovados | 188 | suíte local, medição de 26.08.2026 |
 | Eixos analíticos | 11 | CERNE, exame adversarial do raciocínio |
 | Fases nomeadas | 18 | RATIO: RI_01–06, ED_01–05, MS_01–07 |
@@ -15,9 +15,10 @@ ligado depois dela. O número não inflou: cresceu por adição nomeável.
 
 ## Método da contagem
 
-A métrica publicada registra 23 rotas sob `/v1` na matriz canônica da versão
-atual. Nesta revisão pública, o número de operações HTTP não é usado como
-indicador autônomo: a página expõe somente a superfície de rotas confirmada.
+A métrica publicada registra 23 rotas sob `/v1` na versão corrente do ATRIO,
+conforme confirmação autoral. O código-fonte completo necessário para recontagem
+independente não integra este derivado público; por isso, a contagem é documentada
+como declaração da versão, e não apresentada como verificação externa autônoma.
 
 ## Limite de interpretação
 
