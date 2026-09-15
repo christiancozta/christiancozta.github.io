@@ -190,21 +190,9 @@ body{
   color:#A63A23;
 }
 
-.field-dark--prelim .prelim-card{
-  grid-template-rows:auto 1fr;
-  align-content:stretch;
-  padding:var(--base) var(--gutter);
-}
-.field-dark--prelim .prelim-card h3{
-  align-self:start;
-  margin:0;
-}
-.field-dark--prelim .prelim-card .row-body{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding-bottom:0;
+/* 01 PRELIMINARES — quatro células com coordenadas tipográficas fixas. */
+#preliminares .prelim-card p{
+  font-size:.9375rem; /* 15px: microajuste -1px */
 }
 
 /* Ordem editorial: na segunda dupla, Quem decide? vem antes de Onde se aplica?. */
@@ -218,6 +206,28 @@ body{
 #preliminares .closing-row{order:7}
 
 @media(min-width:761px){
+  #preliminares .prelim-card{
+    position:relative;
+    display:block;
+    padding:0;
+    align-content:initial;
+  }
+  #preliminares .prelim-card h3{
+    position:absolute;
+    top:31px;
+    left:var(--gutter);
+    right:var(--gutter);
+    margin:0;
+  }
+  #preliminares .prelim-card .row-body{
+    position:absolute;
+    top:86px;
+    left:var(--gutter);
+    right:var(--gutter);
+    display:block;
+    padding:0;
+  }
+
   /* Bloco de tensão: coluna única ancorada à margem esquerda do board. */
   #preliminares .tension-row{
     grid-template-columns:repeat(6,var(--cell));
@@ -246,9 +256,25 @@ body{
   --grid-light:#ECECEC;
 }
 
-/* Overrides responsivos anteriores não podem rebaixar o corpo editorial. */
+/* Mobile: fluxo natural; as coordenadas fixas pertencem ao tabuleiro desktop. */
 @media(max-width:760px){
   #preliminares .board{display:flex;flex-direction:column}
+  #preliminares .prelim-card{
+    position:static;
+    display:block;
+    height:auto;
+    min-height:0;
+    padding:1rem;
+  }
+  #preliminares .prelim-card h3{
+    position:static;
+    margin-bottom:calc(var(--base)*.5);
+  }
+  #preliminares .prelim-card .row-body{
+    position:static;
+    display:block;
+    padding:0;
+  }
   .methodology-row p,
   .field-light--architecture .module-lead,
   .field-light--architecture .module-card__section dd,
