@@ -14,9 +14,12 @@
 .field-light--architecture .module-card--detail .module-card__operation{
   grid-column:auto;grid-row:auto;align-self:auto;width:100%;max-width:none
 }
-.field-light--architecture .module-card__tab-lead{width:100%;max-width:none;margin:0}
+.field-light--architecture .module-card__tab-lead{
+  width:100%;max-width:none;margin:0;
+  font-family:var(--font-heading);font-weight:700;text-align:center
+}
 .field-light--architecture .module-card__tabs{
-  display:flex;align-items:stretch;gap:8px;width:100%;max-width:none;
+  display:flex;align-items:stretch;justify-content:center;gap:8px;width:100%;max-width:none;
   margin-top:calc(var(--base)*1.05);padding-top:calc(var(--base)*.8);
   border-top:1px solid var(--architecture-card-rule)
 }
@@ -62,9 +65,22 @@
   flex:none;width:100%;max-width:none
 }
 
+/* Estado-mãe da seção: ATRIO é o cartão de chegada em desktop e mobile. */
+.field-light--architecture .architecture-system[data-active-module="atrio"] .module-card-stage{
+  --architecture-card-bg:#1B1B1B;
+  --architecture-card-accent:#A63A23;
+  --architecture-card-rule:rgba(250,250,250,.15)
+}
+.field-light--architecture #module-card-atrio{
+  border:3px solid #A63A23;
+  box-shadow:0 0 0 1px rgba(166,58,35,.22);
+  background:transparent
+}
+.field-light--architecture .module-card__title-accent{color:#A63A23}
+
 @media(max-width:760px){
-  .field-light--architecture .module-card__tabs{gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
-  .field-light--architecture .module-card__tab{flex:1 1 0;min-width:0;padding:0 8px}
+  .field-light--architecture .module-card__tabs{justify-content:center;gap:6px;margin-top:var(--base);padding-top:calc(var(--base)*.72)}
+  .field-light--architecture .module-card__tab{flex:0 0 auto;min-width:0;padding:0 8px}
   .field-light--architecture .module-card__tab-panel{margin-top:24px}
   .field-light--architecture .module-card__evolution .module-card__version{margin:0}
 }
