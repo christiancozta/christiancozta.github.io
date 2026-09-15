@@ -163,7 +163,7 @@ function patchCerneVersionDialog(){
   const current=document.getElementById("version-note-current");
   const list=document.getElementById("version-note-list");
   if(!title||!current||!list||title.textContent.trim()!=="CERNE") return;
-  current.textContent="Versão corrente 3.0.0 — 09/09/2026";
+  current.textContent="Versão corrente 3.0.0";
   list.replaceChildren(...CERNE_HISTORY.map(item=>{
     const li=document.createElement("li");
     const mark=document.createElement("b");
