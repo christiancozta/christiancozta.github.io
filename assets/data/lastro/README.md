@@ -4,7 +4,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 
 ## Arquivos
 
-- `jurimetria_derivada.csv`: agregados mínimos da 2ª Turma Recursal necessários para conferir série mensal, universos, denominadores, teste adversarial, tempos médios publicados e o indicador individual do autor, sem linhas processuais ou benchmark de terceiros.
+- `jurimetria_derivada.csv`: agregados mínimos da 2ª Turma Recursal necessários para conferir série mensal, universos, denominadores, teste adversarial, testes de robustez, tempos médios publicados e o indicador individual do autor, sem linhas processuais ou benchmark de terceiros.
 - `jurimetria.sha256`: SHA-256 da base original usada nos cálculos. O hash registra a integridade dos bytes da fonte; não prova, por si só, a fidelidade da extração ao sistema de origem.
 - `ementario_publico.xlsx`: 2.758 ementas; somente estrutura de classificação.
 - `acervo_publico.xlsx`: 1.192 registros; somente ID sequencial, classe, agrupador e núcleo.
@@ -21,6 +21,8 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 881 / 1.711 = 51,49% no recorte integral | derivada | `jurimetria_derivada.csv` |
 | 899 / 1.896 = 47,42% como denominador adversarial rejeitado | derivada | `jurimetria_derivada.csv` |
 | série mensal NOV/25–MAI/26 e amplitude de +16,18 p.p. | derivada | `jurimetria_derivada.csv` |
+| abril sem entrantes = 60,11%, diferença de −0,28 p.p. | agregada | `jurimetria_derivada.csv` |
+| 0 de 6 servidores presentes nas duas pontas recuaram | agregada | `jurimetria_derivada.csv` |
 | 13,2 d / 6,9 d / 10,1 d de fila média publicada | agregada | `jurimetria_derivada.csv` |
 | 153 / 258 = 59,30% do autor | derivada | `jurimetria_derivada.csv` |
 | 2.758 ementas catalogadas | direta | `ementario_publico.xlsx` |
@@ -31,11 +33,13 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 76,5% com tese firmada | derivada | `precedentes_publico.xlsx` |
 | 245 códigos, 9 matérias, 3 ramos e 10 situações | direta | `precedentes_publico.xlsx` |
 | 115.114 registros únicos | direta | `diagnostico_corpus_publico.md` |
-| 23 rotas e 188 testes | direta | `operacao_atrio_publica.md` |
+| 23 rotas e 188 testes | declarada/agregada | `operacao_atrio_publica.md` |
 
 ## Limites da verificação
 
-O derivado público permite recalcular as figuras agregadas expostas. Os tempos de fila são publicados apenas como agregados, sem linhas individuais; portanto, o arquivo documenta os valores e o critério, mas não expõe observações suficientes para recomputar as médias linha a linha. O hash SHA-256 comprova que uma determinada sequência de bytes corresponde à fonte usada, mas não autentica a extração perante o sistema de origem.
+O derivado público permite recalcular as figuras agregadas cuja contagem foi preservada. O teste de abril sem entrantes é publicado como resultado agregado (60,11%) porque as linhas individualizadas necessárias à recomposição foram excluídas por privacidade; o teste dos seis servidores preserva somente a contagem final de recuos. Os tempos de fila também são publicados apenas como agregados, sem linhas individuais. O hash SHA-256 comprova que uma determinada sequência de bytes corresponde à fonte usada, mas não autentica a extração perante o sistema de origem.
+
+A contagem de 23 rotas registra a versão corrente confirmada pelo autor; o código-fonte completo necessário para recontagem independente não integra este derivado público. O lastro, portanto, documenta a declaração sem apresentá-la como verificação externa autônoma.
 
 ## Exclusões de privacidade
 
