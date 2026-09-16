@@ -15,6 +15,13 @@
     const finalLayer = document.createElement("script");
     finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap4", src).href;
     finalLayer.async = false;
+    finalLayer.onload = () => {
+      const railLayer = document.createElement("script");
+      railLayer.src = new URL("arco-rail-final.js?v=20260916-atrio-hero", src).href;
+      railLayer.async = false;
+      railLayer.onerror = () => console.error("ARCO: falha ao carregar o ajuste final do rail.");
+      document.head.appendChild(railLayer);
+    };
     finalLayer.onerror = () => console.error("ARCO: falha ao carregar a camada final consolidada.");
     document.head.appendChild(finalLayer);
   };
