@@ -1300,57 +1300,6 @@ body{
   .mec > summary, .pain > summary{ column-gap:.75rem; }
 }
 
-/* Credenciais flutuantes: inexistem fora do mobile; no celular substituem o
-   rodapé do rail sem ocupar altura do topo. */
-.mobile-cred{ display:none; }
-@media (max-width:820px){
-  .mobile-cred{
-    display:block; position:fixed; z-index:70;
-    right:max(1rem, env(safe-area-inset-right, 0px));
-    bottom:calc(1rem + env(safe-area-inset-bottom, 0px));
-  }
-  .mobile-cred > summary{ list-style:none; }
-  .mobile-cred > summary::-webkit-details-marker{ display:none; }
-  .mobile-cred__toggle{
-    width:2.65rem; height:2.65rem;
-    display:grid; place-items:center;
-    margin-left:auto; padding:0; cursor:pointer;
-    border:1px solid rgba(255,255,255,.18); border-radius:0;
-    background:var(--ink); color:var(--paper);
-    box-shadow:0 8px 24px rgba(0,0,0,.16);
-  }
-  .mobile-cred__toggle svg{ width:1.05rem; height:1.05rem; display:block; }
-  .mobile-cred__panel{
-    position:absolute; right:0; bottom:calc(100% + .6rem);
-    width:min(17rem, calc(100vw - 2rem));
-    padding:1rem 1.05rem 1.05rem;
-    background:var(--ink); color:var(--paper);
-    border:1px solid var(--hair-inv);
-    box-shadow:0 12px 30px rgba(0,0,0,.2);
-  }
-  .mobile-cred__links{
-    display:flex; align-items:baseline; flex-wrap:wrap;
-    gap:.3rem .48rem; margin:0 0 .9rem;
-    font-family:var(--f-micro); font-size:.58rem; line-height:1.5;
-    letter-spacing:.04em; color:var(--pp-58);
-  }
-  .mobile-cred__links a{
-    color:var(--pp-58); text-decoration:none; padding-bottom:1px; white-space:nowrap;
-    background-image:linear-gradient(var(--hair-inv),var(--hair-inv));
-    background-size:100% 1px; background-repeat:no-repeat; background-position:0 100%;
-  }
-  .mobile-cred__links i{ font-style:normal; color:var(--hair-inv); }
-  .mobile-cred__name{
-    margin:0; font-family:var(--f-display); font-weight:600; font-size:1.02rem;
-    line-height:1.1; letter-spacing:-.03em; color:var(--paper);
-  }
-  .mobile-cred__sub{
-    margin:.5rem 0 0; font-family:var(--f-micro); font-size:.58rem;
-    line-height:1.5; letter-spacing:.12em; text-transform:uppercase; color:var(--pp-58);
-  }
-  .mobile-cred__sub i{ font-style:normal; color:var(--hair-inv); margin:0 .2rem; }
-}
-
 /* ===========================================================================
    REVELAÇÃO — entrada com massa, nunca estática. Só transform/opacity.
    O conteúdo é visível por padrão; o esconde só entra quando o JS confirma

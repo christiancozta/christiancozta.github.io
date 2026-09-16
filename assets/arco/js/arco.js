@@ -1,5 +1,5 @@
 /* ========================================================================== 
-   ARCO — loader final 15.09.2026
+   ARCO — loader final 16.09.2026
    Mantém a base estabilizada intacta e aplica a camada final consolidada.
    ========================================================================== */
 (() => {
@@ -9,11 +9,11 @@
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
 
   const base = document.createElement("script");
-  base.src = new URL("arco-base-20260915.js?v=20260915-endcap2", src).href;
+  base.src = new URL("arco-base-20260915.js?v=20260916-rail-contacts", src).href;
   base.async = false;
   base.onload = () => {
     const finalLayer = document.createElement("script");
-    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260915-endcap4", src).href;
+    finalLayer.src = new URL("arco-final-20260915-v2.js?v=20260916-rail-contacts", src).href;
     finalLayer.async = false;
     finalLayer.onload = () => {
       const railLayer = document.createElement("script");
