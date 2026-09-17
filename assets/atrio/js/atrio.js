@@ -77,6 +77,7 @@ let scrollRaf = 0;
 let moduleAnimation = null;
 let moduleToken = 0;
 let architectureMode = null;
+let architectureUnit = 0;
 let architectureMicro = 8;
 let architectureLandingY = 0;
 let architecturePieceSize = 108;
