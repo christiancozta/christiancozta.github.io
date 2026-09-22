@@ -254,7 +254,7 @@
       },
       "2": {
         title:"METHODOLOGICAL CRITERIA", tag:"DATA", cls:"data",
-        detail:"for validating data and jurimetric indicators: grounding in evidence (Grounding) and traceability (Trace)."
+        detail:"for validating data and indicators in jurimetrics: evidentiary grounding (Grounding) and traceability (Trace)."
       },
       "1": {
         title:"PROFESSIONAL", tag:"", cls:"",
