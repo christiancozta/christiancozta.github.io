@@ -280,6 +280,9 @@ const subtitle=card.querySelector(".module-card__subtitle")?.textContent.trim()|
 moduleStatus.textContent=[title,subtitle].filter(Boolean).join(", ");
 }
 function frameArchitecture(){
+// A ativacao inicial do ATRIO monta o estado-padrao sem sequestrar a rolagem do Hero.
+// O sinal e consumido uma unica vez; interacoes posteriores continuam enquadrando a arquitetura.
+if(moduleSystem?.dataset.suppressNextFrame==="true"){delete moduleSystem.dataset.suppressNextFrame;return}
 // O layout ja esta final quando o card sai de hidden; so as opacidades animam.
 // Poe o topo do trilho a 6% da janela: peca pousada e card cabem juntos nos dois modos.
 if(!moduleField)return;
