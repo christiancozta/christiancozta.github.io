@@ -224,13 +224,13 @@
         second.className = 'eq__lead translation-intro__second';
         introLead.after(second);
       }
-      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> dores reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
+      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> dores reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
     }
 
     stats.className = 'translation-method';
     stats.innerHTML = `
       <header class="eqhead translation-method__head">
-        <h3>Como a tradução é atualizada</h3>
+        <h3>Como a prática é mapeada</h3>
       </header>
       <p class="translation-method__intro">Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e documentado é o acerto pelo método.</p>
       <ol class="translation-method__list">
