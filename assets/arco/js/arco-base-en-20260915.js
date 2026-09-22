@@ -8,7 +8,7 @@
 
   const current = document.currentScript;
   const src = current?.src || new URL("../assets/arco/js/arco-en.js", document.baseURI).href;
-  const runtimeUrl = new URL("arco-runtime-en.js?v=20260922-en-v1", src);
+  const runtimeUrl = new URL("arco-runtime-en.js?v=20260922-en-v2", src);
 
   const runtime = document.createElement("script");
   runtime.src = runtimeUrl.href;
@@ -41,8 +41,8 @@
     if (foundation){
       foundation.lang = 'en';
       foundation.innerHTML = `
-        The first movement took place in first-instance judge's chambers, facing a high-volume caseload with strong structural repetition. The experience involved triage, workload organization, backlog remediation, and the digital integration of <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Decreto Judiciário Conjunto nº 508/2023 | TJPR" data-numerator="36,000 cases listed in the Annex" data-denominator="4 phases of 3 months | 7 groups of judicial districts" data-period="Justice 4.0 Center | from July 27, 2023">36,000</span> tax enforcement cases.
-        That is where the initial insight formed: before accelerating legal production, the caseload had to be made legible and the legal work measurable. <button class="b-data" type="button">DATA</button> would emerge from there.
+        The first movement took place in a first-instance tax enforcement court, facing a high-volume caseload built around highly repetitive case patterns. The work involved triage, workload management, backlog remediation, and the digital integration of <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Decreto Judiciário Conjunto nº 508/2023 | TJPR" data-numerator="36,000 cases listed in the Annex" data-denominator="4 phases of 3 months | 7 groups of judicial districts" data-period="Justice 4.0 Center | from July 27, 2023">36,000</span> tax enforcement cases.
+        That is where the initial insight took shape: before accelerating legal output, the caseload had to be made legible and the work measurable. <button class="b-data" type="button">DATA</button> would emerge from there.
       `;
       foundation.querySelector('.b-data')?.addEventListener('click',() =>
         document.querySelector('.rail__link--data[data-view="data"]')?.click());
@@ -54,8 +54,8 @@
     if (paragraph && !paragraph.querySelector('.storylink--echo')){
       paragraph.lang = 'en';
       paragraph.innerHTML = `
-        The second movement matured at the appellate level, with the shift from volume management to directing the decision workflow. <span class="storylink storylink--echo" role="button" tabindex="0" aria-haspopup="dialog" lang="en">As there was no one to ask</span>, <button class="b-echo" type="button">ECHO</button> emerged as a method for operational structuring:
-        caseload organization, thematic segmentation, routine standardization, priority control, and draft decision quality. It is the point where experience becomes a legal operations method.
+        The second movement matured at the appellate level, with a shift from managing volume to directing the decision workflow. <span class="storylink storylink--echo" role="button" tabindex="0" aria-haspopup="dialog" lang="en">With no established procedure and no one inside to ask</span>, <button class="b-echo" type="button">ECHO</button> emerged as a method for structuring the operation:
+        caseload organization, thematic segmentation, routine standardization, priority control, team management, and quality control for draft decisions. This is where judicial experience becomes a legal operations method.
       `;
 
       const echo = paragraph.querySelector('.b-echo');
@@ -147,7 +147,7 @@
     if (architectureParagraph && !architectureParagraph.querySelector('.storylink--atrio')){
       architectureParagraph.lang = 'en';
       architectureParagraph.innerHTML = `
-        The third movement emerges when reasoning, on encountering artificial intelligence, <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="en">tried to accelerate before method did</span>. <button class="b-atrio" type="button">ATRIO</button> transforms the logic already built into a modular architecture, with a document base, assisted reasoning, human validation, traceability, and quality control. AI does not replace decision-making: it operates within a governed path.
+        The third movement begins when method meets artificial intelligence and <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="en">reasoning starts to accelerate before the method does</span>. <button class="b-atrio" type="button">ATRIO</button> turns the logic already built through ECHO into a modular architecture, with a document corpus, assisted reasoning, human validation, traceability, and quality control. AI does not replace judgment: it operates within a governed path.
       `;
 
       const atrio = architectureParagraph.querySelector('.b-atrio');
@@ -210,14 +210,14 @@
     if (!opening || !stats || !frontierText) return;
 
     if (introLead){
-      introLead.textContent = 'I developed tools without knowing they already had names. I redesigned what had “always been done that way” when it did not address the problem.';
+      introLead.textContent = 'I built tools without knowing they already had names. I redesigned practices that had “always been done that way” when they did not solve the problem.';
       let second = introLead.parentElement?.querySelector('.translation-intro__second');
       if (!second){
         second = document.createElement('p');
         second.className = 'eq__lead translation-intro__second';
         introLead.after(second);
       }
-      second.innerHTML = 'This section presents what was built in practice, translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> pain points recognizable in the private market, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and translated through <strong>136</strong> market correspondences.';
+      second.innerHTML = 'This section presents what was built in practice, translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> recognizable private-sector pain points, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and mapped to <strong>136</strong> market correspondences.';
     }
 
     stats.className = 'translation-method';
@@ -225,7 +225,7 @@
       <header class="eqhead translation-method__head">
         <h3>How the translation is updated</h3>
       </header>
-      <p class="translation-method__intro">Hypotheses, revisions, and abandoned decisions remain recorded. An acknowledged and documented error is a methodological success.</p>
+      <p class="translation-method__intro">Hypotheses, revisions, and abandoned decisions remain recorded. An acknowledged, documented error is a methodological success.</p>
       <ol class="translation-method__list">
         <li>only what has implementation and evidence is included;</li>
         <li>aliases do not increase the count;</li>
@@ -240,14 +240,14 @@
 
     const dataBoundary = document.createElement('p');
     dataBoundary.className = 'fronteira-data';
-    dataBoundary.innerHTML = 'I extracted metrics and calculated indicators from raw lists delivered by the system. During my professional experience, however, systematic measurement was limited to the team productivity indicator. The remaining indicators were calculated later, as a retrospective exercise to develop this capability. For that reason, this exercise does not count jurimetrics mechanisms attributed to <button class="b-data" type="button">DATA</button>.';
+    dataBoundary.innerHTML = 'I extracted metrics and calculated indicators from raw lists exported by the system. During my professional experience, however, systematic measurement was limited to the team productivity indicator. The remaining indicators were calculated later, as a retrospective exercise to develop this capability. For that reason, this exercise does not count jurimetric mechanisms attributed to <button class="b-data" type="button">DATA</button>.';
     frontierText.appendChild(dataBoundary);
     dataBoundary.querySelector('.b-data')?.addEventListener('click',() =>
       document.querySelector('.rail__link--data[data-view="data"]')?.click());
 
     const limitCopy = document.createElement('p');
     limitCopy.className = 'fronteira-limit';
-    limitCopy.innerHTML = '<strong>Not yet demonstrated:</strong> No entry covers the financial side of Legal Ops. There is no evidence to claim it. RAG and semantic search are excluded because preparation is not a mechanism; the others because analogy is not a designed transfer. Declaring the boundary costs less than letting it be discovered.';
+    limitCopy.innerHTML = '<strong>Not yet demonstrated:</strong> No entry covers the financial side of Legal Ops. There is no evidence to support that claim. RAG and semantic search are excluded because preparation alone is not a mechanism; the others because analogy is not the same as a deliberately designed transfer. Declaring the boundary costs less than letting someone else discover it.';
     frontierText.appendChild(limitCopy);
 
     if (sourceChips){
