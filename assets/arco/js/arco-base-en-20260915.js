@@ -217,7 +217,7 @@
         second.className = 'eq__lead translation-intro__second';
         introLead.after(second);
       }
-      second.innerHTML = 'This section presents what was built in practice, translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> recognizable private-sector pain points, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and mapped to <strong>136</strong> market correspondences.';
+      second.innerHTML = 'This section presents what was built in practice, identified and translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> recognizable private-sector pain points, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and mapped to <strong>136</strong> market correspondences.';
     }
 
     stats.className = 'translation-method';
