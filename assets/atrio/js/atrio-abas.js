@@ -22,6 +22,7 @@ const architectureSystem = document.getElementById("architecture-system");
 const atrioCard = document.querySelector('[data-module-card="atrio"]');
 let activeTab = "fluxo";
 let defaultFrame = 0;
+let initialDefaultActivation = true;
 
 function tabsFor(card){return [...card.querySelectorAll(".module-card__tab[role='tab']")]}
 function panelsFor(card){return [...card.querySelectorAll(".module-card__tab-panel[role='tabpanel']")]}
@@ -181,6 +182,10 @@ function activateDefaultAtrio(){
   const phase=architectureSystem.dataset.modulePhase;
   const active=architectureSystem.dataset.activeModule;
   if(phase!=="idle" || active==="atrio") return;
+  if(initialDefaultActivation){
+    architectureSystem.dataset.suppressNextFrame="true";
+    initialDefaultActivation=false;
+  }
   window.atrioActivateModule("atrio");
 }
 
