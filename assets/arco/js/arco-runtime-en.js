@@ -241,12 +241,12 @@
 
     const stationMeta = {
       "5": {
-        title:"AREAS OF PRACTICE", tag:"ARCO", cls:"arco",
-        detail:"that organize mechanisms and their correspondences, built around recognizable private-market problems."
+        title:"PRACTICE AREAS", tag:"ARCO", cls:"arco",
+        detail:"that organize mechanisms and their market correspondences around recognizable private-sector problems."
       },
       "4": {
         title:"LEGAL AI MODULES", tag:"ATRIO", cls:"atrio",
-        detail:"brought together in a legal reasoning architecture for decision support, applied to the routine of a judge's chambers."
+        detail:"brought together in a legal reasoning architecture for decision support, applied to the day-to-day work of a judge's chambers."
       },
       "3": {
         title:"OPERATIONAL AXES", tag:"ECHO", cls:"echo",
@@ -254,10 +254,10 @@
       },
       "2": {
         title:"METHODOLOGICAL CRITERIA", tag:"DATA", cls:"data",
-        detail:"for validating data and jurimetric indicators: evidence (Grounding) and traceability (Trace)."
+        detail:"for validating data and jurimetric indicators: grounding in evidence (Grounding) and traceability (Trace)."
       },
       "1": {
-        title:"PROFISSIONAL", tag:"", cls:"",
+        title:"PROFESSIONAL", tag:"", cls:"",
         detail:"able to measure, organize, and architect legal systems at the crossroads of law, technology, and data."
       }
     };
