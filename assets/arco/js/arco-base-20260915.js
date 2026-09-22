@@ -224,7 +224,7 @@
         second.className = 'eq__lead translation-intro__second';
         introLead.after(second);
       }
-      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> dores reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
+      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> problemas reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
     }
 
     stats.className = 'translation-method';
