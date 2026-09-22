@@ -1,0 +1,511 @@
+/* ========================================================================== 
+   ARCO — English desktop/mobile entry + on-demand provenance
+   O runtime estabilizado permanece em arco-runtime.js. Esta camada acrescenta
+   leitura territorial no desktop e preserva a marca estática no hero.
+   ========================================================================== */
+(() => {
+  "use strict";
+
+  const current = document.currentScript;
+  const src = current?.src || new URL("../assets/arco/js/arco-en.js", document.baseURI).href;
+  const runtimeUrl = new URL("arco-runtime-en.js?v=20260922-en-v1", src);
+
+  const runtime = document.createElement("script");
+  runtime.src = runtimeUrl.href;
+  runtime.async = false;
+  runtime.onload = () => {
+    installArcadeNarrative();
+    installTranslationFrontier();
+    installProvenanceHover();
+  };
+  runtime.onerror = () => console.error("ARCO: failed to load the stabilized runtime.");
+  document.head.appendChild(runtime);
+
+  function installArcadeNarrative(){
+    const home = document.querySelector('.view[data-view="home"] .home');
+    const movements = [...(home?.querySelectorAll('.arcade > .mov') || [])];
+    if (!home || movements.length < 3) return;
+
+    const openTale = (id, trigger) => {
+      const tale = document.getElementById(id);
+      if (!tale) return;
+      if (!tale.open) tale.showModal();
+      tale.scrollTop = 0;
+      tale.addEventListener('close',() => trigger?.focus(),{once:true});
+    };
+
+    const atrioTaleTitle = document.querySelector('#tale-atrio .tale__title');
+    if (atrioTaleTitle) atrioTaleTitle.textContent = 'When Reasoning Tried to Accelerate Before Method';
+
+    const foundation = movements[0].querySelector('.mov__t');
+    if (foundation){
+      foundation.lang = 'en';
+      foundation.innerHTML = `
+        The first movement took place in first-instance judge's chambers, facing a high-volume caseload with strong structural repetition. The experience involved triage, workload organization, backlog remediation, and the digital integration of <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Decreto Judiciário Conjunto nº 508/2023 | TJPR" data-numerator="36,000 cases listed in the Annex" data-denominator="4 phases of 3 months | 7 groups of judicial districts" data-period="Justice 4.0 Center | from July 27, 2023">36,000</span> tax enforcement cases.
+        That is where the initial insight formed: before accelerating legal production, the caseload had to be made legible and the legal work measurable. <button class="b-data" type="button">DATA</button> would emerge from there.
+      `;
+      foundation.querySelector('.b-data')?.addEventListener('click',() =>
+        document.querySelector('.rail__link--data[data-view="data"]')?.click());
+    }
+
+    const regency = movements[1];
+    const paragraph = regency.querySelector('.mov__t');
+    const legacyStory = regency.querySelector('.idlink--echo[data-tale="tale-echo"]');
+    if (paragraph && !paragraph.querySelector('.storylink--echo')){
+      paragraph.lang = 'en';
+      paragraph.innerHTML = `
+        The second movement matured at the appellate level, with the shift from volume management to directing the decision workflow. <span class="storylink storylink--echo" role="button" tabindex="0" aria-haspopup="dialog" lang="en">As there was no one to ask</span>, <button class="b-echo" type="button">ECHO</button> emerged as a method for operational structuring:
+        caseload organization, thematic segmentation, routine standardization, priority control, and draft decision quality. It is the point where experience becomes a legal operations method.
+      `;
+
+      const echo = paragraph.querySelector('.b-echo');
+      echo?.addEventListener('click',() =>
+        document.querySelector('.rail__link[data-view="echo"]')?.click());
+
+      const story = paragraph.querySelector('.storylink--echo');
+      const openStory = () => openTale('tale-echo',story);
+      story?.addEventListener('click',openStory);
+      story?.addEventListener('keydown',event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openStory();
+      });
+
+      legacyStory?.remove();
+
+      if (!document.getElementById('arco-arcade-narrative-style')){
+        const style = document.createElement('style');
+        style.id = 'arco-arcade-narrative-style';
+        style.textContent = String.raw`
+.b-data{
+  display:inline;padding:.1em .36em .14em;margin:0 .02em;border:0;
+  font:inherit;font-weight:600;letter-spacing:.008em;text-decoration:none;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  background:#0057FF;color:#FCFCFC;cursor:pointer;
+  transition:box-shadow var(--fast) var(--ease)
+}
+.b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
+.view[data-view="home"] .arcade > .mov:nth-child(2) .mov__t,
+.view[data-view="home"] .arcade > .mov:nth-child(3) .mov__t{
+  -webkit-hyphens:auto;
+  hyphens:auto;
+}
+.view[data-view="home"] .arcade > .mov:nth-child(2) > .idlink--echo,
+.view[data-view="home"] .arcade > .mov:nth-child(3) > .idlink--atrio{
+  display:none!important;
+}
+.storylink{
+  display:inline;
+  margin:0;padding:0;border:0;background:none;color:inherit;
+  font:inherit;font-style:normal;font-weight:700;cursor:pointer;
+  -webkit-hyphens:auto;hyphens:auto;
+  text-decoration-line:underline;text-decoration-thickness:1px;
+  text-underline-offset:.14em;text-decoration-color:currentColor;
+  transition:text-decoration-color var(--fast) var(--ease)
+}
+.storylink:hover,.storylink:focus-visible{text-decoration-color:transparent}
+`;
+        document.head.appendChild(style);
+      }
+
+      const mq = matchMedia('(max-width:820px)');
+      const tag = document.createElement('span');
+      tag.className = 'arco-provenance-tag arco-provenance-tag--echo';
+      tag.textContent = 'ECHO';
+      tag.setAttribute('aria-hidden','true');
+      document.body.appendChild(tag);
+
+      const moveTag = event => {
+        const gapX = 14,gapY = 12,margin = 8;
+        const rect = tag.getBoundingClientRect();
+        let x = event.clientX + gapX;
+        let y = event.clientY + gapY;
+        if (x + rect.width + margin > innerWidth) x = event.clientX - rect.width - gapX;
+        if (y + rect.height + margin > innerHeight) y = event.clientY - rect.height - gapY;
+        tag.style.left = `${Math.max(margin, x)}px`;
+        tag.style.top = `${Math.max(margin, y)}px`;
+      };
+      const hideTag = () => tag.classList.remove('is-visible');
+      story?.addEventListener('pointerenter',event => {
+        if (mq.matches || (event.pointerType && event.pointerType !== 'mouse')) return;
+        tag.classList.add('is-visible');
+        moveTag(event);
+      });
+      story?.addEventListener('pointermove',event => {
+        if (!mq.matches && (!event.pointerType || event.pointerType === 'mouse')) moveTag(event);
+      });
+      story?.addEventListener('pointerleave',hideTag);
+      story?.addEventListener('click',hideTag);
+      window.addEventListener('scroll',hideTag,{passive:true,capture:true});
+      window.addEventListener('blur',hideTag);
+      mq.addEventListener?.('change',hideTag);
+    }
+
+    const architecture = movements[2];
+    const architectureParagraph = architecture.querySelector('.mov__t');
+    const legacyArchitectureStory = architecture.querySelector('.idlink--atrio[data-tale="tale-atrio"]');
+    if (architectureParagraph && !architectureParagraph.querySelector('.storylink--atrio')){
+      architectureParagraph.lang = 'en';
+      architectureParagraph.innerHTML = `
+        The third movement emerges when reasoning, on encountering artificial intelligence, <span class="storylink storylink--atrio" role="button" tabindex="0" aria-haspopup="dialog" lang="en">tried to accelerate before method did</span>. <button class="b-atrio" type="button">ATRIO</button> transforms the logic already built into a modular architecture, with a document base, assisted reasoning, human validation, traceability, and quality control. AI does not replace decision-making: it operates within a governed path.
+      `;
+
+      const atrio = architectureParagraph.querySelector('.b-atrio');
+      atrio?.addEventListener('click',() =>
+        document.querySelector('.rail__link[data-view="atrio"]')?.click());
+
+      const architectureStory = architectureParagraph.querySelector('.storylink--atrio');
+      const openArchitectureStory = () => openTale('tale-atrio',architectureStory);
+      architectureStory?.addEventListener('click',openArchitectureStory);
+      architectureStory?.addEventListener('keydown',event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        openArchitectureStory();
+      });
+
+      legacyArchitectureStory?.remove();
+
+      const mq = matchMedia('(max-width:820px)');
+      const tag = document.createElement('span');
+      tag.className = 'arco-provenance-tag arco-provenance-tag--atrio';
+      tag.textContent = 'ATRIO';
+      tag.setAttribute('aria-hidden','true');
+      document.body.appendChild(tag);
+
+      const moveTag = event => {
+        const gapX = 14,gapY = 12,margin = 8;
+        const rect = tag.getBoundingClientRect();
+        let x = event.clientX + gapX;
+        let y = event.clientY + gapY;
+        if (x + rect.width + margin > innerWidth) x = event.clientX - rect.width - gapX;
+        if (y + rect.height + margin > innerHeight) y = event.clientY - rect.height - gapY;
+        tag.style.left = `${Math.max(margin, x)}px`;
+        tag.style.top = `${Math.max(margin, y)}px`;
+      };
+      const hideTag = () => tag.classList.remove('is-visible');
+      architectureStory?.addEventListener('pointerenter',event => {
+        if (mq.matches || (event.pointerType && event.pointerType !== 'mouse')) return;
+        tag.classList.add('is-visible');
+        moveTag(event);
+      });
+      architectureStory?.addEventListener('pointermove',event => {
+        if (!mq.matches && (!event.pointerType || event.pointerType === 'mouse')) moveTag(event);
+      });
+      architectureStory?.addEventListener('pointerleave',hideTag);
+      architectureStory?.addEventListener('click',hideTag);
+      window.addEventListener('scroll',hideTag,{passive:true,capture:true});
+      window.addEventListener('blur',hideTag);
+      mq.addEventListener?.('change',hideTag);
+    }
+  }
+
+  function installTranslationFrontier(){
+    const opening = document.querySelector('.abertura');
+    const stats = opening?.querySelector('.eq__stats--rank');
+    const frontierText = opening?.querySelector('.band--fronteira .fronteira-txt');
+    const introLead = document.querySelector('#h-repertorio')?.parentElement?.querySelector('.eq__lead');
+    const repertoire = document.querySelector('#repertorio');
+    const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
+    const sourceChips = limitSection?.querySelector('.outchips');
+    if (!opening || !stats || !frontierText) return;
+
+    if (introLead){
+      introLead.textContent = 'I developed tools without knowing they already had names. I redesigned what had “always been done that way” when it did not address the problem.';
+      let second = introLead.parentElement?.querySelector('.translation-intro__second');
+      if (!second){
+        second = document.createElement('p');
+        second.className = 'eq__lead translation-intro__second';
+        introLead.after(second);
+      }
+      second.innerHTML = 'This section presents what was built in practice, translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> pain points recognizable in the private market, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and translated through <strong>136</strong> market correspondences.';
+    }
+
+    stats.className = 'translation-method';
+    stats.innerHTML = `
+      <header class="eqhead translation-method__head">
+        <h3>How the translation is updated</h3>
+      </header>
+      <p class="translation-method__intro">Hypotheses, revisions, and abandoned decisions remain recorded. An acknowledged and documented error is a methodological success.</p>
+      <ol class="translation-method__list">
+        <li>only what has implementation and evidence is included;</li>
+        <li>aliases do not increase the count;</li>
+        <li>one correspondence may be demonstrated by more than one class;</li>
+        <li>one class may support several correspondences;</li>
+        <li>a new tool or technology does not automatically create a new class;</li>
+        <li>the number changes only when a unit emerges with its own function, specific evidence, and the possibility of independent testing.</li>
+      </ol>
+    `;
+
+    frontierText.replaceChildren();
+
+    const dataBoundary = document.createElement('p');
+    dataBoundary.className = 'fronteira-data';
+    dataBoundary.innerHTML = 'I extracted metrics and calculated indicators from raw lists delivered by the system. During my professional experience, however, systematic measurement was limited to the team productivity indicator. The remaining indicators were calculated later, as a retrospective exercise to develop this capability. For that reason, this exercise does not count jurimetrics mechanisms attributed to <button class="b-data" type="button">DATA</button>.';
+    frontierText.appendChild(dataBoundary);
+    dataBoundary.querySelector('.b-data')?.addEventListener('click',() =>
+      document.querySelector('.rail__link--data[data-view="data"]')?.click());
+
+    const limitCopy = document.createElement('p');
+    limitCopy.className = 'fronteira-limit';
+    limitCopy.innerHTML = '<strong>Not yet demonstrated:</strong> No entry covers the financial side of Legal Ops. There is no evidence to claim it. RAG and semantic search are excluded because preparation is not a mechanism; the others because analogy is not a designed transfer. Declaring the boundary costs less than letting it be discovered.';
+    frontierText.appendChild(limitCopy);
+
+    if (sourceChips){
+      const allowed = new Set([
+        'e-billing','spend management','outside counsel management','vendor management',
+        'matter budgeting','rag','semantic search'
+      ]);
+      [...sourceChips.querySelectorAll('.chip')].forEach(chip => {
+        if (!allowed.has(chip.textContent.trim().toLocaleLowerCase('en-US'))) chip.remove();
+      });
+      frontierText.appendChild(sourceChips);
+    }
+
+    if (!document.getElementById('arco-translation-frontier-style')){
+      const style = document.createElement('style');
+      style.id = 'arco-translation-frontier-style';
+      style.textContent = String.raw`
+.translation-intro__second{margin-top:.65rem!important}
+.translation-intro__second strong{font-weight:700;color:inherit}
+.translation-method{
+  min-width:0;
+  font-family:var(--f-body);
+  color:var(--ink-78)
+}
+.translation-method__head{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  margin:0 0 .75rem;padding-top:.85rem;border-top:1px solid var(--hair)
+}
+.translation-method__head h3{
+  margin:0;
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(.98rem,1.45vw,1.14rem);
+  line-height:1.1;
+  letter-spacing:-.018em;
+  color:var(--ink)
+}
+.translation-method__intro{
+  margin:0 0 .8rem;
+  font-family:var(--f-body);
+  font-size:.78rem;
+  line-height:1.6;
+  color:var(--ink-78)
+}
+.translation-method__list{
+  margin:0;
+  padding-left:1.45rem;
+  font-family:var(--f-body);
+  font-size:.78rem;
+  line-height:1.6;
+  color:var(--ink-78)
+}
+.translation-method__list li{padding-left:.48rem}
+.translation-method__list li + li{margin-top:.28rem}
+.band--fronteira .fronteira-limit strong{
+  font-family:var(--f-body);font-size:inherit;line-height:inherit;font-style:normal;
+  font-weight:700;color:inherit;letter-spacing:inherit;text-transform:none
+}
+.band--fronteira .outchips{margin-top:.7rem}
+.progress-rail__mark{display:none!important}
+.doors{background:var(--paper)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.translation-end-space{display:block;width:100%;height:var(--translation-end-space,6rem);background:transparent;pointer-events:none}
+@media (max-width:820px){
+  .translation-end-space{height:max(clamp(5rem,12vh,8rem),calc(5rem + env(safe-area-inset-bottom,0px)))}
+}
+`;
+      document.head.appendChild(style);
+    }
+
+    limitSection?.remove();
+
+    if (repertoire){
+      let endSpace = repertoire.querySelector(':scope > .translation-end-space');
+      if (!endSpace){
+        endSpace = document.createElement('div');
+        endSpace.className = 'translation-end-space';
+        endSpace.setAttribute('aria-hidden','true');
+        repertoire.appendChild(endSpace);
+      }
+
+      const mqMobile = matchMedia('(max-width:820px)');
+      let endRaf = 0;
+      const measureEndSpace = () => {
+        endRaf = 0;
+        if (mqMobile.matches){
+          endSpace.style.removeProperty('--translation-end-space');
+          return;
+        }
+        const railName = document.querySelector('.rail__name');
+        const top = railName?.getBoundingClientRect().top;
+        const height = Number.isFinite(top) ? Math.max(0,innerHeight - top) : 0;
+        endSpace.style.setProperty('--translation-end-space',`${height}px`);
+      };
+      const scheduleEndSpace = () => {
+        if (endRaf) return;
+        endRaf = requestAnimationFrame(measureEndSpace);
+      };
+      scheduleEndSpace();
+      window.addEventListener('resize',scheduleEndSpace,{passive:true});
+      window.addEventListener('orientationchange',scheduleEndSpace,{passive:true});
+      mqMobile.addEventListener?.('change',scheduleEndSpace);
+    }
+  }
+
+  function installProvenanceHover(){
+    const homeView = document.querySelector('.view[data-view="home"]');
+    const home = homeView?.querySelector(".home");
+    const zone = home?.querySelector(".narr-zone");
+    const stats = zone ? [...zone.querySelectorAll(".narr__stat")] : [];
+    const mq = matchMedia("(max-width:820px)");
+    if (!homeView || !home || !zone || stats.length !== 5) return;
+
+    const projects = {
+      "5": {tag:"ARCO", cls:"arco"},
+      "4": {tag:"ATRIO", cls:"atrio"},
+      "3": {tag:"ECHO", cls:"echo"},
+      "2": {tag:"DATA", cls:"data"}
+    };
+
+    stats.forEach(stat => {
+      const button = stat.querySelector(".narr__n");
+      if (!button || button.querySelector(".narr__glyph")) return;
+      const glyph = document.createElement("span");
+      glyph.className = "narr__glyph";
+      glyph.textContent = button.textContent.trim();
+      button.textContent = "";
+      button.appendChild(glyph);
+    });
+
+    if (!document.getElementById("arco-provenance-hover-style")){
+      const style = document.createElement("style");
+      style.id = "arco-provenance-hover-style";
+      style.textContent = String.raw`
+@media (min-width:821px){
+  .view[data-view="home"] .home .narr__tag{display:none!important}
+  .view[data-view="home"] .bio__list li:first-child a{
+    background:none!important;color:inherit!important;border:2px solid #8A8A8A!important;
+    padding:calc(.44em - 1px) calc(.78em - 1px)!important;font-weight:600!important;
+    transition:color var(--fast) var(--ease),border-color var(--fast) var(--ease)!important
+  }
+  .view[data-view="home"] .bio__list li:first-child a:hover,
+  .view[data-view="home"] .bio__list li:first-child a:focus-visible{
+    background:none!important;color:var(--ink)!important;border-color:#8A8A8A!important
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__n{
+    position:relative!important;isolation:isolate!important;overflow:visible!important;
+    transition:color 120ms cubic-bezier(.22,.68,0,1)!important
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__n::before{
+    content:"";position:absolute;left:50%;top:50%;width:42px;height:42px;
+    transform:translate(-50%,-50%);background:transparent;opacity:0;z-index:0;pointer-events:none;
+    transition:opacity 120ms cubic-bezier(.22,.68,0,1),background-color 120ms cubic-bezier(.22,.68,0,1)
+  }
+  .view[data-view="home"] .home.hero-commit01-final .narr__glyph{position:relative;z-index:1}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n{background:transparent!important;box-shadow:none!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n::before{opacity:1}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n::before{background:#181818}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n{color:#FCFCFC!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n::before{background:#A63A23}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n{color:#FCFCFC!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n::before{background:#FFB627}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n{color:#181818!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n::before{background:#0057FF}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n{color:#FCFCFC!important}
+  .arco-provenance-tag{
+    position:fixed;left:0;top:0;z-index:1000;display:inline-flex;align-items:center;min-height:1.42em;
+    padding:.08em .38em .12em;border-radius:0;font-family:var(--f-micro);font-size:.54rem;font-weight:700;
+    line-height:1.2;letter-spacing:.085em;text-transform:uppercase;white-space:nowrap;opacity:0;visibility:hidden;
+    pointer-events:none;transition:opacity 120ms cubic-bezier(.22,.68,0,1),visibility 0s linear 120ms
+  }
+  .arco-provenance-tag.is-visible{opacity:1;visibility:visible;transition:opacity 120ms cubic-bezier(.22,.68,0,1)}
+  .arco-provenance-tag--arco{background:#181818;color:#FCFCFC}
+  .arco-provenance-tag--atrio{background:#A63A23;color:#FCFCFC}
+  .arco-provenance-tag--echo{background:#FFB627;color:#181818}
+  .arco-provenance-tag--data{background:#0057FF;color:#FCFCFC}
+}
+@media (max-width:820px){.arco-provenance-tag{display:none!important}}
+@media (prefers-reduced-motion:reduce){
+  .arco-provenance-tag,.view[data-view="home"] .home.hero-commit01-final .narr__n,
+  .view[data-view="home"] .home.hero-commit01-final .narr__n::before{transition:none!important}
+}`;
+      document.head.appendChild(style);
+    }
+
+    const cursorTag = document.createElement("span");
+    cursorTag.className = "arco-provenance-tag";
+    cursorTag.setAttribute("aria-hidden", "true");
+    document.body.appendChild(cursorTag);
+
+    let activeStat = null;
+    const clearHover = () => {
+      if (activeStat) activeStat.classList.remove("is-provenance-hover");
+      activeStat = null;
+      cursorTag.className = "arco-provenance-tag";
+      cursorTag.textContent = "";
+    };
+
+    const bandAt = (clientX, clientY) => {
+      const rows = stats.map(stat => {
+        const number = stat.querySelector(".narr__n");
+        if (!number) return null;
+        const statRect = stat.getBoundingClientRect();
+        const numberRect = number.getBoundingClientRect();
+        return {
+          stat,step:stat.dataset.step,center:numberRect.top + numberRect.height / 2,
+          left:Math.min(statRect.left, numberRect.left) - 8,right:Math.max(statRect.right, numberRect.right) + 8
+        };
+      }).filter(Boolean).sort((a,b) => a.center - b.center);
+
+      for (let i = 0; i < rows.length; i++){
+        const row = rows[i];
+        const previous = rows[i - 1];
+        const next = rows[i + 1];
+        const top = previous ? (previous.center + row.center) / 2 : row.center - (next ? (next.center - row.center) / 2 : 24);
+        const bottom = next ? (row.center + next.center) / 2 : row.center + (previous ? (row.center - previous.center) / 2 : 24);
+        if (clientY >= top && clientY < bottom && clientX >= row.left && clientX <= row.right) return row;
+      }
+      return null;
+    };
+
+    const moveTag = event => {
+      const gapX = 14,gapY = 12,margin = 8;
+      const rect = cursorTag.getBoundingClientRect();
+      let x = event.clientX + gapX;
+      let y = event.clientY + gapY;
+      if (x + rect.width + margin > innerWidth) x = event.clientX - rect.width - gapX;
+      if (y + rect.height + margin > innerHeight) y = event.clientY - rect.height - gapY;
+      cursorTag.style.left = `${Math.max(margin, x)}px`;
+      cursorTag.style.top = `${Math.max(margin, y)}px`;
+    };
+
+    const handlePointerMove = event => {
+      if (mq.matches || (event.pointerType && event.pointerType !== "mouse") || homeView.dataset.active === "false" || !home.classList.contains("hero-commit01-final")){
+        clearHover();
+        return;
+      }
+      const row = bandAt(event.clientX, event.clientY);
+      const project = row ? projects[row.step] : null;
+      if (!row || !project){clearHover();return;}
+      if (activeStat !== row.stat){
+        if (activeStat) activeStat.classList.remove("is-provenance-hover");
+        activeStat = row.stat;
+        activeStat.classList.add("is-provenance-hover");
+        cursorTag.textContent = project.tag;
+        cursorTag.className = `arco-provenance-tag arco-provenance-tag--${project.cls} is-visible`;
+      }
+      moveTag(event);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, {passive:true});
+    window.addEventListener("scroll", clearHover, {passive:true,capture:true});
+    window.addEventListener("resize", clearHover, {passive:true});
+    window.addEventListener("blur", clearHover);
+    document.addEventListener("pointerout", event => {if (!event.relatedTarget) clearHover();});
+    document.addEventListener("visibilitychange", () => {if (document.hidden) clearHover();});
+    mq.addEventListener?.("change", clearHover);
+    new MutationObserver(() => {if (homeView.dataset.active === "false") clearHover();})
+      .observe(homeView,{attributes:true,attributeFilter:["data-active"]});
+  }
+
+})();
