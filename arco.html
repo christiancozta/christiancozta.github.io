@@ -31,7 +31,12 @@
 
 <script>
 (() => {
-  const DATA_FAVICON = "assets/arco/brand/favicon-data.svg?v=20260925";
+  const HASH_FAVICONS = {
+    "#data": "assets/arco/brand/favicon-data.svg?v=20260925",
+    "#echo": "assets/arco/brand/favicon-echo.svg?v=20260925",
+    "#atrio": "assets/arco/brand/favicon-atrio.svg?v=20260925"
+  };
+
   const icons = [...document.querySelectorAll('link[rel~="icon"]')];
 
   icons.forEach((icon) => {
@@ -41,11 +46,11 @@
   });
 
   const syncFavicon = () => {
-    const isData = window.location.hash === "#data";
+    const hashFavicon = HASH_FAVICONS[window.location.hash];
 
     icons.forEach((icon) => {
-      if (isData) {
-        icon.setAttribute("href", DATA_FAVICON);
+      if (hashFavicon) {
+        icon.setAttribute("href", hashFavicon);
         icon.setAttribute("type", "image/svg+xml");
         icon.setAttribute("sizes", "any");
       } else {
