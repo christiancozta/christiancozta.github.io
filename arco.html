@@ -29,6 +29,40 @@
 <link rel="icon" href="assets/arco/brand/simbolo-preto-16x16.png?v=20260829" type="image/png" sizes="16x16">
 <link rel="shortcut icon" href="assets/arco/brand/favicon.ico?v=20260829" type="image/x-icon">
 
+<script>
+(() => {
+  const DATA_FAVICON = "assets/arco/brand/favicon-data.svg?v=20260925";
+  const icons = [...document.querySelectorAll('link[rel~="icon"]')];
+
+  icons.forEach((icon) => {
+    icon.dataset.arcoHref = icon.getAttribute("href") || "";
+    icon.dataset.arcoType = icon.getAttribute("type") || "";
+    icon.dataset.arcoSizes = icon.getAttribute("sizes") || "";
+  });
+
+  const syncFavicon = () => {
+    const isData = window.location.hash === "#data";
+
+    icons.forEach((icon) => {
+      if (isData) {
+        icon.setAttribute("href", DATA_FAVICON);
+        icon.setAttribute("type", "image/svg+xml");
+        icon.setAttribute("sizes", "any");
+      } else {
+        icon.setAttribute("href", icon.dataset.arcoHref);
+        if (icon.dataset.arcoType) icon.setAttribute("type", icon.dataset.arcoType);
+        else icon.removeAttribute("type");
+        if (icon.dataset.arcoSizes) icon.setAttribute("sizes", icon.dataset.arcoSizes);
+        else icon.removeAttribute("sizes");
+      }
+    });
+  };
+
+  syncFavicon();
+  window.addEventListener("hashchange", syncFavicon);
+})();
+</script>
+
 
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20260916-rail-contacts">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20260916-rail-contacts">
