@@ -75,6 +75,13 @@
 
   syncFavicon();
   window.addEventListener("hashchange", syncFavicon);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dataAnchor = document.querySelector('.bio__data-link[data-open-view="data"]');
+    dataAnchor?.addEventListener("click", () => {
+      document.querySelector('.rail__link--data[data-view="data"]')?.click();
+    });
+  });
 })();
 </script>
 
@@ -396,7 +403,7 @@
             <span class="mov__t" id="bio-creed">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</span>
             <!-- os contatos continuam a frase visualmente: uma linha real, não um travessão -->
             <ul class="bio__list">
-              <li><a class="bio__data-link" href="data.html">Números</a></li>
+              <li><a class="bio__data-link" href="#data" data-open-view="data">Números</a></li>
               <li><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener">CV</a></li>
               <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a></li>
               <li><a href="mailto:christiandscosta@gmail.com">E-mail</a></li>
@@ -1719,7 +1726,7 @@
     </section>
 
     <!-- ===================== FILHO: DATA ===================== -->
-    <section class="view" data-view="data" aria-label="DATA">
+    <section class="view" id="data" data-view="data" aria-label="DATA">
       <div class="child child--data">
         <div class="child__bar">
           <a class="child__full" href="data.html" target="_blank" rel="noopener">
