@@ -41,10 +41,10 @@
 
 <script>
 (() => {
-  const HASH_FAVICONS = {
-    "#data": "assets/arco/brand/favicon-data.svg?v=20260925",
-    "#echo": "assets/arco/brand/favicon-echo.svg?v=20260925",
-    "#atrio": "assets/arco/brand/favicon-atrio.svg?v=20260925"
+  const VIEW_FAVICONS = {
+    data: "assets/arco/brand/favicon-data.svg?v=20260925",
+    echo: "assets/arco/brand/favicon-echo.svg?v=20260925",
+    atrio: "assets/arco/brand/favicon-atrio.svg?v=20260925"
   };
 
   const icons = [...document.querySelectorAll('link[rel~="icon"]')];
@@ -56,11 +56,13 @@
   });
 
   const syncFavicon = () => {
-    const hashFavicon = HASH_FAVICONS[window.location.hash];
+    const activeView =
+      document.querySelector('.view[data-active="true"]')?.dataset.view || "home";
+    const viewFavicon = VIEW_FAVICONS[activeView];
 
     icons.forEach((icon) => {
-      if (hashFavicon) {
-        icon.setAttribute("href", hashFavicon);
+      if (viewFavicon) {
+        icon.setAttribute("href", viewFavicon);
         icon.setAttribute("type", "image/svg+xml");
         icon.setAttribute("sizes", "any");
       } else {
@@ -73,10 +75,17 @@
     });
   };
 
-  syncFavicon();
-  window.addEventListener("hashchange", syncFavicon);
-
   document.addEventListener("DOMContentLoaded", () => {
+    const stage = document.querySelector(".stage");
+    if (stage) {
+      new MutationObserver(syncFavicon).observe(stage, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-active"]
+      });
+    }
+    syncFavicon();
+
     const dataAnchor = document.querySelector('.bio__data-link[data-open-view="data"]');
     dataAnchor?.addEventListener("click", () => {
       document.querySelector('.rail__link--data[data-view="data"]')?.click();
