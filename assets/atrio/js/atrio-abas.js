@@ -6,7 +6,7 @@ const TAB_LABELS = { fluxo: "Fluxo", aplicacao: "Aplicação", evolucao: "Evolu�
 const EVOLUTION_COPY = {
   atrio: "A execução registra a composição de versões dos quatro módulos, preservando o estado técnico sob o qual o percurso foi realizado.",
   corpus: "Versão da base governada, com ingestão incremental e cofre apartado do acervo.",
-  ratio: "Versão da máquina de estados, com as três vias processuais isoladas.",
+  ratio: "Versão do workflow governado, com RI, ED e MS isolados por firewall modular, proveniência controlada e avanço dependente de validação expressa do operador.",
   cerne: "Versão do contrato de confronto crítico, com onze eixos, vinte e três confrontos e gate técnico em três estados.",
   lux: "Versão do refinamento formal, com pseudonimização orientada pelo destino e pelos princípios da LGPD e da Resolução CNJ 615/2025."
 };
