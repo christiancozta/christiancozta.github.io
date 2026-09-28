@@ -212,10 +212,14 @@
     const h = location.hash.slice(1);
     if (!h || VIEWS.includes(h)) return show(h || "home", {push:false});
     show("home", {push:false});
-    document.getElementById(h)?.scrollIntoView({block:"start"});
+    const target = document.getElementById(h);
+    if (!target) return;
+    const pane = target.closest?.(".pane");
+    if (pane) openDoor(pane.id.replace(/^pane-/, ""), {quiet:true});
+    requestAnimationFrame(() => target.scrollIntoView({block:"start"}));
   }
   addEventListener("popstate", route);
-  if (location.hash) route();
+  if (location.hash) requestAnimationFrame(route);
 
   /* ---- Altura do cordão no mobile: o palco desce inteiro, sem rolagem dupla ---- */
   const rail = document.querySelector(".rail");
@@ -344,9 +348,9 @@
       { threshold: 0 }).observe(hero);
   })();
 
-  /* ---- AS TRÊS PORTAS DO REPERTÓRIO ----------------------------------------
+  /* ---- AS QUATRO PORTAS DO REPERTÓRIO --------------------------------------
      Trocar de porta não troca de conteúdo: troca o modo de entrar nele. Por
-     isso o seletor é tablist — o leitor de tela também ouve "uma coisa, três
+     isso o seletor é tablist — o leitor de tela também ouve "uma coisa, quatro
      acessos" — e por isso qualquer lembrete que aponte para dentro de outra
      porta abre a porta antes de saltar. */
   const doorBox = document.querySelector(".doors");
@@ -354,17 +358,24 @@
     if (!doorBox) return () => {};
     const tabs  = [...doorBox.querySelectorAll(".door")];
     const slab  = doorBox.querySelector(".doors__slab");
+    const tablist = doorBox.querySelector(".doors__set");
     const caps  = [...doorBox.querySelectorAll(".doors__cap")];
     const panes = new Map(tabs.map(t =>
       [t.dataset.door, document.getElementById(t.getAttribute("aria-controls"))]));
 
+    function syncSlab(tab){
+      if (!slab || !tablist || !tab) return;
+      slab.style.left = `${tab.offsetLeft}px`;
+      slab.style.width = `${tab.offsetWidth}px`;
+    }
+
     function apply(key, {focus = false, quiet = false} = {}){
       const tab = tabs.find(t => t.dataset.door === key);
       if (!tab || !panes.get(key)) return;
+      syncSlab(tab);
       if (doorBox.dataset.door === key){ if (focus) tab.focus(); return; }
 
       doorBox.dataset.door = key;
-      if (slab) slab.style.transform = `translateX(${tabs.indexOf(tab) * 100}%)`;
       tabs.forEach(t => {
         const on = t === tab;
         t.setAttribute("aria-selected", String(on));
@@ -396,8 +407,14 @@
       e.preventDefault();
       apply(tabs[to].dataset.door, {focus:true});
     });
+    const syncActive = () =>
+      syncSlab(tabs.find(t => t.getAttribute("aria-selected") === "true") || tabs[0]);
+    if ("ResizeObserver" in window && tablist) new ResizeObserver(syncActive).observe(tablist);
+    addEventListener("resize", syncActive, {passive:true});
+    requestAnimationFrame(syncActive);
     return apply;
   })();
+  window.ARCO_OPEN_DOOR = openDoor;
 
   /* a porta em que um alvo mora — null se ele não estiver dentro de nenhuma */
   const doorOf = node => {
@@ -414,6 +431,17 @@
       if (el.dataset.doorGoto) openDoor(el.dataset.doorGoto);
       const target = document.getElementById(el.dataset.anchor);
       target?.scrollIntoView({block:"start", behavior: reduce ? "auto" : "smooth"});
+    }));
+
+  document.querySelectorAll(".arco-lang a").forEach(link =>
+    link.addEventListener("click", () => {
+      const repertoire = document.getElementById("repertorio");
+      if (!repertoire) return;
+      const rect = repertoire.getBoundingClientRect();
+      if (rect.top >= innerHeight || rect.bottom <= 0) return;
+      const target = new URL(link.href, location.href);
+      target.hash = "repertorio";
+      link.href = target.href;
     }));
 
   /* ---- Repertório: o alvo referido abre toda a cadeia de gavetas acima de si,
