@@ -210,28 +210,14 @@
     const sourceChips = limitSection?.querySelector('.outchips');
     if (!cover || !opening || !stats || !frontierText) return;
 
-    const demandCta = cover.querySelector('.demanda-cta__btn');
-    if (demandCta && demandCta.dataset.doorBound !== 'true'){
-      demandCta.dataset.doorBound = 'true';
-      demandCta.addEventListener('click',() => {
-        const key = demandCta.dataset.targetDoor || 'dor';
-        window.ARCO_OPEN_DOOR?.(key,{focus:true});
-      });
-    }
-
     if (introLead){
-      introLead.textContent = 'I built tools without knowing they already had names. I redesigned practices that had “always been done that way” when they did not solve the problem.';
-      let second = introLead.parentElement?.querySelector('.translation-intro__second');
-      if (!second){
-        second = document.createElement('p');
-        second.className = 'eq__lead translation-intro__second';
-        introLead.after(second);
-      }
-      second.innerHTML = 'This section presents what was built in practice, identified and translated into problems, mechanisms, and recognizable professional language. <strong>8</strong> recognizable private-sector pain points, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and mapped to <strong>136</strong> market correspondences.';
+      introLead.textContent = 'This section presents what was built in practice, mapped and translated into problems, mechanisms, and recognizable professional language.';
+      introLead.parentElement?.querySelector('.translation-intro__second')?.remove();
     }
 
     stats.className = 'translation-method';
     stats.innerHTML = `
+      <p class="translation-method__context">I built tools without knowing they already had names. I redesigned practices that had “always been done that way” when they did not solve the problem. I mapped <strong>8</strong> recognizable private-sector problems, addressed by <strong>17</strong> mechanisms built in practice, organized across professional domains and translated into <strong>136</strong> market correspondences.</p>
       <header class="eqhead translation-method__head">
         <h3>How the practice is mapped</h3>
       </header>
@@ -282,6 +268,14 @@
   font-family:var(--f-body);
   color:var(--ink-78)
 }
+.translation-method__context{
+  margin:0 0 1rem;
+  font-family:var(--f-body);
+  font-size:.8rem;
+  line-height:1.62;
+  color:var(--ink-78)
+}
+.translation-method__context strong{font-weight:700;color:var(--ink)}
 .translation-method__head{
   display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
   margin:0 0 .75rem;padding-top:.85rem;border-top:1px solid var(--hair)

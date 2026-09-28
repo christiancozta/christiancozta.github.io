@@ -365,6 +365,9 @@
 
     function syncSlab(tab){
       if (!slab || !tablist || !tab) return;
+      const inTray = tablist.contains(tab);
+      slab.hidden = !inTray;
+      if (!inTray) return;
       slab.style.left = `${tab.offsetLeft}px`;
       slab.style.width = `${tab.offsetWidth}px`;
     }
@@ -396,7 +399,7 @@
     }
 
     tabs.forEach(t => t.addEventListener("click", () => apply(t.dataset.door)));
-    doorBox.querySelector(".doors__set")?.addEventListener("keydown", e => {
+    doorBox.querySelector(".doors__bar")?.addEventListener("keydown", e => {
       const i = tabs.indexOf(document.activeElement);
       if (i < 0) return;
       const step = {ArrowRight:1, ArrowLeft:-1, ArrowDown:1, ArrowUp:-1}[e.key];
