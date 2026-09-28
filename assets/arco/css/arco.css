@@ -1496,7 +1496,7 @@ body{
    =========================================================================== */
 .doors{
   position:sticky; top:0; z-index:var(--z-tip);
-  margin:clamp(.5rem,1.2vw,.9rem) calc(var(--pad) * -1) clamp(1.6rem,3.2vw,2.5rem);
+  margin:clamp(.5rem,1.2vw,.9rem) calc(var(--pad) * -1) clamp(.65rem,1.4vw,1rem);
   padding:clamp(.85rem,1.9vw,1.25rem) var(--pad) clamp(.75rem,1.6vw,1.1rem);
   background:rgba(255,255,255,.9);
   -webkit-backdrop-filter:blur(16px) saturate(1.06);
@@ -1508,22 +1508,30 @@ body{
   content:""; position:absolute; left:var(--pad); right:var(--pad); bottom:0;
   height:1px; background:var(--hair);
 }
-.doors__bar{ display:flex; align-items:center; gap:clamp(1rem,2.4vw,2rem); }
-.doors__k{
-  margin:0; flex:none;
-  font-family:var(--f-micro); font-size:.62rem; font-weight:500;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-62);
+.doors__bar{ display:flex; align-items:stretch; gap:clamp(1rem,2.4vw,2rem); }
+.door.door--cover{
+  flex:0 0 auto;align-self:center;display:block;
+  padding:.4rem 0;border:0;background:transparent;
+  font-family:var(--f-micro);font-size:.62rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-62);
+  white-space:nowrap;text-align:left
 }
+.door--cover .door__t{
+  font:inherit;letter-spacing:inherit;line-height:1.25;text-transform:inherit;color:inherit
+}
+.door.door--cover[aria-selected="true"]{color:var(--ink-62)}
+.door--cover:hover{color:var(--ink)}
+.door--cover:focus-visible{outline-offset:4px}
 /* a bandeja: filete por fora, folga por dentro. A peça de tinta mora nela e
    nunca encosta na moldura — é encaixe de instrumento, não botão de tela. */
 .doors__set{
   position:relative; flex:1 1 auto; min-width:0;
-  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
   padding:3px; border:1px solid var(--hair); background:var(--hair-soft);
 }
 .doors__slab{
   position:absolute; left:3px; top:3px; z-index:0;
-  width:calc((100% - 6px) / 4); height:calc(100% - 6px);
+  width:calc((100% - 6px) / 3); height:calc(100% - 6px);
   background:var(--ink);
   transform:none;
   transition:left 640ms var(--ease), width 640ms var(--ease);
@@ -1562,6 +1570,7 @@ body{
 .door:focus-visible{ outline-offset:-2px; }
 
 .doors__caps{ margin-top:.7rem; }
+.doors[data-door="capa"] .doors__caps{display:none}
 .doors__cap{
   /* a legenda quebra na margem da barra, nunca antes: 70ch cortava em 519px
      uma calha de 770px e deixava a segunda linha sem motivo */
@@ -1572,30 +1581,8 @@ body{
 
 .pane[hidden]{ display:none; }
 .collection-anchor{display:block;width:0;height:0;overflow:hidden}
-.pane--capa .abertura{margin-top:clamp(1.65rem,3vw,2.35rem)}
-.demanda-cta{
-  display:grid;grid-template-columns:minmax(0,1fr) auto;
-  column-gap:clamp(1.5rem,3vw,3rem);row-gap:.35rem;align-items:end;
-  margin-top:clamp(2rem,4vw,3.2rem);padding-top:clamp(1rem,2vw,1.35rem);
-  border-top:1px solid var(--hair);font-family:var(--f-body);color:var(--ink)
-}
-.demanda-cta__title{
-  margin:0;font-family:var(--f-body);font-size:clamp(1rem,1.7vw,1.2rem);
-  font-weight:600;line-height:1.35;letter-spacing:-.015em;text-wrap:balance
-}
-.demanda-cta__sub{
-  margin:0;max-width:68ch;font-family:var(--f-body);font-size:.8rem;
-  line-height:1.55;color:var(--ink-62)
-}
-.demanda-cta__btn{
-  grid-column:2;grid-row:1 / span 2;align-self:end;
-  appearance:none;-webkit-appearance:none;background:none;border:0;
-  border-bottom:1px solid var(--ink);padding:.3rem 0 .22rem;margin:0;
-  font-family:var(--f-body);font-size:.78rem;font-weight:600;line-height:1.35;
-  letter-spacing:-.005em;color:var(--ink);cursor:pointer;text-align:left
-}
-.demanda-cta__btn:hover{border-bottom-color:transparent}
-.demanda-cta__btn:focus-visible{outline-offset:4px}
+.pane--capa .abertura{margin-top:0}
+
 
 /* a troca de porta não é corte: a matéria entra de baixo, em cascata curta */
 @keyframes door-in{
@@ -1623,15 +1610,13 @@ body{
 @media (max-width:640px){
   .doors__set{
     grid-template-columns:none;grid-auto-flow:column;
-    grid-auto-columns:minmax(8.5rem,42vw);
+    grid-auto-columns:minmax(9rem,46vw);
     overflow-x:auto;overscroll-behavior-inline:contain;
     scroll-snap-type:x proximity;scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
   }
   .doors__set::-webkit-scrollbar{display:none}
   .door{scroll-snap-align:start}
-  .demanda-cta{grid-template-columns:1fr;align-items:start}
-  .demanda-cta__btn{grid-column:1;grid-row:auto;justify-self:start;margin-top:.35rem}
 }
 @media (max-width:520px){
   .door{ padding:.6rem .45rem .55rem; align-items:center; text-align:center; }

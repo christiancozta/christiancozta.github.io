@@ -217,28 +217,14 @@
     const sourceChips = limitSection?.querySelector('.outchips');
     if (!cover || !opening || !stats || !frontierText) return;
 
-    const demandCta = cover.querySelector('.demanda-cta__btn');
-    if (demandCta && demandCta.dataset.doorBound !== 'true'){
-      demandCta.dataset.doorBound = 'true';
-      demandCta.addEventListener('click',() => {
-        const key = demandCta.dataset.targetDoor || 'dor';
-        window.ARCO_OPEN_DOOR?.(key,{focus:true});
-      });
-    }
-
     if (introLead){
-      introLead.textContent = 'Desenvolvi ferramentas sem saber que já eram batizadas. Reformulei o que “sempre foi assim” quando ele não respondia ao problema.';
-      let second = introLead.parentElement?.querySelector('.translation-intro__second');
-      if (!second){
-        second = document.createElement('p');
-        second.className = 'eq__lead translation-intro__second';
-        introLead.after(second);
-      }
-      second.innerHTML = 'A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível. <strong>8</strong> problemas reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.';
+      introLead.textContent = 'A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível.';
+      introLead.parentElement?.querySelector('.translation-intro__second')?.remove();
     }
 
     stats.className = 'translation-method';
     stats.innerHTML = `
+      <p class="translation-method__context">Desenvolvi ferramentas sem saber que já eram batizadas. Reformulei o que “sempre foi assim” quando ele não respondia ao problema. Mapeei <strong>8</strong> problemas reconhecíveis no mercado privado, enfrentadas por <strong>17</strong> mecanismos construídos na prática, organizados em domínios profissionais e traduzidos por <strong>136</strong> correspondências de mercado.</p>
       <header class="eqhead translation-method__head">
         <h3>Como a prática é mapeada</h3>
       </header>
@@ -289,6 +275,14 @@
   font-family:var(--f-body);
   color:var(--ink-78)
 }
+.translation-method__context{
+  margin:0 0 1rem;
+  font-family:var(--f-body);
+  font-size:.8rem;
+  line-height:1.62;
+  color:var(--ink-78)
+}
+.translation-method__context strong{font-weight:700;color:var(--ink)}
 .translation-method__head{
   display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
   margin:0 0 .75rem;padding-top:.85rem;border-top:1px solid var(--hair)
