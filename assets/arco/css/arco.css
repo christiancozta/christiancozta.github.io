@@ -633,7 +633,7 @@ body{
 .band .lede{ color:var(--band-txt); }
 
 .proof{
-  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
   column-gap:var(--colgap); row-gap:clamp(2rem,4vw,2.75rem);
   margin-top:clamp(2.5rem,5vw,4rem);
 }
@@ -1508,20 +1508,14 @@ body{
   content:""; position:absolute; left:var(--pad); right:var(--pad); bottom:0;
   height:1px; background:var(--hair);
 }
-.doors__bar{ display:flex; align-items:stretch; gap:clamp(1rem,2.4vw,2rem); }
-.door.door--cover{
-  flex:0 0 auto;align-self:center;display:block;
-  padding:.4rem 0;border:0;background:transparent;
-  font-family:var(--f-micro);font-size:.62rem;font-weight:500;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--ink-62);
-  white-space:nowrap;text-align:left
-}
+.doors__bar{display:block}
 .door--cover .door__t{
-  font:inherit;letter-spacing:inherit;line-height:1.25;text-transform:inherit;color:inherit
+  font-family:var(--f-micro);font-size:.62rem;font-weight:500;
+  letter-spacing:.16em;line-height:1;text-transform:uppercase;color:inherit
 }
+.door--cover .door__n--blank{visibility:hidden}
 .door.door--cover[aria-selected="true"]{color:var(--ink-62)}
 .door--cover:hover{color:var(--ink)}
-.door--cover:focus-visible{outline-offset:4px}
 /* a bandeja: filete por fora, folga por dentro. A peça de tinta mora nela e
    nunca encosta na moldura — é encaixe de instrumento, não botão de tela. */
 .doors__set{
@@ -1531,7 +1525,7 @@ body{
 }
 .doors__slab{
   position:absolute; left:3px; top:3px; z-index:0;
-  width:calc((100% - 6px) / 3); height:calc(100% - 6px);
+  width:calc((100% - 6px) / 4); height:calc(100% - 6px);
   background:var(--ink);
   transform:none;
   transition:left 640ms var(--ease), width 640ms var(--ease);
@@ -1548,9 +1542,7 @@ body{
   text-align:left; color:var(--ink-62);
   transition:color 420ms var(--ease), transform 260ms var(--ease);
 }
-.door:not([aria-selected="true"]) + .door:not([aria-selected="true"]){
-  box-shadow:inset 1px 0 0 var(--hair);
-}
+.doors__set > .door + .door{box-shadow:inset 1px 0 0 var(--hair)}
 .door__t{
   font-family:var(--f-display); font-weight:600;
   font-size:clamp(.86rem,1.25vw,1rem); letter-spacing:-.014em; line-height:1;
@@ -1569,15 +1561,20 @@ body{
 .door[aria-selected="true"] .door__n{ opacity:.68; }
 .door:focus-visible{ outline-offset:-2px; }
 
-.doors__caps{ margin-top:.7rem; }
-.doors[data-door="capa"] .doors__caps{display:none}
+.doors__caps{
+  display:grid;
+  margin-top:.7rem;
+}
 .doors__cap{
-  /* a legenda quebra na margem da barra, nunca antes: 70ch cortava em 519px
-     uma calha de 770px e deixava a segunda linha sem motivo */
+  grid-area:1 / 1;
+  /* todas permanecem no grid: a maior legenda fixa o mesmo espaço e a
+     segunda divisória não muda de posição entre as quatro entradas */
   margin:0; max-width:none;
   font-size:.79rem; line-height:1.6; color:var(--ink-62); text-wrap:pretty;
+  transition:opacity 420ms var(--ease), transform 420ms var(--ease);
 }
-.doors__cap[hidden]{ display:none; }
+.doors__cap[hidden]{display:block;visibility:hidden;opacity:0;pointer-events:none}
+.doors__cap--blank{visibility:hidden!important}
 
 .pane[hidden]{ display:none; }
 .collection-anchor{display:block;width:0;height:0;overflow:hidden}
@@ -1610,7 +1607,7 @@ body{
 @media (max-width:640px){
   .doors__set{
     grid-template-columns:none;grid-auto-flow:column;
-    grid-auto-columns:minmax(9rem,46vw);
+    grid-auto-columns:minmax(8.5rem,42vw);
     overflow-x:auto;overscroll-behavior-inline:contain;
     scroll-snap-type:x proximity;scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
