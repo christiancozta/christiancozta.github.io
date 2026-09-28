@@ -207,14 +207,24 @@
   }
 
   function installTranslationFrontier(){
-    const opening = document.querySelector('.abertura');
-    const stats = opening?.querySelector('.eq__stats--rank');
+    const cover = document.querySelector('#pane-capa');
+    const opening = cover?.querySelector('.abertura');
+    const stats = opening?.querySelector('.eq__stats--rank, .translation-method');
     const frontierText = opening?.querySelector('.band--fronteira .fronteira-txt');
     const introLead = document.querySelector('#h-repertorio')?.parentElement?.querySelector('.eq__lead');
     const repertoire = document.querySelector('#repertorio');
     const limitSection = document.querySelector('section[aria-labelledby="eq-limite"]');
     const sourceChips = limitSection?.querySelector('.outchips');
-    if (!opening || !stats || !frontierText) return;
+    if (!cover || !opening || !stats || !frontierText) return;
+
+    const demandCta = cover.querySelector('.demanda-cta__btn');
+    if (demandCta && demandCta.dataset.doorBound !== 'true'){
+      demandCta.dataset.doorBound = 'true';
+      demandCta.addEventListener('click',() => {
+        const key = demandCta.dataset.targetDoor || 'dor';
+        window.ARCO_OPEN_DOOR?.(key,{focus:true});
+      });
+    }
 
     if (introLead){
       introLead.textContent = 'Desenvolvi ferramentas sem saber que já eram batizadas. Reformulei o que “sempre foi assim” quando ele não respondia ao problema.';
