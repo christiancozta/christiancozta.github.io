@@ -514,9 +514,9 @@ a:hover{color:#181818}
 .q4-strip>div{padding:26px 0 30px;border-bottom:1px solid #2e2e2e}
 .q4-strip>div:last-child{border-bottom:0}
 .echo-metric{position:relative;overflow:hidden;outline:0}
-.echo-metric__source{position:absolute;inset:auto 0 0;z-index:2;margin:0;padding:12px 14px;background:#FFB627;color:#181818;font-size:12px;line-height:1.45;transform:translateY(102%);transition:transform .28s cubic-bezier(.22,.68,0,1)}
-.echo-metric__source strong{display:block;margin-bottom:4px;font-size:9.5px;line-height:1;letter-spacing:.11em;text-transform:uppercase}
-.echo-metric:hover .echo-metric__source,.echo-metric:focus-visible .echo-metric__source{transform:translateY(0)}
+.echo-metric__reading{position:absolute;inset:auto 0 0;z-index:2;margin:0;padding:16px;background:#2e71ff;color:#fff;font-size:13px;line-height:1.5;transform:translateY(102%);transition:transform .28s cubic-bezier(.22,.68,0,1)}
+.echo-metric__reading strong{display:block;margin-bottom:4px;font-size:9.5px;line-height:1;letter-spacing:.11em;text-transform:uppercase}
+.echo-metric:hover .echo-metric__reading,.echo-metric:focus-visible .echo-metric__reading,.echo-metric[aria-describedby="data-tooltip"] .echo-metric__reading{transform:translateY(0)}
 .echo-metric:focus-visible{box-shadow:inset 0 0 0 2px #FFB627}
 .precedent-proof{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr);gap:clamp(28px,5vw,88px);align-items:end;background:#FFB627;color:#181818;margin-top:clamp(28px,3.4vw,48px);padding:clamp(28px,3.6vw,52px)}
 .precedent-proof__support{display:grid;gap:16px}
@@ -626,9 +626,27 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   color:#FFB627!important;
 }
 #acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a > span{
-  background:#FFB627!important;
-  color:#181818!important;
+  background:transparent!important;
+  color:#FFB627!important;
 }
+
+/* DATA: mesma linguagem documental em todos os indicadores de ECHO. */
+body [data-datum][data-regime="derivacao"]{box-shadow:none}
+body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
+#data-tooltip{width:min(360px,calc(100vw - 32px));padding:18px 20px;background:#2e71ff;color:#fff;border:0;border-radius:0;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+#data-tooltip::after{content:"";position:absolute;left:var(--tip-arrow-x,50%);top:100%;transform:translateX(-50%);border:10px solid transparent;border-bottom:0;border-top-color:#2e71ff}
+#data-tooltip[data-placement="below"]::after{top:auto;bottom:100%;border-top:0;border-bottom:10px solid #2e71ff}
+#data-tooltip span{display:block;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.28)}
+#data-tooltip span[hidden]{display:none}
+#data-tooltip span:first-child{padding-top:0}
+#data-tooltip span.is-last{padding-bottom:0;border-bottom:0}
+#data-tooltip b{display:block;margin-bottom:5px;color:#fff;font-size:10px;line-height:1.4;letter-spacing:.1em}
+#data-tooltip em{display:block;color:#fff;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+#data-tooltip .data-tooltip__subitem{padding-left:12px;border-bottom:0}
+#data-tooltip .data-tooltip__subitem b{font-size:9px;margin-bottom:3px}
+.method-note__title{margin:0 0 18px;font-family:var(--section-display);font-size:clamp(26px,3vw,38px);font-weight:700;line-height:1.15;letter-spacing:-.025em;color:#FFB627}
+.method-note__lead{margin:0 0 18px;font-size:clamp(19px,2vw,25px);font-weight:600;line-height:1.35;color:#fff;text-wrap:pretty}
+@media(prefers-reduced-motion:reduce){.echo-metric__reading{transition:none}}
 
 </style>
 </helmet>
@@ -1029,37 +1047,33 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   </div>
 
   <div data-reveal class="q4 q4-strip" style="margin-top:clamp(40px,5vw,72px);border-top:1px solid #F2EFE9;border-bottom:1px solid #F2EFE9;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/ementario_publico.xlsx" data-denominator="contagem absoluta" data-period="Acervo integral | código, hierarquia e fundamento">
+    <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/ementario_publico.xlsx" data-denominator="2.758 ementas catalogadas" data-period="Acervo integral | código, hierarquia e fundamento">
       <p style="margin:0;font-size:12.5px;font-weight:600">Ementário</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">2.758</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: acervo integral</p>
       <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Ementas catalogadas com código, hierarquia e fundamento, formando uma base recuperável de padrões textuais e jurídicos.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> O número mede memória organizada. A relevância não está apenas na quantidade, mas na transformação de recorrências em repertório consultável.</p>
-      <p class="echo-metric__source"><strong>Fonte</strong> Painel TR, Ementário; 2.758 registros de dados.</p>
+      <p class="echo-metric__reading"><strong>Leitura</strong> O número mede memória organizada. A relevância não está apenas na quantidade, mas na transformação de recorrências em repertório consultável.</p>
     </div>
     <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/acervo_publico.xlsx" data-denominator="1.192 registros anonimizados" data-period="Fluxo recursal | acervo triado" data-detail="data.html › ECHO">
       <p style="margin:0;font-size:12.5px;font-weight:600">Acervo triado</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">1.192</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: fluxo recursal</p>
       <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Processos triados e segmentados segundo o fluxo operacional adotado.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> O indicador demonstra aplicação do método sobre volume real, não apenas formulação documental.</p>
-      <p class="echo-metric__source"><strong>Fonte</strong> Planilha de controle do acervo; 1.192 registros anonimizados.</p>
+      <p class="echo-metric__reading"><strong>Leitura</strong> O indicador demonstra aplicação do método sobre volume real, não apenas formulação documental.</p>
     </div>
-    <div class="echo-metric" tabindex="0" data-datum data-regime="derivacao" data-source="10 temáticas de 102 assuntos | mapa_tematico_publico.pdf" data-numerator="92 categorias suprimidas" data-denominator="102 assuntos de origem | 1 − 10/102 = 90,196%" data-period="Taxonomia | operação recursal">
+    <div class="echo-metric" tabindex="0" data-datum data-regime="derivacao" data-source="10 temáticas de 102 assuntos | mapa_tematico_publico.pdf" data-denominator="102 assuntos de origem | 1 − 10/102 = 90,196%" data-period="Taxonomia | operação recursal">
       <p style="margin:0;font-size:12.5px;font-weight:600">Taxonomia</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">90,2%</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: mapa temático</p>
       <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Redução de complexidade categorial para uma camada de localização operacional mais manejável.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A redução preserva a matéria e melhora classificação, distribuição e recuperação.</p>
-      <p class="echo-metric__source"><strong>Fonte</strong> Manual Mapa Temático; indicador derivado e auditado.</p>
+      <p class="echo-metric__reading"><strong>Leitura</strong> A redução preserva a matéria e melhora classificação, distribuição e recuperação.</p>
     </div>
     <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/precedentes_publico.xlsx" data-denominator="9 matérias | 3 ramos | 10 situações" data-period="Painel temático" data-detail="data.html › ECHO">
       <p style="margin:0;font-size:12.5px;font-weight:600">Precedentes</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">631</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: painel temático</p>
       <p style="margin:12px 0 0;font-size:13px;line-height:1.5;text-wrap:pretty">Temas catalogados por matéria, situação, ramo do direito e código de assunto.</p>
-      <p style="margin:12px 0 0;padding-top:11px;border-top:1px solid #2e2e2e;font-size:12.5px;line-height:1.5;color:rgba(242,239,233,.72);text-wrap:pretty"><span style="font-weight:600;color:#F2EFE9">Leitura.</span> A base converte pesquisa de tese dispersa em memória jurídica estruturada e recuperável.</p>
-      <p class="echo-metric__source"><strong>Fonte</strong> Painel TR, Precedentes; 631 temas catalogados.</p>
+      <p class="echo-metric__reading"><strong>Leitura</strong> A base converte pesquisa de tese dispersa em memória jurídica estruturada e recuperável.</p>
     </div>
   </div>
 
@@ -1078,11 +1092,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   </div>
 
   <div data-reveal style="margin-top:clamp(48px,6vw,88px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <p style="margin:0 0 clamp(14px,1.6vw,20px);font-size:12.5px;font-weight:600;color:rgba(242,239,233,.7)">Nota metodológica</p>
+    <h3 class="method-note__title">Nota metodológica</h3>
+    <p class="method-note__lead">Nem todos os números representam o mesmo tipo de resultado.</p>
     <p style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.55;text-wrap:pretty">Os indicadores demonstram aplicação e escala operacional. Eles não isolam causalidade e não substituem análise qualitativa. Número, base e limite interpretativo permanecem visíveis para evitar que a métrica seja separada do contexto em que foi produzida.</p>
 
-    <p style="margin:clamp(40px,4.8vw,64px) 0 clamp(20px,2.4vw,32px);font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">Nem todos os números representam o mesmo tipo de resultado.</p>
-    <div style="border-top:1px solid #2e2e2e">
+    <div style="margin-top:32px;border-top:1px solid #2e2e2e">
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Entregáveis</p>
         <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes e registros.</p>
@@ -1365,13 +1379,11 @@ class Component extends DCLogic {
 
 </script>
 <div class="data-tooltip" id="data-tooltip" role="tooltip" hidden>
-  <p class="data-tooltip__regime" data-tip-regime></p>
-  <span data-tip-slot="source"><b data-tip-label="source">FONTE</b><em data-tip-source></em></span>
-  <span data-tip-slot="detail" hidden><b data-tip-label="detail">VER EM</b><em data-tip-detail></em></span>
-  <p class="data-tooltip__lastro" data-tip-lastro hidden>LASTRO</p>
-  <span data-tip-slot="numerator" hidden><b data-tip-label="numerator">CONTAGEM</b><em data-tip-numerator></em></span>
-  <span data-tip-slot="denominator" hidden><b data-tip-label="denominator">UNIVERSO</b><em data-tip-denominator></em></span>
-  <span data-tip-slot="period" hidden><b data-tip-label="period">RECORTE</b><em data-tip-period></em></span>
+  <span data-tip-slot="source"><b>FONTE</b><em data-tip-source></em></span>
+  <span data-tip-slot="detail" hidden><b>VER EM</b><em data-tip-detail></em></span>
+  <span data-tip-slot="denominator" hidden><b>UNIVERSO</b><em data-tip-denominator></em></span>
+  <span class="data-tooltip__subitem" data-tip-slot="period" hidden><b>RECORTE</b><em data-tip-period></em></span>
+  <span class="data-tooltip__subitem" data-tip-slot="numerator" hidden><b>CONTAGEM</b><em data-tip-numerator></em></span>
 </div>
 <script>
 (() => {
@@ -1380,23 +1392,14 @@ class Component extends DCLogic {
   const tooltip = document.getElementById('data-tooltip');
   if (!tooltip) return;
 
-  const REGIMES = {
-    lastro: { nome: 'Rastro documental', campos: ['FONTE', 'CONTAGEM', 'UNIVERSO', 'RECORTE', 'VER EM'] },
-    derivacao: { nome: 'Rastro derivado', campos: ['DERIVA DE', 'CONTAGEM', 'UNIVERSO', 'RECORTE', 'VER EM'] }
-  };
-  const TIP_KEYS = ['source', 'numerator', 'denominator', 'period', 'detail'];
-  const LASTRO_KEYS = ['numerator', 'denominator', 'period'];
-  const SLOT_ORDER = ['source', 'detail', 'numerator', 'denominator', 'period'];
+  const TIP_KEYS = ['source', 'detail', 'denominator', 'period', 'numerator'];
   const DATUM_SELECTOR = '[data-datum][data-regime]';
   const tipFields = {};
-  const tipLabels = {};
   const tipSlots = {};
   TIP_KEYS.forEach((key) => {
     tipFields[key] = tooltip.querySelector(`[data-tip-${key}]`);
-    tipLabels[key] = tooltip.querySelector(`[data-tip-label="${key}"]`);
     tipSlots[key] = tooltip.querySelector(`[data-tip-slot="${key}"]`);
   });
-  const lastroHead = tooltip.querySelector('[data-tip-lastro]');
   let activeDatum = null;
 
   const datumFrom = node => node instanceof Element ? node.closest(DATUM_SELECTOR) : null;
@@ -1404,34 +1407,33 @@ class Component extends DCLogic {
   const positionTooltip = target => {
     if (tooltip.hidden) return;
     const rect = target.getBoundingClientRect();
+    if (rect.bottom <= 0 || rect.top >= window.innerHeight) { hideTooltip(); return; }
     const gap = 12;
     const tipRect = tooltip.getBoundingClientRect();
     let left = rect.left + (rect.width - tipRect.width) / 2;
     let top = rect.top - tipRect.height - gap;
+    const below = top < gap;
 
     left = Math.max(gap, Math.min(left, window.innerWidth - tipRect.width - gap));
-    if (top < gap) top = Math.min(window.innerHeight - tipRect.height - gap, rect.bottom + gap);
+    if (below) top = Math.max(gap, Math.min(window.innerHeight - tipRect.height - gap, rect.bottom + gap));
+    tooltip.dataset.placement = below ? 'below' : 'above';
+    tooltip.style.setProperty('--tip-arrow-x', Math.max(18, Math.min(tipRect.width - 18, rect.left + rect.width / 2 - left)) + 'px');
 
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
   };
 
   const showTooltip = target => {
-    const regime = REGIMES[target.dataset.regime];
-    if (!regime) return;
     if (activeDatum && activeDatum !== target) activeDatum.removeAttribute('aria-describedby');
     activeDatum = target;
-    tooltip.className = 'data-tooltip is-' + target.dataset.regime;
-    tooltip.querySelector('[data-tip-regime]').textContent = regime.nome;
-    TIP_KEYS.forEach((key, index) => {
+
+    TIP_KEYS.forEach((key) => {
       const value = target.dataset[key] || '';
-      if (tipLabels[key]) tipLabels[key].textContent = regime.campos[index];
       if (tipFields[key]) tipFields[key].textContent = value;
       if (tipSlots[key]) tipSlots[key].hidden = !value;
     });
-    lastroHead.hidden = !LASTRO_KEYS.some((key) => target.dataset[key]);
     let lastVisible = null;
-    SLOT_ORDER.forEach((key) => {
+    TIP_KEYS.forEach((key) => {
       const slot = tipSlots[key];
       if (!slot) return;
       slot.classList.remove('is-last');
@@ -1482,7 +1484,7 @@ class Component extends DCLogic {
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') hideTooltip();
   });
-  window.addEventListener('scroll', hideTooltip, { passive: true });
+  window.addEventListener('scroll', () => { if (activeDatum) positionTooltip(activeDatum); }, { passive: true });
   window.addEventListener('resize', hideTooltip, { passive: true });
 })();
 </script>
