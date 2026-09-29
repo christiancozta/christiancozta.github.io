@@ -17,7 +17,7 @@
     finalLayer.async = false;
     finalLayer.onload = () => {
       const railLayer = document.createElement("script");
-      railLayer.src = new URL("arco-rail-final.js?v=20260916-atrio-hero", src).href;
+      railLayer.src = new URL("arco-rail-final.js?v=20260929-atrio-architecture-anchor", src).href;
       railLayer.async = false;
       railLayer.onerror = () => console.error("ARCO: falha ao carregar o ajuste final do rail.");
       document.head.appendChild(railLayer);
