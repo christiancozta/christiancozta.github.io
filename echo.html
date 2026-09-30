@@ -566,7 +566,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 @media(max-width:719px){.echo-trace{display:none}}
 
-/* ACERVO — DOCUMENTOS FUNDADORES 01–03 */
+/* ACERVO — DOCUMENTOS FUNDADORES 01 / 04 / 05 */
 #acervo-ficha{
   border-left:1px solid #FFB627;
   transition:
@@ -576,7 +576,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
     box-shadow .38s cubic-bezier(.22,.68,0,1);
   will-change:transform,opacity;
 }
-#acervo div:has(> aside) > div:first-child > button:nth-child(-n+3)::after{
+#acervo div:has(> aside) > div:first-child > button:is(:nth-child(1),:nth-child(4),:nth-child(5))::after{
   content:"★";
   position:absolute;
   left:26px;
@@ -588,46 +588,67 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   transform:translate(-50%,-50%);
   pointer-events:none;
 }
-#acervo div:has(> aside) > div:first-child > button:nth-child(3) .acervo-item__funcao{
+#acervo div:has(> aside) > div:first-child > button:nth-child(5) .acervo-item__funcao{
   display:-webkit-box!important;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:2;
   overflow:hidden;
 }
-#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3){
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5)){
   color:#F2EFE9!important;
 }
-#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:first-child{
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5)) > span:first-child{
   background:#181818!important;
 }
-#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:nth-child(-n+3) > span:nth-child(2){
+#acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5)) > span:nth-child(2){
   background:#FFB627!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside{
   background:#FFB627!important;
   color:#181818!important;
   border-left-color:#181818!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > p:first-child{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > p:first-child{
   color:#181818!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div{
   border-top-color:rgba(24,24,24,.38)!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div > div{
   border-bottom-color:rgba(24,24,24,.28)!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > div > div > p:first-child{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div > div > p:first-child{
   color:#181818!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > a{
   background:#181818!important;
   color:#FFB627!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:nth-child(-n+3)) > aside > a > span{
+#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > a > span{
   background:transparent!important;
   color:#FFB627!important;
 }
+
+
+/* PREVIEW PDF — leitura no próprio acervo. */
+.echo-preview[hidden]{display:none}
+.echo-preview{position:fixed;inset:0;z-index:120;display:grid;grid-template-rows:auto minmax(0,1fr);background:rgba(16,16,16,.96);color:#F2EFE9}
+.echo-preview__bar{min-height:64px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:18px;padding:12px clamp(16px,3vw,40px);border-bottom:1px solid rgba(242,239,233,.18)}
+.echo-preview__title{min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 clamp(15px,1.6vw,18px)/1.2 var(--section-display)}
+.echo-preview__count{font:500 10px/1 var(--mono);letter-spacing:.12em;color:rgba(242,239,233,.62)}
+.echo-preview__close,.echo-preview__nav{border:1px solid rgba(242,239,233,.34);background:transparent;color:#F2EFE9;cursor:pointer}
+.echo-preview__close{width:40px;height:40px;border-radius:999px;font:400 20px/1 var(--body)}
+.echo-preview__close:hover,.echo-preview__nav:hover:not(:disabled){background:#FFB627;border-color:#FFB627;color:#181818}
+.echo-preview__stage{position:relative;min-height:0;display:grid;place-items:center;padding:clamp(18px,2.6vw,38px) clamp(56px,6vw,92px);overflow:auto}
+.echo-preview__pages{width:min(100%,1500px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.5vw,22px);align-items:center;justify-items:center}
+.echo-preview__pages[data-spread="1"]{grid-template-columns:minmax(0,min(100%,980px));justify-content:center}
+.echo-preview__page{display:block;width:100%;max-height:calc(100dvh - 126px);object-fit:contain;background:#fff;box-shadow:0 18px 44px rgba(0,0,0,.34)}
+.echo-preview__nav{position:absolute;top:50%;width:42px;height:42px;border-radius:999px;transform:translateY(-50%);font:500 22px/1 var(--body)}
+.echo-preview__nav:disabled{opacity:.22;cursor:default}
+.echo-preview__prev{left:clamp(10px,1.8vw,26px)}
+.echo-preview__next{right:clamp(10px,1.8vw,26px)}
+.echo-preview__status{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);padding:5px 9px;background:#181818;color:rgba(242,239,233,.72);font:500 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:760px){.echo-preview__stage{padding:18px 50px 34px}.echo-preview__pages{grid-template-columns:1fr}.echo-preview__page{max-height:none}}
 
 /* DATA: mesma linguagem documental em todos os indicadores de ECHO. */
 body [data-datum][data-regime="derivacao"]{box-shadow:none}
@@ -1017,12 +1038,22 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
           </div>
         </sc-for>
       </div>
-      <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
-        <a href="{{ ficha.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;margin-top:26px;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
-          {{ ficha.acao }}
-          <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center;font-size:13px">↓</span>
-        </a>
-      </sc-if>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:26px">
+        <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
+          <a href="{{ ficha.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
+            {{ ficha.acao }}
+            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center;font-size:13px">↓</span>
+          </a>
+        </sc-if>
+        <sc-if value="{{ ficha.podeVisualizar }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ ficha.visualizar }}" style="display:inline-flex;align-items:center;gap:14px;border:0;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-family:'Commissioner',system-ui,sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
+            VISUALIZAR
+            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M2.3 12s3.4-5.2 9.7-5.2S21.7 12 21.7 12 18.3 17.2 12 17.2 2.3 12 2.3 12Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            </span>
+          </button>
+        </sc-if>
+      </div>
     </aside>
   </div>
 
@@ -1211,19 +1242,40 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </section>
 
 </x-dc>
+
+<div class="echo-preview" id="echo-preview" role="dialog" aria-modal="true" aria-labelledby="echo-preview-title" hidden>
+  <div class="echo-preview__bar">
+    <h2 class="echo-preview__title" id="echo-preview-title">Documento</h2>
+    <span class="echo-preview__count" id="echo-preview-count">01 / 01</span>
+    <button class="echo-preview__close" id="echo-preview-close" type="button" aria-label="Fechar visualização">×</button>
+  </div>
+  <div class="echo-preview__stage">
+    <button class="echo-preview__nav echo-preview__prev" id="echo-preview-prev" type="button" aria-label="Páginas anteriores">‹</button>
+    <div class="echo-preview__pages" id="echo-preview-pages" data-spread="2">
+      <canvas class="echo-preview__page" id="echo-preview-page-1"></canvas>
+      <canvas class="echo-preview__page" id="echo-preview-page-2"></canvas>
+    </div>
+    <button class="echo-preview__nav echo-preview__next" id="echo-preview-next" type="button" aria-label="Próximas páginas">›</button>
+    <span class="echo-preview__status" id="echo-preview-status">PDF</span>
+  </div>
+</div>
+
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+
+const TRIAGEM_PDF_BYTES = new Uint8Array([37,80,68,70,45,49,46,52,10,37,45,45,45,45,32,82,101,112,111,114,116,76,97,98,32,71,101,110,101,114,97,116,101,100,32,80,68,70,32,100,111,99,117,109,101,110,116,32,40,111,112,101,110,115,111,117,114,99,101,41,10,49,32,48,32,111,98,106,10,60,60,10,47,70,49,32,50,32,48,32,82,32,47,70,50,32,51,32,48,32,82,10,62,62,10,101,110,100,111,98,106,10,50,32,48,32,111,98,106,10,60,60,10,47,66,97,115,101,70,111,110,116,32,47,72,101,108,118,101,116,105,99,97,32,47,69,110,99,111,100,105,110,103,32,47,87,105,110,65,110,115,105,69,110,99,111,100,105,110,103,32,47,78,97,109,101,32,47,70,49,32,47,83,117,98,116,121,112,101,32,47,84,121,112,101,49,32,47,84,121,112,101,32,47,70,111,110,116,10,62,62,10,101,110,100,111,98,106,10,51,32,48,32,111,98,106,10,60,60,10,47,66,97,115,101,70,111,110,116,32,47,72,101,108,118,101,116,105,99,97,45,66,111,108,100,32,47,69,110,99,111,100,105,110,103,32,47,87,105,110,65,110,115,105,69,110,99,111,100,105,110,103,32,47,78,97,109,101,32,47,70,50,32,47,83,117,98,116,121,112,101,32,47,84,121,112,101,49,32,47,84,121,112,101,32,47,70,111,110,116,10,62,62,10,101,110,100,111,98,106,10,52,32,48,32,111,98,106,10,60,60,10,47,67,111,110,116,101,110,116,115,32,56,32,48,32,82,32,47,77,101,100,105,97,66,111,120,32,91,32,48,32,48,32,56,52,49,46,56,56,57,56,32,53,57,53,46,50,55,53,54,32,93,32,47,80,97,114,101,110,116,32,55,32,48,32,82,32,47,82,101,115,111,117,114,99,101,115,32,60,60,10,47,70,111,110,116,32,49,32,48,32,82,32,47,80,114,111,99,83,101,116,32,91,32,47,80,68,70,32,47,84,101,120,116,32,47,73,109,97,103,101,66,32,47,73,109,97,103,101,67,32,47,73,109,97,103,101,73,32,93,10,62,62,32,47,82,111,116,97,116,101,32,48,32,47,84,114,97,110,115,32,60,60,10,10,62,62,32,10,32,32,47,84,121,112,101,32,47,80,97,103,101,10,62,62,10,101,110,100,111,98,106,10,53,32,48,32,111,98,106,10,60,60,10,47,80,97,103,101,77,111,100,101,32,47,85,115,101,78,111,110,101,32,47,80,97,103,101,115,32,55,32,48,32,82,32,47,84,121,112,101,32,47,67,97,116,97,108,111,103,10,62,62,10,101,110,100,111,98,106,10,54,32,48,32,111,98,106,10,60,60,10,47,65,117,116,104,111,114,32,40,97,110,111,110,121,109,111,117,115,41,32,47,67,114,101,97,116,105,111,110,68,97,116,101,32,40,68,58,50,48,48,48,48,49,48,49,48,48,48,48,48,48,43,48,48,39,48,48,39,41,32,47,67,114,101,97,116,111,114,32,40,97,110,111,110,121,109,111,117,115,41,32,47,75,101,121,119,111,114,100,115,32,40,41,32,47,77,111,100,68,97,116,101,32,40,68,58,50,48,48,48,48,49,48,49,48,48,48,48,48,48,43,48,48,39,48,48,39,41,32,47,80,114,111,100,117,99,101,114,32,40,82,101,112,111,114,116,76,97,98,32,80,68,70,32,76,105,98,114,97,114,121,32,45,32,92,40,111,112,101,110,115,111,117,114,99,101,92,41,41,32,10,32,32,47,83,117,98,106,101,99,116,32,40,117,110,115,112,101,99,105,102,105,101,100,41,32,47,84,105,116,108,101,32,40,117,110,116,105,116,108,101,100,41,32,47,84,114,97,112,112,101,100,32,47,70,97,108,115,101,10,62,62,10,101,110,100,111,98,106,10,55,32,48,32,111,98,106,10,60,60,10,47,67,111,117,110,116,32,49,32,47,75,105,100,115,32,91,32,52,32,48,32,82,32,93,32,47,84,121,112,101,32,47,80,97,103,101,115,10,62,62,10,101,110,100,111,98,106,10,56,32,48,32,111,98,106,10,60,60,10,47,70,105,108,116,101,114,32,91,32,47,65,83,67,73,73,56,53,68,101,99,111,100,101,32,47,70,108,97,116,101,68,101,99,111,100,101,32,93,32,47,76,101,110,103,116,104,32,50,49,54,55,10,62,62,10,115,116,114,101,97,109,10,71,97,117,49,49,57,108,111,38,73,38,59,75,90,81,39,102,96,88,105,40,60,37,39,106,89,87,39,85,34,51,104,65,112,69,78,57,48,111,95,110,86,42,41,66,60,117,107,70,97,45,47,53,63,115,112,98,33,116,33,103,109,39,48,113,86,36,44,103,77,106,75,92,73,91,101,65,73,87,103,74,113,61,97,70,73,87,89,62,97,112,101,72,89,62,61,53,112,93,77,62,37,102,46,96,94,39,88,50,38,39,51,67,103,69,105,57,69,95,49,62,51,88,98,33,109,70,85,73,101,97,90,76,83,76,71,113,87,73,45,58,52,117,54,95,41,33,96,84,87,81,86,101,87,49,96,51,76,45,56,104,79,81,112,36,110,44,110,71,105,52,87,34,99,66,102,48,113,58,79,57,44,73,41,80,73,81,101,95,60,55,50,61,61,96,95,53,102,90,102,101,43,106,53,103,73,113,43,45,44,51,104,41,45,71,53,68,117,82,108,96,55,59,74,58,44,92,108,82,99,39,101,34,59,98,67,75,64,75,90,50,100,113,117,59,33,65,73,45,57,104,67,93,111,61,83,38,111,45,77,41,116,77,46,101,90,38,85,82,85,108,46,106,58,98,40,56,37,36,40,89,35,92,34,95,58,110,95,92,87,65,70,49,105,77,60,93,55,90,115,47,85,99,34,66,37,58,61,39,112,99,116,107,35,40,89,34,92,54,84,67,75,49,49,71,114,75,52,81,99,92,50,73,43,74,46,40,51,75,48,113,42,66,98,67,73,39,90,61,108,65,89,104,116,40,70,64,79,81,41,101,91,100,89,33,109,50,51,66,77,97,54,51,37,87,40,84,81,40,94,51,103,110,98,116,107,76,55,117,33,90,70,82,52,109,94,100,35,70,66,107,79,90,102,59,102,102,104,54,92,46,116,79,48,45,47,93,81,55,79,76,52,69,34,98,102,39,57,63,33,100,68,112,82,58,111,112,101,40,54,61,40,103,74,93,56,54,116,108,81,70,65,60,105,71,71,106,55,103,73,97,47,100,44,38,93,77,98,40,104,48,87,55,113,44,76,81,88,56,73,44,88,36,58,116,93,50,85,101,87,40,117,96,34,78,83,75,46,41,50,50,106,57,41,108,88,53,80,58,77,61,45,90,97,95,59,85,86,55,115,78,79,105,54,84,101,55,34,36,46,37,77,82,73,61,114,49,85,90,60,107,71,115,79,104,98,94,62,114,43,83,44,39,82,98,47,101,56,100,90,63,37,100,115,70,89,109,39,55,34,82,37,98,36,113,111,94,90,72,92,42,94,78,112,33,35,93,89,57,38,88,40,106,104,73,83,70,42,34,86,108,107,40,89,52,49,55,48,44,113,48,60,42,39,107,40,97,68,84,113,45,96,73,62,113,77,88,94,47,58,113,111,42,115,53,73,37,65,81,91,80,64,105,55,35,90,103,35,113,92,81,66,66,95,88,76,67,83,52,73,55,50,96,45,59,57,65,54,72,41,47,53,109,64,117,53,71,46,80,38,38,89,59,59,58,97,106,71,95,91,66,100,79,87,88,81,116,39,44,114,39,98,45,97,103,65,62,95,38,43,70,93,68,48,87,55,88,52,50,80,48,107,115,85,67,50,113,95,44,36,68,68,86,115,100,100,41,98,72,68,82,100,44,107,62,113,63,77,56,111,46,70,103,41,42,68,87,102,58,43,93,79,63,75,86,37,50,51,67,33,69,88,66,88,49,47,109,93,67,58,96,54,54,94,68,85,65,46,52,58,113,117,92,100,84,80,91,73,98,112,55,91,113,107,91,38,89,58,62,116,97,109,106,82,37,68,87,93,60,101,61,90,67,105,117,77,79,41,46,60,54,69,50,37,89,76,76,89,51,74,53,110,75,62,84,54,64,59,113,69,58,88,93,87,111,86,101,45,68,115,104,82,53,113,105,83,93,47,90,78,112,113,50,55,80,67,61,47,76,37,72,72,60,83,53,50,47,103,94,64,42,115,102,94,115,55,81,78,79,106,73,38,42,48,95,95,90,115,44,65,69,94,98,109,111,62,71,90,95,50,43,117,109,38,92,43,58,45,58,62,45,67,64,52,85,64,53,116,103,40,41,69,111,67,53,46,72,110,112,79,66,76,64,67,107,61,33,62,37,92,43,58,45,58,46,45,63,115,83,54,53,110,59,49,66,72,64,102,46,59,55,94,89,58,50,40,99,102,100,65,39,43,104,114,56,101,102,87,53,95,60,95,107,69,52,65,97,49,68,79,47,82,37,65,56,99,88,74,70,88,70,64,48,114,62,53,83,48,77,55,57,81,51,94,55,107,42,87,33,68,77,43,85,54,65,91,43,36,114,70,38,111,59,81,101,41,102,104,116,94,75,33,61,59,74,74,103,108,97,55,83,61,109,94,74,87,78,55,92,94,67,99,61,79,104,102,113,78,38,41,97,61,82,99,42,95,75,49,68,59,88,116,46,94,57,39,102,54,94,76,87,67,59,95,79,59,108,41,38,42,85,44,86,47,97,34,112,69,111,44,95,90,88,36,94,65,105,78,41,95,56,105,102,110,88,87,38,54,55,86,46,62,42,81,52,79,66,87,104,61,75,93,96,91,85,93,88,97,49,74,76,88,41,47,83,62,78,110,108,48,103,61,66,113,110,90,44,42,104,98,97,61,82,84,37,95,88,105,75,103,104,82,93,55,37,68,109,41,66,74,37,57,63,48,77,90,73,80,110,60,63,115,76,45,112,103,95,44,44,91,52,65,68,52,60,90,60,87,64,67,101,96,115,69,93,52,65,100,63,77,102,106,97,115,45,95,65,91,51,112,51,97,97,52,99,36,61,37,98,91,98,51,61,81,47,51,87,116,106,77,90,70,82,33,45,43,61,113,113,111,64,35,101,99,78,64,62,110,97,78,62,63,84,79,65,58,75,100,42,75,113,45,58,110,34,33,49,112,37,100,71,99,109,103,53,51,43,101,111,55,99,71,81,37,99,47,83,63,114,98,55,110,86,102,94,102,38,113,112,62,75,40,45,93,101,74,105,69,72,60,44,87,67,79,73,62,39,97,74,93,69,55,71,96,64,88,41,91,43,96,70,38,98,70,106,71,97,94,62,38,101,58,96,114,79,107,61,68,95,55,78,52,78,91,55,36,95,71,45,60,47,110,48,55,51,105,36,83,102,86,41,94,96,40,61,45,62,34,42,105,40,88,47,40,56,75,60,84,115,49,108,66,76,59,88,55,73,77,94,45,110,46,85,75,58,77,75,88,37,52,90,83,75,116,81,84,116,40,81,40,53,102,75,72,84,68,49,108,71,68,63,49,93,97,106,111,102,107,96,69,47,100,93,65,60,42,70,84,101,113,111,55,46,83,52,81,78,50,41,107,59,73,106,45,100,99,100,105,36,117,64,67,96,44,39,42,49,93,49,62,98,101,96,49,46,60,82,77,92,52,55,100,69,115,90,97,89,82,43,109,62,56,37,82,36,112,76,79,96,115,106,83,49,66,52,69,38,51,110,50,102,35,50,50,117,34,87,115,104,66,85,109,34,45,115,66,62,53,113,51,35,107,44,83,74,44,110,66,113,106,83,104,116,69,85,75,78,107,104,93,75,108,101,80,96,102,103,87,100,36,105,81,77,88,40,42,107,117,99,41,34,50,70,81,59,115,38,55,54,42,93,77,109,112,86,62,60,103,88,113,86,64,107,78,76,102,110,39,77,59,100,79,42,58,36,109,68,82,102,50,106,45,47,108,53,46,58,94,116,40,70,101,90,110,67,110,110,66,57,72,39,59,36,50,81,73,104,111,88,84,65,97,92,54,94,92,50,99,80,103,68,49,63,82,113,90,83,115,75,52,90,108,47,78,85,62,90,68,107,105,83,90,100,63,87,93,108,115,65,77,73,77,99,61,93,63,95,59,99,97,77,85,82,76,66,96,86,74,93,103,94,89,110,107,68,96,71,34,97,68,62,82,87,104,45,55,95,97,97,52,81,99,36,47,71,66,74,94,95,45,90,75,72,103,85,82,90,47,65,38,92,64,64,43,85,114,57,56,83,99,40,108,64,52,68,64,101,98,67,47,92,64,98,34,90,94,86,79,83,109,87,107,105,66,67,84,91,52,38,80,38,73,68,56,101,33,104,117,114,109,57,53,77,64,76,114,102,76,86,90,110,58,35,63,50,110,41,39,104,82,101,94,38,96,55,95,54,75,78,84,84,113,44,103,53,94,78,79,109,39,110,79,51,96,83,83,59,44,65,91,114,95,57,95,60,103,73,96,69,69,85,88,52,45,62,44,54,54,78,114,104,44,36,113,71,108,112,44,103,92,70,98,109,75,93,60,83,117,100,39,50,43,117,98,42,52,53,62,78,38,109,81,65,112,58,103,34,114,85,74,66,88,38,48,92,98,58,44,70,43,59,92,33,112,91,54,85,98,45,48,108,44,72,117,34,54,77,104,99,49,63,97,69,95,42,104,52,95,38,54,53,98,91,60,105,70,64,97,61,38,104,112,35,42,83,37,110,58,110,88,110,71,113,78,40,100,56,52,114,55,114,113,105,39,40,64,97,82,75,45,86,44,59,95,116,96,110,41,99,108,87,45,59,112,94,44,114,63,80,36,85,62,42,92,58,102,62,62,36,45,90,100,101,115,77,79,108,50,103,70,48,35,51,62,105,71,105,96,57,105,79,71,94,37,37,72,111,117,97,76,41,93,67,41,94,54,96,36,55,74,71,99,60,99,44,44,39,69,77,86,104,37,37,103,115,60,51,33,102,54,58,113,69,76,66,73,56,92,96,108,112,89,61,76,72,85,103,57,80,53,86,76,36,93,60,96,108,54,40,34,98,99,67,49,79,126,62,101,110,100,115,116,114,101,97,109,10,101,110,100,111,98,106,10,120,114,101,102,10,48,32,57,10,48,48,48,48,48,48,48,48,48,48,32,54,53,53,51,53,32,102,32,10,48,48,48,48,48,48,48,48,54,49,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,49,48,50,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,50,48,57,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,51,50,49,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,53,50,52,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,53,57,50,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,56,53,51,32,48,48,48,48,48,32,110,32,10,48,48,48,48,48,48,48,57,49,50,32,48,48,48,48,48,32,110,32,10,116,114,97,105,108,101,114,10,60,60,10,47,73,68,32,10,91,60,49,99,49,55,56,49,57,56,102,98,100,102,97,53,49,98,50,53,57,57,53,100,56,57,100,52,49,48,50,48,52,51,62,60,49,99,49,55,56,49,57,56,102,98,100,102,97,53,49,98,50,53,57,57,53,100,56,57,100,52,49,48,50,48,52,51,62,93,10,37,32,82,101,112,111,114,116,76,97,98,32,103,101,110,101,114,97,116,101,100,32,80,68,70,32,100,111,99,117,109,101,110,116,32,45,45,32,100,105,103,101,115,116,32,40,111,112,101,110,115,111,117,114,99,101,41,10,10,47,73,110,102,111,32,54,32,48,32,82,10,47,82,111,111,116,32,53,32,48,32,82,10,47,83,105,122,101,32,57,10,62,62,10,115,116,97,114,116,120,114,101,102,10,51,49,55,48,10,37,37,69,79,70,10]);
+
 const MATERIAIS = [
   {id:'m1',titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/echo/documentos/notas_introdutorias.pdf'},
+  {id:'m2',titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf'}
+  {id:'m5',titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf'},
   {id:'m4',titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/echo/documentos/mapa_tematico.pdf'},
   {id:'m3',titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/echo/documentos/afinacao_processual.pdf'},
+  {id:'m6',titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
+  {id:'m7',titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf'},
+  {id:'m8',titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
   {id:'m9',titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx'},
   {id:'m10',titulo:'Ementário',familia:'Painéis',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx'},
   {id:'m11',titulo:'Guia de Estilo',familia:'Manuais',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/echo/documentos/guia_estilo.pdf'},
-  {id:'m5',titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf'},
-  {id:'m7',titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf'},
-  {id:'m6',titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
-  {id:'m8',titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m2',titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf'}
 ];
 
 const PERCURSOS = [
@@ -1383,6 +1435,23 @@ class Component extends DCLogic {
           acao: m.formato === 'XLSX' ? 'Abrir planilha' : 'Baixar PDF'
         };
 
+    const previewMaterial = ativo ? prova : m;
+    ficha.podeVisualizar = !!previewMaterial && previewMaterial.formato === 'PDF';
+    ficha.previewHref = previewMaterial && previewMaterial.id !== 'm3' ? previewMaterial.href : '';
+    ficha.previewData = previewMaterial && previewMaterial.id === 'm3' ? TRIAGEM_PDF_BYTES : null;
+    ficha.previewPaginas = previewMaterial && previewMaterial.id === 'm3' ? 1 : 2;
+    ficha.visualizar = () => {
+      if (!ficha.podeVisualizar) return;
+      window.dispatchEvent(new CustomEvent('echo:preview', {
+        detail: {
+          titulo: previewMaterial.titulo,
+          href: ficha.previewHref,
+          data: ficha.previewData,
+          paginas: ficha.previewPaginas
+        }
+      }));
+    };
+
     return {
       materiais, percursos, ficha,
       notaAberta: this.state.nota,
@@ -1522,5 +1591,99 @@ class Component extends DCLogic {
 })();
 </script>
 <div class="echo-trace" aria-hidden="true"><i></i><b></b><s></s></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+(() => {
+  'use strict';
+  const modal=document.getElementById('echo-preview');
+  const title=document.getElementById('echo-preview-title');
+  const count=document.getElementById('echo-preview-count');
+  const pages=document.getElementById('echo-preview-pages');
+  const canvases=[document.getElementById('echo-preview-page-1'),document.getElementById('echo-preview-page-2')];
+  const prev=document.getElementById('echo-preview-prev');
+  const next=document.getElementById('echo-preview-next');
+  const close=document.getElementById('echo-preview-close');
+  const status=document.getElementById('echo-preview-status');
+  if(!modal||!window.pdfjsLib)return;
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  let pdf=null,firstPage=1,spread=2,renderCycle=0,opener=null;
+  const pad=n=>String(n).padStart(2,'0');
+
+  async function drawPage(canvas,pageNumber,cycle){
+    const page=await pdf.getPage(pageNumber);
+    if(cycle!==renderCycle)return;
+    const pixelRatio=Math.min(window.devicePixelRatio||1,2);
+    const base=page.getViewport({scale:1});
+    const target=spread===1?980:720;
+    const cssScale=Math.min(1.65,target/base.width);
+    const viewport=page.getViewport({scale:cssScale*pixelRatio});
+    canvas.width=Math.floor(viewport.width);
+    canvas.height=Math.floor(viewport.height);
+    canvas.style.aspectRatio=base.width+' / '+base.height;
+    const ctx=canvas.getContext('2d',{alpha:false});
+    await page.render({canvasContext:ctx,viewport}).promise;
+  }
+
+  async function render(){
+    if(!pdf)return;
+    const cycle=++renderCycle;
+    const second=spread===2&&firstPage+1<=pdf.numPages?firstPage+1:null;
+    pages.dataset.spread=second?'2':'1';
+    canvases[0].hidden=false;
+    canvases[1].hidden=!second;
+    const jobs=[drawPage(canvases[0],firstPage,cycle)];
+    if(second)jobs.push(drawPage(canvases[1],second,cycle));
+    await Promise.all(jobs);
+    if(cycle!==renderCycle)return;
+    count.textContent=second?pad(firstPage)+'–'+pad(second)+' / '+pad(pdf.numPages):pad(firstPage)+' / '+pad(pdf.numPages);
+    status.textContent=spread===1?'PDF · 1 página':'PDF · 2 páginas';
+    prev.disabled=firstPage<=1;
+    next.disabled=firstPage+spread>pdf.numPages;
+  }
+
+  async function openPreview(detail){
+    if(!detail||(!detail.href&&!detail.data))return;
+    opener=document.activeElement;
+    title.textContent=detail.titulo||'Documento';
+    spread=Number(detail.paginas)===1?1:2;
+    firstPage=1;
+    modal.hidden=false;
+    document.body.style.overflow='hidden';
+    pages.dataset.spread=spread===1?'1':'2';
+    canvases[0].hidden=false;
+    canvases[1].hidden=spread===1;
+    count.textContent='…';
+    status.textContent='Carregando PDF';
+    prev.disabled=true;next.disabled=true;
+    close.focus({preventScroll:true});
+    try{
+      const source=detail.data?{data:detail.data}:detail.href;
+      pdf=await window.pdfjsLib.getDocument(source).promise;
+      if(!pdf||!pdf.numPages)throw new Error('PDF sem páginas');
+      await render();
+    }catch(error){
+      pdf=null;count.textContent='—';status.textContent='Não foi possível carregar o PDF';console.error(error);
+    }
+  }
+
+  function closePreview(){
+    renderCycle++;pdf=null;modal.hidden=true;document.body.style.overflow='';
+    if(opener&&typeof opener.focus==='function')opener.focus({preventScroll:true});
+  }
+  prev.addEventListener('click',()=>{if(!pdf||firstPage<=1)return;firstPage=Math.max(1,firstPage-spread);render()});
+  next.addEventListener('click',()=>{if(!pdf||firstPage+spread>pdf.numPages)return;firstPage+=spread;render()});
+  close.addEventListener('click',closePreview);
+  window.addEventListener('echo:preview',event=>openPreview(event.detail));
+  document.addEventListener('keydown',event=>{
+    if(modal.hidden)return;
+    if(event.key==='Escape'){event.preventDefault();closePreview()}
+    if(event.key==='ArrowLeft'&&!prev.disabled){event.preventDefault();prev.click()}
+    if(event.key==='ArrowRight'&&!next.disabled){event.preventDefault();next.click()}
+  });
+})();
+</script>
+
 </body>
 </html>
