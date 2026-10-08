@@ -1,7 +1,9 @@
-# Playbook de Elaboração de Votos | fonte canônica
+# ATRIL | fonte canônica
 
-Esta pasta guarda a fonte do Playbook. A página publicada (`/playbook.html`) e os arquivos
-`assets/playbook/playbook.css`, `playbook.js` e `playbook-dados.js` são gerados a partir dela
+O ATRIL é a página que publica o Playbook de Elaboração de Votos (anexo ao Volume 04 da coleção da Turma Recursal do TJPR).
+
+Esta pasta guarda a fonte do ATRIL. A página publicada (`/atril.html`) e os arquivos
+`assets/atril/atril.css`, `atril.js` e `atril-dados.js` são gerados a partir dela
 e não devem ser editados à mão.
 
 ## Estrutura
@@ -15,14 +17,14 @@ e não devem ser editados à mão.
 | `build/pagina.html` | Estrutura da página |
 | `build/build.py` | Monta a página a partir das pastas acima |
 
-Os PDFs ficam em `assets/playbook/anexos/` (componentes do Playbook) e `assets/playbook/manuais/` (volumes da coleção).
+Os PDFs ficam em `assets/atril/anexos/` (componentes do Playbook) e `assets/atril/manuais/` (volumes da coleção).
 
 ## Gerar a página
 
 Na raiz do repositório:
 
 ```
-python3 assets/playbook/fonte/build/build.py
+python3 assets/atril/fonte/build/build.py
 ```
 
 O script não tem dependências além do Python 3.
