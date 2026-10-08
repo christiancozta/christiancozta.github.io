@@ -3,6 +3,7 @@
 Fonte canônica (editar aqui):
   assets/atril/fonte/componentes/*.html   textos dos componentes, já em marcação do sistema
   assets/atril/fonte/dados/*.txt          bases do Toolkit (Calendário, Fundamentos, Ementário, Templates)
+  assets/atril/fonte/dados/materiais.json  teclado: documentos, manuais e anexos em PDF
   assets/atril/fonte/build/css/*.css      sistema visual (família, componentes, interface)
   assets/atril/fonte/build/interface.js   comportamento da página
   assets/atril/fonte/build/pagina.html    estrutura da página
@@ -121,9 +122,18 @@ def templates():
     return [dict(out[i], n=n) for i, n in MODELOS.items()]
 
 
+def materiais():
+    m = json.loads((DADOS / 'materiais.json').read_text(encoding='utf-8'))
+    for item in m['brancas'] + m['pretas']:
+        if 'arquivo' in item:
+            item['kb'] = round((PB / item['arquivo']).stat().st_size / 1024)
+    m.pop('_nota', None)
+    return m
+
+
 def main():
     docs = {c: (FONTE / 'componentes' / f'{c}.html').read_text(encoding='utf-8') for c in COMPONENTES}
-    data = {'cal': calendario(), 'fun': fundamentos(), 'eme': ementario(), 'tpl': templates()}
+    data = {'cal': calendario(), 'fun': fundamentos(), 'eme': ementario(), 'tpl': templates(), 'mat': materiais()}
     payload = json.dumps({'docs': docs, 'data': data}, ensure_ascii=False, separators=(',', ':'))
     (PB / 'atril-dados.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\nwindow.ATRIL = ' + payload + ';\n', encoding='utf-8')
     css = '\n'.join((BUILD / 'css' / n).read_text(encoding='utf-8') for n in ['familia.css', 'componentes.css', 'interface.css'])
