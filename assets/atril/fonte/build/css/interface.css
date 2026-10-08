@@ -206,7 +206,7 @@ body.app.kb-min { --kb-h: 72px; }
    Tampa: faixa preta entre a estante e o teclado, com a leitura da tecla
    ========================================================================== */
 .tampa { position: relative; display: flex; align-items: center; justify-content: flex-end; padding: 0 var(--m); border-bottom: 1px solid var(--corpo-2); }
-.gravacao { position: absolute; left: var(--m); top: 50%; transform: translateY(-50%); font: 800 11px/1 var(--f-marca); letter-spacing: .42em; color: #3A3A3A; pointer-events: none; user-select: none; }
+.gravacao { position: absolute; left: var(--m); top: 50%; transform: translateY(-50%); font: 800 11px/1 var(--f-marca); letter-spacing: .42em; color: #7F7F7F; pointer-events: none; user-select: none; }
 .leitura { position: absolute; left: 0; top: 50%; display: flex; align-items: baseline; gap: 12px; white-space: nowrap; pointer-events: none;
   transform: translate(var(--lx, 50vw), -50%) translateX(-50%); transition: transform .5s var(--ease), opacity .25s; }
 .leitura .ln { font: 600 12.5px/1 var(--f-marca); letter-spacing: .16em; text-transform: uppercase; color: var(--ambar); }
@@ -256,7 +256,7 @@ body.app.kb-min { --kb-h: 72px; }
 /* rótulos */
 .tecla .tl { position: absolute; bottom: 18px; left: var(--cx, 50%); transform: translateX(-50%); font: 600 10px/1 var(--f-marca); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
 .tecla.man .tl { font-size: 17px; font-weight: 700; letter-spacing: -.01em; color: var(--laranja); bottom: 15px; }
-.tecla.p .tl { bottom: 16px; font-size: var(--tlf, 8px); letter-spacing: .1em; }
+.tecla.p .tl { left: var(--lx2, 50%); top: var(--ly2, 50%); bottom: auto; writing-mode: vertical-rl; transform: translate(-50%, -50%) rotate(var(--ang, 0deg)) rotate(180deg); font-size: 8.5px; letter-spacing: .12em; }
 .kb-min .tecla .tl { bottom: 10px; }
 .kb-min .tecla.p .tl { display: none; }
 .kb-min .tecla.man .tl { font-size: 13px; bottom: 9px; }
@@ -557,7 +557,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
    Mobile: folha em cima, teclado rolável, ferramentas em gaveta
    ========================================================================== */
 @media (max-width: 899px) {
-  :root { --topo: 52px; --tampa: 36px; --kb-h: 124px; --m: 10px; }
+  :root { --topo: 52px; --tampa: 36px; --kb-h: 148px; --m: 10px; }
   body.app { grid-template-rows: var(--topo) minmax(0, 1fr) var(--tampa) var(--kb-h) calc(56px + env(safe-area-inset-bottom)); }
   body.app.kb-min { --kb-h: 64px; }
   .topo { gap: 12px; padding: 0 12px; }
@@ -576,7 +576,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .tecla.b { scroll-snap-align: start; }
   .tecla.b .tl { writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); bottom: 14px; font-size: 9.5px; }
   .tecla.man .tl { writing-mode: horizontal-tb; transform: translateX(-50%); font-size: 16px; }
-  .tecla.p .tl { writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); bottom: 9px; letter-spacing: .08em; }
+  .tecla.p .tl { font-size: 7.5px; letter-spacing: .1em; }
   .kb-min .tecla.b:not(.man) .tl { display: none; }
 
   .ferr { position: fixed; z-index: 70; left: 0; right: 0; bottom: 0; top: 9vh; top: 9dvh; box-shadow: 0 -18px 48px rgba(0, 0, 0, .45); transform: translateY(105%); visibility: hidden; transition: transform .45s var(--ease), visibility 0s .45s; }
@@ -621,6 +621,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .toast { bottom: calc(var(--kb-h) + var(--tampa) + 72px); }
 }
 @media (min-width: 900px) { .barra, .veu { display: none !important; } }
+@media (max-height: 820px) and (min-width: 900px) { :root { --kb-h: clamp(140px, 24vh, 200px); } .gad.aberto .gh { padding-top: 10px; padding-bottom: 11px; } }
 @media (max-height: 640px) and (min-width: 900px) { :root { --kb-h: 96px; } }
 
 @media (prefers-reduced-motion: reduce) {
