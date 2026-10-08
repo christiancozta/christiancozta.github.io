@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATRIL · Partitura geral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Commissioner:wght@300;400;500;600&family=Zalando+Sans+Expanded:wght@700&display=swap" rel="stylesheet">
+<style>
+/* Proposta B · Partitura geral. O acervo como partitura de regência: cada material é uma pauta,
+   agrupada por chave como os naipes de uma orquestra; os compassos são a ordem de utilização das Regras de Aplicação,
+   e as notas ficam onde as Regras mandam usar cada componente. Ler na vertical é ler um passo. */
+:root{
+  color-scheme: light;
+  --papel:#F2EFE9; --papel-2:#F7F5F0; --tinta:#181818; --grafite:rgba(24,24,24,.64); --cinza:rgba(24,24,24,.44);
+  --fio:rgba(24,24,24,.2); --fio-2:rgba(24,24,24,.1); --ambar:#FFB627; --ambar-luz:rgba(255,182,39,.16); --latao:#9C7426;
+  --serif:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif;
+  --body:"Commissioner",system-ui,sans-serif;
+  --mono:"Azeret Mono",ui-monospace,monospace;
+  --marca:"Zalando Sans Expanded",system-ui,sans-serif;
+  --mola:cubic-bezier(.32,.72,0,1); --saida:cubic-bezier(.16,1,.3,1);
+  --g:clamp(16px,4.4vw,72px); --nomes:clamp(150px,15vw,232px); --parte:118px; --chave:26px;
+}
+*{box-sizing:border-box}
+html{background:var(--papel)}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 15px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+::selection{background:var(--ambar);color:var(--tinta)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--tinta);outline-offset:3px}
+.grao{position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.pag{padding:0 var(--g) 72px;max-width:1560px;margin:0 auto}
+
+/* cabeçalho */
+.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
+.marca{font:700 13px/1 var(--marca);letter-spacing:.34em}
+.acoes{display:flex;gap:8px}
+.volta{display:inline-flex;align-items:center;gap:4px;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza);transition:color .4s var(--mola)}
+.volta:hover{color:var(--tinta)}
+.pil{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--fio);
+  font:500 12.5px/1 var(--body);transition:background .5s var(--mola),transform .3s var(--mola)}
+.pil:hover{background:rgba(24,24,24,.04)}
+.pil:active{transform:scale(.98)}
+.pil kbd{font:500 10px/1 var(--mono);color:var(--cinza);padding:7px 9px;border-radius:999px;background:rgba(24,24,24,.05)}
+.pil .b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--tinta);color:var(--papel);transition:transform .5s var(--mola),background .5s var(--mola),color .5s var(--mola)}
+.pil:hover .b{transform:translate(2px,-1px) scale(1.06);background:var(--ambar);color:var(--tinta)}
+.pil[aria-pressed="true"] .b{background:var(--ambar);color:var(--tinta)}
+.ic{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+
+/* folha de rosto da partitura */
+.rosto{display:grid;grid-template-columns:minmax(170px,1fr) minmax(0,3.4fr) minmax(170px,1fr);align-items:start;gap:24px;padding:clamp(28px,6vh,72px) 0 clamp(26px,4.5vh,48px);border-top:1px solid var(--tinta)}
+.rosto-e{font:500 10px/1.7 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
+.epigrafe{margin-top:22px;max-width:24ch;font:italic 400 16px/1.35 var(--serif);color:var(--tinta);text-transform:none;letter-spacing:0}
+.epigrafe mark{background:var(--ambar);color:inherit;padding:0 .12em}
+.epigrafe small{display:block;margin-top:8px;font:500 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--cinza)}
+.titulo{text-align:center}
+.titulo h1{margin:0 auto;font:400 clamp(36px,4.9vw,80px)/.98 var(--serif);font-variation-settings:"opsz" 96;letter-spacing:-.02em;text-wrap:balance}
+.titulo h1 i{font-weight:400}
+.titulo p{margin:16px 0 0;font:italic 400 clamp(16px,1.5vw,21px)/1.3 var(--serif);color:var(--grafite)}
+.titulo p span{font-style:normal}
+.rosto-d{text-align:right;font:500 10px/1.7 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
+.rosto-d b{display:block;margin-top:28px;font:400 15px/1.3 var(--serif);letter-spacing:0;text-transform:none;color:var(--tinta)}
+
+/* sistema */
+.sistema{position:relative;--x0:calc(var(--chave) + var(--nomes))}
+.linha{display:grid;grid-template-columns:var(--chave) var(--nomes) minmax(0,1fr) var(--parte);align-items:center}
+.cab{height:64px;align-items:end;padding-bottom:6px}
+.andamento{grid-column:1 / 3;align-self:end;padding-bottom:8px;font:italic 600 16px/1 var(--serif)}
+.andamento small{display:block;margin-top:6px;font:400 9.5px/1 var(--mono);font-style:normal;letter-spacing:.18em;text-transform:uppercase;color:var(--cinza)}
+.marcas{display:grid;grid-template-columns:repeat(5,1fr)}
+.marcas button{display:flex;align-items:baseline;gap:8px;text-align:left;padding:0 0 8px;border-radius:2px}
+.ensaio{display:inline-block;min-width:24px;padding:3px 6px 2px;border:1px solid var(--tinta);font:700 13px/1 var(--serif);text-align:center;transition:background .4s var(--mola)}
+.marcas small{font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cinza);transition:color .4s var(--mola)}
+.marcas button:hover .ensaio,.marcas button.on .ensaio{background:var(--ambar)}
+.marcas button:hover small,.marcas button.on small{color:var(--tinta)}
+
+.naipe{position:relative;padding:6px 0;border-top:1px solid var(--fio-2)}
+.naipe:first-of-type{border-top:0}
+.naipe+.naipe{margin-top:10px}
+.chave{position:absolute;left:0;top:14px;bottom:14px;width:var(--chave)}
+.chave .nome-n{position:absolute;left:0;top:50%;transform:translate(-2px,-50%) rotate(180deg);writing-mode:vertical-rl;font:500 9px/1 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--cinza)}
+.chave .colchete{position:absolute;right:6px;top:0;bottom:0;width:4px;background:var(--tinta)}
+.chave .colchete::before,.chave .colchete::after{content:"";position:absolute;right:-9px;width:12px;height:7px;border:solid var(--tinta);border-width:2px 0 0 0;border-radius:0 12px 0 0}
+.chave .colchete::before{top:-5px;transform:skewY(-14deg);transform-origin:left}
+.chave .colchete::after{bottom:-5px;border-width:0 0 2px 0;border-radius:0 0 12px 0;transform:skewY(14deg);transform-origin:left}
+.chave svg{position:absolute;right:2px;top:0;height:100%;width:14px}
+
+.voz{position:relative;height:42px;cursor:pointer;transition:opacity .5s var(--mola)}
+.voz .nm{grid-column:2;justify-self:end;padding-right:18px;text-align:right;line-height:1.1;transition:transform .5s var(--mola)}
+.voz .nm b{font:italic 400 15.5px/1.1 var(--serif);white-space:nowrap}
+.voz .nm small{display:block;margin-top:3px;font:400 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--cinza)}
+.voz svg.pauta{grid-column:3;display:block;width:100%;height:40px;overflow:visible}
+.voz .pt{grid-column:4;justify-self:start;padding-left:18px;font:400 10.5px/1 var(--mono);letter-spacing:.04em;color:var(--cinza);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;transition:color .4s var(--mola)}
+.voz .pt .ic{width:11px;height:11px}
+.voz .pt:hover{color:var(--tinta)}
+.voz:hover .nm,.voz:focus-visible .nm{transform:translateX(-4px)}
+.voz:hover .nm b,.voz:focus-visible .nm b,.voz[aria-current="page"] .nm b{background:linear-gradient(transparent 58%,var(--ambar) 58%,var(--ambar) 92%,transparent 92%)}
+.sistema.foco-voz .voz:not(.quente){opacity:.32}
+.pauta .l{stroke:var(--fio);stroke-width:1}
+.pauta .bar{stroke:var(--tinta);stroke-width:1}
+.pauta .fim{stroke:var(--tinta)}
+.pauta .n{fill:var(--tinta);transition:opacity .5s var(--mola)}
+.pauta .h{fill:none;stroke:var(--tinta);stroke-width:1.6}
+.pauta .st{stroke:var(--tinta);stroke-width:1.1}
+.pauta .tie{fill:none;stroke:var(--tinta);stroke-width:1.1}
+.pauta .r{fill:var(--tinta);opacity:.8}
+.pauta text{font:italic 400 13px var(--serif);fill:var(--grafite)}
+.voz:hover .l{stroke:rgba(24,24,24,.42)}
+.sistema[data-m] .pauta [data-m]{opacity:.22}
+.sistema[data-m="1"] .pauta [data-m="1"],.sistema[data-m="2"] .pauta [data-m="2"],.sistema[data-m="3"] .pauta [data-m="3"],
+.sistema[data-m="4"] .pauta [data-m="4"],.sistema[data-m="5"] .pauta [data-m="5"]{opacity:1}
+.coluna{position:absolute;top:58px;bottom:0;width:0;left:0;pointer-events:none;background:var(--ambar-luz);opacity:0;transition:transform .6s var(--mola),width .6s var(--mola),opacity .4s var(--mola)}
+.sistema[data-m] .coluna{opacity:1}
+.batuta{position:absolute;top:52px;bottom:0;left:0;width:2px;background:var(--ambar);box-shadow:0 0 0 .5px rgba(156,116,38,.35);pointer-events:none;opacity:0}
+.batuta.vai{animation:varre 3.4s cubic-bezier(.45,.05,.3,1) forwards}
+@keyframes varre{0%{transform:translateX(var(--a));opacity:0}6%{opacity:1}86%{opacity:1}100%{transform:translateX(var(--b));opacity:0}}
+
+.letra{margin-top:18px;padding-top:16px;border-top:1px solid var(--tinta)}
+.letra .txt{grid-column:3;display:grid;grid-template-columns:repeat(5,1fr)}
+.letra .rot{grid-column:1 / 3;align-self:start;font:500 9.5px/1.6 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza);padding-top:2px}
+.letra p{margin:0;padding:0 18px 0 0;font:400 13px/1.5 var(--body);color:var(--grafite);transition:color .4s var(--mola)}
+.letra p b{display:block;font:700 12px/1 var(--serif);color:var(--tinta);margin-bottom:6px}
+.sistema[data-m="1"] .letra p:nth-child(1),.sistema[data-m="2"] .letra p:nth-child(2),.sistema[data-m="3"] .letra p:nth-child(3),
+.sistema[data-m="4"] .letra p:nth-child(4),.sistema[data-m="5"] .letra p:nth-child(5){color:var(--tinta)}
+.rodape{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;margin-top:44px;padding-top:14px;border-top:1px solid var(--fio);font:500 9.5px/1.6 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza)}
+.rodape b{color:var(--tinta);font-weight:500}
+
+/* a parte: folha que se abre sobre a partitura */
+.veu{position:fixed;inset:0;z-index:40;background:rgba(24,24,24,.16);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .6s var(--mola)}
+.veu.on{opacity:1;pointer-events:auto}
+.parte{position:fixed;z-index:45;top:0;right:0;bottom:0;width:min(780px,94vw);background:var(--papel-2);
+  box-shadow:-40px 0 80px -40px rgba(24,24,24,.35),-1px 0 0 var(--fio);transform:translateX(104%);transition:transform .9s var(--mola);display:flex;flex-direction:column}
+.parte.on{transform:none}
+.parte-h{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(20px,4vw,48px);border-bottom:1px solid var(--fio-2)}
+.parte-h span{font:500 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
+.parte-c{flex:1;min-height:0;overflow:auto;padding:clamp(26px,5vh,52px) clamp(20px,4vw,48px) 64px}
+.p-t{margin:0;font:400 clamp(34px,4vw,56px)/1 var(--serif);font-variation-settings:"opsz" 96;letter-spacing:-.02em;text-wrap:balance}
+.p-l{margin:14px 0 0;max-width:46ch;font:italic 400 19px/1.4 var(--serif);color:var(--grafite)}
+.p-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:22px 0 0;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza)}
+.regua{height:21px;margin:28px 0;border-left:1px solid var(--tinta);position:relative;background:repeating-linear-gradient(180deg,var(--fio) 0 1px,transparent 1px 5px)}
+.regua::after{content:"";position:absolute;right:0;top:0;bottom:0;width:4px;border-left:1px solid var(--tinta);border-right:2.5px solid var(--tinta)}
+.texto h3{margin:0 0 10px;font:600 20px/1.2 var(--serif)}
+.texto p{margin:0 0 14px;max-width:64ch;font:400 15.5px/1.7 var(--body);color:#2a2724}
+.texto .sec{margin-bottom:30px}
+.princ{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 28px}
+.princ div{padding-top:10px;border-top:1px solid var(--fio)}
+.princ b{display:block;font:italic 600 15px/1.2 var(--serif);margin-bottom:6px}
+.princ span{font:400 14px/1.55 var(--body);color:var(--grafite)}
+.secoes{list-style:none;margin:0;padding:0;columns:2;column-gap:32px}
+.secoes li{break-inside:avoid;display:grid;grid-template-columns:30px 1fr;padding:10px 0;border-top:1px solid var(--fio-2);font:400 14.5px/1.4 var(--body)}
+.secoes li span{font:italic 600 14px/1.4 var(--serif);color:var(--latao)}
+.cta{display:inline-flex;align-items:center;gap:14px;height:46px;padding:0 6px 0 22px;border-radius:999px;background:var(--tinta);color:var(--papel);font:500 13.5px/1 var(--body);transition:transform .35s var(--mola)}
+.cta .b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(242,239,233,.12);transition:transform .5s var(--mola),background .5s var(--mola),color .5s var(--mola)}
+.cta:hover .b{transform:translate(2px,-1px) scale(1.06);background:var(--ambar);color:var(--tinta)}
+.cta:active{transform:scale(.98)}
+.cta.cl{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 1px var(--fio)}
+.cta.cl .b{background:rgba(24,24,24,.06)}
+.botoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.campos{display:grid;grid-template-columns:1fr 120px;gap:12px;max-width:520px}
+.campo label{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza);margin-bottom:8px}
+.campo input{width:100%;height:48px;padding:0 16px;border:0;border-radius:2px;background:transparent;box-shadow:inset 0 -1px 0 var(--tinta);font:400 22px/1 var(--serif);font-variant-numeric:tabular-nums lining-nums;color:var(--tinta)}
+.campo input:focus{outline:0;box-shadow:inset 0 -2px 0 var(--tinta);background:rgba(255,182,39,.08)}
+.venc{margin-top:28px;max-width:520px;padding-top:18px;border-top:1px solid var(--tinta)}
+.venc small{font:500 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--cinza)}
+.venc strong{display:block;margin-top:10px;font:400 clamp(30px,3.6vw,44px)/1.02 var(--serif);letter-spacing:-.02em}
+.venc strong mark{background:var(--ambar);color:inherit;padding:0 .08em}
+.venc span{display:block;margin-top:12px;font:400 14px/1.55 var(--body);color:var(--grafite)}
+.venc.erro strong{font-size:22px;line-height:1.3}
+.busca{display:flex;align-items:center;gap:12px;height:52px;max-width:560px;box-shadow:inset 0 -1px 0 var(--tinta)}
+.busca input{flex:1;min-width:0;border:0;background:none;font:italic 400 22px/1 var(--serif);color:var(--tinta)}
+.busca input:focus{outline:0}
+.busca span{font:400 11px/1 var(--mono);color:var(--cinza)}
+.lista{list-style:none;margin:16px 0 0;padding:0;max-width:640px}
+.lista li{display:grid;grid-template-columns:84px 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--fio-2)}
+.lista code{font:500 10.5px/1.6 var(--mono);color:var(--latao)}
+.lista b{display:block;font:500 14.5px/1.35 var(--body)}
+.lista small{display:block;margin-top:3px;font:400 12px/1.4 var(--body);color:var(--cinza)}
+.nota{margin-top:18px;max-width:60ch;font:400 12.5px/1.6 var(--body);color:var(--cinza)}
+
+@media (max-width:980px){
+  :root{--parte:0px}
+  .voz .pt{display:none}
+  .rosto{grid-template-columns:1fr;text-align:center}
+  .rosto-e,.rosto-d{text-align:center}.epigrafe{margin:18px auto 0}.rosto-d b{margin-top:10px}
+  .rosto-e{order:2}.titulo{order:1}.rosto-d{order:3}
+}
+@media (max-width:700px){
+  :root{--nomes:0px;--chave:18px}
+  .pil .t,.pil kbd{display:none}.pil{padding:0 5px}
+  .voz{height:auto;grid-template-rows:auto 40px;padding-top:6px}
+  .voz .nm{grid-column:2 / 4;grid-row:1;justify-self:start;padding:0 0 0 0;text-align:left}
+  .voz .nm small{display:inline;margin-left:8px}
+  .voz svg.pauta{grid-row:2}
+  .andamento{grid-column:1 / 4;grid-row:1}
+  .cab{height:auto;grid-template-rows:auto auto;row-gap:10px}
+  .marcas{grid-column:2 / 4;grid-row:2}
+  .marcas small{display:none}
+  .letra .txt{grid-column:2 / 4;grid-template-columns:1fr;row-gap:12px}
+  .letra .rot{grid-column:2 / 4;margin-bottom:10px}
+  .letra p{padding:0}
+  .letra .linha{grid-template-columns:var(--chave) 0 1fr 0}
+  .coluna,.batuta{display:none}
+  .secoes{columns:1}.princ{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr 96px}
+  .parte{width:100vw}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0s!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="grao" aria-hidden="true"></div>
+<div class="pag">
+  <header class="topo">
+    <div style="display:flex;align-items:center;gap:18px"><a class="marca" href="#" aria-label="ATRIL, início">ATRIL</a><a class="volta" href="./"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6 9 12l6 6"/></svg>Propostas</a></div>
+    <div class="acoes">
+      <button class="pil" type="button" id="b-som" aria-pressed="false"><span class="t">Ouvir os compassos</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span></button>
+      <button class="pil" type="button" id="b-busca"><span class="t">Buscar</span><kbd>Ctrl K</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></span></button>
+      <a class="pil" href="https://christiancozta.github.io/arco.html#echo"><span class="t">ECHO</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+    </div>
+  </header>
+
+  <section class="rosto">
+    <div class="rosto-e">Partitura geral
+      <p class="epigrafe">Harmonia é <mark>coordenação</mark> de diferenças.<small>ECHO · Acervo</small></p>
+    </div>
+    <div class="titulo">
+      <h1>Playbook <i>de</i><br>Elaboração <i>de</i> Votos</h1>
+      <p>para <span>Recurso Inominado</span> e <span>Embargos de Declaração</span></p>
+    </div>
+    <div class="rosto-d">Anexo ao Volume 04<br>Guia de Estilo<b>Turma Recursal do TJPR</b></div>
+  </section>
+
+  <section class="sistema" id="sistema" aria-label="Partitura geral do acervo">
+    <div class="coluna" id="coluna" aria-hidden="true"></div>
+    <div class="batuta" id="batuta" aria-hidden="true"></div>
+    <div class="linha cab">
+      <div class="andamento">Ordem de utilização<small>Regras de Aplicação, seção 3</small></div>
+      <div class="marcas" id="marcas"></div>
+    </div>
+    <div id="naipes"></div>
+    <div class="letra"><div class="linha"><div class="rot">Texto da ordem</div><div class="txt" id="letra"></div></div></div>
+  </section>
+
+  <footer class="rodape"><span>Acervo do <b>ECHO</b> · Turma Recursal do TJPR</span><span><b>107</b> fundamentos · <b>2.758</b> assuntos · <b>730</b> dias de calendário · <b>6</b> modelos</span></footer>
+</div>
+
+<div class="veu" id="veu"></div>
+<aside class="parte" id="parte" aria-hidden="true" aria-labelledby="p-t">
+  <div class="parte-h"><span id="parte-r">Parte</span><button class="pil" type="button" id="fecha" aria-label="Voltar à partitura"><span class="t">Voltar à partitura</span><kbd>Esc</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span></button></div>
+  <div class="parte-c" id="parte-c"></div>
+</aside>
+
+<script src="dados.js"></script>
+<script>
+(function(){
+var A=window.ATRIL, $=function(s){return document.querySelector(s)};
+var reduz=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var SETA='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg>';
+var P={}; A.brancas.forEach(function(m){P[m.id]=m}); A.pretas.forEach(function(m){P[m.id]=m});
+/* Altura na pauta (clave de sol): 28=Mi4 25.5=Fá4 23=Sol4 20.5=Lá4 18=Si4 15.5=Dó5 13=Ré5 10.5=Mi5.
+   Regras: pedal de Dó em todos os compassos. III soa Dó maior; IV suspende (Fá, Sol, Dó); a coda resolve em Dó maior. */
+var NOTA={28:'E4',25.5:'F4',23:'G4',20.5:'A4',18:'B4',15.5:'C5',13:'D5',10.5:'E5'};
+var NAIPES=[
+ {n:'Governança',tipo:'colchete',vozes:[
+  {id:'regras',nome:'Regras de Aplicação',sub:'coordena a ordem',notas:[[1,15.5],[2,15.5],[3,15.5],[4,15.5],[5,15.5]],parte:'pdf-regras'},
+  {id:'guia',nome:'Guia de Estilo',sub:'a forma',notas:[[4,23,'w'],[5,23,'w']],liga:[4,5],parte:'vol-04'},
+  {id:'criterios',nome:'Critérios Operacionais',sub:'ao final',notas:[[5,10.5]],parte:'pdf-criterios'}]},
+ {n:'Toolkit',tipo:'colchete',vozes:[
+  {id:'calendario',nome:'Calendário Jurídico',sub:'730 dias',notas:[[2,20.5]],ferr:1},
+  {id:'fundamentos',nome:'Fundamentos',sub:'107 registros',notas:[[3,23]],ferr:1},
+  {id:'ementario',nome:'Ementário',sub:'2.758 assuntos',notas:[[3,10.5]],ferr:1},
+  {id:'templates',nome:'Templates',sub:'6 modelos',notas:[[4,25.5]],ferr:1,parte:'pdf-templates'}]},
+ {n:'Registro',tipo:'colchete',vozes:[
+  {id:'indice',nome:'Índice e Arquitetura',sub:'7 seções',marca:'tacet',parte:'pdf-indice'},
+  {id:'memoria',nome:'Memória de Integração',sub:'9 seções',marca:'tacet',parte:'pdf-memoria'}]},
+ {n:'Coleção',tipo:'chaveta',vozes:[
+  {id:'vol-01',nome:'Notas Introdutórias',sub:'vol. 01',marca:'ad lib.',parte:'vol-01'},
+  {id:'vol-02',nome:'Mapa Temático',sub:'vol. 02',marca:'ad lib.',parte:'vol-02'},
+  {id:'vol-03',nome:'Afinação Processual',sub:'vol. 03',marca:'ad lib.',parte:'vol-03'},
+  {id:'vol-04',nome:'Guia de Estilo',sub:'vol. 04',marca:'col Guia',parte:'vol-04'}]}
+];
+var MARCAS=[['I','identificar'],['II','admissibilidade'],['III','fundamentos'],['IV','resultado'],['Coda','revisão']];
+var LETRA=A.passos.concat(['Ao final, aplicar os critérios operacionais e conferir a correspondência entre fundamentação, dispositivo e ementa.']);
+
+$('#marcas').innerHTML=MARCAS.map(function(m,i){return '<button type="button" data-m="'+(i+1)+'"><span class="ensaio">'+m[0]+'</span><small>'+m[1]+'</small></button>'}).join('');
+$('#letra').innerHTML=LETRA.map(function(t,i){return '<p><b>'+MARCAS[i][0]+'</b>'+t+'</p>'}).join('');
+$('#naipes').innerHTML=NAIPES.map(function(g){
+  return '<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">'+g.n+'</span>'+(g.tipo==='colchete'?'<span class="colchete"></span>':'<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" fill="none" stroke="#181818" stroke-width="2.6" vector-effect="non-scaling-stroke"/></svg>')+'</div>'+
+  g.vozes.map(function(v){
+    var p=v.parte?P[v.parte]:null;
+    return '<a class="linha voz" href="#'+v.id+'" data-id="'+v.id+'"><span></span><span class="nm"><b>'+v.nome+'</b><small>'+v.sub+'</small></span><svg class="pauta" data-v="'+v.id+'" aria-hidden="true"></svg>'+
+      (p?'<span class="pt" data-pdf="'+p.url+'">parte · '+p.paginas+' p. '+SETA+'</span>':'<span></span>')+'</a>';
+  }).join('')+'</div>';
+}).join('');
+var VOZ={}; NAIPES.forEach(function(g){g.vozes.forEach(function(v){VOZ[v.id]=v})});
+
+function desenha(){
+  var svgs=document.querySelectorAll('svg.pauta');
+  if(!svgs.length) return;
+  var W=svgs[0].getBoundingClientRect().width, mw=W/5;
+  svgs.forEach(function(s){
+    var v=VOZ[s.dataset.v], o='';
+    [8,13,18,23,28].forEach(function(y){o+='<line class="l" x1="0" x2="'+W+'" y1="'+y+'" y2="'+y+'"/>'});
+    for(var i=0;i<5;i++) o+='<line class="bar" x1="'+(i*mw+.5)+'" x2="'+(i*mw+.5)+'" y1="8" y2="28"/>';
+    o+='<line class="fim" x1="'+(W-5)+'" x2="'+(W-5)+'" y1="8" y2="28" stroke-width="1"/><line class="fim" x1="'+(W-1.5)+'" x2="'+(W-1.5)+'" y1="8" y2="28" stroke-width="3"/>';
+    if(v.marca){o+='<text x="'+(Math.min(mw*.5,60))+'" y="22.5">'+v.marca+'</text>'}
+    else{
+      var tem={}; (v.notas||[]).forEach(function(n){tem[n[0]]=n});
+      for(var m=1;m<=5;m++){
+        var cx=(m-1)*mw+mw*0.42, n=tem[m];
+        if(!n){o+='<rect class="r" data-m="'+m+'" x="'+(cx-5)+'" y="13" width="10" height="3.2"/>';continue}
+        var y=n[1];
+        if(n[2]==='w') o+='<ellipse class="h" data-m="'+m+'" cx="'+cx+'" cy="'+y+'" rx="5.2" ry="3.3" transform="rotate(-18 '+cx+' '+y+')"/>';
+        else{
+          var up=y>18, sx=up?cx+4:cx-4, sy2=up?y-18:y+18;
+          o+='<g data-m="'+m+'"><ellipse class="n" cx="'+cx+'" cy="'+y+'" rx="4.6" ry="3.2" transform="rotate(-22 '+cx+' '+y+')"/><line class="st" x1="'+sx+'" x2="'+sx+'" y1="'+y+'" y2="'+sy2+'"/></g>';
+        }
+        if(y<=8-2.5||y>=28+2.5){}
+      }
+      if(v.liga){var a=(v.liga[0]-1)*mw+mw*.42, b=(v.liga[1]-1)*mw+mw*.42, yy=tem[v.liga[0]][1];
+        o+='<path class="tie" data-m="'+v.liga[1]+'" d="M'+(a+6)+' '+(yy+5)+' Q'+((a+b)/2)+' '+(yy+13)+' '+(b-6)+' '+(yy+5)+'"/>'}
+    }
+    s.setAttribute('viewBox','0 0 '+W+' 40'); s.innerHTML=o;
+  });
+  var r=svgs[0].getBoundingClientRect(), base=$('#sistema').getBoundingClientRect();
+  sist.style.setProperty('--sx',(r.left-base.left)+'px'); sist.style.setProperty('--mw',mw+'px');
+  geo={x:r.left-base.left,mw:mw};
+}
+var sist=$('#sistema'), geo={x:0,mw:0}, col=$('#coluna'), mAtual=0;
+function marca(m){
+  if(m===mAtual) return; mAtual=m;
+  document.querySelectorAll('.marcas button').forEach(function(b){b.classList.toggle('on',+b.dataset.m===m)});
+  if(!m){sist.removeAttribute('data-m');return}
+  sist.setAttribute('data-m',m);
+  col.style.width=geo.mw+'px'; col.style.transform='translateX('+(geo.x+(m-1)*geo.mw)+'px)';
+  acorde(m);
+}
+sist.addEventListener('pointermove',function(e){
+  if(innerWidth<=700) return;
+  var b=sist.getBoundingClientRect(), x=e.clientX-b.left-geo.x;
+  var m=x<0||x>geo.mw*5?0:Math.min(5,Math.floor(x/geo.mw)+1); marca(m);
+  var voz=e.target.closest('.voz');
+  sist.classList.toggle('foco-voz',!!voz);
+  document.querySelectorAll('.voz').forEach(function(el){el.classList.toggle('quente',el===voz)});
+});
+sist.addEventListener('pointerleave',function(){marca(0);sist.classList.remove('foco-voz')});
+document.querySelectorAll('.marcas button').forEach(function(b){
+  b.addEventListener('focus',function(){marca(+b.dataset.m)});
+  b.addEventListener('click',function(){mAtual=0;marca(+b.dataset.m)});
+});
+
+/* som: o acorde de cada compasso, ouvido na vertical */
+var ctx=null, somOn=false;
+function freq(n){var i={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[n[0]];return 440*Math.pow(2,((+n[1]-4)*12+i-9)/12)}
+function acorde(m){
+  if(!somOn||!ctx) return;
+  var t=ctx.currentTime, alt=[];
+  NAIPES.forEach(function(g){g.vozes.forEach(function(v){(v.notas||[]).forEach(function(n){if(n[0]===m&&alt.indexOf(n[1])<0)alt.push(n[1])})})});
+  alt.forEach(function(y,i){
+    var o=ctx.createOscillator(), g=ctx.createGain(); o.type='sine'; o.frequency.value=freq(NOTA[y]);
+    g.gain.setValueAtTime(0.0001,t+i*0.035); g.gain.exponentialRampToValueAtTime(0.12,t+i*0.035+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+1.8);
+    o.connect(g); g.connect(ctx.destination); o.start(t+i*0.035); o.stop(t+1.9);
+  });
+}
+$('#b-som').addEventListener('click',function(){
+  somOn=!somOn; this.setAttribute('aria-pressed',somOn);
+  if(somOn&&!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  if(ctx&&ctx.state==='suspended') ctx.resume();
+  if(somOn){[1,2,3,4,5].forEach(function(m,i){setTimeout(function(){mAtual=0;marca(m)},i*520)});setTimeout(function(){marca(0)},2900)}
+});
+
+/* a parte de cada voz */
+var parte=$('#parte'), veu=$('#veu'), pc=$('#parte-c');
+function docHTML(m){
+  var corpo;
+  if(m.id==='guia') corpo='<div class="texto">'+A.guiaTexto.map(function(s){
+    if(typeof s[1][0]==='string') return '<div class="sec"><h3>'+s[0]+'</h3>'+s[1].map(function(p){return '<p>'+p+'</p>'}).join('')+'</div>';
+    return '<div class="sec"><h3>'+s[0]+'</h3><div class="princ">'+s[1].map(function(p){return '<div><b>'+p[0]+'</b><span>'+p[1]+'</span></div>'}).join('')+'</div></div>'}).join('')+'</div>';
+  else corpo='<ol class="secoes">'+m.secoes.map(function(s){var k=s.indexOf('. ');return '<li><span>'+s.slice(0,k)+'</span>'+s.slice(k+2)+'</li>'}).join('')+'</ol>';
+  return '<h2 class="p-t" id="p-t">'+m.nome+'</h2><p class="p-l">'+m.lead+'</p><div class="p-meta"><span>'+m.camada+'</span><span>'+m.secoes.length+' seções</span><span>05/10/2026</span></div><div class="regua"></div>'+corpo+
+  '<div class="botoes"><a class="cta" href="'+m.pdf.url+'" target="_blank" rel="noopener">'+m.pdf.nome+' · '+m.pdf.paginas+' p.<span class="b">'+SETA+'</span></a></div>';
+}
+function volHTML(m){
+  return '<h2 class="p-t" id="p-t">'+m.nome+'</h2><p class="p-l">'+m.sub+'.</p><div class="p-meta"><span>Coleção da Turma Recursal</span><span>'+m.volume+'</span><span>PDF · '+m.paginas+' páginas</span></div><div class="regua"></div>'+
+  '<p class="nota" style="font-size:15px;color:var(--grafite)">Volume diagramado da coleção, para leitura contínua e impressão. Na partitura, os volumes tocam <i>ad libitum</i>: consultam-se a qualquer passo, fora da ordem.</p>'+
+  '<div class="botoes"><a class="cta" href="'+m.url+'" target="_blank" rel="noopener">Abrir '+m.volume.toLowerCase()+'<span class="b">'+SETA+'</span></a>'+(m.le?'<a class="cta cl" href="#guia">Ler o Guia na tela<span class="b">'+SETA+'</span></a>':'')+'</div>';
+}
+var estado={m:'08/10/2026',n:'10'};
+function ferrHTML(id){
+  if(id==='calendario') return '<h2 class="p-t" id="p-t">Calendário Jurídico</h2><p class="p-l">Prazo em dias úteis no regime cível, com a base de 2026 de Curitiba.</p><div class="regua"></div>'+
+    '<div class="campos"><div class="campo"><label for="c-m">Marco</label><input id="c-m" inputmode="numeric" maxlength="10" value="'+estado.m+'"></div><div class="campo"><label for="c-n">Dias úteis</label><input id="c-n" type="number" min="1" max="250" value="'+estado.n+'"></div></div>'+
+    '<div class="venc" id="c-r" aria-live="polite"></div><p class="nota">Art. 224 do CPC: exclui-se o dia do marco. Tabela do Decreto Judiciário nº 621/2025. Prazo material, em horas ou criminal fica fora da base; para outra comarca, complementar com os atos locais.</p>';
+  if(id==='fundamentos') return '<h2 class="p-t" id="p-t">Fundamentos</h2><p class="p-l">Repertório argumentativo com gatilhos, requisitos e limites.</p><div class="regua"></div>'+
+    '<label class="busca"><input id="f-q" placeholder="negativação, voo, gratuidade" autocomplete="off" aria-label="Buscar fundamentos"><span id="f-ct"></span></label><ul class="lista" id="f-l"></ul>';
+  if(id==='ementario') return '<h2 class="p-t" id="p-t">Ementário</h2><p class="p-l">Taxonomia, códigos, descrições e formulações de referência.</p><div class="regua"></div>'+
+    '<ul class="lista">'+A.ementario.map(function(e){return '<li><code>'+e.cod+'</code><div><b>'+e.desc+'</b><small>'+e.ramo+' · já abordado pela TR: '+e.tr+'</small></div></li>'}).join('')+'</ul><p class="nota">Amostra de 5 dos 2.758 registros neste protótipo.</p>';
+  return '<h2 class="p-t" id="p-t">Templates</h2><p class="p-l">Montador de minutas de RI e ED, com blocos condicionais e lacunas.</p><div class="regua"></div>'+
+    '<ul class="lista">'+A.templates.map(function(t){return '<li><code>'+t[0].split('-')[0]+'</code><div><b>'+t[0]+'</b><small>'+t[1]+'</small></div></li>'}).join('')+'</ul><div class="botoes"><span class="cta">Abrir o montador<span class="b">'+SETA+'</span></span></div>';
+}
+function liga(id){
+  if(id==='calendario'){
+    var go=function(){estado.m=$('#c-m').value;estado.n=$('#c-n').value;var d=A.parse(estado.m),n=parseInt(estado.n,10),el=$('#c-r');
+      if(!d||!(n>0)){el.className='venc erro';el.innerHTML='<small>Aguardando</small><strong>Informe o marco em dd/mm/aaaa e os dias úteis.</strong>';return}
+      var r=A.prazo(d,n); if(r.erro){el.className='venc erro';el.innerHTML='<small>Fora da base</small><strong>'+r.erro+'</strong>';return}
+      el.className='venc'; el.innerHTML='<small>Vence em</small><strong><mark>'+A.extenso(r.data)+'</mark></strong><span>'+A.semana(r.data)+', '+n+'º dia útil'+(r.excluidos.length?'. Excluídos pela tabela: '+r.excluidos.map(function(e){return A.fmt(e[0]).slice(0,5)+' ('+e[1]+')'}).join('; '):'')+'.</span>'};
+    $('#c-m').addEventListener('input',go);$('#c-n').addEventListener('input',go);go();
+  }
+  if(id==='fundamentos'){
+    var q=$('#f-q'),go2=function(){var s=q.value.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+      var r=A.fundamentos.filter(function(x){return !s||(x[1]+' '+x[2]).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').indexOf(s)>-1});
+      $('#f-ct').textContent=r.length+' de 107';$('#f-l').innerHTML=r.slice(0,40).map(function(x){return '<li><code>'+x[0]+'</code><div><b>'+x[2]+'</b><small>'+x[1]+'</small></div></li>'}).join('')};
+    q.addEventListener('input',go2);go2();
+  }
+}
+function abre(id){
+  var v=VOZ[id], m=P[id];
+  if(!v&&!m){fecha();return}
+  document.querySelectorAll('.voz').forEach(function(el){el.toggleAttribute('aria-current',el.dataset.id===id)});
+  $('#parte-r').textContent=v&&v.ferr?'Ferramenta · '+v.nome:(m&&m.tipo==='manual'?'Parte · '+m.volume:'Parte · '+(m?m.nome:''));
+  pc.innerHTML=v&&v.ferr?ferrHTML(id):m.tipo==='manual'?volHTML(m):docHTML(m);
+  liga(id); pc.scrollTop=0;
+  parte.classList.add('on'); parte.setAttribute('aria-hidden','false'); veu.classList.add('on');
+}
+function fecha(){parte.classList.remove('on');parte.setAttribute('aria-hidden','true');veu.classList.remove('on');document.querySelectorAll('.voz').forEach(function(el){el.removeAttribute('aria-current')})}
+function rota(){var h=location.hash.slice(1);if(h)abre(h);else fecha()}
+addEventListener('hashchange',rota);
+document.addEventListener('click',function(e){
+  var pt=e.target.closest('.pt'); if(pt){e.preventDefault();open(pt.dataset.pdf,'_blank','noopener');return}
+});
+function sai(){if(location.hash){history.pushState('',document.title,location.pathname+location.search)}fecha()}
+$('#fecha').addEventListener('click',sai); veu.addEventListener('click',sai);
+$('#b-busca').addEventListener('click',function(){location.hash='fundamentos';setTimeout(function(){var q=$('#f-q');if(q)q.focus()},500)});
+addEventListener('keydown',function(e){if(e.key==='Escape')sai();if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#b-busca').click()}});
+
+/* a batuta: um gesto de entrada, da primeira à última barra */
+var bat=$('#batuta');
+function gesto(){if(reduz||innerWidth<=700)return;bat.style.setProperty('--a',geo.x+'px');bat.style.setProperty('--b',(geo.x+geo.mw*5)+'px');bat.classList.remove('vai');void bat.offsetWidth;bat.classList.add('vai')}
+addEventListener('resize',desenha);
+document.fonts&&document.fonts.ready.then(desenha);
+desenha(); rota(); setTimeout(gesto,900);
+})();
+</script>
+</body>
+</html>
