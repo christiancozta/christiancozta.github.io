@@ -1,10 +1,11 @@
 # ÁTRIL | fonte canônica
 
-O ÁTRIL é a página que publica o Playbook de Elaboração de Votos (anexo ao Volume 04 da coleção da Turma Recursal do TJPR). A página é uma partitura de regência: cada material é uma pauta, agrupada em naipes (Coleção, Governança, Ferramenta), e os compassos são a ordem de utilização das Regras de Aplicação. Clicar numa pauta abre o material num painel sobre a partitura; "abrir" leva ao PDF. Índice e Arquitetura e Memória de Integração ficam fora do sistema, como anotações na folha de rosto. Templates abre em tela inteira.
+O ÁTRIL é a página que publica o Playbook de Elaboração de Votos (anexo ao Volume 04 da coleção da Turma Recursal do TJPR). A página é uma partitura de regência: cada material é uma pauta, agrupada em naipes (Coleção, Governança, Ferramenta), e os compassos são a ordem de utilização das Regras de Aplicação. Clicar numa pauta abre o material num painel sobre a partitura; "ver" abre o PDF no leitor da própria página e "baixar" baixa o arquivo. Índice e Arquitetura e Memória de Integração ficam fora do sistema, como anotações na folha de rosto. Templates abre em tela inteira.
 
 Esta pasta guarda a fonte do ÁTRIL. A página publicada (`/atril.html`) e os arquivos
-`assets/atril/atril.css`, `atril.js` e `atril-dados.js` são gerados a partir dela
-e não devem ser editados à mão.
+`assets/atril/atril.css`, `atril.js`, `atril-dados.js`, `atril-fundamentos.js` e
+`atril-ementario.js` são gerados a partir dela e não devem ser editados à mão. As duas
+últimas bases são injetadas pelo `atril.js` só quando a ferramenta é aberta.
 
 ## Estrutura
 

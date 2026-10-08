@@ -12,7 +12,9 @@ Build (gerado, não editar à mão):
   atril.html                                 página publicada na raiz do site
   assets/atril/atril.css                     folhas de estilo concatenadas
   assets/atril/atril.js                      interface
-  assets/atril/atril-dados.js                textos e bases em JSON (window.ATRIL)
+  assets/atril/atril-dados.js                textos e bases leves em JSON (window.ATRIL), com as contagens
+  assets/atril/atril-fundamentos.js          base dos Fundamentos, carregada só quando a ferramenta é aberta
+  assets/atril/atril-ementario.js            base do Ementário, carregada só quando a ferramenta é aberta
 
 Uso, na raiz do repositório:  python3 assets/atril/fonte/build/build.py
 """
@@ -133,14 +135,21 @@ def materiais():
 
 def main():
     docs = {c: (FONTE / 'componentes' / f'{c}.html').read_text(encoding='utf-8') for c in COMPONENTES}
-    data = {'cal': calendario(), 'fun': fundamentos(), 'eme': ementario(), 'tpl': templates(), 'mat': materiais()}
-    payload = json.dumps({'docs': docs, 'data': data}, ensure_ascii=False, separators=(',', ':'))
-    (PB / 'atril-dados.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\nwindow.ATRIL = ' + payload + ';\n', encoding='utf-8')
+    fun, eme = fundamentos(), ementario()
+    escopo = {'DIREITO CIVIL', 'DIREITO DO CONSUMIDOR', 'DIREITO PROCESSUAL CIVIL E DO TRABALHO'}
+    n = {'fun': len(fun), 'funCat': len({f['c'] for f in fun}), 'eme': len(eme), 'emeEsc': sum(e['r'] in escopo for e in eme)}
+    data = {'cal': calendario(), 'tpl': templates(), 'mat': materiais(), 'n': n}
+    js = lambda v: json.dumps(v, ensure_ascii=False, separators=(',', ':'))
+    cab = '/* Gerado por fonte/build/build.py. Não editar. */\n'
+    (PB / 'atril-dados.js').write_text(cab + 'window.ATRIL = ' + js({'docs': docs, 'data': data}) + ';\n', encoding='utf-8')
+    # Bases pesadas: o atril.js injeta cada uma só quando a ferramenta é aberta (ou a busca as consulta).
+    (PB / 'atril-fundamentos.js').write_text(cab + 'window.ATRIL.data.fun = ' + js(fun) + ';\n', encoding='utf-8')
+    (PB / 'atril-ementario.js').write_text(cab + 'window.ATRIL.data.eme = ' + js(eme) + ';\n', encoding='utf-8')
     css = '\n'.join((BUILD / 'css' / n).read_text(encoding='utf-8') for n in ['familia.css', 'componentes.css', 'interface.css'])
     (PB / 'atril.css').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + css, encoding='utf-8')
     (PB / 'atril.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + (BUILD / 'interface.js').read_text(encoding='utf-8'), encoding='utf-8')
     (RAIZ / 'atril.html').write_text((BUILD / 'pagina.html').read_text(encoding='utf-8'), encoding='utf-8')
-    print(f"atril.html | {len(data['fun'])} fundamentos | {len(data['eme'])} registros do Ementário | {len(data['cal'])} dias | {len(data['tpl'])} modelos")
+    print(f"atril.html | {n['fun']} fundamentos | {n['eme']} registros do Ementário | {len(data['cal'])} dias | {len(data['tpl'])} modelos")
 
 
 if __name__ == '__main__':

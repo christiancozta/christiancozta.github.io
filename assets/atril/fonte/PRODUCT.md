@@ -27,7 +27,8 @@ O ÁTRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia d
 
 ## Capabilities and Constraints
 
-- Página estática publicada no GitHub Pages. Fonte canônica em `assets/atril/fonte/`; `atril.html`, `atril.css`, `atril.js` e `atril-dados.js` são gerados por `build/build.py` (Python 3, sem dependências) e não se editam à mão.
+- Página estática publicada no GitHub Pages. Fonte canônica em `assets/atril/fonte/`; `atril.html`, `atril.css`, `atril.js`, `atril-dados.js`, `atril-fundamentos.js` e `atril-ementario.js` são gerados por `build/build.py` (Python 3, sem dependências) e não se editam à mão.
+- Carga sob demanda: a abertura da página traz só os textos, o Calendário, os Templates e as contagens (cerca de 140 KB de dados). Fundamentos (cerca de 100 KB) e Ementário (cerca de 1,6 MB) descem apenas quando a ferramenta é aberta, por clique, rota ou link direto, ou quando a busca global os consulta. O pdf.js também só é carregado na primeira abertura do leitor.
 - Bases: 107 fundamentos, 2.758 registros do Ementário, 730 dias de calendário (2025 histórico, 2026 ativo), 6 modelos de Templates.
 - Toda busca e cálculo roda no navegador, sem servidor.
 - Rotas por hash (`#guia`, `#regras`, `#criterios`, `#templates`, `#calendario`, `#fundamentos`, `#ementario`, `#indice`, `#memoria`) e links profundos para seções e registros.
@@ -35,9 +36,10 @@ O ÁTRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia d
 
 ## Brand Commitments
 
-- Nome da página: ÁTRIL, com acento, por decisão do autor (08/10/2026); arquivo `atril.html`. Subtítulo: "Playbook de elaboração de votos"; os PDFs seguem intitulados "Playbook de Elaboração de Votos".
+- Nome da página: ÁTRIL, com acento, por decisão do autor (08/10/2026); arquivo `atril.html`. Subtítulo: "Playbook da metodologia ECHO" (ECHO leva a `arco.html#echo`, a página-mãe); descrição: "Manuais, SOPs e instrumentos para gabinete judicial". Os PDFs seguem intitulados "Playbook de Elaboração de Votos".
 - Paleta fechada: #181818 tinta, #FFB627 apoio, #FCFCFC papel, #C84D00 acento. Na camada web, o âmbar é a luz única e o latão #8A6620 (âmbar com tinta) faz a marcação de texto; o #C84D00 fica na coleção impressa. Tints e cinzas só por mistura dessas cores com o papel.
-- Zalando Sans Expanded é obrigatória na marca (é a face do wordmark do ECHO); outras famílias são permitidas. A camada web usa Bodoni Moda, Commissioner e Azeret Mono, as duas últimas herdadas do ECHO.
+- Sem barra superior nem wordmark: a entrada é a folha de rosto. A autoria vem assinada como no ARCO (símbolo em #FFB627, miolo vazado, e o nome em Restart Ginger, levando a `arco.html`). A camada web usa Bodoni Moda, Commissioner e Azeret Mono, as duas últimas herdadas do ECHO.
+- Google Analytics (G-GD0Q3Z4KQ9) no `<head>`, como em arco, echo, atrio e data.
 - Parentesco visível com o ECHO: a epígrafe "Harmonia é coordenação de diferenças", o marca-texto âmbar e a família tipográfica.
 
 ## Evidence on Hand
