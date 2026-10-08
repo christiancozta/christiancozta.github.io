@@ -185,11 +185,15 @@ function layout() {
     el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = f(yb) + 'px';
     el.style.clipPath = `path('${d}')`;
     el.style.backgroundImage = `linear-gradient(to bottom, transparent calc(100% - ${lip}px), var(--lip) calc(100% - ${lip}px)), linear-gradient(to right, rgba(252, 252, 252, .1), rgba(252, 252, 252, 0) 32%, rgba(252, 252, 252, 0) 86%, rgba(252, 252, 252, .05))`;
-    el.style.setProperty('--cx', f((bl + br) / 2 - L) + 'px');
-    // corpo do rótulo pela medida útil: largura da ponta (desktop) ou altura da tecla (mobile, texto vertical)
-    const util = mob ? yb - 18 : (br - bl) - 12;
-    el.style.setProperty('--tlf', f(Math.max(6, Math.min(8.5, util / (m.curto.length * 0.95)))) + 'px');
-    geo[m.id] = (tl + tr) / 2;
+    // rótulo vertical no eixo da tecla: corpo único na fileira, inclinado com a perspectiva
+    const tx = (tl + tr) / 2; const bx = (bl + br) / 2;
+    const rot = el.querySelector('.tl'); const len = rot.offsetHeight;
+    const yc = yb - 12 - len / 2;
+    el.style.setProperty('--lx2', f(tx + (bx - tx) * (yc / yb) - L) + 'px');
+    el.style.setProperty('--ly2', f(yc) + 'px');
+    el.style.setProperty('--ang', f(Math.atan2(tx - bx, yb) * 180 / Math.PI) + 'deg');
+    rot.style.visibility = len > yb - 22 ? 'hidden' : '';
+    geo[m.id] = tx;
   });
   bordas();
   leitura(foco);
@@ -1223,7 +1227,7 @@ if (store.get('atril.kb') === 'min' || window.innerHeight < 560) setKbMin(true);
 if ('ResizeObserver' in window) new ResizeObserver(() => layout()).observe(KB);
 else window.addEventListener('resize', layout);
 window.addEventListener('resize', () => leitura(foco));
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => leitura(foco));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout());
 MQ.addEventListener('change', () => { fechaGaveta(); layout(); if (!isMob() && !gAberto) abreGadget('calendario', { gaveta: false }); });
 initCal();
 gstat('fundamentos', `${FUN.length} registros em ${FCATS} categorias`);
