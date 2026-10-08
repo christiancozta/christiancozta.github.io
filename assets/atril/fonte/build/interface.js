@@ -724,7 +724,7 @@ function renderCal() {
   $('#c-djew').style.display = cs.mode === 'prazo' ? 'flex' : 'none';
   const res = $('#c-res');
   $('#c-ml').textContent = cs.dje ? 'Disponibilização no DJe' : 'Marco (intimação ou publicação)';
-  $('#c-xl').innerHTML = cs.ex.map((k) => `<span class="chip">${br(pdate(k))}<button type="button" aria-label="Remover ${br(pdate(k))}" data-rm="${k}">×</button></span>`).join('');
+  $('#c-xl').innerHTML = cs.ex.map((k) => `<span class="chip">${br(pdate(k))}<button type="button" aria-label="Remover ${br(pdate(k))}" data-rm="${k}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></span>`).join('');
   const out = $('#c-out'); const warns = [];
   const trilhaAberta = !!($('.trilha', out) && $('.trilha', out).open);
   if (cs.loc === 'out') warns.push('<div class="box warn"><div class="lbl">Outra comarca</div><p>O feriado de 8 de setembro (Curitiba) deixa de ser excluído. A tabela não incorpora os feriados locais das demais comarcas: inclua-os nas exclusões do processo.</p></div>');
@@ -774,7 +774,7 @@ function anoHTML() {
     <p class="fmeta"><span><strong>Calendário</strong> · tabela anual, cível em dias úteis</span><span>Decreto Judiciário nº 621/2025 · Curitiba · art. 224 do CPC</span></p>
     <div class="pauta" aria-hidden="true"></div>
     <div class="anobar"><div class="segc" role="group" aria-label="Ano" id="c-anos"><button type="button" data-y="2026" aria-pressed="true">2026 | ativo</button><button type="button" data-y="2025" aria-pressed="false">2025 | histórico</button></div>
-    <div class="legend"><span><i style="background: var(--support);"></i>Excluído (feriado, recesso, suspensão)</span><span><i style="background: var(--paper); box-shadow: inset 0 0 0 1px var(--rule);"></i>Computável</span><span><i style="box-shadow: inset 0 0 0 1px #9A9A9A;"></i>Fim de semana</span></div></div>
+    <div class="legend"><span><i style="background: var(--support);"></i>Excluído (feriado, recesso, suspensão)</span><span><i style="background: var(--paper); box-shadow: inset 0 0 0 1px var(--rule);"></i>Computável</span><span><i style="box-shadow: inset 0 0 0 1px #707070;"></i>Fim de semana</span></div></div>
     <div id="c-yw"></div>
     <div class="months" id="c-year"></div>
   </div>`;
