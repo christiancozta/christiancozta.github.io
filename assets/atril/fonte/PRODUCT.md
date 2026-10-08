@@ -8,15 +8,15 @@ web
 
 ## Users
 
-Primeiro, visitantes do portfólio de Christian da Costa (christiancozta.github.io), que chegam ao ATRIL como demonstração de método em operações jurídicas. Em seguida, quem redige votos de RI e ED na Turma Recursal do TJPR e usa as ferramentas de verdade: calcular prazo, localizar fundamento, consultar ementa, montar minuta. Quando os dois públicos entram em conflito, a experiência de vitrine lidera, e as ferramentas continuam funcionando por inteiro.
+Primeiro, visitantes do portfólio de Christian da Costa (christiancozta.github.io), que chegam ao ÁTRIL como demonstração de método em operações jurídicas. Em seguida, quem redige votos de RI e ED na Turma Recursal do TJPR e usa as ferramentas de verdade: calcular prazo, localizar fundamento, consultar ementa, montar minuta. Quando os dois públicos entram em conflito, a experiência de vitrine lidera, e as ferramentas continuam funcionando por inteiro.
 
 ## Product Purpose
 
-O ATRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia de Estilo) da coleção da Turma Recursal do TJPR. Reúne numa só página a governança (Guia de Estilo, Regras de Aplicação, Critérios Operacionais), o registro (Índice e Arquitetura, Memória de Integração), os manuais da coleção, os anexos em PDF e o toolkit (Templates, Calendário, Fundamentos, Ementário). A página localiza e calcula; não decide.
+O ÁTRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia de Estilo) da coleção da Turma Recursal do TJPR. Reúne numa só página a governança (Guia de Estilo, Regras de Aplicação, Critérios Operacionais), o registro (Índice e Arquitetura, Memória de Integração), os manuais da coleção, os anexos em PDF e o toolkit (Templates, Calendário, Fundamentos, Ementário). A página localiza e calcula; não decide.
 
 ## Positioning
 
-É uma página filha do ECHO (echo.html), o modelo operacional que converte resposta externa em processo documentado, papel definido, critério de controle e conhecimento reutilizável. O ATRIL é esse modelo aplicado a uma única produção, o voto: o conhecimento do gabinete posto à disposição de quem escreve, para que a coerência do colegiado não dependa de quem estiver na sala.
+É uma página filha do ECHO (echo.html), o modelo operacional que converte resposta externa em processo documentado, papel definido, critério de controle e conhecimento reutilizável. O ÁTRIL é esse modelo aplicado a uma única produção, o voto: o conhecimento do gabinete posto à disposição de quem escreve, para que a coerência do colegiado não dependa de quem estiver na sala.
 
 ## Operating Context
 
@@ -35,10 +35,10 @@ O ATRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia de
 
 ## Brand Commitments
 
-- Nome da página: ATRIL (grafia dicionarizada, sem acento); arquivo `atril.html`. O conteúdo segue intitulado "Playbook de Elaboração de Votos", como nos PDFs.
-- Paleta fechada: #181818 tinta, #FFB627 apoio, #FCFCFC papel, #C84D00 acento. Tints e cinzas só por mistura dessas cores com o papel.
-- Zalando Sans Expanded é obrigatória (é a face do wordmark do ECHO); outras famílias são permitidas.
-- Parentesco visível com o ECHO.
+- Nome da página: ÁTRIL, com acento, por decisão do autor (08/10/2026); arquivo `atril.html`. Subtítulo: "Playbook de elaboração de votos"; os PDFs seguem intitulados "Playbook de Elaboração de Votos".
+- Paleta fechada: #181818 tinta, #FFB627 apoio, #FCFCFC papel, #C84D00 acento. Na camada web, o âmbar é a luz única e o latão #8A6620 (âmbar com tinta) faz a marcação de texto; o #C84D00 fica na coleção impressa. Tints e cinzas só por mistura dessas cores com o papel.
+- Zalando Sans Expanded é obrigatória na marca (é a face do wordmark do ECHO); outras famílias são permitidas. A camada web usa Bodoni Moda, Commissioner e Azeret Mono, as duas últimas herdadas do ECHO.
+- Parentesco visível com o ECHO: a epígrafe "Harmonia é coordenação de diferenças", o marca-texto âmbar e a família tipográfica.
 
 ## Evidence on Hand
 
@@ -57,4 +57,4 @@ O ATRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia de
 
 ## Accessibility & Inclusion
 
-Operável por teclado e leitor de tela, com alvos de toque adequados no mobile (nenhuma tecla do teclado de navegação sem área útil) e respeito a `prefers-reduced-motion`.
+Operável por teclado e leitor de tela, com alvos de toque adequados no mobile (nenhuma pauta, anotação ou comando sem área útil) e respeito a `prefers-reduced-motion`.

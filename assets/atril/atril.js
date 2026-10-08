@@ -11,12 +11,6 @@ const cap = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 const BASE = location.href.split('#')[0];
 const AS = 'assets/atril/';
 const RM = window.matchMedia('(prefers-reduced-motion: reduce)');
-const MQ = window.matchMedia('(max-width: 899px)');
-const isMob = () => MQ.matches;
-const store = {
-  get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
-  set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* armazenamento indisponível */ } }
-};
 const ICON = {
   volta: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8 12l6 6"/></svg>',
   chev: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>',
@@ -114,186 +108,194 @@ function snippet(text, terms, len = 150) {
 }
 
 /* =====================================================================
-   MATERIAIS E TECLADO
-   Trecho real de teclado de Mi a Fá: 9 brancas (documentos e manuais)
-   e 5 pretas (anexos em PDF), na ordem de dados/materiais.json.
+   MATERIAIS E PARTITURA
+   O acervo como partitura de regência. Cada material é uma pauta, agrupada
+   por chave em naipes (Coleção, Governança, Ferramenta); os compassos são a
+   ordem de utilização das Regras de Aplicação (seção 3), e as notas ficam
+   onde as Regras mandam usar cada componente. Ler na vertical é ler um passo.
+   O Registro (Índice e Memória) fica fora do sistema, anotado na folha de rosto.
    ===================================================================== */
 const MAT = D.mat;
 const WH = MAT.brancas;
 const BK = MAT.pretas;
 BK.forEach((m) => { m.tipo = 'anexo'; });
 const MBY = {}; WH.concat(BK).forEach((m) => { MBY[m.id] = m; });
-const ORDEM = [];
-WH.forEach((m, i) => { ORDEM.push(m); BK.filter((b) => b.entre[0] === i).forEach((b) => ORDEM.push(b)); });
 const fmtKB = (kb) => (kb >= 1000 ? (kb / 1024).toFixed(1).replace('.', ',') + ' MB' : kb + ' KB');
-function tipoLinha(m) {
-  if (m.tipo === 'documento') return 'documento · ' + m.camada;
-  if (m.tipo === 'manual') return 'manual · ' + m.volume + ' · ' + m.paginas + ' p.';
-  return 'anexo em PDF · ' + m.paginas + ' p.';
-}
-function rotuloTecla(m) {
-  if (m.tipo === 'documento') return m.nome + ', documento de ' + m.camada;
-  if (m.tipo === 'manual') return m.volume + ', ' + m.nome + ', manual em PDF';
-  return m.nome + ', anexo em PDF';
+const nTxt = (n, s, p) => n.toLocaleString('pt-BR') + ' ' + (n === 1 ? s : p);
+const TITULO = 'ÁTRIL | Playbook de elaboração de votos';
+
+/* Altura na pauta (clave de sol): 28 Mi4, 25.5 Fá4, 23 Sol4, 20.5 Lá4, 18 Si4, 15.5 Dó5, 13 Ré5, 10.5 Mi5.
+   As Regras sustentam um pedal de Dó; III soa Dó maior; IV suspende (Fá, Sol, Dó); a coda resolve em Dó maior. */
+const NOTA = { 28: 'E4', 25.5: 'F4', 23: 'G4', 20.5: 'A4', 18: 'B4', 15.5: 'C5', 13: 'D5', 10.5: 'E5' };
+const MARCAS = [['I', 'identificar'], ['II', 'admissibilidade'], ['III', 'fundamentos'], ['IV', 'resultado'], ['Coda', 'revisão']];
+const LETRA = [
+  'Identificar a classe, o objeto, o rito e as questões relevantes.',
+  'Examinar a admissibilidade, com a recuperação da base temporal quando necessária.',
+  'Localizar os fundamentos e as referências pertinentes, confrontando-os com o caso.',
+  'Definir o resultado antes de selecionar os blocos decisórios do Template.',
+  'Ao final, aplicar os critérios operacionais e conferir a correspondência entre fundamentação, dispositivo e ementa.'
+];
+const NAIPES = [
+  { n: 'Coleção', chave: 'chaveta', vozes: [
+    { id: 'vol-01', marca: 'ad lib.', pdf: 'vol-01' },
+    { id: 'vol-02', marca: 'ad lib.', pdf: 'vol-02' },
+    { id: 'vol-03', marca: 'ad lib.', pdf: 'vol-03' },
+    { id: 'guia', sub: 'vol. 04 | a forma', notas: [[4, 23, 'w'], [5, 23, 'w']], liga: [4, 5], pdf: 'vol-04' }] },
+  { n: 'Governança', chave: 'colchete', vozes: [
+    { id: 'regras', sub: 'coordena a ordem', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
+    { id: 'criterios', sub: 'ao final', notas: [[5, 10.5]], pdf: 'pdf-criterios' }] },
+  { n: 'Ferramenta', chave: 'colchete', vozes: [
+    { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [[2, 20.5]], ferr: true },
+    { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(D.fun.length, 'registro', 'registros'), notas: [[3, 23]], ferr: true },
+    { id: 'ementario', nome: 'Ementário', sub: nTxt(D.eme.length, 'assunto', 'assuntos'), notas: [[3, 10.5]], ferr: true },
+    { id: 'templates', nome: 'Templates', sub: nTxt(D.tpl.length, 'modelo', 'modelos'), notas: [[4, 25.5]], ferr: true, pdf: 'pdf-templates' }] }
+];
+const ANOT = [
+  { id: 'indice', nota: 'Identidade, camadas e componentes', pdf: 'pdf-indice' },
+  { id: 'memoria', nota: 'Fontes, decisões, correções e limites', pdf: 'pdf-memoria' }
+];
+const VOZ = {};
+NAIPES.forEach((g) => g.vozes.forEach((v) => {
+  const m = MBY[v.id];
+  if (!v.nome) v.nome = m.nome;
+  if (!v.sub) v.sub = m.tipo === 'manual' ? 'vol. ' + m.curto : '';
+  v.naipe = g.n; VOZ[v.id] = v;
+}));
+const ANBY = {}; ANOT.forEach((a) => { ANBY[a.id] = a; });
+function vozDesc(v) {
+  if (v.marca) return 'consulta livre, fora da ordem';
+  const ms = v.notas.map((n) => MARCAS[n[0] - 1][0]);
+  if (ms.length === 5) return 'presente em todos os compassos';
+  if (v.liga) return 'sustentado de ' + ms[0] + ' até a coda';
+  return 'entra em ' + ms.join(', ');
 }
 
-const KB = $('#teclado');
-const TECLAS = $('#teclas');
-const LEIT = $('#leitura');
-const KEL = {};
-const geo = {};
-let foco = null;
-
-function buildKeys() {
-  TECLAS.innerHTML = ORDEM.map((m) => `<a class="tecla ${m.tipo === 'anexo' ? 'p' : 'b'}${m.tipo === 'manual' ? ' man' : ''}" href="#${m.id}" data-k="${m.id}" tabindex="-1" aria-label="${esc(rotuloTecla(m))}"><span class="tl" aria-hidden="true">${esc(m.curto)}</span></a>`).join('');
-  $$('.tecla', TECLAS).forEach((el) => { KEL[el.dataset.k] = el; });
+const SIS = $('#sistema');
+const COL = $('#coluna');
+const BAT = $('#batuta');
+const MQS = window.matchMedia('(max-width: 700px)');
+const abrirPdf = (m, nome) => `<a class="pt" href="${AS + m.arquivo}" target="_blank" rel="noopener" aria-label="Abrir ${esc(nome)} em PDF, ${m.paginas} páginas">abrir | ${m.paginas} p.${ICON.fora}</a>`;
+function montaPartitura() {
+  $('#marcas').innerHTML = MARCAS.map(([r, s], i) => `<button type="button" data-m="${i + 1}"><span class="ensaio">${r}</span><small>${s}</small></button>`).join('');
+  $('#letra').innerHTML = LETRA.map((t, i) => `<p><b>${MARCAS[i][0]}</b>${esc(t)}</p>`).join('');
+  $('#naipes').innerHTML = NAIPES.map((g) => `<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">${g.n}</span>${g.chave === 'colchete' ? '<span class="colchete"></span>' : '<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" vector-effect="non-scaling-stroke"/></svg>'}</div>` +
+    g.vozes.map((v) => {
+      const p = v.pdf ? MBY[v.pdf] : null;
+      return `<div class="linha voz" data-id="${v.id}"><span></span><a class="nm" href="#${v.id}" aria-label="${esc(v.nome)}, ${esc(g.n)}, ${vozDesc(v)}"><b>${esc(v.nome)}</b><small>${esc(v.sub)}</small></a><svg class="pauta-s" data-v="${v.id}" aria-hidden="true"></svg>${p ? abrirPdf(p, v.nome) : '<span></span>'}</div>`;
+    }).join('') + '</div>').join('');
+  $('#anot').innerHTML = ANOT.map((a) => {
+    const m = MBY[a.id]; const p = MBY[a.pdf];
+    return `<li><a class="an" href="#${a.id}" data-id="${a.id}">${esc(m.nome)}</a><p>${esc(a.nota)}</p>${abrirPdf(p, m.nome).replace('class="pt"', 'class="ab"')}</li>`;
+  }).join('');
+  $('#rodape').innerHTML = `<span>Acervo do <a href="arco.html#echo"><b>ECHO</b></a> | Turma Recursal do TJPR</span><span><b>${D.fun.length}</b> fundamentos | <b>${D.eme.length.toLocaleString('pt-BR')}</b> assuntos | <b>${D.cal.length}</b> dias de calendário | <b>${D.tpl.length}</b> modelos</span>`;
 }
 
-/* Geometria: cada tecla é um trapézio projetado a partir de um ponto de fuga
-   acima do teclado. No mobile o teclado fica plano e rola na horizontal. */
-function layout() {
-  const W0 = KB.clientWidth; const H = KB.clientHeight;
-  if (!W0 || !H) return;
-  const mob = isMob(); const n = WH.length;
-  const W = mob ? Math.max(W0, n * 64) : W0;
-  const s0 = mob ? 1 : (H < 110 ? 0.94 : 0.72);
-  TECLAS.style.width = W + 'px';
-  const X = (u, v) => W / 2 + (u - 0.5) * W * (s0 + (1 - s0) * v);
-  const f = (x) => Math.round(x * 10) / 10;
-  const g = 1.25;
-  WH.forEach((m, i) => {
-    const u0 = i / n; const u1 = (i + 1) / n;
-    const pts = [[X(u0, 0) + g, 0], [X(u1, 0) - g, 0], [X(u1, 1) - g, H], [X(u0, 1) + g, H]];
-    const L = Math.min(pts[0][0], pts[3][0]); const R = Math.max(pts[1][0], pts[2][0]);
-    const el = KEL[m.id];
-    el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = H + 'px';
-    el.style.clipPath = 'polygon(' + pts.map(([x, y]) => f(x - L) + 'px ' + f(y) + 'px').join(', ') + ')';
-    el.style.setProperty('--cx', f(X((u0 + u1) / 2, 1) - L) + 'px');
-    geo[m.id] = X((u0 + u1) / 2, 0);
+/* Cada pauta é um SVG do tamanho real da coluna: cinco linhas, barras de compasso,
+   pausas onde o material não entra, notas onde entra, ligadura no Guia sustentado. */
+const sg = { x: 0, mw: 0 };
+function desenha() {
+  const svgs = $$('svg.pauta-s');
+  if (!svgs.length) return;
+  const W = svgs[0].getBoundingClientRect().width; if (!W) return;
+  const mw = W / 5;
+  svgs.forEach((s) => {
+    const v = VOZ[s.dataset.v]; let o = '';
+    [8, 13, 18, 23, 28].forEach((y) => { o += `<line class="l" x1="0" x2="${W}" y1="${y}" y2="${y}"/>`; });
+    for (let i = 0; i < 5; i++) o += `<line class="bar" x1="${i * mw + 0.5}" x2="${i * mw + 0.5}" y1="8" y2="28"/>`;
+    o += `<line class="fim" x1="${W - 5}" x2="${W - 5}" y1="8" y2="28" stroke-width="1"/><line class="fim" x1="${W - 1.5}" x2="${W - 1.5}" y1="8" y2="28" stroke-width="3"/>`;
+    if (v.marca) o += `<text x="${Math.min(mw * 0.5, 60)}" y="22.5">${v.marca}</text>`;
+    else {
+      const tem = {}; v.notas.forEach((n) => { tem[n[0]] = n; });
+      for (let m = 1; m <= 5; m++) {
+        const cx = (m - 1) * mw + mw * 0.42; const n = tem[m];
+        if (!n) { o += `<rect class="r" data-m="${m}" x="${cx - 5}" y="13" width="10" height="3.2"/>`; continue; }
+        const y = n[1];
+        if (n[2] === 'w') o += `<ellipse class="h" data-m="${m}" cx="${cx}" cy="${y}" rx="5.2" ry="3.3" transform="rotate(-18 ${cx} ${y})"/>`;
+        else {
+          const up = y > 18; const sx = up ? cx + 4 : cx - 4; const sy = up ? y - 18 : y + 18;
+          o += `<g data-m="${m}"><ellipse class="n" cx="${cx}" cy="${y}" rx="4.6" ry="3.2" transform="rotate(-22 ${cx} ${y})"/><line class="st" x1="${sx}" x2="${sx}" y1="${y}" y2="${sy}"/></g>`;
+        }
+      }
+      if (v.liga) {
+        const a = (v.liga[0] - 1) * mw + mw * 0.42; const b = (v.liga[1] - 1) * mw + mw * 0.42; const yy = tem[v.liga[0]][1];
+        o += `<path class="tie" data-m="${v.liga[1]}" d="M${a + 6} ${yy + 5} Q${(a + b) / 2} ${yy + 13} ${b - 6} ${yy + 5}"/>`;
+      }
+    }
+    s.setAttribute('viewBox', `0 0 ${W} 40`); s.innerHTML = o;
   });
-  const hw = (mob ? 44 / (W / n) : 0.6) / 2 / n;
-  const lv = mob ? 0.6 : 0.62;
-  BK.forEach((m) => {
-    const ub = (m.entre[0] + 1) / n; const yb = lv * H;
-    const tl = X(ub - hw, 0); const tr = X(ub + hw, 0); const br = X(ub + hw, lv); const bl = X(ub - hw, lv);
-    const L = Math.min(tl, bl); const R = Math.max(tr, br);
-    const r = Math.min(6, (br - bl) / 4);
-    const p = (x, y) => f(x - L) + ' ' + f(y);
-    const d = `M${p(tl, 0)} L${p(tr, 0)} L${p(br, yb - r)} Q${p(br, yb)} ${p(br - r, yb)} L${p(bl + r, yb)} Q${p(bl, yb)} ${p(bl, yb - r)} Z`;
-    const el = KEL[m.id];
-    const lip = Math.max(6, Math.round(yb * 0.09));
-    el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = f(yb) + 'px';
-    el.style.clipPath = `path('${d}')`;
-    el.style.backgroundImage = `linear-gradient(to bottom, transparent calc(100% - ${lip}px), var(--lip) calc(100% - ${lip}px)), linear-gradient(to right, rgba(252, 252, 252, .1), rgba(252, 252, 252, 0) 32%, rgba(252, 252, 252, 0) 86%, rgba(252, 252, 252, .05))`;
-    // rótulo vertical no eixo da tecla: corpo único na fileira, inclinado com a perspectiva
-    const tx = (tl + tr) / 2; const bx = (bl + br) / 2;
-    const rot = el.querySelector('.tl'); const len = rot.offsetHeight;
-    const yc = yb - 12 - len / 2;
-    el.style.setProperty('--lx2', f(tx + (bx - tx) * (yc / yb) - L) + 'px');
-    el.style.setProperty('--ly2', f(yc) + 'px');
-    el.style.setProperty('--ang', f(Math.atan2(tx - bx, yb) * 180 / Math.PI) + 'deg');
-    rot.style.visibility = len > yb - 22 ? 'hidden' : '';
-    geo[m.id] = tx;
+  sg.x = svgs[0].getBoundingClientRect().left - SIS.getBoundingClientRect().left; sg.mw = mw;
+}
+
+/* Compasso em foco: a coluna acende, o resto esmaece e, com som, o compasso soa como acorde. */
+let mAtual = 0;
+function marcaCompasso(m) {
+  if (m === mAtual) return; mAtual = m;
+  $$('#marcas button').forEach((b) => b.classList.toggle('on', +b.dataset.m === m));
+  if (!m) { SIS.removeAttribute('data-m'); return; }
+  SIS.setAttribute('data-m', m);
+  COL.style.width = sg.mw + 'px'; COL.style.transform = `translateX(${sg.x + (m - 1) * sg.mw}px)`;
+  acorde(m);
+}
+SIS.addEventListener('pointermove', (e) => {
+  if (MQS.matches || e.pointerType !== 'mouse') return;
+  const x = e.clientX - SIS.getBoundingClientRect().left - sg.x;
+  marcaCompasso(x < 0 || x > sg.mw * 5 ? 0 : Math.min(5, Math.floor(x / sg.mw) + 1));
+  const voz = e.target.closest('.voz');
+  SIS.classList.toggle('foco-voz', !!voz);
+  $$('.voz', SIS).forEach((el) => el.classList.toggle('quente', el === voz));
+});
+SIS.addEventListener('pointerleave', () => { marcaCompasso(0); SIS.classList.remove('foco-voz'); });
+SIS.addEventListener('click', (e) => {
+  const mb = e.target.closest('#marcas button'); if (mb) { mAtual = 0; marcaCompasso(+mb.dataset.m); return; }
+  if (e.target.closest('a')) return;
+  const voz = e.target.closest('.voz'); if (voz) navigate('#' + voz.dataset.id);
+});
+$('#marcas').addEventListener('focusin', (e) => { const b = e.target.closest('button'); if (b) marcaCompasso(+b.dataset.m); });
+$('#marcas').addEventListener('focusout', (e) => { if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('#marcas')) marcaCompasso(0); });
+
+/* Som: sintetizado no navegador, desligado até o primeiro toque. */
+let actx = null; let somOn = false;
+const freq = (n) => 440 * Math.pow(2, ((+n[1] - 4) * 12 + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[n[0]] - 9) / 12);
+function acorde(m) {
+  if (!somOn || !actx) return;
+  const t = actx.currentTime; const alt = [];
+  NAIPES.forEach((g) => g.vozes.forEach((v) => (v.notas || []).forEach((n) => { if (n[0] === m && !alt.includes(n[1])) alt.push(n[1]); })));
+  alt.forEach((y, i) => {
+    const o = actx.createOscillator(); const g = actx.createGain(); o.type = 'sine'; o.frequency.value = freq(NOTA[y]);
+    g.gain.setValueAtTime(0.0001, t + i * 0.035); g.gain.exponentialRampToValueAtTime(0.12, t + i * 0.035 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.8);
+    o.connect(g); g.connect(actx.destination); o.start(t + i * 0.035); o.stop(t + 1.9);
   });
-  bordas();
-  leitura(foco);
 }
-function bordas() {
-  const max = KB.scrollWidth - KB.clientWidth;
-  KB.classList.toggle('mais-esq', max > 2 && KB.scrollLeft > 2);
-  KB.classList.toggle('mais-dir', max > 2 && KB.scrollLeft < max - 2);
-}
-
-/* Leitura: o nome da tecla corre pela tampa e para acima dela. */
-function leitura(id) {
-  const m = MBY[id] || MBY[cur.key];
-  const ln = $('.ln', LEIT); const lk = $('.lk', LEIT);
-  let x;
-  if (m) {
-    ln.textContent = m.tipo === 'manual' ? m.curto + ' ' + m.nome : m.nome;
-    lk.textContent = tipoLinha(m);
-    LEIT.classList.remove('dica');
-    x = geo[m.id] - (isMob() ? KB.scrollLeft : 0);
-  } else {
-    ln.textContent = isMob() ? 'Deslize e toque uma tecla' : 'Passe o cursor e toque uma tecla';
-    lk.textContent = 'documentos e manuais nas brancas, anexos em PDF nas pretas';
-    LEIT.classList.add('dica');
-    x = window.innerWidth / 2;
-  }
-  const w = LEIT.offsetWidth; const wt = LEIT.parentElement.clientWidth; const wb = $('#kb-toggle').offsetWidth + 28;
-  x = Math.max(w / 2 + (isMob() ? 12 : 150), Math.min(wt - wb - w / 2, x));
-  LEIT.style.setProperty('--lx', Math.round(x) + 'px');
-}
-
-function rove(id, focar) {
-  $$('.tecla', TECLAS).forEach((el) => { el.tabIndex = el.dataset.k === id ? 0 : -1; });
-  if (focar && KEL[id]) KEL[id].focus();
-}
-function marcaTecla(id) {
-  $$('.tecla', TECLAS).forEach((el) => { if (el.dataset.k === id) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
-  rove(KEL[id] ? id : ORDEM[0].id, false);
-  if (isMob() && KEL[id]) {
-    const el = KEL[id];
-    KB.scrollTo({ left: el.offsetLeft + el.offsetWidth / 2 - KB.clientWidth / 2, behavior: RM.matches ? 'auto' : 'smooth' });
-  }
-  leitura(foco);
-}
-function toca(el) {
-  el.classList.add('toca');
-  setTimeout(() => el.classList.remove('toca'), 190);
-}
-function arpejo() {
-  if (RM.matches) return;
-  ORDEM.forEach((m, i) => setTimeout(() => toca(KEL[m.id]), 300 + i * 48));
-}
-
-TECLAS.addEventListener('pointerover', (e) => {
-  const k = e.target.closest('.tecla');
-  if (!k || e.pointerType !== 'mouse') return;
-  foco = k.dataset.k; leitura(foco);
+$('#b-som').addEventListener('click', (e) => {
+  somOn = !somOn; e.currentTarget.setAttribute('aria-pressed', String(somOn));
+  if (somOn && !actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { /* sem áudio */ } }
+  if (actx && actx.state === 'suspended') actx.resume();
+  if (somOn) { [1, 2, 3, 4, 5].forEach((m, i) => setTimeout(() => { mAtual = 0; marcaCompasso(m); }, i * 520)); setTimeout(() => marcaCompasso(0), 2900); }
 });
-TECLAS.addEventListener('pointerleave', () => {
-  const a = document.activeElement;
-  foco = a && a.classList && a.classList.contains('tecla') ? a.dataset.k : null;
-  leitura(foco);
-});
-TECLAS.addEventListener('focusin', (e) => { const k = e.target.closest('.tecla'); if (k) { foco = k.dataset.k; leitura(foco); } });
-TECLAS.addEventListener('focusout', (e) => { if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('.tecla')) { foco = null; leitura(null); } });
-TECLAS.addEventListener('keydown', (e) => {
-  const k = e.target.closest('.tecla'); if (!k) return;
-  const i = ORDEM.findIndex((m) => m.id === k.dataset.k); let j = null;
-  if (e.key === 'ArrowRight') j = Math.min(ORDEM.length - 1, i + 1);
-  else if (e.key === 'ArrowLeft') j = Math.max(0, i - 1);
-  else if (e.key === 'Home') j = 0;
-  else if (e.key === 'End') j = ORDEM.length - 1;
-  else if (e.key === ' ') { e.preventDefault(); k.click(); return; }
-  if (j == null) return;
-  e.preventDefault(); rove(ORDEM[j].id, true);
-});
-TECLAS.addEventListener('click', (e) => {
-  const k = e.target.closest('.tecla'); if (!k) return;
-  toca(k);
-  if (location.hash === '#' + k.dataset.k) { e.preventDefault(); FOLHA.scrollTo({ top: 0, behavior: RM.matches ? 'auto' : 'smooth' }); }
-});
-KB.addEventListener('scroll', () => { bordas(); leitura(foco); }, { passive: true });
 
-const KBT = $('#kb-toggle');
-function setKbMin(on, salvar) {
-  document.body.classList.toggle('kb-min', on);
-  KBT.setAttribute('aria-expanded', String(!on));
-  $('span', KBT).textContent = on ? 'Abrir teclado' : 'Recolher teclado';
-  if (salvar) store.set('atril.kb', on ? 'min' : '');
+/* A batuta: um gesto de entrada, da primeira à última barra. */
+function gesto() {
+  if (RM.matches || MQS.matches || !sg.mw) return;
+  BAT.style.setProperty('--a', sg.x + 'px'); BAT.style.setProperty('--b', (sg.x + sg.mw * 5) + 'px');
+  BAT.classList.remove('vai'); void BAT.offsetWidth; BAT.classList.add('vai');
 }
-KBT.addEventListener('click', () => setKbMin(!document.body.classList.contains('kb-min'), true));
 
 /* =====================================================================
-   FOLHA
+   A PARTE: folha que se abre sobre a partitura
+   Documentos, fichas de PDF e ferramentas abrem no mesmo painel, à direita;
+   a partitura fica atrás, esmaecida. Fechar volta ao ponto de onde se saiu.
    ===================================================================== */
+const PARTE = $('#parte');
+const VEU = $('#veu');
 const FOLHA = $('#folha');
 const FIN = $('#folha-in');
+const ROT = $('#parte-r');
 const cur = { key: null };
 let folhaIO = null;
+let parteVolta = null;
+const GADS = ['calendario', 'fundamentos', 'ementario'];
 const TOOLDOC = { 'calendario-base': ['Calendário', 'base e limites da contagem', 'Calendário, base e limites'], 'fundamentos-regra': ['Fundamentos', 'regra de uso', 'Fundamentos, regra de uso'], 'ementario-regra': ['Ementário', 'regra de uso', 'Ementário, regra de uso'] };
+const TOOLVOZ = { 'calendario-base': 'calendario', 'fundamentos-regra': 'fundamentos', 'ementario-regra': 'ementario' };
 const DOCVIEW = { 'guia-de-estilo': 'guia', 'regras-de-aplicacao': 'regras', 'criterios-operacionais': 'criterios', 'indice-e-arquitetura': 'indice', 'memoria-de-integracao': 'memoria', 'templates-texto': 'templates', 'calendario-base': 'calendario', 'fundamentos-regra': 'fundamentos', 'ementario-regra': 'ementario' };
 
 function scrollToId(id, instant) {
@@ -301,36 +303,91 @@ function scrollToId(id, instant) {
   if (el) { el.scrollIntoView({ behavior: instant || RM.matches ? 'auto' : 'smooth', block: 'start' }); return true; }
   return false;
 }
+function abreParte() {
+  if (PARTE.classList.contains('on')) return;
+  const a = document.activeElement;
+  parteVolta = a && a !== document.body && !PARTE.contains(a) ? a : null;
+  PARTE.hidden = false; VEU.classList.add('on'); document.documentElement.classList.add('com-parte');
+  void PARTE.offsetWidth; PARTE.classList.add('on');
+  setTimeout(() => FOLHA.focus({ preventScroll: true }), 80);
+}
+function fechaParte() {
+  if (!PARTE.classList.contains('on')) return;
+  PARTE.classList.remove('on'); VEU.classList.remove('on'); document.documentElement.classList.remove('com-parte');
+  setTimeout(() => { if (!PARTE.classList.contains('on')) PARTE.hidden = true; }, RM.matches ? 0 : 600);
+  cur.key = null; marcaVoz(null); document.title = TITULO;
+  const v = parteVolta; parteVolta = null;
+  if (v && v.focus && document.contains(v)) v.focus({ preventScroll: true });
+}
+function sai() {
+  if (location.hash) history.pushState('', document.title, location.pathname + location.search);
+  fechaParte();
+}
+$('#fecha').addEventListener('click', sai);
+VEU.addEventListener('click', sai);
+
+/* Qual pauta ou anotação corresponde ao que está aberto. */
+function vozDe(key) {
+  if (VOZ[key] || ANBY[key]) return key;
+  if (key.startsWith('ferr:')) return key.slice(5);
+  if (key.startsWith('doc:')) return TOOLVOZ[key.slice(4)] || null;
+  if (key === 'cal-ano') return 'calendario';
+  if (key.startsWith('fun:')) return 'fundamentos';
+  if (key.startsWith('eme:')) return 'ementario';
+  const m = MBY[key];
+  if (!m) return null;
+  if (m.le) return m.le;
+  if (m.ferramenta) return m.ferramenta;
+  return null;
+}
+function marcaVoz(id) {
+  $$('.voz, .an').forEach((el) => { if (el.dataset.id === id) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
+}
+function rotulo(key) {
+  if (key === 'cal-ano') return 'Ferramenta | Calendário Jurídico, tabela anual';
+  if (key.startsWith('doc:')) return 'Ferramenta | ' + ((TOOLDOC[key.slice(4)] || [])[2] || '');
+  if (key.startsWith('fun:')) return 'Ferramenta | Fundamento ' + key.slice(4);
+  if (key.startsWith('eme:')) return 'Ferramenta | Ementário ' + key.slice(4);
+  if (key.startsWith('ferr:')) return 'Ferramenta | ' + VOZ[key.slice(5)].nome;
+  if (VOZ[key]) return VOZ[key].naipe + ' | ' + VOZ[key].nome;
+  if (ANBY[key]) return 'Anotação | ' + MBY[key].nome;
+  const m = MBY[key];
+  if (!m) return '';
+  return m.tipo === 'manual' ? 'Coleção | ' + m.volume : 'Anexo em PDF | ' + m.nome;
+}
 function tituloFolha(key) {
-  if (key === 'inicio') return '';
   if (key === 'cal-ano') return 'Calendário Jurídico';
   if (key.startsWith('doc:')) return (TOOLDOC[key.slice(4)] || [])[2] || '';
   if (key.startsWith('fun:')) return 'Fundamento ' + key.slice(4);
   if (key.startsWith('eme:')) return 'Ementário ' + key.slice(4);
+  if (key.startsWith('ferr:')) return VOZ[key.slice(5)].nome;
   return MBY[key] ? MBY[key].nome : '';
 }
-function showSheet(key, sub) {
-  if (cur.key === key) { if (sub) scrollToId(sub); return; }
-  const primeira = cur.key === null;
-  cur.key = key;
-  const render = () => {
-    if (folhaIO) { folhaIO.disconnect(); folhaIO = null; }
-    renderSheet(key);
-    FOLHA.scrollTop = 0;
-    if (sub) requestAnimationFrame(() => scrollToId(sub, true));
-  };
-  if (!primeira && document.startViewTransition && !RM.matches) document.startViewTransition(render);
-  else render();
-  marcaTecla(MBY[key] ? key : null);
+function situa(key) {
+  ROT.textContent = rotulo(key);
+  marcaVoz(vozDe(key));
   const t = tituloFolha(key);
-  document.title = t ? t + ' | ATRIL' : 'ATRIL | Playbook de Elaboração de Votos';
-  if (!primeira) $('#anuncio').textContent = 'Na folha: ' + (t || 'capa do ATRIL');
+  document.title = t ? t + ' | ÁTRIL' : TITULO;
+  $('#anuncio').textContent = 'Aberto sobre a partitura: ' + t;
 }
-function ensureSheet() { if (cur.key === null) showSheet('inicio'); }
+function mostraFerr(id) {
+  FIN.hidden = !!id;
+  GADS.forEach((g) => { $('#gb-' + g).hidden = g !== id; });
+}
 
+function showSheet(key, sub) {
+  mostraFerr(null);
+  abreParte();
+  if (cur.key === key) { if (sub) scrollToId(sub); return; }
+  cur.key = key;
+  if (folhaIO) { folhaIO.disconnect(); folhaIO = null; }
+  renderSheet(key);
+  FOLHA.scrollTop = 0;
+  if (sub) requestAnimationFrame(() => scrollToId(sub, true));
+  situa(key);
+}
 function renderSheet(key) {
-  if (key === 'inicio') FIN.innerHTML = capaHTML();
-  else if (key === 'cal-ano') { FIN.innerHTML = anoHTML(); renderYear(); }
+  if (key === 'cal-ano') { FIN.innerHTML = anoHTML(); renderYear(); }
   else if (key.startsWith('doc:')) docSheet(key.slice(4), null);
   else if (key.startsWith('fun:')) FIN.innerHTML = `<div class="ffer"><article class="detail">${funDetailHTML(FBY[key.slice(4)], parseQuery(fs.q), true)}</article></div>`;
   else if (key.startsWith('eme:')) FIN.innerHTML = `<div class="ffer"><article class="detail">${emeDetailHTML(EBY[key.slice(4)], parseQuery(es.q), true)}</article></div>`;
@@ -357,54 +414,29 @@ function buildRail(rail, art, key) {
   }
 }
 function docSheet(k, m) {
-  const i = m ? WH.indexOf(m) : -1;
-  const prev = i > 0 ? WH[i - 1] : null;
-  const next = i >= 0 && i < WH.length - 1 ? WH[i + 1] : null;
-  FIN.innerHTML = '<div class="docwrap"><article class="doc flow v4"></article><aside class="rail" aria-label="Seções desta folha"></aside></div>' +
-    (m ? `<nav class="pager" aria-label="Teclas vizinhas">${prev ? `<a href="#${prev.id}"><span class="small">Tecla anterior</span><span class="t">${esc(prev.nome)}</span></a>` : '<span></span>'}${next ? `<a href="#${next.id}"><span class="small">Próxima tecla</span><span class="t">${esc(next.tipo === 'manual' ? next.curto + ' ' + next.nome : next.nome)}</span></a>` : ''}</nav>` : '');
+  FIN.innerHTML = '<div class="docwrap"><article class="doc flow v4"></article><aside class="rail" aria-label="Seções desta folha"></aside></div>';
   const art = $('article', FIN);
   art.innerHTML = DOCS[k] || '';
   let meta = '';
   if (m) {
     const p = MBY[m.pdf];
-    meta = `<span><strong>${esc(m.camada)}</strong> · documento</span>` + (p ? `<a href="#${p.id}">${p.tipo === 'manual' ? 'Versão diagramada: ' + p.volume : 'Também em PDF'}, ${p.paginas} p.</a>` : '');
-  } else if (TOOLDOC[k]) meta = `<span><strong>${TOOLDOC[k][0]}</strong> · ${TOOLDOC[k][1]}</span>`;
+    meta = `<span><strong>${esc(m.camada)}</strong> | documento</span>` + (p ? `<a href="${AS + p.arquivo}" target="_blank" rel="noopener">abrir ${p.tipo === 'manual' ? 'o ' + p.volume.toLowerCase() : 'o PDF'} | ${p.paginas} p.</a>` : '');
+  } else if (TOOLDOC[k]) meta = `<span><strong>${TOOLDOC[k][0]}</strong> | ${TOOLDOC[k][1]}</span>`;
   const op = $('.op', art);
   if (op) op.insertAdjacentHTML('afterend', '<div class="pauta" aria-hidden="true"></div>' + (meta ? `<p class="fmeta">${meta}</p>` : ''));
   buildRail($('.rail', FIN), art, k);
 }
 
-function capaHTML() {
-  const docs = WH.filter((m) => m.tipo === 'documento');
-  const mans = WH.filter((m) => m.tipo === 'manual');
-  const li = (m, q) => `<li><a href="#${m.id}"><span class="tk${m.tipo === 'anexo' ? ' p' : ''}" aria-hidden="true"></span><span class="nm">${m.tipo === 'manual' ? m.curto + ' ' : ''}${esc(m.nome)}</span><span class="q">${esc(q)}</span></a></li>`;
-  const passos = ['Identificar classe, objeto, rito e questões relevantes', 'Examinar a admissibilidade, com a base temporal quando necessária', 'Localizar fundamentos e referências, confrontando-os com o caso', 'Definir o resultado antes de selecionar os blocos do Template'];
-  return `<div class="capa">
-    <div class="capa-cab"><span>Anexo ao Volume 04 | Guia de Estilo</span><span>Turma Recursal do TJPR</span></div>
-    <h1 class="capa-t">Playbook de Elaboração de Votos</h1>
-    <p class="capa-para">para <em>Recurso Inominado</em> e <em>Embargos de Declaração</em></p>
-    <p class="capa-dica">Cada tecla abre um material nesta folha; as ferramentas calculam e buscam ao lado.</p>
-    <h2 class="compassos-t">Ordem de utilização</h2>
-    <ol class="compassos">${passos.map((t, i) => `<li class="compasso"><span class="nota" aria-hidden="true">${['I', 'II', 'III', 'IV'][i]}</span><p>${t}</p></li>`).join('')}</ol>
-    <div class="indice">
-      <section><h2>Documentos</h2><ul>${docs.map((m) => li(m, m.camada)).join('')}</ul></section>
-      <section><h2>Manuais da coleção</h2><ul>${mans.map((m) => li(m, m.paginas + ' p.')).join('')}</ul></section>
-      <section><h2>Anexos em PDF</h2><ul>${BK.map((m) => li(m, m.paginas + ' p.')).join('')}</ul></section>
-    </div>
-    <p class="capa-nota"><strong>Antes de usar.</strong> A página localiza e calcula; não decide. Gatilho não demonstra incidência, ementa-base não é ementa final e a contagem vale para o regime cível em dias úteis, com a base de 2026 e a referência territorial de Curitiba.</p>
-  </div>`;
-}
-
 function fichaHTML(m) {
   const url = AS + m.arquivo; const arq = m.arquivo.split('/').pop();
   let rel = '';
-  if (m.le) rel = `<p class="fpdf-rel">Versão diagramada do documento que se lê na folha: <a href="#${m.le}">${esc(MBY[m.le].nome)}</a>.</p>`;
+  if (m.le) rel = `<p class="fpdf-rel">Versão diagramada do documento que se lê na tela: <a href="#${m.le}">${esc(MBY[m.le].nome)}</a>.</p>`;
   else if (m.ferramenta === 'templates') rel = '<p class="fpdf-rel">Os seis modelos também se montam no <a href="#templates">montador de Templates</a>, em tela inteira.</p>';
   return `<div class="fpdf">
     <a class="fpdf-capa" href="${url}" target="_blank" rel="noopener" aria-label="Abrir o PDF ${esc(m.nome)} em nova aba"><img src="${AS + m.capa}" width="560" height="793" alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></a>
     <div class="fpdf-txt">
       <h1 class="ft">${esc(m.nome)}</h1>
-      ${m.tipo === 'manual' ? `<p class="fpdf-sub"><strong>${m.volume}</strong> · ${esc(m.sub)}</p>` : `<p class="fpdf-lead">${esc(m.lead)}</p>`}
+      ${m.tipo === 'manual' ? `<p class="fpdf-sub"><strong>${m.volume}</strong> | ${esc(m.sub)}</p>` : `<p class="fpdf-lead">${esc(m.lead)}</p>`}
       <div class="pauta" aria-hidden="true"></div>
       <div class="deft narrow">
         <div class="row"><div class="dt">Natureza</div><div class="dd">${m.tipo === 'manual' ? 'Manual da coleção da Turma Recursal do TJPR' : 'Anexo do Playbook, camada ' + esc(m.camada)}</div></div>
@@ -417,75 +449,17 @@ function fichaHTML(m) {
   </div>`;
 }
 
-/* =====================================================================
-   FERRAMENTAS: gadgets, gaveta (mobile) e largura
-   ===================================================================== */
-const FERR = $('#ferr');
-const GADS = ['calendario', 'fundamentos', 'ementario'];
-let gAberto = null;
-let gavetaVolta = null;
+/* Ferramentas: Calendário, Fundamentos e Ementário abrem no mesmo painel. */
 function gstat(id, t) { $('#gs-' + id).textContent = t; }
-function abreGadget(id, opts) {
-  const o = opts || {};
-  GADS.forEach((g) => {
-    const on = g === id;
-    $('#g-' + g).classList.toggle('aberto', on);
-    $('#gh-' + g).setAttribute('aria-expanded', String(on));
-    $('#gb-' + g).hidden = !on;
-  });
-  gAberto = id;
-  FERR.classList.add('tem-aberto');
+function abreGadget(id) {
+  mostraFerr(id);
+  abreParte();
+  if (cur.key !== 'ferr:' + id) { cur.key = 'ferr:' + id; FOLHA.scrollTop = 0; }
+  if (folhaIO) { folhaIO.disconnect(); folhaIO = null; }
   if (id === 'fundamentos' && !inited.fun) initFun();
   if (id === 'ementario' && !inited.eme) initEme();
-  if (isMob() && o.gaveta !== false) abreGaveta();
-  $$('.barra [data-g]').forEach((b) => b.setAttribute('aria-expanded', String(isMob() && FERR.classList.contains('gaveta') && b.dataset.g === id)));
+  situa('ferr:' + id);
 }
-function fechaGadgets() {
-  GADS.forEach((g) => { $('#g-' + g).classList.remove('aberto'); $('#gh-' + g).setAttribute('aria-expanded', 'false'); $('#gb-' + g).hidden = true; });
-  gAberto = null;
-  FERR.classList.remove('tem-aberto');
-}
-function abreGaveta() {
-  if (FERR.classList.contains('gaveta')) return;
-  if (!gavetaVolta) gavetaVolta = document.activeElement;
-  FERR.classList.add('gaveta'); $('#veu').hidden = false;
-  setTimeout(() => $('#ferr-x').focus(), 60);
-}
-function fechaGaveta() {
-  if (!FERR.classList.contains('gaveta')) return;
-  FERR.classList.remove('gaveta'); $('#veu').hidden = true;
-  $$('.barra [data-g]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
-  const v = gavetaVolta; gavetaVolta = null;
-  if (v && v.focus && document.contains(v)) v.focus();
-}
-$$('.gh').forEach((b) => b.addEventListener('click', () => {
-  const id = b.id.slice(3);
-  if (gAberto === id && !isMob()) fechaGadgets(); else abreGadget(id);
-}));
-$$('.barra [data-g]').forEach((b) => b.addEventListener('click', () => { gavetaVolta = b; abreGadget(b.dataset.g); }));
-$('#ferr-x').addEventListener('click', fechaGaveta);
-$('#veu').addEventListener('click', fechaGaveta);
-
-const ARR = $('#ferr-arraste');
-function setFerrW(w, salvar) {
-  const max = Math.min(560, Math.round(window.innerWidth * 0.44));
-  const v = Math.max(340, Math.min(max, Math.round(w)));
-  document.documentElement.style.setProperty('--ferr-w', v + 'px');
-  ARR.setAttribute('aria-valuenow', String(v));
-  if (salvar) store.set('atril.ferr', String(v));
-}
-ARR.addEventListener('pointerdown', (e) => {
-  if (isMob()) return;
-  e.preventDefault(); ARR.setPointerCapture(e.pointerId); ARR.classList.add('ativo');
-  const dir = FERR.getBoundingClientRect().right;
-  const mv = (ev) => setFerrW(dir - ev.clientX - 10);
-  const up = () => { ARR.classList.remove('ativo'); ARR.removeEventListener('pointermove', mv); ARR.removeEventListener('pointerup', up); setFerrW(FERR.offsetWidth, true); };
-  ARR.addEventListener('pointermove', mv); ARR.addEventListener('pointerup', up);
-});
-ARR.addEventListener('keydown', (e) => {
-  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-  e.preventDefault(); setFerrW(FERR.offsetWidth + (e.key === 'ArrowLeft' ? 20 : -20), true);
-});
 
 /* =====================================================================
    CAMADA DE TEMPLATES (tela inteira)
@@ -496,7 +470,6 @@ let ultimaFolha = '';
 function abreCamada(sub) {
   if (CAM.hidden) {
     camVolta = document.activeElement;
-    fechaGaveta();
     CAM.hidden = false; document.body.classList.add('com-camada');
     if (!inited.tpl) { inited.tpl = true; initTpl(); }
     setTimeout(() => $('#camada-x').focus(), 40);
@@ -526,7 +499,7 @@ CAM.addEventListener('keydown', (e) => {
 
 /* =====================================================================
    ROTEAMENTO
-   O hash diz o que está na folha; ferramentas abrem ao lado sem trocá-la.
+   Sem hash, a partitura. Com hash, o material abre sobre ela.
    ===================================================================== */
 function setTabs(tabsEl, prefix, tab) {
   $$('button', tabsEl).forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
@@ -547,31 +520,31 @@ function lazyDocs(scope) { $$('[data-doc]', scope).forEach((el) => { if (el.tagN
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
   const parts = h.split('/'); const v = parts[0]; const sub = parts.slice(1).join('/') || null;
-  if (v === 'templates') { abreCamada(sub); ensureSheet(); return; }
+  if (v === 'templates') { abreCamada(sub); return; }
   fechaCamada(true);
   ultimaFolha = h;
   if (v === 'calendario') {
     if (sub === 'ano') { showSheet('cal-ano'); return; }
     if (sub) { showSheet('doc:calendario-base', sub === 'base' ? null : sub); return; }
-    abreGadget('calendario'); ensureSheet(); return;
+    abreGadget('calendario'); return;
   }
   if (v === 'fundamentos') {
     if (sub === 'regra' || (sub && sub.startsWith('fundamentos-'))) { showSheet('doc:fundamentos-regra', sub === 'regra' ? null : sub); return; }
-    abreGadget('fundamentos'); if (sub) funSelect(sub); ensureSheet(); return;
+    abreGadget('fundamentos'); if (sub) funSelect(sub); return;
   }
   if (v === 'ementario') {
     if (sub === 'regra' || (sub && sub.startsWith('ementario-'))) { showSheet('doc:ementario-regra', sub === 'regra' ? null : sub); return; }
-    abreGadget('ementario'); if (sub) emeSelect(sub); ensureSheet(); return;
+    abreGadget('ementario'); if (sub) emeSelect(sub); return;
   }
-  if (MBY[v]) { fechaGaveta(); showSheet(v, sub); return; }
-  showSheet('inicio');
+  if (MBY[v]) { showSheet(v, sub); return; }
+  fechaParte();
 }
 function navigate(href) {
   if (location.hash === href) route(); else location.hash = href;
 }
-$('.salto').addEventListener('click', (e) => { e.preventDefault(); FOLHA.focus(); });
+$('.salto').addEventListener('click', (e) => { e.preventDefault(); SIS.focus(); });
 
-/* Ações dos registros (gadget e folha) */
+/* Ações dos registros */
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const a = b.dataset.act; const id = b.dataset.id;
@@ -581,14 +554,13 @@ document.addEventListener('click', (e) => {
   else if (a === 'f-lk') copy(BASE + '#fundamentos/' + id, 'Link do registro copiado.');
   else if (a === 'f-em') {
     const f = FBY[id]; es.q = fs.q.trim() || f.t.replace(/\s*\(.*\)\s*$/, ''); es.cur = null;
-    abreGadget('ementario'); $('#e-q').value = es.q; setEmeView('list'); renderEmeLeft();
-  } else if (a === 'f-folha') { fechaGaveta(); showSheet('fun:' + id); }
-  else if (a === 'e-cp') copy(EBY[id].eb, 'Ementa-base copiada. Preencha as lacunas conforme o Guia.');
+    history.replaceState(null, '', '#ementario'); abreGadget('ementario'); $('#e-q').value = es.q; setEmeView('list'); renderEmeLeft();
+  } else if (a === 'e-cp') copy(EBY[id].eb, 'Ementa-base copiada. Preencha as lacunas conforme o Guia.');
   else if (a === 'e-lk') copy(BASE + '#ementario/' + id, 'Link do registro copiado.');
   else if (a === 'e-fn') {
     const en = EBY[id]; fs.q = es.q.trim() || en.d; fs.cur = null; fs.cat = 'all';
-    abreGadget('fundamentos'); $('#f-q').value = fs.q; setFunView('list'); renderFunList();
-  } else if (a === 'e-folha') { fechaGaveta(); showSheet('eme:' + id); }
+    history.replaceState(null, '', '#fundamentos'); abreGadget('fundamentos'); $('#f-q').value = fs.q; setFunView('list'); renderFunList();
+  }
 });
 FIN.addEventListener('click', (e) => {
   const go = e.target.closest('[data-go]'); if (go) { showSheet('eme:' + go.dataset.go); return; }
@@ -741,7 +713,7 @@ function renderCal() {
     }
     const exTxt = r.ex.length ? 'Excluídos pela tabela: ' + r.ex.map((x) => `${br(x.d).slice(0, 5)} (${esc(x.why.split(';')[0].replace(/ \(.*\)$/, ''))})`).join(', ') + ', além dos fins de semana.' : 'Sem feriados ou suspensões no intervalo; excluídos apenas os fins de semana.';
     const count = {}; r.rows.forEach((x) => { if (x.cls === 'c' || x.cls === 'due') count[iso(x.d)] = x.k; });
-    res.innerHTML = `<div class="dark"><p class="big"><span class="pre">Vence em</span> ${r.due.getDate()} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</p><p class="sub">${cap(WDL[r.due.getDay()])}, ${cs.n}º dia útil${r.pub ? `, publicação em ${br(r.pub)}` : ''}</p></div>`;
+    res.innerHTML = `<div class="dark"><p class="big"><span class="pre">Vence em</span> <span class="dt">${r.due.getDate()} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</span></p><p class="sub">${cap(WDL[r.due.getDay()])}, ${cs.n}º dia útil${r.pub ? `, publicação em ${br(r.pub)}` : ''}</p></div>`;
     out.innerHTML = `
       <p class="gtxt">Início da contagem em <strong>${br(r.first)}</strong>. ${exTxt}</p>
       ${warns.join('')}
@@ -772,7 +744,7 @@ let calYear = 2026;
 function anoHTML() {
   return `<div class="ffer">
     <h1 class="ft">Calendário Jurídico</h1>
-    <p class="fmeta"><span><strong>Calendário</strong> · tabela anual, cível em dias úteis</span><span>Decreto Judiciário nº 621/2025 · Curitiba · art. 224 do CPC</span></p>
+    <p class="fmeta"><span><strong>Calendário</strong> | tabela anual, cível em dias úteis</span><span>Decreto Judiciário nº 621/2025 | Curitiba | art. 224 do CPC</span></p>
     <div class="pauta" aria-hidden="true"></div>
     <div class="anobar"><div class="segc" role="group" aria-label="Ano" id="c-anos"><button type="button" data-y="2026" aria-pressed="true">2026 | ativo</button><button type="button" data-y="2025" aria-pressed="false">2025 | histórico</button></div>
     <div class="legend"><span><i style="background: var(--support);"></i>Excluído (feriado, recesso, suspensão)</span><span><i style="background: var(--paper); box-shadow: inset 0 0 0 1px var(--rule);"></i>Computável</span><span><i style="box-shadow: inset 0 0 0 1px #707070;"></i>Fim de semana</span></div></div>
@@ -1000,7 +972,6 @@ function funDetailHTML(f, P, folha) {
       <button type="button" class="btn pri" data-act="f-cp" data-id="${f.id}">Copiar formulação</button>
       <button type="button" class="btn ghost" data-act="f-lk" data-id="${f.id}">Copiar link</button>
       <button type="button" class="btn ghost" data-act="f-em" data-id="${f.id}">Buscar no Ementário</button>
-      ${folha ? '' : `<button type="button" class="btn ghost" data-act="f-folha" data-id="${f.id}">Abrir na folha</button>`}
     </div>`;
 }
 function funDetail(id, P) {
@@ -1023,7 +994,7 @@ function initFun() {
   $('#f-list').addEventListener('click', (e) => {
     const b = e.target.closest('[data-id]'); if (!b) return;
     setFunView('det'); funDetail(b.dataset.id);
-    $('#gb-fundamentos').scrollTop = 0; $('#f-det .gvolta').focus();
+    FOLHA.scrollTop = 0; $('#f-det .gvolta').focus();
   });
   setFunView('list'); renderFunList();
 }
@@ -1109,7 +1080,6 @@ function emeDetailHTML(e, P, folha) {
       <button type="button" class="btn pri" data-act="e-cp" data-id="${e.c}">Copiar ementa-base</button>
       <button type="button" class="btn ghost" data-act="e-lk" data-id="${e.c}">Copiar link</button>
       <button type="button" class="btn ghost" data-act="e-fn" data-id="${e.c}">Buscar nos Fundamentos</button>
-      ${folha ? '' : `<button type="button" class="btn ghost" data-act="e-folha" data-id="${e.c}">Abrir na folha</button>`}
     </div>`;
 }
 function emeDetail(c, P) {
@@ -1123,7 +1093,7 @@ function emeSelect(c) {
   if (!SCOPE.has(e.r)) es.sc = 'a';
   es.open.add('R:' + e.r); e._p.forEach((x) => es.open.add(x.c));
   es.cur = c; setEmeView('det'); renderEmeLeft(); emeDetail(c);
-  $('#gb-ementario').scrollTop = 0;
+  FOLHA.scrollTop = 0;
 }
 let eTimer;
 function initEme() {
@@ -1140,7 +1110,7 @@ function initEme() {
     const go = ev.target.closest('[data-go]');
     if (go) { emeSelect(go.dataset.go); return; }
     const n = ev.target.closest('[data-c]');
-    if (n) { setEmeView('det'); emeDetail(n.dataset.c); $('#gb-ementario').scrollTop = 0; $('#e-det .gvolta').focus(); }
+    if (n) { setEmeView('det'); emeDetail(n.dataset.c); FOLHA.scrollTop = 0; $('#e-det .gvolta').focus(); }
   });
   setEmeView('list'); renderEmeLeft();
 }
@@ -1183,13 +1153,13 @@ function runSearch() {
   $('#sf').innerHTML = [['all', 'Tudo', total]].concat(keys.map((k) => [k, k, out[k].length])).map(([k, l, n]) => `<button type="button" data-f="${k}" aria-pressed="${sfilter === k}">${l}${P.terms.length ? ' ' + n : ''}</button>`).join('');
   $('#ssyn').innerHTML = P.syn.length ? 'Também: ' + P.syn.slice(0, 4).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const L = $('#sl');
-  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ATRIL: seções dos documentos, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
+  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ÁTRIL: seções dos documentos, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
   if (!total) { L.innerHTML = '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
   L.innerHTML = keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');
   ssel = 0; markSel();
 }
 function markSel() { const rs = $$('#sl .res'); rs.forEach((r, i) => r.classList.toggle('sel', i === ssel)); if (rs[ssel]) rs[ssel].scrollIntoView({ block: 'nearest' }); }
-function openSearch(q) { fechaGaveta(); $('#sov').hidden = false; const i = $('#sq'); if (q != null) i.value = q; i.focus(); i.select(); runSearch(); }
+function openSearch(q) { $('#sov').hidden = false; const i = $('#sq'); if (q != null) i.value = q; i.focus(); i.select(); runSearch(); }
 function closeSearch(semFoco) { $('#sov').hidden = true; if (!semFoco) $('#searchbtn').focus(); }
 let sTimer;
 $('#searchbtn').addEventListener('click', () => openSearch());
@@ -1212,7 +1182,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (!$('#sov').hidden) { closeSearch(); return; }
     if (!CAM.hidden) { fechaCamada(); return; }
-    if (FERR.classList.contains('gaveta')) { fechaGaveta(); return; }
+    if (PARTE.classList.contains('on')) { sai(); return; }
   }
   if (e.key === '/' && $('#sov').hidden && CAM.hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { e.preventDefault(); openSearch(); }
 });
@@ -1220,21 +1190,15 @@ document.addEventListener('keydown', (e) => {
 /* =====================================================================
    INÍCIO
    ===================================================================== */
-buildKeys();
-const wSalvo = parseInt(store.get('atril.ferr'), 10);
-if (wSalvo) setFerrW(wSalvo);
-if (store.get('atril.kb') === 'min' || window.innerHeight < 560) setKbMin(true);
-if ('ResizeObserver' in window) new ResizeObserver(() => layout()).observe(KB);
-else window.addEventListener('resize', layout);
-window.addEventListener('resize', () => leitura(foco));
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => layout());
-MQ.addEventListener('change', () => { fechaGaveta(); layout(); if (!isMob() && !gAberto) abreGadget('calendario', { gaveta: false }); });
+montaPartitura();
+desenha();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha);
+if ('ResizeObserver' in window) new ResizeObserver(() => desenha()).observe(SIS);
+else window.addEventListener('resize', desenha);
 initCal();
 gstat('fundamentos', `${FUN.length} registros em ${FCATS} categorias`);
 gstat('ementario', `${EME.length.toLocaleString('pt-BR')} registros, ${ENSC.toLocaleString('pt-BR')} no escopo do Guia`);
-if (!isMob()) abreGadget('calendario', { gaveta: false });
 window.addEventListener('hashchange', route);
-layout();
 route();
-arpejo();
+setTimeout(gesto, 900);
 })();
