@@ -38,7 +38,7 @@ O ÁTRIL publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia d
 
 - Nome da página: ÁTRIL, com acento, por decisão do autor (08/10/2026); arquivo `atril.html`. Subtítulo: "Playbook da metodologia ECHO" (ECHO leva a `arco.html#echo`, a página-mãe); descrição: "Manuais, SOPs e instrumentos para gabinete judicial". Os PDFs seguem intitulados "Playbook de Elaboração de Votos".
 - Paleta fechada: #181818 tinta, #FFB627 apoio, #FCFCFC papel, #C84D00 acento. Na camada web, o âmbar é a luz única e o latão #8A6620 (âmbar com tinta) faz a marcação de texto; o #C84D00 fica na coleção impressa. Tints e cinzas só por mistura dessas cores com o papel.
-- Sem barra superior nem wordmark: a entrada é a folha de rosto. A autoria vem assinada como no ARCO (símbolo em #FFB627, miolo vazado, e o nome em Restart Ginger, levando a `arco.html`). A camada web usa Bodoni Moda, Commissioner e Azeret Mono, as duas últimas herdadas do ECHO.
+- Sem barra superior nem wordmark: a entrada é a folha de rosto. A autoria aparece no fim do texto de apresentação ("Autoria de Christian da Costa, advogado (OAB-PR 89.297) e Mestre em Direito (UFPR).") e vem assinada no pé como no ARCO (símbolo em #FFB627, miolo vazado, e o nome em Restart Ginger, levando a `arco.html`), ao lado da epígrafe do ECHO. A camada web usa Bodoni Moda, Commissioner e Azeret Mono, as duas últimas herdadas do ECHO.
 - Google Analytics (G-GD0Q3Z4KQ9) no `<head>`, como em arco, echo, atrio e data.
 - Parentesco visível com o ECHO: a epígrafe "Harmonia é coordenação de diferenças", o marca-texto âmbar e a família tipográfica.
 

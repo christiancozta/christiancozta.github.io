@@ -162,7 +162,7 @@ O mundo tem um material, o papel #FCFCFC, e uma luz, o âmbar #FFB627. A tinta e
 A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 
 ### Luz
-- **Âmbar** (#FFB627): símbolo da assinatura (o miolo continua vazado); marca-texto do nome da voz aberta ou sob o cursor, da epígrafe, do nome do autor e do link ECHO no hover, e do vencimento; fundo da marca de ensaio ativa; batuta; dias excluídos no calendário; bolha das pílulas no hover; botão primário no hover; fio do topo da busca; seleção de texto.
+- **Âmbar** (#FFB627): símbolo da assinatura no pé (o miolo continua vazado); marca-texto do nome da voz aberta ou sob o cursor, da epígrafe, do nome do autor e do link ECHO no hover, e do vencimento; fundo da marca de ensaio ativa; batuta; dias excluídos no calendário; bolha das pílulas no hover; botão primário no hover; fio do topo da busca; seleção de texto.
 - **Luz de coluna** (âmbar a 16%): faixa do compasso em foco.
 
 ### Marcação
@@ -189,10 +189,10 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 **Títulos e nomes:** Bodoni Moda (opsz 96 nos tamanhos de título).
 **Texto:** Commissioner.
 **Indicações e códigos:** Azeret Mono, caixa alta espaçada nas indicações.
-**Assinatura:** ARCO Restart Ginger 600, só no nome do autor, na coluna esquerda da folha de rosto (a mesma face e o mesmo símbolo do ARCO).
+**Assinatura:** ARCO Restart Ginger 600, só no nome do autor, no pé da página (a mesma face e o mesmo símbolo do ARCO).
 
 ### Hierarchy
-- **Título** (Bodoni 400, clamp(52px, 6.6vw, 108px), 0,86, +0,015em): ÁTRIL, centrado na folha de rosto.
+- **Título** (Bodoni 400, clamp(60px, 8vw, 132px), 0,86, +0,1em): ÁTRIL, centrado na folha de rosto. O espacejamento largo é obrigatório: abaixo dele as serifas de fio do Bodoni (opsz 96) se emendam e desenham um filete na base e no topo da palavra. O topo do acento fica na mesma linha do primeiro texto das colunas laterais.
 - **Subtítulo** (Bodoni itálico 400, clamp(17px, 1.6vw, 24px)): "Playbook da metodologia ECHO", com ECHO levando à página-mãe (arco.html#echo).
 - **Descrição** (indicação, 9,5px): "Manuais, SOPs e instrumentos para gabinete judicial", sob o subtítulo; nas ferramentas, a mesma linha diz o que cada uma é ("Ferramenta | gatilhos, requisitos e limites").
 - **Folha** (Bodoni 400, clamp(32px, 3.6vw, 50px), 1, −0,02em): título de documento, ferramenta, ficha de PDF, montador. O lead vem em Bodoni itálico 18px, grafite.
@@ -212,14 +212,15 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 A página rola e tem largura máxima de 1560px, com margem lateral clamp(16px, 4.4vw, 72px).
 
 - **Entrada limpa:** sem barra superior nem fio; a página abre direto na folha de rosto.
-- **Folha de rosto:** grade de três colunas (minmax(190px, 1fr), 3,2fr, minmax(190px, 1fr)). À esquerda, de cima para baixo: o texto de apresentação ("Showcase do acervo instrumental da metodologia de operações jurídicas ECHO, instalada em gabinete judicial do Tribunal de Justiça do Estado do Paraná."), "Autoria:" e a assinatura centrada (símbolo âmbar de 30px, nome em Restart Ginger, "LAW | OPS | TECH | AI" em indicação), que leva ao ARCO; a epígrafe "Harmonia é coordenação de diferenças."; e os comandos: a pílula redonda do som (só o símbolo musical) e, ao lado, Buscar. No centro, título, subtítulo e descrição. À direita, alinhadas à direita e sem fio no topo, as anotações: Índice e Arquitetura ("Identidade, camadas e componentes") e Memória de Integração ("Fontes, decisões, correções e limites"), cada uma com "ver | baixar".
-- **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho traz a indicação "Ordem de utilização" e, sobre cada compasso, a marca de ensaio seguida do passo e do seu texto, que continua o título: "I Identificação para classe, objeto, rito e questões relevantes." Texto em Commissioner 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
+- **Folha de rosto:** grade de três colunas (minmax(190px, 1fr), 3,2fr, minmax(190px, 1fr)), as três começando na mesma linha. À esquerda, o texto de apresentação em Commissioner 11px, no corpo das legendas das anotações ("Showcase do acervo instrumental da metodologia de operações jurídicas ECHO, instalada em gabinete judicial do Tribunal de Justiça do Estado do Paraná. Autoria de Christian da Costa, advogado (OAB-PR 89.297) e Mestre em Direito (UFPR).") e os comandos: a pílula redonda do som (só o símbolo musical) e, ao lado, Buscar. No centro, título, subtítulo e descrição. À direita, alinhadas à direita e sem fio no topo, as anotações: Índice e Arquitetura ("Identidade, camadas e componentes") e Memória de Integração ("Fontes, decisões, correções e limites"), cada uma com "ver | baixar".
+- **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho traz a indicação "Ordem de utilização" e, sobre cada compasso, a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Commissioner 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
+- **Pé:** sobre fio, a epígrafe "Harmonia é coordenação de diferenças." em Bodoni itálico à esquerda e, à direita, a assinatura: símbolo âmbar de 36px ao lado do nome em Restart Ginger e de "LAW | OPS | TECH | AI" em indicação, levando ao ARCO. Até 980px, os dois se empilham ao centro.
 - **Naipes, nesta ordem:** Coleção (chaveta de piano: volumes 01 a 03 *ad lib.* e o Guia de Estilo, sustentado de IV até a coda), Governança (colchete: Regras de Aplicação em pedal nos cinco compassos, Critérios Operacionais na coda) e Ferramenta (colchete: Calendário Jurídico em II, Fundamentos e Ementário em III, Templates em IV).
 - **Parte:** painel fixo à direita, min(1040px, 92vw), com cabeçalho (rótulo "Naipe | Material" e pílula "Voltar à partitura") e corpo rolável. Documentos levam o trilho "Nesta folha" (210px) acima de 1180px.
 
 Comportamento por largura:
 - **Até 1180px:** o trilho "Nesta folha" some.
-- **Até 980px:** a folha de rosto vira uma coluna centrada (título; apresentação, assinatura, epígrafe e comandos; anotações); a coluna "ver | baixar" some da partitura.
+- **Até 980px:** a folha de rosto vira uma coluna centrada (título; apresentação e comandos; anotações); a coluna "ver | baixar" some da partitura.
 - **Até 700px:** o nome da voz sobe para cima da pauta; o texto da ordem vira lista de uma coluna; a parte ocupa a largura inteira; coluna em foco e batuta somem; o leitor de PDF mostra uma página por vez.
 
 ### Named Rules
