@@ -1,26 +1,26 @@
-"""Monta a página do Playbook a partir da fonte canônica.
+"""Monta a página do ATRIL a partir da fonte canônica.
 
 Fonte canônica (editar aqui):
-  assets/playbook/fonte/componentes/*.html   textos dos componentes, já em marcação do sistema
-  assets/playbook/fonte/dados/*.txt          bases do Toolkit (Calendário, Fundamentos, Ementário, Templates)
-  assets/playbook/fonte/build/css/*.css      sistema visual (família, componentes, interface)
-  assets/playbook/fonte/build/interface.js   comportamento da página
-  assets/playbook/fonte/build/pagina.html    estrutura da página
+  assets/atril/fonte/componentes/*.html   textos dos componentes, já em marcação do sistema
+  assets/atril/fonte/dados/*.txt          bases do Toolkit (Calendário, Fundamentos, Ementário, Templates)
+  assets/atril/fonte/build/css/*.css      sistema visual (família, componentes, interface)
+  assets/atril/fonte/build/interface.js   comportamento da página
+  assets/atril/fonte/build/pagina.html    estrutura da página
 
 Build (gerado, não editar à mão):
-  playbook.html                              página publicada na raiz do site
-  assets/playbook/playbook.css               folhas de estilo concatenadas
-  assets/playbook/playbook.js                interface
-  assets/playbook/playbook-dados.js          textos e bases em JSON (window.PLAYBOOK)
+  atril.html                                 página publicada na raiz do site
+  assets/atril/atril.css                     folhas de estilo concatenadas
+  assets/atril/atril.js                      interface
+  assets/atril/atril-dados.js                textos e bases em JSON (window.ATRIL)
 
-Uso, na raiz do repositório:  python3 assets/playbook/fonte/build/build.py
+Uso, na raiz do repositório:  python3 assets/atril/fonte/build/build.py
 """
 import json
 import re
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[4]
-PB = RAIZ / 'assets' / 'playbook'
+PB = RAIZ / 'assets' / 'atril'
 FONTE = PB / 'fonte'
 BUILD = FONTE / 'build'
 DADOS = FONTE / 'dados'
@@ -125,12 +125,12 @@ def main():
     docs = {c: (FONTE / 'componentes' / f'{c}.html').read_text(encoding='utf-8') for c in COMPONENTES}
     data = {'cal': calendario(), 'fun': fundamentos(), 'eme': ementario(), 'tpl': templates()}
     payload = json.dumps({'docs': docs, 'data': data}, ensure_ascii=False, separators=(',', ':'))
-    (PB / 'playbook-dados.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\nwindow.PLAYBOOK = ' + payload + ';\n', encoding='utf-8')
+    (PB / 'atril-dados.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\nwindow.ATRIL = ' + payload + ';\n', encoding='utf-8')
     css = '\n'.join((BUILD / 'css' / n).read_text(encoding='utf-8') for n in ['familia.css', 'componentes.css', 'interface.css'])
-    (PB / 'playbook.css').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + css, encoding='utf-8')
-    (PB / 'playbook.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + (BUILD / 'interface.js').read_text(encoding='utf-8'), encoding='utf-8')
-    (RAIZ / 'playbook.html').write_text((BUILD / 'pagina.html').read_text(encoding='utf-8'), encoding='utf-8')
-    print(f"playbook.html | {len(data['fun'])} fundamentos | {len(data['eme'])} registros do Ementário | {len(data['cal'])} dias | {len(data['tpl'])} modelos")
+    (PB / 'atril.css').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + css, encoding='utf-8')
+    (PB / 'atril.js').write_text('/* Gerado por fonte/build/build.py. Não editar. */\n' + (BUILD / 'interface.js').read_text(encoding='utf-8'), encoding='utf-8')
+    (RAIZ / 'atril.html').write_text((BUILD / 'pagina.html').read_text(encoding='utf-8'), encoding='utf-8')
+    print(f"atril.html | {len(data['fun'])} fundamentos | {len(data['eme'])} registros do Ementário | {len(data['cal'])} dias | {len(data['tpl'])} modelos")
 
 
 if __name__ == '__main__':

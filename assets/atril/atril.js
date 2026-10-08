@@ -1,9 +1,10 @@
+/* Gerado por fonte/build/build.py. Não editar. */
 (() => {
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-const DOCS = window.PLAYBOOK.docs;
-const D = window.PLAYBOOK.data;
+const DOCS = window.ATRIL.docs;
+const D = window.ATRIL.data;
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const cap = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
@@ -158,7 +159,7 @@ function route() {
   if (current !== v) {
     $$('.view').forEach((s) => { s.hidden = s.id !== 'v-' + v; s.classList.toggle('cur', s.id === 'v-' + v); });
     $$('#nav a[data-v]').forEach((a) => { if (a.dataset.v === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); a.classList.toggle('on', a.dataset.v === v); });
-    document.title = (v === 'inicio' ? '' : TITLES[v] + ' | ') + 'Playbook de Elaboração de Votos';
+    document.title = (v === 'inicio' ? '' : TITLES[v] + ' | ') + 'ATRIL';
     if (!inited[v]) { inited[v] = true; init(v); }
     current = v;
     if (!sub) window.scrollTo(0, 0);
@@ -736,7 +737,7 @@ function runSearch() {
   $('#sf').innerHTML = [['all', 'Tudo', total]].concat(keys.map((k) => [k, k, out[k].length])).map(([k, l, n]) => `<button type="button" data-f="${k}" aria-pressed="${sfilter === k}">${l}${P.terms.length ? ' ' + n : ''}</button>`).join('');
   $('#ssyn').innerHTML = P.syn.length ? 'Também: ' + P.syn.slice(0, 4).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const L = $('#sl');
-  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o Playbook: seções dos componentes, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
+  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ATRIL: seções dos componentes, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
   if (!total) { L.innerHTML = '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
   L.innerHTML = keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');
   ssel = 0; markSel();
