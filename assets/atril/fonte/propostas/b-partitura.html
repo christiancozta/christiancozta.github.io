@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ÁTRIL · Partitura geral</title>
+<title>ÁTRIL | Playbook de elaboração de votos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Commissioner:wght@300;400;500;600&family=Zalando+Sans+Expanded:wght@700&display=swap" rel="stylesheet">
@@ -52,21 +52,20 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* folha de rosto da partitura */
 .rosto{display:grid;grid-template-columns:minmax(170px,1fr) minmax(0,3.4fr) minmax(170px,1fr);align-items:start;gap:24px;padding:clamp(28px,6vh,72px) 0 clamp(26px,4.5vh,48px);border-top:1px solid var(--tinta)}
-.rosto-e{font:500 10px/1.7 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
-.epigrafe{margin-top:22px;max-width:24ch;font:italic 400 16px/1.35 var(--serif);color:var(--tinta);text-transform:none;letter-spacing:0}
+.epigrafe{margin:0;max-width:24ch;font:italic 400 16px/1.35 var(--serif);color:var(--tinta)}
 .epigrafe mark{background:var(--ambar);color:inherit;padding:0 .12em}
-.epigrafe small{display:block;margin-top:8px;font:500 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--cinza)}
+.comandos{display:grid;gap:8px;width:min(100%,232px);margin-top:26px}
+.comandos .pil{justify-content:flex-start}
+.comandos .pil .t{margin-right:auto}
+@media (hover:none){.comandos kbd{display:none}}
 .titulo{text-align:center}
 .titulo h1{margin:0 auto;font:400 clamp(64px,9.6vw,156px)/.86 var(--serif);font-variation-settings:"opsz" 96;letter-spacing:.015em}
 .titulo .sub{margin:20px 0 0;font:italic 400 clamp(19px,2vw,30px)/1.2 var(--serif);color:var(--tinta)}
-.titulo .instr{margin:14px 0 0;font:500 9.5px/1.6 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
 .rosto-d{justify-self:end;width:min(100%,250px);text-align:right}
-.rosto-d .rot-a{display:block;margin-bottom:12px;font:500 10px/1.7 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
 .anot{list-style:none;margin:0;padding:0;border-top:1px solid var(--tinta)}
 .anot li{padding:12px 0 13px;border-bottom:1px solid var(--fio-2)}
 .anot .an{display:inline;font:italic 400 16px/1.25 var(--serif);transition:background .4s var(--mola)}
 .anot .an:hover,.anot .an:focus-visible,.anot .an[aria-current="page"]{background:linear-gradient(transparent 58%,var(--ambar) 58%,var(--ambar) 92%,transparent 92%)}
-.anot .an sup{font:500 8.5px/1 var(--mono);letter-spacing:.06em;color:var(--cinza);margin-right:5px;vertical-align:.5em}
 .anot p{margin:5px 0 6px;font:400 12.5px/1.45 var(--body);color:var(--grafite)}
 .anot .ab{display:inline-flex;align-items:center;gap:6px;font:400 10.5px/1 var(--mono);letter-spacing:.04em;color:var(--cinza);transition:color .4s var(--mola)}
 .anot .ab .ic{width:11px;height:11px}
@@ -193,12 +192,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   :root{--parte:0px}
   .voz .pt{display:none}
   .rosto{grid-template-columns:1fr;text-align:center}
-  .rosto-e,.rosto-d{text-align:center}.epigrafe{margin:18px auto 0}.rosto-d{justify-self:center;width:min(100%,360px)}
+  .rosto-e,.rosto-d{text-align:center}.epigrafe{margin:0 auto}.comandos{margin:22px auto 0}.rosto-d{justify-self:center;width:min(100%,360px)}
   .rosto-e{order:2}.titulo{order:1}.rosto-d{order:3}
 }
 @media (max-width:700px){
   :root{--nomes:0px;--chave:18px}
-  .pil .t,.pil kbd{display:none}.pil{padding:0 5px}
+  .parte-h .pil .t,.parte-h .pil kbd{display:none}.parte-h .pil{padding:0 5px}
   .voz{height:auto;grid-template-rows:auto 40px;padding-top:6px}
   .voz .nm{grid-column:2 / 4;grid-row:1;justify-self:start;padding:0 0 0 0;text-align:left}
   .voz .nm small{display:inline;margin-left:8px}
@@ -224,26 +223,25 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 <div class="pag">
   <header class="topo">
     <div style="display:flex;align-items:center;gap:18px"><a class="marca" href="#" aria-label="ÁTRIL, início">ÁTRIL</a><a class="volta" href="./"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6 9 12l6 6"/></svg>Propostas</a></div>
-    <div class="acoes">
-      <button class="pil" type="button" id="b-som" aria-pressed="false"><span class="t">Ouvir os compassos</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span></button>
-      <button class="pil" type="button" id="b-busca"><span class="t">Buscar</span><kbd>Ctrl K</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></span></button>
-      <a class="pil" href="https://christiancozta.github.io/arco.html#echo"><span class="t">ECHO</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
-    </div>
   </header>
 
   <section class="rosto">
-    <div class="rosto-e">Partitura geral
-      <p class="epigrafe">Harmonia é <mark>coordenação</mark> de diferenças.<small>ECHO · Acervo</small></p>
+    <div class="rosto-e">
+      <p class="epigrafe">Harmonia é <mark>coordenação</mark> de diferenças.</p>
+      <nav class="comandos" aria-label="Comandos">
+        <button class="pil" type="button" id="b-som" aria-pressed="false"><span class="t">Ouvir os compassos</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span></button>
+        <button class="pil" type="button" id="b-busca"><span class="t">Buscar</span><kbd>Ctrl K</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></span></button>
+        <a class="pil" href="https://christiancozta.github.io/arco.html#echo"><span class="t">ECHO</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+      </nav>
     </div>
     <div class="titulo">
       <h1>ÁTRIL</h1>
       <p class="sub">Playbook de elaboração de votos</p>
-      <p class="instr">para Recurso Inominado e Embargos de Declaração</p>
     </div>
-    <aside class="rosto-d" aria-label="Anotações"><span class="rot-a">Anotações</span><ol class="anot" id="anot"></ol></aside>
+    <aside class="rosto-d" aria-label="Anotações"><ol class="anot" id="anot"></ol></aside>
   </section>
 
-  <section class="sistema" id="sistema" aria-label="Partitura geral do acervo">
+  <section class="sistema" id="sistema" aria-label="Partitura do acervo">
     <div class="coluna" id="coluna" aria-hidden="true"></div>
     <div class="batuta" id="batuta" aria-hidden="true"></div>
     <div class="linha cab">
@@ -254,7 +252,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
     <div class="letra"><div class="linha"><div class="rot">Texto da ordem</div><div class="txt" id="letra"></div></div></div>
   </section>
 
-  <footer class="rodape"><span>Acervo do <b>ECHO</b> · Turma Recursal do TJPR</span><span><b>107</b> fundamentos · <b>2.758</b> assuntos · <b>730</b> dias de calendário · <b>6</b> modelos</span></footer>
+  <footer class="rodape"><span>Acervo do <b>ECHO</b> | Turma Recursal do TJPR</span><span><b>107</b> fundamentos | <b>2.758</b> assuntos | <b>730</b> dias de calendário | <b>6</b> modelos</span></footer>
 </div>
 
 <div class="veu" id="veu"></div>
@@ -278,7 +276,7 @@ var NAIPES=[
   {id:'vol-01',nome:'Notas Introdutórias',sub:'vol. 01',marca:'ad lib.',parte:'vol-01'},
   {id:'vol-02',nome:'Mapa Temático',sub:'vol. 02',marca:'ad lib.',parte:'vol-02'},
   {id:'vol-03',nome:'Afinação Processual',sub:'vol. 03',marca:'ad lib.',parte:'vol-03'},
-  {id:'guia',nome:'Guia de Estilo',sub:'vol. 04 · a forma',notas:[[4,23,'w'],[5,23,'w']],liga:[4,5],parte:'vol-04'}]},
+  {id:'guia',nome:'Guia de Estilo',sub:'vol. 04 | a forma',notas:[[4,23,'w'],[5,23,'w']],liga:[4,5],parte:'vol-04'}]},
  {n:'Governança',tipo:'colchete',vozes:[
   {id:'regras',nome:'Regras de Aplicação',sub:'coordena a ordem',notas:[[1,15.5],[2,15.5],[3,15.5],[4,15.5],[5,15.5]],parte:'pdf-regras'},
   {id:'criterios',nome:'Critérios Operacionais',sub:'ao final',notas:[[5,10.5]],parte:'pdf-criterios'}]},
@@ -290,6 +288,8 @@ var NAIPES=[
  ];
 /* Registro: fora do sistema, anotado à margem da folha de rosto. */
 var ANOT=[{id:'indice',parte:'pdf-indice'},{id:'memoria',parte:'pdf-memoria'}];
+P.indice=Object.assign({},P.indice,{lead:'Identidade, camadas e componentes'});
+P.memoria=Object.assign({},P.memoria,{lead:'Fontes, decisões, correções e limites'});
 var MARCAS=[['I','identificar'],['II','admissibilidade'],['III','fundamentos'],['IV','resultado'],['Coda','revisão']];
 var LETRA=A.passos.concat(['Ao final, aplicar os critérios operacionais e conferir a correspondência entre fundamentação, dispositivo e ementa.']);
 
@@ -300,13 +300,13 @@ $('#naipes').innerHTML=NAIPES.map(function(g){
   g.vozes.map(function(v){
     var p=v.parte?P[v.parte]:null;
     return '<div class="linha voz" data-id="'+v.id+'"><span></span><a class="nm" href="#'+v.id+'"><b>'+v.nome+'</b><small>'+v.sub+'</small></a><svg class="pauta" data-v="'+v.id+'" aria-hidden="true"></svg>'+
-      (p?'<a class="pt" href="'+p.url+'" target="_blank" rel="noopener" aria-label="Abrir '+v.nome+' em PDF, '+p.paginas+' páginas">abrir · '+p.paginas+' p. '+SETA+'</a>':'<span></span>')+'</div>';
+      (p?'<a class="pt" href="'+p.url+'" target="_blank" rel="noopener" aria-label="Abrir '+v.nome+' em PDF, '+p.paginas+' páginas">abrir | '+p.paginas+' p. '+SETA+'</a>':'<span></span>')+'</div>';
   }).join('')+'</div>';
 }).join('');
 var VOZ={}; NAIPES.forEach(function(g){g.vozes.forEach(function(v){v.naipe=g.n;VOZ[v.id]=v})});
 $('#anot').innerHTML=ANOT.map(function(a,i){var m=P[a.id],p=P[a.parte];
-  return '<li><a class="an" href="#'+a.id+'" data-id="'+a.id+'"><sup>'+(i+1)+'</sup>'+m.nome+'</a><p>'+m.lead+'</p>'+
-    '<a class="ab" href="'+p.url+'" target="_blank" rel="noopener" aria-label="Abrir '+m.nome+' em PDF, '+p.paginas+' páginas">abrir · '+p.paginas+' p. '+SETA+'</a></li>'}).join('');
+  return '<li><a class="an" href="#'+a.id+'" data-id="'+a.id+'">'+m.nome+'</a><p>'+m.lead+'</p>'+
+    '<a class="ab" href="'+p.url+'" target="_blank" rel="noopener" aria-label="Abrir '+m.nome+' em PDF, '+p.paginas+' páginas">abrir | '+p.paginas+' p. '+SETA+'</a></li>'}).join('');
 
 function desenha(){
   var svgs=document.querySelectorAll('svg.pauta');
@@ -392,10 +392,10 @@ function docHTML(m){
     return '<div class="sec"><h3>'+s[0]+'</h3><div class="princ">'+s[1].map(function(p){return '<div><b>'+p[0]+'</b><span>'+p[1]+'</span></div>'}).join('')+'</div></div>'}).join('')+'</div>';
   else corpo='<ol class="secoes">'+m.secoes.map(function(s){var k=s.indexOf('. ');return '<li><span>'+s.slice(0,k)+'</span>'+s.slice(k+2)+'</li>'}).join('')+'</ol>';
   return '<h2 class="p-t" id="p-t">'+m.nome+'</h2><p class="p-l">'+m.lead+'</p><div class="p-meta"><span>'+m.camada+'</span><span>'+m.secoes.length+' seções</span><span>05/10/2026</span></div><div class="regua"></div>'+corpo+
-  '<div class="botoes"><a class="cta" href="'+m.pdf.url+'" target="_blank" rel="noopener">Abrir o PDF · '+m.pdf.paginas+' p.<span class="b">'+SETA+'</span></a></div>';
+  '<div class="botoes"><a class="cta" href="'+m.pdf.url+'" target="_blank" rel="noopener">Abrir o PDF | '+m.pdf.paginas+' p.<span class="b">'+SETA+'</span></a></div>';
 }
 function volHTML(m){
-  return '<h2 class="p-t" id="p-t">'+m.nome+'</h2><p class="p-l">'+m.sub+'.</p><div class="p-meta"><span>Coleção da Turma Recursal</span><span>'+m.volume+'</span><span>PDF · '+m.paginas+' páginas</span></div><div class="regua"></div>'+
+  return '<h2 class="p-t" id="p-t">'+m.nome+'</h2><p class="p-l">'+m.sub+'.</p><div class="p-meta"><span>Coleção da Turma Recursal</span><span>'+m.volume+'</span><span>PDF | '+m.paginas+' páginas</span></div><div class="regua"></div>'+
   '<p class="nota" style="font-size:15px;color:var(--grafite)">Volume diagramado da coleção, para leitura contínua e impressão. Na partitura, os volumes tocam <i>ad libitum</i>: consultam-se a qualquer passo, fora da ordem.</p>'+
   '<div class="botoes"><a class="cta" href="'+m.url+'" target="_blank" rel="noopener">Abrir '+m.volume.toLowerCase()+'<span class="b">'+SETA+'</span></a>'+(m.le?'<a class="cta cl" href="#guia">Ler o Guia na tela<span class="b">'+SETA+'</span></a>':'')+'</div>';
 }
@@ -407,7 +407,7 @@ function ferrHTML(id){
   if(id==='fundamentos') return '<h2 class="p-t" id="p-t">Fundamentos</h2><p class="p-l">Repertório argumentativo com gatilhos, requisitos e limites.</p><div class="regua"></div>'+
     '<label class="busca"><input id="f-q" placeholder="negativação, voo, gratuidade" autocomplete="off" aria-label="Buscar fundamentos"><span id="f-ct"></span></label><ul class="lista" id="f-l"></ul>';
   if(id==='ementario') return '<h2 class="p-t" id="p-t">Ementário</h2><p class="p-l">Taxonomia, códigos, descrições e formulações de referência.</p><div class="regua"></div>'+
-    '<ul class="lista">'+A.ementario.map(function(e){return '<li><code>'+e.cod+'</code><div><b>'+e.desc+'</b><small>'+e.ramo+' · já abordado pela TR: '+e.tr+'</small></div></li>'}).join('')+'</ul><p class="nota">Amostra de 5 dos 2.758 registros neste protótipo.</p>';
+    '<ul class="lista">'+A.ementario.map(function(e){return '<li><code>'+e.cod+'</code><div><b>'+e.desc+'</b><small>'+e.ramo+' | já abordado pela TR: '+e.tr+'</small></div></li>'}).join('')+'</ul><p class="nota">Amostra de 5 dos 2.758 registros neste protótipo.</p>';
   return '<h2 class="p-t" id="p-t">Templates</h2><p class="p-l">Montador de minutas de RI e ED, com blocos condicionais e lacunas.</p><div class="regua"></div>'+
     '<ul class="lista">'+A.templates.map(function(t){return '<li><code>'+t[0].split('-')[0]+'</code><div><b>'+t[0]+'</b><small>'+t[1]+'</small></div></li>'}).join('')+'</ul><div class="botoes"><span class="cta">Abrir o montador<span class="b">'+SETA+'</span></span></div>';
 }
@@ -430,7 +430,7 @@ function abre(id){
   var v=VOZ[id], m=P[id];
   if(!v&&!m){fecha();return}
   document.querySelectorAll('.voz,.an').forEach(function(el){el.toggleAttribute('aria-current',el.dataset.id===id)});
-  $('#parte-r').textContent=v&&v.ferr?'Ferramenta · '+v.nome:v?v.naipe+' · '+v.nome:'Anotação · '+m.nome;
+  $('#parte-r').textContent=v&&v.ferr?'Ferramenta | '+v.nome:v?v.naipe+' | '+v.nome:'Anotação | '+m.nome;
   pc.innerHTML=v&&v.ferr?ferrHTML(id):m.tipo==='manual'?volHTML(m):docHTML(m);
   liga(id); pc.scrollTop=0;
   parte.classList.add('on'); parte.setAttribute('aria-hidden','false'); veu.classList.add('on');
