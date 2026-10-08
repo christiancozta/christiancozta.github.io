@@ -81,24 +81,15 @@ input, textarea { caret-color: var(--tinta); }
 
 .rosto { display: grid; grid-template-columns: minmax(190px, 1fr) minmax(0, 3.2fr) minmax(190px, 1fr); align-items: start; gap: 32px; padding: clamp(44px, 8vh, 96px) 0 clamp(32px, 5.5vh, 64px); }
 .rosto-e { width: min(100%, 240px); }
-.showcase { font: 400 12.5px/1.55 var(--f-text); color: var(--grafite); hyphens: auto; -webkit-hyphens: auto; }
-.autoria { margin-top: 18px; }
-.autoria-r { display: block; font: 400 12.5px/1.4 var(--f-text); color: var(--grafite); }
-.assina { display: flex; flex-direction: column; align-items: center; gap: 9px; margin-top: 16px; text-align: center; text-decoration: none; color: var(--tinta); }
-.assina-marca { width: 30px; height: 30px; color: var(--ambar); transition: transform .6s var(--mola); }
-.assina-nome { font: 600 21px/1.05 'ARCO Restart Ginger', var(--f-text); letter-spacing: -.03em; font-synthesis: none; transition: background .4s var(--mola); }
-.assina-tag { font: 500 9px/1 var(--mono); letter-spacing: .2em; color: var(--cinza); }
-.assina-tag i { font-style: normal; margin: 0 .35em; color: var(--fio); }
-.assina:hover .assina-marca { transform: rotate(90deg); }
-.assina:hover .assina-nome, .assina:focus-visible .assina-nome { background: linear-gradient(transparent 60%, var(--ambar) 60%, var(--ambar) 92%, transparent 92%); }
-.epigrafe { margin-top: 28px; max-width: 24ch; font: italic 400 16px/1.35 var(--serif); }
-.epigrafe mark { background: var(--ambar); color: inherit; padding: 0 .12em; }
+.showcase { font: 400 11px/1.4 var(--f-text); color: var(--grafite); hyphens: auto; -webkit-hyphens: auto; }
 .comandos { display: flex; gap: 8px; margin-top: 18px; }
 .comandos .busca { flex: 1; }
 .comandos .pil .t { margin-right: auto; }
 @media (hover: none) { .comandos kbd { display: none; } }
-.titulo { align-self: center; text-align: center; }
-.titulo h1 { font: 400 clamp(52px, 6.6vw, 108px)/.86 var(--serif); font-variation-settings: "opsz" 96; letter-spacing: .015em; }
+.titulo { text-align: center; }
+/* As serifas de fio do Bodoni se emendavam numa linha só na base e no topo das letras;
+   o espacejamento as separa. A entrelinha curta põe o topo do acento na linha das colunas. */
+.titulo h1 { font: 400 clamp(60px, 8vw, 132px)/.86 var(--serif); font-variation-settings: "opsz" 96; letter-spacing: var(--h1-ls, .1em); margin-right: calc(-1 * var(--h1-ls, .1em)); padding-top: .21em; }
 .titulo .sub { margin-top: 18px; font: italic 400 clamp(17px, 1.6vw, 24px)/1.25 var(--serif); }
 .titulo .sub a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--fio); transition: background .4s var(--mola); }
 .titulo .sub a:hover, .titulo .sub a:focus-visible { text-decoration-color: transparent; background: linear-gradient(transparent 60%, var(--ambar) 60%, var(--ambar) 92%, transparent 92%); }
@@ -126,9 +117,11 @@ input, textarea { caret-color: var(--tinta); }
 .andamento { grid-column: 1 / 3; align-self: start; padding-top: 2px; font: italic 600 16px/1.2 var(--serif); }
 .marcas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .marcas button { display: flex; flex-direction: column; justify-content: flex-start; padding: 0 16px 2px 6px; border: 0; background: none; text-align: justify; cursor: pointer; }
-.marcas .mt { display: block; font: 400 11.5px/1.5 var(--f-text); color: var(--grafite); text-align: justify; text-align-last: left; hyphens: auto; -webkit-hyphens: auto; transition: color .4s var(--mola); }
-.marcas .mt b { font: 500 9.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tinta); }
-.ensaio { display: inline-block; min-width: 22px; margin-right: 4px; padding: 2px 5px 1px; border: 1px solid var(--tinta); font: 700 12px/1 var(--serif); text-align: center; vertical-align: 1px; transition: background .4s var(--mola); }
+.marcas .mt { display: block; font: 400 11.5px/1.5 var(--f-text); color: var(--grafite); transition: color .4s var(--mola); }
+.marcas .mh { display: flex; align-items: center; white-space: nowrap; }
+.marcas .mh b { font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tinta); }
+.marcas .mx { display: block; margin-top: 6px; text-align: justify; text-align-last: left; hyphens: auto; -webkit-hyphens: auto; }
+.ensaio { display: inline-block; min-width: 22px; margin-right: 7px; padding: 2px 5px 1px; border: 1px solid var(--tinta); font: 700 12px/1 var(--serif); text-align: center; vertical-align: 1px; transition: background .4s var(--mola); }
 .marcas button:hover .ensaio, .marcas button.on .ensaio { background: var(--ambar); }
 .marcas button:hover .mt, .marcas button.on .mt { color: var(--tinta); }
 
@@ -173,9 +166,18 @@ input, textarea { caret-color: var(--tinta); }
 .batuta.vai { animation: varre 3.4s cubic-bezier(.45, .05, .3, 1) forwards; }
 @keyframes varre { 0% { transform: translateX(var(--a)); opacity: 0; } 6% { opacity: 1; } 86% { opacity: 1; } 100% { transform: translateX(var(--b)); opacity: 0; } }
 
-.rodape { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--fio); font: 500 9.5px/1.6 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--cinza); }
-.rodape b { color: var(--tinta); font-weight: 500; }
-.rodape a { text-decoration: none; }
+/* Pé: a epígrafe do ECHO à esquerda, a assinatura do autor à direita (como no ARCO). */
+.rodape { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px; margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--fio); }
+.epigrafe { font: italic 400 clamp(18px, 1.5vw, 22px)/1.3 var(--serif); }
+.epigrafe mark { background: var(--ambar); color: inherit; padding: 0 .12em; }
+.assina { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--tinta); }
+.assina-marca { flex: none; width: 36px; height: 36px; color: var(--ambar); transition: transform .6s var(--mola); }
+.assina-txt { display: flex; flex-direction: column; gap: 7px; }
+.assina-nome { font: 600 21px/1.05 'ARCO Restart Ginger', var(--f-text); letter-spacing: -.03em; font-synthesis: none; transition: background .4s var(--mola); }
+.assina-tag { font: 500 9px/1 var(--mono); letter-spacing: .2em; color: var(--cinza); white-space: nowrap; }
+.assina-tag i { font-style: normal; margin: 0 .35em; color: var(--fio); }
+.assina:hover .assina-marca, .assina:focus-visible .assina-marca { transform: rotate(90deg); }
+.assina:hover .assina-nome, .assina:focus-visible .assina-nome { background: linear-gradient(transparent 60%, var(--ambar) 60%, var(--ambar) 92%, transparent 92%); }
 
 /* ==========================================================================
    A parte: folha que se abre sobre a partitura
@@ -550,8 +552,9 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .voz .pt { display: none; }
   .rosto { grid-template-columns: minmax(0, 1fr); text-align: center; }
   .rosto-e, .rosto-d { justify-self: center; width: min(100%, 360px); text-align: center; }
-  .epigrafe { margin: 28px auto 0; }
+  .showcase { font-size: 12px; }
   .comandos { justify-content: center; }
+  .rodape { flex-direction: column; justify-content: center; text-align: center; }
   .comandos .busca { flex: 0 1 220px; }
   .rosto-e { order: 2; } .titulo { order: 1; } .rosto-d { order: 3; }
   .fpdf { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); }
@@ -567,6 +570,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .marcas { grid-column: 2 / 4; grid-row: 2; grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
   .marcas button { padding: 0 8px 0 0; }
   .marcas .mt { font-size: 12.5px; }
+  .marcas .mx { margin-top: 4px; }
   .leitor-palco { padding: 20px 48px 56px; }
   .leitor-h .pil .t, .leitor-h .pil kbd { display: none; }
   .leitor-h .pil { padding: 0 5px; }

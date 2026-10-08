@@ -179,7 +179,7 @@ const MQS = window.matchMedia('(max-width: 700px)');
 /* PDF: "ver" abre o leitor na própria página, em duas páginas; "baixar" baixa o arquivo. */
 const verBaixar = (m, nome, cls) => `<span class="${cls || 'pt'}"><button type="button" data-ver="${m.id}" aria-label="Ver ${esc(nome)} em PDF">ver</button><i aria-hidden="true">|</i><a href="${AS + m.arquivo}" download aria-label="Baixar ${esc(nome)} em PDF">baixar</a></span>`;
 function montaPartitura() {
-  $('#marcas').innerHTML = MARCAS.map(([r, t, x], i) => `<button type="button" data-m="${i + 1}"><span class="mt" lang="pt-BR"><span class="ensaio">${r}</span><b>${t}</b> ${esc(x).replace(/~/g, '\u00AD')}</span></button>`).join('');
+  $('#marcas').innerHTML = MARCAS.map(([r, t, x], i) => `<button type="button" data-m="${i + 1}"><span class="mt" lang="pt-BR"><span class="mh"><span class="ensaio">${r}</span><b>${t}</b></span><span class="mx">${esc(x).replace(/~/g, '\u00AD')}</span></span></button>`).join('');
   $('#naipes').innerHTML = NAIPES.map((g) => `<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">${g.n}</span>${g.chave === 'colchete' ? '<span class="colchete"></span>' : '<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" vector-effect="non-scaling-stroke"/></svg>'}</div>` +
     g.vozes.map((v) => {
       const p = v.pdf ? MBY[v.pdf] : null;
@@ -189,7 +189,6 @@ function montaPartitura() {
     const m = MBY[a.id]; const p = MBY[a.pdf];
     return `<li><a class="an" href="#${a.id}" data-id="${a.id}">${esc(m.nome)}</a><p>${esc(a.nota)}</p>${verBaixar(p, m.nome, 'ab')}</li>`;
   }).join('');
-  $('#rodape').innerHTML = `<span>Acervo do <a href="arco.html#echo"><b>ECHO</b></a> | Turma Recursal do TJPR</span><span><b>${N.fun}</b> fundamentos | <b>${N.eme.toLocaleString('pt-BR')}</b> assuntos | <b>${D.cal.length}</b> dias de calendário | <b>${D.tpl.length}</b> modelos</span>`;
 }
 
 /* Cada pauta é um SVG do tamanho real da coluna: cinco linhas, barras de compasso,
