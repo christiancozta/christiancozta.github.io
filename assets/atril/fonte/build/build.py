@@ -1,9 +1,9 @@
-"""Monta a página do ATRIL a partir da fonte canônica.
+"""Monta a página do ÁTRIL a partir da fonte canônica.
 
 Fonte canônica (editar aqui):
   assets/atril/fonte/componentes/*.html   textos dos componentes, já em marcação do sistema
   assets/atril/fonte/dados/*.txt          bases do Toolkit (Calendário, Fundamentos, Ementário, Templates)
-  assets/atril/fonte/dados/materiais.json  teclado: documentos, manuais e anexos em PDF
+  assets/atril/fonte/dados/materiais.json  materiais: documentos, manuais e anexos em PDF
   assets/atril/fonte/build/css/*.css      sistema visual (família, componentes, interface)
   assets/atril/fonte/build/interface.js   comportamento da página
   assets/atril/fonte/build/pagina.html    estrutura da página

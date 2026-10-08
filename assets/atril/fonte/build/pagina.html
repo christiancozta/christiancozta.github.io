@@ -3,138 +3,140 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ATRIL | Playbook de Elaboração de Votos</title>
-<meta name="description" content="ATRIL: o Playbook de Elaboração de Votos da Turma Recursal do TJPR numa estante de partitura. Documentos, manuais e anexos num teclado; prazo, fundamentos, ementário e montador de minutas ao lado.">
-<meta property="og:title" content="ATRIL | Playbook de Elaboração de Votos">
-<meta property="og:description" content="Documentos, manuais e anexos num teclado; prazo, fundamentos, ementário e montador de minutas ao lado. Uma página filha do ECHO.">
+<title>ÁTRIL | Playbook de elaboração de votos</title>
+<meta name="description" content="ÁTRIL: o Playbook de Elaboração de Votos da Turma Recursal do TJPR como partitura de regência. Cada material é uma pauta; os compassos são a ordem de utilização; documentos, PDFs, Calendário, Fundamentos, Ementário e Templates abrem sobre a partitura.">
+<meta property="og:title" content="ÁTRIL | Playbook de elaboração de votos">
+<meta property="og:description" content="O acervo como partitura de regência: cada material é uma pauta, e as notas ficam onde as Regras de Aplicação mandam usar cada componente. Uma página filha do ECHO.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://christiancozta.github.io/atril.html">
-<meta name="theme-color" content="#181818">
+<meta name="theme-color" content="#FCFCFC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,400..700&family=Zalando+Sans+Expanded:ital,wght@0,300..800;1,300..500&family=Zalando+Sans:wght@500..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Commissioner:wght@300;400;500;600;700&family=Zalando+Sans+Expanded:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/atril/atril.css">
 <link rel="icon" href="assets/atril/favicon.svg" type="image/svg+xml">
 </head>
-<body class="app">
+<body class="partitura">
 <!--
-THESIS: O ATRIL é uma estante de partitura. O material é uma folha branca presa ao corpo preto do instrumento, e se escolhe o que ler tocando uma tecla. Recusa a página de documentação com barra lateral, cards e home de atalhos.
-OWN-WORLD: laca #181818, papel #FCFCFC, tecla acesa #FFB627, marcação de editor #C84D00. Teclado vetorial em perspectiva (9 brancas, 5 pretas) com bochechas pretas, pauta de cinco linhas como divisor, Zalando Sans Expanded gravada como a marca de um piano.
-STORY: o visitante vê o instrumento inteiro, passa o cursor e lê o nome do material na tampa, toca a tecla e a folha vira. As ferramentas, numa segunda folha, calculam e buscam sem tirar ninguém do lugar.
-FIRST VIEWPORT: barra preta de 48px; folha-capa à esquerda (título de partitura, a ordem de uso em quatro compassos); folha de ferramentas à direita com o Calendário aberto e o vencimento calculado; faixa preta com a leitura em âmbar; teclado de 14 teclas até a borda inferior.
-FORM: átril e piano, direção fixada pelo usuário (vence a rolagem); semente 9442b163, rolagem degradada.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+THESIS: O ÁTRIL é uma partitura de regência. O acervo inteiro é o sistema que o regente lê: cada material é uma pauta, agrupada por chave em naipes (Coleção, Governança, Ferramenta), e os compassos são a ordem de utilização das Regras de Aplicação. Ler na vertical é ler um passo.
+OWN-WORLD: papel #FCFCFC, tinta #181818, âmbar #FFB627 como luz única (marca-texto, batuta, compasso em foco), latão #8A6620 (âmbar com tinta) como marcação de texto. Bodoni Moda na folha de rosto, nos nomes das pautas e nos títulos; Commissioner no texto; Azeret Mono nas indicações; Zalando Sans Expanded só na marca.
+STORY: a folha de rosto diz o nome (ÁTRIL), a epígrafe do ECHO e os comandos; à direita, as anotações do Registro. Abaixo, a partitura: passar pelo compasso acende a coluna e, com som, soa o acorde do passo. Clicar numa pauta abre o material sobre a partitura; "abrir" leva ao PDF.
+FIRST VIEWPORT: barra com a marca; folha de rosto (epígrafe e comandos, título, anotações); cabeçalho do sistema com as marcas de ensaio I a IV e Coda; Coleção e Governança inteiras.
+FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este sistema.
 -->
-<a class="sr salto" href="#folha">Ir para a folha</a>
+<a class="sr salto" href="#sistema">Ir para a partitura</a>
 
-<header class="topo">
-  <a class="marca" href="#inicio" aria-label="ATRIL, voltar à capa">ATRIL</a>
-  <span class="obra">Playbook de Elaboração de Votos<span class="obra-sub">Turma Recursal do TJPR</span></span>
-  <button class="busca" id="searchbtn" type="button" aria-label="Buscar no ATRIL (Ctrl K)">
-    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-    <span class="ph">Buscar seções, fundamentos, ementas e modelos</span><kbd class="kbd">Ctrl K</kbd>
-  </button>
-  <a class="echo" href="echo.html">ECHO<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></a>
-</header>
+<div class="pag">
+  <header class="topo">
+    <a class="marca" href="#" aria-label="ÁTRIL, voltar à partitura">ÁTRIL</a>
+  </header>
 
-<div class="estante">
-  <main class="folha" id="folha" tabindex="-1"><div class="folha-in" id="folha-in"></div></main>
-
-  <aside class="ferr" id="ferr" aria-label="Ferramentas">
-    <div class="ferr-arraste" id="ferr-arraste" role="separator" aria-orientation="vertical" aria-label="Largura das ferramentas" aria-valuemin="340" aria-valuemax="560" aria-valuenow="380" tabindex="0"></div>
-    <div class="ferr-h">
-      <h2 class="ferr-t">Ferramentas</h2>
-      <button class="ferr-x" id="ferr-x" type="button" aria-label="Fechar ferramentas"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+  <section class="rosto" aria-label="Folha de rosto">
+    <div class="rosto-e">
+      <p class="epigrafe">Harmonia é <mark>coordenação</mark> de diferenças.</p>
+      <nav class="comandos" aria-label="Comandos">
+        <button class="pil" type="button" id="b-som" aria-pressed="false"><span class="t">Ouvir os compassos</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span></button>
+        <button class="pil" type="button" id="searchbtn" aria-label="Buscar no ÁTRIL (Ctrl K)"><span class="t">Buscar</span><kbd>Ctrl K</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></span></button>
+        <a class="pil" href="arco.html#echo"><span class="t">ECHO</span><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+      </nav>
     </div>
+    <div class="titulo">
+      <h1>ÁTRIL</h1>
+      <p class="sub">Playbook de elaboração de votos</p>
+    </div>
+    <aside class="rosto-d" aria-label="Anotações"><ol class="anot" id="anot"></ol></aside>
+  </section>
 
-    <section class="gad" id="g-calendario">
-      <h3><button class="gh" id="gh-calendario" type="button" aria-expanded="false" aria-controls="gb-calendario"><span class="gn">Calendário</span><span class="gs" id="gs-calendario">Prazo em dias úteis</span><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button></h3>
-      <div class="gb" id="gb-calendario" role="region" aria-labelledby="gh-calendario" hidden>
-        <form class="gform" id="c-form" onsubmit="return false">
-          <div class="segc" role="group" aria-label="Modo de contagem">
-            <button type="button" data-mode="prazo" aria-pressed="true">Prazo</button>
-            <button type="button" data-mode="int" aria-pressed="false">Intervalo</button>
-          </div>
-          <div id="c-prazo" class="frow">
-            <div class="field"><label for="c-m" id="c-ml">Marco (intimação ou publicação)</label><div class="data"><input id="c-m" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
-            <div class="field fn"><label for="c-n">Dias úteis</label><input id="c-n" class="input mono" type="number" min="1" max="250" value="10" inputmode="numeric"></div>
-          </div>
-          <div id="c-int" class="frow" style="display: none;">
-            <div class="field"><label for="c-a">Data inicial (excluída)</label><div class="data"><input id="c-a" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
-            <div class="field"><label for="c-b">Data final (incluída)</label><div class="data"><input id="c-b" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
-          </div>
-          <div class="gres" id="c-res" aria-live="polite"></div>
-          <label class="chk" id="c-djew"><input type="checkbox" id="c-dje"><span>O marco é a disponibilização no DJe</span></label>
-          <details class="gmais">
-            <summary>Localidade, regime e exclusões do processo</summary>
-            <div class="gcol">
-              <p class="small">Disponibilização no DJe: publicação no primeiro dia útil seguinte e contagem a partir do dia útil posterior (Lei nº 11.419/2006, art. 4º, §§ 3º e 4º).</p>
-              <div class="field"><label for="c-l">Localidade</label>
-                <select id="c-l" class="input"><option value="cwb">Curitiba</option><option value="out">Outra comarca</option></select>
-              </div>
-              <div class="field"><label for="c-r">Regime</label>
-                <select id="c-r" class="input"><option>Cível, em dias úteis</option><option disabled>Criminal (fora da base)</option><option disabled>Prazo material (fora da base)</option><option disabled>Em horas (fora da base)</option></select>
-              </div>
-              <div class="field">
-                <label for="c-x">Exclusões do processo (suspensão, indisponibilidade)</label>
-                <div class="frow"><div class="data"><input id="c-x" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div><button type="button" class="btn ghost" id="c-xadd">Incluir</button></div>
-                <div class="exlist" id="c-xl"></div>
-              </div>
+  <section class="sistema" id="sistema" tabindex="-1" aria-label="Partitura do acervo">
+    <div class="coluna" id="coluna" aria-hidden="true"></div>
+    <div class="batuta" id="batuta" aria-hidden="true"></div>
+    <div class="linha cab">
+      <div class="andamento">Ordem de utilização<small>Regras de Aplicação, seção 3</small></div>
+      <div class="marcas" id="marcas"></div>
+    </div>
+    <div id="naipes"></div>
+    <div class="letra"><div class="linha"><div class="rot">Texto da ordem</div><div class="txt" id="letra"></div></div></div>
+  </section>
+
+  <footer class="rodape" id="rodape"></footer>
+</div>
+
+<div class="veu" id="veu"></div>
+<aside class="parte" id="parte" aria-labelledby="parte-r" hidden>
+  <div class="parte-h">
+    <span id="parte-r"></span>
+    <button class="pil" type="button" id="fecha" aria-label="Voltar à partitura"><span class="t">Voltar à partitura</span><kbd>Esc</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span></button>
+  </div>
+  <div class="parte-c folha" id="folha" tabindex="-1">
+    <div class="folha-in" id="folha-in"></div>
+
+    <section class="ferramenta" id="gb-calendario" aria-labelledby="ft-calendario" hidden>
+      <header class="ferr-cab"><h2 class="ft" id="ft-calendario">Calendário Jurídico</h2><p class="gs" id="gs-calendario">Prazo em dias úteis</p></header>
+      <div class="pauta" aria-hidden="true"></div>
+      <form class="gform" id="c-form" onsubmit="return false">
+        <div class="segc" role="group" aria-label="Modo de contagem">
+          <button type="button" data-mode="prazo" aria-pressed="true">Prazo</button>
+          <button type="button" data-mode="int" aria-pressed="false">Intervalo</button>
+        </div>
+        <div id="c-prazo" class="frow">
+          <div class="field"><label for="c-m" id="c-ml">Marco (intimação ou publicação)</label><div class="data"><input id="c-m" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
+          <div class="field fn"><label for="c-n">Dias úteis</label><input id="c-n" class="input mono" type="number" min="1" max="250" value="10" inputmode="numeric"></div>
+        </div>
+        <div id="c-int" class="frow" style="display: none;">
+          <div class="field"><label for="c-a">Data inicial (excluída)</label><div class="data"><input id="c-a" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
+          <div class="field"><label for="c-b">Data final (incluída)</label><div class="data"><input id="c-b" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div></div>
+        </div>
+        <div class="gres" id="c-res" aria-live="polite"></div>
+        <label class="chk" id="c-djew"><input type="checkbox" id="c-dje"><span>O marco é a disponibilização no DJe</span></label>
+        <details class="gmais">
+          <summary>Localidade, regime e exclusões do processo</summary>
+          <div class="gcol">
+            <p class="small">Disponibilização no DJe: publicação no primeiro dia útil seguinte e contagem a partir do dia útil posterior (Lei nº 11.419/2006, art. 4º, §§ 3º e 4º).</p>
+            <div class="field"><label for="c-l">Localidade</label>
+              <select id="c-l" class="input"><option value="cwb">Curitiba</option><option value="out">Outra comarca</option></select>
             </div>
-          </details>
-        </form>
-        <div class="gout" id="c-out"></div>
-        <div class="glinks"><a href="#calendario/ano">Tabela anual na folha</a><a href="#calendario/base">Base e limites</a></div>
-      </div>
+            <div class="field"><label for="c-r">Regime</label>
+              <select id="c-r" class="input"><option>Cível, em dias úteis</option><option disabled>Criminal (fora da base)</option><option disabled>Prazo material (fora da base)</option><option disabled>Em horas (fora da base)</option></select>
+            </div>
+            <div class="field">
+              <label for="c-x">Exclusões do processo (suspensão, indisponibilidade)</label>
+              <div class="frow"><div class="data"><input id="c-x" class="input mono" type="text" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"><button type="button" class="data-b" aria-label="Escolher a data no calendário"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg></button><input type="date" class="data-n" tabindex="-1" aria-hidden="true"></div><button type="button" class="btn ghost" id="c-xadd">Incluir</button></div>
+              <div class="exlist" id="c-xl"></div>
+            </div>
+          </div>
+        </details>
+      </form>
+      <div class="gout" id="c-out"></div>
+      <div class="glinks"><a href="#calendario/ano">Tabela anual</a><a href="#calendario/base">Base e limites</a></div>
     </section>
 
-    <section class="gad" id="g-fundamentos">
-      <h3><button class="gh" id="gh-fundamentos" type="button" aria-expanded="false" aria-controls="gb-fundamentos"><span class="gn">Fundamentos</span><span class="gs" id="gs-fundamentos">Busca por gatilho, tema ou elemento</span><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button></h3>
-      <div class="gb" id="gb-fundamentos" role="region" aria-labelledby="gh-fundamentos" hidden>
-        <div class="qbox"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label class="sr" for="f-q">Buscar fundamentos</label><input id="f-q" placeholder="negativação, voo cancelado, dialeticidade" autocomplete="off"><span class="ct" id="f-ct"></span></div>
-        <div class="field"><label class="sr" for="f-cat">Categoria</label><select id="f-cat" class="input sm"></select></div>
-        <div id="f-syn" class="small"></div>
-        <div class="gpane" id="f-lista"><div class="rlist" id="f-list"></div></div>
-        <article class="gpane detail" id="f-det" hidden></article>
-        <div class="glinks"><a href="#fundamentos/regra">Regra de uso na folha</a></div>
-      </div>
+    <section class="ferramenta" id="gb-fundamentos" aria-labelledby="ft-fundamentos" hidden>
+      <header class="ferr-cab"><h2 class="ft" id="ft-fundamentos">Fundamentos</h2><p class="gs" id="gs-fundamentos">Busca por gatilho, tema ou elemento</p></header>
+      <div class="pauta" aria-hidden="true"></div>
+      <div class="qbox"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label class="sr" for="f-q">Buscar fundamentos</label><input id="f-q" placeholder="negativação, voo cancelado, dialeticidade" autocomplete="off"><span class="ct" id="f-ct"></span></div>
+      <div class="field"><label class="sr" for="f-cat">Categoria</label><select id="f-cat" class="input sm"></select></div>
+      <div id="f-syn" class="small"></div>
+      <div class="gpane" id="f-lista"><div class="rlist" id="f-list"></div></div>
+      <article class="gpane detail" id="f-det" hidden></article>
+      <div class="glinks"><a href="#fundamentos/regra">Regra de uso</a></div>
     </section>
 
-    <section class="gad" id="g-ementario">
-      <h3><button class="gh" id="gh-ementario" type="button" aria-expanded="false" aria-controls="gb-ementario"><span class="gn">Ementário</span><span class="gs" id="gs-ementario">Assunto, código ou texto-base</span><svg class="ic chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button></h3>
-      <div class="gb" id="gb-ementario" role="region" aria-labelledby="gh-ementario" hidden>
-        <div class="segc" role="group" aria-label="Alcance"><button type="button" data-sc="g" aria-pressed="true" id="e-sg">Escopo do Guia</button><button type="button" data-sc="a" aria-pressed="false" id="e-sa">Acervo completo</button></div>
-        <div class="qbox"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label class="sr" for="e-q">Buscar no Ementário</label><input id="e-q" placeholder="cadastro de inadimplentes, 6226" autocomplete="off"><span class="ct" id="e-ct"></span></div>
-        <div class="gpane" id="e-lista"><div id="e-intro"></div><div class="lbl" id="e-lh">Árvore taxonômica</div><div id="e-left"></div></div>
-        <article class="gpane detail" id="e-det" hidden></article>
-        <div class="glinks"><a href="#ementario/regra">Regra de uso na folha</a></div>
-      </div>
+    <section class="ferramenta" id="gb-ementario" aria-labelledby="ft-ementario" hidden>
+      <header class="ferr-cab"><h2 class="ft" id="ft-ementario">Ementário</h2><p class="gs" id="gs-ementario">Assunto, código ou texto-base</p></header>
+      <div class="pauta" aria-hidden="true"></div>
+      <div class="segc" role="group" aria-label="Alcance"><button type="button" data-sc="g" aria-pressed="true" id="e-sg">Escopo do Guia</button><button type="button" data-sc="a" aria-pressed="false" id="e-sa">Acervo completo</button></div>
+      <div class="qbox"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><label class="sr" for="e-q">Buscar no Ementário</label><input id="e-q" placeholder="cadastro de inadimplentes, 6226" autocomplete="off"><span class="ct" id="e-ct"></span></div>
+      <div class="gpane" id="e-lista"><div id="e-intro"></div><div class="lbl" id="e-lh">Árvore taxonômica</div><div id="e-left"></div></div>
+      <article class="gpane detail" id="e-det" hidden></article>
+      <div class="glinks"><a href="#ementario/regra">Regra de uso</a></div>
     </section>
-
-    <a class="gad-tpl" href="#templates"><span><b>Templates</b><span>Montar minuta em tela inteira</span></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></a>
-  </aside>
-</div>
-
-<div class="tampa">
-  <span class="gravacao" aria-hidden="true">ATRIL</span>
-  <div class="leitura" id="leitura" aria-hidden="true"><span class="ln"></span><span class="lk"></span></div>
-  <button class="recolhe" id="kb-toggle" type="button" aria-expanded="true" aria-controls="teclado"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg><span>Recolher teclado</span></button>
-</div>
-
-<nav class="teclado" id="teclado" aria-label="Teclado de materiais. Teclas brancas: documentos e manuais. Teclas pretas: anexos em PDF."><div class="teclas" id="teclas"></div></nav>
-
-<nav class="barra" aria-label="Ferramentas">
-  <button type="button" data-g="calendario"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>Calendário</button>
-  <button type="button" data-g="fundamentos"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M7 20h10M5 7.5h14M5 7.5 2.5 14h5zM19 7.5 16.5 14h5z"/></svg>Fundamentos</button>
-  <button type="button" data-g="ementario"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4v16M6 8h6M6 14h6M12 8h7M12 14h7M12 8v6"/></svg>Ementário</button>
-  <a href="#templates"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8.5L19 8v12.5H6z"/><path d="M14 3.5V8h5M9 12h7M9 15.5h7"/></svg>Templates</a>
-</nav>
-<div class="veu" id="veu" hidden></div>
+  </div>
+</aside>
 
 <div class="camada" id="camada" role="dialog" aria-modal="true" aria-labelledby="camada-t" hidden>
   <div class="camada-h">
     <h2 class="camada-t" id="camada-t">Templates<span>Montador de minutas de RI e ED</span></h2>
-    <button class="camada-x" id="camada-x" type="button"><span>Fechar</span><kbd class="kbd">Esc</kbd></button>
+    <button class="pil" type="button" id="camada-x"><span class="t">Voltar à partitura</span><kbd>Esc</kbd><span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></span></button>
   </div>
   <div class="camada-c">
    <div class="camada-folha">
@@ -163,15 +165,15 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 </div>
 
 <div class="overlay" id="sov" hidden>
-  <div class="sdlg" role="dialog" aria-modal="true" aria-label="Buscar no ATRIL">
+  <div class="sdlg" role="dialog" aria-modal="true" aria-label="Buscar no ÁTRIL">
     <div class="qrow">
       <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
-      <label class="sr" for="sq">Buscar</label><input id="sq" placeholder="Buscar em todo o ATRIL" autocomplete="off">
+      <label class="sr" for="sq">Buscar</label><input id="sq" placeholder="Buscar em todo o ÁTRIL" autocomplete="off">
       <button class="kbd" id="sx" type="button">Esc</button>
     </div>
     <div class="frow2"><div class="segc" id="sf" role="group" aria-label="Filtrar resultados"></div><span class="small" id="ssyn"></span></div>
     <div class="slist" id="sl"></div>
-    <div class="sfoot"><span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> navegar</span><span><kbd class="kbd">Enter</kbd> abrir</span><span><kbd class="kbd">Esc</kbd> fechar</span><span class="sfoot-r">Documentos abrem na folha; fundamentos e ementas, nas ferramentas</span></div>
+    <div class="sfoot"><span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> navegar</span><span><kbd class="kbd">Enter</kbd> abrir</span><span><kbd class="kbd">Esc</kbd> fechar</span><span class="sfoot-r">Tudo abre sobre a partitura; os modelos, no montador</span></div>
   </div>
 </div>
 
