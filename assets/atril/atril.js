@@ -121,7 +121,7 @@ function snippet(text, terms, len = 150) {
 const MAT = D.mat;
 const WH = MAT.brancas;
 const BK = MAT.pretas;
-BK.forEach((m) => { m.tipo = 'anexo'; m.curto = 'PDF'; });
+BK.forEach((m) => { m.tipo = 'anexo'; });
 const MBY = {}; WH.concat(BK).forEach((m) => { MBY[m.id] = m; });
 const ORDEM = [];
 WH.forEach((m, i) => { ORDEM.push(m); BK.filter((b) => b.entre[0] === i).forEach((b) => ORDEM.push(b)); });
@@ -184,11 +184,20 @@ function layout() {
     const lip = Math.max(6, Math.round(yb * 0.09));
     el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = f(yb) + 'px';
     el.style.clipPath = `path('${d}')`;
-    el.style.backgroundImage = `linear-gradient(to bottom, transparent calc(100% - ${lip}px), var(--lip) calc(100% - ${lip}px))`;
+    el.style.backgroundImage = `linear-gradient(to bottom, transparent calc(100% - ${lip}px), var(--lip) calc(100% - ${lip}px)), linear-gradient(to right, rgba(252, 252, 252, .1), rgba(252, 252, 252, 0) 32%, rgba(252, 252, 252, 0) 86%, rgba(252, 252, 252, .05))`;
     el.style.setProperty('--cx', f((bl + br) / 2 - L) + 'px');
+    // corpo do rótulo pela medida útil: largura da ponta (desktop) ou altura da tecla (mobile, texto vertical)
+    const util = mob ? yb - 18 : (br - bl) - 12;
+    el.style.setProperty('--tlf', f(Math.max(6, Math.min(8.5, util / (m.curto.length * 0.95)))) + 'px');
     geo[m.id] = (tl + tr) / 2;
   });
+  bordas();
   leitura(foco);
+}
+function bordas() {
+  const max = KB.scrollWidth - KB.clientWidth;
+  KB.classList.toggle('mais-esq', max > 2 && KB.scrollLeft > 2);
+  KB.classList.toggle('mais-dir', max > 2 && KB.scrollLeft < max - 2);
 }
 
 /* Leitura: o nome da tecla corre pela tampa e para acima dela. */
@@ -202,13 +211,13 @@ function leitura(id) {
     LEIT.classList.remove('dica');
     x = geo[m.id] - (isMob() ? KB.scrollLeft : 0);
   } else {
-    ln.textContent = isMob() ? 'Toque uma tecla' : 'Passe o cursor e toque uma tecla';
+    ln.textContent = isMob() ? 'Deslize e toque uma tecla' : 'Passe o cursor e toque uma tecla';
     lk.textContent = 'documentos e manuais nas brancas, anexos em PDF nas pretas';
     LEIT.classList.add('dica');
     x = window.innerWidth / 2;
   }
   const w = LEIT.offsetWidth; const wt = LEIT.parentElement.clientWidth; const wb = $('#kb-toggle').offsetWidth + 28;
-  x = Math.max(w / 2 + 12, Math.min(wt - wb - w / 2, x));
+  x = Math.max(w / 2 + (isMob() ? 12 : 150), Math.min(wt - wb - w / 2, x));
   LEIT.style.setProperty('--lx', Math.round(x) + 'px');
 }
 
@@ -262,7 +271,7 @@ TECLAS.addEventListener('click', (e) => {
   toca(k);
   if (location.hash === '#' + k.dataset.k) { e.preventDefault(); FOLHA.scrollTo({ top: 0, behavior: RM.matches ? 'auto' : 'smooth' }); }
 });
-KB.addEventListener('scroll', () => leitura(foco), { passive: true });
+KB.addEventListener('scroll', () => { bordas(); leitura(foco); }, { passive: true });
 
 const KBT = $('#kb-toggle');
 function setKbMin(on, salvar) {
@@ -370,7 +379,7 @@ function capaHTML() {
     <div class="capa-cab"><span>Anexo ao Volume 04 | Guia de Estilo</span><span>Turma Recursal do TJPR</span></div>
     <h1 class="capa-t">Playbook de Elaboração de Votos</h1>
     <p class="capa-para">para <em>Recurso Inominado</em> e <em>Embargos de Declaração</em></p>
-    <p class="capa-dica">Guia, regras, critérios e repertório reunidos numa estante. Cada tecla abre um material nesta folha; as ferramentas calculam e buscam ao lado.</p>
+    <p class="capa-dica">Cada tecla abre um material nesta folha; as ferramentas calculam e buscam ao lado.</p>
     <h2 class="compassos-t">Ordem de utilização</h2>
     <ol class="compassos">${passos.map((t, i) => `<li class="compasso"><span class="nota" aria-hidden="true">${['I', 'II', 'III', 'IV'][i]}</span><p>${t}</p></li>`).join('')}</ol>
     <div class="indice">
@@ -594,6 +603,26 @@ const br = (d) => pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFu
 const WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
 const WDL = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
 const MESL = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const isoBr = (s) => (s ? s.split('-').reverse().join('/') : '');
+const brIso = (s) => {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s || ''); if (!m) return null;
+  const d = new Date(+m[3], +m[2] - 1, +m[1]);
+  return d.getFullYear() === +m[3] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[1] ? `${m[3]}-${m[2]}-${m[1]}` : null;
+};
+function campoData(id, get, set) {
+  const t = $('#' + id); const w = t.closest('.data'); const n = $('.data-n', w);
+  t.value = isoBr(get());
+  t.addEventListener('input', () => {
+    let v = t.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 4) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4); else if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+    if (v !== t.value) t.value = v;
+    const iso = brIso(v);
+    t.setAttribute('aria-invalid', String(v.length === 10 && !iso));
+    if (iso) set(iso); else if (!v) set('');
+  });
+  $('.data-b', w).addEventListener('click', () => { n.value = get() || ''; try { n.showPicker(); } catch (e) { n.focus(); n.click(); } });
+  n.addEventListener('change', () => { if (n.value) { t.value = isoBr(n.value); t.removeAttribute('aria-invalid'); set(n.value); } });
+}
 const today = new Date();
 const DEF_MARCO = today.getFullYear() === 2026 ? iso(today) : '2026-10-07';
 const cs = { mode: 'prazo', marco: DEF_MARCO, n: 10, dje: false, a: '2026-02-02', b: '2026-03-06', loc: 'cwb', ex: [] };
@@ -689,25 +718,28 @@ function renderCal() {
   $$('#c-form [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === cs.mode)));
   $('#c-prazo').style.display = cs.mode === 'prazo' ? 'flex' : 'none';
   $('#c-int').style.display = cs.mode === 'int' ? 'flex' : 'none';
+  $('#c-djew').style.display = cs.mode === 'prazo' ? 'flex' : 'none';
+  const res = $('#c-res');
   $('#c-ml').textContent = cs.dje ? 'Disponibilização no DJe' : 'Marco (intimação ou publicação)';
   $('#c-xl').innerHTML = cs.ex.map((k) => `<span class="chip">${br(pdate(k))}<button type="button" aria-label="Remover ${br(pdate(k))}" data-rm="${k}">×</button></span>`).join('');
   const out = $('#c-out'); const warns = [];
   const trilhaAberta = !!($('.trilha', out) && $('.trilha', out).open);
   if (cs.loc === 'out') warns.push('<div class="box warn"><div class="lbl">Outra comarca</div><p>O feriado de 8 de setembro (Curitiba) deixa de ser excluído. A tabela não incorpora os feriados locais das demais comarcas: inclua-os nas exclusões do processo.</p></div>');
   if (cs.mode === 'prazo') {
-    if (!cs.marco || !(cs.n >= 1)) { out.innerHTML = '<p class="small">Informe o marco e o número de dias úteis.</p>'; gstat('calendario', 'Informe o marco e os dias úteis'); return; }
+    if (!cs.marco || !(cs.n >= 1)) { res.innerHTML = '<p class="small">Informe o marco e o número de dias úteis.</p>'; out.innerHTML = ''; gstat('calendario', 'Informe o marco e os dias úteis'); return; }
     const r = calcPrazo(cs);
     if (r.hist) warns.unshift('<div class="box warn"><div class="lbl">Histórico de 2025</div><p>O intervalo alcança 2025, base preservada sem conferência normativa anual. Verifique as fontes de 2025 e a localidade antes de concluir.</p></div>');
     if (r.blocked) {
-      out.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>A contagem sai da base disponível (2025 e 2026; não há tabela de 2027). A ferramenta não conclui o prazo: recupere a base do período antes de prosseguir.</p></div>' + warns.join('');
+      res.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>A contagem sai da base disponível (2025 e 2026; não há tabela de 2027). A ferramenta não conclui o prazo: recupere a base do período antes de prosseguir.</p></div>';
+      out.innerHTML = warns.join('');
       gstat('calendario', 'Fora da base disponível');
       return;
     }
     const exTxt = r.ex.length ? 'Excluídos pela tabela: ' + r.ex.map((x) => `${br(x.d).slice(0, 5)} (${esc(x.why.split(';')[0].replace(/ \(.*\)$/, ''))})`).join(', ') + ', além dos fins de semana.' : 'Sem feriados ou suspensões no intervalo; excluídos apenas os fins de semana.';
     const count = {}; r.rows.forEach((x) => { if (x.cls === 'c' || x.cls === 'due') count[iso(x.d)] = x.k; });
+    res.innerHTML = `<div class="dark"><p class="big"><span class="pre">Vence em</span> ${r.due.getDate()} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</p><p class="sub">${cap(WDL[r.due.getDay()])}, ${cs.n}º dia útil${r.pub ? `, publicação em ${br(r.pub)}` : ''}</p></div>`;
     out.innerHTML = `
-      <div class="dark"><div><div class="lbl">Vencimento</div><div class="big">${pad(r.due.getDate())} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</div><div class="sub">${cap(WDL[r.due.getDay()])} | ${cs.n}º dia útil</div></div>
-      <div class="txt">${r.pub ? `Publicação em <strong>${br(r.pub)}</strong>. ` : ''}Início da contagem em <strong>${br(r.first)}</strong>. ${exTxt}</div></div>
+      <p class="gtxt">Início da contagem em <strong>${br(r.first)}</strong>. ${exTxt}</p>
       ${warns.join('')}
       ${monthsHTML(pdate(cs.marco), r.due, { o: cs, count, mk: cs.marco, due: iso(r.due) })}
       ${LEGENDA}
@@ -717,14 +749,14 @@ function renderCal() {
     $('#c-copy').onclick = () => copy(trailText(r, cs), 'Trilha copiada.');
     gstat('calendario', `Vence em ${br(r.due)}, ${WDL[r.due.getDay()]}`);
   } else {
-    if (!cs.a || !cs.b) { out.innerHTML = '<p class="small">Informe as duas datas.</p>'; gstat('calendario', 'Informe as duas datas'); return; }
+    if (!cs.a || !cs.b) { res.innerHTML = '<p class="small">Informe as duas datas.</p>'; out.innerHTML = ''; gstat('calendario', 'Informe as duas datas'); return; }
     const r = calcInt(cs);
-    if (r.bad) { out.innerHTML = '<div class="box warn"><div class="lbl">Datas</div><p>A data final deve ser posterior à inicial.</p></div>'; gstat('calendario', 'Datas a corrigir'); return; }
-    if (r.blocked) { out.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>O intervalo sai da base disponível (2025 e 2026). A ferramenta não conclui a contagem.</p></div>'; gstat('calendario', 'Fora da base disponível'); return; }
+    if (r.bad) { res.innerHTML = '<div class="box warn"><div class="lbl">Datas</div><p>A data final deve ser posterior à inicial.</p></div>'; out.innerHTML = ''; gstat('calendario', 'Datas a corrigir'); return; }
+    if (r.blocked) { res.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>O intervalo sai da base disponível (2025 e 2026). A ferramenta não conclui a contagem.</p></div>'; out.innerHTML = ''; gstat('calendario', 'Fora da base disponível'); return; }
     if (r.hist) warns.unshift('<div class="box warn"><div class="lbl">Histórico de 2025</div><p>O intervalo alcança 2025, base preservada sem conferência normativa anual.</p></div>');
+    res.innerHTML = `<div class="dark"><p class="big">${r.n} dia${r.n === 1 ? '' : 's'} út${r.n === 1 ? 'il' : 'eis'}</p><p class="sub">De ${br(pdate(cs.a))}, excluída, a ${br(pdate(cs.b))}, incluída</p></div>`;
     out.innerHTML = `
-      <div class="dark"><div><div class="lbl">Dias úteis no intervalo</div><div class="big">${r.n}</div></div>
-      <div class="txt">De ${br(pdate(cs.a))} (excluída) a ${br(pdate(cs.b))} (incluída): ${r.days} dias corridos, ${r.we} de fim de semana${r.ex.length ? ' e ' + r.ex.length + ' excluídos pela tabela' : ''}.</div></div>
+      <p class="gtxt">${r.days} dias corridos, ${r.we} de fim de semana${r.ex.length ? ' e ' + r.ex.length + ' excluídos pela tabela' : ''}.</p>
       ${warns.join('')}
       ${r.ex.length ? `<div class="trail">${r.ex.map((x) => `<div class="tr x"><span class="k">N</span><span class="mono">${br(x.d)}</span><span>${WD[x.d.getDay()]}</span><span>${esc(x.why)}</span></div>`).join('')}</div>` : ''}
       ${monthsHTML(pdate(cs.a), pdate(cs.b), { o: cs, mk: cs.a, due: cs.b })}
@@ -752,18 +784,20 @@ function renderYear() {
   $('#c-year').innerHTML = h;
 }
 function initCal() {
-  $('#c-m').value = cs.marco; $('#c-n').value = cs.n; $('#c-a').value = cs.a; $('#c-b').value = cs.b;
+  $('#c-n').value = cs.n;
+  let xTmp = '';
+  campoData('c-m', () => cs.marco, (v) => { cs.marco = v; renderCal(); });
+  campoData('c-a', () => cs.a, (v) => { cs.a = v; renderCal(); });
+  campoData('c-b', () => cs.b, (v) => { cs.b = v; renderCal(); });
+  campoData('c-x', () => xTmp, (v) => { xTmp = v; });
   $('#c-form').addEventListener('click', (e) => {
     const b = e.target.closest('[data-mode]'); if (b) { cs.mode = b.dataset.mode; renderCal(); }
     const rm = e.target.closest('[data-rm]'); if (rm) { cs.ex = cs.ex.filter((k) => k !== rm.dataset.rm); renderCal(); }
   });
-  $('#c-m').addEventListener('input', (e) => { cs.marco = e.target.value; renderCal(); });
   $('#c-n').addEventListener('input', (e) => { cs.n = Math.min(250, parseInt(e.target.value, 10) || 0); renderCal(); });
-  $('#c-a').addEventListener('input', (e) => { cs.a = e.target.value; renderCal(); });
-  $('#c-b').addEventListener('input', (e) => { cs.b = e.target.value; renderCal(); });
   $('#c-dje').addEventListener('change', (e) => { cs.dje = e.target.checked; renderCal(); });
   $('#c-l').addEventListener('change', (e) => { cs.loc = e.target.value; renderCal(); });
-  $('#c-xadd').addEventListener('click', () => { const v = $('#c-x').value; if (v && !cs.ex.includes(v)) { cs.ex.push(v); cs.ex.sort(); $('#c-x').value = ''; renderCal(); } });
+  $('#c-xadd').addEventListener('click', () => { const v = xTmp; if (v && !cs.ex.includes(v)) { cs.ex.push(v); cs.ex.sort(); xTmp = ''; $('#c-x').value = ''; renderCal(); } });
   renderCal();
 }
 
@@ -947,8 +981,8 @@ function renderFunList() {
 function funDetailHTML(f, P, folha) {
   const none = f.l.some((x) => /^nenhum/i.test(x));
   return `${folha ? '' : `<button type="button" class="gvolta" data-act="voltar">${ICON.volta}Resultados</button>`}
-    <div class="tags"><span class="idl">${f.id}</span><span class="tagw mute">${esc(catLabel(f.c))}</span>${f.co && f.co !== f.c ? `<span class="tagw amber">Categoria de origem: ${esc(f.co.toLowerCase())}</span>` : ''}</div>
     <h2>${hl(f.t, P.terms)}</h2>
+    <div class="tags"><span class="idl">${f.id}</span><span class="tagw mute">${esc(catLabel(f.c))}</span>${f.co && f.co !== f.c ? `<span class="tagw amber">Categoria de origem: ${esc(f.co.toLowerCase())}</span>` : ''}</div>
     ${folha ? '<div class="pauta" aria-hidden="true"></div>' : ''}
     <div class="deftw">
       <div class="row"><div class="dt">Gatilhos de uso</div><div class="dd"><ul>${f.g.map((x) => `<li>${hl(x, P.terms)}</li>`).join('')}</ul></div></div>
@@ -1055,8 +1089,8 @@ function emeDetailHTML(e, P, folha) {
   const kids = (KIDS[e.c] || []).slice().sort(byDesc);
   return `${folha ? '' : `<button type="button" class="gvolta" data-act="voltar">${ICON.volta}${es.q.trim() ? 'Resultados' : 'Árvore'}</button>`}
     <div class="crumb"><span>${esc(cap(e.r.toLowerCase()))}</span>${e._p.map((x) => `<span aria-hidden="true">›</span><button type="button" data-go="${x.c}">${esc(x.d)}</button>`).join('')}</div>
-    <div class="tags"><span class="idl">${e.c}</span><span class="tagw mute">Hierarquia ${esc(e.h)}</span><span class="tagw ${e.tr ? '' : 'mute'}">Abordado pela TR: ${e.tr ? 'Sim' : 'Não'} | dado da planilha</span>${SCOPE.has(e.r) ? '' : '<span class="tagw amber">Fora do escopo do Guia</span>'}</div>
     <h2>${hl(e.d, P.terms)}</h2>
+    <div class="tags"><span class="idl">${e.c}</span><span class="tagw mute">Hierarquia ${esc(e.h)}</span><span class="tagw ${e.tr ? '' : 'mute'}">Abordado pela TR: ${e.tr ? 'Sim' : 'Não'} | dado da planilha</span>${SCOPE.has(e.r) ? '' : '<span class="tagw amber">Fora do escopo do Guia</span>'}</div>
     ${folha ? '<div class="pauta" aria-hidden="true"></div>' : ''}
     ${SCOPE.has(e.r) ? '' : '<div class="box warn"><div class="lbl">Ramo fora do escopo</div><p>O ramo é categoria taxonômica de origem e não entra automaticamente na ementa de um voto do escopo civil e de consumo.</p></div>'}
     <div><div class="fhead"><div class="lbl">Ementa-base de origem</div><span class="tagw amber">Não é ementa final</span></div><div class="specw">${ebh}</div>
