@@ -8,6 +8,21 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': 
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const cap = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 const BASE = location.href.split('#')[0];
+const AS = 'assets/atril/';
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+const MQ = window.matchMedia('(max-width: 899px)');
+const isMob = () => MQ.matches;
+const store = {
+  get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* armazenamento indisponível */ } }
+};
+const ICON = {
+  volta: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 8 12l6 6"/></svg>',
+  chev: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>',
+  fora: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg>',
+  baixa: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>'
+};
+const inited = {};
 
 /* ---------- utilidades ---------- */
 function toast(msg) {
@@ -97,45 +112,408 @@ function snippet(text, terms, len = 150) {
   return (s > 0 ? '…' : '') + text.slice(s, s + len) + (s + len < text.length ? '…' : '');
 }
 
-/* ---------- navegação ---------- */
-const VIEWS = ['inicio', 'guia', 'regras', 'criterios', 'templates', 'calendario', 'fundamentos', 'ementario', 'indice', 'memoria'];
-const TITLES = { inicio: 'Início', guia: 'Guia de Estilo', regras: 'Regras de Aplicação', criterios: 'Critérios Operacionais', templates: 'Templates', calendario: 'Calendário', fundamentos: 'Fundamentos', ementario: 'Ementário', indice: 'Índice e Arquitetura', memoria: 'Memória de Integração' };
-const ORDER = VIEWS.slice(1);
-const inited = {};
-let current = null;
+/* =====================================================================
+   MATERIAIS E TECLADO
+   Trecho real de teclado de Mi a Fá: 9 brancas (documentos e manuais)
+   e 5 pretas (anexos em PDF), na ordem de dados/materiais.json.
+   ===================================================================== */
+const MAT = D.mat;
+const WH = MAT.brancas;
+const BK = MAT.pretas;
+BK.forEach((m) => { m.tipo = 'anexo'; m.curto = 'PDF'; });
+const MBY = {}; WH.concat(BK).forEach((m) => { MBY[m.id] = m; });
+const ORDEM = [];
+WH.forEach((m, i) => { ORDEM.push(m); BK.filter((b) => b.entre[0] === i).forEach((b) => ORDEM.push(b)); });
+const fmtKB = (kb) => (kb >= 1000 ? (kb / 1024).toFixed(1).replace('.', ',') + ' MB' : kb + ' KB');
+function tipoLinha(m) {
+  if (m.tipo === 'documento') return 'documento · ' + m.camada;
+  if (m.tipo === 'manual') return 'manual · ' + m.volume + ' · ' + m.paginas + ' p.';
+  return 'anexo em PDF · ' + m.paginas + ' p.';
+}
+function rotuloTecla(m) {
+  if (m.tipo === 'documento') return m.nome + ', documento de ' + m.camada;
+  if (m.tipo === 'manual') return m.volume + ', ' + m.nome + ', manual em PDF';
+  return m.nome + ', anexo em PDF';
+}
+
+const KB = $('#teclado');
+const TECLAS = $('#teclas');
+const LEIT = $('#leitura');
+const KEL = {};
+const geo = {};
+let foco = null;
+
+function buildKeys() {
+  TECLAS.innerHTML = ORDEM.map((m) => `<a class="tecla ${m.tipo === 'anexo' ? 'p' : 'b'}${m.tipo === 'manual' ? ' man' : ''}" href="#${m.id}" data-k="${m.id}" tabindex="-1" aria-label="${esc(rotuloTecla(m))}"><span class="tl" aria-hidden="true">${esc(m.curto)}</span></a>`).join('');
+  $$('.tecla', TECLAS).forEach((el) => { KEL[el.dataset.k] = el; });
+}
+
+/* Geometria: cada tecla é um trapézio projetado a partir de um ponto de fuga
+   acima do teclado. No mobile o teclado fica plano e rola na horizontal. */
+function layout() {
+  const W0 = KB.clientWidth; const H = KB.clientHeight;
+  if (!W0 || !H) return;
+  const mob = isMob(); const n = WH.length;
+  const W = mob ? Math.max(W0, n * 64) : W0;
+  const s0 = mob ? 1 : (H < 110 ? 0.94 : 0.72);
+  TECLAS.style.width = W + 'px';
+  const X = (u, v) => W / 2 + (u - 0.5) * W * (s0 + (1 - s0) * v);
+  const f = (x) => Math.round(x * 10) / 10;
+  const g = 1.25;
+  WH.forEach((m, i) => {
+    const u0 = i / n; const u1 = (i + 1) / n;
+    const pts = [[X(u0, 0) + g, 0], [X(u1, 0) - g, 0], [X(u1, 1) - g, H], [X(u0, 1) + g, H]];
+    const L = Math.min(pts[0][0], pts[3][0]); const R = Math.max(pts[1][0], pts[2][0]);
+    const el = KEL[m.id];
+    el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = H + 'px';
+    el.style.clipPath = 'polygon(' + pts.map(([x, y]) => f(x - L) + 'px ' + f(y) + 'px').join(', ') + ')';
+    el.style.setProperty('--cx', f(X((u0 + u1) / 2, 1) - L) + 'px');
+    geo[m.id] = X((u0 + u1) / 2, 0);
+  });
+  const hw = (mob ? 44 / (W / n) : 0.6) / 2 / n;
+  const lv = mob ? 0.6 : 0.62;
+  BK.forEach((m) => {
+    const ub = (m.entre[0] + 1) / n; const yb = lv * H;
+    const tl = X(ub - hw, 0); const tr = X(ub + hw, 0); const br = X(ub + hw, lv); const bl = X(ub - hw, lv);
+    const L = Math.min(tl, bl); const R = Math.max(tr, br);
+    const r = Math.min(6, (br - bl) / 4);
+    const p = (x, y) => f(x - L) + ' ' + f(y);
+    const d = `M${p(tl, 0)} L${p(tr, 0)} L${p(br, yb - r)} Q${p(br, yb)} ${p(br - r, yb)} L${p(bl + r, yb)} Q${p(bl, yb)} ${p(bl, yb - r)} Z`;
+    const el = KEL[m.id];
+    const lip = Math.max(6, Math.round(yb * 0.09));
+    el.style.left = f(L) + 'px'; el.style.width = f(R - L) + 'px'; el.style.height = f(yb) + 'px';
+    el.style.clipPath = `path('${d}')`;
+    el.style.backgroundImage = `linear-gradient(to bottom, transparent calc(100% - ${lip}px), var(--lip) calc(100% - ${lip}px))`;
+    el.style.setProperty('--cx', f((bl + br) / 2 - L) + 'px');
+    geo[m.id] = (tl + tr) / 2;
+  });
+  leitura(foco);
+}
+
+/* Leitura: o nome da tecla corre pela tampa e para acima dela. */
+function leitura(id) {
+  const m = MBY[id] || MBY[cur.key];
+  const ln = $('.ln', LEIT); const lk = $('.lk', LEIT);
+  let x;
+  if (m) {
+    ln.textContent = m.tipo === 'manual' ? m.curto + ' ' + m.nome : m.nome;
+    lk.textContent = tipoLinha(m);
+    LEIT.classList.remove('dica');
+    x = geo[m.id] - (isMob() ? KB.scrollLeft : 0);
+  } else {
+    ln.textContent = isMob() ? 'Toque uma tecla' : 'Passe o cursor e toque uma tecla';
+    lk.textContent = 'documentos e manuais nas brancas, anexos em PDF nas pretas';
+    LEIT.classList.add('dica');
+    x = window.innerWidth / 2;
+  }
+  const w = LEIT.offsetWidth; const wt = LEIT.parentElement.clientWidth; const wb = $('#kb-toggle').offsetWidth + 28;
+  x = Math.max(w / 2 + 12, Math.min(wt - wb - w / 2, x));
+  LEIT.style.setProperty('--lx', Math.round(x) + 'px');
+}
+
+function rove(id, focar) {
+  $$('.tecla', TECLAS).forEach((el) => { el.tabIndex = el.dataset.k === id ? 0 : -1; });
+  if (focar && KEL[id]) KEL[id].focus();
+}
+function marcaTecla(id) {
+  $$('.tecla', TECLAS).forEach((el) => { if (el.dataset.k === id) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current'); });
+  rove(KEL[id] ? id : ORDEM[0].id, false);
+  if (isMob() && KEL[id]) {
+    const el = KEL[id];
+    KB.scrollTo({ left: el.offsetLeft + el.offsetWidth / 2 - KB.clientWidth / 2, behavior: RM.matches ? 'auto' : 'smooth' });
+  }
+  leitura(foco);
+}
+function toca(el) {
+  el.classList.add('toca');
+  setTimeout(() => el.classList.remove('toca'), 190);
+}
+function arpejo() {
+  if (RM.matches) return;
+  ORDEM.forEach((m, i) => setTimeout(() => toca(KEL[m.id]), 300 + i * 48));
+}
+
+TECLAS.addEventListener('pointerover', (e) => {
+  const k = e.target.closest('.tecla');
+  if (!k || e.pointerType !== 'mouse') return;
+  foco = k.dataset.k; leitura(foco);
+});
+TECLAS.addEventListener('pointerleave', () => {
+  const a = document.activeElement;
+  foco = a && a.classList && a.classList.contains('tecla') ? a.dataset.k : null;
+  leitura(foco);
+});
+TECLAS.addEventListener('focusin', (e) => { const k = e.target.closest('.tecla'); if (k) { foco = k.dataset.k; leitura(foco); } });
+TECLAS.addEventListener('focusout', (e) => { if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('.tecla')) { foco = null; leitura(null); } });
+TECLAS.addEventListener('keydown', (e) => {
+  const k = e.target.closest('.tecla'); if (!k) return;
+  const i = ORDEM.findIndex((m) => m.id === k.dataset.k); let j = null;
+  if (e.key === 'ArrowRight') j = Math.min(ORDEM.length - 1, i + 1);
+  else if (e.key === 'ArrowLeft') j = Math.max(0, i - 1);
+  else if (e.key === 'Home') j = 0;
+  else if (e.key === 'End') j = ORDEM.length - 1;
+  else if (e.key === ' ') { e.preventDefault(); k.click(); return; }
+  if (j == null) return;
+  e.preventDefault(); rove(ORDEM[j].id, true);
+});
+TECLAS.addEventListener('click', (e) => {
+  const k = e.target.closest('.tecla'); if (!k) return;
+  toca(k);
+  if (location.hash === '#' + k.dataset.k) { e.preventDefault(); FOLHA.scrollTo({ top: 0, behavior: RM.matches ? 'auto' : 'smooth' }); }
+});
+KB.addEventListener('scroll', () => leitura(foco), { passive: true });
+
+const KBT = $('#kb-toggle');
+function setKbMin(on, salvar) {
+  document.body.classList.toggle('kb-min', on);
+  KBT.setAttribute('aria-expanded', String(!on));
+  $('span', KBT).textContent = on ? 'Abrir teclado' : 'Recolher teclado';
+  if (salvar) store.set('atril.kb', on ? 'min' : '');
+}
+KBT.addEventListener('click', () => setKbMin(!document.body.classList.contains('kb-min'), true));
+
+/* =====================================================================
+   FOLHA
+   ===================================================================== */
+const FOLHA = $('#folha');
+const FIN = $('#folha-in');
+const cur = { key: null };
+let folhaIO = null;
+const TOOLDOC = { 'calendario-base': ['Calendário', 'base e limites da contagem', 'Calendário, base e limites'], 'fundamentos-regra': ['Fundamentos', 'regra de uso', 'Fundamentos, regra de uso'], 'ementario-regra': ['Ementário', 'regra de uso', 'Ementário, regra de uso'] };
+const DOCVIEW = { 'guia-de-estilo': 'guia', 'regras-de-aplicacao': 'regras', 'criterios-operacionais': 'criterios', 'indice-e-arquitetura': 'indice', 'memoria-de-integracao': 'memoria', 'templates-texto': 'templates', 'calendario-base': 'calendario', 'fundamentos-regra': 'fundamentos', 'ementario-regra': 'ementario' };
+
+function scrollToId(id, instant) {
+  const el = document.getElementById(id);
+  if (el) { el.scrollIntoView({ behavior: instant || RM.matches ? 'auto' : 'smooth', block: 'start' }); return true; }
+  return false;
+}
+function tituloFolha(key) {
+  if (key === 'inicio') return '';
+  if (key === 'cal-ano') return 'Calendário Jurídico';
+  if (key.startsWith('doc:')) return (TOOLDOC[key.slice(4)] || [])[2] || '';
+  if (key.startsWith('fun:')) return 'Fundamento ' + key.slice(4);
+  if (key.startsWith('eme:')) return 'Ementário ' + key.slice(4);
+  return MBY[key] ? MBY[key].nome : '';
+}
+function showSheet(key, sub) {
+  if (cur.key === key) { if (sub) scrollToId(sub); return; }
+  const primeira = cur.key === null;
+  cur.key = key;
+  const render = () => {
+    if (folhaIO) { folhaIO.disconnect(); folhaIO = null; }
+    renderSheet(key);
+    FOLHA.scrollTop = 0;
+    if (sub) requestAnimationFrame(() => scrollToId(sub, true));
+  };
+  if (!primeira && document.startViewTransition && !RM.matches) document.startViewTransition(render);
+  else render();
+  marcaTecla(MBY[key] ? key : null);
+  const t = tituloFolha(key);
+  document.title = t ? t + ' | ATRIL' : 'ATRIL | Playbook de Elaboração de Votos';
+  if (!primeira) $('#anuncio').textContent = 'Na folha: ' + (t || 'capa do ATRIL');
+}
+function ensureSheet() { if (cur.key === null) showSheet('inicio'); }
+
+function renderSheet(key) {
+  if (key === 'inicio') FIN.innerHTML = capaHTML();
+  else if (key === 'cal-ano') { FIN.innerHTML = anoHTML(); renderYear(); }
+  else if (key.startsWith('doc:')) docSheet(key.slice(4), null);
+  else if (key.startsWith('fun:')) FIN.innerHTML = `<div class="ffer"><article class="detail">${funDetailHTML(FBY[key.slice(4)], parseQuery(fs.q), true)}</article></div>`;
+  else if (key.startsWith('eme:')) FIN.innerHTML = `<div class="ffer"><article class="detail">${emeDetailHTML(EBY[key.slice(4)], parseQuery(es.q), true)}</article></div>`;
+  else { const m = MBY[key]; if (m.doc) docSheet(m.doc, m); else FIN.innerHTML = fichaHTML(m); }
+}
 
 function renderDoc(el, key) {
   el.innerHTML = DOCS[key] || '';
   const rail = el.parentElement && el.parentElement.querySelector('.rail');
   if (rail) buildRail(rail, el, key);
 }
-const DOCVIEW = { 'guia-de-estilo': 'guia', 'regras-de-aplicacao': 'regras', 'criterios-operacionais': 'criterios', 'indice-e-arquitetura': 'indice', 'memoria-de-integracao': 'memoria', 'templates-texto': 'templates', 'calendario-base': 'calendario', 'fundamentos-regra': 'fundamentos', 'ementario-regra': 'ementario' };
-function viewOfDocKey(key) { return DOCVIEW[key] || key; }
 function buildRail(rail, art, key) {
-  const v = viewOfDocKey(key);
+  const v = DOCVIEW[key] || key;
   const hs = $$('.op h1[id], h2.h2[id]', art);
   if (hs.length < 2) { rail.hidden = true; return; }
-  rail.innerHTML = '<div class="lbl">Nesta página</div>' + hs.map((h) => `<a href="#${v}/${h.id}" data-id="${h.id}" class="${h.tagName === 'H1' ? 'ch' : ''}">${esc(h.textContent)}</a>`).join('');
+  rail.innerHTML = '<div class="lbl">Nesta folha</div>' + hs.map((h) => `<a href="#${v}/${h.id}" data-id="${h.id}" class="${h.tagName === 'H1' ? 'ch' : ''}">${esc(h.textContent)}</a>`).join('');
   if ('IntersectionObserver' in window) {
     const links = $$('a', rail);
     const io = new IntersectionObserver((ents) => {
-      ents.forEach((en) => { if (en.isIntersecting) { links.forEach((a) => a.classList.toggle('on', a.dataset.id === en.target.id)); } });
-    }, { rootMargin: '-80px 0px -70% 0px' });
+      ents.forEach((en) => { if (en.isIntersecting) links.forEach((a) => a.classList.toggle('on', a.dataset.id === en.target.id)); });
+    }, { root: rail.closest('.folha, .camada-c'), rootMargin: '0px 0px -72% 0px' });
     hs.forEach((h) => io.observe(h));
+    if (rail.closest('.folha')) folhaIO = io;
   }
 }
-function docView(v) {
-  const sec = $('#v-' + v);
-  const k = sec.dataset.doc;
-  const i = ORDER.indexOf(v);
-  const prev = ORDER[i - 1], next = ORDER[i + 1];
-  sec.innerHTML = `<div class="docwrap"><article class="doc flow v4"></article><aside class="rail"></aside></div>
-    <nav class="pager" aria-label="Componentes vizinhos">${prev ? `<a href="#${prev}"><span class="small">Anterior</span><span class="t">${TITLES[prev]}</span></a>` : '<span></span>'}${next ? `<a href="#${next}"><span class="small">Próximo</span><span class="t">${TITLES[next]}</span></a>` : ''}</nav>`;
-  renderDoc($('article', sec), k);
-
+function docSheet(k, m) {
+  const i = m ? WH.indexOf(m) : -1;
+  const prev = i > 0 ? WH[i - 1] : null;
+  const next = i >= 0 && i < WH.length - 1 ? WH[i + 1] : null;
+  FIN.innerHTML = '<div class="docwrap"><article class="doc flow v4"></article><aside class="rail" aria-label="Seções desta folha"></aside></div>' +
+    (m ? `<nav class="pager" aria-label="Teclas vizinhas">${prev ? `<a href="#${prev.id}"><span class="small">Tecla anterior</span><span class="t">${esc(prev.nome)}</span></a>` : '<span></span>'}${next ? `<a href="#${next.id}"><span class="small">Próxima tecla</span><span class="t">${esc(next.tipo === 'manual' ? next.curto + ' ' + next.nome : next.nome)}</span></a>` : ''}</nav>` : '');
+  const art = $('article', FIN);
+  art.innerHTML = DOCS[k] || '';
+  let meta = '';
+  if (m) {
+    const p = MBY[m.pdf];
+    meta = `<span><strong>${esc(m.camada)}</strong> · documento</span>` + (p ? `<a href="#${p.id}">${p.tipo === 'manual' ? 'Versão diagramada: ' + p.volume : 'Também em PDF'}, ${p.paginas} p.</a>` : '');
+  } else if (TOOLDOC[k]) meta = `<span><strong>${TOOLDOC[k][0]}</strong> · ${TOOLDOC[k][1]}</span>`;
+  const op = $('.op', art);
+  if (op) op.insertAdjacentHTML('afterend', '<div class="pauta" aria-hidden="true"></div>' + (meta ? `<p class="fmeta">${meta}</p>` : ''));
+  buildRail($('.rail', FIN), art, k);
 }
-function lazyDocs(scope) { $$('[data-doc]', scope).forEach((el) => { if (el.tagName === 'ARTICLE' && !el.dataset.done) { renderDoc(el, el.dataset.doc); el.dataset.done = '1'; } }); }
 
+function capaHTML() {
+  const docs = WH.filter((m) => m.tipo === 'documento');
+  const mans = WH.filter((m) => m.tipo === 'manual');
+  const li = (m, q) => `<li><a href="#${m.id}"><span class="tk${m.tipo === 'anexo' ? ' p' : ''}" aria-hidden="true"></span><span class="nm">${m.tipo === 'manual' ? m.curto + ' ' : ''}${esc(m.nome)}</span><span class="q">${esc(q)}</span></a></li>`;
+  const passos = ['Identificar classe, objeto, rito e questões relevantes', 'Examinar a admissibilidade, com a base temporal quando necessária', 'Localizar fundamentos e referências, confrontando-os com o caso', 'Definir o resultado antes de selecionar os blocos do Template'];
+  return `<div class="capa">
+    <div class="capa-cab"><span>Anexo ao Volume 04 | Guia de Estilo</span><span>Turma Recursal do TJPR</span></div>
+    <h1 class="capa-t">Playbook de Elaboração de Votos</h1>
+    <p class="capa-para">para <em>Recurso Inominado</em> e <em>Embargos de Declaração</em></p>
+    <p class="capa-dica">Guia, regras, critérios e repertório reunidos numa estante. Cada tecla abre um material nesta folha; as ferramentas calculam e buscam ao lado.</p>
+    <h2 class="compassos-t">Ordem de utilização</h2>
+    <ol class="compassos">${passos.map((t, i) => `<li class="compasso"><span class="nota" aria-hidden="true">${['I', 'II', 'III', 'IV'][i]}</span><p>${t}</p></li>`).join('')}</ol>
+    <div class="indice">
+      <section><h2>Documentos</h2><ul>${docs.map((m) => li(m, m.camada)).join('')}</ul></section>
+      <section><h2>Manuais da coleção</h2><ul>${mans.map((m) => li(m, m.paginas + ' p.')).join('')}</ul></section>
+      <section><h2>Anexos em PDF</h2><ul>${BK.map((m) => li(m, m.paginas + ' p.')).join('')}</ul></section>
+    </div>
+    <p class="capa-nota"><strong>Antes de usar.</strong> A página localiza e calcula; não decide. Gatilho não demonstra incidência, ementa-base não é ementa final e a contagem vale para o regime cível em dias úteis, com a base de 2026 e a referência territorial de Curitiba.</p>
+  </div>`;
+}
+
+function fichaHTML(m) {
+  const url = AS + m.arquivo; const arq = m.arquivo.split('/').pop();
+  let rel = '';
+  if (m.le) rel = `<p class="fpdf-rel">Versão diagramada do documento que se lê na folha: <a href="#${m.le}">${esc(MBY[m.le].nome)}</a>.</p>`;
+  else if (m.ferramenta === 'templates') rel = '<p class="fpdf-rel">Os seis modelos também se montam no <a href="#templates">montador de Templates</a>, em tela inteira.</p>';
+  return `<div class="fpdf">
+    <a class="fpdf-capa" href="${url}" target="_blank" rel="noopener" aria-label="Abrir o PDF ${esc(m.nome)} em nova aba"><img src="${AS + m.capa}" width="560" height="793" alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></a>
+    <div class="fpdf-txt">
+      <h1 class="ft">${esc(m.nome)}</h1>
+      ${m.tipo === 'manual' ? `<p class="fpdf-sub"><strong>${m.volume}</strong> · ${esc(m.sub)}</p>` : `<p class="fpdf-lead">${esc(m.lead)}</p>`}
+      <div class="pauta" aria-hidden="true"></div>
+      <div class="deft narrow">
+        <div class="row"><div class="dt">Natureza</div><div class="dd">${m.tipo === 'manual' ? 'Manual da coleção da Turma Recursal do TJPR' : 'Anexo do Playbook, camada ' + esc(m.camada)}</div></div>
+        <div class="row"><div class="dt">Formato</div><div class="dd">PDF, ${m.paginas} páginas, ${fmtKB(m.kb)}</div></div>
+        <div class="row"><div class="dt">Arquivo</div><div class="dd">${esc(arq)}</div></div>
+      </div>
+      <div class="acoes"><a class="btn pri" href="${url}" target="_blank" rel="noopener">Abrir PDF${ICON.fora}</a><a class="btn ghost" href="${url}" download>Baixar${ICON.baixa}</a></div>
+      ${rel}
+    </div>
+  </div>`;
+}
+
+/* =====================================================================
+   FERRAMENTAS: gadgets, gaveta (mobile) e largura
+   ===================================================================== */
+const FERR = $('#ferr');
+const GADS = ['calendario', 'fundamentos', 'ementario'];
+let gAberto = null;
+let gavetaVolta = null;
+function gstat(id, t) { $('#gs-' + id).textContent = t; }
+function abreGadget(id, opts) {
+  const o = opts || {};
+  GADS.forEach((g) => {
+    const on = g === id;
+    $('#g-' + g).classList.toggle('aberto', on);
+    $('#gh-' + g).setAttribute('aria-expanded', String(on));
+    $('#gb-' + g).hidden = !on;
+  });
+  gAberto = id;
+  FERR.classList.add('tem-aberto');
+  if (id === 'fundamentos' && !inited.fun) initFun();
+  if (id === 'ementario' && !inited.eme) initEme();
+  if (isMob() && o.gaveta !== false) abreGaveta();
+  $$('.barra [data-g]').forEach((b) => b.setAttribute('aria-expanded', String(isMob() && FERR.classList.contains('gaveta') && b.dataset.g === id)));
+}
+function fechaGadgets() {
+  GADS.forEach((g) => { $('#g-' + g).classList.remove('aberto'); $('#gh-' + g).setAttribute('aria-expanded', 'false'); $('#gb-' + g).hidden = true; });
+  gAberto = null;
+  FERR.classList.remove('tem-aberto');
+}
+function abreGaveta() {
+  if (FERR.classList.contains('gaveta')) return;
+  if (!gavetaVolta) gavetaVolta = document.activeElement;
+  FERR.classList.add('gaveta'); $('#veu').hidden = false;
+  setTimeout(() => $('#ferr-x').focus(), 60);
+}
+function fechaGaveta() {
+  if (!FERR.classList.contains('gaveta')) return;
+  FERR.classList.remove('gaveta'); $('#veu').hidden = true;
+  $$('.barra [data-g]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+  const v = gavetaVolta; gavetaVolta = null;
+  if (v && v.focus && document.contains(v)) v.focus();
+}
+$$('.gh').forEach((b) => b.addEventListener('click', () => {
+  const id = b.id.slice(3);
+  if (gAberto === id && !isMob()) fechaGadgets(); else abreGadget(id);
+}));
+$$('.barra [data-g]').forEach((b) => b.addEventListener('click', () => { gavetaVolta = b; abreGadget(b.dataset.g); }));
+$('#ferr-x').addEventListener('click', fechaGaveta);
+$('#veu').addEventListener('click', fechaGaveta);
+
+const ARR = $('#ferr-arraste');
+function setFerrW(w, salvar) {
+  const max = Math.min(560, Math.round(window.innerWidth * 0.44));
+  const v = Math.max(340, Math.min(max, Math.round(w)));
+  document.documentElement.style.setProperty('--ferr-w', v + 'px');
+  ARR.setAttribute('aria-valuenow', String(v));
+  if (salvar) store.set('atril.ferr', String(v));
+}
+ARR.addEventListener('pointerdown', (e) => {
+  if (isMob()) return;
+  e.preventDefault(); ARR.setPointerCapture(e.pointerId); ARR.classList.add('ativo');
+  const dir = FERR.getBoundingClientRect().right;
+  const mv = (ev) => setFerrW(dir - ev.clientX - 10);
+  const up = () => { ARR.classList.remove('ativo'); ARR.removeEventListener('pointermove', mv); ARR.removeEventListener('pointerup', up); setFerrW(FERR.offsetWidth, true); };
+  ARR.addEventListener('pointermove', mv); ARR.addEventListener('pointerup', up);
+});
+ARR.addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  e.preventDefault(); setFerrW(FERR.offsetWidth + (e.key === 'ArrowLeft' ? 20 : -20), true);
+});
+
+/* =====================================================================
+   CAMADA DE TEMPLATES (tela inteira)
+   ===================================================================== */
+const CAM = $('#camada');
+let camVolta = null;
+let ultimaFolha = '';
+function abreCamada(sub) {
+  if (CAM.hidden) {
+    camVolta = document.activeElement;
+    fechaGaveta();
+    CAM.hidden = false; document.body.classList.add('com-camada');
+    if (!inited.tpl) { inited.tpl = true; initTpl(); }
+    setTimeout(() => $('#camada-x').focus(), 40);
+  }
+  tplSub(sub);
+}
+function fechaCamada(semHistorico) {
+  if (CAM.hidden) return;
+  CAM.hidden = true; document.body.classList.remove('com-camada');
+  if (!semHistorico && location.hash.startsWith('#templates')) history.replaceState(null, '', ultimaFolha ? '#' + ultimaFolha : location.pathname + location.search);
+  if (camVolta && camVolta.focus && document.contains(camVolta)) camVolta.focus();
+}
+function tplSub(sub) {
+  if (!sub) return;
+  if (sub === 'anotados') setTabs($('#t-tabs'), 't', 'a');
+  else if (sub.startsWith('templates-')) { setTabs($('#t-tabs'), 't', 't'); setTimeout(() => scrollToId(sub), 40); }
+  else if (TPLIDX[sub] != null) { setTabs($('#t-tabs'), 't', 'm'); tplSelect(sub); }
+}
+$('#camada-x').addEventListener('click', () => fechaCamada());
+CAM.addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const f = $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', CAM).filter((el) => !el.disabled && el.offsetParent !== null);
+  if (!f.length) return;
+  if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+  else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+});
+
+/* =====================================================================
+   ROTEAMENTO
+   O hash diz o que está na folha; ferramentas abrem ao lado sem trocá-la.
+   ===================================================================== */
 function setTabs(tabsEl, prefix, tab) {
   $$('button', tabsEl).forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
   $$('button', tabsEl).forEach((b) => { const p = $('#' + prefix + '-' + b.dataset.tab); if (p) p.hidden = b.dataset.tab !== tab; });
@@ -150,45 +528,58 @@ function bindTabs(id, prefix, onChange) {
     const n = bs[(i + (e.key === 'ArrowRight' ? 1 : bs.length - 1)) % bs.length]; n.focus(); n.click();
   });
 }
+function lazyDocs(scope) { $$('[data-doc]', scope).forEach((el) => { if (el.tagName === 'ARTICLE' && !el.dataset.done) { renderDoc(el, el.dataset.doc); el.dataset.done = '1'; } }); }
 
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
-  let [v, sub] = h.split('/');
-  if (!VIEWS.includes(v)) { v = 'inicio'; sub = null; }
-  if (current !== v) {
-    $$('.view').forEach((s) => { s.hidden = s.id !== 'v-' + v; s.classList.toggle('cur', s.id === 'v-' + v); });
-    $$('#nav a[data-v]').forEach((a) => { if (a.dataset.v === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); a.classList.toggle('on', a.dataset.v === v); });
-    document.title = (v === 'inicio' ? '' : TITLES[v] + ' | ') + 'ATRIL';
-    if (!inited[v]) { inited[v] = true; init(v); }
-    current = v;
-    if (!sub) window.scrollTo(0, 0);
+  const parts = h.split('/'); const v = parts[0]; const sub = parts.slice(1).join('/') || null;
+  if (v === 'templates') { abreCamada(sub); ensureSheet(); return; }
+  fechaCamada(true);
+  ultimaFolha = h;
+  if (v === 'calendario') {
+    if (sub === 'ano') { showSheet('cal-ano'); return; }
+    if (sub) { showSheet('doc:calendario-base', sub === 'base' ? null : sub); return; }
+    abreGadget('calendario'); ensureSheet(); return;
   }
-  closeNav();
-  handleSub(v, sub);
+  if (v === 'fundamentos') {
+    if (sub === 'regra' || (sub && sub.startsWith('fundamentos-'))) { showSheet('doc:fundamentos-regra', sub === 'regra' ? null : sub); return; }
+    abreGadget('fundamentos'); if (sub) funSelect(sub); ensureSheet(); return;
+  }
+  if (v === 'ementario') {
+    if (sub === 'regra' || (sub && sub.startsWith('ementario-'))) { showSheet('doc:ementario-regra', sub === 'regra' ? null : sub); return; }
+    abreGadget('ementario'); if (sub) emeSelect(sub); ensureSheet(); return;
+  }
+  if (MBY[v]) { fechaGaveta(); showSheet(v, sub); return; }
+  showSheet('inicio');
 }
-function scrollToId(id) {
-  const el = document.getElementById(id);
-  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return true; }
-  return false;
+function navigate(href) {
+  if (location.hash === href) route(); else location.hash = href;
 }
-function handleSub(v, sub) {
-  if (!sub) return;
-  if (v === 'templates') { if (sub.startsWith('templates-')) { setTabs($('#t-tabs'), 't', 't'); scrollToId(sub); } else if (TPLIDX[sub] != null) { setTabs($('#t-tabs'), 't', 'm'); tplSelect(sub); } return; }
-  if (v === 'calendario') { if (sub.startsWith('calendario-')) { setTabs($('#c-tabs'), 'c', 'base'); scrollToId(sub); } else if (sub === 'ano') setTabs($('#c-tabs'), 'c', 'ano'); return; }
-  if (v === 'fundamentos') { if (sub.startsWith('fundamentos-')) { setTabs($('#f-tabs'), 'f', 'r'); scrollToId(sub); } else { setTabs($('#f-tabs'), 'f', 'b'); funSelect(sub, true); } return; }
-  if (v === 'ementario') { if (sub.startsWith('ementario-')) { setTabs($('#e-tabs'), 'e', 'r'); scrollToId(sub); } else { setTabs($('#e-tabs'), 'e', 'b'); emeSelect(sub, true); } return; }
-  setTimeout(() => scrollToId(sub), 30);
-}
-function init(v) {
-  if ($('#v-' + v).dataset.doc) docView(v);
-  if (v === 'templates') initTpl();
-  if (v === 'calendario') initCal();
-  if (v === 'fundamentos') initFun();
-  if (v === 'ementario') initEme();
-}
-function closeNav() { $('#nav').classList.remove('open'); $('#menubtn').setAttribute('aria-expanded', 'false'); }
-$('#menubtn').addEventListener('click', (e) => { e.stopPropagation(); const o = $('#nav').classList.toggle('open'); $('#menubtn').setAttribute('aria-expanded', String(o)); });
-document.addEventListener('click', (e) => { if ($('#nav').classList.contains('open') && !e.target.closest('#nav')) closeNav(); });
+$('.salto').addEventListener('click', (e) => { e.preventDefault(); FOLHA.focus(); });
+
+/* Ações dos registros (gadget e folha) */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act; const id = b.dataset.id;
+  if (a === 'voltar') {
+    if (b.closest('#f-det')) { setFunView('list'); $('#f-q').focus(); } else { setEmeView('list'); $('#e-q').focus(); }
+  } else if (a === 'f-cp') copy(FBY[id].b, 'Formulação copiada. Adapte ao caso e ao Guia antes de usar.');
+  else if (a === 'f-lk') copy(BASE + '#fundamentos/' + id, 'Link do registro copiado.');
+  else if (a === 'f-em') {
+    const f = FBY[id]; es.q = fs.q.trim() || f.t.replace(/\s*\(.*\)\s*$/, ''); es.cur = null;
+    abreGadget('ementario'); $('#e-q').value = es.q; setEmeView('list'); renderEmeLeft();
+  } else if (a === 'f-folha') { fechaGaveta(); showSheet('fun:' + id); }
+  else if (a === 'e-cp') copy(EBY[id].eb, 'Ementa-base copiada. Preencha as lacunas conforme o Guia.');
+  else if (a === 'e-lk') copy(BASE + '#ementario/' + id, 'Link do registro copiado.');
+  else if (a === 'e-fn') {
+    const en = EBY[id]; fs.q = es.q.trim() || en.d; fs.cur = null; fs.cat = 'all';
+    abreGadget('fundamentos'); $('#f-q').value = fs.q; setFunView('list'); renderFunList();
+  } else if (a === 'e-folha') { fechaGaveta(); showSheet('eme:' + id); }
+});
+FIN.addEventListener('click', (e) => {
+  const go = e.target.closest('[data-go]'); if (go) { showSheet('eme:' + go.dataset.go); return; }
+  const y = e.target.closest('[data-y]'); if (y) { calYear = +y.dataset.y; renderYear(); }
+});
 
 /* =====================================================================
    CALENDÁRIO
@@ -292,58 +683,74 @@ function trailText(r, o) {
   if (o.ex.length) L.push('Exclusões informadas: ' + o.ex.map((k) => br(pdate(k))).join(', '));
   return L.join('\n');
 }
+const LEGENDA = '<div class="legend"><span><i style="box-shadow: inset 0 0 0 2px var(--ink);"></i>Marco</span><span><i style="background: var(--accent-tint);"></i>Dia contado</span><span><i style="background: var(--support);"></i>Excluído pela tabela</span><span><i style="background: repeating-linear-gradient(135deg, var(--support-tint) 0 3px, var(--paper) 3px 6px);"></i>Exclusão informada</span><span><i style="background: var(--ink);"></i>Vencimento</span></div>';
 function renderCal() {
   $$('#c-form [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === cs.mode)));
   $('#c-prazo').style.display = cs.mode === 'prazo' ? 'flex' : 'none';
   $('#c-int').style.display = cs.mode === 'int' ? 'flex' : 'none';
-  $('#c-ml').textContent = cs.dje ? 'Data da disponibilização no DJe' : 'Marco (intimação ou publicação)';
+  $('#c-ml').textContent = cs.dje ? 'Disponibilização no DJe' : 'Marco (intimação ou publicação)';
   $('#c-xl').innerHTML = cs.ex.map((k) => `<span class="chip">${br(pdate(k))}<button type="button" aria-label="Remover ${br(pdate(k))}" data-rm="${k}">×</button></span>`).join('');
   const out = $('#c-out'); const warns = [];
+  const trilhaAberta = !!($('.trilha', out) && $('.trilha', out).open);
   if (cs.loc === 'out') warns.push('<div class="box warn"><div class="lbl">Outra comarca</div><p>O feriado de 8 de setembro (Curitiba) deixa de ser excluído. A tabela não incorpora os feriados locais das demais comarcas: inclua-os nas exclusões do processo.</p></div>');
   if (cs.mode === 'prazo') {
-    if (!cs.marco || !(cs.n >= 1)) { out.innerHTML = '<p class="small">Informe o marco e o número de dias úteis.</p>'; return; }
+    if (!cs.marco || !(cs.n >= 1)) { out.innerHTML = '<p class="small">Informe o marco e o número de dias úteis.</p>'; gstat('calendario', 'Informe o marco e os dias úteis'); return; }
     const r = calcPrazo(cs);
     if (r.hist) warns.unshift('<div class="box warn"><div class="lbl">Histórico de 2025</div><p>O intervalo alcança 2025, base preservada sem conferência normativa anual. Verifique as fontes de 2025 e a localidade antes de concluir.</p></div>');
     if (r.blocked) {
-      out.innerHTML = '<div class="box warn" style="padding: 20px 24px;"><div class="lbl">Intervalo não coberto</div><p style="font-size: 16px;">A contagem sai da base disponível (2025 e 2026; não há tabela de 2027). A ferramenta não conclui o prazo: recupere a base do período antes de prosseguir.</p></div>' + warns.join('');
+      out.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>A contagem sai da base disponível (2025 e 2026; não há tabela de 2027). A ferramenta não conclui o prazo: recupere a base do período antes de prosseguir.</p></div>' + warns.join('');
+      gstat('calendario', 'Fora da base disponível');
       return;
     }
     const exTxt = r.ex.length ? 'Excluídos pela tabela: ' + r.ex.map((x) => `${br(x.d).slice(0, 5)} (${esc(x.why.split(';')[0].replace(/ \(.*\)$/, ''))})`).join(', ') + ', além dos fins de semana.' : 'Sem feriados ou suspensões no intervalo; excluídos apenas os fins de semana.';
     const count = {}; r.rows.forEach((x) => { if (x.cls === 'c' || x.cls === 'due') count[iso(x.d)] = x.k; });
     out.innerHTML = `
-      <div class="dark"><div><div class="lbl">Vencimento</div><div class="big">${pad(r.due.getDate())} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</div><div style="margin-top: 4px;">${WDL[r.due.getDay()]} | ${cs.n}º dia útil</div></div>
+      <div class="dark"><div><div class="lbl">Vencimento</div><div class="big">${pad(r.due.getDate())} de ${MESL[r.due.getMonth()]} de ${r.due.getFullYear()}</div><div class="sub">${cap(WDL[r.due.getDay()])} | ${cs.n}º dia útil</div></div>
       <div class="txt">${r.pub ? `Publicação em <strong>${br(r.pub)}</strong>. ` : ''}Início da contagem em <strong>${br(r.first)}</strong>. ${exTxt}</div></div>
       ${warns.join('')}
       ${monthsHTML(pdate(cs.marco), r.due, { o: cs, count, mk: cs.marco, due: iso(r.due) })}
-      <div class="legend"><span><i style="box-shadow: inset 0 0 0 2px var(--ink);"></i>Marco</span><span><i style="background: var(--accent-tint);"></i>Dia contado</span><span><i style="background: var(--support);"></i>Excluído pela tabela</span><span><i style="background: repeating-linear-gradient(135deg, var(--support-tint) 0 4px, var(--paper) 4px 8px);"></i>Exclusão informada</span><span><i style="background: var(--ink);"></i>Vencimento</span></div>
-      <div><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 12px;"><h2 class="h3w">Trilha de conferência</h2><button type="button" class="btn ghost sm" id="c-copy">Copiar trilha</button></div>
-      <div class="trail">${r.rows.map((x) => `<div class="tr ${x.cls}"><span class="k">${x.k}</span><span class="mono">${br(x.d)}</span><span>${WD[x.d.getDay()]}</span><span>${esc(x.why || '')}</span></div>`).join('')}</div></div>
+      ${LEGENDA}
+      <details class="trilha"${trilhaAberta ? ' open' : ''}><summary>Trilha de conferência</summary><button type="button" class="btn ghost sm" id="c-copy">Copiar trilha</button>
+      <div class="trail">${r.rows.map((x) => `<div class="tr ${x.cls}"><span class="k">${x.k}</span><span class="mono">${br(x.d)}</span><span>${WD[x.d.getDay()]}</span><span>${esc(x.why || '')}</span></div>`).join('')}</div></details>
       <div class="box"><div class="lbl">Limites da base</div><p>Contagem pelo art. 224 do CPC: exclui o dia do começo e inclui o do vencimento. A tabela cobre 2026 (ativo) e 2025 (histórico); não há 2027. O campo de contagem não indica expediente, e a data de ciência, disponibilização ou publicação continua a ser determinada no processo.</p></div>`;
     $('#c-copy').onclick = () => copy(trailText(r, cs), 'Trilha copiada.');
+    gstat('calendario', `Vence em ${br(r.due)}, ${WDL[r.due.getDay()]}`);
   } else {
-    if (!cs.a || !cs.b) { out.innerHTML = '<p class="small">Informe as duas datas.</p>'; return; }
+    if (!cs.a || !cs.b) { out.innerHTML = '<p class="small">Informe as duas datas.</p>'; gstat('calendario', 'Informe as duas datas'); return; }
     const r = calcInt(cs);
-    if (r.bad) { out.innerHTML = '<div class="box warn"><div class="lbl">Datas</div><p>A data final deve ser posterior à inicial.</p></div>'; return; }
-    if (r.blocked) { out.innerHTML = '<div class="box warn" style="padding: 20px 24px;"><div class="lbl">Intervalo não coberto</div><p style="font-size: 16px;">O intervalo sai da base disponível (2025 e 2026). A ferramenta não conclui a contagem.</p></div>'; return; }
+    if (r.bad) { out.innerHTML = '<div class="box warn"><div class="lbl">Datas</div><p>A data final deve ser posterior à inicial.</p></div>'; gstat('calendario', 'Datas a corrigir'); return; }
+    if (r.blocked) { out.innerHTML = '<div class="box warn"><div class="lbl">Intervalo não coberto</div><p>O intervalo sai da base disponível (2025 e 2026). A ferramenta não conclui a contagem.</p></div>'; gstat('calendario', 'Fora da base disponível'); return; }
     if (r.hist) warns.unshift('<div class="box warn"><div class="lbl">Histórico de 2025</div><p>O intervalo alcança 2025, base preservada sem conferência normativa anual.</p></div>');
     out.innerHTML = `
-      <div class="dark"><div><div class="lbl">Dias úteis no intervalo</div><div class="big" style="font-size: 56px;">${r.n}</div></div>
+      <div class="dark"><div><div class="lbl">Dias úteis no intervalo</div><div class="big">${r.n}</div></div>
       <div class="txt">De ${br(pdate(cs.a))} (excluída) a ${br(pdate(cs.b))} (incluída): ${r.days} dias corridos, ${r.we} de fim de semana${r.ex.length ? ' e ' + r.ex.length + ' excluídos pela tabela' : ''}.</div></div>
       ${warns.join('')}
       ${r.ex.length ? `<div class="trail">${r.ex.map((x) => `<div class="tr x"><span class="k">N</span><span class="mono">${br(x.d)}</span><span>${WD[x.d.getDay()]}</span><span>${esc(x.why)}</span></div>`).join('')}</div>` : ''}
       ${monthsHTML(pdate(cs.a), pdate(cs.b), { o: cs, mk: cs.a, due: cs.b })}
       <div class="box"><div class="lbl">Convenção</div><p>Exclui a data inicial e inclui a final, como na contagem do art. 224 do CPC. Fins de semana, feriados, recesso e suspensões da tabela não entram.</p></div>`;
+    gstat('calendario', `${r.n} dias úteis no intervalo`);
   }
 }
 let calYear = 2026;
+function anoHTML() {
+  return `<div class="ffer">
+    <h1 class="ft">Calendário Jurídico</h1>
+    <p class="fmeta"><span><strong>Calendário</strong> · tabela anual, cível em dias úteis</span><span>Decreto Judiciário nº 621/2025 · Curitiba · art. 224 do CPC</span></p>
+    <div class="pauta" aria-hidden="true"></div>
+    <div class="anobar"><div class="segc" role="group" aria-label="Ano" id="c-anos"><button type="button" data-y="2026" aria-pressed="true">2026 | ativo</button><button type="button" data-y="2025" aria-pressed="false">2025 | histórico</button></div>
+    <div class="legend"><span><i style="background: var(--support);"></i>Excluído (feriado, recesso, suspensão)</span><span><i style="background: var(--paper); box-shadow: inset 0 0 0 1px var(--rule);"></i>Computável</span><span><i style="box-shadow: inset 0 0 0 1px #9A9A9A;"></i>Fim de semana</span></div></div>
+    <div id="c-yw"></div>
+    <div class="months" id="c-year"></div>
+  </div>`;
+}
 function renderYear() {
-  $$('#c-ano [data-y]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.y === calYear)));
-  $('#c-yw').innerHTML = calYear === 2025 ? '<div class="box warn" style="margin-bottom: 18px;"><div class="lbl">Histórico de origem</div><p>Preservado para evitar perda documental; não recebeu conferência normativa anual e não se confunde com a tabela ativa de 2026.</p></div>' : '';
+  if (!$('#c-year')) return;
+  $$('#c-anos [data-y]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.y === calYear)));
+  $('#c-yw').innerHTML = calYear === 2025 ? '<div class="box warn"><div class="lbl">Histórico de origem</div><p>Preservado para evitar perda documental; não recebeu conferência normativa anual e não se confunde com a tabela ativa de 2026.</p></div>' : '';
   let h = ''; for (let m = 0; m < 12; m++) h += monthHTML(calYear, m, { o: { loc: 'cwb', ex: [] } });
   $('#c-year').innerHTML = h;
 }
 function initCal() {
-  bindTabs('c-tabs', 'c', (t) => { if (t === 'ano') renderYear(); });
   $('#c-m').value = cs.marco; $('#c-n').value = cs.n; $('#c-a').value = cs.a; $('#c-b').value = cs.b;
   $('#c-form').addEventListener('click', (e) => {
     const b = e.target.closest('[data-mode]'); if (b) { cs.mode = b.dataset.mode; renderCal(); }
@@ -356,21 +763,7 @@ function initCal() {
   $('#c-dje').addEventListener('change', (e) => { cs.dje = e.target.checked; renderCal(); });
   $('#c-l').addEventListener('change', (e) => { cs.loc = e.target.value; renderCal(); });
   $('#c-xadd').addEventListener('click', () => { const v = $('#c-x').value; if (v && !cs.ex.includes(v)) { cs.ex.push(v); cs.ex.sort(); $('#c-x').value = ''; renderCal(); } });
-  $('#c-ano').addEventListener('click', (e) => { const b = e.target.closest('[data-y]'); if (b) { calYear = +b.dataset.y; renderYear(); } });
   renderCal();
-}
-function quickCal() {
-  const m = $('#q-m'), n = $('#q-n'), out = $('#q-out');
-  m.value = DEF_MARCO;
-  const go = () => {
-    const o = { marco: m.value, n: parseInt(n.value, 10) || 0, dje: false, loc: 'cwb', ex: [] };
-    if (!o.marco || o.n < 1) { out.innerHTML = '<span class="small">Informe marco e dias.</span>'; return; }
-    const r = calcPrazo(o);
-    if (r.blocked) { out.innerHTML = '<div class="lbl">Vencimento</div><p style="margin-top: 4px;">Fora da base disponível (sem 2027).</p>'; return; }
-    out.innerHTML = `<div class="lbl">Vencimento</div><div style="font: 700 24px/1.2 var(--f-display); margin-top: 4px;">${br(r.due)}</div><div class="small" style="margin-top: 2px;">${WDL[r.due.getDay()]}${r.ex.length ? ' | excluídos: ' + r.ex.map((x) => br(x.d).slice(0, 5)).join(', ') : ''}${r.hist ? ' | alcança o histórico de 2025' : ''}</div>`;
-  };
-  m.addEventListener('input', go); n.addEventListener('input', go); go();
-  $('#q-go').addEventListener('click', () => { cs.marco = m.value || cs.marco; cs.n = parseInt(n.value, 10) || cs.n; cs.mode = 'prazo'; if (inited.calendario) { $('#c-m').value = cs.marco; $('#c-n').value = cs.n; renderCal(); } });
 }
 
 /* =====================================================================
@@ -495,7 +888,7 @@ function updStatus() {
 }
 function tplSelect(id) { if (TPLIDX[id] == null) return; tcur = id; renderTpl(); }
 function initTpl() {
-  bindTabs('t-tabs', 't', (tab) => { if (tab === 'a' && !$('#t-adoc').dataset.done) { $('#t-adoc').innerHTML = DOCS['templates-anotados']; $('#t-adoc').dataset.done = '1'; } });
+  bindTabs('t-tabs', 't');
   $('#t-list').innerHTML = D.tpl.map((t) => `<button type="button" data-id="${t.id}" aria-pressed="false"><span class="tid">${t.id}</span><span class="small" style="color: inherit; opacity: .8;">${esc(cap(t.res))}</span></button>`).join('');
   $('#t-list').addEventListener('click', (e) => { const b = e.target.closest('[data-id]'); if (b) { tcur = b.dataset.id; history.replaceState(null, '', '#templates/' + tcur); renderTpl(); } });
   $('#t-res').addEventListener('click', (e) => { const b = e.target.closest('[data-res]'); if (b) { tstate(tcur).res = b.dataset.res; applyAuto(tcur); renderTpl(); } });
@@ -516,77 +909,88 @@ function initTpl() {
 }
 
 /* =====================================================================
-   FUNDAMENTOS
+   FUNDAMENTOS (gadget: lista e registro empilhados)
    ===================================================================== */
 const FUN = D.fun; const FBY = {}; FUN.forEach((f) => { FBY[f.id] = f; });
 FUN.forEach((f) => {
   f._f = [{ t: norm(f.t), w: 10 }, { t: norm(f.g.join(' | ')), w: 8 }, { t: norm(f.e.join(' | ')), w: 4 }, { t: norm(f.f), w: 3 }, { t: norm(f.c), w: 3 }, { t: norm(f.b), w: 2 }, { t: norm(f.l.join(' | ')), w: 2 }, { t: norm(f.id), w: 20 }];
 });
-const fs = { q: '', cat: 'all', cur: null };
+const FCATS = new Set(FUN.map((f) => f.c)).size;
+const catLabel = (c) => cap(c.toLowerCase()).replace(/ — /g, ' | ');
+const fs = { q: '', cat: 'all', cur: null, view: 'list' };
 function funSearch(q) {
   const P = parseQuery(q); if (!P.terms.length) return { P, res: [] };
   const res = []; FUN.forEach((f) => { const s = score(f._f, P.terms); if (s) res.push({ f, s }); });
   res.sort((a, b) => b.s - a.s || a.f.id.localeCompare(b.f.id)); return { P, res };
 }
+function setFunView(v) { fs.view = v; $('#f-lista').hidden = v !== 'list'; $('#f-det').hidden = v !== 'det'; }
 function renderFunList() {
   const { P, res } = funSearch(fs.q);
   let items = fs.q.trim() ? res.map((r) => r.f) : FUN.slice();
   const cats = {}; items.forEach((f) => { cats[f.c] = (cats[f.c] || 0) + 1; });
+  const total = items.length;
   if (fs.cat !== 'all') items = items.filter((f) => f.c === fs.cat);
   $('#f-ct').textContent = `${items.length} de ${FUN.length}`;
   $('#f-syn').innerHTML = P.syn.length ? 'Também buscado: ' + P.syn.slice(0, 6).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const catNames = Object.keys(cats).sort();
-  $('#f-cats').innerHTML = `<button type="button" class="chip" data-cat="all" aria-pressed="${fs.cat === 'all'}">Todas <span class="ct">${Object.values(cats).reduce((a, b) => a + b, 0)}</span></button>` + catNames.map((c) => `<button type="button" class="chip" data-cat="${esc(c)}" aria-pressed="${fs.cat === c}">${esc(cap(c.toLowerCase()).replace(/ — /g, ' | '))} <span class="ct">${cats[c]}</span></button>`).join('');
+  if (fs.cat !== 'all' && !cats[fs.cat]) catNames.unshift(fs.cat);
+  $('#f-cat').innerHTML = `<option value="all">Todas as categorias (${total})</option>` + catNames.map((c) => `<option value="${esc(c)}"${fs.cat === c ? ' selected' : ''}>${esc(catLabel(c))} (${cats[c] || 0})</option>`).join('');
   $('#f-list').innerHTML = items.length ? items.map((f) => {
     let sn = f.f;
     if (fs.q.trim()) { const src = [f.g.join('; '), f.e.join('; '), f.l.join('; '), f.b].find((x) => score([{ t: norm(x), w: 1 }], P.terms)) || f.f; sn = snippet(src, P.terms, 130); }
     return `<button type="button" class="ritem" data-id="${f.id}" aria-current="${fs.cur === f.id}"><span class="id">${f.id}</span><span class="tt">${hl(f.t, P.terms)}</span><span class="sn">${hl(sn, P.terms)}</span></button>`;
-  }).join('') : '<p class="small" style="padding: 16px 0;">Nenhum fundamento corresponde à busca. Tente um gatilho mais genérico ou verifique o Ementário.</p>';
-  if (!fs.cur && items.length) funDetail(items[0].id, P);
-  else if (fs.cur) funDetail(fs.cur, P);
+  }).join('') : '<p class="small" style="padding: 14px 0;">Nenhum fundamento corresponde à busca. Tente um gatilho mais genérico ou consulte o Ementário.</p>';
+  if (fs.cur && fs.view === 'det') funDetail(fs.cur, P);
+  gstat('fundamentos', fs.q.trim() ? `“${fs.q.trim()}”: ${items.length} de ${FUN.length}` : `${FUN.length} registros em ${FCATS} categorias`);
 }
-function funDetail(id, P) {
-  const f = FBY[id]; if (!f) return; fs.cur = id; P = P || parseQuery(fs.q);
-  $$('#f-list .ritem').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
+function funDetailHTML(f, P, folha) {
   const none = f.l.some((x) => /^nenhum/i.test(x));
-  $('#f-det').innerHTML = `
-    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"><span class="idl">${f.id}</span><span class="tagw mute">${esc(cap(f.c.toLowerCase()).replace(/ — /g, ' | '))}</span>${f.co && f.co !== f.c ? `<span class="tagw amber">Categoria de origem: ${esc(f.co.toLowerCase())}</span>` : ''}</div>
+  return `${folha ? '' : `<button type="button" class="gvolta" data-act="voltar">${ICON.volta}Resultados</button>`}
+    <div class="tags"><span class="idl">${f.id}</span><span class="tagw mute">${esc(catLabel(f.c))}</span>${f.co && f.co !== f.c ? `<span class="tagw amber">Categoria de origem: ${esc(f.co.toLowerCase())}</span>` : ''}</div>
     <h2>${hl(f.t, P.terms)}</h2>
+    ${folha ? '<div class="pauta" aria-hidden="true"></div>' : ''}
     <div class="deftw">
       <div class="row"><div class="dt">Gatilhos de uso</div><div class="dd"><ul>${f.g.map((x) => `<li>${hl(x, P.terms)}</li>`).join('')}</ul></div></div>
       <div class="row"><div class="dt">Função no voto</div><div class="dd">${hl(f.f, P.terms)}</div></div>
       <div class="row"><div class="dt">Elementos de aplicação</div><div class="dd"><ul>${f.e.map((x) => `<li>${hl(x, P.terms)}</li>`).join('')}</ul></div></div>
     </div>
-    <div><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px;"><div class="lbl">Formulação-base</div><span class="small">Adaptável: reescrever conforme o caso e o Guia</span></div><div class="formula">${hl(f.b, P.terms)}</div></div>
+    <div><div class="fhead"><div class="lbl">Formulação-base</div><span class="small">Adaptável: reescrever conforme o caso e o Guia</span></div><div class="formula">${hl(f.b, P.terms)}</div></div>
     <div class="box warn"><div class="lbl">Excludentes e limites</div><ul style="padding-left: 18px;">${f.l.map((x) => `<li>${hl(x, P.terms)}</li>`).join('')}</ul>${none ? '<p class="small" style="margin-top: 6px; color: var(--ink);">“Nenhum” significa que a fonte não listou limite adicional; não autoriza afirmar aplicação sem exceções.</p>' : ''}</div>
     ${f.x.length ? `<details class="corr"><summary>Correções desta edição (${f.x.length})</summary>${f.x.map((x) => `<div class="ci"><strong>${esc(cap(x.campo))}</strong> | ${esc(x.razao)}<div class="small" style="margin-top: 4px;">Texto de origem substituído: ${esc(x.origem)}</div></div>`).join('')}</details>` : ''}
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-      <button type="button" class="btn pri" id="f-cp">Copiar formulação-base</button>
-      <button type="button" class="btn ghost" id="f-lk">Copiar link</button>
-      <button type="button" class="btn ghost" id="f-em">Buscar no Ementário</button>
+    <div class="acoes">
+      <button type="button" class="btn pri" data-act="f-cp" data-id="${f.id}">Copiar formulação</button>
+      <button type="button" class="btn ghost" data-act="f-lk" data-id="${f.id}">Copiar link</button>
+      <button type="button" class="btn ghost" data-act="f-em" data-id="${f.id}">Buscar no Ementário</button>
+      ${folha ? '' : `<button type="button" class="btn ghost" data-act="f-folha" data-id="${f.id}">Abrir na folha</button>`}
     </div>`;
-  $('#f-cp').onclick = () => copy(f.b, 'Formulação copiada. Adapte ao caso e ao Guia antes de usar.');
-  $('#f-lk').onclick = () => copy(BASE + '#fundamentos/' + f.id, 'Link do registro copiado.');
-  $('#f-em').onclick = () => { es.q = fs.q.trim() || f.t.replace(/\s*\(.*\)\s*$/, ''); location.hash = '#ementario'; if (inited.ementario) { $('#e-q').value = es.q; renderEmeLeft(); } };
 }
-function funSelect(id, fromRoute) {
+function funDetail(id, P) {
+  const f = FBY[id]; if (!f) return; fs.cur = id; P = P || parseQuery(fs.q);
+  $$('#f-list .ritem').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
+  $('#f-det').innerHTML = funDetailHTML(f, P, false);
+}
+function funSelect(id) {
   if (!FBY[id]) return;
-  if (fs.cat !== 'all' && FBY[id].c !== fs.cat) { fs.cat = 'all'; }
-  fs.cur = id; renderFunList();
-  if (fromRoute && window.innerWidth < 900) $('#f-det').scrollIntoView({ behavior: 'smooth' });
+  if (!inited.fun) initFun();
+  if (fs.cat !== 'all' && FBY[id].c !== fs.cat) fs.cat = 'all';
+  fs.cur = id; setFunView('det'); renderFunList(); funDetail(id);
 }
 let fTimer;
 function initFun() {
-  bindTabs('f-tabs', 'f');
+  inited.fun = true;
   $('#f-q').value = fs.q;
-  $('#f-q').addEventListener('input', (e) => { clearTimeout(fTimer); fTimer = setTimeout(() => { fs.q = e.target.value; fs.cur = null; renderFunList(); }, 120); });
-  $('#f-cats').addEventListener('click', (e) => { const b = e.target.closest('[data-cat]'); if (b) { fs.cat = b.dataset.cat; fs.cur = null; renderFunList(); } });
-  $('#f-list').addEventListener('click', (e) => { const b = e.target.closest('[data-id]'); if (b) { history.replaceState(null, '', '#fundamentos/' + b.dataset.id); funDetail(b.dataset.id); if (window.innerWidth < 900) $('#f-det').scrollIntoView({ behavior: 'smooth' }); } });
-  renderFunList();
+  $('#f-q').addEventListener('input', (e) => { clearTimeout(fTimer); fTimer = setTimeout(() => { fs.q = e.target.value; fs.cur = null; setFunView('list'); renderFunList(); }, 120); });
+  $('#f-cat').addEventListener('change', (e) => { fs.cat = e.target.value; fs.cur = null; setFunView('list'); renderFunList(); });
+  $('#f-list').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-id]'); if (!b) return;
+    setFunView('det'); funDetail(b.dataset.id);
+    $('#gb-fundamentos').scrollTop = 0; $('#f-det .gvolta').focus();
+  });
+  setFunView('list'); renderFunList();
 }
 
 /* =====================================================================
-   EMENTÁRIO
+   EMENTÁRIO (gadget: árvore ou resultados, e registro empilhado)
    ===================================================================== */
 const EME = D.eme; const EBY = {}; EME.forEach((e) => { EBY[e.c] = e; });
 const KIDS = {}; EME.forEach((e) => { if (EBY[e.m]) (KIDS[e.m] = KIDS[e.m] || []).push(e.c); });
@@ -595,7 +999,8 @@ const pathOf = (e) => { const p = []; let x = e; let g = 0; while (x && EBY[x.m]
 EME.forEach((e) => { e._p = pathOf(e); e._f = [{ t: norm(e.c), w: 30 }, { t: norm(e.d), w: 10 }, { t: norm(e._p.map((x) => x.d).join(' > ')), w: 3 }, { t: norm(e.eb), w: 2 }, { t: norm(e.fd), w: 1 }, { t: norm(e.r), w: 1 }]; });
 const ROOTS = {}; EME.forEach((e) => { if (!EBY[e.m]) (ROOTS[e.r] = ROOTS[e.r] || []).push(e.c); });
 const RAMOS = Object.keys(ROOTS).sort();
-const es = { sc: 'g', q: '', cur: null, open: new Set() };
+const ENSC = EME.filter((e) => SCOPE.has(e.r)).length;
+const es = { sc: 'g', q: '', cur: null, open: new Set(), view: 'list' };
 const inSc = (e) => es.sc === 'a' || SCOPE.has(e.r);
 const byDesc = (a, b) => EBY[a].d.localeCompare(EBY[b].d, 'pt');
 function emeSearch(q, all) {
@@ -604,57 +1009,56 @@ function emeSearch(q, all) {
   EME.forEach((e) => { if (!all && !inSc(e)) return; let s = score(e._f, P.terms); if (s) { if (norm(q).trim() === e.c) s += 100; res.push({ e, s: s + (SCOPE.has(e.r) ? 2 : 0) }); } });
   res.sort((a, b) => b.s - a.s); return { P, res };
 }
+function setEmeView(v) { es.view = v; $('#e-lista').hidden = v !== 'list'; $('#e-det').hidden = v !== 'det'; }
 function treeHTML(codes, depth) {
   return codes.filter((c) => inSc(EBY[c])).sort(byDesc).map((c) => {
     const e = EBY[c]; const kids = (KIDS[c] || []).filter((k) => inSc(EBY[k])); const open = es.open.has(c);
-    return `<button type="button" class="tn${es.cur === c ? ' cur' : ''}" data-c="${c}" style="padding-left: ${4 + depth * 18}px" aria-expanded="${kids.length ? open : ''}"><span class="tw">${kids.length ? (open ? '▾' : '▸') : ''}</span><span>${esc(e.d)}</span>${e.tr ? '<span class="cnt" title="Assunto já abordado pela TR (dado da planilha)">TR</span>' : ''}</button>` + (open && kids.length ? treeHTML(kids, depth + 1) : '');
+    return `<div class="tn-row" style="padding-left: ${(depth - 1) * 14}px">${kids.length ? `<button type="button" class="tw" data-tg="${c}" aria-expanded="${open}" aria-label="${open ? 'Recolher' : 'Expandir'}: ${esc(e.d)}">${ICON.chev}</button>` : '<span class="tw"></span>'}<button type="button" class="tn${es.cur === c ? ' cur' : ''}" data-c="${c}"><span>${esc(e.d)}</span>${e.tr ? '<span class="cnt" title="Assunto já abordado pela TR (dado da planilha)">TR</span>' : ''}</button></div>` + (open && kids.length ? treeHTML(kids, depth + 1) : '');
   }).join('');
 }
+function emeIntro() {
+  const tr = EME.filter((e) => e.tr).length;
+  $('#e-intro').innerHTML = `<div class="gstats"><div><div class="v">${EME.length.toLocaleString('pt-BR')}</div><div class="l">registros na aba principal</div></div><div><div class="v">${ENSC.toLocaleString('pt-BR')}</div><div class="l">no escopo do Guia</div></div><div><div class="v">${tr.toLocaleString('pt-BR')}</div><div class="l">abordados pela TR</div></div></div>
+    <p class="small">Ementa-base com lacunas não é ementa final, e “abordado pela TR” não certifica tese, número de julgados ou caráter vinculante.</p>`;
+}
 function renderEmeLeft() {
-  $$('#v-ementario [data-sc]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.sc === es.sc)));
+  $$('#gb-ementario [data-sc]').forEach((b) => { if (b.closest('.segc')) b.setAttribute('aria-pressed', String(b.dataset.sc === es.sc)); });
   const left = $('#e-left');
   if (es.q.trim()) {
     const { P, res } = emeSearch(es.q, false);
     const outside = es.sc === 'g' ? emeSearch(es.q, true).res.filter((r) => !SCOPE.has(r.e.r)).length : 0;
     $('#e-ct').textContent = `${res.length} resultado${res.length === 1 ? '' : 's'}`;
     $('#e-lh').textContent = 'Resultados';
+    $('#e-intro').innerHTML = '';
     left.innerHTML = '<div class="rlist">' + res.slice(0, 80).map(({ e }) => `<button type="button" class="ritem" data-c="${e.c}" aria-current="${es.cur === e.c}"><span class="id">${e.c}${e.tr ? ' | TR' : ''}</span><span class="tt">${hl(e.d, P.terms)}</span><span class="sn">${esc(cap(e.r.toLowerCase()))}${e._p.length ? ' › ' + e._p.map((x) => esc(x.d)).join(' › ') : ''}</span></button>`).join('') + '</div>' +
       (res.length > 80 ? `<p class="small" style="margin-top: 10px;">Mostrando 80 de ${res.length}. Refine a busca.</p>` : '') +
-      (outside ? `<p class="small" style="margin-top: 10px;">${outside} resultado${outside === 1 ? '' : 's'} fora do escopo do Guia. <button type="button" class="btn ghost sm" data-sc="a" style="margin-top: 6px;">Ver no acervo completo</button></p>` : '') +
+      (outside ? `<p class="small" style="margin-top: 10px;">${outside} resultado${outside === 1 ? '' : 's'} fora do escopo do Guia.</p><button type="button" class="btn ghost sm" data-sc="a" style="align-self: flex-start;">Ver no acervo completo</button>` : '') +
       (!res.length ? '<p class="small" style="padding: 12px 0;">Nada encontrado neste alcance.</p>' : '');
-    if (!es.cur && res.length) emeDetail(res[0].e.c, P); else if (es.cur) emeDetail(es.cur, P);
+    gstat('ementario', `“${es.q.trim()}”: ${res.length} resultado${res.length === 1 ? '' : 's'}`);
+    if (es.cur && es.view === 'det') emeDetail(es.cur, P);
   } else {
     const ramos = RAMOS.filter((r) => es.sc === 'a' || SCOPE.has(r));
     const n = EME.filter(inSc).length;
     $('#e-ct').textContent = `${n.toLocaleString('pt-BR')} registros`;
     $('#e-lh').textContent = 'Árvore taxonômica';
-    left.innerHTML = '<div class="tree">' + ramos.map((r) => { const open = es.open.has('R:' + r); const cnt = EME.filter((e) => e.r === r).length; return `<button type="button" class="tn ramo" data-r="${esc(r)}" aria-expanded="${open}"><span class="tw">${open ? '▾' : '▸'}</span><span>${esc(cap(r.toLowerCase()))}</span><span class="cnt">${cnt}</span></button>` + (open ? treeHTML(ROOTS[r], 1) : ''); }).join('') + '</div>';
-    if (es.cur) emeDetail(es.cur); else emeIntro();
+    emeIntro();
+    left.innerHTML = '<div class="tree">' + ramos.map((r) => { const open = es.open.has('R:' + r); const cnt = EME.filter((e) => e.r === r).length; return `<button type="button" class="ramo" data-r="${esc(r)}" aria-expanded="${open}">${ICON.chev}<span>${esc(cap(r.toLowerCase()))}</span><span class="cnt">${cnt}</span></button>` + (open ? treeHTML(ROOTS[r], 1) : ''); }).join('') + '</div>';
+    gstat('ementario', `${EME.length.toLocaleString('pt-BR')} registros, ${ENSC.toLocaleString('pt-BR')} no escopo do Guia`);
+    if (es.cur && es.view === 'det') emeDetail(es.cur);
   }
 }
-function emeIntro() {
-  const n = EME.filter((e) => SCOPE.has(e.r)).length; const tr = EME.filter((e) => e.tr).length;
-  $('#e-det').innerHTML = `
-    <div class="g3" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
-      <div class="stat"><div class="v">${EME.length.toLocaleString('pt-BR')}</div><div class="l"><strong>Registros</strong>aba principal da planilha</div></div>
-      <div class="stat"><div class="v">${n}</div><div class="l"><strong>No escopo do Guia</strong>civil, consumidor e processual civil</div></div>
-      <div class="stat"><div class="v">${tr}</div><div class="l"><strong>Abordados pela TR</strong>informação da planilha</div></div>
-    </div>
-    <div class="box"><div class="lbl">Como usar</div><p>Busque por assunto, código ou texto-base, ou navegue pela árvore. Ementa-base com lacunas não é ementa final, e “abordado pela TR” não certifica tese, número de julgados ou caráter vinculante.</p></div>`;
-}
-function emeDetail(c, P) {
-  const e = EBY[c]; if (!e) return; es.cur = c; P = P || parseQuery(es.q);
-  $$('#e-left [data-c]').forEach((b) => { b.classList.toggle('cur', b.dataset.c === c && b.classList.contains('tn')); if (b.classList.contains('ritem')) b.setAttribute('aria-current', String(b.dataset.c === c)); });
+function emeDetailHTML(e, P, folha) {
   const gaps = (e.eb.match(/\[\.\.\.\]/g) || []).length;
   const ebh = esc(e.eb).replace(/\[\.\.\.\]/g, '<span class="gapm">[...]</span>');
-  const val = (s) => /^\[(SEM VALOR|TEXTO VAZIO) NA FONTE\]$/.test(s) ? `<span class="empty">${s === '[SEM VALOR NA FONTE]' ? 'Sem valor na fonte' : 'Texto vazio na fonte'}</span>` : hl(s, P.terms);
-  const kids = (KIDS[c] || []).slice().sort(byDesc);
-  $('#e-det').innerHTML = `
-    <div class="crumb"><span>${esc(cap(e.r.toLowerCase()))}</span>${e._p.map((x) => `<span>›</span><button type="button" data-go="${x.c}">${esc(x.d)}</button>`).join('')}</div>
-    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;"><span class="idl">${e.c}</span><span class="tagw mute">Hierarquia ${esc(e.h)}</span><span class="tagw ${e.tr ? '' : 'mute'}">Abordado pela TR: ${e.tr ? 'Sim' : 'Não'} | dado da planilha</span>${SCOPE.has(e.r) ? '' : '<span class="tagw amber">Fora do escopo do Guia</span>'}</div>
+  const val = (s) => (/^\[(SEM VALOR|TEXTO VAZIO) NA FONTE\]$/.test(s) ? `<span class="empty">${s === '[SEM VALOR NA FONTE]' ? 'Sem valor na fonte' : 'Texto vazio na fonte'}</span>` : hl(s, P.terms));
+  const kids = (KIDS[e.c] || []).slice().sort(byDesc);
+  return `${folha ? '' : `<button type="button" class="gvolta" data-act="voltar">${ICON.volta}${es.q.trim() ? 'Resultados' : 'Árvore'}</button>`}
+    <div class="crumb"><span>${esc(cap(e.r.toLowerCase()))}</span>${e._p.map((x) => `<span aria-hidden="true">›</span><button type="button" data-go="${x.c}">${esc(x.d)}</button>`).join('')}</div>
+    <div class="tags"><span class="idl">${e.c}</span><span class="tagw mute">Hierarquia ${esc(e.h)}</span><span class="tagw ${e.tr ? '' : 'mute'}">Abordado pela TR: ${e.tr ? 'Sim' : 'Não'} | dado da planilha</span>${SCOPE.has(e.r) ? '' : '<span class="tagw amber">Fora do escopo do Guia</span>'}</div>
     <h2>${hl(e.d, P.terms)}</h2>
+    ${folha ? '<div class="pauta" aria-hidden="true"></div>' : ''}
     ${SCOPE.has(e.r) ? '' : '<div class="box warn"><div class="lbl">Ramo fora do escopo</div><p>O ramo é categoria taxonômica de origem e não entra automaticamente na ementa de um voto do escopo civil e de consumo.</p></div>'}
-    <div><div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px;"><div class="lbl">Ementa-base de origem</div><span class="tagw amber">Não é ementa final</span></div><div class="specw">${ebh}</div>
+    <div><div class="fhead"><div class="lbl">Ementa-base de origem</div><span class="tagw amber">Não é ementa final</span></div><div class="specw">${ebh}</div>
     <p class="small" style="margin-top: 8px;">${gaps} lacuna${gaps === 1 ? '' : 's'}. Estrutura final pelo Guia: área; classe; subárea quando cabível; tema; tese; resultado.</p></div>
     <div class="deftw">
       <div class="row"><div class="dt">Fundamento / descrição</div><div class="dd">${val(e.fd)}</div></div>
@@ -662,41 +1066,44 @@ function emeDetail(c, P) {
       <div class="row"><div class="dt">Origem</div><div class="dd">Aba Ementário, linha ${esc(e.ln)}</div></div>
       ${kids.length ? `<div class="row"><div class="dt">Assuntos filhos</div><div class="dd"><div class="kids">${kids.map((k) => `<button type="button" class="chip" data-go="${k}">${esc(EBY[k].d)}</button>`).join('')}</div></div></div>` : ''}
     </div>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-      <button type="button" class="btn pri" id="e-cp">Copiar ementa-base</button>
-      <button type="button" class="btn ghost" id="e-lk">Copiar link</button>
-      <button type="button" class="btn ghost" id="e-fn">Buscar nos Fundamentos</button>
+    <div class="acoes">
+      <button type="button" class="btn pri" data-act="e-cp" data-id="${e.c}">Copiar ementa-base</button>
+      <button type="button" class="btn ghost" data-act="e-lk" data-id="${e.c}">Copiar link</button>
+      <button type="button" class="btn ghost" data-act="e-fn" data-id="${e.c}">Buscar nos Fundamentos</button>
+      ${folha ? '' : `<button type="button" class="btn ghost" data-act="e-folha" data-id="${e.c}">Abrir na folha</button>`}
     </div>`;
-  $('#e-cp').onclick = () => copy(e.eb, 'Ementa-base copiada. Preencha as lacunas conforme o Guia.');
-  $('#e-lk').onclick = () => copy(BASE + '#ementario/' + e.c, 'Link do registro copiado.');
-  $('#e-fn').onclick = () => { fs.q = es.q.trim() || e.d; fs.cur = null; location.hash = '#fundamentos'; if (inited.fundamentos) { $('#f-q').value = fs.q; renderFunList(); } };
 }
-function emeSelect(c, fromRoute) {
+function emeDetail(c, P) {
+  const e = EBY[c]; if (!e) return; es.cur = c; P = P || parseQuery(es.q);
+  $$('#e-left [data-c]').forEach((b) => { if (b.classList.contains('tn')) b.classList.toggle('cur', b.dataset.c === c); else b.setAttribute('aria-current', String(b.dataset.c === c)); });
+  $('#e-det').innerHTML = emeDetailHTML(e, P, false);
+}
+function emeSelect(c) {
   const e = EBY[c]; if (!e) return;
+  if (!inited.eme) initEme();
   if (!SCOPE.has(e.r)) es.sc = 'a';
   es.open.add('R:' + e.r); e._p.forEach((x) => es.open.add(x.c));
-  es.cur = c; renderEmeLeft();
-  if (fromRoute && window.innerWidth < 900) $('#e-det').scrollIntoView({ behavior: 'smooth' });
+  es.cur = c; setEmeView('det'); renderEmeLeft(); emeDetail(c);
+  $('#gb-ementario').scrollTop = 0;
 }
 let eTimer;
 function initEme() {
-  bindTabs('e-tabs', 'e');
+  inited.eme = true;
   $('#e-q').value = es.q;
-  $('#e-q').addEventListener('input', (ev) => { clearTimeout(eTimer); eTimer = setTimeout(() => { es.q = ev.target.value; es.cur = null; renderEmeLeft(); }, 150); });
-  $('#v-ementario').addEventListener('click', (ev) => {
-    const sc = ev.target.closest('[data-sc]'); if (sc) { es.sc = sc.dataset.sc; if (es.cur && !inSc(EBY[es.cur])) es.cur = null; renderEmeLeft(); return; }
-    const r = ev.target.closest('[data-r]'); if (r) { const k = 'R:' + r.dataset.r; es.open.has(k) ? es.open.delete(k) : es.open.add(k); renderEmeLeft(); return; }
-    const go = ev.target.closest('[data-go]'); if (go) { history.replaceState(null, '', '#ementario/' + go.dataset.go); emeSelect(go.dataset.go); return; }
+  $('#e-q').addEventListener('input', (ev) => { clearTimeout(eTimer); eTimer = setTimeout(() => { es.q = ev.target.value; es.cur = null; setEmeView('list'); renderEmeLeft(); }, 150); });
+  $('#gb-ementario').addEventListener('click', (ev) => {
+    const sc = ev.target.closest('[data-sc]');
+    if (sc) { es.sc = sc.dataset.sc; if (es.cur && !inSc(EBY[es.cur])) { es.cur = null; setEmeView('list'); } renderEmeLeft(); return; }
+    const r = ev.target.closest('[data-r]');
+    if (r) { const k = 'R:' + r.dataset.r; if (es.open.has(k)) es.open.delete(k); else es.open.add(k); renderEmeLeft(); const n = $(`#e-left [data-r="${CSS.escape(r.dataset.r)}"]`); if (n) n.focus(); return; }
+    const tg = ev.target.closest('[data-tg]');
+    if (tg) { const c = tg.dataset.tg; if (es.open.has(c)) es.open.delete(c); else es.open.add(c); renderEmeLeft(); const n = $(`#e-left [data-tg="${c}"]`); if (n) n.focus(); return; }
+    const go = ev.target.closest('[data-go]');
+    if (go) { emeSelect(go.dataset.go); return; }
     const n = ev.target.closest('[data-c]');
-    if (n) {
-      const c = n.dataset.c;
-      if (n.classList.contains('tn') && (KIDS[c] || []).length) { if (es.open.has(c) && es.cur === c) es.open.delete(c); else es.open.add(c); }
-      history.replaceState(null, '', '#ementario/' + c); es.cur = c;
-      if (n.classList.contains('tn')) renderEmeLeft(); else emeDetail(c);
-      if (window.innerWidth < 900) $('#e-det').scrollIntoView({ behavior: 'smooth' });
-    }
+    if (n) { setEmeView('det'); emeDetail(n.dataset.c); $('#gb-ementario').scrollTop = 0; $('#e-det .gvolta').focus(); }
   });
-  renderEmeLeft();
+  setEmeView('list'); renderEmeLeft();
 }
 
 /* =====================================================================
@@ -709,11 +1116,12 @@ function buildIndex() {
   Object.keys(comp).forEach((k) => {
     const [v, name] = comp[k]; const tpl = document.createElement('template'); tpl.innerHTML = DOCS[k] || '';
     const tx = (el) => { const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const a = []; while (w.nextNode()) a.push(w.currentNode.nodeValue); return a.join(' '); };
-    let cur = { id: null, h: name, txt: [] }; const push = () => { const t = cur.txt.join(' ').replace(/\s+/g, ' ').trim(); if (t || cur.id) secs.push({ v, comp: name, id: cur.id, h: cur.h, t, f: [{ t: norm(cur.h), w: 6 }, { t: norm(t), w: 1 }] }); };
+    let cur0 = { id: null, h: name, txt: [] };
+    const push = () => { const t = cur0.txt.join(' ').replace(/\s+/g, ' ').trim(); if (t || cur0.id) secs.push({ v, comp: name, id: cur0.id, h: cur0.h, t, f: [{ t: norm(cur0.h), w: 6 }, { t: norm(t), w: 1 }] }); };
     Array.from(tpl.content.children).forEach((el) => {
       const h = el.matches('h2.h2[id]') ? el : el.querySelector('h1[id]');
-      if (h) { push(); cur = { id: h.id, h: h.textContent.trim(), txt: el === h ? [] : [tx(el).replace(h.textContent, '')] }; }
-      else cur.txt.push(tx(el));
+      if (h) { push(); cur0 = { id: h.id, h: h.textContent.trim(), txt: el === h ? [] : [tx(el).replace(h.textContent, '')] }; }
+      else cur0.txt.push(tx(el));
     });
     push();
   });
@@ -736,41 +1144,58 @@ function runSearch() {
   $('#sf').innerHTML = [['all', 'Tudo', total]].concat(keys.map((k) => [k, k, out[k].length])).map(([k, l, n]) => `<button type="button" data-f="${k}" aria-pressed="${sfilter === k}">${l}${P.terms.length ? ' ' + n : ''}</button>`).join('');
   $('#ssyn').innerHTML = P.syn.length ? 'Também: ' + P.syn.slice(0, 4).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const L = $('#sl');
-  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ATRIL: seções dos componentes, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
+  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ATRIL: seções dos documentos, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
   if (!total) { L.innerHTML = '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
   L.innerHTML = keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');
   ssel = 0; markSel();
 }
 function markSel() { const rs = $$('#sl .res'); rs.forEach((r, i) => r.classList.toggle('sel', i === ssel)); if (rs[ssel]) rs[ssel].scrollIntoView({ block: 'nearest' }); }
-function openSearch(q) { $('#sov').hidden = false; document.body.style.overflow = 'hidden'; const i = $('#sq'); if (q != null) i.value = q; i.focus(); i.select(); runSearch(); }
-function closeSearch() { $('#sov').hidden = true; document.body.style.overflow = ''; $('#searchbtn').focus(); }
+function openSearch(q) { fechaGaveta(); $('#sov').hidden = false; const i = $('#sq'); if (q != null) i.value = q; i.focus(); i.select(); runSearch(); }
+function closeSearch(semFoco) { $('#sov').hidden = true; if (!semFoco) $('#searchbtn').focus(); }
 let sTimer;
 $('#searchbtn').addEventListener('click', () => openSearch());
-$('#sx').addEventListener('click', closeSearch);
+$('#sx').addEventListener('click', () => closeSearch());
 $('#sov').addEventListener('click', (e) => {
   if (e.target.id === 'sov') { closeSearch(); return; }
   const f = e.target.closest('[data-f]'); if (f) { sfilter = f.dataset.f; runSearch(); return; }
   const t = e.target.closest('[data-try]'); if (t) { $('#sq').value = t.dataset.try; runSearch(); return; }
-  if (e.target.closest('.res')) closeSearch();
+  const r = e.target.closest('.res'); if (r) { e.preventDefault(); closeSearch(true); navigate(r.getAttribute('href')); }
 });
 $('#sq').addEventListener('input', () => { clearTimeout(sTimer); sTimer = setTimeout(runSearch, 110); });
 $('#sq').addEventListener('keydown', (e) => {
   const rs = $$('#sl .res');
   if (e.key === 'ArrowDown') { e.preventDefault(); ssel = Math.min(rs.length - 1, ssel + 1); markSel(); }
   else if (e.key === 'ArrowUp') { e.preventDefault(); ssel = Math.max(0, ssel - 1); markSel(); }
-  else if (e.key === 'Enter') { e.preventDefault(); if (rs[ssel]) { location.hash = rs[ssel].getAttribute('href'); closeSearch(); } }
+  else if (e.key === 'Enter') { e.preventDefault(); if (rs[ssel]) { closeSearch(true); navigate(rs[ssel].getAttribute('href')); } }
 });
 document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('#sov').hidden ? openSearch() : closeSearch(); return; }
-  if (e.key === 'Escape' && !$('#sov').hidden) { closeSearch(); return; }
-  if (e.key === '/' && $('#sov').hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { e.preventDefault(); openSearch(); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if ($('#sov').hidden) openSearch(); else closeSearch(); return; }
+  if (e.key === 'Escape') {
+    if (!$('#sov').hidden) { closeSearch(); return; }
+    if (!CAM.hidden) { fechaCamada(); return; }
+    if (FERR.classList.contains('gaveta')) { fechaGaveta(); return; }
+  }
+  if (e.key === '/' && $('#sov').hidden && CAM.hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) { e.preventDefault(); openSearch(); }
 });
 
-/* ---------- início ---------- */
-quickCal();
-$('#q-fun').innerHTML = ['negativação', 'gratuidade', 'dialeticidade', 'voo cancelado'].map((s) => `<button type="button" class="chip" data-fq="${s}">${s}</button>`).join('');
-$('#q-fun').addEventListener('click', (e) => { const b = e.target.closest('[data-fq]'); if (!b) return; fs.q = b.dataset.fq; fs.cur = null; fs.cat = 'all'; if (inited.fundamentos) { $('#f-q').value = fs.q; renderFunList(); } location.hash = '#fundamentos'; });
-
+/* =====================================================================
+   INÍCIO
+   ===================================================================== */
+buildKeys();
+const wSalvo = parseInt(store.get('atril.ferr'), 10);
+if (wSalvo) setFerrW(wSalvo);
+if (store.get('atril.kb') === 'min' || window.innerHeight < 560) setKbMin(true);
+if ('ResizeObserver' in window) new ResizeObserver(() => layout()).observe(KB);
+else window.addEventListener('resize', layout);
+window.addEventListener('resize', () => leitura(foco));
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => leitura(foco));
+MQ.addEventListener('change', () => { fechaGaveta(); layout(); if (!isMob() && !gAberto) abreGadget('calendario', { gaveta: false }); });
+initCal();
+gstat('fundamentos', `${FUN.length} registros em ${FCATS} categorias`);
+gstat('ementario', `${EME.length.toLocaleString('pt-BR')} registros, ${ENSC.toLocaleString('pt-BR')} no escopo do Guia`);
+if (!isMob()) abreGadget('calendario', { gaveta: false });
 window.addEventListener('hashchange', route);
+layout();
 route();
+arpejo();
 })();
