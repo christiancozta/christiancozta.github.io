@@ -4,6 +4,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const DOCS = window.ATRIL.docs;
 const D = window.ATRIL.data;
+const N = D.n;
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const cap = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
@@ -121,33 +122,35 @@ BK.forEach((m) => { m.tipo = 'anexo'; });
 const MBY = {}; WH.concat(BK).forEach((m) => { MBY[m.id] = m; });
 const fmtKB = (kb) => (kb >= 1000 ? (kb / 1024).toFixed(1).replace('.', ',') + ' MB' : kb + ' KB');
 const nTxt = (n, s, p) => n.toLocaleString('pt-BR') + ' ' + (n === 1 ? s : p);
-const TITULO = 'ÁTRIL | Playbook de elaboração de votos';
+const TITULO = 'ÁTRIL | Playbook da metodologia ECHO';
 
 /* Altura na pauta (clave de sol): 28 Mi4, 25.5 Fá4, 23 Sol4, 20.5 Lá4, 18 Si4, 15.5 Dó5, 13 Ré5, 10.5 Mi5.
    As Regras sustentam um pedal de Dó; III soa Dó maior; IV suspende (Fá, Sol, Dó); a coda resolve em Dó maior. */
 const NOTA = { 28: 'E4', 25.5: 'F4', 23: 'G4', 20.5: 'A4', 18: 'B4', 15.5: 'C5', 13: 'D5', 10.5: 'E5' };
-const MARCAS = [['I', 'identificar'], ['II', 'admissibilidade'], ['III', 'fundamentos'], ['IV', 'resultado'], ['Coda', 'revisão']];
-const LETRA = [
-  'Identificar a classe, o objeto, o rito e as questões relevantes.',
-  'Examinar a admissibilidade, com a recuperação da base temporal quando necessária.',
-  'Localizar os fundamentos e as referências pertinentes, confrontando-os com o caso.',
-  'Definir o resultado antes de selecionar os blocos decisórios do Template.',
-  'Ao final, aplicar os critérios operacionais e conferir a correspondência entre fundamentação, dispositivo e ementa.'
+/* Cada marca de ensaio abre o seu passo: o título continua no texto. */
+/* Texto da ordem: justificado; "~" marca a sílaba (hífen discreto), para hifenizar
+   mesmo nos navegadores sem dicionário de português. */
+const MARCAS = [
+  ['I', 'Identificação', 'para clas~se, ob~je~to, ri~to e ques~tões re~le~van~tes.'],
+  ['II', 'Admissibilidade', 'para sus~ten~tar, re~cu~pe~ran~do a ba~se tem~po~ral, quan~do ne~ces~sá~rio.'],
+  ['III', 'Fundamentos', 'para con~fron~to com as re~fe~rên~cias per~ti~nen~tes.'],
+  ['IV', 'Resultados', 'para de~fi~nir an~tes da mon~ta~gem da de~ci~são (“Tem~pla~tes”).'],
+  ['V', 'Coda', 'para re~fi~nar e ade~quar a de~ci~são de acor~do com cri~té~rios de~fi~ni~dos.']
 ];
 const NAIPES = [
   { n: 'Coleção', chave: 'chaveta', vozes: [
     { id: 'vol-01', marca: 'ad lib.', pdf: 'vol-01' },
     { id: 'vol-02', marca: 'ad lib.', pdf: 'vol-02' },
-    { id: 'vol-03', marca: 'ad lib.', pdf: 'vol-03' },
-    { id: 'guia', sub: 'vol. 04 | a forma', notas: [[4, 23, 'w'], [5, 23, 'w']], liga: [4, 5], pdf: 'vol-04' }] },
+    { id: 'vol-03', sub: 'vol. 03 | SOP', marca: 'ad lib.', pdf: 'vol-03' },
+    { id: 'guia', sub: 'vol. 04 | SOP', notas: [[4, 23, 'w'], [5, 23, 'w']], liga: [4, 5], pdf: 'vol-04' }] },
   { n: 'Governança', chave: 'colchete', vozes: [
-    { id: 'regras', sub: 'coordena a ordem', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
-    { id: 'criterios', sub: 'ao final', notas: [[5, 10.5]], pdf: 'pdf-criterios' }] },
+    { id: 'regras', sub: 'SOP', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
+    { id: 'criterios', sub: 'SOP', notas: [[5, 10.5]], pdf: 'pdf-criterios' }] },
   { n: 'Ferramenta', chave: 'colchete', vozes: [
     { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [[2, 20.5]], ferr: true },
-    { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(D.fun.length, 'registro', 'registros'), notas: [[3, 23]], ferr: true },
-    { id: 'ementario', nome: 'Ementário', sub: nTxt(D.eme.length, 'assunto', 'assuntos'), notas: [[3, 10.5]], ferr: true },
-    { id: 'templates', nome: 'Templates', sub: nTxt(D.tpl.length, 'modelo', 'modelos'), notas: [[4, 25.5]], ferr: true, pdf: 'pdf-templates' }] }
+    { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(N.fun, 'registro', 'registros'), notas: [[3, 23]], ferr: true },
+    { id: 'ementario', nome: 'Ementário', sub: nTxt(N.eme, 'assunto', 'assuntos'), notas: [[3, 10.5]], ferr: true },
+    { id: 'templates', nome: 'Templates', sub: nTxt(D.tpl.length, 'modelo', 'modelos'), notas: [[4, 25.5]], ferr: true }] }
 ];
 const ANOT = [
   { id: 'indice', nota: 'Identidade, camadas e componentes', pdf: 'pdf-indice' },
@@ -165,7 +168,7 @@ function vozDesc(v) {
   if (v.marca) return 'consulta livre, fora da ordem';
   const ms = v.notas.map((n) => MARCAS[n[0] - 1][0]);
   if (ms.length === 5) return 'presente em todos os compassos';
-  if (v.liga) return 'sustentado de ' + ms[0] + ' até a coda';
+  if (v.liga) return 'sustentado de ' + ms[0] + ' até a coda (V)';
   return 'entra em ' + ms.join(', ');
 }
 
@@ -173,20 +176,20 @@ const SIS = $('#sistema');
 const COL = $('#coluna');
 const BAT = $('#batuta');
 const MQS = window.matchMedia('(max-width: 700px)');
-const abrirPdf = (m, nome) => `<a class="pt" href="${AS + m.arquivo}" target="_blank" rel="noopener" aria-label="Abrir ${esc(nome)} em PDF, ${m.paginas} páginas">abrir | ${m.paginas} p.${ICON.fora}</a>`;
+/* PDF: "ver" abre o leitor na própria página, em duas páginas; "baixar" baixa o arquivo. */
+const verBaixar = (m, nome, cls) => `<span class="${cls || 'pt'}"><button type="button" data-ver="${m.id}" aria-label="Ver ${esc(nome)} em PDF">ver</button><i aria-hidden="true">|</i><a href="${AS + m.arquivo}" download aria-label="Baixar ${esc(nome)} em PDF">baixar</a></span>`;
 function montaPartitura() {
-  $('#marcas').innerHTML = MARCAS.map(([r, s], i) => `<button type="button" data-m="${i + 1}"><span class="ensaio">${r}</span><small>${s}</small></button>`).join('');
-  $('#letra').innerHTML = LETRA.map((t, i) => `<p><b>${MARCAS[i][0]}</b>${esc(t)}</p>`).join('');
+  $('#marcas').innerHTML = MARCAS.map(([r, t, x], i) => `<button type="button" data-m="${i + 1}"><span class="mt" lang="pt-BR"><span class="ensaio">${r}</span><b>${t}</b> ${esc(x).replace(/~/g, '\u00AD')}</span></button>`).join('');
   $('#naipes').innerHTML = NAIPES.map((g) => `<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">${g.n}</span>${g.chave === 'colchete' ? '<span class="colchete"></span>' : '<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" vector-effect="non-scaling-stroke"/></svg>'}</div>` +
     g.vozes.map((v) => {
       const p = v.pdf ? MBY[v.pdf] : null;
-      return `<div class="linha voz" data-id="${v.id}"><span></span><a class="nm" href="#${v.id}" aria-label="${esc(v.nome)}, ${esc(g.n)}, ${vozDesc(v)}"><b>${esc(v.nome)}</b><small>${esc(v.sub)}</small></a><svg class="pauta-s" data-v="${v.id}" aria-hidden="true"></svg>${p ? abrirPdf(p, v.nome) : '<span></span>'}</div>`;
+      return `<div class="linha voz" data-id="${v.id}"><span></span><a class="nm" href="#${v.id}" aria-label="${esc(v.nome)}, ${esc(g.n)}, ${vozDesc(v)}"><b>${esc(v.nome)}</b><small>${esc(v.sub)}</small></a><svg class="pauta-s" data-v="${v.id}" aria-hidden="true"></svg>${p ? verBaixar(p, v.nome) : '<span></span>'}</div>`;
     }).join('') + '</div>').join('');
   $('#anot').innerHTML = ANOT.map((a) => {
     const m = MBY[a.id]; const p = MBY[a.pdf];
-    return `<li><a class="an" href="#${a.id}" data-id="${a.id}">${esc(m.nome)}</a><p>${esc(a.nota)}</p>${abrirPdf(p, m.nome).replace('class="pt"', 'class="ab"')}</li>`;
+    return `<li><a class="an" href="#${a.id}" data-id="${a.id}">${esc(m.nome)}</a><p>${esc(a.nota)}</p>${verBaixar(p, m.nome, 'ab')}</li>`;
   }).join('');
-  $('#rodape').innerHTML = `<span>Acervo do <a href="arco.html#echo"><b>ECHO</b></a> | Turma Recursal do TJPR</span><span><b>${D.fun.length}</b> fundamentos | <b>${D.eme.length.toLocaleString('pt-BR')}</b> assuntos | <b>${D.cal.length}</b> dias de calendário | <b>${D.tpl.length}</b> modelos</span>`;
+  $('#rodape').innerHTML = `<span>Acervo do <a href="arco.html#echo"><b>ECHO</b></a> | Turma Recursal do TJPR</span><span><b>${N.fun}</b> fundamentos | <b>${N.eme.toLocaleString('pt-BR')}</b> assuntos | <b>${D.cal.length}</b> dias de calendário | <b>${D.tpl.length}</b> modelos</span>`;
 }
 
 /* Cada pauta é um SVG do tamanho real da coluna: cinco linhas, barras de compasso,
@@ -246,7 +249,7 @@ SIS.addEventListener('pointermove', (e) => {
 SIS.addEventListener('pointerleave', () => { marcaCompasso(0); SIS.classList.remove('foco-voz'); });
 SIS.addEventListener('click', (e) => {
   const mb = e.target.closest('#marcas button'); if (mb) { mAtual = 0; marcaCompasso(+mb.dataset.m); return; }
-  if (e.target.closest('a')) return;
+  if (e.target.closest('a, button')) return;
   const voz = e.target.closest('.voz'); if (voz) navigate('#' + voz.dataset.id);
 });
 $('#marcas').addEventListener('focusin', (e) => { const b = e.target.closest('button'); if (b) marcaCompasso(+b.dataset.m); });
@@ -418,11 +421,12 @@ function docSheet(k, m) {
   art.innerHTML = DOCS[k] || '';
   let meta = '';
   if (m) {
-    const p = MBY[m.pdf];
-    meta = `<span><strong>${esc(m.camada)}</strong> | documento</span>` + (p ? `<a href="${AS + p.arquivo}" target="_blank" rel="noopener">abrir ${p.tipo === 'manual' ? 'o ' + p.volume.toLowerCase() : 'o PDF'} | ${p.paginas} p.</a>` : '');
+    const p = MBY[m.pdf]; const v = VOZ[m.id];
+    const leg = v ? v.sub + ' | ' + m.camada : 'Anotação | ' + m.camada;
+    meta = `<span>${esc(leg)}</span>` + (p ? `<button type="button" class="fver" data-ver="${p.id}">Abrir o PDF</button>` : '');
   } else if (TOOLDOC[k]) meta = `<span><strong>${TOOLDOC[k][0]}</strong> | ${TOOLDOC[k][1]}</span>`;
   const op = $('.op', art);
-  if (op) op.insertAdjacentHTML('afterend', '<div class="pauta" aria-hidden="true"></div>' + (meta ? `<p class="fmeta">${meta}</p>` : ''));
+  if (op) op.insertAdjacentHTML('beforeend', (meta ? `<p class="fmeta">${meta}</p>` : '') + '<div class="pauta" aria-hidden="true"></div>');
   buildRail($('.rail', FIN), art, k);
 }
 
@@ -432,17 +436,17 @@ function fichaHTML(m) {
   if (m.le) rel = `<p class="fpdf-rel">Versão diagramada do documento que se lê na tela: <a href="#${m.le}">${esc(MBY[m.le].nome)}</a>.</p>`;
   else if (m.ferramenta === 'templates') rel = '<p class="fpdf-rel">Os seis modelos também se montam no <a href="#templates">montador de Templates</a>, em tela inteira.</p>';
   return `<div class="fpdf">
-    <a class="fpdf-capa" href="${url}" target="_blank" rel="noopener" aria-label="Abrir o PDF ${esc(m.nome)} em nova aba"><img src="${AS + m.capa}" width="560" height="793" alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></a>
+    <button type="button" class="fpdf-capa" data-ver="${m.id}" aria-label="Ver o PDF ${esc(m.nome)}"><img src="${AS + m.capa}" width="560" height="793" alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></button>
     <div class="fpdf-txt">
       <h1 class="ft">${esc(m.nome)}</h1>
       ${m.tipo === 'manual' ? `<p class="fpdf-sub"><strong>${m.volume}</strong> | ${esc(m.sub)}</p>` : `<p class="fpdf-lead">${esc(m.lead)}</p>`}
       <div class="pauta" aria-hidden="true"></div>
       <div class="deft narrow">
         <div class="row"><div class="dt">Natureza</div><div class="dd">${m.tipo === 'manual' ? 'Manual da coleção da Turma Recursal do TJPR' : 'Anexo do Playbook, camada ' + esc(m.camada)}</div></div>
-        <div class="row"><div class="dt">Formato</div><div class="dd">PDF, ${m.paginas} páginas, ${fmtKB(m.kb)}</div></div>
+        <div class="row"><div class="dt">Formato</div><div class="dd">PDF, ${fmtKB(m.kb)}</div></div>
         <div class="row"><div class="dt">Arquivo</div><div class="dd">${esc(arq)}</div></div>
       </div>
-      <div class="acoes"><a class="btn pri" href="${url}" target="_blank" rel="noopener">Abrir PDF${ICON.fora}</a><a class="btn ghost" href="${url}" download>Baixar${ICON.baixa}</a></div>
+      <div class="acoes"><button type="button" class="btn pri" data-ver="${m.id}">Abrir o PDF</button><a class="btn ghost" href="${url}" download>Baixar${ICON.baixa}</a></div>
       ${rel}
     </div>
   </div>`;
@@ -455,9 +459,39 @@ function abreGadget(id) {
   abreParte();
   if (cur.key !== 'ferr:' + id) { cur.key = 'ferr:' + id; FOLHA.scrollTop = 0; }
   if (folhaIO) { folhaIO.disconnect(); folhaIO = null; }
-  if (id === 'fundamentos' && !inited.fun) initFun();
-  if (id === 'ementario' && !inited.eme) initEme();
   situa('ferr:' + id);
+  if (!BASES[id]) return Promise.resolve(true);
+  const k = BASES[id][0];
+  if (inited[k]) return Promise.resolve(true);
+  const sec = $('#gb-' + id);
+  sec.setAttribute('aria-busy', 'true'); gstat(id, 'Carregando a base');
+  return carregaBase(id).then(() => {
+    sec.removeAttribute('aria-busy');
+    if (!inited[k]) (k === 'fun' ? initFun : initEme)();
+    return true;
+  }, () => {
+    sec.removeAttribute('aria-busy'); gstat(id, 'A base não carregou. Feche e abra de novo.');
+    return false;
+  });
+}
+
+/* Bases pesadas: Fundamentos e Ementário só descem quando a ferramenta é aberta
+   (ou quando a busca global as consulta). Cada uma é um script à parte, injetado uma vez. */
+const BASES = { fundamentos: ['fun', 'atril-fundamentos.js'], ementario: ['eme', 'atril-ementario.js'] };
+const pronta = {};
+const baixando = {};
+function carregaBase(id) {
+  if (!baixando[id]) {
+    const [k, arq] = BASES[id];
+    baixando[id] = (D[k] ? Promise.resolve() : new Promise((ok, falha) => {
+      const s = document.createElement('script');
+      s.src = AS + arq; s.async = true;
+      s.onload = ok;
+      s.onerror = () => { s.remove(); delete baixando[id]; falha(new Error(arq)); };
+      document.head.appendChild(s);
+    })).then(() => { if (!pronta[id]) { (k === 'fun' ? prepFun : prepEme)(); pronta[id] = true; } });
+  }
+  return baixando[id];
 }
 
 /* =====================================================================
@@ -497,6 +531,131 @@ CAM.addEventListener('keydown', (e) => {
 });
 
 /* =====================================================================
+   LEITOR DE PDF
+   "ver" abre o PDF na própria página, como livro aberto: a primeira página
+   sozinha e depois duas a duas; no celular, uma por vez. O pdf.js carrega
+   só no primeiro uso, do mesmo endereço que o ECHO usa.
+   ===================================================================== */
+const LEI = $('#leitor');
+const LIVRO = $('#leitor-livro');
+const PGS = $$('.leitor-pg', LIVRO);
+const PALCO = $('#leitor-palco');
+const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+const MQL = window.matchMedia('(max-width: 760px)');
+const lei = { doc: null, url: '', abs: [], i: 0, ciclo: 0, volta: null, carga: null, m: null };
+const pad2 = (n) => String(n).padStart(2, '0');
+function carregaPdfjs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  if (!lei.carga) {
+    lei.carga = new Promise((ok, falha) => {
+      const sc = document.createElement('script'); sc.src = PDFJS + 'pdf.min.js'; sc.async = true;
+      sc.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; ok(window.pdfjsLib); };
+      sc.onerror = () => { lei.carga = null; falha(new Error('pdf.js indisponível')); };
+      document.head.appendChild(sc);
+    });
+  }
+  return lei.carga;
+}
+function aberturas() {
+  const n = lei.doc.numPages; const a = [];
+  if (MQL.matches) { for (let p = 1; p <= n; p++) a.push([p]); return a; }
+  a.push([1]);
+  for (let p = 2; p <= n; p += 2) a.push(p + 1 <= n ? [p, p + 1] : [p]);
+  return a;
+}
+async function mostra() {
+  if (!lei.doc) return;
+  const ciclo = ++lei.ciclo; const ab = lei.abs[lei.i]; const n = lei.doc.numPages;
+  LIVRO.classList.add('vira');
+  const pags = await Promise.all(ab.map((p) => lei.doc.getPage(p)));
+  if (ciclo !== lei.ciclo) return;
+  const base = pags[0].getViewport({ scale: 1 });
+  const lado = MQL.matches ? 48 : 104; const alto = MQL.matches ? 64 : 92;
+  const W = Math.max(120, PALCO.clientWidth - lado * 2); const H = Math.max(160, PALCO.clientHeight - alto);
+  const esc1 = Math.min((ab.length === 2 ? W / 2 : W) / base.width, H / base.height);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  await Promise.all(pags.map(async (pg, k) => {
+    const cv = PGS[k]; const vp = pg.getViewport({ scale: esc1 * dpr });
+    const off = document.createElement('canvas'); off.width = Math.floor(vp.width); off.height = Math.floor(vp.height);
+    await pg.render({ canvasContext: off.getContext('2d', { alpha: false }), viewport: vp }).promise;
+    if (ciclo !== lei.ciclo) return;
+    cv.width = off.width; cv.height = off.height; cv.getContext('2d').drawImage(off, 0, 0);
+    cv.style.width = Math.round(base.width * esc1) + 'px'; cv.style.height = Math.round(base.height * esc1) + 'px';
+  }));
+  if (ciclo !== lei.ciclo) return;
+  PGS.forEach((cv, k) => { cv.hidden = k >= ab.length; });
+  LIVRO.dataset.n = String(ab.length);
+  LIVRO.classList.remove('vira');
+  $('#leitor-n').textContent = (ab.length === 2 ? pad2(ab[0]) + '–' + pad2(ab[1]) : pad2(ab[0])) + ' / ' + pad2(n);
+  $('#leitor-st').textContent = ab.length === 2 ? 'PDF | página dupla' : 'PDF | página';
+  $('#leitor-ant').disabled = lei.i <= 0;
+  $('#leitor-prox').disabled = lei.i >= lei.abs.length - 1;
+}
+async function abreLeitor(m) {
+  if (!m || !m.arquivo) return;
+  lei.m = m;
+  if (LEI.hidden) lei.volta = document.activeElement;
+  const url = AS + m.arquivo;
+  $('#leitor-t').textContent = m.nome;
+  const bx = $('#leitor-baixa'); bx.href = url; bx.setAttribute('download', m.arquivo.split('/').pop());
+  $('#leitor-n').textContent = '…'; $('#leitor-st').textContent = 'Carregando o PDF';
+  $('#leitor-ant').disabled = true; $('#leitor-prox').disabled = true;
+  if (lei.url !== url) PGS.forEach((cv) => { cv.hidden = true; });
+  LEI.hidden = false; document.documentElement.classList.add('com-leitor');
+  void LEI.offsetWidth; LEI.classList.add('on');
+  $('#leitor-x').focus({ preventScroll: true });
+  const ciclo = ++lei.ciclo;
+  try {
+    const lib = await carregaPdfjs();
+    if (lei.url !== url) { lei.doc = await lib.getDocument(url).promise; lei.url = url; }
+    if (ciclo !== lei.ciclo || LEI.hidden) return;
+    lei.abs = aberturas(); lei.i = 0;
+    await mostra();
+  } catch (err) {
+    lei.doc = null; lei.url = '';
+    $('#leitor-n').textContent = '';
+    $('#leitor-st').innerHTML = `Não foi possível abrir o PDF aqui. <a href="${url}" target="_blank" rel="noopener">Abrir em nova aba</a>`;
+  }
+}
+function fechaLeitor() {
+  if (LEI.hidden) return;
+  lei.ciclo++;
+  LEI.classList.remove('on'); document.documentElement.classList.remove('com-leitor');
+  setTimeout(() => { if (!LEI.classList.contains('on')) LEI.hidden = true; }, RM.matches ? 0 : 420);
+  const v = lei.volta; lei.volta = null;
+  if (v && v.focus && document.contains(v)) v.focus({ preventScroll: true });
+}
+function vira(d) {
+  if (!lei.doc) return;
+  const j = Math.min(lei.abs.length - 1, Math.max(0, lei.i + d));
+  if (j !== lei.i) { lei.i = j; mostra(); }
+}
+$('#leitor-ant').addEventListener('click', () => vira(-1));
+$('#leitor-prox').addEventListener('click', () => vira(1));
+$('#leitor-x').addEventListener('click', fechaLeitor);
+LEI.addEventListener('click', (e) => { if (e.target === PALCO) fechaLeitor(); });
+LEI.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') { e.preventDefault(); fechaLeitor(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); vira(-1); }
+  else if (e.key === 'ArrowRight') { e.preventDefault(); vira(1); }
+  else if (e.key === 'Tab') {
+    const f = $$('button:not(:disabled), a[href]', LEI);
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+    else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  }
+});
+let leiTimer;
+window.addEventListener('resize', () => {
+  if (LEI.hidden || !lei.doc) return;
+  clearTimeout(leiTimer);
+  leiTimer = setTimeout(() => { const p = lei.abs[lei.i][0]; lei.abs = aberturas(); lei.i = Math.max(0, lei.abs.findIndex((a) => a.includes(p))); mostra(); }, 160);
+});
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-ver]'); if (!b) return;
+  e.preventDefault(); abreLeitor(MBY[b.dataset.ver]);
+});
+
+/* =====================================================================
    ROTEAMENTO
    Sem hash, a partitura. Com hash, o material abre sobre ela.
    ===================================================================== */
@@ -529,11 +688,11 @@ function route() {
   }
   if (v === 'fundamentos') {
     if (sub === 'regra' || (sub && sub.startsWith('fundamentos-'))) { showSheet('doc:fundamentos-regra', sub === 'regra' ? null : sub); return; }
-    abreGadget('fundamentos'); if (sub) funSelect(sub); return;
+    abreGadget('fundamentos').then((ok) => { if (ok && sub && cur.key === 'ferr:fundamentos') funSelect(sub); }); return;
   }
   if (v === 'ementario') {
     if (sub === 'regra' || (sub && sub.startsWith('ementario-'))) { showSheet('doc:ementario-regra', sub === 'regra' ? null : sub); return; }
-    abreGadget('ementario'); if (sub) emeSelect(sub); return;
+    abreGadget('ementario').then((ok) => { if (ok && sub && cur.key === 'ferr:ementario') emeSelect(sub); }); return;
   }
   if (MBY[v]) { showSheet(v, sub); return; }
   fechaParte();
@@ -553,12 +712,14 @@ document.addEventListener('click', (e) => {
   else if (a === 'f-lk') copy(BASE + '#fundamentos/' + id, 'Link do registro copiado.');
   else if (a === 'f-em') {
     const f = FBY[id]; es.q = fs.q.trim() || f.t.replace(/\s*\(.*\)\s*$/, ''); es.cur = null;
-    history.replaceState(null, '', '#ementario'); abreGadget('ementario'); $('#e-q').value = es.q; setEmeView('list'); renderEmeLeft();
+    history.replaceState(null, '', '#ementario');
+    abreGadget('ementario').then((ok) => { if (!ok) return; $('#e-q').value = es.q; setEmeView('list'); renderEmeLeft(); });
   } else if (a === 'e-cp') copy(EBY[id].eb, 'Ementa-base copiada. Preencha as lacunas conforme o Guia.');
   else if (a === 'e-lk') copy(BASE + '#ementario/' + id, 'Link do registro copiado.');
   else if (a === 'e-fn') {
     const en = EBY[id]; fs.q = es.q.trim() || en.d; fs.cur = null; fs.cat = 'all';
-    history.replaceState(null, '', '#fundamentos'); abreGadget('fundamentos'); $('#f-q').value = fs.q; setFunView('list'); renderFunList();
+    history.replaceState(null, '', '#fundamentos');
+    abreGadget('fundamentos').then((ok) => { if (!ok) return; $('#f-q').value = fs.q; setFunView('list'); renderFunList(); });
   }
 });
 FIN.addEventListener('click', (e) => {
@@ -921,11 +1082,15 @@ function initTpl() {
 /* =====================================================================
    FUNDAMENTOS (gadget: lista e registro empilhados)
    ===================================================================== */
-const FUN = D.fun; const FBY = {}; FUN.forEach((f) => { FBY[f.id] = f; });
-FUN.forEach((f) => {
-  f._f = [{ t: norm(f.t), w: 10 }, { t: norm(f.g.join(' | ')), w: 8 }, { t: norm(f.e.join(' | ')), w: 4 }, { t: norm(f.f), w: 3 }, { t: norm(f.c), w: 3 }, { t: norm(f.b), w: 2 }, { t: norm(f.l.join(' | ')), w: 2 }, { t: norm(f.id), w: 20 }];
-});
-const FCATS = new Set(FUN.map((f) => f.c)).size;
+let FUN = []; const FBY = {}; let FCATS = 0;
+function prepFun() {
+  FUN = D.fun;
+  FUN.forEach((f) => {
+    FBY[f.id] = f;
+    f._f = [{ t: norm(f.t), w: 10 }, { t: norm(f.g.join(' | ')), w: 8 }, { t: norm(f.e.join(' | ')), w: 4 }, { t: norm(f.f), w: 3 }, { t: norm(f.c), w: 3 }, { t: norm(f.b), w: 2 }, { t: norm(f.l.join(' | ')), w: 2 }, { t: norm(f.id), w: 20 }];
+  });
+  FCATS = new Set(FUN.map((f) => f.c)).size;
+}
 const catLabel = (c) => cap(c.toLowerCase()).replace(/ — /g, ' | ');
 const fs = { q: '', cat: 'all', cur: null, view: 'list' };
 function funSearch(q) {
@@ -987,7 +1152,7 @@ function funSelect(id) {
 let fTimer;
 function initFun() {
   inited.fun = true;
-  $('#f-q').value = fs.q;
+  if (fs.q) $('#f-q').value = fs.q; else fs.q = $('#f-q').value;
   $('#f-q').addEventListener('input', (e) => { clearTimeout(fTimer); fTimer = setTimeout(() => { fs.q = e.target.value; fs.cur = null; setFunView('list'); renderFunList(); }, 120); });
   $('#f-cat').addEventListener('change', (e) => { fs.cat = e.target.value; fs.cur = null; setFunView('list'); renderFunList(); });
   $('#f-list').addEventListener('click', (e) => {
@@ -1001,14 +1166,17 @@ function initFun() {
 /* =====================================================================
    EMENTÁRIO (gadget: árvore ou resultados, e registro empilhado)
    ===================================================================== */
-const EME = D.eme; const EBY = {}; EME.forEach((e) => { EBY[e.c] = e; });
-const KIDS = {}; EME.forEach((e) => { if (EBY[e.m]) (KIDS[e.m] = KIDS[e.m] || []).push(e.c); });
 const SCOPE = new Set(['DIREITO CIVIL', 'DIREITO DO CONSUMIDOR', 'DIREITO PROCESSUAL CIVIL E DO TRABALHO']);
+let EME = []; const EBY = {}; const KIDS = {}; const ROOTS = {}; let RAMOS = []; let ENSC = 0;
 const pathOf = (e) => { const p = []; let x = e; let g = 0; while (x && EBY[x.m] && g++ < 10) { x = EBY[x.m]; p.unshift(x); } return p; };
-EME.forEach((e) => { e._p = pathOf(e); e._f = [{ t: norm(e.c), w: 30 }, { t: norm(e.d), w: 10 }, { t: norm(e._p.map((x) => x.d).join(' > ')), w: 3 }, { t: norm(e.eb), w: 2 }, { t: norm(e.fd), w: 1 }, { t: norm(e.r), w: 1 }]; });
-const ROOTS = {}; EME.forEach((e) => { if (!EBY[e.m]) (ROOTS[e.r] = ROOTS[e.r] || []).push(e.c); });
-const RAMOS = Object.keys(ROOTS).sort();
-const ENSC = EME.filter((e) => SCOPE.has(e.r)).length;
+function prepEme() {
+  EME = D.eme;
+  EME.forEach((e) => { EBY[e.c] = e; });
+  EME.forEach((e) => { if (EBY[e.m]) (KIDS[e.m] = KIDS[e.m] || []).push(e.c); else (ROOTS[e.r] = ROOTS[e.r] || []).push(e.c); });
+  EME.forEach((e) => { e._p = pathOf(e); e._f = [{ t: norm(e.c), w: 30 }, { t: norm(e.d), w: 10 }, { t: norm(e._p.map((x) => x.d).join(' > ')), w: 3 }, { t: norm(e.eb), w: 2 }, { t: norm(e.fd), w: 1 }, { t: norm(e.r), w: 1 }]; });
+  RAMOS = Object.keys(ROOTS).sort();
+  ENSC = EME.filter((e) => SCOPE.has(e.r)).length;
+}
 const es = { sc: 'g', q: '', cur: null, open: new Set(), view: 'list' };
 const inSc = (e) => es.sc === 'a' || SCOPE.has(e.r);
 const byDesc = (a, b) => EBY[a].d.localeCompare(EBY[b].d, 'pt');
@@ -1097,7 +1265,7 @@ function emeSelect(c) {
 let eTimer;
 function initEme() {
   inited.eme = true;
-  $('#e-q').value = es.q;
+  if (es.q) $('#e-q').value = es.q; else es.q = $('#e-q').value;
   $('#e-q').addEventListener('input', (ev) => { clearTimeout(eTimer); eTimer = setTimeout(() => { es.q = ev.target.value; es.cur = null; setEmeView('list'); renderEmeLeft(); }, 150); });
   $('#gb-ementario').addEventListener('click', (ev) => {
     const sc = ev.target.closest('[data-sc]');
@@ -1137,9 +1305,15 @@ function buildIndex() {
   SIDX = { secs, tpls };
 }
 let sfilter = 'all', ssel = 0;
+let buscaBases = null;
 function runSearch() {
   if (!SIDX) buildIndex();
   const q = $('#sq').value; const P = parseQuery(q);
+  const faltam = !pronta.fundamentos || !pronta.ementario;
+  if (P.terms.length && faltam && !buscaBases) {
+    buscaBases = Promise.all([carregaBase('fundamentos'), carregaBase('ementario')])
+      .then(() => { if (!$('#sov').hidden) runSearch(); }, () => { buscaBases = null; });
+  }
   const out = { Seções: [], Fundamentos: [], Ementário: [], Templates: [] };
   if (P.terms.length) {
     SIDX.secs.forEach((s) => { const sc = score(s.f, P.terms); if (sc) out['Seções'].push({ sc, html: `<a class="res" href="#${s.v}${s.id ? '/' + s.id : ''}"><span class="id">${esc(s.comp)}</span><span class="tt">${hl(s.h, P.terms)}</span><span class="sn">${hl(snippet(s.t, P.terms), P.terms)}</span></a>` }); });
@@ -1152,9 +1326,10 @@ function runSearch() {
   $('#sf').innerHTML = [['all', 'Tudo', total]].concat(keys.map((k) => [k, k, out[k].length])).map(([k, l, n]) => `<button type="button" data-f="${k}" aria-pressed="${sfilter === k}">${l}${P.terms.length ? ' ' + n : ''}</button>`).join('');
   $('#ssyn').innerHTML = P.syn.length ? 'Também: ' + P.syn.slice(0, 4).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const L = $('#sl');
-  if (!P.terms.length) { L.innerHTML = '<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ÁTRIL: seções dos documentos, 107 fundamentos, 2.758 registros do Ementário e os 6 modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">' + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
-  if (!total) { L.innerHTML = '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
-  L.innerHTML = keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');
+  if (!P.terms.length) { L.innerHTML = `<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o ÁTRIL: seções dos documentos, ${N.fun} fundamentos, ${N.eme.toLocaleString('pt-BR')} registros do Ementário e os ${D.tpl.length} modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">` + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
+  const aviso = faltam ? '<p class="small sespera" role="status">Consultando também Fundamentos e Ementário</p>' : '';
+  if (!total) { L.innerHTML = aviso || '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
+  L.innerHTML = aviso + keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');
   ssel = 0; markSel();
 }
 function markSel() { const rs = $$('#sl .res'); rs.forEach((r, i) => r.classList.toggle('sel', i === ssel)); if (rs[ssel]) rs[ssel].scrollIntoView({ block: 'nearest' }); }
@@ -1177,6 +1352,7 @@ $('#sq').addEventListener('keydown', (e) => {
   else if (e.key === 'Enter') { e.preventDefault(); if (rs[ssel]) { closeSearch(true); navigate(rs[ssel].getAttribute('href')); } }
 });
 document.addEventListener('keydown', (e) => {
+  if (!LEI.hidden) return;
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); if ($('#sov').hidden) openSearch(); else closeSearch(); return; }
   if (e.key === 'Escape') {
     if (!$('#sov').hidden) { closeSearch(); return; }
@@ -1195,8 +1371,8 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha);
 if ('ResizeObserver' in window) new ResizeObserver(() => desenha()).observe(SIS);
 else window.addEventListener('resize', desenha);
 initCal();
-gstat('fundamentos', `${FUN.length} registros em ${FCATS} categorias`);
-gstat('ementario', `${EME.length.toLocaleString('pt-BR')} registros, ${ENSC.toLocaleString('pt-BR')} no escopo do Guia`);
+gstat('fundamentos', `${N.fun} registros em ${N.funCat} categorias`);
+gstat('ementario', `${N.eme.toLocaleString('pt-BR')} registros, ${N.emeEsc.toLocaleString('pt-BR')} no escopo do Guia`);
 window.addEventListener('hashchange', route);
 route();
 setTimeout(gesto, 900);
