@@ -15,7 +15,7 @@ colors:
   rule: "#DADADA"
   ink-3: "#5C5C5C"
   grafite: "rgba(24, 24, 24, .66)"
-  cinza: "rgba(24, 24, 24, .48)"
+  cinza: "rgba(24, 24, 24, .55)"
   fio: "rgba(24, 24, 24, .2)"
   fio-2: "rgba(24, 24, 24, .1)"
 typography:
@@ -131,8 +131,8 @@ components:
     textColor: "{colors.tinta}"
     opacity: ".62; .92 no hover; cheio quando ligado"
   gaveta:
-    backgroundColor: "{colors.surface}"
-    shadow: "inset 0 10px 14px -12px rgba(24, 24, 24, .22)"
+    backgroundColor: "#FDFCFA com fibra; encarte dobrado ao meio"
+    shadow: "0 22px 30px -24px rgba(24, 24, 24, .42); inset 0 12px 14px -12px rgba(24, 24, 24, .2)"
   button-primary:
     backgroundColor: "{colors.tinta}"
     textColor: "{colors.papel}"
@@ -170,7 +170,7 @@ O mundo tem um material, o papel #FCFCFC, e uma luz, o âmbar #FFB627. A tinta e
 - Âmbar como luz única, em marca-texto, faixa de coluna e batuta.
 - Notação musical verdadeira: pautas de cinco linhas, barras de compasso, barra dupla final, pausas, semínimas, semibreves ligadas, chaves e colchetes de naipe, marcas de ensaio, indicações *tacet* e *ad lib.*
 - A notação informa: cada nota corresponde a uma regra escrita.
-- Bodoni Moda para o que é título ou nome; Instrument Sans para o texto; JetBrains Mono para indicações, códigos e a barra; Restart Ginger só na assinatura do autor, como no ARCO.
+- Bodoni Moda para o que é título ou nome; Instrument Sans para o texto; Shantell Sans 300 para o texto dos passos, como anotação à mão sobre a partitura; JetBrains Mono para indicações, códigos, o subtítulo e o prendedor; Restart Ginger só na assinatura do autor, como no ARCO.
 - Pílulas para comandos; cantos retos no resto.
 
 ## Colors
@@ -191,9 +191,9 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 ### Neutros
 - **Tinta** (#181818): a base sob a folha, a laca do prendedor e os carimbos; todo o texto principal, barras e chaves da partitura, botão primário, vencimento no calendário.
 - **Papel** (#FCFCFC): a folha e tudo o que se abre sobre ela, inclusive a parte e o montador.
-- **Grafite** (tinta a 66%) e **Cinza** (tinta a 48%): texto secundário, indicações, rótulos.
+- **Grafite** (tinta a 66%) e **Cinza** (tinta a 55%, cerca de 3,9:1 sobre o papel): texto secundário, indicações, rótulos.
 - **Fio** (tinta a 20%) e **Fio 2** (tinta a 10%): linhas da pauta, separadores.
-- **Superfície** (#F3F3F2): fundo da gaveta, hover de linhas, caixas de nota.
+- **Superfície** (#F3F3F2): hover de linhas, caixas de nota.
 
 ### Named Rules
 **A Regra da Luz Única.** Só o âmbar acende. Nada de segunda cor de destaque na interface; o laranja #C84D00 da coleção impressa fica nas capas dos manuais.
@@ -204,11 +204,14 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 
 **Títulos e nomes:** Bodoni Moda (opsz 96 nos tamanhos de título).
 **Texto:** Instrument Sans.
+**Texto dos passos:** Shantell Sans 300, a mão do regente anotando cada compasso.
 **Indicações e códigos:** JetBrains Mono, caixa alta espaçada nas indicações e no prendedor.
 **Assinatura:** ARCO Restart Ginger 600, só no nome do autor, no pé da página (a mesma face e o mesmo símbolo do ARCO).
 
 ### Hierarchy
-- **Título** (Bodoni 900, 64px, 1, +0,08em): PLAY, centrado no alto da folha; é o único elemento da folha de rosto.
+- **Título** (Bodoni 900, 64px, 1, +0,08em): PLAY, centrado no alto da folha.
+- **Subtítulo** (JetBrains Mono 800, 9,5px, 0,12em, caixa alta, no corpo exato dos títulos dos compassos): "Showcase do playbook da metodologia ECHO", centrado sob o título.
+- **Crédito** (Instrument Sans 400, 15px): "Christian da Costa", alinhado à direita sob o subtítulo, como o nome do compositor numa partitura; leva ao ARCO.
 - **Prendedor** (JetBrains Mono, âmbar, caixa alta): "PLAYBOOK" em 500 10,5px e, abaixo, "ECHO" em 700 15px, espacejados; o prendedor leva à página-mãe (arco.html#echo).
 - **Folha** (Bodoni 400, clamp(32px, 3.6vw, 50px), 1, −0,02em): título de documento, ferramenta, ficha de PDF, montador. O lead vem em Bodoni itálico 18px, grafite.
 - **Seção** (Bodoni 600, 22px): h2 dos documentos; h3 em 600 16px.
@@ -229,11 +232,11 @@ A página é uma folha sobre a base: bordas de tinta nas laterais (clamp(12px, 3
 - **Papel:** fibra em ruído fractal (SVG), linhas de vergê a cada 4px quase invisíveis, luz rasante do alto à esquerda e sombra leve nas bordas. Por baixo, duas folhas do maço (#EEECE7 e #F5F3EF), levemente fora de esquadro, aparecem nas laterais e no pé. Dois cantos dobrados de clamp(22px, 2.6vw, 38px), no alto à direita e no pé à esquerda, recortam a folha (clip-path), mostram o maço e projetam sombra curta.
 - **Prendedor:** preso à borda de cima, no alto à esquerda, girado −2,4°: corpo de laca #181818 com brilho no dorso, "PLAYBOOK / ECHO" em âmbar e as hastes de aço deitadas para baixo sobre a folha, com sombra. No hover, ergue 2px. No celular, em 62%.
 - **Carimbos:** som e busca lado a lado no alto à direita, dentro da folha: anel duplo e ícone em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girados −5° e 4°. No hover a tinta firma; ao clicar, o carimbo afunda; o som ligado vira carimbo cheio, com o ícone em papel.
-- **Folha de rosto:** só o título PLAY, centrado, com mais ar embaixo do que em cima (clamp(72px, 12vh, 136px) até o cabeçalho dos compassos).
-- **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Instrument Sans 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
+- **Folha de rosto:** o título PLAY e o subtítulo, centrados; o crédito "Christian da Costa" à direita; depois clamp(40px, 7vh, 76px) até o cabeçalho dos compassos.
+- **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Shantell Sans 300 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
 - **Pé:** sobre fio, a epígrafe "Harmonia é coordenação de diferenças." em Bodoni itálico à esquerda e, à direita, a assinatura: símbolo âmbar de 36px ao lado do nome em Restart Ginger e de "LAW | OPS | TECH | AI" em indicação, levando ao ARCO. Até 980px, os dois se empilham ao centro.
 - **Naipes, nesta ordem:** Intro (colchete: Índice e Arquitetura, legenda "Abertura", e Memória de Integração, legenda "Registro", as únicas *ad lib.*; as legendas são as categorias que os próprios PDFs declaram), Coleção (chaveta de piano: Notas Introdutórias em I, que acolhe; Mapa Temático em I, que classifica a matéria; Afinação Processual sustentada de I a II, ligada, triagem e depois verificação; e o Guia de Estilo, sustentado de IV até a coda; as notas dos volumes seguem o que cada um declara na capa), Governança (colchete: Regras de Aplicação em pedal nos cinco compassos e Critérios Operacionais na coda, emendando no Guia de Estilo que fecha a Coleção) e Ferramenta (colchete: Calendário Jurídico em II, Fundamentos e Ementário em III, Templates em IV).
-- **Parte:** painel fixo à direita, min(1040px, 92vw), com cabeçalho (rótulo "Naipe | Material" e pílula "Voltar à partitura") e corpo rolável. Documentos levam o trilho "Nesta folha" (210px) acima de 1180px.
+- **Parte:** outra folha pousada sobre a partitura, à direita, com a base de tinta em volta (recuada da borda, do topo e do pé), fibra, luz rasante e sombra; min(1040px, 92vw), com cabeçalho (rótulo "Naipe | Material" e pílula "Voltar à partitura") e corpo rolável. Documentos levam o trilho "Nesta folha" (210px) acima de 1180px.
 
 Comportamento por largura:
 - **Até 1180px:** o trilho "Nesta folha" some.
@@ -261,7 +264,7 @@ A notação dá as formas: pauta de cinco linhas a cada 5px, barra de compasso d
 - **Voz:** nome em Bodoni itálico alinhado à direita, legenda em indicação ("vol. 01"; "vol. 03 | SOP" e "vol. 04 | SOP" na Afinação Processual e no Guia; "SOP" nas Regras e nos Critérios; a contagem nas ferramentas), pauta em SVG do tamanho real da coluna, "ver | baixar" à direita (ferramentas não têm). Hover: nome desliza 4px para a esquerda e ganha o marca-texto âmbar; as outras vozes esmaecem a 32%. Aberta: marca-texto fixo.
 - **Compasso em foco:** cursor sobre a coluna ou foco na marca de ensaio. A faixa de luz âmbar cobre o compasso, as notas de fora caem a 22% de opacidade, a marca acende em âmbar e o texto do passo, no cabeçalho, passa para tinta.
 - **Som:** o carimbo do símbolo musical ("Ouvir os compassos") liga um sintetizador senoidal; cada compasso soa como acorde das notas que contém. As alturas fazem I abrir em Dó maior (Mi4, Sol4 e Dó5, com o Mi5 da Afinação), II soar Lá menor com o mesmo Mi ligado como nota comum, III soar Dó maior, IV ficar suspenso (Fá, Sol, Dó) e a coda resolver em Dó maior. Ligar o som toca os cinco compassos em sequência.
-- **Gaveta:** só nos volumes 01, 02 e 03. Clicar na pauta (ou no nome) abre, sob ela, uma gaveta em superfície #F3F3F2 com sombra interna no topo, alinhada do início da pauta à barra final, que empurra o resto para baixo (0,6s, na curva da mola). Dentro: a página dupla do volume (capa e página 2, de 104 a 136px por página, com a lombada), que abre o leitor em tela inteira; "Volume 01 | Identidade e estrutura" em indicação; o nome em Bodoni; a frase de abertura do manual ("Acolher é… […]"); natureza e formato; "Abrir o PDF" e "Baixar"; e o X redondo. Fecha clicando na própria pauta, no X, em outra pauta ou com Esc. A rota é a do volume (#vol-01), e um link direto abre a gaveta.
+- **Gaveta:** só nos volumes 01, 02 e 03. Clicar na pauta (ou no nome) abre, sob ela, uma gaveta que é um encarte de papel (#FDFCFA com fibra, dobrado ao meio e reaberto: vale na dobra e brilho logo abaixo, sombra de quem está enfiado sob a pauta, giro de −0,2°), alinhada do início da pauta à barra final, que empurra o resto para baixo (0,6s, na curva da mola). Dentro: a página dupla do volume (capa e página 2, de 104 a 136px por página, com a lombada), que abre o leitor em tela inteira; "Volume 01 | Identidade e estrutura" em indicação; o nome em Bodoni; a frase de abertura do manual ("Acolher é… […]"); natureza e formato; "Abrir o PDF" e "Baixar"; e o X redondo. Fecha clicando na própria pauta, no X, em outra pauta ou com Esc. A rota é a do volume (#vol-01), e um link direto abre a gaveta.
 - **Batuta:** fio âmbar de 2px que atravessa o sistema uma vez, 900ms depois da carga; não ocorre com movimento reduzido nem abaixo de 700px.
 
 ### Parte
