@@ -36,9 +36,9 @@ O PLAY publica o Playbook de Elaboração de Votos, anexo ao Volume 04 (Guia de 
 
 ## Brand Commitments
 
-- Nome da página: PLAY, por decisão do autor (09/10/2026), no lugar de ÁTRIL; arquivo `play.html` (christiancozta.github.io/play.html). O endereço `atril.html` não chegou a ser divulgado e foi retirado sem redirecionamento. A barra do topo diz "PLAYBOOK ECHO" (ECHO leva a `arco.html#echo`, a página-mãe); a folha de rosto é só o título. Os PDFs seguem intitulados "Playbook de Elaboração de Votos".
+- Nome da página: PLAY, por decisão do autor (09/10/2026), no lugar de ÁTRIL; arquivo `play.html` (christiancozta.github.io/play.html). O endereço `atril.html` não chegou a ser divulgado e foi retirado sem redirecionamento. O prendedor diz "PLAYBOOK / ECHO" e leva a `arco.html#echo`, a página-mãe; a folha de rosto é só o título. Os PDFs seguem intitulados "Playbook de Elaboração de Votos".
 - Paleta fechada: #181818 tinta, #FFB627 apoio, #FCFCFC papel, #C84D00 acento. Na camada web, o âmbar é a luz única e o latão #8A6620 (âmbar com tinta) faz a marcação de texto; o #C84D00 fica na coleção impressa. Tints e cinzas só por mistura dessas cores com o papel.
-- A página é o início de uma folha sobre uma base de tinta #181818: bordas laterais e, um pouco mais fina, a barra do topo. A autoria vem assinada no pé como no ARCO (símbolo em #FFB627, miolo vazado, e o nome em Restart Ginger, levando a `arco.html`), ao lado da epígrafe do ECHO. A camada web usa Bodoni Moda, Instrument Sans e JetBrains Mono.
+- A página é uma folha de partitura #FCFCFC sobre uma base de tinta #181818, com cara de papel (fibra, maço por baixo, cantos dobrados), presa por um prendedor preto com "PLAYBOOK / ECHO" em âmbar; som e busca são carimbos de tinta no alto à direita. A autoria vem assinada no pé como no ARCO (símbolo em #FFB627, miolo vazado, e o nome em Restart Ginger, levando a `arco.html`), ao lado da epígrafe do ECHO. A camada web usa Bodoni Moda, Instrument Sans e JetBrains Mono.
 - Google Analytics (G-GD0Q3Z4KQ9) no `<head>`, como em arco, echo, atrio e data.
 - Parentesco visível com o ECHO: a epígrafe "Harmonia é coordenação de diferenças", o marca-texto âmbar e a família tipográfica.
 

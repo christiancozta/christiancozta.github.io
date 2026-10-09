@@ -35,7 +35,8 @@
   --parte-l: 118px;
   --chave: 26px;
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
-  --topo-h: clamp(34px, 2.6vw, 42px);   /* barra do topo, um pouco mais fina que as laterais */
+  --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
+  --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
   /* movimento */
   --ease: cubic-bezier(.16, 1, .3, 1);
   --mola: cubic-bezier(.32, .72, 0, 1);
@@ -47,7 +48,7 @@
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; background: var(--tinta); }
 html.com-parte, html.com-leitor { overflow: hidden; }
-body { margin: 0; padding: 0 var(--borda); background: var(--tinta); color: var(--tinta); font: 400 15px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
+body { margin: 0; padding: var(--topo-h) var(--borda); overflow-x: clip; background: var(--tinta); color: var(--tinta); font: 400 15px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
 :where(p, h1, h2, h3, h4, ul, ol, dl, dd, figure) { margin: 0; }
 a { color: inherit; }
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -62,18 +63,56 @@ input, textarea { caret-color: var(--tinta); }
 /* ==========================================================================
    Base, barra e folha: a página é o início de uma folha sobre a base de tinta
    ========================================================================== */
-.topo { height: var(--topo-h); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
-.topo-t { grid-column: 2; margin-right: -.3em; font: 500 14px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--ambar); white-space: nowrap; }
-.topo-t a { text-decoration: none; transition: box-shadow .4s var(--mola); }
-.topo-t a:hover, .topo-t a:focus-visible { box-shadow: inset 0 -1px 0 var(--ambar); }
-.topo :focus-visible { outline-color: var(--ambar); }
-.topo-b { width: 26px; height: 26px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ambar); box-shadow: inset 0 0 0 1px rgba(255, 182, 39, .32); cursor: pointer; transition: background .4s var(--mola), color .4s var(--mola), box-shadow .4s var(--mola), transform .3s var(--mola); }
-.topo-b .ic { width: 13px; height: 13px; stroke-width: 1.5; }
-.topo-b:hover, .topo-b[aria-pressed="true"] { background: var(--ambar); color: var(--tinta); box-shadow: none; }
-.topo-b:active { transform: scale(.94); }
-.topo .so-b { grid-column: 1; justify-self: start; }
-.topo .busca { grid-column: 3; justify-self: end; }
-.a4 { min-height: calc(100vh - var(--topo-h)); background: var(--papel); }
+/* O maço: duas folhas por baixo, levemente fora de esquadro, aparecem nas bordas e nos cantos dobrados. */
+.maco { position: relative; }
+.maco::before, .maco::after { content: ""; position: absolute; inset: 0; transform-origin: 0 0; pointer-events: none; }
+.maco::before { background: #EEECE7; transform: translate(5px, 4px) rotate(.16deg); }
+.maco::after { background: #F5F3EF; transform: translate(-3px, 6px) rotate(-.07deg); }
+
+/* A folha: papel #FCFCFC com fibra, luz rasante do alto à esquerda e sombra leve nas bordas.
+   Dois cantos dobrados (alto à direita, pé à esquerda) recortam a folha e mostram o maço. */
+.a4 {
+  position: relative; z-index: 1; min-height: calc(100vh - 2 * var(--topo-h));
+  background:
+    radial-gradient(1400px 900px at 14% 0, rgba(255, 255, 255, .7), transparent 62%),
+    linear-gradient(90deg, rgba(24, 24, 24, .028), transparent 2.4%, transparent 97.6%, rgba(24, 24, 24, .028)),
+    linear-gradient(rgba(24, 24, 24, .03), transparent 160px),
+    repeating-linear-gradient(0deg, rgba(24, 24, 24, .008) 0 1px, transparent 1px 4px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    var(--papel);
+  clip-path: polygon(0 0, calc(100% - var(--orelha)) 0, 100% var(--orelha), 100% 100%, var(--orelha) 100%, 0 calc(100% - var(--orelha)));
+}
+.a4::before, .a4::after { content: ""; position: absolute; width: var(--orelha); height: var(--orelha); pointer-events: none; }
+.a4::before { top: 0; right: 0; background: linear-gradient(225deg, transparent 50%, #DCD8CF 50%, #ECE9E3 64%, #F7F5F1); box-shadow: -4px 4px 7px -4px rgba(24, 24, 24, .24); }
+.a4::after { bottom: 0; left: 0; background: linear-gradient(45deg, transparent 50%, #DCD8CF 50%, #ECE9E3 64%, #F7F5F1); box-shadow: 4px -4px 7px -4px rgba(24, 24, 24, .2); }
+
+/* Prendedor: laca preta presa à borda de cima, hastes de aço deitadas sobre a folha. */
+.clipe { position: absolute; z-index: 3; top: -12px; left: clamp(20px, 5vw, 92px); width: 132px; transform: rotate(-2.4deg); transform-origin: 50% 0; text-decoration: none; transition: transform .6s var(--mola); }
+.clipe-svg { display: block; width: 132px; height: 152px; overflow: visible; filter: drop-shadow(0 7px 9px rgba(24, 24, 24, .2)) drop-shadow(0 1px 1.5px rgba(24, 24, 24, .32)); transition: filter .6s var(--mola); }
+.clipe-arame { fill: none; stroke: url(#clipe-aco); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.clipe-t { position: absolute; left: 0; top: 0; width: 132px; height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-top: 6px; color: var(--ambar); pointer-events: none; }
+.clipe-t b { margin-right: -.3em; font: 500 10.5px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; }
+.clipe-t b + b { margin-right: -.5em; font-size: 15px; font-weight: 700; letter-spacing: .5em; }
+.clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg); }
+.clipe:hover .clipe-svg { filter: drop-shadow(0 10px 12px rgba(24, 24, 24, .22)) drop-shadow(0 2px 2px rgba(24, 24, 24, .3)); }
+.clipe:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 4px; }
+
+/* Carimbos: som e busca, em tinta, discretos, levemente tortos como quem carimbou à mão. */
+.carimbos { position: absolute; z-index: 2; top: clamp(16px, 2vw, 26px); right: calc(var(--orelha) + clamp(10px, 1.6vw, 22px)); display: flex; gap: 10px; }
+.carimbo { --r: -5deg; width: 38px; height: 38px; padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
+.carimbo + .carimbo { --r: 4deg; }
+.carimbo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.carimbo .c-anel { fill: none; stroke: currentColor; stroke-width: 1.7; }
+.carimbo .c-anel2 { fill: none; stroke: currentColor; stroke-width: .7; }
+.carimbo .c-fundo { fill: currentColor; opacity: 0; transition: opacity .35s var(--mola); }
+.carimbo .c-ic { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .35s var(--mola); }
+.carimbo .c-ic ellipse { fill: currentColor; }
+.carimbo:hover, .carimbo:focus-visible { opacity: .92; }
+.carimbo:active { transform: rotate(var(--r)) scale(.92); }
+.carimbo[aria-pressed="true"] { opacity: .9; }
+.carimbo[aria-pressed="true"] .c-fundo { opacity: 1; }
+.carimbo[aria-pressed="true"] .c-ic { stroke: var(--papel); }
+.carimbo[aria-pressed="true"] .c-ic ellipse { fill: var(--papel); }
 .pag { max-width: 1560px; margin: 0 auto; padding: 0 var(--g) 72px; }
 
 .pil { display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 5px 0 15px; border: 0; border-radius: 999px; background: none; box-shadow: inset 0 0 0 1px var(--fio); color: var(--tinta); font: 500 12.5px/1 var(--f-text); text-decoration: none; cursor: pointer; transition: background .5s var(--mola), transform .3s var(--mola); }
@@ -91,7 +130,7 @@ input, textarea { caret-color: var(--tinta); }
 .pil.claro:hover .b { background: var(--ambar); }
 
 /* Folha de rosto: só o título. */
-.rosto { padding: clamp(44px, 8vh, 88px) 0 clamp(72px, 12vh, 136px); text-align: center; }
+.rosto { padding: clamp(56px, 9vh, 96px) 0 clamp(72px, 12vh, 136px); text-align: center; }
 .rosto h1 { margin-right: -.08em; font: 900 64px/1 var(--serif); letter-spacing: .08em; }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
@@ -588,6 +627,13 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .gav-c { flex-direction: column; align-items: flex-start; gap: 20px; margin-left: var(--chave); padding: 20px 16px 22px; }
   .gav-pgs img { width: min(30vw, 120px); }
   .gav-txt { padding-right: 0; }
+  .clipe { top: -8px; left: 14px; transform: rotate(-2.4deg) scale(.62); transform-origin: 0 0; }
+  .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
+  .carimbos { gap: 6px; }
+  .carimbo { width: 32px; height: 32px; }
+  .rosto { padding-top: 112px; }
+  .maco::before { transform: translate(3px, 3px) rotate(.05deg); }
+  .maco::after { transform: translate(-2px, 4px) rotate(-.03deg); }
   .leitor-palco { padding: 20px 48px 56px; }
   .leitor-h .pil .t, .leitor-h .pil kbd { display: none; }
   .leitor-h .pil { padding: 0 5px; }
@@ -615,7 +661,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
 }
 
 @media print {
-  .topo, .gav-x, .veu, .parte-h, .rail, .overlay, .camada, .coluna, .batuta { display: none !important; }
+  .clipe, .carimbos, .gav-x, .veu, .parte-h, .rail, .overlay, .camada, .coluna, .batuta { display: none !important; }
   html.com-parte { overflow: visible; }
   .parte { position: static; width: auto; transform: none; box-shadow: none; }
 }
