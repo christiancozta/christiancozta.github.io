@@ -28,20 +28,39 @@
 <body class="partitura">
 <!--
 THESIS: O PLAY é o Playbook da metodologia ECHO, apresentado como partitura de regência numa folha. O acervo inteiro é o sistema que o regente lê: cada material é uma pauta, agrupada por chave em naipes (Intro, Coleção, Governança, Ferramenta), e os compassos são a ordem de utilização das Regras de Aplicação. Ler na vertical é ler um passo.
-OWN-WORLD: a página é o início de uma folha sobre uma base de tinta #181818 (bordas laterais e, um pouco mais fina, a barra do topo com "PLAYBOOK ECHO" em âmbar). Papel #FCFCFC, âmbar #FFB627 como luz única, latão #8A6620 como marcação de texto. Bodoni Moda no título e nos nomes das pautas; Instrument Sans no texto; JetBrains Mono nas indicações; Restart Ginger na assinatura, como no ARCO.
+OWN-WORLD: a página é uma folha de partitura sobre uma base de tinta #181818: fibra sutil, luz rasante, o maço de folhas por baixo, orelhas dobradas em dois cantos, o prendedor preto no alto à esquerda com "PLAYBOOK / ECHO" em âmbar e os carimbos de tinta (som e busca) no alto à direita. Papel #FCFCFC, âmbar #FFB627 como luz única, latão #8A6620 como marcação de texto. Bodoni Moda no título e nos nomes das pautas; Instrument Sans no texto; JetBrains Mono nas indicações; Restart Ginger na assinatura, como no ARCO.
 STORY: o título PLAY abre a folha; abaixo, a partitura: cada compasso traz no cabeçalho o seu passo e, na linha de baixo, o texto; passar por ele acende a coluna e, com som, soa o acorde. Os três primeiros manuais abrem numa gaveta sob a própria pauta, com a página dupla; o resto abre numa parte sobre a partitura. "ver" abre o PDF na própria página, em duas páginas; "baixar" baixa. No pé, a epígrafe do ECHO e a assinatura.
-FIRST VIEWPORT: barra preta, PLAY centrado, cabeçalho do sistema com as marcas I a V e a Coleção.
+FIRST VIEWPORT: a folha presa pelo prendedor, PLAY centrado, cabeçalho do sistema com as marcas I a V e a Coleção.
 FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este sistema.
 -->
 <a class="sr salto" href="#sistema">Ir para a partitura</a>
 
-<header class="topo">
-  <button class="topo-b so-b" type="button" id="b-som" aria-pressed="false" aria-label="Ouvir os compassos" title="Ouvir os compassos"><svg class="ic nota" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 17.5V5.5l10-2.5v12"/><path d="M8.5 9l10-2.5"/><ellipse cx="6.2" cy="17.6" rx="2.6" ry="2" transform="rotate(-20 6.2 17.6)" fill="currentColor" stroke="none"/><ellipse cx="16.2" cy="15.1" rx="2.6" ry="2" transform="rotate(-20 16.2 15.1)" fill="currentColor" stroke="none"/></svg></button>
-  <p class="topo-t">Playbook <a href="arco.html#echo">ECHO</a></p>
-  <button class="topo-b busca" type="button" id="searchbtn" aria-label="Buscar no PLAY (Ctrl K)" title="Buscar (Ctrl K)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
-</header>
+<!-- Tinta de carimbo: borda trêmula e falhas de entintamento. -->
+<svg class="sr" aria-hidden="true" focusable="false"><filter id="tinta" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.2 0 0 0 -.62" result="m"/><feComposite in="d" in2="m" operator="in"/></filter></svg>
+
+<div class="maco">
+  <a class="clipe" href="arco.html#echo" aria-label="Playbook ECHO: abrir a página-mãe">
+    <svg class="clipe-svg" viewBox="0 0 132 152" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="clipe-aco" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E949B"/><stop offset=".22" stop-color="#E8EBEE"/><stop offset=".5" stop-color="#A3A9B0"/><stop offset=".78" stop-color="#EEF0F2"/><stop offset="1" stop-color="#868C93"/></linearGradient>
+        <linearGradient id="clipe-laca" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3A3A"/><stop offset=".12" stop-color="#232323"/><stop offset=".55" stop-color="#181818"/><stop offset="1" stop-color="#0F0F0F"/></linearGradient>
+        <linearGradient id="clipe-brilho" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff" stop-opacity=".16"/><stop offset=".7" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <path class="clipe-arame" d="M15 56C15 74 39 84 43 98C46 109 31 120 34 134C37 148 95 148 98 134C101 120 86 109 89 98C93 84 117 74 117 56"/>
+      <rect x="1" y="0" width="130" height="62" rx="3.5" fill="url(#clipe-laca)"/>
+      <rect x="6" y="2" width="120" height="3" rx="1.5" fill="url(#clipe-brilho)"/>
+      <rect x="1.5" y="0.5" width="129" height="61" rx="3" fill="none" stroke="#fff" stroke-opacity=".07"/>
+      <rect x="9" y="54" width="14" height="9" rx="3" fill="#2A2A2A"/><rect x="109" y="54" width="14" height="9" rx="3" fill="#2A2A2A"/>
+      <circle cx="15" cy="58.5" r="2.2" fill="url(#clipe-aco)"/><circle cx="117" cy="58.5" r="2.2" fill="url(#clipe-aco)"/>
+    </svg>
+    <span class="clipe-t"><b>Playbook</b><b>ECHO</b></span>
+  </a>
 
 <div class="a4">
+  <div class="carimbos">
+    <button class="carimbo so-b" type="button" id="b-som" aria-pressed="false" aria-label="Ouvir os compassos" title="Ouvir os compassos"><svg viewBox="0 0 40 40" aria-hidden="true"><g filter="url(#tinta)"><circle class="c-fundo" cx="20" cy="20" r="15.6"/><circle class="c-anel" cx="20" cy="20" r="18.2"/><circle class="c-anel2" cx="20" cy="20" r="15.6"/><g class="c-ic" transform="translate(11 11) scale(.75)"><path d="M8.5 17.5V5.5l10-2.5v12"/><path d="M8.5 9l10-2.5"/><ellipse cx="6.2" cy="17.6" rx="2.6" ry="2" transform="rotate(-20 6.2 17.6)" fill="currentColor" stroke="none"/><ellipse cx="16.2" cy="15.1" rx="2.6" ry="2" transform="rotate(-20 16.2 15.1)" fill="currentColor" stroke="none"/></g></g></svg></button>
+    <button class="carimbo busca" type="button" id="searchbtn" aria-label="Buscar no PLAY (Ctrl K)" title="Buscar (Ctrl K)"><svg viewBox="0 0 40 40" aria-hidden="true"><g filter="url(#tinta)"><circle class="c-fundo" cx="20" cy="20" r="15.6"/><circle class="c-anel" cx="20" cy="20" r="18.2"/><circle class="c-anel2" cx="20" cy="20" r="15.6"/><g class="c-ic" transform="translate(11 11) scale(.75)"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></g></g></svg></button>
+  </div>
 <div class="pag">
   <section class="rosto" aria-label="Folha de rosto">
     <h1>PLAY</h1>
@@ -67,6 +86,7 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
       </span>
     </a>
   </footer>
+</div>
 </div>
 </div>
 
