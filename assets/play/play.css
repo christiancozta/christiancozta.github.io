@@ -331,7 +331,7 @@
   --latao-2: #6E5119;      /* latão mais fechado: texto pequeno sobre tint */
   --ambar-luz: rgba(255, 182, 39, .16);
   --grafite: rgba(24, 24, 24, .66);
-  --cinza: rgba(24, 24, 24, .48);
+  --cinza: rgba(24, 24, 24, .55);
   --fio: rgba(24, 24, 24, .2);
   --fio-2: rgba(24, 24, 24, .1);
   /* aliases do sistema editorial da coleção (familia.css) */
@@ -354,6 +354,9 @@
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
+  /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
+  --fibra: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --verge: repeating-linear-gradient(0deg, rgba(24, 24, 24, .008) 0 1px, transparent 1px 4px);
   /* movimento */
   --ease: cubic-bezier(.16, 1, .3, 1);
   --mola: cubic-bezier(.32, .72, 0, 1);
@@ -394,8 +397,8 @@ input, textarea { caret-color: var(--tinta); }
     radial-gradient(1400px 900px at 14% 0, rgba(255, 255, 255, .7), transparent 62%),
     linear-gradient(90deg, rgba(24, 24, 24, .028), transparent 2.4%, transparent 97.6%, rgba(24, 24, 24, .028)),
     linear-gradient(rgba(24, 24, 24, .03), transparent 160px),
-    repeating-linear-gradient(0deg, rgba(24, 24, 24, .008) 0 1px, transparent 1px 4px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    var(--verge),
+    var(--fibra),
     var(--papel);
   clip-path: polygon(0 0, calc(100% - var(--orelha)) 0, 100% var(--orelha), 100% 100%, var(--orelha) 100%, 0 calc(100% - var(--orelha)));
 }
@@ -447,8 +450,13 @@ input, textarea { caret-color: var(--tinta); }
 .pil.claro:hover .b { background: var(--ambar); }
 
 /* Folha de rosto: só o título. */
-.rosto { padding: clamp(56px, 9vh, 96px) 0 clamp(72px, 12vh, 136px); text-align: center; }
+.rosto { padding: clamp(56px, 9vh, 96px) 0 clamp(40px, 7vh, 76px); text-align: center; }
 .rosto h1 { margin-right: -.08em; font: 900 64px/1 var(--serif); letter-spacing: .08em; }
+/* Subtítulo no corpo exato dos títulos dos compassos, em JetBrains 800; o autor à direita, como crédito de compositor. */
+.rosto-sub { margin: 18px -.12em 0 0; font: 800 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tinta); }
+.rosto-autor { margin-top: clamp(26px, 4.5vh, 44px); text-align: right; font: 400 15px/1.2 var(--f-text); }
+.rosto-autor a { text-decoration: none; transition: background .4s var(--mola); }
+.rosto-autor a:hover, .rosto-autor a:focus-visible { background: linear-gradient(transparent 60%, var(--ambar) 60%, var(--ambar) 92%, transparent 92%); }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
 .pt button { border: 0; background: none; padding: 4px 0; font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }
@@ -468,7 +476,7 @@ input, textarea { caret-color: var(--tinta); }
 .marcas .mt { display: block; font: 400 11.5px/1.5 var(--f-text); color: var(--grafite); transition: color .4s var(--mola); }
 .marcas .mh { display: flex; align-items: center; white-space: nowrap; }
 .marcas .mh b { font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tinta); }
-.marcas .mx { display: block; margin-top: 6px; text-align: justify; text-align-last: left; hyphens: auto; -webkit-hyphens: auto; }
+.marcas .mx { display: block; margin-top: 6px; font-family: 'Shantell Sans', var(--f-text); font-weight: 300; text-align: justify; text-align-last: left; hyphens: auto; -webkit-hyphens: auto; }
 .ensaio { display: inline-block; min-width: 22px; margin-right: 7px; padding: 2px 5px 1px; border: 1px solid var(--tinta); font: 700 12px/1 var(--serif); text-align: center; vertical-align: 1px; transition: background .4s var(--mola); }
 .marcas button:hover .ensaio, .marcas button.on .ensaio { background: var(--ambar); }
 .marcas button:hover .mt, .marcas button.on .mt { color: var(--tinta); }
@@ -518,8 +526,18 @@ input, textarea { caret-color: var(--tinta); }
 .gaveta { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s var(--mola); }
 .gaveta.on { grid-template-rows: 1fr; }
 .gav-in { min-height: 0; overflow: hidden; }
-.gav-c { position: relative; display: flex; align-items: center; gap: clamp(24px, 3.2vw, 52px); margin: 4px var(--parte-l) 12px calc(var(--chave) + var(--nomes)); padding: 24px clamp(20px, 2.6vw, 36px); background: var(--surface); box-shadow: inset 0 10px 14px -12px rgba(24, 24, 24, .22); opacity: 0; transform: translateY(-10px); transition: opacity .4s var(--mola), transform .6s var(--mola); }
-.gaveta.on .gav-c { opacity: 1; transform: none; transition-delay: .08s; }
+.gav-c {
+  position: relative; display: flex; align-items: center; gap: clamp(24px, 3.2vw, 52px);
+  margin: 6px var(--parte-l) 16px calc(var(--chave) + var(--nomes)); padding: 26px clamp(20px, 2.6vw, 36px);
+  /* Encarte: papel dobrado ao meio e reaberto (vale na dobra, brilho logo abaixo), enfiado sob a pauta. */
+  background:
+    linear-gradient(180deg, transparent 0, rgba(24, 24, 24, .018) 36%, rgba(24, 24, 24, .06) 49.7%, rgba(255, 255, 255, .95) 50.1%, rgba(255, 255, 255, .3) 53%, transparent 62%),
+    linear-gradient(90deg, rgba(24, 24, 24, .025), transparent 3%, transparent 97%, rgba(24, 24, 24, .025)),
+    var(--fibra), #FDFCFA;
+  box-shadow: 0 0 0 1px rgba(24, 24, 24, .07), 0 22px 30px -24px rgba(24, 24, 24, .42), 0 3px 6px -4px rgba(24, 24, 24, .2), inset 0 12px 14px -12px rgba(24, 24, 24, .2);
+  opacity: 0; transform: translateY(-10px); transition: opacity .4s var(--mola), transform .6s var(--mola);
+}
+.gaveta.on .gav-c { opacity: 1; transform: rotate(-.2deg); transition-delay: .08s; }
 .gav-livro { flex: none; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0; border: 0; background: none; cursor: zoom-in; }
 .gav-pgs { position: relative; display: flex; box-shadow: 0 18px 30px -18px rgba(24, 24, 24, .5); transition: transform .5s var(--mola), box-shadow .5s var(--mola); }
 .gav-pgs img { display: block; width: clamp(104px, 8.4vw, 136px); height: auto; aspect-ratio: 320 / 453; background: var(--papel); }
@@ -560,7 +578,17 @@ input, textarea { caret-color: var(--tinta); }
    ========================================================================== */
 .veu { position: fixed; inset: 0; z-index: 40; background: rgba(24, 24, 24, .16); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .6s var(--mola); }
 .veu.on { opacity: 1; pointer-events: auto; }
-.parte { position: fixed; z-index: 45; top: 0; right: 0; bottom: 0; width: min(1040px, 92vw); display: flex; flex-direction: column; background: var(--papel); box-shadow: -40px 0 80px -40px rgba(24, 24, 24, .35), -1px 0 0 var(--fio); transform: translateX(104%); transition: transform .9s var(--mola); }
+.parte {
+  position: fixed; z-index: 45; top: var(--topo-h); right: var(--borda); bottom: var(--topo-h); width: min(1040px, calc(92vw - var(--borda)));
+  display: flex; flex-direction: column;
+  /* Outra folha pousada sobre a partitura: fibra, luz rasante e a base de tinta em volta. */
+  background:
+    radial-gradient(1100px 700px at 12% 0, rgba(255, 255, 255, .7), transparent 62%),
+    linear-gradient(90deg, rgba(24, 24, 24, .03), transparent 2.5%, transparent 97.5%, rgba(24, 24, 24, .03)),
+    var(--verge), var(--fibra), var(--papel);
+  box-shadow: 0 0 0 1px rgba(24, 24, 24, .08), -40px 0 80px -40px rgba(24, 24, 24, .5), -6px 10px 18px -10px rgba(24, 24, 24, .3);
+  transform: translateX(calc(100% + var(--borda) + 60px)); transition: transform .9s var(--mola);
+}
 .parte.on { transform: none; }
 .parte-h { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px clamp(20px, 4vw, 48px); border-bottom: 1px solid var(--fio-2); }
 .parte-h > span { min-width: 0; font: 500 10px/1.4 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--grafite); }
@@ -955,7 +983,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .leitor-h .pil .t, .leitor-h .pil kbd { display: none; }
   .leitor-h .pil { padding: 0 5px; }
   .coluna, .batuta { display: none; }
-  .parte { width: 100vw; }
+  .parte { width: calc(100vw - 2 * var(--borda)); }
   .parte-h .pil .t, .parte-h .pil kbd, .camada-h .pil .t, .camada-h .pil kbd { display: none; }
   .parte-h .pil, .camada-h .pil { padding: 0 5px; }
   .docwrap { display: block; }
