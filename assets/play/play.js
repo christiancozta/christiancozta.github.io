@@ -112,11 +112,11 @@ function snippet(text, terms, len = 150) {
 /* =====================================================================
    MATERIAIS E PARTITURA
    O acervo como partitura de regência. Cada material é uma pauta, agrupada
-   por chave em naipes (Coleção, Governança, Ferramenta); os compassos são a
+   por chave em naipes (Intro, Coleção, Governança, Ferramenta); os compassos são a
    ordem de utilização das Regras de Aplicação (seção 3), e as notas ficam
    onde as Regras mandam usar cada componente. Ler na vertical é ler um passo.
-   O Guia de Estilo fecha a Coleção e emenda nas Regras e nos Critérios; Índice (abertura)
-   e Memória (registro) fecham a Governança, ad lib.
+   Intro abre o sistema com Índice (abertura) e Memória (registro), ad lib.; o Guia de
+   Estilo fecha a Coleção e emenda nas Regras e nos Critérios da Governança.
    ===================================================================== */
 const MAT = D.mat;
 const WH = MAT.brancas;
@@ -144,6 +144,9 @@ const MARCAS = [
   ['V', 'Coda', 'para re~fi~nar e ade~quar a de~ci~são de acor~do com cri~té~rios de~fi~ni~dos.']
 ];
 const NAIPES = [
+  { n: 'Intro', chave: 'colchete', vozes: [
+    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
+    { id: 'memoria', sub: 'Registro', marca: 'ad lib.', pdf: 'pdf-memoria' }] },
   { n: 'Coleção', chave: 'chaveta', vozes: [
     { id: 'vol-01', notas: [[1, 28]], pdf: 'vol-01' },
     { id: 'vol-02', notas: [[1, 23]], pdf: 'vol-02' },
@@ -151,9 +154,7 @@ const NAIPES = [
     { id: 'guia', sub: 'vol. 04 | SOP', notas: [[4, 23, 'w'], [5, 23, 'w']], liga: [4, 5], pdf: 'vol-04' }] },
   { n: 'Governança', chave: 'colchete', vozes: [
     { id: 'regras', sub: 'SOP', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
-    { id: 'criterios', sub: 'SOP', notas: [[5, 10.5]], pdf: 'pdf-criterios' },
-    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
-    { id: 'memoria', sub: 'Registro', marca: 'ad lib.', pdf: 'pdf-memoria' }] },
+    { id: 'criterios', sub: 'SOP', notas: [[5, 10.5]], pdf: 'pdf-criterios' }] },
   { n: 'Ferramenta', chave: 'colchete', vozes: [
     { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [[2, 20.5]], ferr: true },
     { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(N.fun, 'registro', 'registros'), notas: [[3, 23]], ferr: true },
