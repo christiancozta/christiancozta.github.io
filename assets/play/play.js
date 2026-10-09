@@ -115,7 +115,8 @@ function snippet(text, terms, len = 150) {
    por chave em naipes (Coleção, Governança, Ferramenta); os compassos são a
    ordem de utilização das Regras de Aplicação (seção 3), e as notas ficam
    onde as Regras mandam usar cada componente. Ler na vertical é ler um passo.
-   Índice (abertura) e Memória (registro) entram na Governança, ad lib.
+   O Guia de Estilo fecha a Coleção e emenda nas Regras e nos Critérios; Índice (abertura)
+   e Memória (registro) fecham a Governança, ad lib.
    ===================================================================== */
 const MAT = D.mat;
 const WH = MAT.brancas;
@@ -149,9 +150,9 @@ const NAIPES = [
     { id: 'vol-03', sub: 'vol. 03 | SOP', notas: [[1, 10.5, 'w'], [2, 10.5, 'w']], liga: [1, 2], pdf: 'vol-03' },
     { id: 'guia', sub: 'vol. 04 | SOP', notas: [[4, 23, 'w'], [5, 23, 'w']], liga: [4, 5], pdf: 'vol-04' }] },
   { n: 'Governança', chave: 'colchete', vozes: [
-    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
     { id: 'regras', sub: 'SOP', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
     { id: 'criterios', sub: 'SOP', notas: [[5, 10.5]], pdf: 'pdf-criterios' },
+    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
     { id: 'memoria', sub: 'Registro', marca: 'ad lib.', pdf: 'pdf-memoria' }] },
   { n: 'Ferramenta', chave: 'colchete', vozes: [
     { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [[2, 20.5]], ferr: true },
