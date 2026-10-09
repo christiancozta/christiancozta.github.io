@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Redesign do ATRIL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Commissioner:wght@400;500;600&family=Schibsted+Grotesk:wght@500;600;700;800&family=Zalando+Sans+Expanded:wght@700&display=swap" rel="stylesheet">
+<style>
+/* Caderno de proposta, no idioma do ECHO: papel creme, tinta, âmbar como marca-texto.
+   Diagnóstico com marcadores sobre a captura, três propostas em sequência, comparação e decisões. */
+:root{
+  color-scheme: light;
+  --papel:#F2EFE9; --papel-2:#F8F6F1; --tinta:#181818; --t2:rgba(24,24,24,.68); --t3:rgba(24,24,24,.48);
+  --fio:rgba(24,24,24,.14); --ambar:#FFB627; --laca:#0E0D0C;
+  --titulo:"Schibsted Grotesk",system-ui,sans-serif; --body:"Commissioner",system-ui,sans-serif;
+  --mono:"Azeret Mono",ui-monospace,monospace; --marca:"Zalando Sans Expanded",system-ui,sans-serif;
+  --mola:cubic-bezier(.32,.72,0,1);
+}
+*{box-sizing:border-box}
+html{background:var(--papel)}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.65 var(--body);-webkit-font-smoothing:antialiased}
+::selection{background:var(--ambar);color:var(--tinta)}
+a{color:inherit}
+img{max-width:100%;display:block}
+.pag{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,4vw,48px);padding-block:0 120px}
+.topo{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0;border-bottom:1px solid var(--tinta)}
+.marca{font:700 13px/1 var(--marca);letter-spacing:.34em;text-decoration:none}
+.marca small{margin-left:14px;font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--t3)}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.pil{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--fio);font:500 12.5px/1 var(--body);text-decoration:none;transition:background .5s var(--mola),transform .3s var(--mola)}
+.pil:hover{background:rgba(24,24,24,.04)}
+.pil:active{transform:scale(.98)}
+.pil .b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--tinta);color:var(--papel);transition:transform .5s var(--mola),background .5s var(--mola),color .5s var(--mola)}
+.pil:hover .b{transform:translate(2px,-1px) scale(1.06);background:var(--ambar);color:var(--tinta)}
+.ic{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+
+.abre{padding:clamp(56px,10vh,112px) 0 clamp(48px,8vh,88px);display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:48px;align-items:end}
+.abre h1{margin:0;font:800 clamp(44px,6.4vw,92px)/.94 var(--titulo);letter-spacing:-.05em;text-wrap:balance}
+.abre h1 mark{background:var(--ambar);color:inherit;padding:0 .06em}
+.abre p{margin:0;max-width:44ch;font:400 17px/1.6 var(--body);color:var(--t2)}
+.abre p b{color:var(--tinta);font-weight:600}
+
+.sec{padding-top:clamp(56px,9vh,104px)}
+.sec-h{display:flex;align-items:baseline;gap:20px;margin:0 0 14px;font:700 clamp(32px,4vw,52px)/1 var(--titulo);letter-spacing:-.04em}
+.sec-h span{font-weight:800;color:transparent;-webkit-text-stroke:1.2px var(--tinta)}
+.sec-l{margin:0 0 40px;max-width:66ch;color:var(--t2)}
+
+/* diagnóstico */
+.cap{position:relative;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(24,24,24,.08),0 30px 60px -36px rgba(24,24,24,.5);aspect-ratio:1440/900;background:var(--laca)}
+.cap img{width:100%;height:100%;object-fit:cover}
+.mk{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--ambar);color:var(--tinta);
+  font:700 12px/1 var(--titulo);box-shadow:0 0 0 3px rgba(24,24,24,.85),0 6px 14px rgba(0,0,0,.4);text-decoration:none;transition:transform .4s var(--mola)}
+.mk:hover{transform:translate(-50%,-50%) scale(1.15)}
+.achados{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:40px;border-top:1px solid var(--tinta)}
+.achado{padding:22px 24px 26px 0;border-bottom:1px solid var(--fio)}
+.achado:not(:nth-child(3n+1)){padding-left:24px;border-left:1px solid var(--fio)}
+.achado h3{display:flex;gap:10px;align-items:baseline;margin:0 0 8px;font:700 17px/1.2 var(--titulo);letter-spacing:-.015em}
+.achado h3 i{font:500 10px/1 var(--mono);font-style:normal;color:var(--t3)}
+.achado p{margin:0;font:400 14px/1.6 var(--body);color:var(--t2)}
+.achado p b{color:var(--tinta);font-weight:600;font-variant-numeric:tabular-nums}
+.manter{display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px;margin-top:56px;padding:28px 0 0;border-top:1px solid var(--tinta)}
+.manter h3{margin:0;font:700 20px/1.2 var(--titulo);letter-spacing:-.02em}
+.manter p{margin:0 0 12px;max-width:72ch;font:400 15px/1.65 var(--body);color:var(--t2)}
+.manter p b{color:var(--tinta);font-weight:600}
+
+/* propostas */
+.prop{padding-top:clamp(64px,10vh,120px)}
+.prop-h{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;margin-bottom:28px}
+.prop-h h2{margin:0;font:800 clamp(40px,5.4vw,76px)/.95 var(--titulo);letter-spacing:-.05em}
+.prop-h h2 span{font-weight:800;color:transparent;-webkit-text-stroke:1.3px var(--tinta);margin-right:.18em}
+.prop-h p{margin:12px 0 0;max-width:58ch;font:400 18px/1.55 var(--body);color:var(--t2)}
+.selo{display:inline-block;margin-top:14px;padding:6px 11px;border-radius:999px;font:500 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;box-shadow:inset 0 0 0 1px var(--tinta)}
+.selo.on{background:var(--tinta);color:var(--papel)}
+.cta{display:inline-flex;align-items:center;gap:14px;height:52px;padding:0 6px 0 24px;border-radius:999px;background:var(--tinta);color:var(--papel);font:500 14px/1 var(--body);text-decoration:none;white-space:nowrap;transition:transform .35s var(--mola)}
+.cta .b{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ambar);color:var(--tinta);transition:transform .5s var(--mola)}
+.cta:hover .b{transform:translate(2px,-1px) scale(1.06)}
+.cta:active{transform:scale(.98)}
+.galeria{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(0,1fr) minmax(0,.62fr);gap:14px;align-items:start}
+.quadro{margin:0}
+.quadro .moldura{border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(24,24,24,.08),0 24px 48px -30px rgba(24,24,24,.5);background:var(--laca)}
+.quadro figcaption{margin-top:10px;font:500 9.5px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}
+.pilha{display:grid;gap:14px}
+.texto-p{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:56px;margin-top:40px}
+.texto-p p{margin:0 0 14px;max-width:66ch;font:400 15.5px/1.7 var(--body);color:#2b2825}
+.texto-p p b{font-weight:600}
+.ficha{margin:0;border-top:1px solid var(--tinta)}
+.ficha div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--fio)}
+.ficha dt{font:500 9.5px/1.8 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}
+.ficha dd{margin:0;font:400 14px/1.5 var(--body)}
+
+/* comparação */
+.tabela{overflow-x:auto;margin-top:8px}
+table{width:100%;min-width:760px;border-collapse:collapse;font:400 14px/1.5 var(--body)}
+th,td{text-align:left;vertical-align:top;padding:14px 18px 14px 0;border-bottom:1px solid var(--fio)}
+thead th{font:700 15px/1.2 var(--titulo);border-bottom:1px solid var(--tinta);padding-bottom:12px}
+tbody th{font:500 9.5px/1.8 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--t3);width:170px}
+td{color:var(--t2)}
+td b{color:var(--tinta);font-weight:600}
+
+.reco{margin-top:clamp(56px,9vh,104px);border-radius:10px;padding:6px;background:rgba(24,24,24,.06)}
+.reco-in{border-radius:6px;background:var(--tinta);color:var(--papel);padding:clamp(28px,4vw,52px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px}
+.reco h2{margin:0;font:800 clamp(34px,4.4vw,60px)/.98 var(--titulo);letter-spacing:-.045em}
+.reco h2 mark{background:var(--ambar);color:var(--tinta);padding:0 .08em}
+.reco p{margin:0 0 14px;font:400 15.5px/1.7 var(--body);color:rgba(242,239,233,.74)}
+.reco p b{color:var(--papel);font-weight:600}
+.decisoes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--tinta)}
+.decisao{padding:22px 24px 24px 0;border-bottom:1px solid var(--fio)}
+.decisao:nth-child(2n){padding-left:24px;border-left:1px solid var(--fio)}
+.decisao h3{margin:0 0 8px;font:700 17px/1.25 var(--titulo);letter-spacing:-.015em}
+.decisao p{margin:0;font:400 14px/1.6 var(--body);color:var(--t2)}
+.pe{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:88px;padding-top:16px;border-top:1px solid var(--fio);font:500 9.5px/1.6 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
+
+@media (max-width:900px){
+  .abre,.texto-p,.reco-in,.manter{grid-template-columns:1fr;gap:24px}
+  .achados{grid-template-columns:1fr}
+  .achado,.achado:not(:nth-child(3n+1)){padding-left:0;border-left:0}
+  .galeria{grid-template-columns:1fr 1fr}
+  .galeria .quadro:first-child{grid-column:1 / -1}
+  .prop-h{grid-template-columns:1fr}
+  .decisoes{grid-template-columns:1fr}.decisao:nth-child(2n){padding-left:0;border-left:0}
+}
+@media (max-width:520px){.galeria{grid-template-columns:1fr}.galeria .pilha{grid-template-columns:1fr 1fr}.mk{width:22px;height:22px;font-size:11px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:0s!important}}
+</style>
+</head>
+<body>
+<div class="pag">
+  <header class="topo">
+    <span class="marca">ATRIL<small>Redesign · outubro de 2026</small></span>
+    <nav class="links" aria-label="Páginas de referência">
+      <a class="pil" href="https://christiancozta.github.io/play.html" target="_blank" rel="noopener">Página atual<span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+      <a class="pil" href="https://christiancozta.github.io/arco.html#echo" target="_blank" rel="noopener">ECHO<span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+    </nav>
+  </header>
+
+  <section class="abre">
+    <h1>Três partituras para o <mark>ATRIL</mark></h1>
+    <p>Análise da página publicada e três protótipos navegáveis, montados com os <b>dados reais do acervo</b>: os documentos e suas seções, os 107 fundamentos, a tabela de 2026 do Calendário e os seis modelos de Templates. Um caminho mantém o piano, outro o troca pela regência, o terceiro o transforma em onda.</p>
+  </section>
+
+  <section class="sec" id="diagnostico">
+    <h2 class="sec-h"><span>01</span>Diagnóstico</h2>
+    <p class="sec-l">A página funciona, é acessível e tem uma ideia excelente no centro. O que falta é elegância, e a falta tem causas mensuráveis. Os números abaixo vêm da renderização a 1.440 × 900 e do próprio DESIGN.md.</p>
+    <div class="cap">
+      <img src="img/atual.jpg" alt="Página atual do ATRIL a 1.440 por 900 pixels: barra preta, folha branca com o título, folha de ferramentas com o Calendário aberto, tampa preta e teclado branco em perspectiva ocupando o terço inferior.">
+      <a class="mk" href="#d1" style="left:58%;top:84%">1</a>
+      <a class="mk" href="#d2" style="left:13%;top:90%">2</a>
+      <a class="mk" href="#d3" style="left:83%;top:31%">3</a>
+      <a class="mk" href="#d4" style="left:10.4%;top:41%">4</a>
+      <a class="mk" href="#d5" style="left:62%;top:17%">5</a>
+      <a class="mk" href="#d6" style="left:34%;top:70.5%">6</a>
+      <a class="mk" href="#d7" style="left:22%;top:66%">7</a>
+      <a class="mk" href="#d8" style="left:8%;top:10%">8</a>
+      <a class="mk" href="#d9" style="left:4%;top:70.5%">9</a>
+    </div>
+    <div class="achados">
+      <article class="achado" id="d1"><h3><i>1</i>Escala</h3><p>O teclado ocupa <b>243 dos 900 px</b> (27% da altura) em #FCFCFC sobre #181818. É a área mais clara e mais contrastada da tela: a mobília fala mais alto que a partitura.</p></article>
+      <article class="achado" id="d2"><h3><i>2</i>Proporção</h3><p>Cada tecla branca mede cerca de <b>157 × 243 px, razão 1 : 1,5</b>. Num piano, a tecla visível tem 23,5 × 150 mm, razão 1 : 6,4. Nove teclas cruzando 1.440 px leem como brinquedo; a elegância de um teclado vem do ritmo de muitas teclas estreitas e de vãos finos.</p></article>
+      <article class="achado" id="d3"><h3><i>3</i>Hierarquia</h3><p>A primeira tela abre o Calendário com campos, controle segmentado e caixa de seleção. O PRODUCT.md diz que a vitrine lidera; a entrada mostra um formulário. São <b>seis zonas</b> com o mesmo volume e nenhuma protagonista.</p></article>
+      <article class="achado" id="d4"><h3><i>4</i>Acento</h3><p>Laranja em <b>oito marcas</b> (I a IV, 01 a 04) e âmbar em <b>três blocos grandes</b> (resultado, status, Templates). Duas luzes disputam o olhar e nenhuma conduz. Luxo é economia de acento.</p></article>
+      <article class="achado" id="d5"><h3><i>5</i>Tipografia</h3><p>Zalando Sans Expanded <b>800</b> no título, nas ferramentas, no resultado e nos nomes dos modelos. Larga e pesada em toda parte, sem contraste de peso e sem uma voz baixa. Soa como capa de tênis, não como programa de concerto.</p></article>
+      <article class="achado" id="d6"><h3><i>6</i>Tom</h3><p>"Passe o cursor e toque uma tecla", em caixa alta espaçada, ocupa o centro da tampa. A página explica a metáfora em vez de deixá-la soar.</p></article>
+      <article class="achado" id="d7"><h3><i>7</i>Respiro</h3><p>Com a página travada em 100dvh, o índice da capa (Documentos, Manuais, Anexos) aparece <b>decepado na dobra</b>, e a leitura fica com 565 px de altura entre a barra e a tampa.</p></article>
+      <article class="achado" id="d8"><h3><i>8</i>Parentesco</h3><p>Papel frio <b>#FCFCFC</b> contra o creme <b>#F2EFE9</b> do ECHO; Commissioner, Azeret Mono e Schibsted Grotesk ficaram na mãe. A filha herdou só a face do wordmark, e nada da Cadeia operacional nem dos Achados.</p></article>
+      <article class="achado" id="d9"><h3><i>9</i>Som</h3><p>A metáfora é sonora e a página é muda: sem onda, sem ressonância, sem altura de nota. O arpejo de abertura apenas acende as teclas em sequência.</p></article>
+    </div>
+    <div class="manter">
+      <h3>O que vale manter</h3>
+      <div>
+        <p><b>O trecho real de Mi a Fá.</b> Nove brancas e cinco pretas na posição verdadeira, com cada preta entre os documentos de que é versão em PDF. É o detalhe mais inteligente da página, e as três propostas o preservam, literal ou transformado.</p>
+        <p><b>A engenharia.</b> Rotas por hash, foco errante com setas, Home e End, rótulos para leitor de tela, respeito a movimento reduzido, a ferramenta ao lado da leitura e o montador em tela inteira. Nada disso precisa ser refeito; muda a pele e a coreografia.</p>
+        <p><b>A pauta como divisor.</b> A ideia é boa e hoje está desenhada como uma barra de progresso. Nas propostas ela volta com barras de compasso, marcas de ensaio e notas.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prop" id="a">
+    <div class="prop-h">
+      <div><h2><span>A</span>Noturno</h2>
+        <p>O piano fica e ganha a sala de concerto: laca, marfim, latão e um único foco de luz sobre a folha.</p>
+        <span class="selo on">Mantém o piano</span></div>
+      <a class="cta" href="a-noturno.html">Abrir protótipo<span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+    </div>
+    <div class="galeria">
+      <figure class="quadro"><div class="moldura"><img src="img/a-tecla.jpg" alt="Proposta Noturno: folha de marfim sob foco sobre um friso de latão, tampa de laca com a leitura em âmbar e teclado de proporção real com a tecla Índice acesa."></div><figcaption>Tecla preta sob o cursor: a leitura na tampa e a onda que se espalha</figcaption></figure>
+      <div class="pilha">
+        <figure class="quadro"><div class="moldura"><img src="img/a-guia.jpg" alt="Folha do Guia de Estilo na proposta Noturno, com título leve e trilho de seções."></div><figcaption>Guia de Estilo na folha</figcaption></figure>
+        <figure class="quadro"><div class="moldura"><img src="img/a-gaveta.jpg" alt="Gaveta de vidro com o Calendário calculando o vencimento em 23 de outubro de 2026."></div><figcaption>Calendário na gaveta de vidro</figcaption></figure>
+      </div>
+      <figure class="quadro"><div class="moldura"><img src="img/a-m.jpg" alt="Proposta Noturno no celular."></div><figcaption>Celular</figcaption></figure>
+    </div>
+    <div class="texto-p">
+      <div>
+        <p>A página escurece e a folha passa a ser a única superfície clara, em marfim (#F2EFE9, o papel do ECHO), sob um foco quente. Ela se apoia num <b>friso de latão</b>: o átril deixa de ser nome e vira objeto. O título troca o peso 800 por <b>300 com o miolo em 600</b>, e a largura da Expanded passa a soar como gravação de concerto.</p>
+        <p>O teclado ganha <b>proporção real</b>: teclas estreitas, vãos de 2 px, marfim com lábio frontal e laca com reflexo. As 14 teclas do acervo ficam no centro; o instrumento continua para os lados e se perde na sombra. Tocar uma tecla afunda, acende um filete âmbar na ponta e solta uma <b>onda na tampa</b> que se espalha a partir dela. Com o som ligado, cada tecla toca a sua nota de Mi4 a Fá5.</p>
+        <p>As ferramentas saem da primeira tela e vão para um trilho discreto que abre uma <b>gaveta de vidro</b> com núcleo de marfim. A capa respira: título, subtítulo e a ordem de utilização escrita como compassos com marcas de ensaio e uma frase ascendente.</p>
+      </div>
+      <dl class="ficha">
+        <div><dt>Arquétipo</dt><dd>Escuro etéreo, eixo Z (folha sobre instrumento)</dd></div>
+        <div><dt>Tipos</dt><dd>Zalando Sans Expanded 300 e 600, Commissioner, Azeret Mono</dd></div>
+        <div><dt>Rolagem</dt><dd>Não. A Regra do Instrumento Inteiro segue valendo</dd></div>
+        <div><dt>Custo</dt><dd>Médio. Reescreve teclado, estante e gaveta; dados, rotas e ferramentas ficam</dd></div>
+        <div><dt>Risco</dt><dd>Entorno escuro em leitura longa (mitigado pela folha clara)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="prop" id="b">
+    <div class="prop-h">
+      <div><h2><span>B</span>Partitura geral</h2>
+        <p>O piano sai e entra a regência: o acervo inteiro vira a partitura que o maestro lê, uma pauta por material.</p>
+        <span class="selo on">Escolhida · versão ajustada</span> <span class="selo">Troca o piano pela regência</span></div>
+      <a class="cta" href="b-partitura.html">Abrir protótipo<span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+    </div>
+    <div class="galeria">
+      <figure class="quadro"><div class="moldura"><img src="img/b-compasso.jpg" alt="Proposta Partitura geral ajustada: título ÁTRIL em Bodoni, anotações à direita e o sistema com Coleção, Governança e Ferramenta, com o compasso III destacado em âmbar."></div><figcaption>Compasso III em foco: Regras, Fundamentos e Ementário soam juntos</figcaption></figure>
+      <div class="pilha">
+        <figure class="quadro"><div class="moldura"><img src="img/b-capa.jpg" alt="Folha de rosto com o título ÁTRIL, a epígrafe e os comandos à esquerda e as anotações do Registro à direita."></div><figcaption>Folha de rosto: comandos e anotações</figcaption></figure>
+        <figure class="quadro"><div class="moldura"><img src="img/b-parte.jpg" alt="A anotação Índice e Arquitetura aberta sobre a partitura."></div><figcaption>Uma anotação aberta sobre a partitura</figcaption></figure>
+      </div>
+      <figure class="quadro"><div class="moldura"><img src="img/b-m.jpg" alt="Proposta Partitura geral no celular."></div><figcaption>Celular</figcaption></figure>
+    </div>
+    <div class="texto-p">
+      <div>
+        <p>A página abre como a folha de rosto de uma partitura, sobre o papel #FCFCFC: <b>ÁTRIL</b> em Bodoni Moda e o subtítulo <i>Playbook de elaboração de votos</i>. À esquerda, a epígrafe do ECHO, <i>Harmonia é coordenação de diferenças</i>, com o marca-texto âmbar da mãe, e logo abaixo os <b>comandos</b>: ouvir os compassos, buscar e voltar ao ECHO. À direita, no lugar das linhas de origem, ficam duas <b>anotações</b> sem título: Índice e Arquitetura e Memória de Integração, o Registro, que sai do sistema porque não toca na ordem.</p>
+        <p>O sistema é uma <b>matriz de uso verdadeira</b>. Os compassos são a ordem da seção 3 das Regras de Aplicação (I a IV e a coda de revisão). O primeiro naipe é a <b>Coleção</b>, presa pela chaveta do piano, com os volumes 01 a 03 <i>ad libitum</i> e o Guia de Estilo por último, sustentado de IV até a coda. Logo abaixo, a <b>Governança</b>: as Regras como pedal em todos os compassos e os Critérios na coda. Depois a <b>Ferramenta</b>: Calendário em II, Fundamentos e Ementário em III, Templates em IV.</p>
+        <p>Ler na vertical é ler um passo. Passar o cursor por um compasso acende a coluna e esmaece o resto; com o som ligado, o compasso soa como acorde. As alturas foram escolhidas para que <b>III soe Dó maior, IV fique suspenso e a coda resolva</b>. Clicar num nome abre o material sobre a partitura; <b>abrir</b>, ao fim de cada pauta, leva ao PDF.</p>
+      </div>
+      <dl class="ficha">
+        <div><dt>Arquétipo</dt><dd>Luxo editorial, divisão editorial</dd></div>
+        <div><dt>Tipos</dt><dd>Bodoni Moda, Commissioner, Azeret Mono; Zalando só na marca</dd></div>
+        <div><dt>Fundo</dt><dd>#FCFCFC, o papel da paleta fechada</dd></div>
+        <div><dt>Rolagem</dt><dd>Sim, curta. A partitura cabe quase inteira na primeira tela</dd></div>
+        <div><dt>Custo</dt><dd>Baixo a médio. SVG simples, sem geometria de perspectiva</dd></div>
+        <div><dt>Risco</dt><dd>O mapeamento das notas precisa acompanhar as Regras quando elas mudarem</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="prop" id="c">
+    <div class="prop-h">
+      <div><h2><span>C</span>Eco</h2>
+        <p>A filha repete o gesto da mãe e o piano vira onda: crista em cada tecla branca, vale em cada preta.</p>
+        <span class="selo">Transforma o piano</span></div>
+      <a class="cta" href="c-eco.html">Abrir protótipo<span class="b"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9.5 8H16v6.5"/></svg></span></a>
+    </div>
+    <div class="galeria">
+      <figure class="quadro"><div class="moldura"><img src="img/c-vale.jpg" alt="Proposta Eco: campo âmbar, uma linha de onda com nove cristas e cinco vales rotulados e a palavra atril gigante em caixa baixa sangrando a borda inferior; o vale Memória está tocado."></div><figcaption>O vale Memória tocado: a corda vibra e o rótulo sobe</figcaption></figure>
+      <div class="pilha">
+        <figure class="quadro"><div class="moldura"><img src="img/c-folha.jpg" alt="Folha do Guia de Estilo na proposta Eco, com numeral vazado e ficha no estilo do ECHO."></div><figcaption>A folha que sobe, com a onda como navegação</figcaption></figure>
+        <figure class="quadro"><div class="moldura"><img src="img/echo.jpg" alt="Abertura da página ECHO: campo âmbar com a palavra echo gigante em caixa baixa."></div><figcaption>Referência: a abertura do ECHO</figcaption></figure>
+      </div>
+      <figure class="quadro"><div class="moldura"><img src="img/c-m.jpg" alt="Proposta Eco no celular, com a onda na vertical."></div><figcaption>Celular: a corda fica de pé</figcaption></figure>
+    </div>
+    <div class="texto-p">
+      <div>
+        <p>A abertura é a do ECHO com outra palavra: <b>campo âmbar e "atril" em caixa baixa</b>, Zalando Sans Expanded 800, sangrando a borda inferior. Entre o lema e a palavra corre uma única linha de tinta.</p>
+        <p>Essa linha é o teclado. Nos 17 pontos a meio passo de tecla, ela sobe nas brancas, desce nas pretas e passa por zero onde o piano não tem preta, entre Mi e Fá e entre Si e Dó. <b>A geometria do teclado sobrevive como traço de som</b>, legível para quem conhece piano e apenas bonita para quem não conhece. Tocar uma crista ou um vale faz a corda vibrar com mola física e, com o som ligado, soa a nota daquela tecla. No celular a corda fica de pé.</p>
+        <p>Abaixo, uma banda de laca repete dois componentes da mãe com os dados da filha: a <b>Cadeia operacional</b> vira a ordem de utilização, e os <b>Achados</b> viram 107, 2.758, 730 e 6, cada um abrindo a sua ferramenta. A folha de leitura sobe do pé da tela com numeral vazado e ficha no idioma do ECHO, e a onda encolhe para o topo como navegação.</p>
+      </div>
+      <dl class="ficha">
+        <div><dt>Arquétipo</dt><dd>Estruturalismo suave sobre o campo âmbar da mãe</dd></div>
+        <div><dt>Tipos</dt><dd>Zalando Sans Expanded 800, Schibsted Grotesk, Commissioner, Azeret Mono</dd></div>
+        <div><dt>Rolagem</dt><dd>Sim. A página volta a ser página</dd></div>
+        <div><dt>Custo</dt><dd>Médio. Onda em SVG com mola; folha e gaveta novas</dd></div>
+        <div><dt>Risco</dt><dd>Mais vitrine que instrumento; o âmbar em área cheia cansa se a visita for longa</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec" id="comparacao">
+    <h2 class="sec-h"><span>02</span>Comparação</h2>
+    <div class="tabela">
+      <table>
+        <thead><tr><th scope="col"></th><th scope="col">A · Noturno</th><th scope="col">B · Partitura geral</th><th scope="col">C · Eco</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Piano</th><td><b>Literal</b>, refeito em proporção real</td><td>Sai; resta a chaveta da Coleção</td><td><b>Transformado</b> em onda com a mesma geometria</td></tr>
+          <tr><th scope="row">Regência</th><td>Implícita, na estante e na ordem em compassos</td><td><b>Explícita</b>: partitura geral, naipes, marcas de ensaio, acordes</td><td>Implícita, na corda que vibra</td></tr>
+          <tr><th scope="row">Leitura longa</th><td>Boa: folha clara sob foco</td><td><b>A melhor</b>: tudo em papel, serifa de leitura</td><td>Boa: a folha cobre a tela inteira</td></tr>
+          <tr><th scope="row">Parentesco com o ECHO</th><td>Papel e família tipográfica</td><td>Papel, família tipográfica e o marca-texto âmbar</td><td><b>O mais forte</b>: abertura, Cadeia e Achados</td></tr>
+          <tr><th scope="row">A estrutura informa?</th><td>As teclas nomeiam os materiais</td><td><b>Sim</b>: cada nota diz em que passo o material entra</td><td>A onda guarda a posição de brancas e pretas</td></tr>
+          <tr><th scope="row">Primeira tela</th><td>Capa e teclado; ferramentas fechadas</td><td>Folha de rosto e quase todo o sistema</td><td>Campo âmbar, onda e palavra</td></tr>
+          <tr><th scope="row">Custo</th><td>Médio</td><td>Baixo a médio</td><td>Médio</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="reco">
+      <div class="reco-in">
+        <h2>Escolhida: <mark>B</mark></h2>
+        <div>
+          <p><b>A Partitura geral é a única em que a metáfora carrega informação.</b> Não é um piano desenhado nem uma onda bonita: é a ordem de utilização das Regras posta na forma que um regente lê, e ler na vertical responde à pergunta prática de quem redige ("o que eu uso neste passo?"). Ela é clara para leitura longa, diferencia o ATRIL do ECHO sem sair da família e custa menos que as outras, porque troca a geometria de perspectiva por SVG plano.</p>
+          <p><b>Se o piano for inegociável, A.</b> É a evolução direta do que existe, mantém a Regra do Instrumento Inteiro e conserta, uma a uma, as nove causas do diagnóstico. C é a melhor vitrine e a pior mesa de trabalho; serve se o ATRIL for antes de tudo uma peça do portfólio.</p>
+          <p>A versão ajustada sobe a Coleção para o primeiro naipe, terminando no Guia, põe a Governança logo depois, tira o Registro do sistema para as anotações da folha de rosto, intitula a página ÁTRIL, leva os comandos para a coluna da epígrafe, enxuga a folha de rosto e volta ao fundo #FCFCFC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="decisoes">
+    <h2 class="sec-h"><span>03</span>Antes de implementar</h2>
+    <p class="sec-l">Pontos que mexem em compromissos escritos no PRODUCT.md e no DESIGN.md. O primeiro já foi decidido.</p>
+    <div class="decisoes">
+      <div class="decisao"><h3>Papel: decidido, #FCFCFC</h3><p>A partitura escolhida volta ao papel da paleta fechada. A paleta do PRODUCT.md e a Regra da Laca e do Papel seguem valendo sem emenda.</p></div>
+      <div class="decisao"><h3>O laranja de editor</h3><p>Os protótipos retiram o #C84D00 da interface e deixam o âmbar como luz única. O laranja segue nas capas dos manuais, onde é a cor da coleção impressa.</p></div>
+      <div class="decisao"><h3>A página volta a rolar</h3><p>Com B, a página rola, ainda que pouco. A Regra do Instrumento Inteiro, do DESIGN.md, sai junto com o teclado.</p></div>
+      <div class="decisao"><h3>A grafia do nome</h3><p>O título agora é ÁTRIL, com acento. O PRODUCT.md registra ATRIL, sem acento, como grafia dicionarizada; se o acento é intencional, o registro precisa ser atualizado.</p></div>
+      <div class="decisao"><h3>Onde entra no código</h3><p>A fonte canônica é assets/play/fonte: build/pagina.html, build/css/interface.css e build/interface.js, regenerados por build.py. O DESIGN.md precisa ser reescrito para a direção escolhida.</p></div>
+    </div>
+    <div class="manter" style="margin-top:56px">
+      <h3>Escopo dos protótipos</h3>
+      <div>
+        <p>São protótipos de direção, com os dados reais. O Calendário calcula pela tabela de 2026 (08/10/2026 mais 10 dias úteis vence em 23/10/2026, com 12/10 excluído, como na página publicada) e recusa prazos que passam de 31/12/2026. Fundamentos busca nos 107 registros. O Ementário mostra uma amostra de 5 dos 2.758 assuntos. Templates lista os seis modelos, mas o montador não foi refeito.</p>
+        <p>Só o Guia de Estilo traz texto corrido; os demais documentos mostram as suas seções reais. A busca global foi simplificada. O som é sintetizado no navegador e começa desligado.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pe"><span>ATRIL · página filha do ECHO</span><span>Christian da Costa · Curitiba · 2026</span></footer>
+</div>
+</body>
+</html>
