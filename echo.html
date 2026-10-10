@@ -39,6 +39,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Commissioner:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&family=Zalando+Sans+Expanded:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@96,900&text=PLAY&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -254,38 +255,34 @@ a:hover{color:#181818}
 
 /* =========================================================
    PRIMEIRA TELA APÓS O HERO
-   linha de tinta à esquerda + cinco famílias à direita, empilhadas.
+   a linha de tinta atravessa a página de borda a borda;
+   abaixo dela, a cadeia operacional, único eixo de leitura.
    ========================================================= */
 .echo-intro{
+  --g:clamp(18px,4vw,56px);
+  --mola:cubic-bezier(.32,.72,0,1);
   position:relative;
   z-index:1;
+  display:flex;
+  flex-direction:column;
   min-height:100vh;
   min-height:100dvh;
   background:var(--ink);
   color:var(--paper);
-  padding:
-    clamp(84px,10.4vh,127px)
-    clamp(18px,4vw,56px)
-    clamp(64px,8vw,112px);
+  padding:clamp(84px,10.4vh,127px) var(--g) clamp(48px,6vw,88px);
   font-family:var(--body);
 }
 
-.echo-intro-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1.9fr) minmax(260px,.75fr);
-  gap:clamp(34px,5vw,80px);
-  align-items:start;
-  margin-top:0;
-}
-
-/* Linha de tinta: o acervo como teclado (proposta Eco).
-   Cada material é uma tecla. Cristas: documentos (manuais, mapas, matrizes).
-   Vales: bases (registros e painéis). Zero onde o piano não tem tecla preta.
-   Abaixo, a cadeia operacional acende o trecho que cada material percorre. */
+/* Linha de tinta (proposta Eco). Cada material é uma tecla, de Si3 a Dó5:
+   cristas para documentos de leitura, vales para bases de consulta,
+   zero onde o piano não tem tecla preta. Tocar um material acende,
+   na cadeia, o trecho que ele percorre; tocar uma etapa reúne os seus. */
 .matrix-wrap{
-  min-width:0;
   position:relative;
-  --mola:cubic-bezier(.32,.72,0,1);
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
 }
 .matrix-title{
   margin:0 0 14px;
@@ -297,7 +294,7 @@ a:hover{color:#181818}
 .onda-som{
   position:absolute;
   right:0;
-  top:-6px;
+  top:-7px;
   display:inline-flex;
   align-items:center;
   gap:8px;
@@ -312,7 +309,7 @@ a:hover{color:#181818}
   letter-spacing:.16em;
   text-transform:uppercase;
   cursor:pointer;
-  transition:background .5s var(--mola),color .5s var(--mola),box-shadow .5s var(--mola);
+  transition:background .5s var(--mola),color .5s var(--mola),box-shadow .5s var(--mola),transform .3s var(--mola);
 }
 .onda-som i{
   width:18px;
@@ -331,70 +328,76 @@ a:hover{color:#181818}
 .onda-som[aria-pressed="true"] i{background:var(--ink);color:var(--amber)}
 .onda-som:focus-visible{outline:1.5px solid var(--amber);outline-offset:2px}
 
+/* a onda e a cadeia sangram até as bordas; teclas e etapas ficam na medida da página */
+.onda-eco,
+.onda-cadeia{
+  margin-left:calc(var(--g) * -1);
+  margin-right:calc(var(--g) * -1);
+}
 .onda-eco{
   position:relative;
-  height:clamp(320px,40vh,380px);
-  border-top:1px solid var(--paper);
+  flex:1 0 auto;
+  height:clamp(340px,46vh,460px);
+  max-height:520px;
   touch-action:pan-y;
 }
-.onda-eco.vert{height:clamp(600px,168vw,780px)}
+.onda-eco::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:var(--g);
+  right:var(--g);
+  height:1px;
+  background:var(--paper);
+}
+.onda-eco.vert{flex:none;height:clamp(600px,168vw,780px)}
 .onda-eco svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
-.onda-eco .eixo{stroke:rgba(242,239,233,.13);stroke-width:1}
-.onda-eco .traco{fill:none;stroke:var(--paper);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+.onda-eco .eixo{stroke:rgba(242,239,233,.12);stroke-width:1}
+.onda-eco .traco{fill:none;stroke:var(--amber);stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
 .onda-eco .no{position:absolute;z-index:2;border-radius:12px;cursor:pointer;outline:0;-webkit-tap-highlight-color:transparent}
 .onda-eco .no:focus-visible{box-shadow:inset 0 0 0 1.5px var(--amber)}
 .onda-eco .ponto{
   position:absolute;
   z-index:1;
-  width:8px;
-  height:8px;
-  margin:-4px 0 0 -4px;
+  width:9px;
+  height:9px;
+  margin:-4.5px 0 0 -4.5px;
   border-radius:50%;
-  background:var(--amber);
-  box-shadow:0 0 0 1px var(--paper);
+  background:var(--paper);
+  box-shadow:0 0 0 2px var(--ink);
   pointer-events:none;
   transition:transform .5s var(--mola),opacity .4s var(--mola);
 }
-.onda-eco .ponto.on{transform:scale(1.7)}
+.onda-eco .ponto.on{transform:scale(1.65)}
 .onda-eco .rot{
   position:absolute;
   z-index:1;
-  transform:translateX(-50%);
+  margin:0;
+  transform:translate(-50%,-100%);
   text-align:center;
   color:var(--paper);
-  pointer-events:none;
-  transition:transform .7s var(--mola),opacity .5s var(--mola);
-}
-.onda-eco .rot small{
-  display:block;
-  font:500 8px/1.4 var(--mono);
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:rgba(242,239,233,.48);
-}
-.onda-eco .rot b{
-  display:block;
-  margin-top:4px;
   font-family:var(--section-display);
-  font-size:var(--rot-fs,13px);
+  font-size:var(--rot-fs,14px);
   font-weight:600;
   line-height:1.12;
   letter-spacing:-.015em;
   text-wrap:balance;
+  pointer-events:none;
+  transition:transform .7s var(--mola),opacity .5s var(--mola);
 }
-.onda-eco .rot.p b{margin:0 0 4px;font-weight:500}
-.onda-eco .rot.on{transform:translate(-50%,-12px)}
-.onda-eco .rot.p.on{transform:translate(-50%,12px)}
+.onda-eco .rot.p{transform:translate(-50%,0);font-weight:500}
+.onda-eco .rot.on{transform:translate(-50%,calc(-100% - 10px))}
+.onda-eco .rot.p.on{transform:translate(-50%,10px)}
 .onda-eco.vivo .rot:not(.on){opacity:.3}
-.onda-eco.vivo .ponto:not(.on){opacity:.45}
+.onda-eco.vivo .ponto:not(.on){opacity:.4}
 .onda-eco.vert .rot{transform:translateY(-50%)}
 .onda-eco.vert .rot.on{transform:translate(6px,-50%)}
 .onda-eco.vert .rot.p.on{transform:translate(-6px,-50%)}
 
-/* cadeia operacional sob a onda: as mesmas seis etapas da antiga tabela */
-.onda-cadeia{position:relative;height:56px;margin-top:4px}
+/* cadeia operacional sob a onda: as seis etapas */
+.onda-cadeia{position:relative;flex:none;height:56px;margin-top:4px}
 .onda-cadeia.alterna{height:72px}
-.onda-cadeia .fio{position:absolute;top:10px;height:1px;background:rgba(242,239,233,.2)}
+.onda-cadeia .fio{position:absolute;top:10px;height:1px;background:var(--paper)}
 .onda-cadeia .rota{
   position:absolute;
   top:9.5px;
@@ -430,18 +433,19 @@ a:hover{color:#181818}
   height:9px;
   border-radius:50%;
   background:var(--ink);
-  box-shadow:inset 0 0 0 1px rgba(242,239,233,.55);
+  box-shadow:inset 0 0 0 1px var(--paper);
   transition:background .35s var(--mola),box-shadow .35s var(--mola),transform .5s var(--mola);
 }
 .onda-cadeia .etapa:hover{color:var(--paper)}
 .onda-cadeia .etapa:hover i{transform:scale(1.25)}
 .onda-cadeia .etapa.on{color:var(--paper)}
-.onda-cadeia .etapa.on i{background:var(--amber);box-shadow:0 0 0 1px var(--paper)}
+.onda-cadeia .etapa.on i{background:var(--paper);box-shadow:0 0 0 2px var(--ink)}
 .onda-cadeia .etapa.off{opacity:.36}
 .onda-cadeia .etapa:focus-visible{outline:1.5px solid var(--amber);outline-offset:0}
 .onda-cadeia.alterna .etapa:nth-of-type(even) span{margin-top:15px}
 
 .onda-leitura{
+  flex:none;
   display:flex;
   flex-wrap:wrap;
   align-items:baseline;
@@ -461,7 +465,7 @@ a:hover{color:#181818}
 .onda-leitura p{
   flex:1 1 320px;
   margin:0;
-  max-width:72ch;
+  max-width:78ch;
   font-size:13px;
   line-height:1.55;
   color:rgba(242,239,233,.7);
@@ -477,6 +481,7 @@ a:hover{color:#181818}
 }
 .onda-leitura em{
   flex:none;
+  margin-left:auto;
   font:500 8.5px/1.4 var(--mono);
   font-style:normal;
   letter-spacing:.14em;
@@ -504,76 +509,6 @@ a:hover{color:#181818}
   .onda-som,.onda-som i,.onda-eco .ponto,.onda-eco .rot,.onda-cadeia .rota,.onda-cadeia .etapa,.onda-cadeia .etapa i,.onda-ir{transition:none}
 }
 
-/* Cinco famílias - sempre uma coluna */
-.families{
-  display:grid;
-  grid-template-columns:1fr;
-  border-top:1px solid var(--paper);
-}
-.family{
-  padding:clamp(16px,1.8vw,24px) 0;
-  border-bottom:1px solid rgba(242,239,233,.18);
-}
-.family:first-child{
-  padding-top:10px;
-}
-.family-top{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:18px;
-}
-.family-num{
-  font-family:var(--mono);
-  font-size:9px;
-  letter-spacing:.14em;
-}
-.family h3{
-  margin:0;
-  font-family:var(--display);
-  font-size:clamp(18px,1.75vw,24px);
-  line-height:1;
-  font-weight:700;
-  letter-spacing:-.025em;
-}
-.family p{
-  margin:8px 0 0;
-  font-size:12.5px;
-  line-height:1.48;
-  color:rgba(242,239,233,.62);
-}
-.family-rule{
-  width:100%;
-  height:22px;
-  margin-top:12px;
-  display:block;
-}
-
-
-@media(min-width:1101px){
-  .matrix-title{
-    position:absolute;
-    left:0;
-    top:-28px;
-    margin:0;
-  }
-  .onda-som{top:-34px}
-  .onda-eco,
-  .families{
-    margin-top:0;
-  }
-}
-
-/* Primeiro recorte responsivo */
-@media(max-width:1100px){
-  .family:first-child{padding-top:12px}
-
-  .echo-intro-grid{
-    grid-template-columns:1fr;
-    gap:24px;
-  }
-  .families{margin-top:8px}
-}
 @media(max-width:760px){
   .legal-ops-pill{width:144px;min-height:34px;padding:0 18px}
   .legal-ops-note{right:10px;top:10px;width:calc(100% - 20px);padding:20px}
@@ -664,8 +599,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 @media(max-width:719px){.echo-trace{display:none}}
 
 /* ACERVO — DOCUMENTOS FUNDADORES 01 / 04 / 05 */
+/* faixa à esquerda na cor contrária: âmbar na ficha escura, preta na ficha âmbar */
 #acervo-ficha{
-  border-left:1px solid #FFB627;
+  border-left:6px solid #FFB627;
   transition:
     background-color .38s cubic-bezier(.22,.68,0,1),
     color .38s cubic-bezier(.22,.68,0,1),
@@ -730,6 +666,229 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   color:#FFB627!important;
 }
 
+
+/* =========================================================
+   PLAY: dois anúncios em linguagens distintas.
+   No acervo, uma folha da partitura presa pelo prendedor;
+   sob a linha de tinta, uma faixa que faz soar, na onda,
+   os oito materiais que o PLAY reúne.
+   ========================================================= */
+.acervo-cab{
+  display:grid;
+  grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);
+  gap:clamp(32px,6vw,104px);
+  align-items:end;
+}
+.play-folha{
+  --mola:cubic-bezier(.32,.72,0,1);
+  position:relative;
+  display:block;
+  max-width:440px;
+  justify-self:end;
+  width:100%;
+  margin-top:26px;
+  color:#181818;
+  transform:rotate(-1.4deg);
+  transform-origin:30% 0;
+  transition:transform .8s var(--mola);
+}
+.play-folha:hover,.play-folha:focus-visible{color:#181818;transform:rotate(0) translateY(-4px)}
+.play-folha:focus-visible{outline:2px solid #181818;outline-offset:6px}
+.play-folha__papel{
+  position:relative;
+  display:block;
+  padding:clamp(30px,3vw,40px) clamp(24px,2.4vw,34px) clamp(22px,2.2vw,28px);
+  background:#FCFCFC;
+  border-radius:2px;
+  box-shadow:
+    0 1px 1px rgba(24,24,24,.05),
+    0 2px 4px rgba(24,24,24,.04),
+    0 26px 44px -28px rgba(24,24,24,.42);
+  transition:box-shadow .8s var(--mola);
+}
+.play-folha:hover .play-folha__papel{box-shadow:0 1px 1px rgba(24,24,24,.05),0 4px 8px rgba(24,24,24,.04),0 40px 60px -32px rgba(24,24,24,.48)}
+/* dobra no canto, como na folha do PLAY */
+.play-folha__papel::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:22px;
+  height:22px;
+  background:linear-gradient(315deg,#F2EFE9 0 50%,#E6E3DD 50% 100%);
+  box-shadow:-1px -1px 2px rgba(24,24,24,.06);
+}
+.play-folha__clipe{
+  position:absolute;
+  z-index:2;
+  top:-20px;
+  left:26px;
+  width:82px;
+  height:94px;
+  transform:rotate(-2.4deg);
+  pointer-events:none;
+}
+.play-folha__clipe svg{display:block;width:82px;height:94px;overflow:visible;filter:drop-shadow(0 5px 6px rgba(24,24,24,.2)) drop-shadow(0 1px 1px rgba(24,24,24,.3))}
+.play-folha__clipe span{
+  position:absolute;
+  left:0;
+  top:0;
+  width:82px;
+  height:39px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding-top:3px;
+  color:#FFB627;
+  font:500 6.6px/1 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.play-folha__clipe span b{font-weight:500}
+.play-folha__clipe span b + b{font-size:9.5px;font-weight:700}
+.play-folha__k{
+  display:block;
+  margin:40px 0 0;
+  font:500 9px/1.4 var(--mono);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(24,24,24,.56);
+}
+.play-folha__t{
+  display:block;
+  margin:10px -.08em 0 0;
+  font:900 clamp(52px,5.4vw,76px)/.9 "Bodoni Moda",Georgia,serif;
+  letter-spacing:.08em;
+}
+.play-folha__l{
+  display:block;
+  margin:16px 0 0;
+  font-size:14px;
+  line-height:1.55;
+  color:rgba(24,24,24,.78);
+  text-wrap:pretty;
+}
+.play-folha__pauta{display:block;margin:22px 0 0}
+.play-folha__pauta svg{display:block;width:100%;height:44px;overflow:visible}
+.play-folha__pauta line{stroke:rgba(24,24,24,.1);stroke-width:1}
+.play-folha__pauta path{fill:none;stroke:#FFB627;stroke-width:1.6;stroke-linejoin:round}
+.play-folha__pauta circle{fill:#FCFCFC;stroke:rgba(24,24,24,.45);stroke-width:1.1}
+.play-folha__pauta circle.on{fill:#181818;stroke:#181818}
+.play-folha__pe{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px 18px;
+  margin-top:18px;
+}
+.play-folha__n span{white-space:nowrap}
+.play-folha__n{font:500 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(24,24,24,.6)}
+.play-folha__cta{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:6px 6px 6px 20px;
+  border-radius:999px;
+  background:#181818;
+  color:#F2EFE9;
+  font-size:13.5px;
+  font-weight:600;
+}
+.play-folha__cta i{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#FFB627;
+  color:#181818;
+  font-style:normal;
+  font-size:13px;
+  transition:transform .6s var(--mola);
+}
+.play-folha:hover .play-folha__cta i{transform:translate(2px,-1px) scale(1.06)}
+.play-folha:active .play-folha__papel{transform:scale(.995)}
+
+/* faixa sob a linha de tinta: moldura dupla, escura sobre escuro */
+.play-faixa{
+  --mola:cubic-bezier(.32,.72,0,1);
+  display:block;
+  flex:none;
+  margin-top:clamp(22px,3vw,36px);
+  padding:6px;
+  border-radius:999px;
+  background:rgba(242,239,233,.035);
+  box-shadow:inset 0 0 0 1px rgba(242,239,233,.1);
+  color:#F2EFE9;
+  transition:box-shadow .6s var(--mola),background .6s var(--mola);
+}
+.play-faixa:hover,.play-faixa:focus-visible{color:#F2EFE9;background:rgba(255,182,39,.06);box-shadow:inset 0 0 0 1px rgba(255,182,39,.4)}
+.play-faixa:focus-visible{outline:1.5px solid #FFB627;outline-offset:3px}
+.play-faixa__in{
+  display:flex;
+  align-items:center;
+  gap:clamp(14px,2vw,28px);
+  padding:8px 8px 8px clamp(18px,2.2vw,30px);
+  border-radius:999px;
+  background:#1F1F1F;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.06);
+}
+.play-faixa__t{
+  flex:none;
+  margin-right:-.08em;
+  font:900 26px/1 "Bodoni Moda",Georgia,serif;
+  letter-spacing:.08em;
+  color:#FFB627;
+}
+.play-faixa__sep{flex:none;width:1px;height:28px;background:rgba(242,239,233,.16)}
+.play-faixa__l{flex:1;min-width:0;font-size:13.5px;line-height:1.45;color:rgba(242,239,233,.78);text-wrap:pretty}
+.play-faixa__l b{font-weight:600;color:#F2EFE9}
+.play-faixa__cta{
+  flex:none;
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:6px 6px 6px 20px;
+  border-radius:999px;
+  background:#FFB627;
+  color:#181818;
+  font-size:13.5px;
+  font-weight:600;
+  transition:transform .3s var(--mola);
+}
+.play-faixa__cta i{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#181818;
+  color:#FFB627;
+  font-style:normal;
+  font-size:13px;
+  transition:transform .6s var(--mola);
+}
+.play-faixa:hover .play-faixa__cta i,.play-faixa:focus-visible .play-faixa__cta i{transform:translate(2px,-1px) scale(1.06)}
+.play-faixa:active .play-faixa__cta{transform:scale(.98)}
+@media(max-width:900px){
+  .acervo-cab{grid-template-columns:1fr;align-items:start}
+  .play-folha{justify-self:start;margin-top:44px}
+}
+@media(max-width:760px){
+  .play-folha{transform:none}
+  .play-folha:hover,.play-folha:focus-visible{transform:translateY(-2px)}
+  .play-faixa{border-radius:26px}
+  .play-faixa__in{flex-wrap:wrap;border-radius:20px;padding:16px 16px 16px 18px;row-gap:14px}
+  .play-faixa__sep{display:none}
+  .play-faixa__l{flex:1 1 100%;order:2}
+  .play-faixa__cta{order:3}
+}
+@media(prefers-reduced-motion:reduce){
+  .play-folha,.play-folha__papel,.play-folha__cta i,.play-faixa,.play-faixa__cta,.play-faixa__cta i{transition:none}
+}
 
 /* PREVIEW PDF — leitura no próprio acervo. */
 .echo-preview[hidden]{display:none}
@@ -823,73 +982,17 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </sc-if>
 
 <section class="echo-intro" id="visao-geral">
-  <div class="echo-intro-grid">
-    <div class="matrix-wrap" id="eco-onda">
-      <p class="matrix-title">Materiais × cadeia operacional</p>
-    </div>
-
-    <div class="families" aria-label="Famílias do acervo">
-      <article class="family">
-        <div class="family-top">
-          <span class="family-num">01</span>
-          <h3>Manuais</h3>
-        </div>
-        <p>orientação, entrada e verificação</p>
-        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
-          <path d="M0 11 C30 1,50 21,80 11 S130 1,160 11 S210 21,240 11" fill="none" stroke="#FFB627" stroke-width="2"/>
-        </svg>
-      </article>
-
-      <article class="family">
-        <div class="family-top">
-          <span class="family-num">02</span>
-          <h3>Mapas</h3>
-        </div>
-        <p>classificação, localização e roteamento</p>
-        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
-          <path d="M0 11 L40 3 L80 19 L120 3 L160 19 L200 3 L240 11" fill="none" stroke="#FFB627" stroke-width="2"/>
-        </svg>
-      </article>
-
-      <article class="family">
-        <div class="family-top">
-          <span class="family-num">03</span>
-          <h3>Matrizes</h3>
-        </div>
-        <p>papéis, competências e autonomia</p>
-        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
-          <path d="M0 11 L30 4 L60 4 L90 18 L120 18 L150 4 L180 4 L210 18 L240 11" fill="none" stroke="#FFB627" stroke-width="2"/>
-        </svg>
-      </article>
-
-      <article class="family">
-        <div class="family-top">
-          <span class="family-num">04</span>
-          <h3>Registros</h3>
-        </div>
-        <p>memória, monitoramento e consolidação</p>
-        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
-          <path d="M0 11 C22 19,42 2,64 11 S106 20,128 11 S170 2,192 11 S220 18,240 11" fill="none" stroke="#FFB627" stroke-width="2"/>
-        </svg>
-      </article>
-
-      <article class="family">
-        <div class="family-top">
-          <span class="family-num">05</span>
-          <h3>Painéis</h3>
-        </div>
-        <p>consulta, referência e recuperação</p>
-        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
-          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
-          <path d="M0 11 H24 V4 H56 V18 H88 V4 H120 V18 H152 V4 H184 V18 H216 V11 H240" fill="none" stroke="#FFB627" stroke-width="2"/>
-        </svg>
-      </article>
-    </div>
+  <div class="matrix-wrap" id="eco-onda">
+    <p class="matrix-title">Materiais × cadeia operacional</p>
   </div>
+  <a class="play-faixa" id="play-faixa" href="play.html" aria-label="Abrir o PLAY, playbook de elaboração de votos, que reúne oito materiais do acervo">
+    <span class="play-faixa__in">
+      <span class="play-faixa__t" aria-hidden="true">PLAY</span>
+      <span class="play-faixa__sep" aria-hidden="true"></span>
+      <span class="play-faixa__l"><b>Oito destes materiais tocam juntos no PLAY</b>, o playbook de elaboração de votos: os quatro volumes da coleção, as regras do texto e as ferramentas de consulta, numa só partitura.</span>
+      <span class="play-faixa__cta">Abrir o PLAY<i aria-hidden="true">↗</i></span>
+    </span>
+  </a>
 </section>
 
 <section id="preliminares" style="background:#FFB627;color:#181818;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
@@ -973,7 +1076,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   <div data-reveal style="margin-top:clamp(56px,7vw,104px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Dar forma ao que ainda não tinha procedimento instituído</p>
     <div style="margin-top:clamp(24px,2.8vw,38px)">
-      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes, registros e painéis, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
+      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
       <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
     </div>
   </div>
@@ -1011,8 +1114,38 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </div>
 
 <section id="acervo" style="padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
-  <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:#FFB627;-webkit-text-stroke:1px #181818">02</span>Acervo</h2>
-  <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
+  <div class="acervo-cab">
+    <div>
+      <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:#FFB627;-webkit-text-stroke:1px #181818">02</span>Acervo</h2>
+      <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
+    </div>
+    <a class="play-folha" href="play.html" aria-label="Abrir o PLAY, playbook de elaboração de votos">
+      <span class="play-folha__clipe" aria-hidden="true">
+          <svg viewBox="0 0 132 152" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="pc-aco" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E949B"/><stop offset=".22" stop-color="#E8EBEE"/><stop offset=".5" stop-color="#A3A9B0"/><stop offset=".78" stop-color="#EEF0F2"/><stop offset="1" stop-color="#8E949B"/></linearGradient>
+              <linearGradient id="pc-laca" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A3A3A"/><stop offset=".12" stop-color="#232323"/><stop offset=".55" stop-color="#181818"/><stop offset="1" stop-color="#0F0F0F"/></linearGradient>
+            </defs>
+            <path d="M15 56C15 74 39 84 43 98C46 109 31 120 34 134C37 148 95 148 98 134C101 120 86 109 89 98C93 84 117 74 117 56" fill="none" stroke="url(#pc-aco)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="1" y="0" width="130" height="62" rx="3.5" fill="url(#pc-laca)"/>
+            <rect x="1.5" y="0.5" width="129" height="61" rx="3" fill="none" stroke="#fff" stroke-opacity=".07"/>
+            <rect x="9" y="54" width="14" height="9" rx="3" fill="#2A2A2A"/><rect x="109" y="54" width="14" height="9" rx="3" fill="#2A2A2A"/>
+            <circle cx="15" cy="58.5" r="2.2" fill="url(#pc-aco)"/><circle cx="117" cy="58.5" r="2.2" fill="url(#pc-aco)"/>
+          </svg>
+        <span><b>Playbook</b><b>ECHO</b></span>
+      </span>
+      <span class="play-folha__papel">
+        <span class="play-folha__k">Novo · showcase do playbook</span>
+        <span class="play-folha__t">PLAY</span>
+        <span class="play-folha__l">O acervo aplicado à redação de votos de RI e ED: quatro volumes, a governança do texto e as ferramentas de consulta, editados juntos numa partitura.</span>
+        <span class="play-folha__pauta" aria-hidden="true"><svg viewBox="0 0 320 44" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="6" x2="320" y2="6"/><line x1="0" y1="14" x2="320" y2="14"/><line x1="0" y1="22" x2="320" y2="22"/><line x1="0" y1="30" x2="320" y2="30"/><line x1="0" y1="38" x2="320" y2="38"/><path d="M0 22H6L8.1 21.7L10.3 20.7L12.4 19.2L14.6 17.5L16.7 15.8L18.8 14.3L21.0 13.3L23.1 13.0L25.2 13.3L27.4 14.3L29.5 15.8L31.7 17.5L33.8 19.2L35.9 20.7L38.1 21.7L40.2 22.0L42.4 21.7L44.5 20.7L46.6 19.2L48.8 17.5L50.9 15.8L53.1 14.3L55.2 13.3L57.3 13.0L59.5 13.7L61.6 15.6L63.8 18.6L65.9 22.0L68.0 25.4L70.2 28.4L72.3 30.3L74.4 31.0L76.6 30.3L78.7 28.4L80.9 25.4L83.0 22.0L85.1 18.6L87.3 15.6L89.4 13.7L91.6 13.0L93.7 13.7L95.8 15.6L98.0 18.6L100.1 22.0L102.2 25.4L104.4 28.4L106.5 30.3L108.7 31.0L110.8 30.3L112.9 28.4L115.1 25.4L117.2 22.0L119.4 18.6L121.5 15.6L123.6 13.7L125.8 13.0L127.9 13.3L130.1 14.3L132.2 15.8L134.3 17.5L136.5 19.2L138.6 20.7L140.8 21.7L142.9 22.0L145.0 21.7L147.2 20.7L149.3 19.2L151.4 17.5L153.6 15.8L155.7 14.3L157.9 13.3L160.0 13.0L162.1 13.7L164.3 15.6L166.4 18.6L168.6 22.0L170.7 25.4L172.8 28.4L175.0 30.3L177.1 31.0L179.2 30.3L181.4 28.4L183.5 25.4L185.7 22.0L187.8 18.6L189.9 15.6L192.1 13.7L194.2 13.0L196.4 13.7L198.5 15.6L200.6 18.6L202.8 22.0L204.9 25.4L207.1 28.4L209.2 30.3L211.3 31.0L213.5 30.3L215.6 28.4L217.7 25.4L219.9 22.0L222.0 18.6L224.2 15.6L226.3 13.7L228.4 13.0L230.6 13.7L232.7 15.6L234.9 18.6L237.0 22.0L239.1 25.4L241.3 28.4L243.4 30.3L245.6 31.0L247.7 30.3L249.8 28.4L252.0 25.4L254.1 22.0L256.2 18.6L258.4 15.6L260.5 13.7L262.7 13.0L264.8 13.3L266.9 14.3L269.1 15.8L271.2 17.5L273.4 19.2L275.5 20.7L277.6 21.7L279.8 22.0L281.9 21.7L284.1 20.7L286.2 19.2L288.3 17.5L290.5 15.8L292.6 14.3L294.8 13.3L296.9 13.0L299.0 13.3L301.2 14.3L303.3 15.8L305.4 17.5L307.6 19.2L309.7 20.7L311.9 21.7L314.0 22.0H320"/><circle cx="23.1" cy="13" r="2.7"/><circle cx="57.3" cy="13" r="2.7" class="on"/><circle cx="74.4" cy="31" r="2.7" class="on"/><circle cx="91.6" cy="13" r="2.7" class="on"/><circle cx="108.7" cy="31" r="2.7" class="on"/><circle cx="125.8" cy="13" r="2.7" class="on"/><circle cx="160.0" cy="13" r="2.7"/><circle cx="177.1" cy="31" r="2.7"/><circle cx="194.2" cy="13" r="2.7"/><circle cx="211.3" cy="31" r="2.7"/><circle cx="228.4" cy="13" r="2.7"/><circle cx="245.6" cy="31" r="2.7" class="on"/><circle cx="262.7" cy="13" r="2.7" class="on"/><circle cx="296.9" cy="13" r="2.7" class="on"/></svg></span>
+        <span class="play-folha__pe">
+          <span class="play-folha__n"><span>8 de 14 materiais</span> · <span>107 fundamentos</span> · <span>2.758 assuntos</span></span>
+          <span class="play-folha__cta">Abrir o PLAY<i aria-hidden="true">↗</i></span>
+        </span>
+      </span>
+    </a>
+  </div>
 
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:clamp(48px,6vw,88px)">
     <span style="font-size:13px;font-weight:600;margin-right:6px">Percursos</span>
@@ -1046,7 +1179,6 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
             <span style="display:block;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16.5px;letter-spacing:-.025em">{{ m.titulo }}</span>
             <span class="acervo-item__funcao" style="display:block;margin-top:4px;font-size:12.5px;line-height:1.45">{{ m.funcao }}</span>
           </span>
-          <span style="position:relative;z-index:1;flex:none;font-size:12.5px;font-weight:600">{{ m.familia }}</span>
         </button>
       </sc-for>
     </div>
@@ -1090,7 +1222,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
   <p id="regime" style="margin:clamp(48px,6vw,88px) 0 clamp(14px,1.6vw,20px);font-size:12.5px;font-weight:600;color:rgba(24,24,24,.72);scroll-margin-top:24px">Regime do acervo</p>
   <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Harmonia é <span style="background:#FFB627;padding:0 .08em">coordenação</span> de diferenças</p>
-  <p style="margin:clamp(20px,2.4vw,32px) 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">A filosofia de trabalho permanece como origem conceitual. No ECHO, ela é traduzida em quatro condições operacionais que atravessam todas as famílias do acervo.</p>
+  <p style="margin:clamp(20px,2.4vw,32px) 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">A filosofia de trabalho permanece como origem conceitual. No ECHO, ela é traduzida em quatro condições operacionais que atravessam todo o acervo.</p>
 
   <div class="q4" style="column-gap:clamp(18px,2.6vw,40px);row-gap:clamp(30px,3.4vw,46px);margin-top:clamp(30px,3.6vw,50px)">
     <div style="border-top:1px solid #181818;padding-top:16px">
@@ -1183,7 +1315,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     <div style="margin-top:32px;border-top:1px solid #2e2e2e">
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Entregáveis</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, registros e painéis.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes e registros.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Aplicação operacional</p>
@@ -1240,7 +1372,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
         <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Materialização</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas, registros e painéis.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas e registros.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
         <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Aplicação</p>
@@ -1293,14 +1425,13 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
 <script>
 /* Linha de tinta do acervo, vinda da proposta Eco do PLAY.
-   Cada material é uma tecla, de Si3 a Dó5: cristas nas brancas (documentos: manuais, mapas, matrizes),
-   vales nas pretas (bases: registros e painéis), zero onde o piano não tem preta.
+   Cada material é uma tecla, de Si3 a Dó5: cristas nas brancas (documentos de leitura, em PDF),
+   vales nas pretas (bases de consulta: planilhas e ferramentas), zero onde o piano não tem preta.
    Tocar um material faz a corda vibrar e acende, na cadeia abaixo, o trecho que ele percorre;
    tocar uma etapa ergue juntos os materiais que a atravessam. O clique leva à ficha no acervo. */
 window.EcoOnda = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   var ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
-  var FAM = { 'Manuais': ['01', 'manual'], 'Mapas': ['02', 'mapa'], 'Matrizes': ['03', 'matriz'], 'Registros': ['04', 'registro'], 'Painéis': ['05', 'painel'] };
   /* 17 pontos a meio passo de tecla. Pares: brancas. Ímpares: fronteira, com material se há preta, 0 se não há (Si–Dó e Mi–Fá).
      Os documentos seguem a cadeia da entrada à produção; cada base fica ao lado do documento que sustenta. */
   var TECLAS = ['m2', 0, 'm1', 'm14', 'm3', 'm10', 'm4', 0, 'm5', 'm9', 'm6', 'm8', 'm7', 'm13', 'm11', 0, 'm12'];
@@ -1336,7 +1467,7 @@ window.EcoOnda = (function () {
     /* estrutura */
     var raiz = el('div', 'onda-eco');
     raiz.setAttribute('role', 'group');
-    raiz.setAttribute('aria-label', 'Materiais do acervo como linha de tinta. Cristas: documentos. Vales: bases.');
+    raiz.setAttribute('aria-label', 'Materiais do acervo como linha de tinta. Cristas: documentos de leitura. Vales: bases de consulta.');
     var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('aria-hidden', 'true');
     var eixo = document.createElementNS(NS, 'line'); eixo.setAttribute('class', 'eixo');
     var traco = document.createElementNS(NS, 'path'); traco.setAttribute('class', 'traco');
@@ -1371,15 +1502,12 @@ window.EcoOnda = (function () {
 
     o.pts.forEach(function (pt, ix) {
       if (!pt.m) return;
-      var m = pt.m, f = FAM[m.familia] || ['', String(m.familia).toLowerCase()];
+      var m = pt.m;
       pt.ponto = el('span', 'ponto'); raiz.appendChild(pt.ponto);
-      pt.rot = el('div', 'rot' + (pt.pol < 0 ? ' p' : ''), pt.pol < 0
-        ? '<b>' + esc(m.titulo) + '</b><small>' + f[1] + '</small>'
-        : '<small>' + f[1] + '</small><b>' + esc(m.titulo) + '</b>');
-      pt.b = pt.rot.querySelector('b');
+      pt.rot = el('p', 'rot' + (pt.pol < 0 ? ' p' : ''), esc(m.titulo));
       raiz.appendChild(pt.rot);
       var a = el('a', 'no'); a.href = '#acervo';
-      a.setAttribute('aria-label', m.titulo + ', ' + f[1] + '. ' + (m.etapas[0] === m.etapas[1] ? 'Etapa: ' : 'Etapas: ') + trecho(m).replace(' → ', ' a ') + '. Abrir no acervo.');
+      a.setAttribute('aria-label', m.titulo + (pt.pol < 0 ? ', base de consulta. ' : ', documento. ') + (m.etapas[0] === m.etapas[1] ? 'Etapa: ' : 'Etapas: ') + trecho(m).replace(' → ', ' a ') + '. Abrir no acervo.');
       raiz.appendChild(a); pt.a = a;
       a.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') toque(ix, 'mouse'); });
       a.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
@@ -1408,6 +1536,16 @@ window.EcoOnda = (function () {
       });
     });
 
+    /* a faixa do PLAY faz soar, juntos, os materiais que o playbook reúne */
+    var faixa = document.getElementById('play-faixa');
+    var noPlay = function (m) { return !!(m.play || /^play\.html/.test(m.href)); };
+    if (faixa) {
+      faixa.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') grupo(true); });
+      faixa.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
+      faixa.addEventListener('focus', function () { grupo(false); });
+      faixa.addEventListener('blur', function () { solta(); });
+    }
+
     leit.addEventListener('click', function (e) { var b = e.target.closest('.onda-ir'); if (b) escolhe(b.dataset.id); });
 
     somB.addEventListener('click', function () {
@@ -1425,16 +1563,17 @@ window.EcoOnda = (function () {
       cad.classList.toggle('alterna', w < 560);
       var h = raiz.clientHeight;
       o.vert = vert; o.w = w; o.h = h;
-      var L = vert ? h : w, marg = vert ? 24 : Math.max(28, w * 0.04);
+      o.g = Math.max(0, -parseFloat(getComputedStyle(raiz).marginLeft) || 0);
+      var L = vert ? h : w, marg = vert ? 24 : o.g + 6;
       o.L = L; o.a0 = marg; o.passo = (L - 2 * marg) / 18; o.mid = vert ? w * 0.5 : h * 0.5;
-      o.base = vert ? Math.min(24, w * 0.06) : Math.min(22, h * 0.06);
-      o.A0 = vert ? 30 : 50;
+      o.base = vert ? Math.min(24, w * 0.06) : Math.max(16, Math.min(32, h * 0.065));
+      o.A0 = vert ? 30 : Math.max(44, Math.min(60, h * 0.12));
     }
-    function transborda() { return o.pts.some(function (p) { return p.b && p.b.scrollWidth > p.b.clientWidth + 1; }); }
+    function transborda() { return o.pts.some(function (p) { return p.rot && p.rot.scrollWidth > p.rot.clientWidth + 1; }); }
     function layout() {
       geo(false);
       if (!o.vert) {
-        o.fs = Math.max(10.5, Math.min(13.5, Math.round(o.passo * 0.31 * 4) / 4));
+        o.fs = Math.max(10.5, Math.min(15, Math.round(o.passo * 0.31 * 4) / 4));
         for (var t = 0; t < 8; t++) {
           raiz.style.setProperty('--rot-fs', o.fs + 'px'); desenha();
           if (!transborda()) break;
@@ -1442,7 +1581,7 @@ window.EcoOnda = (function () {
           o.fs = Math.max(10.5, o.fs - 0.5);
         }
       }
-      if (o.vert) raiz.style.setProperty('--rot-fs', '13px');
+      if (o.vert) raiz.style.setProperty('--rot-fs', '13.5px');
       desenha(); cadeia();
       if (o.estado) estado(o.estado[0], o.estado[1], o.estado[2]);
     }
@@ -1472,19 +1611,21 @@ window.EcoOnda = (function () {
           /* o rótulo começa além da maior excursão da corda, para o ponto nunca invadir o texto */
           var borda = o.base + o.A0 + 14;
           rs.top = u + 'px'; rs.textAlign = pt.pol < 0 ? 'right' : 'left';
-          if (pt.pol < 0) { rs.left = '0px'; rs.width = Math.max(0, o.mid - borda) + 'px'; }
-          else { rs.left = (o.mid + borda) + 'px'; rs.width = Math.max(0, o.w - o.mid - borda) + 'px'; }
+          if (pt.pol < 0) { rs.left = o.g + 'px'; rs.width = Math.max(0, o.mid - borda - o.g) + 'px'; }
+          else { rs.left = (o.mid + borda) + 'px'; rs.width = Math.max(0, o.w - o.mid - borda - o.g) + 'px'; }
         } else {
-          var zw = o.passo * 1.9;
-          as.left = (u - zw / 2) + 'px'; as.width = zw + 'px'; as.top = (pt.pol < 0 ? o.mid : o.mid - o.base - 124) + 'px'; as.height = (o.base + 124) + 'px';
-          rs.left = u + 'px'; rs.width = (o.passo * 2 - 6) + 'px'; rs.textAlign = '';
-          rs.top = (pt.pol < 0 ? o.mid + o.base + 64 : o.mid - o.base - 116) + 'px';
+          /* rótulos ancorados pela base (cristas) ou pelo topo (vales), além da maior excursão da corda */
+          var folga = o.base + o.A0 + 18, zw = o.passo * 1.9;
+          as.left = (u - zw / 2) + 'px'; as.width = zw + 'px';
+          as.top = (pt.pol < 0 ? o.mid : o.mid - folga - 46) + 'px'; as.height = (folga + 46) + 'px';
+          rs.left = u + 'px'; rs.width = (o.passo * 2 - 8) + 'px'; rs.textAlign = '';
+          rs.top = (pt.pol < 0 ? o.mid + folga : o.mid - folga) + 'px';
         }
       });
     }
     function cadeia() {
       var w = cad.clientWidth, x0, x1;
-      if (o.vert) { x0 = w * 0.09; x1 = w * 0.91; } else { x0 = o.a0 + o.passo; x1 = o.a0 + 17 * o.passo; }
+      if (o.vert) { x0 = o.g + (w - 2 * o.g) * 0.06; x1 = w - x0; } else { x0 = o.a0 + o.passo; x1 = o.a0 + 17 * o.passo; }
       o.ex = ETAPAS.map(function (_, i) { return x0 + (x1 - x0) * i / 5; });
       paradas.forEach(function (b, i) { b.style.left = o.ex[i] + 'px'; });
       fio.style.left = x0 + 'px'; fio.style.width = (x1 - x0) + 'px';
@@ -1530,6 +1671,11 @@ window.EcoOnda = (function () {
         });
       }
     }
+    function grupo(toca) {
+      o.alvoA = o.pts.map(function (p) { return p.m && noPlay(p.m) ? p.pol * o.A0 * 0.5 : 0; });
+      estado('g'); aplica();
+      if (toca) o.pts.forEach(function (p, j) { if (p.m && noPlay(p.m)) setTimeout(function () { vibra(j, 0.3); som(p.nota, 0.08); }, reduz ? 0 : j * 40); });
+    }
     function solta() {
       if (o.fixo) { if (o.fixo[0] === 'm') toque(o.fixo[1], 'toque'); else acorde(o.fixo[1]); return; }
       o.alvoA = o.alvoA.map(function () { return 0; });
@@ -1541,7 +1687,7 @@ window.EcoOnda = (function () {
       var mat = tipo === 'm' ? o.pts[alvo].m : null;
       o.pts.forEach(function (p, j) {
         if (!p.m) return;
-        var on = tipo === 'm' ? j === alvo : tipo === 'e' ? cobre(p.m, alvo) : false;
+        var on = tipo === 'm' ? j === alvo : tipo === 'e' ? cobre(p.m, alvo) : tipo === 'g' ? noPlay(p.m) : false;
         p.rot.classList.toggle('on', on); p.ponto.classList.toggle('on', on);
       });
       paradas.forEach(function (b, i) {
@@ -1558,15 +1704,18 @@ window.EcoOnda = (function () {
     function leitura(tipo, alvo, via) {
       var h;
       if (tipo === 'm') {
-        var m = o.pts[alvo].m, f = FAM[m.familia] || ['', ''];
-        h = '<small>' + f[0] + ' · ' + esc(m.familia) + '</small><p><b>' + esc(m.titulo) + '</b>' + trecho(m) + '</p>' +
+        var m = o.pts[alvo].m;
+        h = '<small>' + trecho(m) + '</small><p><b>' + esc(m.titulo) + '</b>' + esc(m.funcao) + '</p>' +
           (via === 'toque' ? '<button type="button" class="onda-ir" data-id="' + m.id + '">Ver no acervo<span aria-hidden="true">↓</span></button>'
             : '<em>' + (via === 'teclado' ? 'Enter' : 'clique') + ' abre a ficha no acervo</em>');
+      } else if (tipo === 'g') {
+        var doPlay = o.pts.filter(function (p) { return p.m && noPlay(p.m); }).map(function (p) { return esc(p.m.titulo); });
+        h = '<small>No PLAY</small><p><b>' + doPlay.length + ' materiais</b>' + doPlay.join(', ') + '.</p>';
       } else if (tipo === 'e') {
         var lista = o.pts.filter(function (p) { return p.m && cobre(p.m, alvo); }).map(function (p) { return esc(p.m.titulo); });
         h = '<small>Etapa ' + ('0' + (alvo + 1)) + ' · ' + ETAPAS[alvo] + '</small><p><b>' + lista.length + ' materiais</b>' + lista.join(', ') + '.</p>';
       } else {
-        h = '<small>Leitura</small><p><b>' + total + ' materiais, uma linha.</b>Cristas são documentos: manuais, mapas e matrizes. Vales são bases: registros e painéis. Toque um material para ver o trecho da cadeia que ele percorre, ou uma etapa para reunir os materiais que a atravessam.</p>';
+        h = '<small>Leitura</small><p><b>' + total + ' materiais, uma linha.</b>Cristas são documentos de leitura; vales, bases de consulta. Toque um material para ver o trecho da cadeia que ele percorre, ou uma etapa para reunir os materiais que a atravessam.</p>';
       }
       /* só redesenha o que mudou: o botão da leitura precisa sobreviver ao blur da tecla */
       if (o.leitH !== h) { o.leitH = h; leit.innerHTML = h; }
@@ -1596,21 +1745,23 @@ window.EcoOnda = (function () {
 
 
 const MATERIAIS = [
-  {id:'m1',etapas:[0,0],titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/play/manuais/1-notas-introdutorias.pdf',edicao:'Volume 01 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-01'},
-  {id:'m2',etapas:[0,0],titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
-  {id:'m5',etapas:[1,2],titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf',preview:'assets/echo/documentos/visualizar/triagem.pdf'},
-  {id:'m4',etapas:[1,2],titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/play/manuais/2-mapa-tematico.pdf',preview:'assets/echo/documentos/visualizar/taxonomia.pdf',edicao:'Volume 02 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-02'},
-  {id:'m3',etapas:[0,3],titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/play/manuais/3-afinacao-processual.pdf',preview:'assets/echo/documentos/triagem.pdf',edicao:'Volume 03 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-03'},
-  {id:'m6',etapas:[2,3],titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
-  {id:'m7',etapas:[3,4],titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
-  {id:'m8',etapas:[4,5],titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m9',etapas:[5,5],titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
-  {id:'m10',etapas:[1,5],titulo:'Ementário',familia:'Painéis',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',edicao:'Planilha-fonte, com 2.758 assuntos na aba principal. O PLAY traz a edição navegável da mesma base.',play:'play.html#ementario'},
-  {id:'m11',etapas:[3,4],titulo:'Guia de Estilo',familia:'Manuais',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/play/manuais/4-guia-estilo.pdf',edicao:'Volume 04 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#guia'},
-  {id:'m12',etapas:[4,4],titulo:'Templates',familia:'Manuais',formato:'PDF',cadeia:'produção / estrutura / redação',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',uso:'Elaboração da minuta',equivalencias:'Document Templates / Clause Library / Document Assembly',href:'assets/play/anexos/templates.pdf',edicao:'Seis modelos, com os cinco IDs preservados e ED-NAO-CONHECIDO incluído. Edição de outubro de 2026, a mesma do PLAY.',play:'play.html#templates'},
-  {id:'m13',etapas:[4,5],titulo:'Fundamentos',familia:'Painéis',formato:'Web',cadeia:'produção / pesquisa / memória',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',uso:'Fundamentação do voto',equivalencias:'Argument Bank / Brief Bank / Legal Knowledge Base',href:'play.html#fundamentos',edicao:'107 temas, com IDs editoriais próprios. Consulta interativa no PLAY.'},
-  {id:'m14',etapas:[3,3],titulo:'Calendário Jurídico',familia:'Painéis',formato:'Web',cadeia:'verificação / prazo / tempestividade',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',uso:'Admissibilidade e tempestividade',equivalencias:'Docketing / Deadline Calculator / Court Calendar',href:'play.html#calendario',edicao:'2026 na tabela ativa e 2025 em histórico separado. Consulta interativa no PLAY.'},
+  {id:'m1',etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/play/manuais/1-notas-introdutorias.pdf',edicao:'Volume 01 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-01'},
+  {id:'m2',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
+  {id:'m5',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf',preview:'assets/echo/documentos/visualizar/triagem.pdf'},
+  {id:'m4',etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/play/manuais/2-mapa-tematico.pdf',preview:'assets/echo/documentos/visualizar/taxonomia.pdf',edicao:'Volume 02 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-02'},
+  {id:'m3',etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/play/manuais/3-afinacao-processual.pdf',preview:'assets/echo/documentos/triagem.pdf',edicao:'Volume 03 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-03'},
+  {id:'m6',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
+  {id:'m7',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
+  {id:'m8',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
+  {id:'m9',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
+  {id:'m10',etapas:[1,5],titulo:'Ementário',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',edicao:'Planilha-fonte, com 2.758 assuntos na aba principal. O PLAY traz a edição navegável da mesma base.',play:'play.html#ementario'},
+  {id:'m11',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/play/manuais/4-guia-estilo.pdf',edicao:'Volume 04 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#guia'},
+  {id:'m12',etapas:[4,4],titulo:'Templates',formato:'PDF',cadeia:'produção / estrutura / redação',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',uso:'Elaboração da minuta',equivalencias:'Document Templates / Clause Library / Document Assembly',href:'assets/play/anexos/templates.pdf',edicao:'Seis modelos, com os cinco IDs preservados e ED-NAO-CONHECIDO incluído. Edição de outubro de 2026, a mesma do PLAY.',play:'play.html#templates'},
+  {id:'m13',etapas:[4,5],titulo:'Fundamentos',formato:'Web',cadeia:'produção / pesquisa / memória',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',uso:'Fundamentação do voto',equivalencias:'Argument Bank / Brief Bank / Legal Knowledge Base',href:'play.html#fundamentos',edicao:'107 temas, com IDs editoriais próprios. Consulta interativa no PLAY.'},
+  {id:'m14',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',cadeia:'verificação / prazo / tempestividade',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',uso:'Admissibilidade e tempestividade',equivalencias:'Docketing / Deadline Calculator / Court Calendar',href:'play.html#calendario',edicao:'2026 na tabela ativa e 2025 em histórico separado. Consulta interativa no PLAY.'},
 ];
+
+const ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
 
 const PERCURSOS = [
   {id:'p1',nome:'Entrada e triagem',antes:'Demandas podiam avançar à análise técnica antes de uma verificação mínima comum de requisitos, levando questões formais simples para etapas de maior custo técnico.',materiais:['m3','m2'],rotulo:'Afinação Processual estrutura a verificação. Roteiros e checklists tornam recorrências verificáveis antes da produção.',efeito:'A entrada passa a ser mais legível e comparável, com menor incidência de retrabalho técnico em questões previamente verificáveis.',prova:'m3'},
@@ -1787,7 +1938,7 @@ class Component extends DCLogic {
           seta: ativo.link ? '↗' : '↓'
         }
       : {
-          kicker: m.familia,
+          kicker: (ETAPAS[m.etapas[0]] + (m.etapas[0] === m.etapas[1] ? '' : ' → ' + ETAPAS[m.etapas[1]])).replace(/^./, (c) => c.toUpperCase()),
           titulo: m.titulo,
           lead: m.funcao,
           campos: [
