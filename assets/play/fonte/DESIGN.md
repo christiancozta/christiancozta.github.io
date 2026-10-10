@@ -130,7 +130,7 @@ components:
   carimbo:
     textColor: "{colors.tinta}"
     opacity: ".62; .92 no hover; cheio quando ligado"
-    size: "44px"
+    size: "clamp(104px, 9.4vw, 140px)"
   selo-seco:
     textColor: "{colors.papel}"
     shadow: "drop-shadow(-1px -1px 0 #fff) drop-shadow(1px 1.3px .7px rgba(24, 24, 24, .2))"
@@ -235,7 +235,7 @@ A página é uma folha sobre a base: bordas de tinta nas laterais (clamp(12px, 3
 
 - **Papel:** fibra em ruído fractal (SVG), linhas de vergê a cada 4px quase invisíveis, luz rasante do alto à esquerda e sombra leve nas bordas. Por baixo, duas folhas do maço (#EEECE7 e #F5F3EF), levemente fora de esquadro, aparecem nas laterais e no pé. Dois cantos dobrados de clamp(22px, 2.6vw, 38px), no alto à direita e no pé à esquerda, recortam a folha (clip-path), mostram o maço e projetam sombra curta.
 - **Prendedor:** preso à borda de cima, no alto à esquerda, girado −2,4°: corpo de laca #181818 com brilho no dorso, "PLAYBOOK / ECHO" em âmbar e as hastes de aço deitadas para baixo sobre a folha, com sombra. No hover, ergue 2px. No celular, em 62%.
-- **Carimbo do som:** no alto à direita, dentro da folha, espelhando a margem do prendedor e na altura do título: 44px, anel duplo e nota em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girado −4°. No hover a tinta firma; ao clicar, afunda; ligado, vira carimbo cheio, com o ícone em papel.
+- **Carimbo do som:** no alto à direita, dentro da folha, espelhando a margem do prendedor e na altura do título. É um carimbo redondo de cartório no porte de um carimbo real sobre a folha, o mesmo do selo seco (clamp(104px, 9,4vw, 140px); 78px no celular): anel grosso, filete, "OUVIR OS COMPASSOS · PLAY · ECHO ·" em volta e a nota ao centro, em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girado −6°. No hover a tinta firma; ao clicar, afunda; ligado, o miolo vira tinta cheia, com a nota em papel.
 - **Selo seco da busca:** à esquerda, centrado sob o prendedor, logo abaixo das hastes (146px do topo da folha) e antes dos compassos: clamp(104px, 8,6vw, 126px), na mesma cor do papel. Só o relevo o revela (luz branca no alto à esquerda, sombra embaixo à direita): anel, filete, "BUSCAR · PLAYBOOK ECHO · CTRL K ·" em volta e a lupa ao centro. No hover o relevo se aprofunda; ao clicar, inverte (afunda). Abre a busca, como Ctrl K. No celular, 84px, à esquerda, entre o subtítulo e os compassos.
 - **Folha de rosto:** o título PLAY e o subtítulo, centrados. A folha de rosto tem altura mínima para que o selo da busca caiba entre o fim das hastes do prendedor e o cabeçalho dos compassos.
 - **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Shantell Sans 300 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
