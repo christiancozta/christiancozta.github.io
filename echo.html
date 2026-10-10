@@ -26,7 +26,7 @@
 <meta name="twitter:title" content="ECHO | Modelo operacional">
 <meta name="twitter:description" content="Metodologia de operações jurídicas para estruturação institucional.">
 <meta name="twitter:image" content="https://christiancozta.github.io/assets/echo/brand/og.png">
-<link rel="icon" href="assets/arco/brand/favicon-echo.svg?v=20260927" type="image/svg+xml" sizes="any">
+<link rel="icon" href="assets/arco/brand/favicon-echo.svg?v=20261010" type="image/svg+xml" sizes="any">
 <link rel="apple-touch-icon" href="assets/echo/brand/apple-touch-icon.png" sizes="180x180">
 <link rel="manifest" href="assets/echo/brand/site.webmanifest">
 <link rel="stylesheet" href="assets/echo/css/theme-echo.css?v=20260827-m">
@@ -766,11 +766,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
    os oito materiais que o PLAY reúne.
    ========================================================= */
 .acervo-cab{
+  --topo:clamp(48px,5vw,80px);
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(340px,500px);
   gap:clamp(32px,5vw,88px);
-  align-items:end;
+  align-items:stretch;
 }
+/* título e texto no alto; respiro; os percursos descem até a linha de base do cartão */
+.acervo-cab__txt{display:flex;flex-direction:column;justify-content:space-between;gap:clamp(28px,3.5vw,48px);min-width:0}
+.acervo-percursos__k{margin:0 0 12px;font-size:13px;font-weight:600}
+.acervo-percursos__grade{display:grid;grid-template-columns:repeat(2,max-content);gap:10px}
+.acervo-percursos__grade > span{display:block}
+.acervo-percursos__grade button{width:100%}
 .play-folha{
   --mola:cubic-bezier(.32,.72,0,1);
   position:relative;
@@ -778,7 +785,10 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   max-width:500px;
   justify-self:end;
   width:100%;
-  margin-top:26px;
+  /* sobe até atravessar a borda da seção âmbar: a folha fica presa pelo prendedor */
+  margin-top:calc((var(--topo) + 22px) * -1);
+  display:flex;
+  flex-direction:column;
   color:#181818;
   transform:rotate(-1.4deg);
   transform-origin:30% 0;
@@ -788,7 +798,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .play-folha:focus-visible{outline:2px solid #181818;outline-offset:6px}
 .play-folha__papel{
   position:relative;
-  display:block;
+  flex:1;
+  display:flex;
+  flex-direction:column;
   padding:22px clamp(22px,2.2vw,30px) 20px;
   background:#FCFCFC;
   border-radius:2px;
@@ -856,9 +868,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   font:900 clamp(44px,4.2vw,58px)/.9 "Bodoni Moda",Georgia,serif;
   letter-spacing:.08em;
 }
+/* quando a folha estica para acompanhar a coluna ao lado, o texto se centra no espaço livre */
 .play-folha__l{
   display:block;
-  margin:16px 0 0;
+  margin:auto 0;
+  padding-top:16px;
   font-size:13.5px;
   line-height:1.55;
   color:rgba(24,24,24,.78);
@@ -876,7 +890,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   align-items:center;
   justify-content:space-between;
   gap:12px 18px;
-  margin-top:16px;
+  padding-top:16px;
 }
 .play-folha__n span{white-space:nowrap}
 .play-folha__n{font:500 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(24,24,24,.6)}
@@ -969,7 +983,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .play-faixa:active .play-faixa__cta{transform:scale(.98)}
 @media(max-width:900px){
   .acervo-cab{grid-template-columns:1fr;align-items:start}
-  .play-folha{justify-self:start;margin-top:44px}
+  .play-folha{order:-1;justify-self:start;margin-bottom:12px}
+}
+@media(max-width:420px){
+  .acervo-percursos__grade{grid-template-columns:1fr 1fr}
+  .acervo-percursos__grade button{padding-left:10px!important;padding-right:10px!important;white-space:normal!important}
 }
 @media(max-width:760px){
   .play-folha{transform:none}
@@ -1050,9 +1068,8 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <g transform="translate(716.826293, 578.249991)">
           <path d="M 22.90625 0 L 22.90625 -348.03125 L 112.109375 -348.03125 L 112.109375 -180.359375 L 103.34375 -194 C 110.8125 -207 119.988281 -218.289062 130.875 -227.875 C 141.757812 -237.457031 154.835938 -244.765625 170.109375 -249.796875 C 185.390625 -254.835938 202.941406 -257.359375 222.765625 -257.359375 C 247.128906 -257.359375 267.675781 -252.644531 284.40625 -243.21875 C 301.144531 -233.800781 313.898438 -220.238281 322.671875 -202.53125 C 331.453125 -184.820312 335.84375 -163.457031 335.84375 -138.4375 L 335.84375 0 L 246.640625 0 L 246.640625 -119.90625 C 246.640625 -142.007812 241.765625 -159.394531 232.015625 -172.0625 C 222.265625 -184.738281 206.179688 -191.078125 183.765625 -191.078125 C 169.140625 -191.078125 156.460938 -188.070312 145.734375 -182.0625 C 135.015625 -176.050781 126.726562 -167.597656 120.875 -156.703125 C 115.03125 -145.816406 112.109375 -133.066406 112.109375 -118.453125 L 112.109375 0 Z"/>
         </g>
-        <g transform="translate(1072.656875, 578.249991)">
-          <path d="M 183.28125 6.828125 C 147.53125 6.828125 116.984375 1.300781 91.640625 -9.75 C 66.296875 -20.800781 46.957031 -36.234375 33.625 -56.046875 C 20.300781 -75.867188 13.640625 -98.941406 13.640625 -125.265625 C 13.640625 -141.191406 16.078125 -155.894531 20.953125 -169.375 C 25.828125 -182.863281 32.976562 -195.050781 42.40625 -205.9375 C 51.832031 -216.820312 63.367188 -226.082031 77.015625 -233.71875 C 90.660156 -241.363281 106.335938 -247.210938 124.046875 -251.265625 C 141.765625 -255.328125 161.507812 -257.359375 183.28125 -257.359375 C 219.34375 -257.359375 249.96875 -251.832031 275.15625 -240.78125 C 300.34375 -229.738281 319.597656 -214.304688 332.921875 -194.484375 C 346.242188 -174.660156 352.90625 -151.585938 352.90625 -125.265625 C 352.90625 -109.671875 350.46875 -95.046875 345.59375 -81.390625 C 340.71875 -67.742188 333.648438 -55.476562 324.390625 -44.59375 C 315.128906 -33.707031 303.59375 -24.445312 289.78125 -16.8125 C 275.96875 -9.175781 260.125 -3.324219 242.25 0.734375 C 224.382812 4.796875 204.726562 6.828125 183.28125 6.828125 Z M 183.28125 -56.0625 C 194 -56.0625 203.582031 -57.195312 212.03125 -59.46875 C 220.476562 -61.738281 227.789062 -65.066406 233.96875 -69.453125 C 240.144531 -73.847656 245.265625 -78.96875 249.328125 -84.8125 C 253.390625 -90.664062 256.394531 -97.003906 258.34375 -103.828125 C 260.289062 -110.648438 261.265625 -117.796875 261.265625 -125.265625 C 261.265625 -137.941406 258.5 -149.476562 252.96875 -159.875 C 247.445312 -170.28125 238.914062 -178.648438 227.375 -184.984375 C 215.84375 -191.316406 201.144531 -194.484375 183.28125 -194.484375 C 172.550781 -194.484375 162.960938 -193.34375 154.515625 -191.0625 C 146.066406 -188.789062 138.753906 -185.460938 132.578125 -181.078125 C 126.410156 -176.691406 121.210938 -171.65625 116.984375 -165.96875 C 112.753906 -160.28125 109.664062 -153.941406 107.71875 -146.953125 C 105.769531 -139.972656 104.796875 -132.742188 104.796875 -125.265625 C 104.796875 -112.921875 107.640625 -101.46875 113.328125 -90.90625 C 119.015625 -80.34375 127.625 -71.894531 139.15625 -65.5625 C 150.695312 -59.226562 165.40625 -56.0625 183.28125 -56.0625 Z"/>
-        </g>
+        <!-- o "o" de echo é a marca do ECHO, na altura do glifo original -->
+        <g transform="translate(1082.101 320.891) scale(0.208679)"><clipPath id="echo-o-clip"><ellipse cx="833" cy="633" rx="833" ry="633"/></clipPath><g clip-path="url(#echo-o-clip)"><ellipse cx="833.0" cy="633.0" rx="833.0" ry="633.0" fill="#181818"/><ellipse cx="1045.8" cy="633.0" rx="987.8" ry="755.9" fill="#FFB627"/><ellipse cx="1057.2" cy="633.0" rx="915.9" ry="696.4" fill="#181818"/><ellipse cx="1142.3" cy="633.0" rx="917.6" ry="696.9" fill="#FFB627"/><ellipse cx="1141.3" cy="633.0" rx="833.3" ry="633.3" fill="#181818"/><ellipse cx="833.5" cy="633.0" rx="416.5" ry="316.5" fill="#FFB627"/></g></g>
       </g>
     </svg>
   </h1>
@@ -1176,11 +1193,28 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </div>
 </section>
 
-<section id="acervo" style="padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
+<section id="acervo" style="padding:clamp(48px,5vw,80px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
   <div class="acervo-cab">
-    <div>
-      <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:#FFB627;-webkit-text-stroke:1px #181818">02</span>Acervo</h2>
-      <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
+    <div class="acervo-cab__txt">
+      <div>
+        <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:#FFB627;-webkit-text-stroke:1px #181818">02</span>Acervo</h2>
+        <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
+      </div>
+      <div class="acervo-percursos" role="group" aria-labelledby="acervo-percursos-k">
+        <p class="acervo-percursos__k" id="acervo-percursos-k">Percursos</p>
+        <div class="acervo-percursos__grade">
+        <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="4">
+          <span>
+            <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}">
+              <button type="button" onClick="{{ p.toggle }}" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid #181818;background:#181818;color:#F2EFE9;transition:transform .45s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-1px)">{{ p.nome }}</button>
+            </sc-if>
+            <sc-if value="{{ p.off }}" hint-placeholder-val="{{ true }}">
+              <button type="button" onClick="{{ p.toggle }}" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1)" style-hover="border-color:#181818;background:rgba(24,24,24,.06)">{{ p.nome }}</button>
+            </sc-if>
+          </span>
+        </sc-for>
+        </div>
+      </div>
     </div>
     <a class="play-folha" href="play.html" aria-label="Abrir o PLAY, playbook de elaboração de votos">
       <span class="play-folha__clipe" aria-hidden="true">
@@ -1212,21 +1246,8 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     </a>
   </div>
 
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:clamp(48px,6vw,88px)">
-    <span style="font-size:13px;font-weight:600;margin-right:6px">Percursos</span>
-    <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="4">
-      <span>
-        <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}">
-          <button type="button" onClick="{{ p.toggle }}" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid #181818;background:#181818;color:#F2EFE9;transition:transform .45s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-1px)">{{ p.nome }}</button>
-        </sc-if>
-        <sc-if value="{{ p.off }}" hint-placeholder-val="{{ true }}">
-          <button type="button" onClick="{{ p.toggle }}" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1)" style-hover="border-color:#181818;background:rgba(24,24,24,.06)">{{ p.nome }}</button>
-        </sc-if>
-      </span>
-    </sc-for>
-  </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:18px;align-items:start">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:clamp(40px,5vw,72px);align-items:start">
     <div style="min-width:0;border-top:1px solid #181818">
       <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
         <button type="button" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" style="position:relative;display:flex;width:100%;text-align:left;align-items:baseline;gap:14px;cursor:pointer;padding:16px 14px 17px;border:0;border-bottom:1px solid rgba(24,24,24,.24);border-left:3px solid transparent;background:transparent;color:#181818;font-family:'Commissioner',system-ui,sans-serif" style-hover="background:rgba(24,24,24,.05)" style-focus="outline:2px solid #FFB627;outline-offset:-2px">
