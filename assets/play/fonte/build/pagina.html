@@ -28,8 +28,8 @@
 <body class="partitura">
 <!--
 THESIS: O PLAY é o Playbook da metodologia ECHO, apresentado como partitura de regência numa folha. O acervo inteiro é o sistema que o regente lê: cada material é uma pauta, agrupada por chave em naipes (Intro, Coleção, Governança, Ferramenta), e os compassos são a ordem de utilização das Regras de Aplicação. Ler na vertical é ler um passo.
-OWN-WORLD: a página é uma folha de partitura sobre uma base de tinta #181818: fibra sutil, luz rasante, o maço de folhas por baixo, orelhas dobradas em dois cantos, o prendedor preto no alto à esquerda com "PLAYBOOK / ECHO" em âmbar e os carimbos de tinta (som e busca) no alto à direita. Papel #FCFCFC, âmbar #FFB627 como luz única, latão #8A6620 como marcação de texto. Bodoni Moda no título e nos nomes das pautas; Instrument Sans no texto; JetBrains Mono nas indicações; Restart Ginger na assinatura, como no ARCO.
-STORY: o título PLAY abre a folha, com o subtítulo ("Showcase do playbook da metodologia ECHO") e, à direita, como crédito de compositor, "Christian da Costa"; abaixo, a partitura: cada compasso traz no cabeçalho o seu passo e, na linha de baixo, o texto; passar por ele acende a coluna e, com som, soa o acorde. Os três primeiros manuais abrem numa gaveta sob a própria pauta, com a página dupla; o resto abre numa parte sobre a partitura. "ver" abre o PDF na própria página, em duas páginas; "baixar" baixa. No pé, a epígrafe do ECHO e a assinatura.
+OWN-WORLD: a página é uma folha de partitura sobre uma base de tinta #181818: fibra sutil, luz rasante, o maço de folhas por baixo, orelhas dobradas em dois cantos, o prendedor preto no alto à esquerda com "PLAYBOOK / ECHO" em âmbar o carimbo de tinta do som no alto à direita e o selo seco da busca, em relevo, à esquerda. Papel #FCFCFC, âmbar #FFB627 como luz única, latão #8A6620 como marcação de texto. Bodoni Moda no título e nos nomes das pautas; Instrument Sans no texto; JetBrains Mono nas indicações; Restart Ginger na assinatura, como no ARCO.
+STORY: o título PLAY abre a folha, com o subtítulo ("Showcase do playbook da metodologia ECHO"); à esquerda, sob o prendedor, a busca é um selo seco em relevo no próprio papel; abaixo, a partitura: cada compasso traz no cabeçalho o seu passo e, na linha de baixo, o texto; passar por ele acende a coluna e, com som, soa o acorde. Os três primeiros manuais abrem numa gaveta sob a própria pauta, com a página dupla; o resto abre numa parte sobre a partitura. "ver" abre o PDF na própria página, em duas páginas; "baixar" baixa. No pé, a epígrafe do ECHO e a assinatura.
 FIRST VIEWPORT: a folha presa pelo prendedor, PLAY centrado, cabeçalho do sistema com as marcas I a V e a Coleção.
 FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este sistema.
 -->
@@ -59,13 +59,23 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
 <div class="a4">
   <div class="carimbos">
     <button class="carimbo so-b" type="button" id="b-som" aria-pressed="false" aria-label="Ouvir os compassos" title="Ouvir os compassos"><svg viewBox="0 0 40 40" aria-hidden="true"><g filter="url(#tinta)"><circle class="c-fundo" cx="20" cy="20" r="15.6"/><circle class="c-anel" cx="20" cy="20" r="18.2"/><circle class="c-anel2" cx="20" cy="20" r="15.6"/><g class="c-ic" transform="translate(11 11) scale(.75)"><path d="M8.5 17.5V5.5l10-2.5v12"/><path d="M8.5 9l10-2.5"/><ellipse cx="6.2" cy="17.6" rx="2.6" ry="2" transform="rotate(-20 6.2 17.6)" fill="currentColor" stroke="none"/><ellipse cx="16.2" cy="15.1" rx="2.6" ry="2" transform="rotate(-20 16.2 15.1)" fill="currentColor" stroke="none"/></g></g></svg></button>
-    <button class="carimbo busca" type="button" id="searchbtn" aria-label="Buscar no PLAY (Ctrl K)" title="Buscar (Ctrl K)"><svg viewBox="0 0 40 40" aria-hidden="true"><g filter="url(#tinta)"><circle class="c-fundo" cx="20" cy="20" r="15.6"/><circle class="c-anel" cx="20" cy="20" r="18.2"/><circle class="c-anel2" cx="20" cy="20" r="15.6"/><g class="c-ic" transform="translate(11 11) scale(.75)"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></g></g></svg></button>
   </div>
+  <!-- Busca: selo seco, em relevo no próprio papel, sob o prendedor. -->
+  <button class="selo" type="button" id="searchbtn" aria-label="Buscar no PLAY (Ctrl K)" title="Buscar (Ctrl K)">
+    <svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+      <defs><path id="selo-arco" d="M80 80m-57 0a57 57 0 1 1 114 0a57 57 0 1 1-114 0"/></defs>
+      <circle class="s-anel" cx="80" cy="80" r="75"/>
+      <circle class="s-fio" cx="80" cy="80" r="69.5"/>
+      <text class="s-txt"><textPath href="#selo-arco" textLength="355" lengthAdjust="spacing">BUSCAR · PLAYBOOK ECHO · CTRL K ·</textPath></text>
+      <circle class="s-fio" cx="80" cy="80" r="46"/>
+      <circle class="s-lupa" cx="75" cy="75" r="16"/>
+      <path class="s-cabo" d="M86.5 86.5 99 99"/>
+    </svg>
+  </button>
 <div class="pag">
   <section class="rosto" aria-label="Folha de rosto">
     <h1>PLAY</h1>
     <p class="rosto-sub">Showcase do playbook da metodologia ECHO</p>
-    <p class="rosto-autor"><a href="arco.html">Christian da Costa</a></p>
   </section>
 
   <section class="sistema" id="sistema" tabindex="-1" aria-label="Partitura do acervo">
