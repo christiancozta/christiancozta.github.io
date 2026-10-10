@@ -37,7 +37,8 @@
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
-  --selo: clamp(104px, 8.6vw, 126px);   /* selo seco da busca */
+  --selo: calc(var(--carimbo) * 1.1);    /* selo seco da busca: 10% maior que o carimbo do som */
+  --selo-mergulho: 64px;                /* quanto o selo desce na casa em branco do cabeçalho dos compassos */
   --carimbo: clamp(104px, 9.4vw, 140px); /* carimbo do som, no porte de um carimbo real sobre a folha */
   --selo-y: 146px;                      /* logo abaixo das hastes do prendedor */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
@@ -143,13 +144,13 @@ input, textarea { caret-color: var(--tinta); }
 /* Subtítulo no corpo exato dos títulos dos compassos, em JetBrains 700; o autor à direita, como crédito de compositor. */
 .rosto-sub { margin: 18px -.06em 0 0; font: 700 9.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
 /* Busca: selo seco. Mesma cor do papel; só o relevo o revela (luz no alto à esquerda, sombra embaixo à direita).
-   Fica à esquerda, logo abaixo das hastes do prendedor (que terminam a ~133px do topo da folha),
-   e a folha de rosto cresce o bastante para os compassos começarem depois dele. */
-.rosto { min-height: calc(var(--selo-y) + var(--selo) + 18px); }
+   Fica à esquerda, logo abaixo das hastes do prendedor (que terminam a ~133px do topo da folha), e desce
+   até a casa em branco do cabeçalho dos compassos; a folha de rosto cresce só o necessário para isso. */
+.rosto { min-height: calc(var(--selo-y) + var(--selo) - var(--selo-mergulho)); }
 .selo {
   position: absolute; z-index: 2; left: calc(clamp(20px, 5vw, 92px) + 66px - var(--selo) / 2); top: var(--selo-y);
   width: var(--selo); height: var(--selo); padding: 0; border: 0; border-radius: 50%; background: none; color: var(--papel); cursor: pointer;
-  filter: drop-shadow(-1px -1px 0 rgba(255, 255, 255, .95)) drop-shadow(1px 1.3px .7px rgba(24, 24, 24, .2)) drop-shadow(1.5px 2.5px 3px rgba(24, 24, 24, .07));
+  filter: drop-shadow(-1.2px -1.2px 0 rgba(255, 255, 255, .95)) drop-shadow(1.3px 1.7px .9px rgba(24, 24, 24, .2)) drop-shadow(2px 3.5px 5px rgba(24, 24, 24, .07));
   transition: filter .5s var(--mola), transform .35s var(--mola);
 }
 .selo svg { display: block; width: 100%; height: 100%; overflow: visible; }
@@ -158,7 +159,7 @@ input, textarea { caret-color: var(--tinta); }
 .selo .s-txt { fill: currentColor; font: 700 11px var(--mono); }
 .selo .s-lupa { fill: none; stroke: currentColor; stroke-width: 6; }
 .selo .s-cabo { fill: none; stroke: currentColor; stroke-width: 8; stroke-linecap: round; }
-.selo:hover { filter: drop-shadow(-1px -1px 0 #fff) drop-shadow(1.2px 1.6px .8px rgba(24, 24, 24, .26)) drop-shadow(2px 3.5px 4px rgba(24, 24, 24, .09)); }
+.selo:hover { filter: drop-shadow(-1.2px -1.2px 0 #fff) drop-shadow(1.6px 2.1px 1px rgba(24, 24, 24, .26)) drop-shadow(2.5px 4.5px 6px rgba(24, 24, 24, .09)); }
 .selo:active { transform: scale(.985); filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .95)) drop-shadow(-1px -1.2px .7px rgba(24, 24, 24, .22)); }
 .selo:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 6px; }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
@@ -680,7 +681,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
   :root { --carimbo: 78px; }
   .carimbos { top: 22px; right: calc(var(--orelha) + 10px); }
-  :root { --selo: 84px; --selo-y: 222px; }
+  :root { --selo-y: 222px; }
   .rosto { padding: 112px 0 0; min-height: calc(var(--selo-y) + var(--selo) + 22px); }
   .selo { left: calc(var(--g) - 4px); }
   .maco::before { transform: translate(3px, 3px) rotate(.05deg); }
