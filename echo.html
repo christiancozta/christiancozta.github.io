@@ -534,10 +534,6 @@ a:hover{color:#181818}
   .legal-ops-pill__arrow{transition:none}
 }
 
-/* cadeia operacional: filete por etapa, para sobreviver à quebra de linha */
-.cadeia>div{position:relative}
-.cadeia>div::before{content:"";position:absolute;left:0;right:0;top:5px;height:1px;background:rgba(255,182,39,.42);z-index:0}
-.cadeia>div>span{position:relative;z-index:1}
 /* grades de quatro: 1 / 2 / 4 colunas, nunca 3+1 */
 .q4{display:grid;grid-template-columns:1fr}
 .q4-strip>div{padding:26px 0 30px;border-bottom:1px solid #2e2e2e}
@@ -598,17 +594,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 @media(max-width:719px){.echo-trace{display:none}}
 
-/* ACERVO — DOCUMENTOS FUNDADORES 01 / 04 / 05 */
-/* faixa à esquerda na cor contrária: âmbar na ficha escura, preta na ficha âmbar */
-#acervo-ficha{
-  border-left:6px solid #FFB627;
-  transition:
-    background-color .38s cubic-bezier(.22,.68,0,1),
-    color .38s cubic-bezier(.22,.68,0,1),
-    border-color .38s cubic-bezier(.22,.68,0,1),
-    box-shadow .38s cubic-bezier(.22,.68,0,1);
-  will-change:transform,opacity;
-}
+/* ACERVO — DOCUMENTOS FUNDADORES 01 / 04 / 05: estrela na lista e ficha âmbar */
 #acervo div:has(> aside) > div:first-child > button:is(:nth-child(1),:nth-child(4),:nth-child(5))::after{
   content:"★";
   position:absolute;
@@ -636,34 +622,140 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 #acervo div:has(> aside) > div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5)) > span:nth-child(2){
   background:#FFB627!important;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside{
-  background:#FFB627!important;
-  color:#181818!important;
-  border-left-color:#181818!important;
+
+/* FICHA DO ACERVO
+   a prévia do documento abre a ficha, como a gaveta do PLAY; depois, pouco texto:
+   função, ruído e as ações. Faixa grossa à esquerda na cor contrária.
+   Cabe inteira na janela do arco, onde a página é publicada em iframe. */
+#acervo-ficha{
+  --mola:cubic-bezier(.32,.72,0,1);
+  --tom:#FFB627;
+  --tinta:#F2EFE9;
+  --fio:rgba(242,239,233,.16);
+  --apagado:rgba(242,239,233,.66);
+  position:sticky;
+  top:24px;
+  min-width:0;
+  max-height:calc(100vh - 48px);
+  overflow:auto;
+  scrollbar-width:thin;
+  padding:clamp(20px,2.2vw,30px) clamp(20px,2.4vw,34px) clamp(22px,2.2vw,30px);
+  background:#181818;
+  color:var(--tinta);
+  border-left:6px solid var(--tom);
+  transition:
+    background-color .38s cubic-bezier(.22,.68,0,1),
+    color .38s cubic-bezier(.22,.68,0,1),
+    border-color .38s cubic-bezier(.22,.68,0,1);
+  will-change:transform,opacity;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > p:first-child{
-  color:#181818!important;
+#acervo-ficha[data-tom="ambar"]{
+  --tom:#181818;
+  --tinta:#181818;
+  --fio:rgba(24,24,24,.22);
+  --apagado:rgba(24,24,24,.7);
+  background:#FFB627;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div{
-  border-top-color:rgba(24,24,24,.38)!important;
+.ficha__topo{display:flex;align-items:flex-end;gap:clamp(18px,2.2vw,28px)}
+.ficha__previa{
+  flex:none;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  margin:0;
+  padding:0;
+  border:0;
+  background:none;
+  color:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div > div{
-  border-bottom-color:rgba(24,24,24,.28)!important;
+.ficha__folhas{position:relative;display:block;width:120px;height:142px}
+.ficha__folha{
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:98px;
+  height:138px;
+  object-fit:cover;
+  object-position:top;
+  background:#FCFCFC;
+  box-shadow:0 1px 1px rgba(0,0,0,.18),0 18px 28px -18px rgba(0,0,0,.7);
+  transform-origin:0 100%;
+  transition:transform .7s var(--mola);
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div > div > p:first-child{
-  color:#181818!important;
+.ficha__folha--2{transform:translate(20px,-4px) rotate(4deg)}
+.ficha__previa[data-forma="paisagem"] .ficha__folhas{width:156px;height:112px}
+.ficha__previa[data-forma="paisagem"] .ficha__folha{width:156px;height:110px}
+.ficha__previa:hover .ficha__folha{transform:translateY(-3px)}
+.ficha__previa:hover .ficha__folha--2{transform:translate(27px,-9px) rotate(6.5deg)}
+.ficha__ver{font:500 8px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--apagado);transition:color .4s var(--mola)}
+.ficha__previa:hover .ficha__ver{color:var(--tinta)}
+.ficha__previa:focus-visible{outline:1.5px solid var(--tom);outline-offset:6px}
+.ficha__cab{min-width:0;padding-bottom:20px}
+.ficha__meta{margin:0;font:500 9px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tom)}
+#acervo-ficha:not([data-tom="ambar"]) .ficha__meta{color:#FFB627}
+.ficha__titulo{
+  margin:10px 0 0;
+  font-family:'Schibsted Grotesk',sans-serif;
+  font-size:clamp(1.45rem,2.4vw,2rem);
+  font-weight:700;
+  line-height:1.04;
+  letter-spacing:-.04em;
+  text-wrap:balance;
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div:last-of-type :is(a,button){
-  background:#181818!important;
-  color:#FFB627!important;
+.ficha__lead{margin:20px 0 0;font-size:14.5px;line-height:1.55;text-wrap:pretty}
+.ficha__nota{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr);
+  gap:12px;
+  margin:18px 0 0;
+  padding-top:14px;
+  border-top:1px solid var(--fio);
+  font-size:13px;
+  line-height:1.5;
+  color:var(--apagado);
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div:last-of-type :is(a,button) > span:last-child{
-  background:#FFB627!important;
-  color:#181818!important;
+.ficha__nota b{font:500 8.5px/1.95 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tinta)}
+.ficha__acoes{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px}
+.ficha__cta{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  padding:6px 6px 6px 20px;
+  border-radius:999px;
+  background:#FFB627;
+  color:#181818;
+  font-size:13.5px;
+  font-weight:600;
+  transition:transform .5s var(--mola),box-shadow .5s var(--mola);
 }
-#acervo div:has(> aside):has(> div:first-child > button[aria-pressed="true"]:is(:nth-child(1),:nth-child(4),:nth-child(5))) > aside > div:last-of-type :is(a,button) > span:not(:last-child){
-  background:transparent!important;
-  color:#FFB627!important;
+.ficha__cta i{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#181818;
+  color:#FFB627;
+  font-style:normal;
+  font-size:13px;
+  transition:transform .6s var(--mola);
+}
+.ficha__cta:hover{color:#181818;transform:translateY(-2px)}
+.ficha__cta:hover i{transform:translate(2px,-1px) scale(1.06)}
+.ficha__cta:active{transform:scale(.98)}
+.ficha__cta--fio{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 1px rgba(242,239,233,.4)}
+.ficha__cta--fio:hover{color:var(--tinta);box-shadow:inset 0 0 0 1px var(--tinta)}
+.ficha__cta--fio i{background:#F2EFE9;color:#181818}
+#acervo-ficha[data-tom="ambar"] .ficha__cta{background:#181818;color:#FFB627}
+#acervo-ficha[data-tom="ambar"] .ficha__cta i{background:#FFB627;color:#181818}
+#acervo-ficha[data-tom="ambar"] .ficha__cta--fio{background:transparent;color:#181818;box-shadow:inset 0 0 0 1px rgba(24,24,24,.42)}
+#acervo-ficha[data-tom="ambar"] .ficha__cta--fio:hover{color:#181818;box-shadow:inset 0 0 0 1px #181818}
+#acervo-ficha[data-tom="ambar"] .ficha__cta--fio i{background:#181818;color:#FFB627}
+@media(prefers-reduced-motion:reduce){
+  .ficha__folha,.ficha__ver,.ficha__cta,.ficha__cta i{transition:none}
 }
 
 
@@ -675,15 +767,15 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
    ========================================================= */
 .acervo-cab{
   display:grid;
-  grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);
-  gap:clamp(32px,6vw,104px);
+  grid-template-columns:minmax(0,1fr) minmax(340px,500px);
+  gap:clamp(32px,5vw,88px);
   align-items:end;
 }
 .play-folha{
   --mola:cubic-bezier(.32,.72,0,1);
   position:relative;
   display:block;
-  max-width:440px;
+  max-width:500px;
   justify-self:end;
   width:100%;
   margin-top:26px;
@@ -697,7 +789,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .play-folha__papel{
   position:relative;
   display:block;
-  padding:clamp(30px,3vw,40px) clamp(24px,2.4vw,34px) clamp(22px,2.2vw,28px);
+  padding:22px clamp(22px,2.2vw,30px) 20px;
   background:#FCFCFC;
   border-radius:2px;
   box-shadow:
@@ -750,28 +842,30 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .play-folha__clipe span b + b{font-size:9.5px;font-weight:700}
 .play-folha__k{
   display:block;
-  margin:40px 0 0;
+  margin:2px 0 0 96px;
   font:500 9px/1.4 var(--mono);
   letter-spacing:.16em;
   text-transform:uppercase;
   color:rgba(24,24,24,.56);
 }
+.play-folha__linha{display:flex;align-items:center;gap:clamp(16px,2vw,24px);margin-top:44px}
 .play-folha__t{
+  flex:none;
   display:block;
-  margin:10px -.08em 0 0;
-  font:900 clamp(52px,5.4vw,76px)/.9 "Bodoni Moda",Georgia,serif;
+  margin:0 -.08em 0 0;
+  font:900 clamp(44px,4.2vw,58px)/.9 "Bodoni Moda",Georgia,serif;
   letter-spacing:.08em;
 }
 .play-folha__l{
   display:block;
   margin:16px 0 0;
-  font-size:14px;
+  font-size:13.5px;
   line-height:1.55;
   color:rgba(24,24,24,.78);
   text-wrap:pretty;
 }
-.play-folha__pauta{display:block;margin:22px 0 0}
-.play-folha__pauta svg{display:block;width:100%;height:44px;overflow:visible}
+.play-folha__pauta{flex:1;min-width:0;display:block}
+.play-folha__pauta svg{display:block;width:100%;height:40px;overflow:visible}
 .play-folha__pauta line{stroke:rgba(24,24,24,.1);stroke-width:1}
 .play-folha__pauta path{fill:none;stroke:#FFB627;stroke-width:1.6;stroke-linejoin:round}
 .play-folha__pauta circle{fill:#FCFCFC;stroke:rgba(24,24,24,.45);stroke-width:1.1}
@@ -781,8 +875,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  gap:14px 18px;
-  margin-top:18px;
+  gap:12px 18px;
+  margin-top:16px;
 }
 .play-folha__n span{white-space:nowrap}
 .play-folha__n{font:500 9px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(24,24,24,.6)}
@@ -1082,37 +1176,6 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </div>
 </section>
 
-<div style="background:#181818;color:#F2EFE9;padding:clamp(28px,3.4vw,44px) clamp(18px,4vw,56px) clamp(32px,3.8vw,52px)">
-  <p style="margin:0 0 clamp(18px,2vw,26px);font-size:14px;font-weight:600">Cadeia operacional</p>
-  <div class="cadeia" style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px 0">
-    <div style="position:relative;flex:1 1 130px;padding-right:14px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Entrada</span>
-    </div>
-    <div style="position:relative;flex:1 1 130px;padding-right:14px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Classificação</span>
-    </div>
-    <div style="position:relative;flex:1 1 130px;padding-right:14px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Distribuição</span>
-    </div>
-    <div style="position:relative;flex:1 1 130px;padding-right:14px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Verificação</span>
-    </div>
-    <div style="position:relative;flex:1 1 130px;padding-right:14px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Produção</span>
-    </div>
-    <div style="position:relative;flex:1 1 130px">
-      <span style="display:block;width:11px;height:11px;border-radius:999px;background:#FFB627;box-shadow:0 0 0 4px #181818,0 0 0 5px #FFB627"></span>
-      <span style="display:block;margin-top:12px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(14px,1.5vw,17px);letter-spacing:-.02em;color:#FFB627">Memória</span>
-    </div>
-  </div>
-  <p style="margin:clamp(26px,3vw,40px) 0 0;font-size:14px;line-height:1.6;text-wrap:pretty">Cada material do ECHO ocupa um ponto dessa cadeia ou conecta mais de uma etapa. O acervo, portanto, não é um catálogo de documentos: é a materialização do método.</p>
-</div>
-
 <section id="acervo" style="padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
   <div class="acervo-cab">
     <div>
@@ -1136,9 +1199,11 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </span>
       <span class="play-folha__papel">
         <span class="play-folha__k">Novo · showcase do playbook</span>
+        <span class="play-folha__linha">
         <span class="play-folha__t">PLAY</span>
-        <span class="play-folha__l">O acervo aplicado à redação de votos de RI e ED: quatro volumes, a governança do texto e as ferramentas de consulta, editados juntos numa partitura.</span>
         <span class="play-folha__pauta" aria-hidden="true"><svg viewBox="0 0 320 44" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="6" x2="320" y2="6"/><line x1="0" y1="14" x2="320" y2="14"/><line x1="0" y1="22" x2="320" y2="22"/><line x1="0" y1="30" x2="320" y2="30"/><line x1="0" y1="38" x2="320" y2="38"/><path d="M0 22H6L8.1 21.7L10.3 20.7L12.4 19.2L14.6 17.5L16.7 15.8L18.8 14.3L21.0 13.3L23.1 13.0L25.2 13.3L27.4 14.3L29.5 15.8L31.7 17.5L33.8 19.2L35.9 20.7L38.1 21.7L40.2 22.0L42.4 21.7L44.5 20.7L46.6 19.2L48.8 17.5L50.9 15.8L53.1 14.3L55.2 13.3L57.3 13.0L59.5 13.7L61.6 15.6L63.8 18.6L65.9 22.0L68.0 25.4L70.2 28.4L72.3 30.3L74.4 31.0L76.6 30.3L78.7 28.4L80.9 25.4L83.0 22.0L85.1 18.6L87.3 15.6L89.4 13.7L91.6 13.0L93.7 13.7L95.8 15.6L98.0 18.6L100.1 22.0L102.2 25.4L104.4 28.4L106.5 30.3L108.7 31.0L110.8 30.3L112.9 28.4L115.1 25.4L117.2 22.0L119.4 18.6L121.5 15.6L123.6 13.7L125.8 13.0L127.9 13.3L130.1 14.3L132.2 15.8L134.3 17.5L136.5 19.2L138.6 20.7L140.8 21.7L142.9 22.0L145.0 21.7L147.2 20.7L149.3 19.2L151.4 17.5L153.6 15.8L155.7 14.3L157.9 13.3L160.0 13.0L162.1 13.7L164.3 15.6L166.4 18.6L168.6 22.0L170.7 25.4L172.8 28.4L175.0 30.3L177.1 31.0L179.2 30.3L181.4 28.4L183.5 25.4L185.7 22.0L187.8 18.6L189.9 15.6L192.1 13.7L194.2 13.0L196.4 13.7L198.5 15.6L200.6 18.6L202.8 22.0L204.9 25.4L207.1 28.4L209.2 30.3L211.3 31.0L213.5 30.3L215.6 28.4L217.7 25.4L219.9 22.0L222.0 18.6L224.2 15.6L226.3 13.7L228.4 13.0L230.6 13.7L232.7 15.6L234.9 18.6L237.0 22.0L239.1 25.4L241.3 28.4L243.4 30.3L245.6 31.0L247.7 30.3L249.8 28.4L252.0 25.4L254.1 22.0L256.2 18.6L258.4 15.6L260.5 13.7L262.7 13.0L264.8 13.3L266.9 14.3L269.1 15.8L271.2 17.5L273.4 19.2L275.5 20.7L277.6 21.7L279.8 22.0L281.9 21.7L284.1 20.7L286.2 19.2L288.3 17.5L290.5 15.8L292.6 14.3L294.8 13.3L296.9 13.0L299.0 13.3L301.2 14.3L303.3 15.8L305.4 17.5L307.6 19.2L309.7 20.7L311.9 21.7L314.0 22.0H320"/><circle cx="23.1" cy="13" r="2.7"/><circle cx="57.3" cy="13" r="2.7" class="on"/><circle cx="74.4" cy="31" r="2.7" class="on"/><circle cx="91.6" cy="13" r="2.7" class="on"/><circle cx="108.7" cy="31" r="2.7" class="on"/><circle cx="125.8" cy="13" r="2.7" class="on"/><circle cx="160.0" cy="13" r="2.7"/><circle cx="177.1" cy="31" r="2.7"/><circle cx="194.2" cy="13" r="2.7"/><circle cx="211.3" cy="31" r="2.7"/><circle cx="228.4" cy="13" r="2.7"/><circle cx="245.6" cy="31" r="2.7" class="on"/><circle cx="262.7" cy="13" r="2.7" class="on"/><circle cx="296.9" cy="13" r="2.7" class="on"/></svg></span>
+        </span>
+        <span class="play-folha__l">O acervo aplicado à redação de votos de RI e ED: quatro volumes, a governança do texto e as ferramentas de consulta, editados juntos numa partitura.</span>
         <span class="play-folha__pe">
           <span class="play-folha__n"><span>8 de 14 materiais</span> · <span>107 fundamentos</span> · <span>2.758 assuntos</span></span>
           <span class="play-folha__cta">Abrir o PLAY<i aria-hidden="true">↗</i></span>
@@ -1183,38 +1248,34 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </sc-for>
     </div>
 
-    <aside id="acervo-ficha" style="position:sticky;top:24px;min-width:0;background:#181818;color:#F2EFE9;padding:clamp(24px,2.6vw,38px)">
-      <p style="margin:0;font-size:12.5px;font-weight:600;color:#FFB627">{{ ficha.kicker }}</p>
-      <h3 style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.04;letter-spacing:-.04em;text-wrap:pretty">{{ ficha.titulo }}</h3>
-      <p style="margin:14px 0 0;font-size:14.5px;line-height:1.55">{{ ficha.lead }}</p>
-      <div style="margin-top:24px;border-top:1px solid #3a3a3a">
-        <sc-for list="{{ ficha.campos }}" as="c" hint-placeholder-count="5">
-          <div style="display:flex;flex-wrap:wrap;gap:6px 18px;padding:13px 0;border-bottom:1px solid #3a3a3a">
-            <p style="flex:0 0 112px;margin:0;font-size:12.5px;font-weight:600;line-height:1.4;color:#FFB627">{{ c.k }}</p>
-            <p style="flex:1 1 200px;margin:0;font-size:13px;line-height:1.5">{{ c.v }}</p>
-          </div>
-        </sc-for>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:26px">
-        <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
-          <a href="{{ ficha.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
-            {{ ficha.acao }}
-            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center;font-size:13px">{{ ficha.seta }}</span>
-          </a>
-        </sc-if>
-        <sc-if value="{{ ficha.podeVisualizar }}" hint-placeholder-val="{{ true }}">
-          <button type="button" onClick="{{ ficha.visualizar }}" style="display:inline-flex;align-items:center;gap:14px;border:0;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-family:'Commissioner',system-ui,sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
-            VISUALIZAR
-            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center">
-              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M2.3 12s3.4-5.2 9.7-5.2S21.7 12 21.7 12 18.3 17.2 12 17.2 2.3 12 2.3 12Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+    <aside id="acervo-ficha" data-tom="{{ ficha.tom }}">
+      <div class="ficha__topo">
+        <sc-if value="{{ ficha.temPrevia }}" hint-placeholder-val="{{ true }}">
+          <button type="button" class="ficha__previa" data-forma="{{ ficha.forma }}" onClick="{{ ficha.abrePrevia }}" aria-label="{{ ficha.previaRotulo }}">
+            <span class="ficha__folhas">
+              <sc-if value="{{ ficha.temVerso }}" hint-placeholder-val="{{ true }}">
+                <img class="ficha__folha ficha__folha--2" src="{{ ficha.previa2 }}" alt="" loading="lazy" decoding="async">
+              </sc-if>
+              <img class="ficha__folha" src="{{ ficha.previa1 }}" alt="" loading="lazy" decoding="async">
             </span>
+            <span class="ficha__ver">{{ ficha.previaAcao }}</span>
           </button>
         </sc-if>
+        <div class="ficha__cab">
+          <p class="ficha__meta">{{ ficha.meta }}</p>
+          <h3 class="ficha__titulo">{{ ficha.titulo }}</h3>
+        </div>
+      </div>
+      <p class="ficha__lead">{{ ficha.lead }}</p>
+      <sc-if value="{{ ficha.temNota }}" hint-placeholder-val="{{ true }}">
+        <p class="ficha__nota"><b>{{ ficha.notaRotulo }}</b><span>{{ ficha.nota }}</span></p>
+      </sc-if>
+      <div class="ficha__acoes">
+        <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
+          <a class="ficha__cta" href="{{ ficha.href }}" target="_blank" rel="noopener">{{ ficha.acao }}<i aria-hidden="true">{{ ficha.seta }}</i></a>
+        </sc-if>
         <sc-if value="{{ ficha.temPlay }}" hint-placeholder-val="{{ false }}">
-          <a href="{{ ficha.play }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:8px 8px 8px 22px;box-shadow:inset 0 0 0 1px rgba(242,239,233,.42);color:#F2EFE9;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#F2EFE9;box-shadow:inset 0 0 0 1px #F2EFE9">
-            No PLAY
-            <span style="width:30px;height:30px;border-radius:999px;background:#F2EFE9;color:#181818;display:flex;align-items:center;justify-content:center;font-size:13px">↗</span>
-          </a>
+          <a class="ficha__cta ficha__cta--fio" href="{{ ficha.play }}" target="_blank" rel="noopener">No PLAY<i aria-hidden="true">↗</i></a>
         </sc-if>
       </div>
     </aside>
@@ -1222,30 +1283,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
   <p id="regime" style="margin:clamp(48px,6vw,88px) 0 clamp(14px,1.6vw,20px);font-size:12.5px;font-weight:600;color:rgba(24,24,24,.72);scroll-margin-top:24px">Regime do acervo</p>
   <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Harmonia é <span style="background:#FFB627;padding:0 .08em">coordenação</span> de diferenças</p>
-  <p style="margin:clamp(20px,2.4vw,32px) 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">A filosofia de trabalho permanece como origem conceitual. No ECHO, ela é traduzida em quatro condições operacionais que atravessam todo o acervo.</p>
-
-  <div class="q4" style="column-gap:clamp(18px,2.6vw,40px);row-gap:clamp(30px,3.4vw,46px);margin-top:clamp(30px,3.6vw,50px)">
-    <div style="border-top:1px solid #181818;padding-top:16px">
-      <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:1.14;letter-spacing:-.025em">Autoridade decisória</p>
-      <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;text-wrap:pretty">O método organiza a execução sem deslocar a responsabilidade institucional de quem decide.</p>
-      <p style="margin:10px 0 0;font-size:13.5px;line-height:1.55;color:rgba(24,24,24,.74);text-wrap:pretty">A existência de procedimento comum não elimina juízo, discricionariedade ou supervisão. Define onde cada responsabilidade começa, termina e retorna ao fluxo.</p>
-    </div>
-    <div style="border-top:1px solid #181818;padding-top:16px">
-      <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:1.14;letter-spacing:-.025em">Coordenação</p>
-      <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;text-wrap:pretty">Papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis.</p>
-      <p style="margin:10px 0 0;font-size:13.5px;line-height:1.55;color:rgba(24,24,24,.74);text-wrap:pretty">Coordenação, aqui, significa reduzir zonas de ambiguidade entre pessoas, tarefas e momentos do processo.</p>
-    </div>
-    <div style="border-top:1px solid #181818;padding-top:16px">
-      <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:1.14;letter-spacing:-.025em">Procedimento comum</p>
-      <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;text-wrap:pretty">Materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível.</p>
-      <p style="margin:10px 0 0;font-size:13.5px;line-height:1.55;color:rgba(24,24,24,.74);text-wrap:pretty">O procedimento não busca uniformizar o raciocínio jurídico. Busca estabilizar aquilo que pode ser verificado, classificado, registrado e reutilizado.</p>
-    </div>
-    <div style="border-top:1px solid #181818;padding-top:16px">
-      <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:18px;line-height:1.14;letter-spacing:-.025em">Memória</p>
-      <p style="margin:12px 0 0;font-size:13.5px;line-height:1.55;text-wrap:pretty">A experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável.</p>
-      <p style="margin:10px 0 0;font-size:13.5px;line-height:1.55;color:rgba(24,24,24,.74);text-wrap:pretty">Sem memória, a equipe resolve novamente problemas que já enfrentou. Com memória, a recorrência deixa de ser ruído e passa a integrar o método.</p>
-    </div>
-  </div>
+  <p style="margin:clamp(20px,2.4vw,32px) 0 0;max-width:78ch;font-size:15px;line-height:1.7;text-wrap:pretty">A filosofia de trabalho permanece como origem conceitual. No ECHO, ela se traduz em quatro condições que atravessam todo o acervo: <b style="font-weight:600">autoridade decisória</b>, porque o método organiza a execução sem deslocar a responsabilidade institucional de quem decide; <b style="font-weight:600">coordenação</b>, porque papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis; <b style="font-weight:600">procedimento comum</b>, porque materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível; e <b style="font-weight:600">memória</b>, porque a experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável. O procedimento não busca uniformizar o raciocínio jurídico: busca estabilizar aquilo que pode ser verificado, classificado, registrado e reutilizado.</p>
 </section>
 
 <section id="achados" style="background:#181818;color:#F2EFE9;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
@@ -1745,20 +1783,20 @@ window.EcoOnda = (function () {
 
 
 const MATERIAIS = [
-  {id:'m1',etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/play/manuais/1-notas-introdutorias.pdf',edicao:'Volume 01 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-01'},
-  {id:'m2',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
-  {id:'m5',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf',preview:'assets/echo/documentos/visualizar/triagem.pdf'},
-  {id:'m4',etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/play/manuais/2-mapa-tematico.pdf',preview:'assets/echo/documentos/visualizar/taxonomia.pdf',edicao:'Volume 02 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-02'},
-  {id:'m3',etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/play/manuais/3-afinacao-processual.pdf',preview:'assets/echo/documentos/triagem.pdf',edicao:'Volume 03 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-03'},
-  {id:'m6',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
-  {id:'m7',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
-  {id:'m8',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m9',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
-  {id:'m10',etapas:[1,5],titulo:'Ementário',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',edicao:'Planilha-fonte, com 2.758 assuntos na aba principal. O PLAY traz a edição navegável da mesma base.',play:'play.html#ementario'},
-  {id:'m11',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/play/manuais/4-guia-estilo.pdf',edicao:'Volume 04 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#guia'},
-  {id:'m12',etapas:[4,4],titulo:'Templates',formato:'PDF',cadeia:'produção / estrutura / redação',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',uso:'Elaboração da minuta',equivalencias:'Document Templates / Clause Library / Document Assembly',href:'assets/play/anexos/templates.pdf',edicao:'Seis modelos, com os cinco IDs preservados e ED-NAO-CONHECIDO incluído. Edição de outubro de 2026, a mesma do PLAY.',play:'play.html#templates'},
-  {id:'m13',etapas:[4,5],titulo:'Fundamentos',formato:'Web',cadeia:'produção / pesquisa / memória',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',uso:'Fundamentação do voto',equivalencias:'Argument Bank / Brief Bank / Legal Knowledge Base',href:'play.html#fundamentos',edicao:'107 temas, com IDs editoriais próprios. Consulta interativa no PLAY.'},
-  {id:'m14',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',cadeia:'verificação / prazo / tempestividade',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',uso:'Admissibilidade e tempestividade',equivalencias:'Docketing / Deadline Calculator / Court Calendar',href:'play.html#calendario',edicao:'2026 na tabela ativa e 2025 em histórico separado. Consulta interativa no PLAY.'},
+  {id:'m1',meta:'Volume 01 · PDF, 13 páginas',previa:['m1-1','m1-2'],forma:'retrato',fundador:true,etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',href:'assets/play/manuais/1-notas-introdutorias.pdf',play:'play.html#vol-01'},
+  {id:'m2',meta:'PDF, 2 páginas',previa:['m2-1'],forma:'paisagem',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
+  {id:'m5',meta:'PDF, 4 páginas',previa:['m5-1'],forma:'paisagem',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',href:'assets/echo/documentos/localizadores.pdf'},
+  {id:'m4',meta:'Volume 02 · PDF, 9 páginas',previa:['m4-1','m4-2'],forma:'retrato',fundador:true,etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',href:'assets/play/manuais/2-mapa-tematico.pdf',play:'play.html#vol-02'},
+  {id:'m3',meta:'Volume 03 · PDF, 12 páginas',previa:['m3-1','m3-2'],forma:'retrato',fundador:true,etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',href:'assets/play/manuais/3-afinacao-processual.pdf',play:'play.html#vol-03'},
+  {id:'m6',meta:'PDF, 1 página',previa:['m6-1'],forma:'paisagem',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',href:'assets/echo/documentos/matriz_papeis.pdf'},
+  {id:'m7',meta:'PDF, 2 páginas',previa:['m7-1'],forma:'paisagem',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
+  {id:'m8',meta:'Planilha XLSX · 631 temas',previa:['m8-1'],forma:'paisagem',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',href:'assets/echo/documentos/precedentes.xlsx'},
+  {id:'m9',meta:'Planilha XLSX',previa:['m9-1'],forma:'paisagem',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
+  {id:'m10',meta:'Planilha XLSX · 2.758 assuntos',previa:['m10-1'],forma:'paisagem',etapas:[1,5],titulo:'Ementário',formato:'XLSX',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',play:'play.html#ementario'},
+  {id:'m11',meta:'Volume 04 · PDF, 20 páginas',previa:['m11-1','m11-2'],forma:'retrato',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',href:'assets/play/manuais/4-guia-estilo.pdf',play:'play.html#guia'},
+  {id:'m12',meta:'Anexo do PLAY · PDF, 11 páginas',previa:['m12-1','m12-2'],forma:'retrato',etapas:[4,4],titulo:'Templates',formato:'PDF',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',href:'assets/play/anexos/templates.pdf',play:'play.html#templates'},
+  {id:'m13',meta:'Ferramenta no PLAY · 107 temas',previa:['m13-1'],forma:'paisagem',etapas:[4,5],titulo:'Fundamentos',formato:'Web',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',href:'play.html#fundamentos'},
+  {id:'m14',meta:'Ferramenta no PLAY · 2025 e 2026',previa:['m14-1'],forma:'paisagem',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',href:'play.html#calendario'},
 ];
 
 const ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
@@ -1854,6 +1892,17 @@ class Component extends DCLogic {
     if (alvo && window.EcoOnda) window.EcoOnda.monta(alvo, MATERIAIS, (id) => this._abreNoAcervo(id));
   }
 
+  // lista e ficha empilhadas (telas estreitas): a escolha leva até a ficha
+  _fichaEmVista() {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const ficha = document.getElementById('acervo-ficha');
+      const lista = ficha && ficha.parentElement.firstElementChild;
+      if (!lista || ficha.getBoundingClientRect().top < lista.getBoundingClientRect().bottom - 1) return;
+      const reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: ficha.getBoundingClientRect().top + window.scrollY - 16, behavior: reduz ? 'auto' : 'smooth' });
+    }));
+  }
+
   _abreNoAcervo(id) {
     this.setState({ sel: id, perc: null });
     // duas voltas de quadro: a ficha já traz o material escolhido quando a rolagem é medida
@@ -1912,7 +1961,7 @@ class Component extends DCLogic {
         aceso,
         marcado: selecionado || aceso,
         apagado: !!acesos && !aceso,
-        select: () => this.setState({ sel: m.id, perc: null })
+        select: () => { this.setState({ sel: m.id, perc: null }); this._fichaEmVista(); }
       };
     });
 
@@ -1923,54 +1972,52 @@ class Component extends DCLogic {
 
     const m = MATERIAIS.find((x) => x.id === sel) || MATERIAIS[0];
     const prova = ativo ? MATERIAIS.find((x) => x.id === ativo.prova) : null;
+    // a prévia é sempre de um documento: o material escolhido ou a prova do percurso
+    const alvo = ativo ? prova : m;
+    const previewHref = !alvo ? '' : alvo.preview || (alvo.formato === 'PDF' ? alvo.href : '');
+    const previa = (alvo && alvo.previa) || [];
     const ficha = ativo
       ? {
-          kicker: 'Percurso de aplicação',
+          tom: 'escuro',
+          meta: 'Percurso · ' + ativo.materiais.length + ' materiais',
           titulo: ativo.nome,
           lead: ativo.efeito,
-          campos: [
-            { k: 'Antes', v: ativo.antes },
-            { k: 'Materiais acionados', v: ativo.rotulo }
-          ],
+          notaRotulo: 'Antes',
+          nota: ativo.antes,
           temArquivo: !!(ativo.link || prova),
           href: ativo.link ? ativo.link.href : prova ? prova.href : '#acervo',
           acao: ativo.link ? ativo.link.acao : prova ? 'Abrir ' + prova.titulo : '',
-          seta: ativo.link ? '↗' : '↓'
+          seta: ativo.link ? '↗' : '↓',
+          temPlay: false,
+          play: ''
         }
       : {
-          kicker: (ETAPAS[m.etapas[0]] + (m.etapas[0] === m.etapas[1] ? '' : ' → ' + ETAPAS[m.etapas[1]])).replace(/^./, (c) => c.toUpperCase()),
+          tom: m.fundador ? 'ambar' : 'escuro',
+          meta: m.meta,
           titulo: m.titulo,
           lead: m.funcao,
-          campos: [
-            { k: 'Papel na cadeia', v: m.cadeia },
-            { k: 'Ruído', v: m.ruido },
-            { k: 'Uso', v: m.uso },
-            { k: 'Formato', v: m.formato === 'Web' ? 'Ferramenta interativa' : m.formato },
-            m.edicao ? { k: 'Edição', v: m.edicao } : null,
-            { k: 'Equivalências', v: m.equivalencias }
-          ].filter(Boolean),
+          notaRotulo: 'Ruído',
+          nota: m.ruido,
           temArquivo: true,
           href: m.href,
           acao: m.formato === 'XLSX' ? 'Abrir planilha' : m.formato === 'Web' ? 'Abrir no PLAY' : 'Baixar PDF',
-          seta: m.formato === 'Web' ? '↗' : '↓'
+          seta: m.formato === 'Web' ? '↗' : '↓',
+          temPlay: !!m.play,
+          play: m.play || ''
         };
-    ficha.temPlay = !ativo && !!m.play;
-    ficha.play = ficha.temPlay ? m.play : '';
-
-    const previewMaterial = ativo ? prova : m;
-    const previewHref = !previewMaterial ? '' : previewMaterial.preview || (previewMaterial.formato === 'PDF' ? previewMaterial.href : '');
-    ficha.podeVisualizar = !!previewHref;
-    ficha.previewHref = previewHref;
-    // ponytail: todo `preview` avulso é folha única em paisagem; campo de páginas por material se vier um de várias.
-    ficha.previewPaginas = previewMaterial && previewMaterial.preview ? 1 : 2;
-    ficha.visualizar = () => {
-      if (!ficha.podeVisualizar) return;
+    ficha.temNota = !!ficha.nota;
+    ficha.temPrevia = previa.length > 0;
+    ficha.previa1 = previa[0] ? 'assets/echo/previas/' + previa[0] + '.jpg' : '';
+    ficha.previa2 = previa[1] ? 'assets/echo/previas/' + previa[1] + '.jpg' : '';
+    ficha.temVerso = !!previa[1];
+    ficha.forma = (alvo && alvo.forma) || 'retrato';
+    ficha.previaAcao = previewHref ? 'Ver em tela inteira' : alvo && alvo.formato === 'Web' ? 'Abrir no PLAY' : 'Abrir planilha';
+    ficha.previaRotulo = (previewHref ? 'Visualizar ' : 'Abrir ') + (alvo ? alvo.titulo : '');
+    ficha.abrePrevia = () => {
+      if (!alvo) return;
+      if (!previewHref) { window.open(alvo.href, '_blank', 'noopener'); return; }
       window.dispatchEvent(new CustomEvent('echo:preview', {
-        detail: {
-          titulo: previewMaterial.titulo,
-          href: ficha.previewHref,
-          paginas: ficha.previewPaginas
-        }
+        detail: { titulo: alvo.titulo, href: previewHref, paginas: ficha.forma === 'retrato' ? 2 : 1 }
       }));
     };
 
