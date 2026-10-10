@@ -130,6 +130,11 @@ components:
   carimbo:
     textColor: "{colors.tinta}"
     opacity: ".62; .92 no hover; cheio quando ligado"
+    size: "44px"
+  selo-seco:
+    textColor: "{colors.papel}"
+    shadow: "drop-shadow(-1px -1px 0 #fff) drop-shadow(1px 1.3px .7px rgba(24, 24, 24, .2))"
+    size: "clamp(104px, 8.6vw, 126px)"
   gaveta:
     backgroundColor: "#FDFCFA com fibra; encarte dobrado ao meio"
     shadow: "0 22px 30px -24px rgba(24, 24, 24, .42); inset 0 12px 14px -12px rgba(24, 24, 24, .2)"
@@ -159,7 +164,7 @@ components:
 
 **Creative North Star: "A Partitura Geral"**
 
-O PLAY é a partitura que o regente lê, numa folha de verdade. A folha #FCFCFC pousa numa base de tinta, sobre um maço de outras folhas que aparecem nas bordas; tem fibra, luz rasante do alto à esquerda, dois cantos dobrados e é presa no alto à esquerda por um prendedor preto com "PLAYBOOK / ECHO" em âmbar. No alto à direita, dois carimbos de tinta (som e busca). A folha abre só com o título, PLAY, em Bodoni Moda 900. Abaixo vem o sistema: cada material é uma pauta, as pautas se agrupam em naipes por chave, e os compassos são a ordem de utilização da seção 3 das Regras de Aplicação. As notas ficam onde as Regras mandam usar cada componente. Ler na vertical é ler um passo; ler na horizontal é seguir um material pela ordem inteira.
+O PLAY é a partitura que o regente lê, numa folha de verdade. A folha #FCFCFC pousa numa base de tinta, sobre um maço de outras folhas que aparecem nas bordas; tem fibra, luz rasante do alto à esquerda, dois cantos dobrados e é presa no alto à esquerda por um prendedor preto com "PLAYBOOK / ECHO" em âmbar. No alto à direita, o carimbo de tinta do som; à esquerda, sob o prendedor, a busca é um selo seco em relevo no próprio papel. A folha abre só com o título, PLAY, em Bodoni Moda 900. Abaixo vem o sistema: cada material é uma pauta, as pautas se agrupam em naipes por chave, e os compassos são a ordem de utilização da seção 3 das Regras de Aplicação. As notas ficam onde as Regras mandam usar cada componente. Ler na vertical é ler um passo; ler na horizontal é seguir um material pela ordem inteira.
 
 Os três primeiros manuais (Notas Introdutórias, Mapa Temático, Afinação Processual) abrem numa gaveta que desce sob a própria pauta, com a página dupla do volume. Os demais materiais abrem numa parte, uma folha que entra pela direita sobre a partitura esmaecida. Documentos, fichas de PDF e ferramentas usam o mesmo painel; o montador de Templates é o único que toma a tela inteira.
 
@@ -210,8 +215,7 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 
 ### Hierarchy
 - **Título** (Bodoni 900, 64px, 1, +0,08em): PLAY, centrado no alto da folha.
-- **Subtítulo** (JetBrains Mono 800, 9,5px, 0,12em, caixa alta, no corpo exato dos títulos dos compassos): "Showcase do playbook da metodologia ECHO", centrado sob o título.
-- **Crédito** (Instrument Sans 400, 15px): "Christian da Costa", alinhado à direita sob o subtítulo, como o nome do compositor numa partitura; leva ao ARCO.
+- **Subtítulo** (JetBrains Mono 700, 9,5px, 0,06em, caixa alta, no corpo exato dos títulos dos compassos): "Showcase do playbook da metodologia ECHO", centrado sob o título.
 - **Prendedor** (JetBrains Mono, âmbar, caixa alta): "PLAYBOOK" em 500 10,5px e, abaixo, "ECHO" em 700 15px, espacejados; o prendedor leva à página-mãe (arco.html#echo).
 - **Folha** (Bodoni 400, clamp(32px, 3.6vw, 50px), 1, −0,02em): título de documento, ferramenta, ficha de PDF, montador. O lead vem em Bodoni itálico 18px, grafite.
 - **Seção** (Bodoni 600, 22px): h2 dos documentos; h3 em 600 16px.
@@ -231,8 +235,9 @@ A página é uma folha sobre a base: bordas de tinta nas laterais (clamp(12px, 3
 
 - **Papel:** fibra em ruído fractal (SVG), linhas de vergê a cada 4px quase invisíveis, luz rasante do alto à esquerda e sombra leve nas bordas. Por baixo, duas folhas do maço (#EEECE7 e #F5F3EF), levemente fora de esquadro, aparecem nas laterais e no pé. Dois cantos dobrados de clamp(22px, 2.6vw, 38px), no alto à direita e no pé à esquerda, recortam a folha (clip-path), mostram o maço e projetam sombra curta.
 - **Prendedor:** preso à borda de cima, no alto à esquerda, girado −2,4°: corpo de laca #181818 com brilho no dorso, "PLAYBOOK / ECHO" em âmbar e as hastes de aço deitadas para baixo sobre a folha, com sombra. No hover, ergue 2px. No celular, em 62%.
-- **Carimbos:** som e busca lado a lado no alto à direita, dentro da folha: anel duplo e ícone em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girados −5° e 4°. No hover a tinta firma; ao clicar, o carimbo afunda; o som ligado vira carimbo cheio, com o ícone em papel.
-- **Folha de rosto:** o título PLAY e o subtítulo, centrados; o crédito "Christian da Costa" à direita; depois clamp(40px, 7vh, 76px) até o cabeçalho dos compassos.
+- **Carimbo do som:** no alto à direita, dentro da folha, espelhando a margem do prendedor e na altura do título: 44px, anel duplo e nota em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girado −4°. No hover a tinta firma; ao clicar, afunda; ligado, vira carimbo cheio, com o ícone em papel.
+- **Selo seco da busca:** à esquerda, centrado sob o prendedor, logo abaixo das hastes (146px do topo da folha) e antes dos compassos: clamp(104px, 8,6vw, 126px), na mesma cor do papel. Só o relevo o revela (luz branca no alto à esquerda, sombra embaixo à direita): anel, filete, "BUSCAR · PLAYBOOK ECHO · CTRL K ·" em volta e a lupa ao centro. No hover o relevo se aprofunda; ao clicar, inverte (afunda). Abre a busca, como Ctrl K. No celular, 84px, à esquerda, entre o subtítulo e os compassos.
+- **Folha de rosto:** o título PLAY e o subtítulo, centrados. A folha de rosto tem altura mínima para que o selo da busca caiba entre o fim das hastes do prendedor e o cabeçalho dos compassos.
 - **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Shantell Sans 300 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
 - **Pé:** sobre fio, a epígrafe "Harmonia é coordenação de diferenças." em Bodoni itálico à esquerda e, à direita, a assinatura: símbolo âmbar de 36px ao lado do nome em Restart Ginger e de "LAW | OPS | TECH | AI" em indicação, levando ao ARCO. Até 980px, os dois se empilham ao centro.
 - **Naipes, nesta ordem:** Intro (colchete: Índice e Arquitetura, legenda "Abertura", e Memória de Integração, legenda "Registro", as únicas *ad lib.*; as legendas são as categorias que os próprios PDFs declaram), Coleção (chaveta de piano: Notas Introdutórias em I, que acolhe; Mapa Temático em I, que classifica a matéria; Afinação Processual sustentada de I a II, ligada, triagem e depois verificação; e o Guia de Estilo, sustentado de IV até a coda; as notas dos volumes seguem o que cada um declara na capa), Governança (colchete: Regras de Aplicação em pedal nos cinco compassos e Critérios Operacionais na coda, emendando no Guia de Estilo que fecha a Coleção) e Ferramenta (colchete: Calendário Jurídico em II, Fundamentos e Ementário em III, Templates em IV).

@@ -37,6 +37,8 @@
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
+  --selo: clamp(104px, 8.6vw, 126px);   /* selo seco da busca */
+  --selo-y: 146px;                      /* logo abaixo das hastes do prendedor */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
   --fibra: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
   --verge: repeating-linear-gradient(0deg, rgba(24, 24, 24, .008) 0 1px, transparent 1px 4px);
@@ -94,16 +96,16 @@ input, textarea { caret-color: var(--tinta); }
 .clipe-svg { display: block; width: 132px; height: 152px; overflow: visible; filter: drop-shadow(0 7px 9px rgba(24, 24, 24, .2)) drop-shadow(0 1px 1.5px rgba(24, 24, 24, .32)); transition: filter .6s var(--mola); }
 .clipe-arame { fill: none; stroke: url(#clipe-aco); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
 .clipe-t { position: absolute; left: 0; top: 0; width: 132px; height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-top: 6px; color: var(--ambar); pointer-events: none; }
-.clipe-t b { margin-right: -.3em; font: 500 10.5px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; }
-.clipe-t b + b { margin-right: -.5em; font-size: 15px; font-weight: 700; letter-spacing: .5em; }
+.clipe-t b { margin-right: -.1em; font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.clipe-t b + b { margin-right: -.1em; font-size: 15px; font-weight: 700; letter-spacing: .1em; }
 .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg); }
 .clipe:hover .clipe-svg { filter: drop-shadow(0 10px 12px rgba(24, 24, 24, .22)) drop-shadow(0 2px 2px rgba(24, 24, 24, .3)); }
 .clipe:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 4px; }
 
-/* Carimbos: som e busca, em tinta, discretos, levemente tortos como quem carimbou à mão. */
-.carimbos { position: absolute; z-index: 2; top: clamp(16px, 2vw, 26px); right: calc(var(--orelha) + clamp(10px, 1.6vw, 22px)); display: flex; gap: 10px; }
-.carimbo { --r: -5deg; width: 38px; height: 38px; padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
-.carimbo + .carimbo { --r: 4deg; }
+/* Carimbo do som, em tinta, discreto, levemente torto como quem carimbou à mão. */
+/* Espelha o prendedor: mesma distância da borda, na altura do título. */
+.carimbos { position: absolute; z-index: 2; top: clamp(36px, 5vw, 72px); right: calc(clamp(20px, 5vw, 92px) + 14px); display: flex; gap: 10px; }
+.carimbo { --r: -4deg; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
 .carimbo svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .carimbo .c-anel { fill: none; stroke: currentColor; stroke-width: 1.7; }
 .carimbo .c-anel2 { fill: none; stroke: currentColor; stroke-width: .7; }
@@ -135,11 +137,27 @@ input, textarea { caret-color: var(--tinta); }
 /* Folha de rosto: só o título. */
 .rosto { padding: clamp(56px, 9vh, 96px) 0 clamp(40px, 7vh, 76px); text-align: center; }
 .rosto h1 { margin-right: -.08em; font: 900 64px/1 var(--serif); letter-spacing: .08em; }
-/* Subtítulo no corpo exato dos títulos dos compassos, em JetBrains 800; o autor à direita, como crédito de compositor. */
-.rosto-sub { margin: 18px -.12em 0 0; font: 800 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--tinta); }
-.rosto-autor { margin-top: clamp(26px, 4.5vh, 44px); text-align: right; font: 400 15px/1.2 var(--f-text); }
-.rosto-autor a { text-decoration: none; transition: background .4s var(--mola); }
-.rosto-autor a:hover, .rosto-autor a:focus-visible { background: linear-gradient(transparent 60%, var(--ambar) 60%, var(--ambar) 92%, transparent 92%); }
+/* Subtítulo no corpo exato dos títulos dos compassos, em JetBrains 700; o autor à direita, como crédito de compositor. */
+.rosto-sub { margin: 18px -.06em 0 0; font: 700 9.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
+/* Busca: selo seco. Mesma cor do papel; só o relevo o revela (luz no alto à esquerda, sombra embaixo à direita).
+   Fica à esquerda, logo abaixo das hastes do prendedor (que terminam a ~133px do topo da folha),
+   e a folha de rosto cresce o bastante para os compassos começarem depois dele. */
+.rosto { min-height: calc(var(--selo-y) + var(--selo) + 18px); }
+.selo {
+  position: absolute; z-index: 2; left: calc(clamp(20px, 5vw, 92px) + 66px - var(--selo) / 2); top: var(--selo-y);
+  width: var(--selo); height: var(--selo); padding: 0; border: 0; border-radius: 50%; background: none; color: var(--papel); cursor: pointer;
+  filter: drop-shadow(-1px -1px 0 rgba(255, 255, 255, .95)) drop-shadow(1px 1.3px .7px rgba(24, 24, 24, .2)) drop-shadow(1.5px 2.5px 3px rgba(24, 24, 24, .07));
+  transition: filter .5s var(--mola), transform .35s var(--mola);
+}
+.selo svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.selo .s-anel { fill: none; stroke: currentColor; stroke-width: 3.4; }
+.selo .s-fio { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.selo .s-txt { fill: currentColor; font: 700 11px var(--mono); }
+.selo .s-lupa { fill: none; stroke: currentColor; stroke-width: 6; }
+.selo .s-cabo { fill: none; stroke: currentColor; stroke-width: 8; stroke-linecap: round; }
+.selo:hover { filter: drop-shadow(-1px -1px 0 #fff) drop-shadow(1.2px 1.6px .8px rgba(24, 24, 24, .26)) drop-shadow(2px 3.5px 4px rgba(24, 24, 24, .09)); }
+.selo:active { transform: scale(.985); filter: drop-shadow(1px 1px 0 rgba(255, 255, 255, .95)) drop-shadow(-1px -1.2px .7px rgba(24, 24, 24, .22)); }
+.selo:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 6px; }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
 .pt button { border: 0; background: none; padding: 4px 0; font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }
@@ -657,9 +675,11 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .gav-txt { padding-right: 0; }
   .clipe { top: -8px; left: 14px; transform: rotate(-2.4deg) scale(.62); transform-origin: 0 0; }
   .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
-  .carimbos { gap: 6px; }
-  .carimbo { width: 32px; height: 32px; }
-  .rosto { padding-top: 112px; }
+  .carimbos { top: 26px; right: calc(var(--orelha) + 16px); }
+  .carimbo { width: 36px; height: 36px; }
+  :root { --selo: 84px; --selo-y: 222px; }
+  .rosto { padding: 112px 0 0; min-height: calc(var(--selo-y) + var(--selo) + 22px); }
+  .selo { left: calc(var(--g) - 4px); }
   .maco::before { transform: translate(3px, 3px) rotate(.05deg); }
   .maco::after { transform: translate(-2px, 4px) rotate(-.03deg); }
   .leitor-palco { padding: 20px 48px 56px; }
@@ -689,7 +709,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
 }
 
 @media print {
-  .clipe, .carimbos, .gav-x, .veu, .parte-h, .rail, .overlay, .camada, .coluna, .batuta { display: none !important; }
+  .clipe, .carimbos, .selo, .gav-x, .veu, .parte-h, .rail, .overlay, .camada, .coluna, .batuta { display: none !important; }
   html.com-parte { overflow: visible; }
   .parte { position: static; width: auto; transform: none; box-shadow: none; }
 }
