@@ -38,6 +38,7 @@
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
   --selo: clamp(104px, 8.6vw, 126px);   /* selo seco da busca */
+  --carimbo: clamp(104px, 9.4vw, 140px); /* carimbo do som, no porte de um carimbo real sobre a folha */
   --selo-y: 146px;                      /* logo abaixo das hastes do prendedor */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
   --fibra: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
@@ -102,18 +103,20 @@ input, textarea { caret-color: var(--tinta); }
 .clipe:hover .clipe-svg { filter: drop-shadow(0 10px 12px rgba(24, 24, 24, .22)) drop-shadow(0 2px 2px rgba(24, 24, 24, .3)); }
 .clipe:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 4px; }
 
-/* Carimbo do som, em tinta, discreto, levemente torto como quem carimbou à mão. */
+/* Carimbo do som: redondo, de cartório (anel grosso, filete, texto em volta, nota ao centro), em tinta,
+   levemente torto como quem carimbou à mão; no porte do selo seco, para equilibrar a folha. */
 /* Espelha o prendedor: mesma distância da borda, na altura do título. */
 .carimbos { position: absolute; z-index: 2; top: clamp(36px, 5vw, 72px); right: calc(clamp(20px, 5vw, 92px) + 14px); display: flex; gap: 10px; }
-.carimbo { --r: -4deg; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
+.carimbo { --r: -6deg; width: var(--carimbo); height: var(--carimbo); padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
 .carimbo svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.carimbo .c-anel { fill: none; stroke: currentColor; stroke-width: 1.7; }
-.carimbo .c-anel2 { fill: none; stroke: currentColor; stroke-width: .7; }
+.carimbo .c-anel { fill: none; stroke: currentColor; stroke-width: 5; }
+.carimbo .c-anel2 { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.carimbo .c-txt { fill: currentColor; font: 700 11.5px var(--mono); }
 .carimbo .c-fundo { fill: currentColor; opacity: 0; transition: opacity .35s var(--mola); }
-.carimbo .c-ic { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .35s var(--mola); }
+.carimbo .c-ic { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke .35s var(--mola); }
 .carimbo .c-ic ellipse { fill: currentColor; }
 .carimbo:hover, .carimbo:focus-visible { opacity: .92; }
-.carimbo:active { transform: rotate(var(--r)) scale(.92); }
+.carimbo:active { transform: rotate(var(--r)) scale(.96); }
 .carimbo[aria-pressed="true"] { opacity: .9; }
 .carimbo[aria-pressed="true"] .c-fundo { opacity: 1; }
 .carimbo[aria-pressed="true"] .c-ic { stroke: var(--papel); }
@@ -675,8 +678,8 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .gav-txt { padding-right: 0; }
   .clipe { top: -8px; left: 14px; transform: rotate(-2.4deg) scale(.62); transform-origin: 0 0; }
   .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
-  .carimbos { top: 26px; right: calc(var(--orelha) + 16px); }
-  .carimbo { width: 36px; height: 36px; }
+  :root { --carimbo: 78px; }
+  .carimbos { top: 22px; right: calc(var(--orelha) + 10px); }
   :root { --selo: 84px; --selo-y: 222px; }
   .rosto { padding: 112px 0 0; min-height: calc(var(--selo-y) + var(--selo) + 22px); }
   .selo { left: calc(var(--g) - 4px); }
