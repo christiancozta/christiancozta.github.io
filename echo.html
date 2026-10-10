@@ -254,7 +254,7 @@ a:hover{color:#181818}
 
 /* =========================================================
    PRIMEIRA TELA APÓS O HERO
-   tabela à esquerda + quatro famílias à direita, empilhadas.
+   linha de tinta à esquerda + cinco famílias à direita, empilhadas.
    ========================================================= */
 .echo-intro{
   position:relative;
@@ -272,15 +272,20 @@ a:hover{color:#181818}
 
 .echo-intro-grid{
   display:grid;
-  grid-template-columns:minmax(0,1.55fr) minmax(260px,.75fr);
+  grid-template-columns:minmax(0,1.9fr) minmax(260px,.75fr);
   gap:clamp(34px,5vw,80px);
   align-items:start;
   margin-top:0;
 }
 
-/* Tabela operacional */
+/* Linha de tinta: o acervo como teclado (proposta Eco).
+   Cada material é uma tecla. Cristas: documentos (manuais, mapas, matrizes).
+   Vales: bases (registros e painéis). Zero onde o piano não tem tecla preta.
+   Abaixo, a cadeia operacional acende o trecho que cada material percorre. */
 .matrix-wrap{
   min-width:0;
+  position:relative;
+  --mola:cubic-bezier(.32,.72,0,1);
 }
 .matrix-title{
   margin:0 0 14px;
@@ -289,92 +294,217 @@ a:hover{color:#181818}
   letter-spacing:.14em;
   text-transform:uppercase;
 }
-.matrix{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-  border-top:1px solid var(--paper);
-}
-.matrix th,
-.matrix td{
-  border-bottom:1px solid rgba(242,239,233,.18);
-  padding:10px 7px;
-  vertical-align:middle;
-}
-.matrix thead th{
-  font-family:var(--mono);
-  font-size:clamp(7.6px,.56vw,8.6px);
-  line-height:1.2;
-  font-weight:500;
-  letter-spacing:.025em;
-  text-transform:uppercase;
-  text-align:center;
-  white-space:nowrap;
-}
-.matrix thead th:first-child{
-  width:26%;
-  text-align:left;
-}
-.matrix tbody th{
-  font-size:11.5px;
-  line-height:1.25;
-  font-weight:500;
-  text-align:left;
-}
-.matrix td{
-  text-align:center;
-  position:relative;
-}
-
-/* Percurso dos materiais:
-   a linha amarela liga o centro do primeiro ponto ao centro do último,
-   atravessando as etapas intermediárias sem quebrar nas células. */
-.matrix td.route-start::before,
-.matrix td.route-mid::before,
-.matrix td.route-end::before{
-  content:"";
+.onda-som{
   position:absolute;
-  top:50%;
-  height:2px;
-  background:var(--amber);
-  transform:translateY(-50%);
-  z-index:0;
-  pointer-events:none;
+  right:0;
+  top:-6px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  height:24px;
+  padding:0 3px 0 11px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  box-shadow:inset 0 0 0 1px rgba(242,239,233,.26);
+  color:var(--paper);
+  font:500 8.5px/1 var(--mono);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .5s var(--mola),color .5s var(--mola),box-shadow .5s var(--mola);
 }
-.matrix td.route-start::before{
-  left:50%;
-  right:-1px;
+.onda-som i{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(242,239,233,.1);
+  transition:transform .5s var(--mola),background .5s var(--mola);
 }
-.matrix td.route-mid::before{
-  left:-1px;
-  right:-1px;
-}
-.matrix td.route-end::before{
-  left:-1px;
-  right:50%;
-}
-.matrix-dot{
+.onda-som svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.onda-som:hover{box-shadow:inset 0 0 0 1px rgba(242,239,233,.6)}
+.onda-som:hover i{transform:translate(1px,-1px) scale(1.06)}
+.onda-som:active{transform:scale(.98)}
+.onda-som[aria-pressed="true"]{background:var(--amber);color:var(--ink);box-shadow:none}
+.onda-som[aria-pressed="true"] i{background:var(--ink);color:var(--amber)}
+.onda-som:focus-visible{outline:1.5px solid var(--amber);outline-offset:2px}
+
+.onda-eco{
   position:relative;
-  z-index:2;
-  display:inline-block;
-  width:7px;
-  height:7px;
+  height:clamp(320px,40vh,380px);
+  border-top:1px solid var(--paper);
+  touch-action:pan-y;
+}
+.onda-eco.vert{height:clamp(600px,168vw,780px)}
+.onda-eco svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.onda-eco .eixo{stroke:rgba(242,239,233,.13);stroke-width:1}
+.onda-eco .traco{fill:none;stroke:var(--paper);stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+.onda-eco .no{position:absolute;z-index:2;border-radius:12px;cursor:pointer;outline:0;-webkit-tap-highlight-color:transparent}
+.onda-eco .no:focus-visible{box-shadow:inset 0 0 0 1.5px var(--amber)}
+.onda-eco .ponto{
+  position:absolute;
+  z-index:1;
+  width:8px;
+  height:8px;
+  margin:-4px 0 0 -4px;
   border-radius:50%;
   background:var(--amber);
   box-shadow:0 0 0 1px var(--paper);
+  pointer-events:none;
+  transition:transform .5s var(--mola),opacity .4s var(--mola);
 }
-.matrix-link{
+.onda-eco .ponto.on{transform:scale(1.7)}
+.onda-eco .rot{
+  position:absolute;
+  z-index:1;
+  transform:translateX(-50%);
+  text-align:center;
+  color:var(--paper);
+  pointer-events:none;
+  transition:transform .7s var(--mola),opacity .5s var(--mola);
+}
+.onda-eco .rot small{
   display:block;
-  height:2px;
-  width:calc(100% + 14px);
-  margin:0 -7px;
-  background:var(--amber);
+  font:500 8px/1.4 var(--mono);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(242,239,233,.48);
 }
-.matrix .muted{
-  color:rgba(242,239,233,.34);
+.onda-eco .rot b{
+  display:block;
+  margin-top:4px;
+  font-family:var(--section-display);
+  font-size:var(--rot-fs,13px);
+  font-weight:600;
+  line-height:1.12;
+  letter-spacing:-.015em;
+  text-wrap:balance;
+}
+.onda-eco .rot.p b{margin:0 0 4px;font-weight:500}
+.onda-eco .rot.on{transform:translate(-50%,-12px)}
+.onda-eco .rot.p.on{transform:translate(-50%,12px)}
+.onda-eco.vivo .rot:not(.on){opacity:.3}
+.onda-eco.vivo .ponto:not(.on){opacity:.45}
+.onda-eco.vert .rot{transform:translateY(-50%)}
+.onda-eco.vert .rot.on{transform:translate(6px,-50%)}
+.onda-eco.vert .rot.p.on{transform:translate(-6px,-50%)}
+
+/* cadeia operacional sob a onda: as mesmas seis etapas da antiga tabela */
+.onda-cadeia{position:relative;height:56px;margin-top:4px}
+.onda-cadeia.alterna{height:72px}
+.onda-cadeia .fio{position:absolute;top:10px;height:1px;background:rgba(242,239,233,.2)}
+.onda-cadeia .rota{
+  position:absolute;
+  top:9.5px;
+  height:2px;
+  background:var(--amber);
+  opacity:0;
+  transition:left .55s var(--mola),width .55s var(--mola),opacity .3s var(--mola);
+}
+.onda-cadeia .rota.on{opacity:1}
+.onda-cadeia .etapa{
+  position:absolute;
+  top:0;
+  z-index:1;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  padding:6px 6px 8px;
+  border:0;
+  border-radius:10px;
+  background:none;
+  color:rgba(242,239,233,.64);
+  font:500 8.5px/1.2 var(--mono);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:color .4s var(--mola),opacity .4s var(--mola);
+}
+.onda-cadeia .etapa i{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--ink);
+  box-shadow:inset 0 0 0 1px rgba(242,239,233,.55);
+  transition:background .35s var(--mola),box-shadow .35s var(--mola),transform .5s var(--mola);
+}
+.onda-cadeia .etapa:hover{color:var(--paper)}
+.onda-cadeia .etapa:hover i{transform:scale(1.25)}
+.onda-cadeia .etapa.on{color:var(--paper)}
+.onda-cadeia .etapa.on i{background:var(--amber);box-shadow:0 0 0 1px var(--paper)}
+.onda-cadeia .etapa.off{opacity:.36}
+.onda-cadeia .etapa:focus-visible{outline:1.5px solid var(--amber);outline-offset:0}
+.onda-cadeia.alterna .etapa:nth-of-type(even) span{margin-top:15px}
+
+.onda-leitura{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:6px 18px;
+  min-height:84px;
+  margin-top:10px;
+  padding-top:14px;
+  border-top:1px solid rgba(242,239,233,.18);
+}
+.onda-leitura small{
+  flex:1 0 100%;
+  font:500 9px/1.4 var(--mono);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--amber);
+}
+.onda-leitura p{
+  flex:1 1 320px;
+  margin:0;
+  max-width:72ch;
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(242,239,233,.7);
+  text-wrap:pretty;
+}
+.onda-leitura p b{
+  margin-right:.5em;
+  font-family:var(--section-display);
+  font-size:14.5px;
+  font-weight:600;
+  letter-spacing:-.015em;
+  color:var(--paper);
+}
+.onda-leitura em{
+  flex:none;
+  font:500 8.5px/1.4 var(--mono);
+  font-style:normal;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(242,239,233,.48);
+}
+.onda-ir{
+  flex:none;
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 5px 5px 16px;
+  border:0;
+  border-radius:999px;
+  background:var(--amber);
+  color:var(--ink);
+  font:600 12.5px/1 var(--body);
+  cursor:pointer;
+  transition:transform .5s var(--mola);
+}
+.onda-ir span{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--amber);font-size:12px}
+.onda-ir:active{transform:scale(.98)}
+.onda-ir:focus-visible{outline:1.5px solid var(--paper);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){
+  .onda-som,.onda-som i,.onda-eco .ponto,.onda-eco .rot,.onda-cadeia .rota,.onda-cadeia .etapa,.onda-cadeia .etapa i,.onda-ir{transition:none}
 }
 
-/* Quatro famílias - sempre uma coluna */
+/* Cinco famílias - sempre uma coluna */
 .families{
   display:grid;
   grid-template-columns:1fr;
@@ -420,24 +550,22 @@ a:hover{color:#181818}
 }
 
 
-@media(min-width:861px){
-  .matrix-wrap{
-    position:relative;
-  }
+@media(min-width:1101px){
   .matrix-title{
     position:absolute;
     left:0;
     top:-28px;
     margin:0;
   }
-  .matrix,
+  .onda-som{top:-34px}
+  .onda-eco,
   .families{
     margin-top:0;
   }
 }
 
 /* Primeiro recorte responsivo */
-@media(max-width:860px){
+@media(max-width:1100px){
   .family:first-child{padding-top:12px}
 
   .echo-intro-grid{
@@ -445,17 +573,6 @@ a:hover{color:#181818}
     gap:24px;
   }
   .families{margin-top:8px}
-  .matrix{font-size:10px}
-  .matrix thead th:first-child{width:30%}
-}
-@media(max-width:900px){
-  .matrix-wrap{
-    overflow-x:auto;
-    scrollbar-width:thin;
-  }
-  .matrix{
-    min-width:680px;
-  }
 }
 @media(max-width:760px){
   .legal-ops-pill{width:144px;min-height:34px;padding:0 18px}
@@ -477,26 +594,6 @@ a:hover{color:#181818}
   .echo-intro{
     padding-top:clamp(68px,9vh,95px);
   }
-  .matrix thead th{
-    font-size:7.4px;
-    letter-spacing:.015em;
-  }
-  .matrix tbody th{
-    font-size:10px;
-  }
-  .matrix th,.matrix td{
-    padding:8px 4px;
-  }
-}
-@media(max-width:520px){
-  .matrix-wrap{
-    overflow-x:auto;
-    padding-bottom:4px;
-  }
-  .matrix{
-    min-width:680px;
-  }
-
 }
 @media(prefers-reduced-motion:reduce){
   .legal-ops-pill__arrow{transition:none}
@@ -727,97 +824,8 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
 <section class="echo-intro" id="visao-geral">
   <div class="echo-intro-grid">
-    <div class="matrix-wrap">
+    <div class="matrix-wrap" id="eco-onda">
       <p class="matrix-title">Materiais × cadeia operacional</p>
-
-      <table class="matrix" aria-label="Materiais do ECHO contra as etapas da cadeia operacional">
-        <thead>
-          <tr>
-            <th>material</th>
-            <th>entrada</th>
-            <th>classificação</th>
-            <th>distribuição</th>
-            <th>verificação</th>
-            <th>produção</th>
-            <th>memória</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th>Notas Introdutórias</th>
-            <td><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Mapa Temático</th>
-            <td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Afinação Processual</th>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-mid"></td>
-            <td class="route-mid"></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Controle de Produtividade</th>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
-            <td><span class="matrix-dot"></span></td>
-          </tr>
-          <tr>
-            <th>Ementário</th>
-            <td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-mid"></td>
-            <td class="route-mid"></td>
-            <td class="route-mid"></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-          </tr>
-          <tr>
-            <th>Guia de Estilo</th>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Mapa de Localizadores</th>
-            <td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Matriz de Competências</th>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Matriz de Papéis</th>
-            <td class="muted"></td><td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td>
-          </tr>
-          <tr>
-            <th>Precedentes</th>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
-            <td class="route-start"><span class="matrix-dot"></span></td>
-            <td class="route-end"><span class="matrix-dot"></span></td>
-          </tr>
-          <tr>
-            <th>Roteiro de Entrevistas</th>
-            <td><span class="matrix-dot"></span></td>
-            <td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td><td class="muted"></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
     <div class="families" aria-label="Famílias do acervo">
@@ -866,6 +874,18 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
           <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
           <path d="M0 11 C22 19,42 2,64 11 S106 20,128 11 S170 2,192 11 S220 18,240 11" fill="none" stroke="#FFB627" stroke-width="2"/>
+        </svg>
+      </article>
+
+      <article class="family">
+        <div class="family-top">
+          <span class="family-num">05</span>
+          <h3>Painéis</h3>
+        </div>
+        <p>consulta, referência e recuperação</p>
+        <svg class="family-rule" viewBox="0 0 240 22" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="0" y1="11" x2="240" y2="11" stroke="#F2EFE9" stroke-opacity=".16"/>
+          <path d="M0 11 H24 V4 H56 V18 H88 V4 H120 V18 H152 V4 H184 V18 H216 V11 H240" fill="none" stroke="#FFB627" stroke-width="2"/>
         </svg>
       </article>
     </div>
@@ -953,7 +973,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   <div data-reveal style="margin-top:clamp(56px,7vw,104px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Dar forma ao que ainda não tinha procedimento instituído</p>
     <div style="margin-top:clamp(24px,2.8vw,38px)">
-      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
+      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes, registros e painéis, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
       <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
     </div>
   </div>
@@ -996,7 +1016,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:clamp(48px,6vw,88px)">
     <span style="font-size:13px;font-weight:600;margin-right:6px">Percursos</span>
-    <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="3">
+    <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="4">
       <span>
         <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}">
           <button type="button" onClick="{{ p.toggle }}" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:12.5px;font-weight:600;white-space:nowrap;border:1px solid #181818;background:#181818;color:#F2EFE9;transition:transform .45s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-1px)">{{ p.nome }}</button>
@@ -1010,7 +1030,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:18px;align-items:start">
     <div style="min-width:0;border-top:1px solid #181818">
-      <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="9">
+      <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
         <button type="button" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" style="position:relative;display:flex;width:100%;text-align:left;align-items:baseline;gap:14px;cursor:pointer;padding:16px 14px 17px;border:0;border-bottom:1px solid rgba(24,24,24,.24);border-left:3px solid transparent;background:transparent;color:#181818;font-family:'Commissioner',system-ui,sans-serif" style-hover="background:rgba(24,24,24,.05)" style-focus="outline:2px solid #FFB627;outline-offset:-2px">
           <sc-if value="{{ m.selecionado }}" hint-placeholder-val="{{ false }}">
             <span style="position:absolute;inset:0;background:#FFB627;pointer-events:none;z-index:0"></span>
@@ -1047,7 +1067,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
           <a href="{{ ficha.href }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;background:#FFB627;color:#181818;border-radius:999px;padding:8px 8px 8px 22px;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#181818">
             {{ ficha.acao }}
-            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center;font-size:13px">↓</span>
+            <span style="width:30px;height:30px;border-radius:999px;background:#181818;color:#FFB627;display:flex;align-items:center;justify-content:center;font-size:13px">{{ ficha.seta }}</span>
           </a>
         </sc-if>
         <sc-if value="{{ ficha.podeVisualizar }}" hint-placeholder-val="{{ true }}">
@@ -1057,6 +1077,12 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
               <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M2.3 12s3.4-5.2 9.7-5.2S21.7 12 21.7 12 18.3 17.2 12 17.2 2.3 12 2.3 12Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
             </span>
           </button>
+        </sc-if>
+        <sc-if value="{{ ficha.temPlay }}" hint-placeholder-val="{{ false }}">
+          <a href="{{ ficha.play }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:8px 8px 8px 22px;box-shadow:inset 0 0 0 1px rgba(242,239,233,.42);color:#F2EFE9;font-size:13.5px;font-weight:600;transition:transform .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-2px);color:#F2EFE9;box-shadow:inset 0 0 0 1px #F2EFE9">
+            No PLAY
+            <span style="width:30px;height:30px;border-radius:999px;background:#F2EFE9;color:#181818;display:flex;align-items:center;justify-content:center;font-size:13px">↗</span>
+          </a>
         </sc-if>
       </div>
     </aside>
@@ -1097,12 +1123,12 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </div>
 
   <div data-reveal class="q4 q4-strip" style="margin-top:clamp(40px,5vw,72px);border-top:1px solid #F2EFE9;border-bottom:1px solid #F2EFE9;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/ementario_publico.xlsx" data-denominator="2.758 ementas catalogadas" data-period="Acervo integral | código, hierarquia e fundamento">
+    <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/ementario_publico.xlsx" data-denominator="2.758 assuntos catalogados" data-period="Acervo integral | código, hierarquia e fundamento">
       <p style="margin:0;font-size:12.5px;font-weight:600">Ementário</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">2.758</p>
       <p style="margin:12px 0 0;font-size:12px;line-height:1.45;color:rgba(242,239,233,.62)">Base: acervo integral</p>
       <div class="echo-metric__caption">
-        <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Ementas catalogadas com código, hierarquia e fundamento, formando uma base recuperável de padrões textuais e jurídicos.</p>
+        <p style="margin:0;font-size:13px;line-height:1.5;text-wrap:pretty">Assuntos catalogados com código, hierarquia e texto-base, formando uma base recuperável de padrões textuais e jurídicos.</p>
         <p class="echo-metric__reading"><strong>Leitura</strong> O número mede memória organizada. A relevância não está apenas na quantidade, mas na transformação de recorrências em repertório consultável.</p>
       </div>
     </div>
@@ -1157,7 +1183,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     <div style="margin-top:32px;border-top:1px solid #2e2e2e">
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Entregáveis</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes e registros.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, registros e painéis.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Aplicação operacional</p>
@@ -1173,7 +1199,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Memória</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">2.758 ementas catalogadas.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">2.758 assuntos catalogados.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
         <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Vocabulário controlado</p>
@@ -1214,7 +1240,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
         <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Materialização</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas e registros.</p>
+        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas, registros e painéis.</p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
         <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Aplicação</p>
@@ -1265,33 +1291,341 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </div>
 </div>
 
+<script>
+/* Linha de tinta do acervo, vinda da proposta Eco do PLAY.
+   Cada material é uma tecla, de Si3 a Dó5: cristas nas brancas (documentos: manuais, mapas, matrizes),
+   vales nas pretas (bases: registros e painéis), zero onde o piano não tem preta.
+   Tocar um material faz a corda vibrar e acende, na cadeia abaixo, o trecho que ele percorre;
+   tocar uma etapa ergue juntos os materiais que a atravessam. O clique leva à ficha no acervo. */
+window.EcoOnda = (function () {
+  var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
+  var FAM = { 'Manuais': ['01', 'manual'], 'Mapas': ['02', 'mapa'], 'Matrizes': ['03', 'matriz'], 'Registros': ['04', 'registro'], 'Painéis': ['05', 'painel'] };
+  /* 17 pontos a meio passo de tecla. Pares: brancas. Ímpares: fronteira, com material se há preta, 0 se não há (Si–Dó e Mi–Fá).
+     Os documentos seguem a cadeia da entrada à produção; cada base fica ao lado do documento que sustenta. */
+  var TECLAS = ['m2', 0, 'm1', 'm14', 'm3', 'm10', 'm4', 0, 'm5', 'm9', 'm6', 'm8', 'm7', 'm13', 'm11', 0, 'm12'];
+  var BRANCAS = ['B3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
+  var NS = 'http://www.w3.org/2000/svg';
+  var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
+
+  function nota(k) { var n = BRANCAS[k >> 1]; return k % 2 ? n[0] + '#' + n.slice(1) : n; }
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function trecho(m) { var e = m.etapas; return e[0] === e[1] ? ETAPAS[e[0]] : ETAPAS[e[0]] + ' → ' + ETAPAS[e[1]]; }
+  function cobre(m, i) { return m.etapas[0] <= i && i <= m.etapas[1]; }
+
+  /* som: corda de triângulo com dois harmônicos, como no PLAY */
+  var ctx = null, somOn = false;
+  function freq(n) { var i = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[n[0]] + (n[1] === '#' ? 1 : 0); return 440 * Math.pow(2, ((+n.slice(-1) - 4) * 12 + i - 9) / 12); }
+  function som(n, vol) {
+    if (!somOn || !ctx || !n) return;
+    var t = ctx.currentTime, g = ctx.createGain(), f = freq(n);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.18, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
+    [[1, 'triangle', 1], [2, 'sine', .25], [3, 'sine', .08]].forEach(function (h) {
+      var o = ctx.createOscillator(), og = ctx.createGain(); o.type = h[1]; o.frequency.value = f * h[0]; og.gain.value = h[2];
+      o.connect(og); og.connect(g); o.start(t); o.stop(t + 2.5);
+    });
+    g.connect(ctx.destination);
+  }
+
+  function monta(wrap, materiais, escolhe) {
+    if (!wrap || wrap.dataset.onda) return;
+    wrap.dataset.onda = '1';
+    var M = {}; materiais.forEach(function (m) { M[m.id] = m; });
+
+    /* estrutura */
+    var raiz = el('div', 'onda-eco');
+    raiz.setAttribute('role', 'group');
+    raiz.setAttribute('aria-label', 'Materiais do acervo como linha de tinta. Cristas: documentos. Vales: bases.');
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('aria-hidden', 'true');
+    var eixo = document.createElementNS(NS, 'line'); eixo.setAttribute('class', 'eixo');
+    var traco = document.createElementNS(NS, 'path'); traco.setAttribute('class', 'traco');
+    svg.appendChild(eixo); svg.appendChild(traco); raiz.appendChild(svg);
+
+    var o = { pts: [], amp: [], vel: [], alvoA: [], raf: 0, fixo: null, ptr: null, ex: [] };
+    TECLAS.forEach(function (id, k) {
+      var m = id ? M[id] : null;
+      o.pts.push({ k: k, pol: k % 2 ? (m ? -1 : 0) : 1, m: m, nota: m ? nota(k) : null });
+      o.amp.push(0); o.vel.push(0); o.alvoA.push(0);
+    });
+    var total = o.pts.filter(function (p) { return p.m; }).length;
+
+    var cad = el('div', 'onda-cadeia');
+    var fio = el('span', 'fio'), rota = el('span', 'rota');
+    cad.appendChild(fio); cad.appendChild(rota);
+    var paradas = ETAPAS.map(function (nome, i) {
+      var n = o.pts.filter(function (p) { return p.m && cobre(p.m, i); }).length;
+      var b = el('button', 'etapa', '<i></i><span>' + nome + '</span>');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Etapa ' + nome + ': ' + n + ' materiais');
+      cad.appendChild(b);
+      return b;
+    });
+    var leit = el('div', 'onda-leitura');
+    var somB = el('button', 'onda-som', 'som<i>' + ICONE + '</i>');
+    somB.type = 'button';
+    somB.setAttribute('aria-pressed', 'false');
+    somB.setAttribute('aria-label', 'Som da linha de tinta');
+
+    wrap.appendChild(somB); wrap.appendChild(raiz); wrap.appendChild(cad); wrap.appendChild(leit);
+
+    o.pts.forEach(function (pt, ix) {
+      if (!pt.m) return;
+      var m = pt.m, f = FAM[m.familia] || ['', String(m.familia).toLowerCase()];
+      pt.ponto = el('span', 'ponto'); raiz.appendChild(pt.ponto);
+      pt.rot = el('div', 'rot' + (pt.pol < 0 ? ' p' : ''), pt.pol < 0
+        ? '<b>' + esc(m.titulo) + '</b><small>' + f[1] + '</small>'
+        : '<small>' + f[1] + '</small><b>' + esc(m.titulo) + '</b>');
+      pt.b = pt.rot.querySelector('b');
+      raiz.appendChild(pt.rot);
+      var a = el('a', 'no'); a.href = '#acervo';
+      a.setAttribute('aria-label', m.titulo + ', ' + f[1] + '. ' + (m.etapas[0] === m.etapas[1] ? 'Etapa: ' : 'Etapas: ') + trecho(m).replace(' → ', ' a ') + '. Abrir no acervo.');
+      raiz.appendChild(a); pt.a = a;
+      a.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') toque(ix, 'mouse'); });
+      a.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
+      a.addEventListener('focus', function () { if (!o.ptr) toque(ix, 'teclado'); });
+      a.addEventListener('blur', function () { solta(); });
+      a.addEventListener('pointerdown', function (e) { o.ptr = e.pointerType; vibra(ix, 1); som(pt.nota); });
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var ptr = o.ptr; o.ptr = null;
+        /* no toque, o primeiro toque fixa a leitura; o segundo, na mesma tecla, abre a ficha */
+        if (ptr && ptr !== 'mouse' && !(o.fixo && o.fixo[0] === 'm' && o.fixo[1] === ix)) { o.fixo = ['m', ix]; toque(ix, 'toque'); return; }
+        escolhe(m.id);
+      });
+    });
+
+    paradas.forEach(function (b, i) {
+      b.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') acorde(i); });
+      b.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
+      b.addEventListener('focus', function () { if (!o.ptr) acorde(i); });
+      b.addEventListener('blur', function () { solta(); });
+      b.addEventListener('pointerdown', function (e) { o.ptr = e.pointerType; });
+      b.addEventListener('click', function () {
+        var ptr = o.ptr; o.ptr = null;
+        if (ptr && ptr !== 'mouse') o.fixo = ['e', i];
+        acorde(i, true);
+      });
+    });
+
+    leit.addEventListener('click', function (e) { var b = e.target.closest('.onda-ir'); if (b) escolhe(b.dataset.id); });
+
+    somB.addEventListener('click', function () {
+      somOn = !somOn; somB.setAttribute('aria-pressed', String(somOn));
+      if (somOn && !ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ctx = null; } }
+      if (ctx && ctx.state === 'suspended') ctx.resume();
+      if (somOn) { som('C4', .14); setTimeout(function () { som('G4', .14); }, 120); }
+    });
+
+    /* geometria */
+    function geo(forcaVert) {
+      var w = raiz.clientWidth;
+      var vert = forcaVert || w < 760;
+      raiz.classList.toggle('vert', vert);
+      cad.classList.toggle('alterna', w < 560);
+      var h = raiz.clientHeight;
+      o.vert = vert; o.w = w; o.h = h;
+      var L = vert ? h : w, marg = vert ? 24 : Math.max(28, w * 0.04);
+      o.L = L; o.a0 = marg; o.passo = (L - 2 * marg) / 18; o.mid = vert ? w * 0.5 : h * 0.5;
+      o.base = vert ? Math.min(24, w * 0.06) : Math.min(22, h * 0.06);
+      o.A0 = vert ? 30 : 50;
+    }
+    function transborda() { return o.pts.some(function (p) { return p.b && p.b.scrollWidth > p.b.clientWidth + 1; }); }
+    function layout() {
+      geo(false);
+      if (!o.vert) {
+        o.fs = Math.max(10.5, Math.min(13.5, Math.round(o.passo * 0.31 * 4) / 4));
+        for (var t = 0; t < 8; t++) {
+          raiz.style.setProperty('--rot-fs', o.fs + 'px'); desenha();
+          if (!transborda()) break;
+          if (o.fs <= 10.5) { geo(true); break; }
+          o.fs = Math.max(10.5, o.fs - 0.5);
+        }
+      }
+      if (o.vert) raiz.style.setProperty('--rot-fs', '13px');
+      desenha(); cadeia();
+      if (o.estado) estado(o.estado[0], o.estado[1], o.estado[2]);
+    }
+    function desenha() {
+      var pts = [[0, 0], [o.a0, 0]].concat(o.pts.map(function (pt, ix) { return [o.a0 + (ix + 1) * o.passo, pt.pol * o.base + o.amp[ix]]; })).concat([[o.L - o.a0, 0], [o.L, 0]]);
+      var d = '', N = 8;
+      for (var i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1];
+        for (var s = (i ? 1 : 0); s <= N; s++) {
+          var t = s / N, u = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * (1 - Math.cos(Math.PI * t)) / 2;
+          var X = o.vert ? o.mid + y : u, Y = o.vert ? u : o.mid - y;
+          d += (d ? 'L' : 'M') + X.toFixed(1) + ' ' + Y.toFixed(1);
+        }
+      }
+      traco.setAttribute('d', d);
+      if (o.vert) { eixo.setAttribute('x1', o.mid); eixo.setAttribute('x2', o.mid); eixo.setAttribute('y1', 0); eixo.setAttribute('y2', o.h); }
+      else { eixo.setAttribute('x1', 0); eixo.setAttribute('x2', o.w); eixo.setAttribute('y1', o.mid); eixo.setAttribute('y2', o.mid); }
+      o.pts.forEach(function (pt, ix) {
+        if (!pt.a) return;
+        var u = o.a0 + (ix + 1) * o.passo, y = pt.pol * o.base + o.amp[ix];
+        var X = o.vert ? o.mid + y : u, Y = o.vert ? u : o.mid - y;
+        pt.ponto.style.left = X + 'px'; pt.ponto.style.top = Y + 'px';
+        var as = pt.a.style, rs = pt.rot.style;
+        if (o.vert) {
+          var zh = pt.pol < 0 ? o.passo * 1.3 : o.passo * 1.9;
+          as.top = (u - zh / 2) + 'px'; as.height = zh + 'px'; as.left = (pt.pol < 0 ? 0 : o.mid) + 'px'; as.width = (o.w * 0.5) + 'px';
+          /* o rótulo começa além da maior excursão da corda, para o ponto nunca invadir o texto */
+          var borda = o.base + o.A0 + 14;
+          rs.top = u + 'px'; rs.textAlign = pt.pol < 0 ? 'right' : 'left';
+          if (pt.pol < 0) { rs.left = '0px'; rs.width = Math.max(0, o.mid - borda) + 'px'; }
+          else { rs.left = (o.mid + borda) + 'px'; rs.width = Math.max(0, o.w - o.mid - borda) + 'px'; }
+        } else {
+          var zw = o.passo * 1.9;
+          as.left = (u - zw / 2) + 'px'; as.width = zw + 'px'; as.top = (pt.pol < 0 ? o.mid : o.mid - o.base - 124) + 'px'; as.height = (o.base + 124) + 'px';
+          rs.left = u + 'px'; rs.width = (o.passo * 2 - 6) + 'px'; rs.textAlign = '';
+          rs.top = (pt.pol < 0 ? o.mid + o.base + 64 : o.mid - o.base - 116) + 'px';
+        }
+      });
+    }
+    function cadeia() {
+      var w = cad.clientWidth, x0, x1;
+      if (o.vert) { x0 = w * 0.09; x1 = w * 0.91; } else { x0 = o.a0 + o.passo; x1 = o.a0 + 17 * o.passo; }
+      o.ex = ETAPAS.map(function (_, i) { return x0 + (x1 - x0) * i / 5; });
+      paradas.forEach(function (b, i) { b.style.left = o.ex[i] + 'px'; });
+      fio.style.left = x0 + 'px'; fio.style.width = (x1 - x0) + 'px';
+    }
+
+    /* movimento: mola amortecida por ponto */
+    function anima() {
+      if (o.raf) return;
+      var ult = performance.now();
+      var passo = function (now) {
+        var dt = Math.min(0.033, (now - ult) / 1000); ult = now; var vivo = false;
+        for (var i = 0; i < o.amp.length; i++) {
+          var f = (o.alvoA[i] - o.amp[i]) * 190 - o.vel[i] * 9;
+          o.vel[i] += f * dt; o.amp[i] += o.vel[i] * dt;
+          if (Math.abs(o.vel[i]) > 0.05 || Math.abs(o.alvoA[i] - o.amp[i]) > 0.05) vivo = true;
+        }
+        desenha();
+        o.raf = vivo ? requestAnimationFrame(passo) : 0;
+      };
+      o.raf = requestAnimationFrame(passo);
+    }
+    function aplica() { if (reduz) { o.amp = o.alvoA.slice(); o.vel = o.vel.map(function () { return 0; }); desenha(); } else anima(); }
+    function vibra(ix, forca) {
+      if (reduz) return;
+      var pol = o.pts[ix].pol || 1;
+      o.vel = o.vel.map(function (v, j) { var d = Math.abs(j - ix); return v + pol * forca * 900 * Math.exp(-d * d / 6) * (d % 2 ? -0.6 : 1); });
+      anima();
+    }
+
+    /* estados: material, etapa ou repouso */
+    function toque(ix, via) {
+      var pt = o.pts[ix];
+      o.alvoA = o.alvoA.map(function (_, j) { var d = Math.abs(j - ix); return d === 0 ? pt.pol * o.A0 : d === 1 ? pt.pol * o.A0 * -0.18 : 0; });
+      estado('m', ix, via); aplica();
+    }
+    function acorde(i, toca) {
+      o.alvoA = o.pts.map(function (p) { return p.m && cobre(p.m, i) ? p.pol * o.A0 * 0.5 : 0; });
+      estado('e', i); aplica();
+      if (toca) {
+        o.pts.forEach(function (p, j) {
+          if (!p.m || !cobre(p.m, i)) return;
+          setTimeout(function () { vibra(j, 0.35); som(p.nota, 0.1); }, reduz ? 0 : j * 45);
+        });
+      }
+    }
+    function solta() {
+      if (o.fixo) { if (o.fixo[0] === 'm') toque(o.fixo[1], 'toque'); else acorde(o.fixo[1]); return; }
+      o.alvoA = o.alvoA.map(function () { return 0; });
+      estado(null); aplica();
+    }
+    function estado(tipo, alvo, via) {
+      o.estado = tipo ? [tipo, alvo, via] : null;
+      raiz.classList.toggle('vivo', !!tipo);
+      var mat = tipo === 'm' ? o.pts[alvo].m : null;
+      o.pts.forEach(function (p, j) {
+        if (!p.m) return;
+        var on = tipo === 'm' ? j === alvo : tipo === 'e' ? cobre(p.m, alvo) : false;
+        p.rot.classList.toggle('on', on); p.ponto.classList.toggle('on', on);
+      });
+      paradas.forEach(function (b, i) {
+        b.classList.toggle('on', mat ? cobre(mat, i) : tipo === 'e' && i === alvo);
+        b.classList.toggle('off', mat ? !cobre(mat, i) : tipo === 'e' && i !== alvo);
+      });
+      if (mat && o.ex.length) {
+        rota.style.left = o.ex[mat.etapas[0]] + 'px';
+        rota.style.width = (o.ex[mat.etapas[1]] - o.ex[mat.etapas[0]]) + 'px';
+        rota.classList.add('on');
+      } else rota.classList.remove('on');
+      leitura(tipo, alvo, via);
+    }
+    function leitura(tipo, alvo, via) {
+      var h;
+      if (tipo === 'm') {
+        var m = o.pts[alvo].m, f = FAM[m.familia] || ['', ''];
+        h = '<small>' + f[0] + ' · ' + esc(m.familia) + '</small><p><b>' + esc(m.titulo) + '</b>' + trecho(m) + '</p>' +
+          (via === 'toque' ? '<button type="button" class="onda-ir" data-id="' + m.id + '">Ver no acervo<span aria-hidden="true">↓</span></button>'
+            : '<em>' + (via === 'teclado' ? 'Enter' : 'clique') + ' abre a ficha no acervo</em>');
+      } else if (tipo === 'e') {
+        var lista = o.pts.filter(function (p) { return p.m && cobre(p.m, alvo); }).map(function (p) { return esc(p.m.titulo); });
+        h = '<small>Etapa ' + ('0' + (alvo + 1)) + ' · ' + ETAPAS[alvo] + '</small><p><b>' + lista.length + ' materiais</b>' + lista.join(', ') + '.</p>';
+      } else {
+        h = '<small>Leitura</small><p><b>' + total + ' materiais, uma linha.</b>Cristas são documentos: manuais, mapas e matrizes. Vales são bases: registros e painéis. Toque um material para ver o trecho da cadeia que ele percorre, ou uma etapa para reunir os materiais que a atravessam.</p>';
+      }
+      /* só redesenha o que mudou: o botão da leitura precisa sobreviver ao blur da tecla */
+      if (o.leitH !== h) { o.leitH = h; leit.innerHTML = h; }
+    }
+
+    /* início */
+    var pendente = 0;
+    function agenda() { if (pendente) return; pendente = requestAnimationFrame(function () { pendente = 0; layout(); }); }
+    if (window.ResizeObserver) new ResizeObserver(agenda).observe(wrap); else window.addEventListener('resize', agenda);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(agenda);
+    estado(null);
+    layout();
+    if (!reduz && window.IntersectionObserver) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es.some(function (e) { return e.isIntersecting; })) return;
+        io.disconnect();
+        o.pts.forEach(function (pt, ix) { if (pt.m) setTimeout(function () { vibra(ix, 0.42); }, 260 + ix * 70); });
+      }, { threshold: 0.45 });
+      io.observe(raiz);
+    }
+  }
+
+  return { monta: monta };
+})();
+</script>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
 
 
 const MATERIAIS = [
-  {id:'m1',titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/echo/documentos/notas_introdutorias.pdf'},
-  {id:'m2',titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
-  {id:'m5',titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf',preview:'assets/echo/documentos/visualizar/triagem.pdf'},
-  {id:'m4',titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/echo/documentos/mapa_tematico.pdf',preview:'assets/echo/documentos/visualizar/taxonomia.pdf'},
-  {id:'m3',titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/echo/documentos/afinacao_processual.pdf',preview:'assets/echo/documentos/triagem.pdf'},
-  {id:'m6',titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
-  {id:'m7',titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
-  {id:'m8',titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m9',titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
-  {id:'m10',titulo:'Ementário',familia:'Painéis',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf'},
-  {id:'m11',titulo:'Guia de Estilo',familia:'Manuais',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/echo/documentos/guia_estilo.pdf'},
+  {id:'m1',etapas:[0,0],titulo:'Notas Introdutórias',familia:'Manuais',formato:'PDF',cadeia:'entrada / orientação / cultura operacional',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',uso:'Documento de entrada',equivalencias:'Onboarding / Enablement / Operating Principles',href:'assets/play/manuais/1-notas-introdutorias.pdf',edicao:'Volume 01 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-01'},
+  {id:'m2',etapas:[0,0],titulo:'Roteiro de Entrevistas',familia:'Manuais',formato:'PDF',cadeia:'descoberta operacional / diagnóstico',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',uso:'Entrevistas e diagnóstico',equivalencias:'Operational Discovery / Process Mapping / Stakeholder Interview',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
+  {id:'m5',etapas:[1,2],titulo:'Mapa de Localizadores',familia:'Mapas',formato:'PDF',cadeia:'classificação / roteamento / filas',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',uso:'Roteamento do acervo',equivalencias:'Matter Routing / Queue Management / Operational Taxonomy',href:'assets/echo/documentos/localizadores.pdf',preview:'assets/echo/documentos/visualizar/triagem.pdf'},
+  {id:'m4',etapas:[1,2],titulo:'Mapa Temático',familia:'Mapas',formato:'PDF',cadeia:'classificação / distribuição',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',uso:'Classificação temática',equivalencias:'Taxonomy / Matter Management / Knowledge Classification',href:'assets/play/manuais/2-mapa-tematico.pdf',preview:'assets/echo/documentos/visualizar/taxonomia.pdf',edicao:'Volume 02 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-02'},
+  {id:'m3',etapas:[0,3],titulo:'Afinação Processual',familia:'Manuais',formato:'PDF',cadeia:'entrada / verificação / quality gate',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',uso:'Triagem e verificação',equivalencias:'Quality Gates / Checklist / SOP / Intake Review',href:'assets/play/manuais/3-afinacao-processual.pdf',preview:'assets/echo/documentos/triagem.pdf',edicao:'Volume 03 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#vol-03'},
+  {id:'m6',etapas:[2,3],titulo:'Matriz de Papéis',familia:'Matrizes',formato:'PDF',cadeia:'governança / distribuição / supervisão',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',uso:'Papéis e governança',equivalencias:'Operating Model / Role Design / People Operations',href:'assets/echo/documentos/matriz_papeis.pdf'},
+  {id:'m7',etapas:[3,4],titulo:'Matriz de Competências',familia:'Matrizes',formato:'PDF',cadeia:'desenvolvimento / autonomia / qualidade',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',uso:'Progressão da equipe',equivalencias:'Competency Framework / Talent Development / Performance Development',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
+  {id:'m8',etapas:[4,5],titulo:'Precedentes',familia:'Registros',formato:'XLSX',cadeia:'produção / pesquisa / memória',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',uso:'Pesquisa jurídica',equivalencias:'Precedent Database / Case Law Retrieval / Knowledge Base',href:'assets/echo/documentos/precedentes.xlsx'},
+  {id:'m9',etapas:[5,5],titulo:'Controle de Produtividade',familia:'Registros',formato:'XLSX',cadeia:'acompanhamento / capacidade / memória quantitativa',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',uso:'Monitoramento e controle de qualidade',equivalencias:'KPI Management / Legal Data Analytics / Operational Monitoring',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
+  {id:'m10',etapas:[1,5],titulo:'Ementário',familia:'Painéis',formato:'XLSX',cadeia:'classificação / referência / recuperação',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',uso:'Triagem temática, consulta e redação de ementas',equivalencias:'Taxonomy / Knowledge Base / Precedent Index / Headnote Library',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',edicao:'Planilha-fonte, com 2.758 assuntos na aba principal. O PLAY traz a edição navegável da mesma base.',play:'play.html#ementario'},
+  {id:'m11',etapas:[3,4],titulo:'Guia de Estilo',familia:'Manuais',formato:'PDF',cadeia:'produção / revisão / quality gate',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',uso:'Redação, revisão e validação final',equivalencias:'Style Guide / Drafting Manual / Writing Standard / Editorial Governance',href:'assets/play/manuais/4-guia-estilo.pdf',edicao:'Volume 04 da coleção, edição de outubro de 2026, a mesma do PLAY.',play:'play.html#guia'},
+  {id:'m12',etapas:[4,4],titulo:'Templates',familia:'Manuais',formato:'PDF',cadeia:'produção / estrutura / redação',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',uso:'Elaboração da minuta',equivalencias:'Document Templates / Clause Library / Document Assembly',href:'assets/play/anexos/templates.pdf',edicao:'Seis modelos, com os cinco IDs preservados e ED-NAO-CONHECIDO incluído. Edição de outubro de 2026, a mesma do PLAY.',play:'play.html#templates'},
+  {id:'m13',etapas:[4,5],titulo:'Fundamentos',familia:'Painéis',formato:'Web',cadeia:'produção / pesquisa / memória',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',uso:'Fundamentação do voto',equivalencias:'Argument Bank / Brief Bank / Legal Knowledge Base',href:'play.html#fundamentos',edicao:'107 temas, com IDs editoriais próprios. Consulta interativa no PLAY.'},
+  {id:'m14',etapas:[3,3],titulo:'Calendário Jurídico',familia:'Painéis',formato:'Web',cadeia:'verificação / prazo / tempestividade',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',uso:'Admissibilidade e tempestividade',equivalencias:'Docketing / Deadline Calculator / Court Calendar',href:'play.html#calendario',edicao:'2026 na tabela ativa e 2025 em histórico separado. Consulta interativa no PLAY.'},
 ];
 
 const PERCURSOS = [
   {id:'p1',nome:'Entrada e triagem',antes:'Demandas podiam avançar à análise técnica antes de uma verificação mínima comum de requisitos, levando questões formais simples para etapas de maior custo técnico.',materiais:['m3','m2'],rotulo:'Afinação Processual estrutura a verificação. Roteiros e checklists tornam recorrências verificáveis antes da produção.',efeito:'A entrada passa a ser mais legível e comparável, com menor incidência de retrabalho técnico em questões previamente verificáveis.',prova:'m3'},
   {id:'p2',nome:'Distribuição temática',antes:'A distribuição dependia de leitura casuística da matéria e de conhecimento individual sobre afinidades, recorrências e concentração do acervo.',materiais:['m4','m5','m9'],rotulo:'Mapa Temático organiza assuntos por núcleos e afinidades. Mapa de Localizadores converte granularidade em categorias úteis à operação. Controle de Produtividade oferece leitura sobre carga e comportamento do fluxo.',efeito:'A carga torna-se legível por mais de uma dimensão, permitindo distribuição comparável e maior visibilidade sobre repetição e risco de gargalo.',prova:'m4'},
-  {id:'p3',nome:'Novos integrantes',antes:'O ingresso de novos integrantes não dispunha de um percurso documentado que articulasse identidade, papéis, expectativas e progressão de autonomia.',materiais:['m1','m6','m7'],rotulo:'Notas Introdutórias estabelecem a referência inicial. Matriz de Papéis delimita funções e responsabilidades. Matriz de Competências organiza desenvolvimento e progressão.',efeito:'A entrada deixa de depender apenas da convivência e passa a contar com critérios comuns para orientação, supervisão e construção de autonomia.',prova:'m6'}
+  {id:'p3',nome:'Novos integrantes',antes:'O ingresso de novos integrantes não dispunha de um percurso documentado que articulasse identidade, papéis, expectativas e progressão de autonomia.',materiais:['m1','m6','m7'],rotulo:'Notas Introdutórias estabelecem a referência inicial. Matriz de Papéis delimita funções e responsabilidades. Matriz de Competências organiza desenvolvimento e progressão.',efeito:'A entrada deixa de depender apenas da convivência e passa a contar com critérios comuns para orientação, supervisão e construção de autonomia.',prova:'m6'},
+  {id:'p4',nome:'Elaboração do voto',antes:'A redação do voto dependia de modelos pessoais, de pesquisa refeita a cada caso e de prazo contado de memória, com variação de estrutura e de linguagem entre minutas.',materiais:['m11','m12','m13','m10','m14'],rotulo:'Guia de Estilo fixa forma e linguagem. Templates dão a estrutura de RI e ED. Fundamentos e Ementário oferecem repertório e assunto já catalogados. Calendário Jurídico confere o prazo em dias úteis.',efeito:'O voto parte de estrutura, modelo e repertório comuns, reunidos no PLAY, e chega à revisão com menos variação entre minutas.',prova:'m11',link:{href:'play.html',acao:'Abrir o PLAY'}}
 ];
 
 class Component extends DCLogic {
   state = { sel: 'm1', perc: null, nota: false };
 
   componentDidMount() {
+    this._prevState = { ...this.state };
+    this._montaOnda();
+    if (!window.EcoOnda) window.addEventListener('load', () => this._montaOnda(), { once: true });
     this._fired = false;
     if (typeof IntersectionObserver === 'function') {
       this._io = new IntersectionObserver((entries) => {
@@ -1316,8 +1650,12 @@ class Component extends DCLogic {
     document.addEventListener('keydown', this._legalOpsKeydown);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
+    // o runtime só entrega prevProps; o estado anterior é guardado aqui.
+    const prevState = this._prevState || this.state;
+    this._prevState = { ...this.state };
     this._sweep();
+    this._montaOnda();
 
     if (prevState.sel !== this.state.sel || prevState.perc !== this.state.perc) {
       requestAnimationFrame(() => {
@@ -1358,6 +1696,30 @@ class Component extends DCLogic {
     clearTimeout(this._t1);
     clearTimeout(this._t2);
     if (this._legalOpsKeydown) document.removeEventListener('keydown', this._legalOpsKeydown);
+  }
+
+  _montaOnda() {
+    const alvo = document.getElementById('eco-onda');
+    if (alvo && window.EcoOnda) window.EcoOnda.monta(alvo, MATERIAIS, (id) => this._abreNoAcervo(id));
+  }
+
+  _abreNoAcervo(id) {
+    this.setState({ sel: id, perc: null });
+    // duas voltas de quadro: a ficha já traz o material escolhido quando a rolagem é medida
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const ficha = document.getElementById('acervo-ficha');
+      const grade = ficha && ficha.parentElement;
+      if (!grade) return;
+      const lista = grade.firstElementChild;
+      const topo = (el) => el.getBoundingClientRect().top + window.scrollY;
+      const empilhado = !!lista && ficha.getBoundingClientRect().top >= lista.getBoundingClientRect().bottom - 1;
+      // lado a lado, a ficha é fixa: basta que o item escolhido também apareça na lista
+      const item = lista && lista.querySelector('button[aria-pressed="true"]');
+      const y = empilhado ? topo(ficha) - 24
+        : Math.max(topo(grade) - 24, item ? topo(item) + item.offsetHeight - window.innerHeight + 40 : 0);
+      const reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: y, behavior: reduz ? 'auto' : 'smooth' });
+    }));
   }
 
   _show(el) {
@@ -1419,9 +1781,10 @@ class Component extends DCLogic {
             { k: 'Antes', v: ativo.antes },
             { k: 'Materiais acionados', v: ativo.rotulo }
           ],
-          temArquivo: !!prova,
-          href: prova ? prova.href : '#acervo',
-          acao: prova ? 'Abrir ' + prova.titulo : ''
+          temArquivo: !!(ativo.link || prova),
+          href: ativo.link ? ativo.link.href : prova ? prova.href : '#acervo',
+          acao: ativo.link ? ativo.link.acao : prova ? 'Abrir ' + prova.titulo : '',
+          seta: ativo.link ? '↗' : '↓'
         }
       : {
           kicker: m.familia,
@@ -1431,13 +1794,17 @@ class Component extends DCLogic {
             { k: 'Papel na cadeia', v: m.cadeia },
             { k: 'Ruído', v: m.ruido },
             { k: 'Uso', v: m.uso },
-            { k: 'Formato', v: m.formato },
+            { k: 'Formato', v: m.formato === 'Web' ? 'Ferramenta interativa' : m.formato },
+            m.edicao ? { k: 'Edição', v: m.edicao } : null,
             { k: 'Equivalências', v: m.equivalencias }
-          ],
+          ].filter(Boolean),
           temArquivo: true,
           href: m.href,
-          acao: m.formato === 'XLSX' ? 'Abrir planilha' : 'Baixar PDF'
+          acao: m.formato === 'XLSX' ? 'Abrir planilha' : m.formato === 'Web' ? 'Abrir no PLAY' : 'Baixar PDF',
+          seta: m.formato === 'Web' ? '↗' : '↓'
         };
+    ficha.temPlay = !ativo && !!m.play;
+    ficha.play = ficha.temPlay ? m.play : '';
 
     const previewMaterial = ativo ? prova : m;
     const previewHref = !previewMaterial ? '' : previewMaterial.preview || (previewMaterial.formato === 'PDF' ? previewMaterial.href : '');
