@@ -1,20 +1,834 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <title>ARCO</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Inteligência Judiciária Orquestrada</title>
+<meta name="description" content="Framework jurídico de eficiência operacional. Autoria de Christian da Costa." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Spectral:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+<script>
+  /* Add motion only when the user hasn't asked for reduced motion.
+     Content is fully visible by default; animation is purely additive. */
+  (function () {
+    try {
+      if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('anim');
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    /* Left column — cold near-black */
+    --nav-bg: #181A18;
+    --nav-ink: #FFFFFF;
+    --nav-muted: #9AA1AB;
+    --nav-hair: #23262B;
+    --nav-hair-strong: #3C4149;
 
-  <link rel="canonical" href="https://christiancozta.github.io/arco.html">
-  <meta http-equiv="refresh" content="0; url=https://christiancozta.github.io/arco.html">
+    /* Right column — cold white (no warm/yellow cast) */
+    --pg-bg: #FAFAFA;
+    --pg-ink: #0E1013;
+    --pg-muted: #58606B;
+    --pg-hair: #D6DBE2;
+    --pg-hair-strong: #0E1013;
 
-  <script>
-    window.location.replace("https://christiancozta.github.io/arco.html");
-  </script>
+    /* Concept reader — cinematic dark */
+    --rd-bg: #0A0B0D;
+    --rd-ink: #E8EBEF;
+    --rd-muted: #8D949E;
+    --rd-hair: #23262B;
+
+    --accent: #d66b24;
+    --accent-ink: #d6c124;
+
+    --nav-w: 21rem;
+    --content: 58rem;
+    --gutter: clamp(1.5rem, 4vw, 4.5rem);
+
+    --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* z-index scale */
+    --z-frame: 5;
+    --z-nav: 30;
+    --z-scrim: 25;
+    --z-menu: 40;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100dvh;
+    background: var(--nav-bg);
+    color: var(--pg-ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* ───────────────────────── LEFT COLUMN (NAV) ───────────────────────── */
+  .nav {
+    position: fixed; inset: 0 auto 0 0;
+    width: var(--nav-w);
+    z-index: var(--z-nav);
+    display: flex; flex-direction: column;
+    background: var(--nav-bg);
+    color: var(--nav-ink);
+    border-right: 1px solid var(--nav-hair);
+    transform: translateX(0);
+    transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+  }
+  body.collapsed .nav { transform: translateX(-100%); }
+
+  /* reopen handle — fixed edge tab, click only (hover-peek removed: it raced
+     against the slide animation and kept re-closing under the cursor) */
+  .reopen {
+    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    z-index: var(--z-menu);
+    display: none; align-items: center; justify-content: center;
+    width: 1.6rem; height: 3.9rem; padding: 0;
+    background: var(--nav-bg); color: var(--nav-muted);
+    border: 1px solid var(--nav-hair-strong); border-left: 0;
+    border-radius: 0 999px 999px 0;
+    cursor: pointer; font-size: 1.05rem; line-height: 1;
+    transition: color 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
+  }
+  .reopen:hover, .reopen:focus-visible {
+    color: #fff; border-color: var(--accent);
+    background: rgba(224,122,95,.16); outline: none;
+  }
+  body.collapsed .reopen { display: inline-flex; }
+
+  /* scroll region — everything EXCEPT the pinned signature */
+  .nav-scroll {
+    flex: 1 1 auto; min-height: 0;
+    overflow-y: auto;
+    padding: 1.9rem 1.5rem 1.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--nav-hair-strong) transparent;
+  }
+  .nav-scroll::-webkit-scrollbar { width: 6px; }
+  .nav-scroll::-webkit-scrollbar-thumb { background: var(--nav-hair-strong); border-radius: 999px; }
+
+  .nav-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .brand {
+    background: none; border: 0; padding: 0; margin: 0;
+    text-align: left; cursor: pointer;
+    font-weight: 600; font-size: 1.15rem; line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: var(--nav-ink);
+    transition: color 180ms var(--ease);
+  }
+  .brand span { display: block; }
+  .brand:hover, .brand:focus-visible { color: var(--accent); outline: none; }
+  .thesis {
+    margin: 1rem 0 0;
+    color: var(--nav-muted);
+    font-size: 0.8rem; line-height: 1.5; letter-spacing: 0.01em;
+    max-width: 15rem;
+  }
+
+  .collapse {
+    flex: 0 0 auto;
+    width: 2.1rem; height: 2.1rem;
+    display: grid; place-items: center;
+    border: 1px solid var(--nav-hair-strong);
+    border-radius: 999px; background: transparent;
+    cursor: pointer; font-size: 0.9rem; line-height: 1;
+    transition: border-color 180ms var(--ease), color 180ms var(--ease), transform 180ms var(--ease);
+  }
+  .collapse:hover { color: var(--accent); border-color: var(--accent); }
+
+  .nav-list { margin-top: 2.1rem; border-top: 1px solid var(--nav-hair-strong); }
+  .nav-item { border-bottom: 1px solid var(--nav-hair); }
+
+  /* nav row: shared look for button-triggers and view links */
+  .nav-row {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 0.95rem 0;
+    background: none; border: 0; text-decoration: none;
+    text-align: left; cursor: pointer;
+    color: var(--nav-ink);
+    font-weight: 600; font-size: 0.98rem; letter-spacing: -0.005em;
+    transition: color 160ms var(--ease);
+  }
+  .nav-row:hover, .nav-row:focus-visible { color: var(--accent); outline: none; }
+  .nav-row .meta {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    color: var(--nav-muted); font-size: 0.62rem; font-weight: 600;
+    letter-spacing: 0.14em; flex: 0 0 auto;
+  }
+  .nav-row:hover .meta, .nav-row:focus-visible .meta { color: var(--accent); }
+  .nav-sign { font-size: 0.9rem; width: 0.9rem; text-align: center; transition: transform 200ms var(--ease); }
+  .nav-item.open .nav-sign { transform: rotate(45deg); }
+  .nav-arrow { font-size: 0.85rem; transition: transform 220ms var(--ease); }
+  .nav-row:hover .nav-arrow { transform: translate(2px, -2px); }
+  .nav-row.is-active > span:first-child { color: var(--accent); }
+
+  /* collapsible drawer — one per item; only the active page's drawer stays open */
+  .drawer {
+    display: grid; grid-template-rows: 0fr;
+    transition: grid-template-rows 320ms var(--ease);
+  }
+  .nav-item.open .drawer { grid-template-rows: 1fr; }
+  .drawer-inner { overflow: hidden; }
+
+  /* Autoria drawer — author data + CV download */
+  .who { display: flex; flex-direction: column; gap: 0.45rem; padding: 0.4rem 0 0.95rem; }
+  .who-name { margin: 0; font-size: 0.88rem; font-weight: 700; color: var(--nav-ink); }
+  .who-link {
+    align-self: flex-start;
+    color: var(--nav-muted); text-decoration: none;
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.01em;
+    padding-bottom: 2px; border-bottom: 1px solid var(--nav-hair-strong);
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .who-link:hover, .who-link:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+
+  .cv-link {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    margin: 0 0 1.05rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    color: var(--nav-ink); text-decoration: none;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+    transition: border-color 180ms var(--ease), color 180ms var(--ease), background 180ms var(--ease);
+  }
+  .cv-link:hover, .cv-link:focus-visible { border-color: var(--accent); color: #fff; background: rgba(224,122,95,.12); outline: none; }
+  .cv-link .ico { font-size: 0.85rem; }
+
+  /* Ensaiando drawer — placeholder pills only */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.35rem 0 1.05rem; }
+  .pill {
+    display: inline-block;
+    padding: 0.3rem 0.62rem;
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    color: var(--nav-muted);
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .pill.is-live { color: var(--accent); border-color: var(--accent); }
+
+  /* result cards under ECHO / ATRIO — now inside drawers, page-bound */
+  .facts { padding: 0.5rem 0 1.15rem; display: flex; flex-direction: column; }
+  .fact {
+    display: flex; gap: 0.95rem; align-items: baseline;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--nav-hair);
+  }
+  .fact:first-child { border-top: 0; padding-top: 0.4rem; }
+  .fact-n {
+    flex: 0 0 auto; min-width: 1.75rem;
+    font-size: 1.5rem; font-weight: 800; line-height: 0.9; letter-spacing: -0.03em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .fact-t { margin: 0; color: var(--nav-muted); font-size: 0.74rem; line-height: 1.42; }
+
+  /* ───────────────────────── PINNED SIGNATURE ───────────────────────── */
+  .sig {
+    flex: 0 0 auto;
+    padding: 1.15rem 1.5rem 1.3rem;
+    border-top: 1px solid var(--nav-hair);
+    background: var(--nav-bg);
+  }
+  .sig-id { display: flex; align-items: center; gap: 0.85rem; }
+  .sig-mark {
+    width: 2.5rem; height: 2.5rem;
+    flex: 0 0 auto; object-fit: contain; display: block;
+    filter: brightness(0) invert(1); /* force logo to pure white */
+  }
+  .sig-text { min-width: 0; }
+  .sig-text strong {
+    display: block;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: -0.005em;
+    color: var(--nav-ink);
+  }
+  .sig-text span {
+    display: block; margin-top: 0.18rem;
+    color: var(--nav-muted); font-size: 0.62rem; line-height: 1.4;
+  }
+
+  /* ───────────────────────── RIGHT COLUMN (PAGE) ───────────────────────── */
+  .page {
+    min-height: 100dvh;
+    margin-left: var(--nav-w);
+    background: var(--pg-bg);
+    color: var(--pg-ink);
+    transition: margin-left 320ms var(--ease);
+  }
+  body.collapsed .page { margin-left: 0; }
+  body.framed .page { display: none; }
+  .wrap {
+    width: min(var(--content), calc(100vw - var(--nav-w) - var(--gutter) * 2));
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  body.collapsed .wrap { width: min(var(--content), calc(100vw - var(--gutter) * 2)); }
+
+  /* HERO — stacked, compact: headline above, lead below, cards next */
+  .hero {   padding: clamp(2rem, 4vw, 3rem) 0 clamp(1.5rem, 3.5vw, 2.4rem); }
+  .hero h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  max-width: 16ch;
+  }
+  .lead {
+    margin: 1.15rem 0 0;
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    color: var(--pg-muted);
+    text-wrap: pretty;
+    max-width: 100%;
+}
+
+  /* TRÊS MOVIMENTOS — three unboxed columns, small blocks, generous air */
+  .cards-section {
+    border-top: 1px solid var(--pg-hair);
+    padding: clamp(1.75rem, 3.5vw, 2.5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; margin: 0 0 clamp(2.25rem, 4.5vw, 3.25rem);
+  }
+  .section-head h2 { margin: 0; font-weight: 700; font-size: 0.95rem; letter-spacing: -0.01em; }
+  .section-head .note { margin: 0; color: var(--pg-muted); font-size: 0.78rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(2.25rem, 4.5vw, 3.75rem); }
+  .card-n {
+    display: block;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .card h3 { margin: 0.65rem 0 0.75rem; font-weight: 700; font-size: 1.08rem; letter-spacing: -0.015em; }
+  .card p { margin: 0; color: var(--pg-muted); font-size: 0.84rem; line-height: 1.62; }
+  .card .strong { color: var(--pg-ink); font-weight: 600; }
+
+  /* concept trigger — quiet text link, persistent accent underline */
+  .reveal {
+    margin: 1.35rem 0 0; padding: 0;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: none; border: 0; cursor: pointer;
+    font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
+    color: var(--pg-ink);
+  }
+  .reveal .lbl {
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(224,122,95,.45);
+    transition: border-color 220ms var(--ease);
+  }
+  .reveal .arr { color: var(--accent-ink); font-size: 0.85rem; transition: transform 220ms var(--ease); }
+  .reveal:hover .lbl, .reveal:focus-visible .lbl { border-bottom-color: var(--accent); }
+  .reveal:hover .arr, .reveal:focus-visible .arr { transform: translate(2px, -2px); }
+  .reveal:focus-visible { outline: none; }
+
+  /* PAGE FOOTER — kept: Autor / Contato / Marco oficial */
+  .foot {
+    border-top: 1px solid var(--pg-hair-strong);
+    padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1.3fr; gap: clamp(1.5rem, 4vw, 3rem); }
+  .foot dt {
+    margin: 0 0 0.6rem;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--pg-muted);
+  }
+  .foot dd { margin: 0; }
+  .foot .name { font-weight: 700; font-size: 1rem; letter-spacing: -0.01em; }
+  .foot .line { margin-top: 0.4rem; color: var(--pg-muted); font-size: 0.82rem; line-height: 1.5; }
+  .foot a { text-decoration: none; border-bottom: 1px solid var(--pg-hair-strong); padding-bottom: 1px; }
+  .foot a:hover { color: var(--accent-ink); border-color: var(--accent); }
+
+  /* ───────────────────────── FRAMED VIEW (ECHO / ATRIO in right column) ───────────────────────── */
+  .frame-wrap {
+    position: fixed; inset: 0 0 0 var(--nav-w);
+    display: none; flex-direction: column;
+    background: var(--pg-bg);
+    z-index: var(--z-frame);
+    transition: left 320ms var(--ease);
+  }
+  body.collapsed .frame-wrap { left: 0; }
+  body.framed .frame-wrap { display: flex; }
+  .frame-bar {
+    flex: 0 0 auto;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.7rem clamp(1rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--pg-hair);
+    background: var(--pg-bg);
+  }
+  .frame-back {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: none; border: 0; padding: 0; cursor: pointer;
+    color: var(--pg-ink); font-weight: 600; font-size: 0.8rem; letter-spacing: -0.005em;
+    transition: color 160ms var(--ease);
+  }
+  .frame-back:hover, .frame-back:focus-visible { color: var(--accent-ink); outline: none; }
+  .frame-title {
+    font-weight: 800; font-size: 0.82rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--pg-muted);
+  }
+  .frame-ext {
+    margin-left: auto; color: var(--pg-muted); text-decoration: none;
+    font-size: 0.74rem; font-weight: 600;
+    border-bottom: 1px solid var(--pg-hair); padding-bottom: 1px;
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .frame-ext:hover, .frame-ext:focus-visible { color: var(--accent-ink); border-color: var(--accent); outline: none; }
+  .frame { flex: 1 1 auto; width: 100%; height: 100%; border: 0; background: var(--pg-bg); }
+
+  /* ───────────────────────── CONCEPT READER (dialog) ───────────────────────── */
+  .reader {
+    width: 100vw; max-width: 100vw;
+    height: 100dvh; max-height: 100dvh;
+    margin: 0; padding: 0; border: 0;
+    background: var(--rd-bg); color: var(--rd-ink);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .reader::backdrop { background: rgba(6,7,9,.55); }
+  .reader-inner {
+    width: min(46rem, 100%);
+    margin: 0 auto;
+    padding: clamp(4.5rem, 9vh, 7rem) var(--gutter) clamp(4rem, 10vh, 7rem);
+  }
+  .reader-close {
+    position: fixed; top: clamp(1.1rem, 3vh, 2rem); right: clamp(1.1rem, 3vw, 2.25rem);
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    padding: 0.5rem 0.95rem;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--rd-hair); border-radius: 999px;
+    color: var(--rd-ink); cursor: pointer;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+    backdrop-filter: blur(8px);
+    transition: background 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  .reader-close:hover { background: rgba(224,122,95,.14); border-color: var(--accent); color: #fff; }
+  .reader-close .x { font-size: 1rem; line-height: 1; }
+  .reader-eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .reader-title {
+    margin: 0 0 clamp(2rem, 5vh, 3.5rem);
+    font-weight: 800; font-size: clamp(3.25rem, 12vw, 6rem);
+    line-height: 0.9; letter-spacing: -0.04em;
+    color: #fff;
+  }
+  .reader-sub {
+    margin: -1.5rem 0 clamp(2rem, 5vh, 3.5rem);
+    color: var(--rd-muted); font-size: 0.86rem; letter-spacing: 0.02em;
+  }
+  .prose p {
+    margin: 0 0 1.35rem;
+    font-family: var(--serif);
+    font-weight: 300; font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+    line-height: 1.72; letter-spacing: 0.003em;
+    color: var(--rd-ink);
+    text-wrap: pretty; max-width: 40ch;
+  }
+  .prose .open { font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.4; font-weight: 400; color: #fff; margin-bottom: 1.6rem; }
+  .prose em { font-style: italic; color: var(--accent); }
+  .prose strong {
+    font-family: var(--font); font-weight: 800;
+    letter-spacing: 0.02em; color: #fff;
+  }
+  .prose .caps {
+    font-family: var(--font); font-weight: 700;
+    font-size: 0.9em; letter-spacing: 0.04em; color: #fff;
+  }
+
+  /* ───────────────────────── MOBILE MENU BUTTON ───────────────────────── */
+  .menu-btn {
+    position: fixed; top: 1rem; left: 1rem; z-index: var(--z-menu);
+    display: none; align-items: center; gap: 0.55rem;
+    padding: 0.6rem 0.95rem;
+    background: var(--nav-bg); color: var(--nav-ink);
+    border: 1px solid var(--nav-hair-strong); border-radius: 999px;
+    cursor: pointer; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .scrim {
+    position: fixed; inset: 0; z-index: var(--z-scrim);
+    background: rgba(8,9,11,.5); backdrop-filter: blur(3px);
+    opacity: 0; pointer-events: none; transition: opacity 280ms var(--ease);
+  }
+
+  /* ───────────────────────── MOTION ───────────────────────── */
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .anim .rise { animation: rise .8s var(--ease) both; }
+  .anim .d1 { animation-delay: .05s; }
+  .anim .d2 { animation-delay: .12s; }
+  .anim .d3 { animation-delay: .19s; }
+  .anim .d4 { animation-delay: .26s; }
+  .anim .d5 { animation-delay: .33s; }
+
+  /* smooth dialog open/close */
+  .reader { opacity: 0; transform: translateY(14px) scale(.992); }
+  .anim .reader {
+    transition: opacity .5s var(--ease), transform .6s var(--ease),
+                overlay .6s var(--ease) allow-discrete, display .6s var(--ease) allow-discrete;
+  }
+  .reader[open] { opacity: 1; transform: none; }
+  @starting-style { .reader[open] { opacity: 0; transform: translateY(14px) scale(.992); } }
+  .anim .reader::backdrop { transition: opacity .5s var(--ease), overlay .6s var(--ease) allow-discrete, display .6s var(--ease) allow-discrete; }
+  .reader::backdrop { opacity: 0; }
+  .reader[open]::backdrop { opacity: 1; }
+  @starting-style { .reader[open]::backdrop { opacity: 0; } }
+
+  /* ───────────────────────── RESPONSIVE ───────────────────────── */
+  @media (max-width: 1080px) {
+    .lead { max-width: 60ch; }
+    .cards { grid-template-columns: 1fr; gap: 2.5rem; }
+    .card p { max-width: 62ch; }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    :root { --nav-w: min(84vw, 22rem); }
+    .page, body.collapsed .page { margin-left: 0; }
+    .wrap, body.collapsed .wrap { width: 100%; }
+    .nav { transform: translateX(-100%); box-shadow: none; }
+    body.nav-open .nav { transform: translateX(0); box-shadow: 30px 0 80px rgba(0,0,0,.5); }
+    body.nav-open .scrim { opacity: 1; pointer-events: auto; }
+    .menu-btn { display: inline-flex; }
+    .collapse { display: none; }
+    .reopen { display: none !important; }
+    .frame-wrap, body.collapsed .frame-wrap { left: 0; }
+    .foot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: clamp(2rem, 11vw, 2.6rem); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
 </head>
 <body>
-  <p>
-    Redirecionando para
-    <a href="https://christiancozta.github.io/arco.html">ARCO</a>.
-  </p>
+
+<div class="scrim" data-close-nav aria-hidden="true"></div>
+<button class="menu-btn" type="button" data-open-nav aria-label="Abrir menu">☰ Menu</button>
+<button class="reopen" type="button" data-reopen aria-label="Mostrar coluna lateral">›</button>
+
+<!-- ═══════════════════════ LEFT COLUMN — NAV ═══════════════════════ -->
+<aside class="nav" aria-label="Navegação">
+  <div class="nav-scroll">
+    <div class="nav-top">
+      <button class="brand" type="button" data-home aria-label="Voltar à página Autoria">
+        <span>Inteligência</span><span>   Judiciária</span><span>      Orquestrada</span>
+      </button>
+      <button class="collapse" type="button" data-collapse aria-label="Recolher coluna lateral">×</button>
+    </div>
+    <p class="thesis">Da operação bruta à regência recursal</p>
+
+    <div class="nav-list">
+
+      <!-- 01 · AUTORIA (home view · drawer opens only while this page is active) -->
+      <div class="nav-item open" data-item="autoria">
+        <button class="nav-row is-active" type="button" data-home data-active="autoria" aria-expanded="true">
+          <span>Autoria</span>
+          <span class="meta"><span>01</span><span class="nav-sign">+</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="who">
+            <p class="who-name">Christian da Costa</p>
+            <a class="who-link" href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a>
+            <a class="who-link" href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+          <!-- placeholder: troque o href pelo arquivo real do CV -->
+          <a class="cv-link" href="CV-Christian_daCosta.pdf" download>
+            <span class="ico" aria-hidden="true">↓</span> Baixar currículo (PDF)
+          </a>
+        </div></div>
+      </div>
+
+      <!-- 02 · ECHO (loads in the right column · drawer opens only on its page) -->
+      <div class="nav-item" data-item="echo">
+        <button class="nav-row" type="button" data-frame="echo" data-active="echo" aria-expanded="false">
+          <span>ECHO</span>
+          <span class="meta"><span>02</span><span class="nav-arrow">↗</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="facts">
+            <div class="fact"><span class="fact-n">01</span><p class="fact-t">Fluxo e memória operacional organizados</p></div>
+            <div class="fact"><span class="fact-n">02</span><p class="fact-t">Prática dispersa convertida em método transmissível</p></div>
+            <div class="fact"><span class="fact-n">03</span><p class="fact-t">Rastreabilidade, critérios e pontos de controle</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 03 · ATRIO (loads in the right column · drawer opens only on its page) -->
+      <div class="nav-item" data-item="atrio">
+        <button class="nav-row" type="button" data-frame="atrio" data-active="atrio" aria-expanded="false">
+          <span>ATRIO</span>
+          <span class="meta"><span>03</span><span class="nav-arrow">↗</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="facts">
+            <div class="fact"><span class="fact-n">01</span><p class="fact-t">Arquitetura modular de governança jurídica</p></div>
+            <div class="fact"><span class="fact-n">02</span><p class="fact-t">CORPUS · RATIO · CERNE · LUX</p></div>
+            <div class="fact"><span class="fact-n">03</span><p class="fact-t">IA como infraestrutura assistida, não substituição do juízo</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- 04 · ENSAIANDO (page-less preview drawer · closes on any navigation) -->
+      <div class="nav-item" data-item="ensaiando">
+        <button class="nav-row" type="button" data-drawer aria-expanded="false">
+          <span>Ensaiando</span>
+          <span class="meta"><span>04</span><span class="nav-sign">+</span></span>
+        </button>
+        <div class="drawer"><div class="drawer-inner">
+          <div class="pills">
+            <span class="pill is-live">em construção</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+            <span class="pill">placeholder</span>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pinned signature — official mark of the work (contact lives in the Autoria drawer) -->
+  <footer class="sig">
+    <div class="sig-id">
+      <img class="sig-mark" src="data:image/png;base64,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" alt="Marca de Christian da Costa" />
+      <div class="sig-text">
+        <strong>Ambiente recursal · TJPR</strong>
+        <span>Fundação operacional, regência recursal e arquitetura ATRIO. Ago-out 2025.</span>
+      </div>
+    </div>
+  </footer>
+</aside>
+
+<!-- ═══════════════════════ RIGHT COLUMN — AUTORIA VIEW ═══════════════════════ -->
+<main class="page">
+  <div class="wrap">
+
+    <section class="hero">
+      <h1 class="rise d2">Método</h1>
+      <p class="lead rise d3">O projeto nasce de uma experiência concreta de prática jurídica de alto volume.<br />Ao transformar rotina jurídica dispersa em percurso governável, o método não acompanhou o fluxo. Ele o construiu.</p>
+    </section>
+
+    <section class="cards-section">
+     
+      <div class="cards rise d5">
+        <article class="card">
+          <span class="card-n">01/21 - 07/25</span>
+          <h3>Fundação</h3>
+          <p>Entre agosto e outubro de 2025, em ambiente recursal de alto volume, foi estruturada uma fundação voltada à organização de acervo, triagem processual, gestão de equipe, curadoria jurídica e formação de memória institucional.</p>
+        </article>
+
+        <article class="card">
+          <span class="card-n">08/25 - 10/25</span>
+          <h3>Regência</h3>
+          <p>Essa base permitiu consolidar o <span class="strong">ECHO</span>, metodologia de organização do acervo por taxonomia, localizadores operacionais, núcleos temáticos e quality gates.</p>
+          <button class="reveal" type="button" data-reader="reader-echo" aria-haspopup="dialog">
+            <span class="lbl">Conceito ECHO</span>
+            <span class="arr" aria-hidden="true">↗</span>
+          </button>
+        </article>
+
+        <article class="card">
+          <span class="card-n">11/25 - 05/26</span>
+          <h3>Arquitetura</h3>
+          <p>Sobre essa fundação, o <span class="strong">ATRIO</span> foi desenvolvido como arquitetura orquestrada por IA, com módulos funcionais, rastreabilidade declarada e governança humana vinculante.</p>
+          <button class="reveal" type="button" data-reader="reader-atrio" aria-haspopup="dialog">
+            <span class="lbl">Conceito ATRIO</span>
+            <span class="arr" aria-hidden="true">↗</span>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <dl class="foot-grid">
+        <div>
+          <dt>Autor</dt>
+          <dd class="name">Christian da Costa</dd>
+          <dd class="line">Jurista · arquitetura jurídico-operacional · IA aplicada ao raciocínio.</dd>
+        </div>
+        <div>
+          <dt>Contato</dt>
+          <dd class="name"><a href="mailto:christiandscosta@gmail.com">christiandscosta@gmail.com</a></dd>
+        </div>
+        <div>
+          <dt>Marco oficial</dt>
+          <dd class="name">Ambiente recursal · TJPR</dd>
+          <dd class="line">Fundação operacional, Regência Recursal e arquitetura ATRIO. Ago-out 2025.</dd>
+        </div>
+      </dl>
+    </footer>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════ RIGHT COLUMN — ECHO / ATRIO FRAMED VIEW ═══════════════════════ -->
+<section class="frame-wrap" aria-label="Página incorporada">
+  <div class="frame-bar">
+    <button class="frame-back" type="button" data-home>← Autoria</button>
+    <span class="frame-title" data-frame-title>ECHO</span>
+    <a class="frame-ext" data-frame-ext href="#" target="_blank" rel="noopener">Abrir em nova aba ↗</a>
+  </div>
+  <iframe class="frame" data-frame-el title="Página incorporada" referrerpolicy="no-referrer"></iframe>
+</section>
+
+<!-- ═══════════════════════ CONCEPT READERS ═══════════════════════ -->
+<dialog class="reader" id="reader-echo" aria-label="Conceito ECHO">
+  <div class="reader-inner">
+    <p class="reader-eyebrow">Conceito · 02</p>
+    <h2 class="reader-title">ECHO</h2>
+    <p class="reader-sub">A ferida de origem, o silêncio que recebeu nome.</p>
+    <div class="prose">
+      <p class="open">A música começou ferida.</p>
+      <p>Não era a falha pequena de uma nota perdida, nem o tropeço comum de um tempo mal contado. Era uma ferida de origem. A sala inteira parecia obedecer a uma peça secreta, repartida entre os corpos antes de chegar ao som.</p>
+      <p>Mas beleza sem lugar também é ruído.</p>
+      <p>O maestro manteve a batuta suspensa. Ali aparecia a regência em sua forma primeira: autoridade concentrada, gesto de direção, centro simbólico da obra.</p>
+      <p>Então ele interrompeu.</p>
+      <p>O silêncio que veio depois não foi pausa. Foi revelação.</p>
+      <p>Só ali a orquestra admitiu o que o ensaio inteiro já sabia: não havia partitura.</p>
+      <p>Em uma delas, quase apagada, sobrevivia a frase mais perigosa de qualquer instituição: <em>sempre foi assim.</em></p>
+      <p>Não haviam herdado uma obra. Haviam herdado ecos.</p>
+      <p>O maestro permaneceu no centro, guardando a responsabilidade maior da regência. Mas quem desceu ao chão da sala foi o spalla, seu braço direito e tradutor.</p>
+      <p>O método começou ali. No silêncio que recebeu nome. O spalla escreveu — não contra a sala, não contra os que vieram antes. Escreveu para impedir que o passado continuasse trabalhando sem rosto.</p>
+      <p>A música não ficou perfeita. Ficou possível.</p>
+      <p>Ao fim, o maestro recolheu a batuta. Sobre a primeira estante, deixado pelo spalla, havia um caderno novo. Na capa, uma palavra curta: <strong>ECHO</strong>.</p>
+      <p>Não era o eco como repetição automática. Era ECHO como inscrição. A letra a mais funcionava como cicatriz deliberada, um desvio pequeno o bastante para preservar a origem e profundo o bastante para mostrar que algo havia sido atravessado.</p>
+    </div>
+  </div>
+  <button class="reader-close" type="button" data-close aria-label="Fechar leitura">Fechar <span class="x" aria-hidden="true">×</span></button>
+</dialog>
+
+<dialog class="reader" id="reader-atrio" aria-label="Conceito ATRIO">
+  <div class="reader-inner">
+    <p class="reader-eyebrow">Conceito · 03</p>
+    <h2 class="reader-title">ATRIO</h2>
+    <p class="reader-sub">Quando o método deixa de ser condução e passa a ser arquitetura.</p>
+    <div class="prose">
+      <p class="open">O ATRIO nasce quando o método deixa de ser apenas prática de condução e passa a operar como arquitetura.</p>
+      <p>Seu ponto de partida não é acelerar a produção jurídica, mas criar uma superfície governável para documentos, raciocínios, controles e entregas.</p>
+      <p>A inteligência artificial, nesse desenho, não ocupa o centro decisório. Ela funciona como força assistiva submetida a inventário, etapas, confronto, revisão e responsabilidade humana. Antes de perguntar o que a máquina entrega, o ATRIO pergunta que percurso permite confiar no que foi produzido.</p>
+      <p>Por isso, sua lógica é modular: <span class="caps">CORPUS</span> organiza o lastro; <span class="caps">RATIO</span> estrutura a elaboração; <span class="caps">CERNE</span> confronta o raciocínio; <span class="caps">LUX</span> refina a linguagem.</p>
+      <p>A arquitetura não substitui o juízo. <em>Dá forma ao caminho que antecede a entrega.</em></p>
+    </div>
+  </div>
+  <button class="reader-close" type="button" data-close aria-label="Fechar leitura">Fechar <span class="x" aria-hidden="true">×</span></button>
+</dialog>
+
+<script>
+(function () {
+  var body = document.body;
+
+  /* ── Sections that load in the right column ── */
+  var SECTIONS = {
+    echo:  { url: 'https://christiancozta.github.io/echo.html',  title: 'ECHO'  },
+    atrio: { url: 'https://christiancozta.github.io/atrio.html', title: 'ATRIO' }
+  };
+  var frameEl    = document.querySelector('[data-frame-el]');
+  var frameTitle = document.querySelector('[data-frame-title]');
+  var frameExt   = document.querySelector('[data-frame-ext]');
+
+  /* ── Drawer state mirrors the open page: only the active item stays open ── */
+  function setActive(key) {
+    document.querySelectorAll('.nav-row').forEach(function (r) { r.classList.remove('is-active'); });
+    var row = document.querySelector('[data-active="' + key + '"]');
+    if (row) row.classList.add('is-active');
+  }
+  function setDrawers(key) {
+    document.querySelectorAll('.nav-item').forEach(function (item) {
+      var open = item.getAttribute('data-item') === key;
+      item.classList.toggle('open', open);
+      var row = item.querySelector('.nav-row');
+      if (row) row.setAttribute('aria-expanded', String(open));
+    });
+  }
+  function showAutoria() {
+    body.classList.remove('framed');
+    setActive('autoria');
+    setDrawers('autoria');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showFrame(key) {
+    var s = SECTIONS[key];
+    if (!s) return;
+    if (frameEl.getAttribute('src') !== s.url) frameEl.setAttribute('src', s.url);
+    frameTitle.textContent = s.title;
+    frameExt.setAttribute('href', s.url);
+    body.classList.add('framed');
+    setActive(key);
+    setDrawers(key);
+    document.querySelector('.frame-wrap').scrollTop = 0;
+  }
+
+  /* ── Collapse (×) / reopen (edge tab) — click only, no hover race ── */
+  var collapseBtn = document.querySelector('[data-collapse]');
+  var reopenBtn = document.querySelector('[data-reopen]');
+  if (collapseBtn) collapseBtn.addEventListener('click', function () { body.classList.add('collapsed'); });
+  if (reopenBtn) reopenBtn.addEventListener('click', function () { body.classList.remove('collapsed'); });
+
+  /* ── Mobile off-canvas ── */
+  function setNavOpen(on) { body.classList.toggle('nav-open', on); }
+  var openBtn = document.querySelector('[data-open-nav]');
+  var scrim = document.querySelector('[data-close-nav]');
+  if (openBtn) openBtn.addEventListener('click', function () { setNavOpen(true); });
+  if (scrim) scrim.addEventListener('click', function () { setNavOpen(false); });
+
+  /* ── ECHO / ATRIO → load in right column, drawers follow the page ── */
+  document.querySelectorAll('[data-frame]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      showFrame(btn.getAttribute('data-frame'));
+      setNavOpen(false);
+    });
+  });
+
+  /* ── Ensaiando — page-less preview drawer; closes on any navigation ── */
+  document.querySelectorAll('[data-drawer]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.closest('.nav-item');
+      var open = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  /* ── Back to Autoria (brand + Autoria row + frame back button) ── */
+  document.querySelectorAll('[data-home]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      showAutoria();
+      setNavOpen(false);
+    });
+  });
+
+  /* ── Concept readers (native <dialog>) ── */
+  document.querySelectorAll('[data-reader]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var dlg = document.getElementById(btn.getAttribute('data-reader'));
+      if (dlg && typeof dlg.showModal === 'function') dlg.showModal();
+      else if (dlg) dlg.setAttribute('open', '');
+    });
+  });
+  document.querySelectorAll('.reader').forEach(function (dlg) {
+    dlg.querySelectorAll('[data-close]').forEach(function (c) {
+      c.addEventListener('click', function () { dlg.close(); });
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  });
+})();
+</script>
 </body>
 </html>
