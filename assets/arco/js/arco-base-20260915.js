@@ -8,7 +8,7 @@
 
   const current = document.currentScript;
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
-  const runtimeUrl = new URL("arco-runtime.js?v=20260912-provenance-v1", src);
+  const runtimeUrl = new URL("arco-runtime.js?v=20261019-play", src);
 
   const runtime = document.createElement("script");
   runtime.src = runtimeUrl.href;

@@ -17,6 +17,7 @@
   const childStates = new WeakMap();
   const childProgressInk = {
     echo:'#181818',
+    play:'#FFB627',
     atrio:'#A63A23',
     data:'#0057FF'
   };
@@ -150,7 +151,7 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
         if (!win || !doc?.documentElement || !doc.body) return;
 
         const view = frame.closest('.view')?.dataset.view;
-        if (!view || !['echo','atrio','data'].includes(view)) return;
+        if (!view || !['echo','play','atrio','data'].includes(view)) return;
 
         doc.documentElement.dataset.arcoEmbedded = 'true';
         installStyle(doc,true);

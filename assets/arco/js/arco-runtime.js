@@ -8,7 +8,7 @@
 
   const current = document.currentScript;
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
-  const coreUrl = new URL("arco-core.js?v=20260909-commit01", src);
+  const coreUrl = new URL("arco-core.js?v=20261019-play", src);
   const mobileUrl = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src);
 
   installHeroStyles();
