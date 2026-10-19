@@ -3,7 +3,7 @@
 /* ========================================================================== */
 (() => {
   "use strict";
-  const VIEWS = ["home","echo","play","atrio","data"];
+  const VIEWS = ["home","echo","play","atrio","cerne","data"];
   const views = [...document.querySelectorAll(".view")];
   const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
   const childLinks = [...document.querySelectorAll(".rail__seclink[data-child]")];
