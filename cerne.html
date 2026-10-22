@@ -1379,6 +1379,216 @@ body{background-color:var(--paper);
   .hd .hd-marca .l5{margin-right:-.04em}
   .hd .hd-marca .l6{grid-column:1 / -1;grid-row:1;justify-self:center;width:.62em;height:.62em;margin:0 0 .16em}
 }
+
+/* =====================================================================
+   refino 22/10/2026 ▪ achado/afastado, máquina escura, herói redistribuído
+   Estados para o público: ACHADO (ferrugem) e AFASTADO (azul). Sem
+   sinaleiro: o amarelo e o verde saem da página.
+   ===================================================================== */
+:root{
+  --azul:#2F5D8C;
+  --azul-d:#8FB3DC;
+  --yellow:var(--azul);
+  --juniper:var(--azul);
+  --m-base:#181818;   /* máquina: chapa */
+  --m-2:#1F1F1F;
+  --m-3:#2A2A2A;
+  --m-linha:#343434;
+  --m-txt:#CFCFCF;
+  --m-dim:#8A8F96;
+  --m-red:#D05D41;
+  --mola:cubic-bezier(.32,.72,0,1);
+  --folha-bg:linear-gradient(var(--gmaj) 1px,transparent 1px),linear-gradient(90deg,var(--gmaj) 1px,transparent 1px),linear-gradient(var(--gmin) 1px,transparent 1px),linear-gradient(90deg,var(--gmin) 1px,transparent 1px);
+}
+.canonica small,.cond b{color:var(--azul-d)}
+.card .prob{border-left-color:var(--azul)}
+.card .evd{color:var(--azul)}
+
+/* ---------- herói: faixa mais grossa, papel da folha, base mais alta ---------- */
+.hd .hd-fita{background-color:var(--paper);background-image:var(--folha-bg);background-size:16px 16px,16px 16px,4px 4px,4px 4px;background-position:0 0}
+.hd .hd-furos{background-color:var(--paper)}
+.hd .hd-cartoes{bottom:0;align-items:center}
+.hd .hd-volta{align-items:center}
+.hd .hd-cartao .e{background:var(--red);color:var(--paper);border-color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.hd .hd-cartao .q{text-wrap:pretty}
+@media (min-width:1021px){
+  .hd .hd-palco{height:calc(100svh - var(--nav-h));min-height:560px;max-height:1100px;justify-content:center;gap:0;padding:clamp(20px,4.2vh,52px) 48px clamp(22px,4.4vh,52px)}
+  .hd .hd-marca{font-size:clamp(44px,min(5.2vw,8.4vh),88px)}
+  .hd .hd-sub{margin-top:clamp(10px,1.9vh,20px)}
+  .hd .hd-esteira{height:clamp(204px,33vh,300px);margin-top:clamp(20px,4.6vh,56px)}
+  .hd .hd-fita{top:14px;bottom:14px;height:auto;border-width:2px}
+  .hd .hd-furos{height:22px;background-image:radial-gradient(circle at 10px 11px,var(--desk) 0 4.2px,var(--ink) 4.2px 5.6px,transparent 5.6px);background-size:20px 22px}
+  .hd .hd-cartoes{top:22px;bottom:22px}
+  .hd .hd-volta{gap:56px;padding-right:56px}
+  .hd .hd-cartao{width:clamp(300px,26vw,380px);gap:10px}
+  .hd .hd-cartao .m{font-size:11px}
+  .hd .hd-cartao .e{padding:2px 9px 1px;font-size:11.5px;border-radius:4px}
+  .hd .hd-cartao .q{font-size:clamp(14.5px,1.25vw,17px);line-height:1.4;-webkit-line-clamp:3}
+  .hd .hd-cartao .t{font-size:10px}
+  .hd .hd-crivo{height:100%;width:84px;margin-left:-42px}
+  .hd .hd-base{margin-top:clamp(20px,4.8vh,60px)}
+}
+@media (min-width:1021px) and (max-height:720px){
+  .hd .hd-cartao .q{-webkit-line-clamp:2}
+}
+
+/* ---------- ficha técnica ao lado da gaveta (moldura dupla) ---------- */
+.demo-cab{gap:16px}
+.ft-casca{width:100%;margin-top:14px;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
+.ft-nucleo{padding:20px 22px 18px;border:1.5px solid var(--ink);border-radius:16px;background-color:var(--paper);background-image:var(--folha-bg);background-size:16px 16px,16px 16px,4px 4px,4px 4px;box-shadow:inset 0 1px 0 #fff}
+.ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-d)}
+.ft-mod{font-family:var(--f-caps);font-weight:600;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.ft-mod a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.25px}
+.ft-mod a:hover{color:var(--red)}
+.ft-lead{margin:0 0 14px;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:17px;line-height:1.35;text-wrap:pretty}
+.ft{margin:0;display:grid}
+.ft div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid rgba(24,24,24,.14)}
+.ft dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.ft dd{margin:0;font-size:13.5px;line-height:1.48;color:#262626;text-wrap:pretty}
+.ft-rod{display:flex;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1.5px dashed rgba(24,24,24,.28);font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.ft-rod i{flex:none;width:10px;height:10px;border-radius:2px;background:var(--azul);box-shadow:-6px 0 0 -1px var(--red)}
+.ft-rod i{margin-left:6px}
+@media (min-width:1021px) and (max-height:760px){
+  .demo-cab{gap:12px}
+  .demo-cab h2{font-size:clamp(1.8rem,3vw,2.5rem)}
+  .ft-nucleo{padding:16px 18px 14px}
+  .ft-lead{font-size:15px;margin-bottom:8px}
+  .ft div{padding:7px 0}
+  .ft dd{font-size:12.5px;line-height:1.45}
+}
+
+/* ---------- máquina escura (a folha segue papel) ---------- */
+.maq .gab{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 60px -36px rgba(24,24,24,.55)}
+.maq .pan{background:var(--m-2);border:1px solid var(--m-linha);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.maq .paraf{background:var(--m-3);border-color:#4A4A4A}
+.maq .paraf::after{background:#5A5A5A}
+.maq .pe{background:#0E0E0E}
+.maq .inst .o{stroke:var(--m-linha);stroke-width:1.6}
+.maq .inst text{fill:var(--m-txt)}
+.maq .inst .mq-marca{font-family:var(--f-marca);fill:#EDEDED}
+.maq .inst .mq-rot{font-family:var(--f-caps);font-weight:700;letter-spacing:.12em;fill:var(--m-dim)}
+.maq .inst .mq-esc{font-family:var(--f-caps);font-weight:600;fill:var(--m-dim)}
+.maq .inst .vz{fill:#5FE08F;font-family:var(--f-lcd);font-weight:400}
+.maq .inst .vz.t{fill:#8CFFB4}
+.maq .inst .vz.m{fill:#3FB872}
+.maq .inst .mq-lcd{font-family:var(--f-lcd);font-weight:400;fill:#8CFFB4}
+.maq .inst .mq-lcd.a{fill:#F08A6E}
+.maq .inst .mq-lcd.f{fill:var(--azul-d)}
+.maq .voto{background:#121212;border:1px solid var(--m-linha);box-shadow:inset 0 2px 0 rgba(0,0,0,.4)}
+.maq .voto:focus-within{box-shadow:0 0 0 3px rgba(208,93,65,.35)}
+.maq .voto-cab{border-bottom-color:#262626;color:#E4E4E4}
+.maq .voto-cab h3{font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--m-dim)}
+.maq .voto-st{color:#9A9FA6}
+.maq .voto{overflow:hidden}
+.maq .voto-txt{color:#D6D6D6;scrollbar-color:#3A3A3A #121212;min-height:110px}
+@media (min-width:1021px){.maq-col{height:max(calc(100vh - var(--nav-h) - 28px),740px)}}
+.maq .voto-txt .pn{color:#6E737A}
+.maq .voto-txt::selection,.maq .voto-txt ::selection{background:rgba(208,93,65,.45);color:#fff}
+
+/* barras de cima da folha: boca e cabeça de impressão também escuras */
+.boca{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.boca .k{background:var(--m-3);border-color:#4A4A4A}
+.boca .k::after{background:#9A9FA6}
+.boca .slit{background:#050505;box-shadow:inset 0 0 0 1px #3A3A3A}
+.carro-body{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
+.carro-body::before{background:#050505;border-color:#3A3A3A}
+.carro-body::after{background:var(--m-3);border-color:#4A4A4A}
+.carro.ativo .carro-body::after{background:var(--m-red);border-color:var(--m-red);box-shadow:0 0 8px rgba(208,93,65,.7)}
+
+/* ---------- estados na folha: § no rótulo; achado ferrugem, afastado azul ---------- */
+.est{font-variant-numeric:tabular-nums;letter-spacing:.06em;padding:2px 9px 1px}
+.est::before{background-image:none;inset:0;transform:translate(2px,-1.5px)}
+.cont{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cnt.f .k i{background:var(--azul);border-color:var(--ink)}
+.cnt.f .v{color:var(--azul)}
+.legenda li{grid-template-columns:96px minmax(0,1fr)}
+.legenda b{font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase}
+@media (min-width:1021px){.legenda li{grid-template-columns:84px minmax(0,1fr)}}
+
+/* ---------- fecho: prova, funil e tríptico ---------- */
+.f-grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 56px;align-items:start}
+.f-esq,.f-dir{min-width:0}
+.fecho .f-num{display:block;max-width:none}
+.f-txt{margin:6px 0 0;font-size:clamp(19px,1.7vw,24px);line-height:1.38;font-weight:500;text-wrap:pretty}
+.f-txt sup a{color:inherit;font-family:var(--f-mono);font-size:12px;text-decoration:none;margin-left:2px}
+.fecho .f-nota{max-width:none}
+.funil{margin:36px 0 0;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
+.funil>*{margin:0}
+.funil figcaption,.funil ol,.funil .fu-pe{background:var(--paper)}
+.funil figcaption{display:flex;justify-content:space-between;gap:12px;padding:16px 20px 10px;border:1.5px solid var(--ink);border-bottom:0;border-radius:16px 16px 0 0;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.funil figcaption span+span{font-weight:600;color:var(--ink2)}
+.funil ol{list-style:none;padding:6px 20px 8px;border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink);display:grid;gap:10px}
+.funil li{display:grid;grid-template-columns:150px minmax(0,1fr) 40px;gap:14px;align-items:center}
+.fu-r{font-size:13.5px;line-height:1.25}
+.fu-b{position:relative;height:18px;border-radius:5px;background:repeating-linear-gradient(90deg,rgba(24,24,24,.08) 0 1px,transparent 1px 8px)}
+.fu-b i{position:absolute;left:0;top:0;bottom:0;width:calc(var(--v) / var(--vmax,18) * 100%);border:1.5px solid var(--ink);border-radius:5px;background:var(--paper);transform-origin:left center;transform:scaleX(var(--fu,1));transition:transform 1.2s var(--mola)}
+.fu1 .fu-b i{background:var(--ink)}
+.fu2 .fu-b i,.fu3 .fu-b i{background-color:var(--red);background-image:var(--grain)}
+.fu3 .fu-b i{box-shadow:var(--reg)}
+.funil li:nth-child(2) .fu-b i{transition-delay:.12s}
+.funil li:nth-child(3) .fu-b i{transition-delay:.24s}
+.funil li:nth-child(4) .fu-b i{transition-delay:.36s}
+.funil li b{font-family:var(--f-num);font-weight:700;font-size:20px;text-align:right;letter-spacing:-.03em}
+.fu2 b,.fu3 b{color:var(--red)}
+.fu-pe{padding:10px 20px 16px;border:1.5px solid var(--ink);border-top:1.5px dashed rgba(24,24,24,.28);border-radius:0 0 16px 16px;font-size:13px;line-height:1.45;color:var(--ink2)}
+.funil.rv:not(.visto) .fu-b i{--fu:0}
+
+.trip{margin-top:clamp(72px,9vw,120px)}
+.trip-cab{display:grid;gap:12px;margin-bottom:28px}
+.trip-t{margin:0;max-width:18em;font-family:var(--f-tit);font-weight:700;font-size:clamp(28px,3vw,42px);line-height:1.06;letter-spacing:-.01em;text-wrap:balance}
+.trip-l{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.trip-l li:nth-child(2){transition-delay:.1s}
+.trip-l li:nth-child(3){transition-delay:.2s}
+.tp-casca{height:100%;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
+.tp-nucleo{height:100%;display:flex;flex-direction:column;gap:10px;padding:22px 22px 24px;border:1.5px solid var(--ink);border-radius:16px;background:var(--paper);box-shadow:inset 0 1px 0 #fff;transition:transform .6s var(--mola),box-shadow .6s var(--mola)}
+.trip-l li:hover .tp-nucleo{transform:translateY(-3px);box-shadow:inset 0 1px 0 #fff,var(--reg)}
+.tp-n{font-family:var(--f-num);font-weight:700;font-size:13px;color:var(--red)}
+.tp-nucleo h3{margin:0;font-family:var(--f-tit);font-weight:700;font-size:24px;line-height:1.1}
+.tp-nucleo p{margin:0;font-size:15px;line-height:1.55;color:#2F2F2F;text-wrap:pretty}
+.trip-l li:nth-child(2) .tp-nucleo{background:var(--ink);border-color:var(--ink);box-shadow:none;color:var(--paper)}
+.trip-l li:nth-child(2) .tp-nucleo p{color:var(--papel-2)}
+.trip-l li:nth-child(2) .tp-n{color:var(--red-d)}
+.trip-l li:nth-child(2):hover .tp-nucleo{box-shadow:var(--reg)}
+
+/* revelação ao entrar na tela */
+.rv{transition:opacity .9s var(--mola),transform .9s var(--mola),filter .9s var(--mola)}
+.js-rv .rv:not(.visto){opacity:0;transform:translateY(28px);filter:blur(6px)}
+
+@media (max-width:1020px){
+  .f-grade{grid-template-columns:minmax(0,1fr);gap:20px}
+  .f-esq,.f-dir{display:contents}
+  .f-grade .f-num{order:1}.f-grade .f-txt{order:2}.f-grade .funil{order:3;margin-top:8px}.f-grade .f-nota{order:4;margin-top:4px}.f-grade .f-acao{order:5;margin-top:0}
+  .trip-l{grid-template-columns:minmax(0,1fr)}
+  .ft-casca{margin-top:6px}
+}
+@media (max-width:640px){
+  .funil li{grid-template-columns:minmax(0,1fr) 34px;gap:4px 10px}
+  .funil .fu-r{grid-column:1 / -1}
+  .funil .fu-b{grid-column:1;grid-row:2}
+  .funil li b{grid-row:2}
+  .funil figcaption{flex-direction:column;gap:2px}
+  .ft div{grid-template-columns:minmax(0,1fr);gap:2px}
+}
+
+/* ---------- histórico de versões: linha do tempo ---------- */
+.mv .vlist{position:relative;margin:4px 0 0;padding:0 0 0 30px}
+.mv .vlist::before{content:"";position:absolute;left:9px;top:16px;bottom:18px;width:1.5px;background:repeating-linear-gradient(var(--ink) 0 3px,transparent 3px 7px)}
+.mv .vlist li{position:relative;display:grid;grid-template-columns:76px minmax(0,1fr);gap:2px 16px;padding:12px 0 13px;border-top:1px solid var(--grade)}
+.mv .vlist li:first-child{border-top:0}
+.mv .vlist li::before{content:"";position:absolute;left:-26px;top:17px;width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper)}
+.mv .vlist li.maior::before{width:12px;height:12px;left:-27px;top:16px;background:var(--ink)}
+.mv .vlist li:first-child::before{background-color:var(--red);background-image:var(--grain);border-color:var(--ink);box-shadow:0 0 0 4px rgba(166,58,35,.14)}
+.mv .vlist .vn{grid-row:1 / span 2;font-family:var(--f-num);font-weight:700;font-size:15px;line-height:1.35}
+.mv .vlist li.maior .vn{font-size:18px}
+.mv .vlist li:first-child .vn{color:var(--red)}
+.mv .vlist .vd{font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.mv .vlist .vd:empty::before{content:"sem data registrada";opacity:.7}
+.mv .vlist li>span:last-child{grid-column:2;font-size:15px;line-height:1.45}
+.mv .vlist li:first-child .vd::after{content:"atual";margin-left:10px;padding:1px 8px;border-radius:999px;background:var(--ink);color:var(--paper);letter-spacing:.14em}
+@media (max-width:640px){.mv .vlist li{grid-template-columns:60px minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.js-rv .rv:not(.visto){opacity:1;transform:none;filter:none}}
 </style>
 </head>
 <body>
@@ -1414,7 +1624,7 @@ body{background-color:var(--paper);
     <div class="hd-fita">
       <div class="hd-furos a"></div>
       <div class="hd-furos b"></div>
-      <div class="hd-cartoes"><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e ho">HOLD</span><span>Parágrafo 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e ho">HOLD</span><span>Parágrafo 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e ab">ABORT</span><span>Parágrafo 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div></div>
+      <div class="hd-cartoes"><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div></div>
     </div>
     <div class="hd-crivo"><i></i><span>CRIVO</span></div>
   </div>
@@ -1444,8 +1654,20 @@ body{background-color:var(--paper);
   <div class="demo-cab">
     <p class="ind">Demonstração</p>
     <h2 id="mesaT">Veja o percurso posto à prova</h2>
-    <p class="contador"><b id="nAtos">08</b><span>atos públicos</span></p>
     <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
+    <div class="ft-casca rv">
+      <div class="ft-nucleo">
+        <div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div>
+        <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
+        <dl class="ft">
+          <div><dt>Entrada</dt><dd>Ato judicial pronto: decisão liminar, voto, sentença ou acórdão, de 40 a 250 mil caracteres.</dd></div>
+          <div><dt>Opera</dt><dd>Lê o ato inteiro por lentes de fronteira própria. Cada dúvida enfrenta acusação e defesa em funções separadas, e só se mantém se resistir ao crivo.</dd></div>
+          <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto, e dúvida afastada ou mantida sem razão. O confronto testa a sustentação; não certifica fontes nem substitui o juízo humano.</dd></div>
+          <div><dt>Saída</dt><dd>Achados em perguntas presas ao trecho, leitura para quem decide, relatório técnico e rastro integral, que guarda também os afastados.</dd></div>
+        </dl>
+        <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
+      </div>
+    </div>
   </div>
   <div class="arquivo-col">
     <div class="arquivo" id="arquivo">
@@ -1510,24 +1732,25 @@ body{background-color:var(--paper);
       <div class="gab">
         <i class="paraf a" aria-hidden="true"></i><i class="paraf b" aria-hidden="true"></i><i class="paraf c" aria-hidden="true"></i><i class="paraf d" aria-hidden="true"></i>
         <div class="pan">
-          <svg class="inst" id="maq" viewBox="0 0 520 503" role="img" aria-labelledby="maqT maqD">
+          <svg class="inst" id="maq" viewBox="0 0 520 560" role="img" aria-labelledby="maqT maqD">
             <title id="maqT">Registrador do CERNE</title>
-            <desc id="maqD">Visor digital com os três seletores de etapa ao lado (Mineração, Crivo e Consolidação). Abaixo, o medidor de dúvidas formadas e a contagem de ABORT, HOLD e afastadas.</desc>
+            <desc id="maqD">Visor digital com os três seletores de etapa ao lado (Mineração, Crivo e Consolidação). Abaixo, ao centro, o medidor de dúvidas formadas e, sob ele, a contagem de achados e afastados.</desc>
+            <defs>
+              <filter id="lcd" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#121212"/><rect width="1" height="1" fill="#1A251E"/></pattern>
+              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262626"/><stop offset="1" stop-color="#1F1F1F"/></linearGradient>
+            </defs>
             <!-- placa da marca -->
-            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#FCFCFC"/>
-            <g stroke="#181818" stroke-width="2.4" stroke-linecap="round">
+            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#121212"/>
+            <g stroke="#4A4A4A" stroke-width="2.4" stroke-linecap="round">
               <path d="M22 19 v20"/><path d="M32 19 v20"/><path d="M42 19 v20"/>
               <path d="M478 19 v20"/><path d="M488 19 v20"/><path d="M498 19 v20"/>
             </g>
-            <text x="260" y="41" text-anchor="middle" font-family="Science Gothic, Inter Display, Inter, sans-serif" font-weight="700" font-size="34" letter-spacing="6" style="font-family:var(--f-marca)">C<tspan fill="#A63A23">E</tspan>RNE</text>
+            <text class="mq-marca" x="260" y="41" text-anchor="middle" font-weight="700" font-size="34" letter-spacing="6">C<tspan fill="#D05D41">E</tspan>RNE</text>
             <!-- card do processo: visor largo e, ao lado, os seletores de etapa -->
-            <rect class="o" x="1.2" y="72" width="517.6" height="240" rx="18" fill="#E8EBEF"/>
-            <defs>
-              <filter id="lcd" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#181818"/><rect width="1" height="1" fill="#1F2A23"/></pattern>
-            </defs>
-            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#181818"/>
-            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#2C3A31" stroke-width="1.2"/>
+            <rect class="o" x="1.2" y="72" width="517.6" height="240" rx="18" fill="url(#chapa)"/>
+            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#0B0B0B"/>
+            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#24342A" stroke-width="1.2"/>
             <circle id="vzLed" cx="356" cy="109" r="3.6" fill="#2C3A31"/>
             <g filter="url(#lcd)">
               <text class="vz t" id="vz1" x="36" y="154"></text>
@@ -1535,31 +1758,27 @@ body{background-color:var(--paper);
               <text class="vz m" id="vz3" x="36" y="230"></text>
             </g>
             <g id="knobs"></g>
-            <!-- card da medida: calibre à esquerda, contagem empilhada à direita -->
-            <rect class="o" x="1.2" y="326" width="517.6" height="176" rx="18" fill="#E8EBEF"/>
-            <path class="o" d="M40 428 A84 84 0 0 1 208 428 Z" fill="#FCFCFC"/>
+            <!-- card da medida: calibre ao centro; achados e afastados logo abaixo -->
+            <rect class="o" x="1.2" y="326" width="517.6" height="232" rx="18" fill="url(#chapa)"/>
+            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#0B0B0B"/>
             <g id="gTicks"></g>
-            <path id="gArc" d="" fill="none" stroke="#A63A23" stroke-width="7" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
-            <g id="gNeedle" style="transform-origin:124px 428px;transform:rotate(-90deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1)">
-              <path d="M121.2 428 L124 358 L126.8 428 Z" fill="#181818" stroke="#181818" stroke-width="1.4" stroke-linejoin="round"/>
+            <path id="gArc" d="" fill="none" stroke="#D05D41" stroke-width="7" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
+            <g id="gNeedle" style="transform-origin:260px 432px;transform:rotate(-90deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1)">
+              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#EDEDED" stroke="#EDEDED" stroke-width="1.4" stroke-linejoin="round"/>
             </g>
-            <circle class="o" cx="124" cy="428" r="9" fill="#181818"/>
-            <circle cx="124" cy="428" r="3" fill="#FCFCFC"/>
-            <rect class="o" x="96" y="436" width="56" height="30" rx="6" fill="#FCFCFC"/>
-            <text id="gNum" x="124" y="459" text-anchor="middle" font-size="21" font-weight="700" style="font-family:var(--f-num)">00</text>
-            <text x="124" y="486" text-anchor="middle" font-size="10.5">dúvidas formadas</text>
-            <path d="M244 346 V482" stroke="#181818" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/>
-            <g stroke="#B9C0CA" stroke-width="1.6" stroke-dasharray="1 5" stroke-linecap="round"><path d="M268 391 H500"/><path d="M268 437 H500"/></g>
-            <rect class="o" x="268" y="361" width="15" height="15" rx="3" fill="none"/>
-            <rect x="270.6" y="359.8" width="13" height="13" rx="2" fill="#A63A23" filter="url(#riso)"/>
-            <text x="294" y="373" font-size="13.5">ABORT</text>
-            <text id="lgA" x="500" y="376" text-anchor="end" font-size="24" font-weight="700" style="font-family:var(--f-num);fill:#A63A23">0</text>
-            <rect class="o" x="268" y="407" width="15" height="15" rx="3" fill="#E8A628"/>
-            <text x="294" y="419" font-size="13.5">HOLD</text>
-            <text id="lgH" x="500" y="422" text-anchor="end" font-size="24" font-weight="700" style="font-family:var(--f-num)">0</text>
-            <rect class="o" x="268" y="453" width="15" height="15" rx="3" fill="#2D5E4A"/>
-            <text x="294" y="465" font-size="13.5">Afastadas</text>
-            <text id="lgF" x="500" y="468" text-anchor="end" font-size="24" font-weight="700" style="font-family:var(--f-num)">0</text>
+            <circle cx="260" cy="432" r="9" fill="#EDEDED"/>
+            <circle cx="260" cy="432" r="3" fill="#121212"/>
+            <rect x="228" y="442" width="64" height="32" rx="6" fill="#0B0B0B" stroke="#24342A" stroke-width="1.6"/>
+            <text class="mq-lcd" id="gNum" x="260" y="467" text-anchor="middle" font-size="28" filter="url(#lcd)">00</text>
+            <text class="mq-rot" x="260" y="492" text-anchor="middle" font-size="10.5">DÚVIDAS FORMADAS</text>
+            <path d="M28 506 H492" stroke="#3A3A3A" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <path d="M260 516 V548" stroke="#3A3A3A" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <rect x="34" y="524" width="14" height="14" rx="3" fill="#D05D41" filter="url(#riso)"/>
+            <text class="mq-rot" x="58" y="536" font-size="12.5">ACHADOS</text>
+            <text class="mq-lcd a" id="lgA" x="238" y="541" text-anchor="end" font-size="32" filter="url(#lcd)">0</text>
+            <rect x="282" y="524" width="14" height="14" rx="3" fill="#6E9BD1"/>
+            <text class="mq-rot" x="306" y="536" font-size="12.5">AFASTADOS</text>
+            <text class="mq-lcd f" id="lgF" x="488" y="541" text-anchor="end" font-size="32" filter="url(#lcd)">0</text>
           </svg>
           <section class="voto" aria-labelledby="votoT">
             <div class="voto-cab">
@@ -1641,17 +1860,15 @@ body{background-color:var(--paper);
         <div class="feed" data-f="od"><section class="fi sec" aria-labelledby="odT">
           <h3 class="sr" id="odT">Como ler os estados</h3>
           <div class="cont">
-            <div class="cnt a"><span class="k"><i aria-hidden="true"></i>ABORT</span><span class="v" id="cA">0</span></div>
-            <div class="cnt h"><span class="k"><i aria-hidden="true"></i>HOLD</span><span class="v" id="cH">0</span></div>
-            <div class="cnt f"><span class="k"><i aria-hidden="true"></i>Afastadas</span><span class="v" id="cF">0</span></div>
+            <div class="cnt a"><span class="k"><i aria-hidden="true"></i>Achados</span><span class="v" id="cA">0</span></div>
+            <div class="cnt f"><span class="k"><i aria-hidden="true"></i>Afastados</span><span class="v" id="cF">0</span></div>
           </div>
           <ul class="legenda">
-            <li><b>HOLD</b><span>a dúvida permanece, mas não se demonstrou que a conclusão dependa dela. Pede leitura, explicação ou correção.</span></li>
-            <li><b>ABORT</b><span>se a dúvida proceder, a conclusão central não se sustenta sem enfrentá-la. Não é veto ao ato.</span></li>
-            <li><b>Afastada</b><span>dúvida que não resistiu ao crivo.</span></li>
-            <li><span></span><span class="nota-c">HOLD e ABORT não são graus de gravidade: indicam a relação da dúvida com a conclusão. O CERNE classifica perguntas, nunca o ato.</span></li>
+            <li><b>Achado</b><span>a dúvida resistiu ao crivo e virou pergunta, presa ao trecho de origem. Pede leitura, explicação ou correção. Não é veto ao ato.</span></li>
+            <li><b>Afastado</b><span>a dúvida não resistiu ao crivo. Fica registrada, com o argumento que a afastou.</span></li>
+            <li><span></span><span class="nota-c">Achado não mede gravidade nem julga o ato: indica uma pergunta que precisa de resposta. O CERNE classifica perguntas, nunca o ato.</span></li>
             <li><span></span><span>Quem responde pelo ato lê a pergunta, confere o trecho e escolhe: explicar, corrigir, pesquisar ou manter a posição sob a própria assinatura. O CERNE não preenche essa escolha. Impede que ela passe despercebida.</span></li>
-            <li><span></span><span>Uma rodada pode terminar sem perguntas, porque nenhuma dúvida se formou ou porque todas foram afastadas. É resultado, não aval: isso não certifica a correção do ato.</span></li>
+            <li><span></span><span>Uma rodada pode terminar sem achados, porque nenhuma dúvida se formou ou porque todas foram afastadas. É resultado, não aval: isso não certifica a correção do ato.</span></li>
           </ul>
         </section></div>
 
@@ -1698,12 +1915,39 @@ body{background-color:var(--paper);
 
 <!-- 1.9 prova ▪ 1.10 fecho ▪ 1.11 seta -->
 <section class="fecho" id="fecho" aria-label="Prova">
-  <div class="f-num">
-    <span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span>
-    <p>Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p>
+  <div class="f-grade">
+    <div class="f-esq">
+      <div class="f-num"><span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span></div>
+      <p class="f-nota" id="nota1">1 Lote único, <span class="pvLote">TJPR e STJ</span>: <span id="pvA">18</span> atos selecionados, <span id="pvD3">12</span> no teste. Ficam fora os atos cujos embargos reconheceram só omissão, porque o CERNE lê só o ato, e a omissão depende dos autos. Os dois pontos fora do que os embargos corrigiram foram avaliados pelo autor. Resultado desta seleção, não taxa geral de precisão.</p>
+      <div class="f-acao"><button class="btn solid" type="button" id="btnOutro">Escolher outro ato</button></div>
+    </div>
+    <div class="f-dir">
+      <p class="f-txt">Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p>
+      <figure class="funil rv" aria-label="Do lote ao ponto corrigido">
+        <figcaption><span>Do lote ao ponto corrigido</span><span>acórdão × embargos acolhidos</span></figcaption>
+        <ol>
+          <li class="fu0" style="--v:18"><span class="fu-r">Pares selecionados</span><span class="fu-b"><i></i></span><b data-pv="analisados">18</b></li>
+          <li class="fu1" style="--v:12"><span class="fu-r">No teste</span><span class="fu-b"><i></i></span><b data-pv="escopo">12</b></li>
+          <li class="fu2" style="--v:9"><span class="fu-r">Com ponto embargável</span><span class="fu-b"><i></i></span><b data-pv="corroboradas">9</b></li>
+          <li class="fu3" style="--v:7"><span class="fu-r">No ponto corrigido</span><span class="fu-b"><i></i></span><b data-pv="correspondencias">7</b></li>
+        </ol>
+        <p class="fu-pe">A rodada recebe só o acórdão. Os embargos entram depois, como referência.</p>
+      </figure>
+    </div>
   </div>
-  <p class="f-nota" id="nota1">1 Lote único, <span class="pvLote">TJPR e STJ</span>: <span id="pvA">18</span> atos selecionados, <span id="pvD3">12</span> no teste. Ficam fora os atos cujos embargos reconheceram só omissão, porque o CERNE lê só o ato, e a omissão depende dos autos. Os dois pontos fora do que os embargos corrigiram foram avaliados pelo autor. Resultado desta seleção, não taxa geral de precisão.</p>
-  <div class="f-acao"><button class="btn solid" type="button" id="btnOutro">Escolher outro ato</button></div>
+
+  <div class="trip">
+    <div class="trip-cab rv">
+      <p class="ind">O dispositivo</p>
+      <h2 class="trip-t">Revisão confirmatória não encontra o que não procura.</h2>
+    </div>
+    <ol class="trip-l">
+      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">01</span><h3>Contexto</h3><p>Texto bem escrito pode esconder lacuna decisória e precedente sem pertinência material. A fluência convence antes que alguém confira o caminho.</p></div></div></li>
+      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">02</span><h3>Aplicação</h3><p>Todas as lentes leem cada ato, e nenhuma pode ser pulada. A dúvida formada enfrenta confronto adversarial e só se mantém sob critério fixo. O que resiste é consolidado por trecho, com identidade e rastro preservados.</p></div></div></li>
+      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">03</span><h3>Efeito</h3><p>Rodada sem achado é resultado válido, não certificado de correção jurídica. O registro preserva também os afastados e os argumentos que justificaram o afastamento.</p></div></div></li>
+    </ol>
+  </div>
+
   <h2 class="citacao">A IA ajuda a percorrer o caminho. Alguém ainda precisa perguntar se ela caminhou.</h2>
   <div class="seta-w">
     <button class="seta" type="button" id="btnTese" aria-expanded="false" aria-controls="tese">
@@ -1909,12 +2153,12 @@ body{background-color:var(--paper);
     </div>
     <h2 class="mv-t" id="mvT">Histórico de versões</h2>
     <ol class="vlist">
-          <li><span class="vn">5.0.0</span><span class="vd">12/10/2026</span><span><b>Refundação.</b> Perguntas por trecho, relatório em duas camadas, nenhum veredito.</span></li>
+          <li class="maior"><span class="vn">5.0.0</span><span class="vd">12/10/2026</span><span><b>Refundação.</b> Perguntas por trecho, relatório em duas camadas, nenhum veredito.</span></li>
           <li><span class="vn">4.0.2</span><span class="vd">23/09/2026</span><span><b>Fechamento computacional.</b></span></li>
           <li><span class="vn">4.0.1</span><span class="vd">23/09/2026</span><span><b>Formalização dos controles.</b></span></li>
-          <li><span class="vn">4.0.0</span><span class="vd">23/09/2026</span><span><b>Consolidação canônica.</b> 156 verificações aprovadas.</span></li>
-          <li><span class="vn">3.0.0</span><span class="vd">09/09/2026</span><span><b>Manual canônico.</b></span></li>
-          <li><span class="vn">2.0.0</span><span class="vd">18/08/2026</span><span><b>Núcleo e domínios.</b></span></li>
+          <li class="maior"><span class="vn">4.0.0</span><span class="vd">23/09/2026</span><span><b>Consolidação canônica.</b> 156 verificações aprovadas.</span></li>
+          <li class="maior"><span class="vn">3.0.0</span><span class="vd">09/09/2026</span><span><b>Manual canônico.</b></span></li>
+          <li class="maior"><span class="vn">2.0.0</span><span class="vd">18/08/2026</span><span><b>Núcleo e domínios.</b></span></li>
           <li><span class="vn">1.2.0</span><span class="vd"></span><span><b>Módulo do ATRIO.</b></span></li>
           <li><span class="vn">0.2.0</span><span class="vd"></span><span><b>Segunda versão autônoma.</b></span></li>
           <li><span class="vn">0.1.0</span><span class="vd"></span><span><b>Primeiro protótipo executável.</b></span></li>
@@ -1993,29 +2237,28 @@ body{background-color:var(--paper);
  ],
  "contagens": {
   "formadas": 18,
-  "abort": 18,
-  "hold": 0,
+  "achados": 18,
   "afastadas": 0,
   "perguntas": 3
  },
  "perguntas": [
   {
    "n": 1,
-   "estado": "ABORT",
+   "estado": "ACHADO",
    "paragrafo": "p3",
    "texto": "Que prova da avaliação realizada e que parâmetro de mercado sustentam a tarifa de R$ 215,00 e afastam sua abusividade?",
    "trecho": "A possibilidade de cobrança da tarifa de avaliação de bem foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes à avaliação do bem, desde que expressamente previsto no contrato, efetivamente prestado o servido e, em valor não abusivo. No presente caso: i. Há expressa previsão de cobrança da tarifa de avaliação, com o respectivo valor informado; ii. A atividade de avaliação está justificada pela condição do bem móvel e, queusado demanda apuração pelo valor atualizado de mercado nas hipóteses seguintes: avaliação, reavaliação e substituição de bens; iii. Não se demonstrou que o valor da tarifa (R$ 215,00) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da tarifa de avaliação do bem conforme o entendimento do Superior Tribunal de Justiça:"
   },
   {
    "n": 2,
-   "estado": "ABORT",
+   "estado": "ACHADO",
    "paragrafo": "p6",
    "texto": "Que elemento prova o serviço cobrado, se o registro não foi comprovado, diante do interesse do credor e da ressalva do STJ?",
    "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 58,50) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
   },
   {
    "n": 3,
-   "estado": "ABORT",
+   "estado": "ACHADO",
    "paragrafo": "p6",
    "texto": "Que parâmetro de mercado ou cálculo sustenta que a tarifa de R$ 58,50 não é abusiva?",
    "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 58,50) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
@@ -2221,50 +2464,49 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 11,
-   "abort": 3,
-   "hold": 7,
+   "achados": 10,
    "afastadas": 1,
    "perguntas": 6
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que julgados anteriores relevantes foram considerados, além dos vinculantes, e por que não influenciam a análise?",
     "trecho": "2.Não há que se falar do julgamento do presente recurso sob o prisma da uniformização de jurisprudência, pois rejeitado IRDR neste sentido pelo TJPR. Sob esta ótica e à falta de decisão vinculante sobre a matéria em debate decorrente de outro instituto processual pertinente, a análise do caso cabe ao prudente arbítrio do julgador, não havendo que se falar em sujeição a eventuais julgados anteriores, porque não vinculativos."
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p5",
     "texto": "Como a data do contrato, não indicada no trecho, sustenta a aplicação dessas regras?",
     "trecho": "4.O empréstimo consignado em benefício previdenciário decorrente de contrato de cartão de crédito é expressamente previsto na Lei 13.172/15 (artigo 6º, §5º), sendo que a retenção da Reserva de Margem Consignável (RMC) é autorizada a contratos de empréstimo consignado por cartão de crédito, “desde que expressamente autorizada” (Instrução Normativa do INSS n. 39/2009, art. 3º, item III)."
    },
    {
     "n": 3,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p5",
     "texto": "A que lei pertence o artigo 6º, § 5º, citado no trecho?",
     "trecho": "4.O empréstimo consignado em benefício previdenciário decorrente de contrato de cartão de crédito é expressamente previsto na Lei 13.172/15 (artigo 6º, §5º), sendo que a retenção da Reserva de Margem Consignável (RMC) é autorizada a contratos de empréstimo consignado por cartão de crédito, “desde que expressamente autorizada” (Instrução Normativa do INSS n. 39/2009, art. 3º, item III)."
    },
    {
     "n": 4,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "Como o trecho distingue a adesão ao cartão da compreensão da cobrança mínima e de seus efeitos?",
     "trecho": "5. O autor não se desincumbiu do ônus de provar (CPC, artigo 373, I) a ocorrência de falha no dever de informação (CDC, artigo 6º, III) ou de algum vício do consentimento no momento da celebração do contrato. Com efeito, o simples fato de acreditar estar firmando contrato de empréstimo consignado e posteriormente constatar que a cobrança se opera pelo desconto de fatura mínima junto a cartão de crédito consignado não invalida o negócio jurídico expressamente admitido por lei e com cláusulas redigidas de forma clara, de fácil leitura e compreensão. Cumpre salientar, ainda, que em momento algum o autor questionou a veracidade da assinatura aposta no contrato ou negou o recebimento do crédito, evidenciando, assim, a sua expressa adesão ao cartão de crédito consignado."
    },
    {
     "n": 5,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "Que dados mostram que o desconto mínimo reduz tão pouco o saldo a ponto de tornar a dívida impagável e justificar a nulidade?",
     "trecho": "6. Contudo, o defeito do negócio jurídico celebrado entre as partes se manifesta no momento de sua execução porque ao estabelecer o desconto de parcela mínima através de margem consignável decorrente de cartão de crédito, a dívida contraída se torna impagável, em razão do decréscimo ínfimo do saldo devedor. Daí por que deve ser declarada a nulidade da cláusula contratual que permite o desconto contínuo de valor proporcional do mútuo pela fatura mínima do cartão sem termo certo, visto que: a) estabelece obrigações abusivas (CDC, artigo 51, IV); b) está em desacordo com o sistema de proteção ao consumidor (CDC, artigo 51, XV); e, c) onera demasiadamente o consumidor (CDC, artigo 51, §1º, III)."
    },
    {
     "n": 6,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p8",
     "texto": "Que fundamento permite manter o desconto fixo pela RMC após afastar a cobrança pela fatura mínima?",
     "trecho": "7. A nulidade da cláusula contratual que permitia o desconto contínuo de valor proporcional do mútuo pela fatura mínima do cartão não invalida o contrato (CDC, artigo 51, § 2º). Contudo, em observância ao princípio da boa fé objetiva (CC, artigo 422) e para evitar o enriquecimento ilícito da parte, uma vez que o valor do crédito foi depositado em conta corrente do consumidor, se faz necessário adequar o contrato nos seguintes termos: a) o montante recebido à título de crédito pela parte autora deverá continuar a ser objeto de desconto junto à margem consignável. O desconto, todavia, não se dará sobre valor mínimo descontado sobre fatura de cartão de crédito, mas sim pelo saldo residual devedor e no montante fixo definido no extrato RMC, tão somente até a quitação pelo valor nominal, sem incidência de juros ou correção monetária, pois não há previsão no contrato (que prevê somente encargos para cartão de crédito), sendo esta a consequência do reconhecimento da abusividade da cláusula contratual. Em síntese: os pagamentos já efetuados serão abatidos de eventual saldo devedor existente, prosseguindo-se os descontos pelo valor fixo já estipulado junto a RMC em tantas parcelas quanto suficientes para alcançar a quitação do valor já recebido pelo autor."
@@ -2324,43 +2566,42 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 14,
-   "abort": 12,
-   "hold": 2,
+   "achados": 14,
    "afastadas": 0,
    "perguntas": 5
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p1",
     "texto": "A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?",
     "trecho": "EMENTA: BANCÁRIO. AÇÃO REVISIONAL. RECURSO DO RÉU. SEGURO DE PROTEÇÃO FINANCEIRA E ENCARGOS CONTRATUAIS DA NORMALIDADE. VALIDADE DA COBRANÇA CONDICIONADA AO ATENDIMENTO DOS PARÂMETROS ESTABELECIDOS NOS JULGAMENTOS DOS RECURSOS ESPECIAIS 1.251.331/RS, 1.578.553/SP, 1.639.259/SP. JURISPRUDÊNCIA CONSOLIDADA. DECISÃO DO RELATOR. ARTIGO 1.011, I, C/C 932, IV E V, DO CÓDIGO DE PROCESSO CIVIL. RECURSO PARCIALMENTE PROVIDO. 1."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que prova, além da falta de opção, mostra que ambos os seguros, inclusive o auto, foram impostos por seguradora determinada?",
     "trecho": "O seguro de proteção financeira, vinculado ao contrato principal, garante a quitação do saldo devedor em caso de desemprego involuntário, quando existente o vínculo empregatício, ou de perda de renda, quando o segurado é trabalhador autônomo. Com a finalidade de resguardar o direito de livre escolha do consumidor, o contrato de fornecimento de crédito deve conter cláusula com redação clara a respeito dessa opção: Seguro de Proteção Financeira com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada: ( ) Sim ( ) Não Neste sentido, e ausente a informação acima, caracteriza venda casada a previsão contratual que impõe ao consumidor a contratação de seguro com seguradora determinada, prática vendada pelo artigo 39, I, da Lei n° 8.078/90. No presente caso: i. Não existe cláusula contratual prevendo, para o consumidor as alternativas, de contratar o seguro com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada, com as opções - Sim e Não - redigidas claramente. Portanto, no caso, está caracterizada a venda casada do seguro de proteção financeira e do seguro “auto”, conforme o entendimento do Superior Tribunal de Justiça: “2.2 - Nos contratos bancários em geral, o consumidor não pode ser compelido a contratar seguro com a instituição financeira ou com seguradora por ela indicada.”. (Recurso Especial nº 1.639.259 - SP (2016/0306899-7 de 12/12/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino)."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Que prova faltava e por que a insuficiência do consumidor, apesar da inversão do ônus, torna o pedido complexo e o Juizado incompetente?",
     "trecho": "2. Juros remuneratórios sobre as tarifas (seguro de proteção financeira) Constata-se que a cobrança reputada abusiva foi diluída no valor das parcelas e, portanto, compõe a base de cálculo para incidência dos juros remuneratórios. Mas ainda que se reconheça a ilegalidade na cobrança, no âmbito dos Juizados Especiais a prolação de sentença ilíquida é inadmissível (artigo 38, § único da Lei 9.099/95). Nesse sentido, não podem ser olvidadas a existência de relação de consumo e a constatação, de plano, da hipossuficiência técnica do consumidor. Por esses motivos, a inversão do ônus da prova como regra de procedimento aplicável ao caso concreto, e a insuficiência do meio de prova fornecido pelo autor para formação da convicção contra a instituição financeira, conduzem à forçosa conclusão pela complexidade da causa e a consequente falta de competência para se conhecer do pedido de repetição do indébito dos juros remuneratórios incidentes sobre as tarifas. Enunciado FONAJE 54: “A menor complexidade da causa para a fixação da competência é aferida pelo objeto da prova e não em face do direito material. ”. 3."
    },
    {
     "n": 4,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?",
     "trecho": "A repetição do indébito é cabível sempre que constatado o pagamento indevido, independente da comprovação de erro no pagamento (Súmula nº 322 do STJ). Os valores cobrados indevidamente devem, pois, ser restituídos com correção monetária (INPC/IGP-DI) desde o desembolso e juros de mora de 1% ao mês a partir da citação. Dispositivo O presente recurso comporta decisão individual do relator (art. 1.011, CPC/2015), com fundamento no artigo 932 do Código de Processo Civil: Recurso , com fundamento no artigo 932, V, do CPC, para:parcialmente provido i. Com fundamento, no parágrafo único do artigo 38 da Lei 9.099/95, julgar extinto, sem resolução de mérito, o pedido de restituição dos juros remuneratórios incidentes sobre as cobranças declaradas abusivas (seguro de proteção financeira); iii. Determinar que o reembolso dos valores pagos em excesso pelo autor ocorra na forma simples, com correção monetária (INPC/IGP-DI) desde o desembolso e juros de mora de 1,0% ao mês a partir da citação. Com a condenação do recorrente ao pagamento das custas processuais e de honorários advocatícios fixados em 10% sobre o valor da condenação."
    },
    {
     "n": 5,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito em conta-corrente?",
     "trecho": "A repetição do indébito é cabível sempre que constatado o pagamento indevido, independente da comprovação de erro no pagamento (Súmula nº 322 do STJ). Os valores cobrados indevidamente devem, pois, ser restituídos com correção monetária (INPC/IGP-DI) desde o desembolso e juros de mora de 1% ao mês a partir da citação. Dispositivo O presente recurso comporta decisão individual do relator (art. 1.011, CPC/2015), com fundamento no artigo 932 do Código de Processo Civil: Recurso , com fundamento no artigo 932, V, do CPC, para:parcialmente provido i. Com fundamento, no parágrafo único do artigo 38 da Lei 9.099/95, julgar extinto, sem resolução de mérito, o pedido de restituição dos juros remuneratórios incidentes sobre as cobranças declaradas abusivas (seguro de proteção financeira); iii. Determinar que o reembolso dos valores pagos em excesso pelo autor ocorra na forma simples, com correção monetária (INPC/IGP-DI) desde o desembolso e juros de mora de 1,0% ao mês a partir da citação. Com a condenação do recorrente ao pagamento das custas processuais e de honorários advocatícios fixados em 10% sobre o valor da condenação."
@@ -2415,22 +2656,21 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 11,
-   "abort": 9,
-   "hold": 1,
+   "achados": 10,
    "afastadas": 1,
    "perguntas": 2
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p1",
     "texto": "Como os precedentes citados orientam a análise das tarifas, se o pedido foi afastado por complexidade da prova?",
     "trecho": "EMENTA: BANCÁRIO. AÇÃO REVISIONAL. TARIFAS E ENCARGOS CONTRATUAIS DA NORMALIDADE. TARIFA DE AVALIAÇÃO DE BEM. TARIFA DE REGISTRO DE CONTRATO. VALIDADE DA COBRANÇA CONDICIONADA AO ATENDIMENTO DOS PARÂMETROS ESTABELECIDOS NOS JULGAMENTOS DOS RECURSOS ESPECIAIS 1.251.331/RS, 1.578.553/SP, 1.639.259/SP. REPETIÇÃO SIMPLES DO INDÉBITO. JURISPRUDÊNCIA CONSOLIDADA. DECISÃO DO RELATOR. ARTIGO 1.011, I, C/C 932, IV E V, DO CÓDIGO DE PROCESSO CIVIL. RECURSO DESPROVIDO."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Que prova faltou, por que sua apuração seria complexa no Juizado e como isso impede calcular a restituição apesar da inversão do ônus?",
     "trecho": "Constata-se que as tarifas reputadas abusivas foram diluídas no valor das parcelas e, portanto, compõem a base de cálculo para incidência dos juros remuneratórios. Mas ainda que se reconheça a ilegalidade na cobrança das tarifas administrativas, no âmbito dos Juizados Especiais a prolação de sentença ilíquida é inadmissível (artigo 38, § único da Lei 9.099/95). Nesse sentido, não podem ser olvidadas a existência de relação de consumo e a constatação, de plano, da hipossuficiência técnica do consumidor. Por esses motivos, a inversão do ônus da prova como regra de procedimento aplicável ao caso concreto, e a insuficiência do meio de prova fornecido pelo autor para formação da convicção contra a instituição financeira, conduzem à forçosa conclusão pela complexidade da causa e a consequente falta de competência para se conhecer do pedido de repetição do indébito dos juros remuneratórios incidentes sobre as tarifas. Enunciado FONAJE 54: “A menor complexidade da causa para a fixação da competência é aferida pelo objeto da prova e não em face do direito material. ”."
@@ -2509,57 +2749,56 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 24,
-   "abort": 19,
-   "hold": 5,
+   "achados": 24,
    "afastadas": 0,
    "perguntas": 7
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que elementos demonstram o início da relação e que R$ 496,00 não era abusivo?",
     "trecho": "Sobre a possibilidade de cobrança da tarifa de cadastro, o Superior Tribunal de Justiça editou a seguinte súmula: Súmula 566 -Nos contratos bancários posteriores ao início da vigência da Resolução-CMN n. 3.518/2007, em 30/4/2008, pode ser cobrada a tarifa de cadastro no início do relacionamento entre o consumidor e a instituição financeira. De acordo com a jurisprudência consolidada sobre a matéria, é válida cobrança da tarifa de cadastro: i. no início do relacionamento entre o cliente e a instituição financeira; ii. desde que expressamente contratada; iii. não constatada a abusividade no valor estipulado. No presente caso: i. Há expressa previsão de cobrança da tarifa de cadastro; ii. Não se constatam indícios da pré-existência do vínculo entre as partes contratantes; iii. Não se demonstrou que o valor (R$ 496,00) quando considerado frente ao valor da obrigação principal (R$ 24.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há, no caso, ilegalidade na cobrança da tarifa de cadastro."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "A data do contrato confirma que ele foi celebrado após 30 de abril de 2008?",
     "trecho": "Sobre a possibilidade de cobrança da tarifa de cadastro, o Superior Tribunal de Justiça editou a seguinte súmula: Súmula 566 -Nos contratos bancários posteriores ao início da vigência da Resolução-CMN n. 3.518/2007, em 30/4/2008, pode ser cobrada a tarifa de cadastro no início do relacionamento entre o consumidor e a instituição financeira. De acordo com a jurisprudência consolidada sobre a matéria, é válida cobrança da tarifa de cadastro: i. no início do relacionamento entre o cliente e a instituição financeira; ii. desde que expressamente contratada; iii. não constatada a abusividade no valor estipulado. No presente caso: i. Há expressa previsão de cobrança da tarifa de cadastro; ii. Não se constatam indícios da pré-existência do vínculo entre as partes contratantes; iii. Não se demonstrou que o valor (R$ 496,00) quando considerado frente ao valor da obrigação principal (R$ 24.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há, no caso, ilegalidade na cobrança da tarifa de cadastro."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Que elemento demonstra a prestação do serviço exigida pelo precedente, apesar da dispensa de provar o registro?",
     "trecho": "2.Tarifa de registro de contrato A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 101,54) quando considerado frente ao valor da obrigação principal (R$ 24.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 4,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Que referência de preço do trecho permite considerar não abusiva a tarifa de registro?",
     "trecho": "2.Tarifa de registro de contrato A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 101,54) quando considerado frente ao valor da obrigação principal (R$ 24.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 5,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "Que dados do caso mostram que a taxa, embora abaixo do dobro da média, não é significativamente discrepante?",
     "trecho": "3. Pedido de limitação à taxa média de mercado. Taxa do contrato que não supera o dobro da média de mercado. Na ordem de estabelecer parâmetros objetivos para esta aferição, a Segunda Seção do Superior Tribunal de Justiça consolidou o seguinte entendimento: a) as instituições financeiras não se sujeitam à limitação dos juros remuneratórios estipulada na Lei de Usura (Decreto 22.626/33), Súmula 596/STF; b) a estipulação de juros remuneratórios superiores a 12% ao ano, por si só, não indica abusividade; c) são inaplicáveis aos juros remuneratórios dos contratos de mútuo bancário as disposições do art. 591 combinado com o art. 406 do CC/02; d) é admitida a revisão das taxas de juros remuneratórios em situações excepcionais, desde que caracterizada a relação de consumo e que a abusividade (capaz de colocar o consumidor em desvantagem exagerada - art. 51, §1º, do CDC) fique cabalmente demonstrada ante as peculiaridades do julgamento em concreto.” (REsp 1.061.530/RS). Dessa forma: os juros remuneratórios são devidos à taxa contratada; salvo se comprovado, in concreto, que são abusivos, assim entendidos aqueles que discrepem significativamente da média de mercado\" (STJ - AgRg no REsp 1032626/MS - Rel. Min. Vasco Della Giustina - 3ª T - j. 18/08/2009). A divulgação pelo Banco Central do Brasil das taxas médias mensais dos juros remuneratórios de empréstimo pessoal auxiliam o julgador na formação do seu convencimento quanto à existência de equilíbrio econômico. (STJ – AgRg no AREsp 540244/MS – Rel. Min. Moura Ribeiro – Terceira Turma – Data do julgamento 21.10.2014) Assim, entende-se que a limitação dos juros remuneratórios somente é admitida quando demonstrado que a taxa cobrada pelas instituições financeiras superam substancialmente a taxa média de mercado publicada pelo Bacen às operações de mesma espécie. No presente caso, a taxa do contrato não supera o dobro da média de mercado. Essa diferença não autoriza o reconhecimento da abusividade. . 4."
    },
    {
     "n": 6,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p8",
     "texto": "Que prova faltou e por que sua apuração torna complexo o pedido de restituição dos juros das tarifas?",
     "trecho": "Constata-se que as tarifas reputadas abusivas foram diluídas no valor das parcelas e, portanto, compõem a base de cálculo para incidência dos juros remuneratórios. Mas ainda que se reconheça a ilegalidade na cobrança das tarifas administrativas, no âmbito dos Juizados Especiais a prolação de sentença ilíquida é inadmissível (artigo 38, § único da Lei 9.099/95). Nesse sentido, não podem ser olvidadas a existência de relação de consumo e a constatação, de plano, da hipossuficiência técnica do consumidor. Por esses motivos, a inversão do ônus da prova como regra de procedimento aplicável ao caso concreto, e a insuficiência do meio de prova fornecido pelo autor para formação da convicção contra a instituição financeira, conduzem à forçosa conclusão pela complexidade da causa e a consequente falta de competência para se conhecer do pedido de repetição do indébito dos juros remuneratórios incidentes sobre as tarifas. Enunciado FONAJE 54: “A menor complexidade da causa para a fixação da competência é aferida pelo objeto da prova e não em face do direito material. ”. 5."
    },
    {
     "n": 7,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p10",
     "texto": "Que elementos mostram que a capitalização no período normal foi regular, permitindo manter a mora?",
     "trecho": "A questão deve ser analisada à luz da jurisprudência consolidada do Superior Tribunal de Justiça, aqui representada pela seguinte orientação: ORIENTAÇÃO 2 - CONFIGURAÇÃO DA MORA: a) O reconhecimento da abusividade nos encargos exigidos no período da normalidade contratual (juros remuneratórios e capitalização) descaracteriza a mora; b) Não descaracteriza a mora o ajuizamento isolado de ação revisional, nem mesmo quando o reconhecimento de abusividade incidir sobre os encargos inerentes ao período de inadimplência contratual. Na espécie, não restou configurada a ilegalidade/abusividade dos encargos exigidos no período da normalidade contratual (capitalização de juros e juros remuneratórios)."
@@ -2571,7 +2810,7 @@ body{background-color:var(--paper);
    "pergunta": null,
    "trecho_embargos": "De fato, os argumentos expendidos pelo agravante são suficientes para a comprovação da omissão quantos aos encargos (IOF). Contudo, mesmo com o reconhecimento da omissão, não há que se falar em ilegalidade dos encargos.",
    "selo": "Fora do teste",
-   "conferencia": "Os embargos reconheceram omissão, que fica fora do teste: o CERNE lê só o ato, e a omissão depende dos autos. Nenhuma pergunta tratou do IOF, que o ato não menciona. As perguntas 1 e 5 mantiveram ABORT sobre a tarifa de cadastro e sobre a taxa de juros, pontos que os embargos reexaminaram e mantiveram.",
+   "conferencia": "Os embargos reconheceram omissão, que fica fora do teste: o CERNE lê só o ato, e a omissão depende dos autos. Nenhuma pergunta tratou do IOF, que o ato não menciona. As perguntas 1 e 5 trataram da tarifa de cadastro e da taxa de juros, pontos que os embargos reexaminaram e mantiveram.",
    "outras": "As 7 perguntas desta rodada tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação.",
    "visibilidade": "Onde estava o ponto: ausente do texto do ato (classificação feita depois da rodada)."
   }
@@ -2630,29 +2869,28 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 9,
-   "abort": 6,
-   "hold": 1,
+   "achados": 7,
    "afastadas": 2,
    "perguntas": 3
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "Que dado da conta mostra que seu período de remuneração começou até 15 de janeiro de 1989 e recebeu índice superveniente?",
     "trecho": "6. Além disso, a instituição financeira afirma que aplicou a lei vigente à época dos fatos e que não há direito adquirido à correção pelo IPC. A insurgência também não comporta acolhimento. Consoante o REsp. nº 1.147.595/RS, “não há como fugir à constatação de que, nos períodos questionados das aplicações em Cadernetas de Poupança, os poupadores tinham contratualmente direito a mais do que efetivamente receberam, em diferenças constantes de índices já estabelecidos pela jurisprudência, de modo que, reconhecida a ilegalidade do abatimento realizado em virtude dos Planos Econômicos em causa, têm, eles, os poupadores, direito a receber a diferença do que não lhes foi pago”. Quanto à legislação incidente, o STJ entendeu que a atualização monetária deveria ser feita com base na norma vigente no período da correção, o que impediu a aplicação retroativa da Medida Provisória 322, convertida na Lei 7.7300/89. A questão controvertida, apreciada por este Tribunal à luz da decisão da Corte Superior, deu origem ao enunciado de número 11.6: Enunciado N.º 11.6- Plano Verão – IPC (42,72%): A Medida Provisória n.º 32 (Lei 7.730/89) é aplicável a partir de 16 de janeiro de 1989, não alcançando as situações pretéritas protegidas pela legislação vigente à data do depósito (princípio da irretroatividade). Os períodos iniciados até 15 de janeiro de 1989 ficam sob a regência da norma anterior, devendo ser remunerados pelo IPC, no percentual de 42,72%. Conforme documento juntado à petição inicial, verifica-se que o autor era titular de caderneta de poupança na então Companhia Real de Crédito Imobiliário no mês de janeiro de 1989 (mov. 1.6, f. 2). No período, inclusive, possuía saldo positivo na poupança, que foi remunerado com base em índice previsto por legislação superveniente. Sendo assim, o entendimento firmado pelo STJ aplica-se ao presente caso, o que obsta a reforma da sentença de acordo com os interesses da instituição financeira."
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p8",
     "texto": "Que fundamento explica aplicar a TR às diferenças desde março de 1991 até hoje, além da remissão ao enunciado?",
     "trecho": "7. De acordo com o enunciado 11.10 das Turmas Recursais do Paraná, “os juros de mora (1% a.m.) devem incidir a partir da citação (CPC, art. 219, caput, c/c o art. 405 do CC)”, assim como já previsto na sentença recorrida. Já “as diferenças entre os rendimentos creditados e a aplicação dos índices corretos deverão ser corrigidas monetariamente pelos mesmos índices aplicáveis às cadernetas de poupança, quais sejam, a BTN, até fevereiro de 1991, e a TR, desde 1° de março de 1991 até os dias de hoje, observado o IPC para os meses de março (84,32%), abril (44,80%) e maio de 1990 (7,87%), sem prejuízo dos juros de mora, devidos desde a citação, no percentual de 1% (um por cento) ao mês”, nos termos do enunciado 11.12 das Turmas Recursais do Paraná."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p9",
     "texto": "Que fundamento mostra que o relator podia negar o recurso individualmente com base no artigo 932, IV, b?",
     "trecho": "8. O presente recurso comporta decisão individual do relator (art. 1.011, CPC/2015), com fundamento no artigo 932, IV, do Código de Processo Civil. Recurso desprovido, com fundamento no artigo 932, IV, b, do CPC, com a condenação do recorrente ao pagamento das custas processuais e de honorários advocatícios fixados em 20% sobre o valor da condenação."
@@ -2664,7 +2902,7 @@ body{background-color:var(--paper);
    "pergunta": 2,
    "trecho_embargos": "Nos termos da fundamentação, o recurso interposto pelo réu foi desprovido. Como consequência, fica a [sentença] mantida, inclusive no que diz respeito à aplicação da média INPC/IGP-DI desde a data em que deveriam ser pagos os valores.",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 2 pediu o fundamento para corrigir as diferenças pela TR. Os embargos reconheceram a contradição: desprovido o recurso, valia o índice da sentença. O resultado não mudou, e o estado foi HOLD.",
+   "conferencia": "A pergunta 2 pediu o fundamento para corrigir as diferenças pela TR. Os embargos reconheceram a contradição: desprovido o recurso, valia o índice da sentença. O resultado não mudou.",
    "outras": "As outras 2 perguntas tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação."
   }
  },
@@ -2706,36 +2944,35 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 14,
-   "abort": 4,
-   "hold": 10,
+   "achados": 14,
    "afastadas": 0,
    "perguntas": 4
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p2",
     "texto": "Que prova demonstra a efetiva prestação do registro, requisito que a própria decisão reconhece para validar a tarifa?",
     "trecho": "1. No caso a controvérsia da demanda reside na cobrança da tarifa de registro, seguro de proteção financeira, IOF, e no valor dos juros pactuados frente a média de mercado. Tarifa de registro de contrato A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$74,89) quando considerado frente ao valor da obrigação principal (R$7.407,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p2",
     "texto": "Que critério concreto sustenta que a tarifa de R$ 74,89 não é abusiva neste caso?",
     "trecho": "1. No caso a controvérsia da demanda reside na cobrança da tarifa de registro, seguro de proteção financeira, IOF, e no valor dos juros pactuados frente a média de mercado. Tarifa de registro de contrato A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$74,89) quando considerado frente ao valor da obrigação principal (R$7.407,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 3,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que critério permite chamar mínima a diferença entre 38,96% e 21,30% e, com base nela, afastar a revisão dos juros?",
     "trecho": "1. É válida a cobrança da tarifa de avaliação de bem e registro de contrato, conforme tese fixada no julgamento do Resp. 1.578.553/SP, submetido ao rito dos Recursos Repetitivos: “Validade da tarifa de avaliação do bem dado em garantia, bem como da cláusula que prevê o ressarcimento de despesa com o registro do contrato, ressalvadas a: - abusividade da cobrança por serviço não efetivamente prestado; e a - possibilidade de controle da onerosidade excessiva, em cada caso concreto”. (Recurso Especial 1.578.553 - SP (2016/0011277-6 de 28/11/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino). Seguro de proteção financeira O seguro de proteção financeira vinculado ao contrato principal, garante a quitação do saldo devedor em caso de desemprego involuntário, quando existente o vínculo empregatício, ou de perda de renda, quando o segurado é trabalhador autônomo. Com a finalidade de resguardar o direito de livre escolha do consumidor, o contrato de fornecimento de crédito deve conter cláusula com redação clara a respeito dessa opção: Seguro de Proteção Financeira com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada: ( ) Sim ( ) Não Neste sentido, e ausente a informação acima, caracteriza venda casada a previsão contratual que impõe ao consumidor a contratação de seguro com seguradora determinada, prática vedada pelo artigo 39, I, da Lei n° 8.078/90. No presente caso: i. Existe cláusula contratual prevendo, para o consumidor as alternativas, de contratar o seguro com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada, com as opções - Sim e Não - redigidas claramente. Portanto, no caso, não está caracterizada a venda casada do seguro de proteção financeira, conforme o entendimento do Superior Tribunal de Justiça: “2.2 - Nos contratos bancários em geral, o consumidor não pode ser compelido a contratar seguro com a instituição financeira ou com seguradora por ela indicada.”. (Recurso Especial nº 1.639.259 - SP (2016/0306899-7 de 12/12/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino). Imposto sobre operações financeiras (IOF) A controvérsia também abrange a legalidade de cobrança do Imposto sobre operações financeiras: No julgamento do REsp 1.251.331/RS, o Superior Tribunal de Justiça consolidou o seguinte entendimento: “É lícito aos contratantes convencionar o pagamento doImposto sobre Operações Financeiras e de Crédito (IOF) por meio financiamento acessório ao mútuo principal, sujeitando-o aos mesmos encargos contratuais”. (REsp 1.251.331-RS (2011/0096435-4 de 28/03/2013) - Segunda Seção - Ministra Maria Isabel Gallotti) É válida, portanto, a cobrança do IOF, conforme previsão no contrato. Pedido de limitação à taxa média de mercado. Ausência de discrepância significativa. O autor postula a limitação dos juros remuneratórios fixados no contrato à taxa média de mercado da época da contratação, que era de 21,30%. A insurgência do autor neste ponto precisa levar em conta a necessidade de demonstrar os motivos vinculados ao seu caso, de apontar os parâmetros em relação ao mercado, para que os juros, em seu aspecto quantitativo, sejam considerados abusivos. “É admitida a revisão das taxas de juros remuneratórios em situações excepcionais, desde que caracterizada a relação de consumo e que a abusividade (capaz de colocar o consumidor em desvantagem exagerada - art. , , do ) fique cabalmente demonstrada, ante51 § 1º CDC às peculiaridades do julgamento em concreto. A divulgação pelo Banco Central do Brasil das taxas médias mensais dos juros remuneratórios de empréstimo pessoal auxiliam o julgador na formação do seu convencimento quanto à existência de equilíbrio econômico. (STJ – AgRg no AREsp 540244/MS – Rel. Min. Moura Ribeiro – Terceira Turma – Data do julgamento 21.10.2014) Neste caso, a pretensão não merece acolhimento, pois a taxa aplicada ao contrato ( )38,96% supera minimamente a taxa média publicada pelo BACEN, não se constatando abusividade no percentual aplicado."
    },
    {
     "n": 4,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "As opções “Sim” e “Não” demonstram que o consumidor podia recusar o seguro ou escolher outra seguradora?",
     "trecho": "1. É válida a cobrança da tarifa de avaliação de bem e registro de contrato, conforme tese fixada no julgamento do Resp. 1.578.553/SP, submetido ao rito dos Recursos Repetitivos: “Validade da tarifa de avaliação do bem dado em garantia, bem como da cláusula que prevê o ressarcimento de despesa com o registro do contrato, ressalvadas a: - abusividade da cobrança por serviço não efetivamente prestado; e a - possibilidade de controle da onerosidade excessiva, em cada caso concreto”. (Recurso Especial 1.578.553 - SP (2016/0011277-6 de 28/11/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino). Seguro de proteção financeira O seguro de proteção financeira vinculado ao contrato principal, garante a quitação do saldo devedor em caso de desemprego involuntário, quando existente o vínculo empregatício, ou de perda de renda, quando o segurado é trabalhador autônomo. Com a finalidade de resguardar o direito de livre escolha do consumidor, o contrato de fornecimento de crédito deve conter cláusula com redação clara a respeito dessa opção: Seguro de Proteção Financeira com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada: ( ) Sim ( ) Não Neste sentido, e ausente a informação acima, caracteriza venda casada a previsão contratual que impõe ao consumidor a contratação de seguro com seguradora determinada, prática vedada pelo artigo 39, I, da Lei n° 8.078/90. No presente caso: i. Existe cláusula contratual prevendo, para o consumidor as alternativas, de contratar o seguro com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada, com as opções - Sim e Não - redigidas claramente. Portanto, no caso, não está caracterizada a venda casada do seguro de proteção financeira, conforme o entendimento do Superior Tribunal de Justiça: “2.2 - Nos contratos bancários em geral, o consumidor não pode ser compelido a contratar seguro com a instituição financeira ou com seguradora por ela indicada.”. (Recurso Especial nº 1.639.259 - SP (2016/0306899-7 de 12/12/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino). Imposto sobre operações financeiras (IOF) A controvérsia também abrange a legalidade de cobrança do Imposto sobre operações financeiras: No julgamento do REsp 1.251.331/RS, o Superior Tribunal de Justiça consolidou o seguinte entendimento: “É lícito aos contratantes convencionar o pagamento doImposto sobre Operações Financeiras e de Crédito (IOF) por meio financiamento acessório ao mútuo principal, sujeitando-o aos mesmos encargos contratuais”. (REsp 1.251.331-RS (2011/0096435-4 de 28/03/2013) - Segunda Seção - Ministra Maria Isabel Gallotti) É válida, portanto, a cobrança do IOF, conforme previsão no contrato. Pedido de limitação à taxa média de mercado. Ausência de discrepância significativa. O autor postula a limitação dos juros remuneratórios fixados no contrato à taxa média de mercado da época da contratação, que era de 21,30%. A insurgência do autor neste ponto precisa levar em conta a necessidade de demonstrar os motivos vinculados ao seu caso, de apontar os parâmetros em relação ao mercado, para que os juros, em seu aspecto quantitativo, sejam considerados abusivos. “É admitida a revisão das taxas de juros remuneratórios em situações excepcionais, desde que caracterizada a relação de consumo e que a abusividade (capaz de colocar o consumidor em desvantagem exagerada - art. , , do ) fique cabalmente demonstrada, ante51 § 1º CDC às peculiaridades do julgamento em concreto. A divulgação pelo Banco Central do Brasil das taxas médias mensais dos juros remuneratórios de empréstimo pessoal auxiliam o julgador na formação do seu convencimento quanto à existência de equilíbrio econômico. (STJ – AgRg no AREsp 540244/MS – Rel. Min. Moura Ribeiro – Terceira Turma – Data do julgamento 21.10.2014) Neste caso, a pretensão não merece acolhimento, pois a taxa aplicada ao contrato ( )38,96% supera minimamente a taxa média publicada pelo BACEN, não se constatando abusividade no percentual aplicado."
@@ -2747,7 +2984,7 @@ body{background-color:var(--paper);
    "pergunta": 4,
    "trecho_embargos": "No presente caso: i. Não existe cláusula contratual prevendo, para o consumidor as alternativas, de contratar o seguro com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada, com as opções - Sim e Não - redigidas claramente. Portanto, no caso, está caracterizada a venda casada do seguro de proteção financeira",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 4 perguntou se as opções “Sim” e “Não” mostravam que o consumidor podia recusar o seguro. Os embargos reconheceram que essa cláusula não existia e declararam a venda casada. A correção mudou o resultado, e o estado foi ABORT.",
+   "conferencia": "A pergunta 4 perguntou se as opções “Sim” e “Não” mostravam que o consumidor podia recusar o seguro. Os embargos reconheceram que essa cláusula não existia e declararam a venda casada. A correção mudou o resultado.",
    "outras": "As outras 3 perguntas tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação."
   }
  },
@@ -2849,71 +3086,70 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 32,
-   "abort": 26,
-   "hold": 6,
+   "achados": 32,
    "afastadas": 0,
    "perguntas": 9
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Que prova mostra que a avaliação foi feita e que critérios justificam considerar razoável a tarifa?",
     "trecho": "A possibilidade de cobrança da tarifa de avaliação de bem foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes à avaliação do bem, desde que expressamente previsto no contrato, efetivamente prestado o servido e, em valor não abusivo. No presente caso: Há expressa previsão de cobrança da tarifa de avaliação, com o respectivo valor informado; A atividade de avaliação está justificada pela condição do bem móvel e, que demandausado apuração pelo valor atualizado de mercado nas hipóteses seguintes: avaliação, reavaliação e substituição de bens; Não se demonstrou que o valor da tarifa (R$ 317,00) quando considerado frente ao valor da iii. i. ii. obrigação principal (R$ 20.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da tarifa de avaliação do bem conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "Como a decisão concilia a exigência de serviço efetivo com a dispensa de prova do registro e os entendimentos citados?",
     "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; Não se demonstrou que o valor da tarifa (R$ 78,54) quando considerado frente ao valor da obrigação principal (R$ 20.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "Que dados de mercado ou comparação justificam considerar razoável a tarifa de R$ 78,54?",
     "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; Não se demonstrou que o valor da tarifa (R$ 78,54) quando considerado frente ao valor da obrigação principal (R$ 20.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 4,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p10",
     "texto": "O que sustenta a validade da cobrança do IOF além da previsão contratual?",
     "trecho": "A controvérsia também abrange a legalidade de cobrança do Imposto sobre operações financeiras: No julgamento do REsp 1.251.331/RS, o Superior Tribunal de Justiça consolidou o seguinte entendimento: “É lícito aos contratantes convencionar o pagamento doImposto sobre Operações Financeiras e de Crédito (IOF) por meio financiamento acessório ao mútuo principal, sujeitando-o aos mesmos encargos contratuais”. (REsp 1.251.331-RS (2011/0096435-4 de 28/03/2013) - Segunda Seção - Ministra Maria Isabel Gallotti) É válida, portanto, a cobrança do IOF, conforme previsão no contrato. 5."
    },
    {
     "n": 5,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p12",
     "texto": "Que prova mostra que a cobrança ocorreu no início da relação, e não apenas que não havia vínculo anterior?",
     "trecho": "Sobre a possibilidade de cobrança da tarifa de cadastro, o Superior Tribunal de Justiça editou a seguinte súmula: Nos contratos bancários posteriores ao início da vigência da Resolução-CMN n.Súmula 566 - 3.518/2007, em 30/4/2008, pode ser cobrada a tarifa de cadastro no início do relacionamento entre o consumidor e a instituição financeira. De acordo com a jurisprudência consolidada sobre a matéria, é válida cobrança da tarifa de cadastro: i. no início do relacionamento entre o cliente e a instituição financeira; ii. desde que expressamente contratada; iii. não constatada a abusividade no valor estipulado. No presente caso: i. Há expressa previsão de cobrança da tarifa de cadastro; ii. Não se constatam indícios da pré-existência do vínculo entre as partes contratantes; iii. Não se demonstrou que o valor (R$ 389,00) quando considerado frente ao valor da obrigação principal (R$ 20.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há, no caso, ilegalidade na cobrança da tarifa de cadastro. 6."
    },
    {
     "n": 6,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p12",
     "texto": "Que dados de mercado ou critério de comparação justificam afastar a abusividade dos R$ 389,00?",
     "trecho": "Sobre a possibilidade de cobrança da tarifa de cadastro, o Superior Tribunal de Justiça editou a seguinte súmula: Nos contratos bancários posteriores ao início da vigência da Resolução-CMN n.Súmula 566 - 3.518/2007, em 30/4/2008, pode ser cobrada a tarifa de cadastro no início do relacionamento entre o consumidor e a instituição financeira. De acordo com a jurisprudência consolidada sobre a matéria, é válida cobrança da tarifa de cadastro: i. no início do relacionamento entre o cliente e a instituição financeira; ii. desde que expressamente contratada; iii. não constatada a abusividade no valor estipulado. No presente caso: i. Há expressa previsão de cobrança da tarifa de cadastro; ii. Não se constatam indícios da pré-existência do vínculo entre as partes contratantes; iii. Não se demonstrou que o valor (R$ 389,00) quando considerado frente ao valor da obrigação principal (R$ 20.000,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há, no caso, ilegalidade na cobrança da tarifa de cadastro. 6."
    },
    {
     "n": 7,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p14",
     "texto": "Que elemento, além da falta da cláusula de opções, mostra que o consumidor foi obrigado a contratar o seguro?",
     "trecho": "O seguro de proteção financeira vinculado ao contrato principal, garante a quitação do saldo devedor em caso de desemprego involuntário, quando existente o vínculo empregatício, ou de perda de renda, quando o segurado é trabalhador autônomo. Com a finalidade de resguardar o direito de livre escolha do consumidor, o contrato de fornecimento de crédito deve conter cláusula com redação clara a respeito dessa opção: Seguro de Proteção Financeira com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada: ( ) Sim ( ) Não Neste sentido, e ausente a informação acima, caracteriza venda casada a previsão contratual que impõe ao consumidor a contratação de seguro com seguradora determinada, prática vedada pelo artigo 39, I, da Lei n° 8.078/90. No presente caso: i. Não existe cláusula contratual prevendo, para o consumidor as alternativas, de contratar o seguro com a própria instituição financeira (mesmo grupo econômico) ou com seguradora por ela indicada, com as opções - Sim e Não - redigidas claramente. Portanto, no caso, está caracterizada a venda casada do seguro de proteção financeira, conforme o entendimento do Superior Tribunal de Justiça: “2.2 - Nos contratos bancários em geral, o consumidor não pode ser compelido a contratar seguro com a instituição financeira ou com seguradora por ela indicada.”. (Recurso Especial nº 1.639.259 - SP (2016/0306899-7 de 12/12/2018) – Segunda Seção - Relator: Ministro Paulo de Tarso Sanseverino). 7."
    },
    {
     "n": 8,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p16",
     "texto": "Que prova específica torna complexa a apuração dos juros e justifica extinguir o pedido, apesar da inversão do ônus?",
     "trecho": "Constata-se que as tarifas reputadas abusivas (seguro) foram diluídas no valor das parcelas e, portanto, compõem a base de cálculo para incidência dos juros remuneratórios. Mas ainda que se reconheça a ilegalidade na cobrança das tarifas administrativas, no âmbito dos Juizados Especiais a prolação de sentença ilíquida é inadmissível (artigo 38, § único da Lei 9.099/95). Nesse sentido, não podem ser olvidadas a existência de relação de consumo e a constatação, de plano, da hipossuficiência técnica do consumidor. Por esses motivos, a inversão do ônus da prova como regra de procedimento aplicável ao caso concreto, e a insuficiência do meio de prova fornecido pelo autor para formação da convicção contra a instituição financeira, conduzem à forçosa conclusão pela complexidade da causa e a consequente falta de competência para se conhecer do pedido de repetição do indébito dos juros remuneratórios incidentes sobre as tarifas. Enunciado FONAJE 54: “A menor complexidade da causa para a fixação da competência é aferida pelo objeto da prova e não em face do direito material. ”. 8."
    },
    {
     "n": 9,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p18",
     "texto": "Que fatos ou fundamento justificam a restituição simples do seguro indevido, em vez da devolução em dobro?",
     "trecho": "A repetição do indébito é cabível sempre que constatado o pagamento indevido, independente da comprovação de erro no pagamento (Súmula nº 322 do STJ). A restituição, conforme entendimento jurisprudencial, deve ser feita na forma simples quando ausente a má-fé do credor. Não prevalece, pois, a pretensão de restituição em dobro, quando o indébito é resultado de juízo de valor provocado pelo consumidor ao pleitear a revisão do contrato. AGRAVO REGIMENTAL NO AGRAVO EM RECURSO ESPECIAL. AÇÃO REVISIONAL DE CONTRATOS BANCÁRIOS. CONTRATOS NÃO JUNTADOS AOS AUTOS. JUROS REMUNERATÓRIOS. LIMITAÇÃO À TAXA MÉDIA DE MERCADO. JUROS MORATÓRIOS. SÚMULA N° 379/STJ. REPETIÇÃO EM DOBRO DO INDÉBITO. IMPOSSIBILIDADE. SÚMULA N° 322/STJ. (...)"
@@ -2925,7 +3161,7 @@ body{background-color:var(--paper);
    "pergunta": 1,
    "trecho_embargos": "O réu não comprovou que a avaliação foi efetivamente realizada. Apenas a avaliação concretamente realizada e comprovada através da apresentação de laudo pode ter seu custo transferido para o consumidor, e não a vistoria do veículo.",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 1 pediu a prova de que a avaliação foi feita. Os embargos reconheceram que o laudo não foi apresentado e declararam a tarifa ilegal. A correção mudou o resultado, e o estado foi ABORT.",
+   "conferencia": "A pergunta 1 pediu a prova de que a avaliação foi feita. Os embargos reconheceram que o laudo não foi apresentado e declararam a tarifa ilegal. A correção mudou o resultado.",
    "outras": "As outras 8 perguntas tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação."
   }
  },
@@ -2982,29 +3218,28 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 18,
-   "abort": 18,
-   "hold": 0,
+   "achados": 18,
    "afastadas": 0,
    "perguntas": 3
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que prova da avaliação realizada e que parâmetro de mercado sustentam a tarifa de R$ 215,00 e afastam sua abusividade?",
     "trecho": "A possibilidade de cobrança da tarifa de avaliação de bem foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes à avaliação do bem, desde que expressamente previsto no contrato, efetivamente prestado o servido e, em valor não abusivo. No presente caso: i. Há expressa previsão de cobrança da tarifa de avaliação, com o respectivo valor informado; ii. A atividade de avaliação está justificada pela condição do bem móvel e, queusado demanda apuração pelo valor atualizado de mercado nas hipóteses seguintes: avaliação, reavaliação e substituição de bens; iii. Não se demonstrou que o valor da tarifa (R$ 215,00) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da tarifa de avaliação do bem conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "Que elemento prova o serviço cobrado, se o registro não foi comprovado, diante do interesse do credor e da ressalva do STJ?",
     "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 58,50) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p6",
     "texto": "Que parâmetro de mercado ou cálculo sustenta que a tarifa de R$ 58,50 não é abusiva?",
     "trecho": "A possibilidade de cobrança da tarifa de registro de contrato foi contemplada no julgamento do Recurso Especial 1.578.553/SP pelo Superior Tribunal de Justiça, consolidando o entendimento judicial de que é possível o repasse ao consumidor dos custos referentes ao registro do contrato, desde que expressamente previsto no contrato, efetivamente prestado o serviço e, em valor não abusivo. Entre os requisitos que propiciam a cobrança não está a comprovação do efetivo registro, uma vez que tal ato se concretiza no interesse do proprietário fiduciário, sobre quem recairia os efeitos da eventual desídia: “...em razão de sua finalidade, que é dar publicidade da contratação e do encargo que recai sobre o bem dado em garantia, diante, ainda, do disposto no art. 1.361, do Código Civil, que estabelece que a propriedade fiduciária se constitui mediante o registro do contrato na repartição competente, com a anotação no certificado de registro”. (TJPR – Seção Cível – IUJ – 1319643-1/01 – Curitiba – Relator: Hélio Henrique Lopes Fernandes Lima – Por maioria – Julgado em 20/11/2015) No presente caso: i. Há expressa previsão de cobrança da tarifa de registro de contrato, com o respectivo valor informado; ii. Não se demonstrou que o valor da tarifa (R$ 58,50) quando considerado frente ao valor da obrigação principal (R$ 14.630,00) e a média praticada pelo mercado, deve ser considerado abusivo. Portanto, não há ilegalidade na cobrança da taxa de registro de contrato, conforme o entendimento do Superior Tribunal de Justiça:"
@@ -3123,36 +3358,35 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 13,
-   "abort": 10,
-   "hold": 3,
+   "achados": 13,
    "afastadas": 0,
    "perguntas": 4
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "Que prova, além da previsão legal e das assinaturas, mostra que o consumidor entendeu e aceitou essa modalidade?",
     "trecho": "3. O contrato de cartão de crédito consignado possui previsão legal expressa (Lei 13.172/2015, art. 6º, § 5º) e não apresenta nulidade formal, uma vez que os documentos anexados atestam a contratação regular, com assinatura e apresentação de documentos pessoais."
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p7",
     "texto": "A referência identifica com clareza qual lei contém o dispositivo citado?",
     "trecho": "3. O contrato de cartão de crédito consignado possui previsão legal expressa (Lei 13.172/2015, art. 6º, § 5º) e não apresenta nulidade formal, uma vez que os documentos anexados atestam a contratação regular, com assinatura e apresentação de documentos pessoais."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p9",
     "texto": "Que prova, além do documento assinado, mostra que o consumidor recebeu informação e escolheu livremente o seguro, podendo recusá-lo?",
     "trecho": "5. A contratação do “Seguro Prestamista BMG Card” restou demonstrada por meio de documento autônomo, com assinatura semelhante à do contrato principal, RG e comprovante de residência, afastando a alegação de venda casada ou contratação não informada."
    },
    {
     "n": 4,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p12",
     "texto": "Que fatos concretos e critérios ligam a cobrança, o benefício alimentar e a hipervulnerabilidade ao dano moral e aos R$ 10.000,00?",
     "trecho": "8. A cobrança indevida sobre benefício previdenciário de pequeno valor configura afronta à dignidade da pessoa humana e enseja indenização por danos morais, fixada em R$ 10.000,00, diante da gravidade da lesão e da condição de hipervulnerabilidade do autor."
@@ -3164,7 +3398,7 @@ body{background-color:var(--paper);
    "pergunta": 4,
    "trecho_embargos": "Configura-se erro material na fixação da indenização por danos morais em R$ 10.000,00, valor desproporcional diante da cobrança única de tarifa indevida de R$ 15,00, o que não caracteriza abalo relevante aos direitos da personalidade (STJ, AgInt no REsp 1.655.465/RS, Rel. Min. Nancy Andrighi, j. 24.04.2018; REsp 1.647.452/RO, Rel. Min. Luis Felipe Salomão, j. 26.02.2019).",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 4 pediu os fatos e critérios que ligam a cobrança, o benefício alimentar e a hipervulnerabilidade ao dano moral e aos R$ 10.000,00. Os embargos reconheceram erro material nesse valor e excluíram a condenação. A correção mudou o resultado, e o estado foi ABORT. As perguntas 1 a 3 (p7 e p9) não são verificadas pelo par.",
+   "conferencia": "A pergunta 4 pediu os fatos e critérios que ligam a cobrança, o benefício alimentar e a hipervulnerabilidade ao dano moral e aos R$ 10.000,00. Os embargos reconheceram erro material nesse valor e excluíram a condenação. A correção mudou o resultado. As perguntas 1 a 3 (§§ 7 e 9) não são verificadas pelo par.",
    "outras": "As outras 3 perguntas tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação."
   }
  },
@@ -3202,22 +3436,21 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 4,
-   "abort": 3,
-   "hold": 1,
+   "achados": 4,
    "afastadas": 0,
    "perguntas": 2
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Que dado mostra que não houve complementação nas 48 horas e por que o pagamento parcial não permite aplicar a regra do CPC?",
     "trecho": "2. ADMISSIBILIDADE RECURSAL 2.1. PREPARO 2.1.1. O recurso não comporta conhecimento. 2.1.2. A teor do preceituado no art. 42, §1º, da Lei n. 9.099/95, “O preparo será feito, independentemente de intimação, nas quarenta e oito horas seguintes à interposição, sob pena de deserção”. 2.1.3. No presente caso, o recurso inominado foi interposto pelos autores em 14/03/2022. Na mesma ocasião, foi vinculada guia de recolhimento das custas recursais, no valor de R$ 824,04. 2.1.4. À seq. 46.1 foi certificada, pelo Juízo de origem, a insuficiência do preparo. 2.1.5. De fato, o preparo não foi realizado corretamente. O recolhimento deveria ter sido feito no importe de 3% sobre o valor da causa, com limite mínimo de R$ 300,00 e máximo de R$ 870,00, nos termos do art. 9º da Lei Estadual n. 18.413/2014, in verbis: “Art. 9º Por ocasião do preparo do recurso inominado em processos de conhecimento, o recorrente deverá pagar, a título de custas recursais, o valor equivalente a 3% (três por cento) do valor da causa, observados os limites mínimo correspondente a R$ 300,00 (trezentos reais) e máximo de R$ 870,00 (oitocentos e setenta reais)”. 2.1.6. O valor dado à causa pelos autores foi de R$ 43.967,85 (seq. 1.1, p. 17), de modo que 3% resultaria em R$ 1.319,03. Aplicando-se o teto estabelecido na legislação, o recolhimento deveria ter sido no importe de R$ 870,00, e não de R$ 824,04. 2.1.7. Ante a insuficiência do preparo, o recurso é manifestamente deserto, não devendo ser conhecido. 2.1.8. Para que não paire dúvida, observo que o prazo suplementar de 5 dias a que dispõe o art. 1.007, § 2º, do CPC não se aplica à sistemática do Juizado Especial, que contém disposição própria (art. 42, §2º, da Lei n. 9.099/95). 2.1.9. Consoante entendimento pacífico no âmbito das Turmas Recursais do Juizado Especial, inclusive, desta Segunda Turma, a complementação do preparo apenas é aceita se respeitado o prazo de 48 horas a contar da interposição do recurso. É a essa tempestividade, aliás, que se refere o Enunciado 80 do FONAJE, cujo teor é: “O recurso Inominado será julgado deserto quando não houver o recolhimento integral do preparo e sua respectiva comprovação pela parte, no prazo de 48 horas, não admitida a complementação intempestiva”. 2.1.10. A propósito, veja-se: AGRAVO INTERNO. RECURSO INOMINADO NÃO CONHECIDO. PREPARO INSUFICIENTE. IMPOSSIBILIDADE DE COMPLEMENTAÇÃO POSTERIOR. ENUNCIADO 80 DO FONAJE. ARTIGOS 8º E 9º, LEI ESTADUAL 18.413/14. DECISÃO MONOCRÁTICA MANTIDA. AGRAVO CONHECIDO E DESPROVIDO. (TJPR - 1ª Turma Recursal - 0001746-10.2019.8.16.0035 - São José dos Pinhais - Rel.: JUÍZA DE DIREITO DA TURMA RECURSAL DOS JUÍZAADOS ESPECIAIS MARIA FERNANDA SCHEIDEMANTEL NOGARA FERREIRA DA COSTA - J. 06.12.2021) MANDADO DE SEGURANÇA EM FACE DE ATO JUDICIAL. DECISÃO DE NÃO CONHECIMENTO DO RECURSO INOMINADO. VALOR RECOLHIDO A MENOR. IMPETRANTE QUE PRETENDE INTIMAÇÃO PARA COMPLEMENTAÇÃO. IMPOSSIBILIDADE DE COMPLEMENTAÇÃO DO PREPARO NO ÂMBITO DOS JUIZADOS. INAPLICABILIDADE DO ART. 1.007, §2° DO CPC. INTELIGÊNCIA DO ENUNCIADO N. 80 DO FONAJE, LEI N° 9.099/95 E LEI ESTADUAL N° 18.413/2014. INEXISTÊNCIA DE DIREITO LÍQUIDO E CERTO A AMPARAR A IMPETRAÇÃO. SEGURANÇA DENEGADA. (TJPR - 5ª Turma Recursal dos Juizados Especiais - 0003626-74.2020.8.16.9000 - Curitiba - Rel.: JUÍZA DE DIREITO DA TURMA RECURSAL DOS JUÍZAADOS ESPECIAIS MANUELA TALLÃO BENKE - J. 19.04.2021) RECURSO INOMINADO. BANCÁRIO. ADITAMENTO À INICIAL. ALTERAÇÃO DO VALOR DA CAUSA. PREPARO RECURSAL INSUFICIENTE. COMPLEMENTAÇÃO NÃO ADMITIDA. PRECEDENTES. ENUNCIADO 80 DO FONAJE. DESERÇÃO. JUÍZO DE ADMISSIBILIDADE NEGATIVO. PRECEDENTES. RECURSO NÃO CONHECIDO. (TJPR - 2ª Turma Recursal - 0001153-55.2021.8.16.0117 - Medianeira - Rel.: JUIZ DE DIREITO DA TURMA RECURSAL DOS JUIZADOS ESPECIAIS MARCEL LUIS HOFFMANN - J. 17.01.2022)"
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Como os julgados citados mostram entendimento consolidado e sua aplicação ao preparo deste caso?",
     "trecho": "2. ADMISSIBILIDADE RECURSAL 2.1. PREPARO 2.1.1. O recurso não comporta conhecimento. 2.1.2. A teor do preceituado no art. 42, §1º, da Lei n. 9.099/95, “O preparo será feito, independentemente de intimação, nas quarenta e oito horas seguintes à interposição, sob pena de deserção”. 2.1.3. No presente caso, o recurso inominado foi interposto pelos autores em 14/03/2022. Na mesma ocasião, foi vinculada guia de recolhimento das custas recursais, no valor de R$ 824,04. 2.1.4. À seq. 46.1 foi certificada, pelo Juízo de origem, a insuficiência do preparo. 2.1.5. De fato, o preparo não foi realizado corretamente. O recolhimento deveria ter sido feito no importe de 3% sobre o valor da causa, com limite mínimo de R$ 300,00 e máximo de R$ 870,00, nos termos do art. 9º da Lei Estadual n. 18.413/2014, in verbis: “Art. 9º Por ocasião do preparo do recurso inominado em processos de conhecimento, o recorrente deverá pagar, a título de custas recursais, o valor equivalente a 3% (três por cento) do valor da causa, observados os limites mínimo correspondente a R$ 300,00 (trezentos reais) e máximo de R$ 870,00 (oitocentos e setenta reais)”. 2.1.6. O valor dado à causa pelos autores foi de R$ 43.967,85 (seq. 1.1, p. 17), de modo que 3% resultaria em R$ 1.319,03. Aplicando-se o teto estabelecido na legislação, o recolhimento deveria ter sido no importe de R$ 870,00, e não de R$ 824,04. 2.1.7. Ante a insuficiência do preparo, o recurso é manifestamente deserto, não devendo ser conhecido. 2.1.8. Para que não paire dúvida, observo que o prazo suplementar de 5 dias a que dispõe o art. 1.007, § 2º, do CPC não se aplica à sistemática do Juizado Especial, que contém disposição própria (art. 42, §2º, da Lei n. 9.099/95). 2.1.9. Consoante entendimento pacífico no âmbito das Turmas Recursais do Juizado Especial, inclusive, desta Segunda Turma, a complementação do preparo apenas é aceita se respeitado o prazo de 48 horas a contar da interposição do recurso. É a essa tempestividade, aliás, que se refere o Enunciado 80 do FONAJE, cujo teor é: “O recurso Inominado será julgado deserto quando não houver o recolhimento integral do preparo e sua respectiva comprovação pela parte, no prazo de 48 horas, não admitida a complementação intempestiva”. 2.1.10. A propósito, veja-se: AGRAVO INTERNO. RECURSO INOMINADO NÃO CONHECIDO. PREPARO INSUFICIENTE. IMPOSSIBILIDADE DE COMPLEMENTAÇÃO POSTERIOR. ENUNCIADO 80 DO FONAJE. ARTIGOS 8º E 9º, LEI ESTADUAL 18.413/14. DECISÃO MONOCRÁTICA MANTIDA. AGRAVO CONHECIDO E DESPROVIDO. (TJPR - 1ª Turma Recursal - 0001746-10.2019.8.16.0035 - São José dos Pinhais - Rel.: JUÍZA DE DIREITO DA TURMA RECURSAL DOS JUÍZAADOS ESPECIAIS MARIA FERNANDA SCHEIDEMANTEL NOGARA FERREIRA DA COSTA - J. 06.12.2021) MANDADO DE SEGURANÇA EM FACE DE ATO JUDICIAL. DECISÃO DE NÃO CONHECIMENTO DO RECURSO INOMINADO. VALOR RECOLHIDO A MENOR. IMPETRANTE QUE PRETENDE INTIMAÇÃO PARA COMPLEMENTAÇÃO. IMPOSSIBILIDADE DE COMPLEMENTAÇÃO DO PREPARO NO ÂMBITO DOS JUIZADOS. INAPLICABILIDADE DO ART. 1.007, §2° DO CPC. INTELIGÊNCIA DO ENUNCIADO N. 80 DO FONAJE, LEI N° 9.099/95 E LEI ESTADUAL N° 18.413/2014. INEXISTÊNCIA DE DIREITO LÍQUIDO E CERTO A AMPARAR A IMPETRAÇÃO. SEGURANÇA DENEGADA. (TJPR - 5ª Turma Recursal dos Juizados Especiais - 0003626-74.2020.8.16.9000 - Curitiba - Rel.: JUÍZA DE DIREITO DA TURMA RECURSAL DOS JUÍZAADOS ESPECIAIS MANUELA TALLÃO BENKE - J. 19.04.2021) RECURSO INOMINADO. BANCÁRIO. ADITAMENTO À INICIAL. ALTERAÇÃO DO VALOR DA CAUSA. PREPARO RECURSAL INSUFICIENTE. COMPLEMENTAÇÃO NÃO ADMITIDA. PRECEDENTES. ENUNCIADO 80 DO FONAJE. DESERÇÃO. JUÍZO DE ADMISSIBILIDADE NEGATIVO. PRECEDENTES. RECURSO NÃO CONHECIDO. (TJPR - 2ª Turma Recursal - 0001153-55.2021.8.16.0117 - Medianeira - Rel.: JUIZ DE DIREITO DA TURMA RECURSAL DOS JUIZADOS ESPECIAIS MARCEL LUIS HOFFMANN - J. 17.01.2022)"
@@ -3229,7 +3462,7 @@ body{background-color:var(--paper);
    "pergunta": 0,
    "trecho_embargos": "O acórdão efetivamente apresentou erro material ao deixar de observar a revelia da ré, em consequência da qual não deveria ter havido condenação dos recorrentes ao pagamento de honorários advocatícios. Ora, se a recorrida não se acha representada por advogado, o processo não conta com titular da verba honorária sucumbencial (Lei 8.906/94, art. 23).",
    "selo": "Não alcançado",
-   "conferencia": "Os embargos reconheceram erro material: honorários fixados a favor de recorrida revel, sem advogado nos autos. Nenhuma pergunta incidiu sobre o item 3.2. As duas perguntas da rodada (p3) trataram da deserção, que os embargos não examinaram.",
+   "conferencia": "Os embargos reconheceram erro material: honorários fixados a favor de recorrida revel, sem advogado nos autos. Nenhuma pergunta incidiu sobre o item 3.2. As duas perguntas da rodada (§ 3) trataram da deserção, que os embargos não examinaram.",
    "outras": "As 2 perguntas desta rodada tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação.",
    "visibilidade": "Onde estava o ponto: parcialmente visível no texto do ato (classificação pré-registrada na ficha)."
   }
@@ -3284,15 +3517,14 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 7,
-   "abort": 0,
-   "hold": 6,
+   "achados": 6,
    "afastadas": 1,
    "perguntas": 1
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p3",
     "texto": "Como o recurso inominado protege o bloqueio urgente, e por que a exceção ao mandado de segurança não se aplica?",
     "trecho": "2. O presente writ não comporta conhecimento. O Mandado de Segurança tem excepcional cabimento nos Juizados Especiais, sendo admitido apenas em casos em que se mostra inviável a defesa do direito através de recurso próprio e, quando presente direito líquido e certo, bem como ato ilegal ou abusivo por parte da autoridade apontada como coatora, o que não ocorre no caso dos autos. Destaque-se que o Supremo Tribunal Federal, no julgamento do leading case nº 576.847 RG/BA, firmou o entendimento, em sede de Repercussão Geral, de que “não cabe mandado de segurança das decisões interlocutórias exaradas em processos submetidos ao rito da Lei n. 9.099/95” (RE 576847, Relator(a): Min. EROS GRAU, Tribunal Pleno, julgado em 20/05/2009, REPERCUSSÃO GERAL - MÉRITO DJe-148 DIVULG 06-08-2009 PUBLIC 07-08-2009 RTJ VOL-00211-01 PP-00558 EMENT VOL-02368-10 PP-02068 LEXSTF v. 31, n. 368, 2009, p. 310-314). Desta forma, considerando ser incabível a interposição de agravo de instrumento nos Juizados Especiais, ante a ausência de previsão legal, e, ainda, a impossibilidade de impetração de mandado de segurança, tem-se que não ocorre a preclusão das decisões interlocutórias prolatadas neste rito processual, de modo que sua impugnação deve ser dar quando da interposição do recurso inominado. Precedentes: TJPR - 2ª Turma Recursal - 0000143-02.2021.8.16.9000 - Mandaguari - Rel.: Juiz Alvaro Rodrigues Junior - J. 22.01.2021; TJPR - 2ª Turma Recursal - 0003277-71.2020.8.16.9000 - São José dos Pinhais - Rel.: Juiz Irineu Stein Júnior - J. 10.11.2020; TJPR - 2ª Turma Recursal - 0001182-68.2020.8.16.9000 - Foz do Iguaçu - Rel.: Juiz Alvaro Rodrigues Junior - J. 12.05.2020). Ademais, destaque-se que, muito embora tenha constado na decisão objeto do presente mandamus acerca da inviabilidade da antecipação de tutela em sede de Juizados Especiais, houve análise do pedido, uma vez que constou expressamente que “(...) no presente caso, não restam configurados os requisitos para sua concessão, pelo que INDEFIRO o pedido.”. Portanto, diante da ausência de qualquer ilegalidade ou teratologia na decisão atacada, bem como ausente prova de direito líquido e certo, indefiro de plano a inicial, com fulcro no artigo 10 da Lei nº 12.016/09."
@@ -3304,7 +3536,7 @@ body{background-color:var(--paper);
    "pergunta": 0,
    "trecho_embargos": "na qual esta alega a ocorrência de omissão no julgado, de fato existente, em relação ao pleito de assistência judiciária gratuita, razão pela qual passo a saná-la.",
    "selo": "Fora do teste",
-   "conferencia": "Os embargos reconheceram omissão: o pedido de gratuidade não foi apreciado. A única pergunta da rodada (p3, HOLD) tratou do cabimento do mandado de segurança diante do pedido urgente de bloqueio; não é verificada pelo par.",
+   "conferencia": "Os embargos reconheceram omissão: o pedido de gratuidade não foi apreciado. A única pergunta da rodada (§ 3) tratou do cabimento do mandado de segurança diante do pedido urgente de bloqueio; não é verificada pelo par.",
    "outras": "A pergunta desta rodada trata de outro ponto. Os embargos não a confirmam nem a descartam.",
    "visibilidade": "Onde estava o ponto: ausente no texto do ato (classificação pré-registrada na ficha)."
   }
@@ -3351,15 +3583,14 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 8,
-   "abort": 2,
-   "hold": 6,
+   "achados": 8,
    "afastadas": 0,
    "perguntas": 1
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p4",
     "texto": "Quais eram os valores disponíveis e como foram comparados às despesas para concluir que afastavam a gratuidade?",
     "trecho": "4. Na hipótese dos autos, os documentos apresentados pela impetrante são insuficientes para aferir a sua hipossuficiência econômica pelas seguintes razões: a) os boletos de conta de água e IPTU dizem respeito ao estilo de vida da impetrante, não se consubstanciando em justificativa apta a configurar a hipossuficiência; b) a declaração dos procuradores apenas evidenciam que o pagamento de honorários contratuais ocorrerá com o eventual êxito da ação; c) a declaração de imposto de renda referente ao exercício de 2021 revela que a impetrante possui relevante montante financeiro em “aplicações de renda fixa”, “conta corrente” e “recursos e disponibilidades para aplicações investimentos”, o que é incompatível com o benefício pleiteado; d) declarações de hipossuficiência possuem presunção relativa de veracidade. Considerando que não é possível dilação probatória em sede de mandado de segurança, conclui-se que não restou demonstrado de forma cabal o direito líquido e certo alegado pela impetrante."
@@ -3371,7 +3602,7 @@ body{background-color:var(--paper);
    "pergunta": 0,
    "trecho_embargos": "No entanto, assiste razão à embargante no que diz respeito à necessidade de remessa do recurso inominado interposto nos autos originários às Turmas Recursais para análise das condições de admissibilidade e, por conseguinte, verificação do pedido de gratuidade da justiça, recolhimento das custas e eventual concessão de prazo para tanto. Isso porque, embora seja permitido ao juízo de origem realizar análise preliminar do benefício, nos termos do Enunciado n. 166 do Fonaje (“Nos Juizados Especiais Cíveis, o juízo prévio de admissibilidade do recurso será feito em primeiro grau”), a apuração final do pedido de concessão do benefício de justiça gratuita cabe às Turmas Recursais, em atenção ao disposto no art. 99, §7º do CPC.",
    "selo": "Fora do teste",
-   "conferencia": "Os embargos acolheram a alegação de omissão e obscuridade sobre o argumento do art. 99, § 7º, do CPC, que o ato registra e não enfrenta. Argumento não enfrentado é omissão (art. 1.022, parágrafo único, II, do CPC). A pergunta da rodada (p4, ABORT) tratou da prova de hipossuficiência, fundamento que os embargos examinaram e mantiveram.",
+   "conferencia": "Os embargos acolheram a alegação de omissão e obscuridade sobre o argumento do art. 99, § 7º, do CPC, que o ato registra e não enfrenta. Argumento não enfrentado é omissão (art. 1.022, parágrafo único, II, do CPC). A pergunta da rodada (§ 4) tratou da prova de hipossuficiência, fundamento que os embargos examinaram e mantiveram.",
    "outras": "A pergunta desta rodada trata de outro ponto. Os embargos não a confirmam nem a descartam.",
    "visibilidade": "Onde estava o ponto: visível no texto do ato (classificação pré-registrada na ficha)."
   }
@@ -3610,29 +3841,28 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 10,
-   "abort": 8,
-   "hold": 1,
+   "achados": 9,
    "afastadas": 1,
    "perguntas": 3
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p31",
     "texto": "Como os repetitivos citados se ajustam ao critério de mudança do estado de direito adotado no voto?",
     "trecho": "FUNDAÇÃO BANRISUL apontou, em síntese, violação do art. 505, I, do CPC, sustentando que, em se tratando de relação jurídica de trato continuado, sobre a previdência complementar, a superveniência de precedentes repetitivos do STJ (REsp 1.207.071/RJ e REsp 1.425.326/RS) configura alteração do estado de direito apta a limitar a eficácia temporal da coisa julgada, com apoio no regime de precedentes e na observância obrigatória aos julgamentos repetitivos, previsto no art. 927, III, do CPC."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p35",
     "texto": "O que justifica considerar uma tese vinculante diferente como mudança do estado de direito?",
     "trecho": "Já no estado de direito, é caracterizado por uma alteração no arcabouço normativo aplicável ao caso, a exemplo da publicação de uma nova lei, ou, consoante a atual sistemática processual, pela fixação de uma tese vinculante em recurso especial repetitivo pelo Superior Tribunal de Justiça ou em repercussão geral pelo Supremo Tribunal Federal, que venha a interpretar a norma de forma qualificada e diferente daquela adotada na decisão anteriormente estabilizada."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p47",
     "texto": "Por que só alteração legislativa ou precedente vinculante que determine a desobrigação permitiria reconhecer mudança do estado de direito?",
     "trecho": "No caso dos autos, constata-se que não há nenhum precedente de natureza estritamente vinculante que determine a desobrigação do pagamento da referida complementação de aposentadoria com a incorporação das rubricas em debate, tampouco alteração legislativa."
@@ -3644,7 +3874,7 @@ body{background-color:var(--paper);
    "pergunta": 1,
    "trecho_embargos": "Configura-se contradição e erro material ao qualificar como simples mudança jurisprudencial, sem força vinculante, teses fixadas em repetitivos do STJ, quando tais precedentes (Temas n. 540 e 736) possuem caráter vinculante e alteram o estado de direito para fins do art. 505, I, do CPC.",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 1 perguntou como os repetitivos citados se ajustam ao critério de mudança do estado de direito adotado no voto, e a pergunta 3 voltou ao mesmo critério. Os embargos reconheceram contradição e erro material: o acórdão tratou como simples mudança de jurisprudência teses fixadas em repetitivos, que têm força vinculante. A correção mudou o resultado, e o estado foi ABORT.",
+   "conferencia": "A pergunta 1 perguntou como os repetitivos citados se ajustam ao critério de mudança do estado de direito adotado no voto, e a pergunta 3 voltou ao mesmo critério. Os embargos reconheceram contradição e erro material: o acórdão tratou como simples mudança de jurisprudência teses fixadas em repetitivos, que têm força vinculante. A correção mudou o resultado.",
    "outras": "A pergunta 2 trata do mesmo critério, a partir de outro trecho. Os embargos não a confirmam nem a descartam.",
    "visibilidade": "Onde estava o ponto: visível no texto do ato (classificação pré-registrada na ficha)."
   },
@@ -3856,43 +4086,42 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 9,
-   "abort": 4,
-   "hold": 3,
+   "achados": 7,
    "afastadas": 2,
    "perguntas": 5
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p31",
     "texto": "Como um caso sobre transação homologada sustenta a divergência afirmada para contrato de prestação de serviços?",
     "trecho": "Entretanto, tal posicionamento diverge frontalmente da jurisprudência consolidada desta Corte Superior, que privilegia a manifestação de vontade e a boa-fé objetiva sobre o formalismo excessivo."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p44",
     "texto": "Se o e-mail só autorizou imprimir, assinar e enviar a minuta, o que demonstra que houve aceitação definitiva e vínculo?",
     "trecho": "Extrai-se do acórdão e dos elementos fáticos delineados que as negociações ultrapassaram, em muito, a fase de meras \"tratativas\". Ficou demonstrado que: (a) a recorrente venceu os procedimentos de concorrência (BIDs 15.860 e 16.076); (b) houve comunicação formal do vencimento e o envio da minuta contratual elaborada pela própria recorrida; e (c) a recorrida autorizou, via e-mail, a impressão, assinatura e envio do contrato por SEDEX (e-STJ, fls. 25174)."
    },
    {
     "n": 3,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p45",
     "texto": "Que provas demonstram os investimentos e prejuízos materiais atribuídos à recusa?",
     "trecho": "Tais circunstâncias geraram na recorrente a legítima expectativa de cumprimento, ensejando investimentos e mobilização. A recusa tardia em assinar, baseada em fatos pretéritos conhecidos pela recorrida ou em questões internas de \"segurança\" não oponíveis à boa-fé do terceiro, caracteriza o venire contra factum proprium."
    },
    {
     "n": 4,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p45",
     "texto": "Que fundamento mantém a indenização se o trecho não explica por que as razões de segurança não justificavam a recusa?",
     "trecho": "Tais circunstâncias geraram na recorrente a legítima expectativa de cumprimento, ensejando investimentos e mobilização. A recusa tardia em assinar, baseada em fatos pretéritos conhecidos pela recorrida ou em questões internas de \"segurança\" não oponíveis à boa-fé do terceiro, caracteriza o venire contra factum proprium."
    },
    {
     "n": 5,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p47",
     "texto": "Que provas já coligidas demonstram cada dano material e seu nexo com a recusa, além de deixar o valor para liquidação?",
     "trecho": "Ante o exposto, conheço do agravo para dar provimento ao recurso especial, a fim de declarar a validade e a força vinculante dos negócios jurídicos objeto das propostas aceitas, condenando a recorrida ao pagamento de indenização pelos danos materiais (danos emergentes e lucros cessantes), cujo quantum debeatur deverá ser apurado em liquidação de sentença pelo Tribunal de origem, observando as provas já coligidas. Inverto os ônus sucumbenciais."
@@ -3904,7 +4133,7 @@ body{background-color:var(--paper);
    "pergunta": 2,
    "trecho_embargos": "O acórdão embargado apresentou uma incoerência em seu desfecho: embora tenha fundamentado o dever de indenizar estritamente na quebra da boa-fé objetiva, na legítima expectativa e no comportamento contraditório (venire contra factum proprium) durante as tratativas terminais — institutos que consubstanciam a responsabilidade pré-contratual (culpa in contrahendo) —, acabou por fazer constar no dispositivo a declaração de \"validade e força vinculante dos negócios jurídicos\" como se o contrato final estivesse aperfeiçoado, gerando indefinição jurídica com impacto direto na futura liquidação de sentença.",
    "selo": "Correspondência",
-   "conferencia": "A pergunta 2 perguntou o que demonstra aceitação definitiva e vínculo, se o e-mail só autorizou imprimir, assinar e enviar a minuta. Os embargos reconheceram a contradição: a fundamentação tratou da boa-fé nas tratativas, e o dispositivo declarou a validade e a força vinculante do contrato. O dispositivo foi corrigido, e o estado foi ABORT.",
+   "conferencia": "A pergunta 2 perguntou o que demonstra aceitação definitiva e vínculo, se o e-mail só autorizou imprimir, assinar e enviar a minuta. Os embargos reconheceram a contradição: a fundamentação tratou da boa-fé nas tratativas, e o dispositivo declarou a validade e a força vinculante do contrato. O dispositivo foi corrigido.",
    "outras": "As outras 4 perguntas tratam de pontos que os embargos não examinaram. Por isso, não foram confirmadas nem afastadas por essa comparação.",
    "visibilidade": "Onde estava o ponto: visível no texto do ato (classificação pré-registrada na ficha)."
   },
@@ -4028,22 +4257,21 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 11,
-   "abort": 11,
-   "hold": 0,
+   "achados": 11,
    "afastadas": 0,
    "perguntas": 2
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p10",
     "texto": "Como a decisão enfrenta as alegações de obrigações assumidas pela CEF e de divergência com a orientação do STJ sobre sua responsabilidade?",
     "trecho": "Nas razões de seu apelo nobre, interposto com fundamento nas alíneas a e c do inciso III do art. 105 da CF, [Recorrente] apontou (1) violação dos arts. 2º, 3º, § 2º, e 6º, IV, do CDC e dos arts. 402, 475, 395, 186, 187 e 927 do CC, além de descompasso com a tese firmada no Tema 996/STJ, sustentando que a CEF, por assumir obrigações além da condição de agente financeiro – inclusive a substituição da construtora e acionamento do seguro –, responde solidariamente pelos danos materiais decorrentes do atraso, com manutenção da condenação em lucros cessantes e restituição dos juros de obra; e (2) existência de dissídio jurisprudencial, por entender que o acórdão recorrido divergiu de orientação consolidada do STJ sobre a responsabilidade e a indenização por lucros cessantes."
    },
    {
     "n": 2,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p15",
     "texto": "O que sustenta tratar a CEF como mera agente financeira, apesar das obrigações de fiscalizar a obra e substituir a construtora?",
     "trecho": "No caso dos autos, a CEF atuou como agente financeira exclusivamente; não atuou como agente executora de políticas públicas federais para a promoção de moradia para pessoas de baixa ou baixíssima renda."
@@ -4396,36 +4624,35 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 12,
-   "abort": 1,
-   "hold": 9,
+   "achados": 10,
    "afastadas": 2,
    "perguntas": 4
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p45",
     "texto": "Que fundamento permite reabrir o prazo sem suspensão judicial, apesar da falta de depósito e dos credores preferenciais?",
     "trecho": "Este Tribunal adota uma postura pragmática voltada à efetividade do processo em detrimento de formalismos excessivos. Embora o prazo para depósito seja, em regra, peremptório, a situação excepcional de questionamento judicial sobre a própria obrigação de depositar altera essa natureza."
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p47",
     "texto": "Como a falta de depósito durante o recurso afeta a proteção dos credores preferenciais?",
     "trecho": "“Logo, não se pode imputar à parte agravante a suposta perda de objeto do recurso pelo simples fato de não ter depositado o valor da arrematação no prazo estipulado pelo juízo de origem, uma vez que justamente questionava, por meio do presente agravo de instrumento, a legalidade da exigência imposta pela decisão agravada."
    },
    {
     "n": 3,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p50",
     "texto": "Que semelhança entre flexibilizar formalidades da arrematação e adiar o depósito durante recurso justifica aplicar esse precedente?",
     "trecho": "Com isso, reforça-se que a utilidade do recurso não pode ser condicionada ao cumprimento prévio da obrigação impugnada, sob pena de criar-se um paradoxo processual: cumprir a ordem recorrida para não perder o objeto do recurso que visa justamente afastá-la.” (e-STJ, fls. 188-189) Os princípios da razoabilidade, da efetividade processual e da boa-fé são caros à jurisprudência da Segunda Seção do Superior Tribunal de Justiça, inclusive suas turmas integrantes. Nesse sentido, segue precedente no qual foram flexibilizadas as formalidades da arrematação em prol da segurança jurídica e da efetividade da execução:"
    },
    {
     "n": 4,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p58",
     "texto": "Que fundamento permite reabrir o prazo se o recurso não suspendeu a ordem de depósito?",
     "trecho": "(REsp n. 1.661.975/SP, relator Ministro Paulo de Tarso Sanseverino, Terceira Turma, julgado em 17/9/2019, DJe de 20/9/2019.) Dessa forma, a interposição de recurso que debate a exigência do depósito impede que a inércia do arrematante seja punida com o desfazimento automático do ato durante o trâmite recursal."
@@ -4746,50 +4973,49 @@ body{background-color:var(--paper);
   ],
   "contagens": {
    "formadas": 11,
-   "abort": 2,
-   "hold": 8,
+   "achados": 10,
    "afastadas": 1,
    "perguntas": 6
   },
   "perguntas": [
    {
     "n": 1,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p18",
     "texto": "Como o requisito de apossamento efetivo se aplica aos registros de invasão, esbulho e perda integral do uso e do valor?",
     "trecho": "Nesse diapasão, segundo a jurisprudência do STJ, \"não há desapropriação indireta sem que haja o efetivo apossamento da propriedade pelo Poder Público. Desse modo, as restrições ao direito de propriedade, impostas por normas ambientais, ainda que esvaziem o conteúdo econômico, não se constituem desapropriação indireta. O que ocorre com a edição de leis ambientais que restringem o uso da propriedade é a limitação administrativa, cujos prejuízos causados devem ser indenizados por meio de ação de direito pessoal, e não de direito real, como é o caso da ação em face de desapropriação indireta\" (STJ, AgRg nos EDcl no AR Esp 457.837/MG, Rel. Ministro Humberto Martins, Segunda Turma, DJe de 22/5/2014)."
    },
    {
     "n": 2,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p19",
     "texto": "Como a afirmação de que não houve apossamento se ajusta aos registros de invasão e esbulho?",
     "trecho": "In casu, diferentemente do ressaltado pelo Tribunal de origem, não houve o apossamento dos lotes, o que afasta a hipótese de desapropriação indireta e, consequentemente, o prazo prescricional vintenário."
    },
    {
     "n": 3,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p21",
     "texto": "Como se explica o termo inicial em 1988 diante das referências à Lei 4.878/1998 e ao Decreto 16.477/98?",
     "trecho": "(...) Portanto, haja vista que o termo inicial é 23/6/1988 (Decreto Estadual 4878/1988) e a referida ação somente foi ajuizada em 19/12/2007 (fls. 5-13, e-STJ), quando já decorridos os cinco anos previstos no art. 10, parágrafo único, do Decreto-Lei 3.365/1941, é inafastável a prescrição da pretensão indenizatória."
    },
    {
     "n": 4,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p32",
     "texto": "Que critério, além da falta de transferência, sustenta classificar a situação como limitação administrativa?",
     "trecho": "A decisão agravada, amparada nas conclusões fáticas do acórdão, entendeu que se trata de limitação administrativa, pois \"'não há desapropriação indireta sem que haja o efetivo apossamento da propriedade pelo Poder Público. Desse modo, as restrições ao direito de propriedade, impostas por normas ambientais, ainda que esvaziem o conteúdo econômico, não se constituem desapropriação indireta. O que ocorre com a edição de leis ambientais que restringem o uso da propriedade é a limitação administrativa, cujos prejuízos causados devem ser indenizados por meio de ação de direito pessoal, e não de direito real, como é o caso da ação em face de desapropriação indireta' (STJ, AgRg nos EDcl no AREsp 457.837/MG, Rel. Ministro Humberto Martins, Segunda Turma, DJe de 22/5/2014)\"."
    },
    {
     "n": 5,
-    "estado": "HOLD",
+    "estado": "ACHADO",
     "paragrafo": "p43",
     "texto": "Como as referências à Lei 4.878/1998 e ao Decreto 16.477/98 se ligam ao marco inicial da prescrição?",
     "trecho": "Posteriormente e em decorrência do advento da Lei Estadual nº 4878/1998 e do Decreto Estadual nº 16477/98 a área em que situam os lotes da apelante foi declarada de utilidade pública e preservação ambiental - o Parque Ecológico do Estado - Lagoa da Jansen, circunstância constatada na perícia judicial realizada sob o crivo do contraditório e da ampla defesa."
    },
    {
     "n": 6,
-    "estado": "ABORT",
+    "estado": "ACHADO",
     "paragrafo": "p65",
     "texto": "Como afastar a revisão dos fatos se a origem também registrou invasão e esbulho?",
     "trecho": "(...) Como visto, a Corte estadual, a quem compete a análise das provas, afirmou expressamente que não houve a transferência da titularidade dos imóveis para o Estado do Maranhão, mas apenas o esvaziamento do conteúdo econômico do bem."
@@ -4819,6 +5045,8 @@ var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySele
 var NS = 'http://www.w3.org/2000/svg';
 var pad = function(n){return String(n).padStart(2,'0')};
 var INK='#181818', PAPER='#FCFCFC', TINT='#E8EBEF', RED='#A63A23';
+/* máquina escura: chapa, traço claro, ferrugem acesa */
+var M_CHAPA='#1E1E1E', M_TRACO='#CFCFCF', M_DIM='#8A8F96', M_RED='#D05D41';
 var PROVA = JSON.parse(document.getElementById('prova').textContent);
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var keys, counts, TOTAL, MAXC;
@@ -4944,15 +5172,15 @@ window.addEventListener('resize',function(){ if(aberta>-1) medirGaveta(); });
 })();
 
 /* ---------- medidor ---------- */
-var CX=124, CY=428;
+var CX=260, CY=432;
 function pt(r,v){var a=Math.PI - v/TOTAL*Math.PI;return [CX+r*Math.cos(a), CY-r*Math.sin(a)]}
 var gT = $('#gTicks');
 function marcarEscala(){
 while(gT.firstChild) gT.removeChild(gT.firstChild);
 for(var v=0; v<=TOTAL; v++){
   var maj = v%6===0 || (v===TOTAL && TOTAL%6>=3), p1=pt(maj?62:67,v), p2=pt(74,v);
-  el('line',{x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),x2:p2[0].toFixed(1),y2:p2[1].toFixed(1),stroke:INK,'stroke-width':maj?2.2:1.4,'stroke-linecap':'round'},gT);
-  if(maj){var pn=pt(52,v), lx=pn[0], ly=pn[1]+4; if(v===0){lx=CX-72;ly=CY+14} if(v===TOTAL){lx=CX+72;ly=CY+14} var tx=el('text',{x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':'middle','font-size':'10.5'},gT);tx.textContent=v;}
+  el('line',{x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),x2:p2[0].toFixed(1),y2:p2[1].toFixed(1),stroke:maj?M_TRACO:M_DIM,'stroke-width':maj?2.2:1.4,'stroke-linecap':'round'},gT);
+  if(maj){var pn=pt(52,v), lx=pn[0], ly=pn[1]+4; if(v===0){lx=CX-72;ly=CY+14} if(v===TOTAL){lx=CX+72;ly=CY+14} var tx=el('text',{x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':'middle','font-size':'10.5','class':'mq-esc'},gT);tx.textContent=v;}
 }
 }
 marcarEscala();
@@ -4966,14 +5194,14 @@ function arc(cx,cy,r,val,tot){
 var kn = $('#knobs'), KX=448, rowY=[113,183,253], kLabels=['I. Mineração','II. Crivo','III. Consolidação'];
 rowY.forEach(function(y,i){
   var g = el('g',{},kn);
-  [-60,0,60].forEach(function(d){var r=d*Math.PI/180;el('line',{x1:(KX+19*Math.sin(r)).toFixed(1),y1:(y-19*Math.cos(r)).toFixed(1),x2:(KX+23*Math.sin(r)).toFixed(1),y2:(y-23*Math.cos(r)).toFixed(1),stroke:INK,'stroke-width':2,'stroke-linecap':'round'},g)});
-  el('circle',{cx:KX,cy:y,r:15.5,fill:PAPER,stroke:INK,'stroke-width':2.4},g);
+  [-60,0,60].forEach(function(d){var r=d*Math.PI/180;el('line',{x1:(KX+19*Math.sin(r)).toFixed(1),y1:(y-19*Math.cos(r)).toFixed(1),x2:(KX+23*Math.sin(r)).toFixed(1),y2:(y-23*Math.cos(r)).toFixed(1),stroke:M_DIM,'stroke-width':2,'stroke-linecap':'round'},g)});
+  el('circle',{cx:KX,cy:y,r:15.5,fill:'#2A2A2A',stroke:'#4A4A4A','stroke-width':2.4},g);
   /* o miolo do seletor faz as vezes de lâmpada: vermelho em curso, preto concluído */
-  el('circle',{cx:KX,cy:y,r:8.6,fill:PAPER,stroke:INK,'stroke-width':2,id:'lpo'+(i+1)},g);
-  el('circle',{cx:KX+1.2,cy:y-.8,r:7.2,fill:RED,filter:'url(#riso)',id:'lp'+(i+1),opacity:0},g);
+  el('circle',{cx:KX,cy:y,r:8.6,fill:'#121212',stroke:'#4A4A4A','stroke-width':2,id:'lpo'+(i+1)},g);
+  el('circle',{cx:KX+1.2,cy:y-.8,r:7.2,fill:M_RED,filter:'url(#riso)',id:'lp'+(i+1),opacity:0},g);
   var p = el('g',{id:'kp'+(i+1),style:'transform-origin:'+KX+'px '+y+'px;transform:rotate(-60deg);transition:transform .45s cubic-bezier(.3,1.5,.5,1)'},g);
-  el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:INK,'stroke-width':3.6,'stroke-linecap':'round'},p);
-  var t = el('text',{x:KX,y:y+33,'text-anchor':'middle','font-size':'11'},g); t.textContent=kLabels[i];
+  el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:'#EDEDED','stroke-width':3.6,'stroke-linecap':'round'},p);
+  var t = el('text',{x:KX,y:y+33,'text-anchor':'middle','font-size':'11','class':'mq-rot'},g); t.textContent=kLabels[i];
 });
 
 /* ---------- etapa I ---------- */
@@ -5005,7 +5233,7 @@ function montarPerguntas(){
 $('#pqs').innerHTML = D.perguntas.map(function(q){
   var pn = q.paragrafo.replace('p','');
   return '<li class="pq"><span class="n" aria-hidden="true">'+q.n+'</span>'+
-    '<div class="meta"><span class="sr">Pergunta '+q.n+'</span><span class="est'+(q.estado==='HOLD'?' h':'')+'">'+q.estado+'</span><span>Parágrafo '+pn+'</span></div>'+
+    '<div class="meta"><span class="sr">Pergunta '+q.n+', parágrafo '+pn+'</span><span class="est" aria-hidden="true">§ '+pn+'</span></div>'+
     '<p class="tx">'+esc(q.texto)+'</p>'+
     '<button class="tog" type="button" aria-expanded="false" aria-controls="tr'+q.n+'x">'+chev+'Trecho do ato</button>'+
     '<blockquote class="trecho" id="tr'+q.n+'x" hidden>'+esc(q.trecho)+'</blockquote></li>';
@@ -5036,7 +5264,7 @@ montarDepois();
 function montarEstaticos(){
   var c = D.contagens, np = D.perguntas.length;
   $('#headTx').textContent = D.versao+': reprodução da rodada de '+D.rodada.slice(0,10);
-  $('#cA').textContent = c.abort; $('#cH').textContent = c.hold; $('#cF').textContent = c.afastadas;
+  $('#cA').textContent = c.achados; $('#cF').textContent = c.afastadas;
   $('#oeT').textContent = (np===1 ? 'Uma pergunta' : (NUMS[np]||np)+' perguntas')+' a quem responde pelo ato';
 }
 montarEstaticos();
@@ -5048,9 +5276,9 @@ $('#btnCopy').addEventListener('click',function(){
 /* ---------- cabeça de impressão: rodas dentadas ---------- */
 $$('.spr .sg').forEach(function(g){
   for(var i=0;i<8;i++){var a=i*45; el('rect',{x:-2.6,y:-14,width:5.2,height:7,rx:1.6,fill:INK,transform:'rotate('+a+')'},g)}
-  el('circle',{r:10,fill:TINT,stroke:INK,'stroke-width':2.2},g);
-  el('circle',{r:3.2,fill:PAPER,stroke:INK,'stroke-width':1.8},g);
-  el('path',{d:'M0 -9.6 V-4',stroke:INK,'stroke-width':1.8,'stroke-linecap':'round'},g);
+  el('circle',{r:10,fill:'#2A2A2A',stroke:INK,'stroke-width':2.2},g);
+  el('circle',{r:3.2,fill:M_TRACO,stroke:INK,'stroke-width':1.8},g);
+  el('path',{d:'M0 -9.6 V-4',stroke:M_TRACO,'stroke-width':1.8,'stroke-linecap':'round'},g);
 });
 
 /* ---------- estado ---------- */
@@ -5063,7 +5291,7 @@ function render(){
   for(var i=1;i<=3;i++){
     var st = S.stage===i ? 'on' : (S.stage>i ? 'feita' : 'off');
     $('#lp'+i).setAttribute('opacity', st==='on'?1:0);
-    $('#lpo'+i).setAttribute('fill', st==='feita'?INK:PAPER);
+    $('#lpo'+i).setAttribute('fill', st==='feita'?M_TRACO:'#121212');
     $('#kp'+i).style.transform = 'rotate('+(st==='on'?0:st==='feita'?60:-60)+'deg)';
     var et = $('#et'+i); et.classList.toggle('on',st==='on'); et.classList.toggle('feita',st==='feita');
     var li = $$('.strip .lamps i')[i-1]; li.className = st==='off'?'':st;
@@ -5072,8 +5300,8 @@ function render(){
   $('#gNeedle').style.transform = 'rotate('+(-90+S.ex/TOTAL*180)+'deg)';
   $('#gArc').setAttribute('d', arc(CX,CY,79,S.ex,TOTAL));
   $('#gNum').textContent = pad(S.ex);
-  var nA = D.contagens.abort, nH = D.contagens.hold;
-  $('#lgA').textContent = Math.min(S.ex,nA); $('#lgH').textContent = Math.max(0,Math.min(S.ex-nA,nH)); $('#lgF').textContent = Math.max(0,S.ex-nA-nH);
+  var nA = D.contagens.achados;
+  $('#lgA').textContent = Math.min(S.ex,nA); $('#lgF').textContent = Math.max(0,S.ex-nA);
   $('#mgNeedle').style.transform = 'rotate('+(-90+S.ex/TOTAL*180)+'deg)';
   $('#mgArc').setAttribute('d', arc(33,34,24,S.ex,TOTAL));
   $('#stNum').textContent = pad(S.ex);
@@ -5098,7 +5326,7 @@ function render(){
 function stageLines(st){
   if(st===0) return ['Entrada: ato','Saída: perguntas',''];
   if(st===1){var c=Math.max(S.ch,1); return ['I. Mineração','parágrafo '+c+' de '+D.ato.length,cum(S.ch)+(cum(S.ch)===1?' dúvida formada':' dúvidas formadas')];}
-  if(st===2){var af=Math.max(0,S.ex-D.contagens.abort-D.contagens.hold); return ['II. Crivo',S.ex+' no crivo',plural(af,' afastada',' afastadas')];}
+  if(st===2){var af=Math.max(0,S.ex-D.contagens.achados); return ['II. Crivo',S.ex+' no crivo',plural(af,' afastado',' afastados')];}
   if(st===3){return ['III. Consolidação', S.pq+(S.pq===1?' pergunta':' perguntas'), S.pq===0?'':ondePerg(S.pq)];}
   return ['Saída',plural(D.perguntas.length,' pergunta',' perguntas'),'a quem responde pelo ato'];
 }
@@ -5119,11 +5347,11 @@ function linhasSecoes(){
   return {
     head: head,
     s1: ['I. Mineração','parágrafo '+D.ato.length+' de '+D.ato.length, plural(c.formadas,' dúvida formada',' dúvidas formadas')],
-    s2: ['II. Crivo', c.formadas+' no crivo', plural(c.afastadas,' afastada',' afastadas')],
+    s2: ['II. Crivo', c.formadas+' no crivo', plural(c.afastadas,' afastado',' afastados')],
     s3: ['III. Consolidação', plural(np,' pergunta',' perguntas'), ondePerg(np)],
     o0: head,
-    od: ['Estados','ABORT '+c.abort+', HOLD '+c.hold,'Afastadas '+c.afastadas],
-    of: q ? [D.depois.selo,'pergunta '+k,'parágrafo '+q.paragrafo.replace('p','')] : [D.depois.selo,'nenhuma pergunta','sobre o ponto corrigido'],
+    od: ['Estados',plural(c.achados,' achado',' achados'),plural(c.afastadas,' afastado',' afastados')],
+    of: q ? [D.depois.selo,'pergunta '+k,'§ '+q.paragrafo.replace('p','')] : [D.depois.selo,'nenhuma pergunta','sobre o ponto corrigido'],
     og: head
   };
 }
@@ -5136,7 +5364,7 @@ function syncVisor(){
     var qs=$$('.pq'), qi=0;
     qs.forEach(function(q,i){ if(q.getBoundingClientRect().top<=line) qi=i; });
     var q=D.perguntas[qi];
-    setVisor(['Pergunta '+q.n+' de '+D.perguntas.length,'parágrafo '+q.paragrafo.replace('p',''),q.estado],'q'+q.n);
+    setVisor(['Pergunta '+q.n+' de '+D.perguntas.length,'§ '+q.paragrafo.replace('p',''),'achado'],'q'+q.n);
     return;
   }
   setVisor(secLines[cur]||secLines.o0,'sec'+cur);
@@ -5256,8 +5484,18 @@ function play(){ $('#op').scrollIntoView({behavior: reduced?'auto':'smooth', blo
   t('pvN',P.corroboradas); t('pvN2',P.corroboradas); t('pvD',P.escopo); t('pvD2',P.escopo); t('pvD3',P.escopo); t('pvA',P.analisados);
   t('vA',P.analisados); t('vE',P.escopo); t('vC',P.corroboradas); t('vS',P.correspondencias);
   $$('.pvLote').forEach(function(e){e.textContent=P.lote});
+  $$('.funil [data-pv]').forEach(function(b){ var v=P[b.dataset.pv]; if(v==null) return; b.textContent=v; b.parentNode.style.setProperty('--v',v); b.parentNode.style.setProperty('--vmax',P.analisados); });
   var np=0, nAtos=0; for(var k in ATOS){ nAtos++; np+=ATOS[k].perguntas.length; }
   if(nAtos){ t('nAtos',pad(nAtos)); var ev=document.getElementById('evd1'); if(ev) ev.textContent='Nos '+(['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','catorze','quinze','dezesseis','dezessete','dezoito','dezenove','vinte'][nAtos]||nAtos)+' atos públicos, '+np+' perguntas e nenhum veredito.'; }
+})();
+
+/* ---------- revelação ao entrar na tela (só transform, opacidade e desfoque) ---------- */
+(function(){
+  var rv=$$('.rv'); if(!rv.length) return;
+  if(reduced || !('IntersectionObserver' in window)){ rv.forEach(function(e){e.classList.add('visto')}); return; }
+  document.documentElement.classList.add('js-rv');
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visto'); io.unobserve(e.target); } }); },{threshold:.18, rootMargin:'0px 0px -6% 0px'});
+  rv.forEach(function(e){io.observe(e)});
 })();
 
 /* ---------- a tese: recolhida por padrão; abre pela seta ou por #tese ---------- */
