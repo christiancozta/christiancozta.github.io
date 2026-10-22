@@ -1659,6 +1659,50 @@ body{background-color:var(--paper);
 .hd .hd-abas .hd-versao:hover{background:#8E2E1B}
 .hd .hd-abas .hd-versao:active{transform:scale(.96)}
 @media (max-width:1020px){.hd .hd-abas .hd-versao{align-self:stretch}}
+
+/* =====================================================================
+   refino 22/10/2026 (c) ▪ máquina clara, como objeto de mesa: alumínio
+   fosco, traço fino, sombra difusa; visor verde com letra preta.
+   A folha não muda. A faixa do herói perde o quadriculado.
+   ===================================================================== */
+:root{
+  --al-1:#F4F5F7;     /* alumínio claro */
+  --al-2:#E9EBEE;
+  --al-3:#DDE1E5;
+  --al-fio:rgba(24,28,34,.16);
+  --al-txt:#5B6169;
+  --al-sombra:0 1px 0 rgba(255,255,255,.9) inset,0 34px 60px -38px rgba(30,36,44,.42),0 3px 8px -4px rgba(30,36,44,.16);
+}
+/* gabinete em moldura dupla: casca de alumínio, núcleo claro */
+.maq .gab{background:linear-gradient(180deg,var(--al-1),var(--al-2));border:1px solid var(--al-fio);border-radius:26px;box-shadow:var(--al-sombra)}
+.maq .pan{background:#FAFAFB;border:1px solid rgba(24,28,34,.1);border-radius:18px;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(24,28,34,.04)}
+.maq .paraf{width:7px;height:7px;background:#F4F5F7;border:1px solid rgba(24,28,34,.28)}
+.maq .paraf::after{width:1px;margin-left:-.5px;background:rgba(24,28,34,.45)}
+.maq .pe{height:12px;width:56px;border-radius:0 0 6px 6px;background:var(--al-3);box-shadow:inset 0 -1px 0 rgba(24,28,34,.12)}
+.maq-alca .o{stroke:#B7BCC2;stroke-width:2}
+.maq .inst .o{stroke:#CDD1D6;stroke-width:1.2}
+.maq .inst .mq-marca{fill:#181818}
+.maq .inst .mq-rot,.maq .inst .mq-esc{fill:var(--al-txt)}
+.maq .inst .vz,.maq .inst .vz.t,.maq .inst .vz.m,.maq .inst .mq-lcd{fill:#141C10}
+.maq .inst .vz.m{fill:#33472A}
+/* texto do ato: papel limpo dentro do painel */
+.maq .voto{background:#FFFFFF;border:1px solid rgba(24,28,34,.12);box-shadow:inset 0 1px 2px rgba(24,28,34,.05)}
+.maq .voto:focus-within{box-shadow:0 0 0 3px rgba(166,58,35,.18)}
+.maq .voto-cab{border-bottom-color:rgba(24,28,34,.08);color:var(--ink)}
+.maq .voto-cab h3{color:var(--al-txt)}
+.maq .voto-st{color:var(--al-txt)}
+.maq .voto-txt{color:#262626;scrollbar-color:#C3C8CE #FFFFFF}
+.maq .voto-txt .pn{color:#9AA0A7}
+.maq .voto-txt::selection,.maq .voto-txt ::selection{background:rgba(166,58,35,.16);color:inherit}
+/* barras de cima da folha: o mesmo alumínio (a folha segue igual) */
+.boca,.carro-body{background:linear-gradient(180deg,var(--al-1),var(--al-2));border:1px solid var(--al-fio);box-shadow:inset 0 1px 0 #fff,0 10px 20px -16px rgba(30,36,44,.5)}
+.boca .k,.carro-body::after{background:#FFFFFF;border:1px solid rgba(24,28,34,.28)}
+.boca .k::after{background:var(--ink);width:1.4px;margin-left:-.7px}
+.boca .slit,.carro-body::before{background:#2B2E33;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+.carro.ativo .carro-body::after{background:var(--red);border-color:var(--red);box-shadow:0 0 0 3px rgba(166,58,35,.16)}
+
+/* herói: a faixa do meio sem quadriculado, só papel */
+.hd .hd-fita{background-image:none;background-color:var(--paper);animation:none}
 </style>
 </head>
 <body>
@@ -1807,21 +1851,21 @@ body{background-color:var(--paper);
             <desc id="maqD">Visor digital com os três seletores de etapa ao lado (Mineração, Crivo e Consolidação). Abaixo, ao centro, o medidor de dúvidas formadas e, sob ele, a contagem de achados e afastados.</desc>
             <defs>
               <filter id="lcd" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#A9C59B"/><rect width="1" height="1" fill="#9BB88D"/></pattern>
-              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4B4F55"/><stop offset="1" stop-color="#44484E"/></linearGradient>
+              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#B3CDA5"/><rect width="1" height="1" fill="#A7C299"/></pattern>
+              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F5F7"/><stop offset="1" stop-color="#ECEEF1"/></linearGradient>
             </defs>
             <!-- placa da marca -->
-            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#2F3236"/>
-            <g stroke="#70767E" stroke-width="2.4" stroke-linecap="round">
+            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#FBFBFC"/>
+            <g stroke="#C3C8CE" stroke-width="2.4" stroke-linecap="round">
               <path d="M22 19 v20"/><path d="M32 19 v20"/><path d="M42 19 v20"/>
               <path d="M478 19 v20"/><path d="M488 19 v20"/><path d="M498 19 v20"/>
             </g>
-            <text class="mq-marca" x="260" y="41" text-anchor="middle" font-weight="700" font-size="34" letter-spacing="6">C<tspan fill="#D05D41">E</tspan>RNE</text>
+            <text class="mq-marca" x="260" y="41" text-anchor="middle" font-weight="700" font-size="34" letter-spacing="6">C<tspan fill="#A63A23">E</tspan>RNE</text>
             <!-- card do processo: visor largo e, ao lado, os seletores de etapa -->
             <rect class="o" x="1.2" y="72" width="517.6" height="240" rx="18" fill="url(#chapa)"/>
-            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#26292C"/>
-            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#7E9A71" stroke-width="1.2"/>
-            <rect x="21" y="93" width="350" height="28" rx="5" fill="#FFFFFF" opacity=".12"/>
+            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#DDE1E5"/>
+            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#93AC86" stroke-width="1.2"/>
+            <rect x="21" y="93" width="350" height="28" rx="5" fill="#FFFFFF" opacity=".18"/>
             <circle id="vzLed" cx="356" cy="109" r="3.6" fill="#8CA87F"/>
             <g filter="url(#lcd)">
               <text class="vz t" id="vz1" x="36" y="154"></text>
@@ -1831,26 +1875,26 @@ body{background-color:var(--paper);
             <g id="knobs"></g>
             <!-- card da medida: calibre ao centro; achados e afastados logo abaixo -->
             <rect class="o" x="1.2" y="326" width="517.6" height="232" rx="18" fill="url(#chapa)"/>
-            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#2F3236"/>
+            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#FFFFFF"/>
             <g id="gTicks"></g>
-            <path id="gArc" d="" fill="none" stroke="#D05D41" stroke-width="7" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
+            <path id="gArc" d="" fill="none" stroke="#A63A23" stroke-width="5" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
             <g id="gNeedle" style="transform-origin:260px 432px;transform:rotate(-90deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1)">
-              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#F2F3F4" stroke="#F2F3F4" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#181818" stroke="#181818" stroke-width="1.4" stroke-linejoin="round"/>
             </g>
-            <circle cx="260" cy="432" r="9" fill="#F2F3F4"/>
-            <circle cx="260" cy="432" r="3" fill="#2F3236"/>
-            <rect x="228" y="442" width="64" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <circle cx="260" cy="432" r="8" fill="#181818"/>
+            <circle cx="260" cy="432" r="2.6" fill="#FFFFFF"/>
+            <rect x="228" y="442" width="64" height="32" rx="6" fill="url(#lcdgrid)" stroke="#C3C8CE" stroke-width="1.2"/>
             <text class="mq-lcd" id="gNum" x="260" y="467" text-anchor="middle" font-size="28">00</text>
             <text class="mq-rot" x="260" y="492" text-anchor="middle" font-size="10.5">DÚVIDAS FORMADAS</text>
-            <path d="M28 506 H492" stroke="#6A7078" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
-            <path d="M260 516 V548" stroke="#6A7078" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
-            <rect x="34" y="524" width="14" height="14" rx="3" fill="#E8A628" stroke="#26292C" stroke-width="1.6"/>
+            <path d="M28 506 H492" stroke="#B7BCC2" stroke-width="1.4" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <path d="M260 516 V548" stroke="#B7BCC2" stroke-width="1.4" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <rect x="34" y="524" width="14" height="14" rx="3" fill="#E8A628" stroke="rgba(24,24,24,.35)" stroke-width="1"/>
             <text class="mq-rot" x="58" y="536" font-size="12.5">ACHADOS</text>
-            <rect x="184" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <rect x="184" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#C3C8CE" stroke-width="1.2"/>
             <text class="mq-lcd" id="lgA" x="234" y="541" text-anchor="end" font-size="30">0</text>
-            <rect x="282" y="524" width="14" height="14" rx="3" fill="#2F5D8C" stroke="#26292C" stroke-width="1.6"/>
+            <rect x="282" y="524" width="14" height="14" rx="3" fill="#2F5D8C" stroke="rgba(24,24,24,.35)" stroke-width="1"/>
             <text class="mq-rot" x="306" y="536" font-size="12.5">AFASTADOS</text>
-            <rect x="432" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <rect x="432" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#C3C8CE" stroke-width="1.2"/>
             <text class="mq-lcd" id="lgF" x="482" y="541" text-anchor="end" font-size="30">0</text>
           </svg>
           <section class="voto" aria-labelledby="votoT">
@@ -5119,7 +5163,7 @@ var NS = 'http://www.w3.org/2000/svg';
 var pad = function(n){return String(n).padStart(2,'0')};
 var INK='#181818', PAPER='#FCFCFC', TINT='#E8EBEF', RED='#A63A23';
 /* máquina escura: chapa, traço claro, ferrugem acesa */
-var M_CHAPA='#44484E', M_TRACO='#E8EAED', M_DIM='#AEB4BB', M_RED='#D05D41';
+var M_CHAPA='#EEF0F2', M_TRACO='#181818', M_DIM='#9AA0A7', M_RED='#A63A23';
 var PROVA = JSON.parse(document.getElementById('prova').textContent);
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var keys, counts, TOTAL, MAXC;
@@ -5252,7 +5296,7 @@ function marcarEscala(){
 while(gT.firstChild) gT.removeChild(gT.firstChild);
 for(var v=0; v<=TOTAL; v++){
   var maj = v%6===0 || (v===TOTAL && TOTAL%6>=3), p1=pt(maj?62:67,v), p2=pt(74,v);
-  el('line',{x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),x2:p2[0].toFixed(1),y2:p2[1].toFixed(1),stroke:maj?M_TRACO:M_DIM,'stroke-width':maj?2.2:1.4,'stroke-linecap':'round'},gT);
+  el('line',{x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),x2:p2[0].toFixed(1),y2:p2[1].toFixed(1),stroke:maj?M_TRACO:M_DIM,'stroke-width':maj?1.8:1,'stroke-linecap':'round'},gT);
   if(maj){var pn=pt(52,v), lx=pn[0], ly=pn[1]+4; if(v===0){lx=CX-72;ly=CY+14} if(v===TOTAL){lx=CX+72;ly=CY+14} var tx=el('text',{x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':'middle','font-size':'10.5','class':'mq-esc'},gT);tx.textContent=v;}
 }
 }
@@ -5268,12 +5312,12 @@ var kn = $('#knobs'), KX=448, rowY=[113,183,253], kLabels=['I. Mineração','II.
 rowY.forEach(function(y,i){
   var g = el('g',{},kn);
   [-60,0,60].forEach(function(d){var r=d*Math.PI/180;el('line',{x1:(KX+19*Math.sin(r)).toFixed(1),y1:(y-19*Math.cos(r)).toFixed(1),x2:(KX+23*Math.sin(r)).toFixed(1),y2:(y-23*Math.cos(r)).toFixed(1),stroke:M_DIM,'stroke-width':2,'stroke-linecap':'round'},g)});
-  el('circle',{cx:KX,cy:y,r:15.5,fill:'#5A5F66',stroke:'#2F3236','stroke-width':2.4},g);
+  el('circle',{cx:KX,cy:y,r:15.5,fill:'#FFFFFF',stroke:'#C3C8CE','stroke-width':1.4},g);
   /* o miolo do seletor faz as vezes de lâmpada: vermelho em curso, preto concluído */
-  el('circle',{cx:KX,cy:y,r:8.6,fill:'#2F3236',stroke:'#2F3236','stroke-width':2,id:'lpo'+(i+1)},g);
+  el('circle',{cx:KX,cy:y,r:8.6,fill:'#ECEEF1',stroke:'#D3D7DC','stroke-width':1.2,id:'lpo'+(i+1)},g);
   el('circle',{cx:KX+1.2,cy:y-.8,r:7.2,fill:M_RED,filter:'url(#riso)',id:'lp'+(i+1),opacity:0},g);
   var p = el('g',{id:'kp'+(i+1),style:'transform-origin:'+KX+'px '+y+'px;transform:rotate(-60deg);transition:transform .45s cubic-bezier(.3,1.5,.5,1)'},g);
-  el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:'#EDEDED','stroke-width':3.6,'stroke-linecap':'round'},p);
+  el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:'#181818','stroke-width':3,'stroke-linecap':'round'},p);
   var t = el('text',{x:KX,y:y+33,'text-anchor':'middle','font-size':'11','class':'mq-rot'},g); t.textContent=kLabels[i];
 });
 
@@ -5348,10 +5392,10 @@ $('#btnCopy').addEventListener('click',function(){
 
 /* ---------- cabeça de impressão: rodas dentadas ---------- */
 $$('.spr .sg').forEach(function(g){
-  for(var i=0;i<8;i++){var a=i*45; el('rect',{x:-2.6,y:-14,width:5.2,height:7,rx:1.6,fill:INK,transform:'rotate('+a+')'},g)}
-  el('circle',{r:10,fill:'#5A5F66',stroke:INK,'stroke-width':2.2},g);
-  el('circle',{r:3.2,fill:M_TRACO,stroke:INK,'stroke-width':1.8},g);
-  el('path',{d:'M0 -9.6 V-4',stroke:M_TRACO,'stroke-width':1.8,'stroke-linecap':'round'},g);
+  for(var i=0;i<8;i++){var a=i*45; el('rect',{x:-2.6,y:-14,width:5.2,height:7,rx:1.6,fill:'#9AA0A7',transform:'rotate('+a+')'},g)}
+  el('circle',{r:10,fill:'#F4F5F7',stroke:'#9AA0A7','stroke-width':1.4},g);
+  el('circle',{r:3.2,fill:'#FFFFFF',stroke:'#9AA0A7','stroke-width':1.2},g);
+  el('path',{d:'M0 -9.6 V-4',stroke:INK,'stroke-width':1.8,'stroke-linecap':'round'},g);
 });
 
 /* ---------- estado ---------- */
@@ -5364,7 +5408,7 @@ function render(){
   for(var i=1;i<=3;i++){
     var st = S.stage===i ? 'on' : (S.stage>i ? 'feita' : 'off');
     $('#lp'+i).setAttribute('opacity', st==='on'?1:0);
-    $('#lpo'+i).setAttribute('fill', st==='feita'?M_TRACO:'#2F3236');
+    $('#lpo'+i).setAttribute('fill', st==='feita'?M_TRACO:'#ECEEF1');
     $('#kp'+i).style.transform = 'rotate('+(st==='on'?0:st==='feita'?60:-60)+'deg)';
     var et = $('#et'+i); et.classList.toggle('on',st==='on'); et.classList.toggle('feita',st==='feita');
     var li = $$('.strip .lamps i')[i-1]; li.className = st==='off'?'':st;
