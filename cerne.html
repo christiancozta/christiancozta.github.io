@@ -1589,6 +1589,76 @@ body{background-color:var(--paper);
 .mv .vlist li:first-child .vd::after{content:"atual";margin-left:10px;padding:1px 8px;border-radius:999px;background:var(--ink);color:var(--paper);letter-spacing:.14em}
 @media (max-width:640px){.mv .vlist li{grid-template-columns:60px minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.js-rv .rv:not(.visto){opacity:1;transform:none;filter:none}}
+
+/* =====================================================================
+   refino 22/10/2026 (b) ▪ máquina em grafite suave, visor verde com letra
+   preta; par ACHADO/AFASTADO em amarelo/azul; terracota só como acento
+   ===================================================================== */
+:root{
+  --amarelo:#E8A628;
+  --amarelo-t:#B97F12;   /* amarelo para número grande sobre o papel */
+  --m-base:#3A3D42;
+  --m-2:#44484E;
+  --m-3:#5A5F66;
+  --m-linha:#2F3236;
+  --m-txt:#E8EAED;
+  --m-dim:#B4BAC1;
+  --lcd-bg:#A9C59B;
+  --lcd-tx:#16200F;
+}
+/* máquina */
+.maq .gab{background:var(--m-base);border-color:#2F3236;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 60px -36px rgba(24,24,24,.45)}
+.maq .pan{background:var(--m-2);border-color:#55595F;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.maq .paraf{background:var(--m-3);border-color:#2F3236}
+.maq .paraf::after{background:#2F3236}
+.maq .pe{background:#2A2C30}
+.maq .inst .o{stroke:var(--m-linha)}
+.maq .inst .mq-marca{fill:#F2F3F4}
+.maq .inst .mq-rot,.maq .inst .mq-esc{fill:var(--m-dim)}
+.maq .inst .vz,.maq .inst .vz.t,.maq .inst .vz.m,.maq .inst .mq-lcd{fill:var(--lcd-tx)}
+.maq .inst .vz.m{fill:#2E4126}
+.maq .voto{background:#2F3236;border-color:#55595F;box-shadow:inset 0 2px 0 rgba(0,0,0,.18)}
+.maq .voto-cab{border-bottom-color:#44484E}
+.maq .voto-cab h3{color:var(--m-dim)}
+.maq .voto-st{color:#C3C8CE}
+.maq .voto-txt{color:#E6E8EB;scrollbar-color:#5A5F66 #2F3236}
+.maq .voto-txt .pn{color:#9AA0A7}
+/* barras de cima da folha, no mesmo grafite */
+.boca,.carro-body{background:var(--m-base);border-color:#2F3236;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.boca .k,.carro-body::after{background:var(--m-3);border-color:#2F3236}
+.boca .k::after{background:#E8EAED}
+.boca .slit,.carro-body::before{background:#1E2023;border-color:#2F3236;box-shadow:none}
+/* celular: o visor da faixa também é verde com letra preta */
+.strip .lcd{background:var(--lcd-bg);color:var(--lcd-tx);text-shadow:none}
+.strip .lcd b{color:var(--lcd-tx)}
+
+/* ACHADO amarelo ▪ AFASTADO azul */
+.cnt.a .k i::before{background-color:var(--amarelo);background-image:none}
+.cnt.a .v{color:var(--amarelo-t)}
+.slip.mk::before{background-color:var(--amarelo);background-image:none}
+.ft-rod i{box-shadow:-6px 0 0 -1px var(--amarelo)}
+
+/* ---------- herói: o papel da faixa corre junto com as perguntas ---------- */
+.hd{--cw:264px;--cg:36px;--volta:calc((var(--cw) + var(--cg)) * 4)}
+@media (min-width:1021px){.hd{--cw:344px;--cg:56px}}
+.hd .hd-volta{gap:var(--cg);padding-right:var(--cg)}
+.hd .hd-cartao{width:var(--cw)}
+.hd .hd-cartoes{animation:hd-corre-v 60s linear infinite}
+.hd .hd-furos{width:100%;animation:hd-papel 60s linear infinite}
+.hd .hd-fita{animation:hd-papel 60s linear infinite}
+@keyframes hd-corre-v{from{transform:translateX(0)}to{transform:translateX(calc(var(--volta) * -1))}}
+@keyframes hd-papel{from{background-position-x:0}to{background-position-x:calc(var(--volta) * -1)}}
+.hd.parado .hd-fita{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.hd .hd-fita,.hd .hd-furos,.hd .hd-cartoes{animation:none!important}}
+
+/* ---------- versão: colada ao pause, no canto direito ---------- */
+.hd .hd-abas{display:flex;align-items:stretch;gap:0}
+.hd .hd-abas .hd-versao{position:static;left:auto;bottom:auto;transform:none;width:auto;height:32px;padding:0 12px;display:inline-flex;flex-direction:row;align-items:center;gap:0;border:2px solid var(--ink);border-right:0;border-radius:0;background:#A63A23;color:#FCFCFC}
+.hd .hd-abas .hd-versao small{font-size:11px;letter-spacing:.14em;opacity:1}
+.hd .hd-abas .hd-versao span{display:none}
+.hd .hd-abas .hd-versao:hover{background:#8E2E1B}
+.hd .hd-abas .hd-versao:active{transform:scale(.96)}
+@media (max-width:1020px){.hd .hd-abas .hd-versao{align-self:stretch}}
 </style>
 </head>
 <body>
@@ -1612,6 +1682,7 @@ body{background-color:var(--paper);
  <div class="hd-palco">
   <div class="hd-faixa" aria-hidden="true"></div>
   <div class="hd-abas">
+    <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões"><small>v5.0.0</small><span></span></button>
     <button class="hd-aba pausa" id="hdPausa" type="button" aria-pressed="false" aria-label="Pausar a esteira" title="Pausar a esteira">
       <svg class="ic-pausa" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="1" width="4" height="14" fill="#181818"/><rect x="9" y="1" width="4" height="14" fill="#181818"/></svg>
       <svg class="ic-play" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M2 1 L13 8 L2 15 Z" fill="#181818"/></svg>
@@ -1624,7 +1695,7 @@ body{background-color:var(--paper);
     <div class="hd-fita">
       <div class="hd-furos a"></div>
       <div class="hd-furos b"></div>
-      <div class="hd-cartoes"><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div></div>
+      <div class="hd-cartoes"><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta" aria-hidden="true"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div></div>
     </div>
     <div class="hd-crivo"><i></i><span>CRIVO</span></div>
   </div>
@@ -1633,7 +1704,6 @@ body{background-color:var(--paper);
       <p class="hd-desc">O CERNE lê o ato judicial pronto e examina o caminho que leva à conclusão. Devolve perguntas presas ao texto, e quem responde pelo ato decide.</p>
       <p class="hd-proj">Projeto autoral de <a href="https://christiancozta.github.io/arco.html" target="_blank" rel="noopener">Christian da Costa</a>, em uso próprio desde 11/2025, no marco da Governança do Raciocínio Jurídico.</p>
     </div>
-    <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões"><small>v5.0.0</small><span></span></button>
     <p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p>
   </div>
  </div>
@@ -1737,21 +1807,22 @@ body{background-color:var(--paper);
             <desc id="maqD">Visor digital com os três seletores de etapa ao lado (Mineração, Crivo e Consolidação). Abaixo, ao centro, o medidor de dúvidas formadas e, sob ele, a contagem de achados e afastados.</desc>
             <defs>
               <filter id="lcd" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#121212"/><rect width="1" height="1" fill="#1A251E"/></pattern>
-              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262626"/><stop offset="1" stop-color="#1F1F1F"/></linearGradient>
+              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#A9C59B"/><rect width="1" height="1" fill="#9BB88D"/></pattern>
+              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4B4F55"/><stop offset="1" stop-color="#44484E"/></linearGradient>
             </defs>
             <!-- placa da marca -->
-            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#121212"/>
-            <g stroke="#4A4A4A" stroke-width="2.4" stroke-linecap="round">
+            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#2F3236"/>
+            <g stroke="#70767E" stroke-width="2.4" stroke-linecap="round">
               <path d="M22 19 v20"/><path d="M32 19 v20"/><path d="M42 19 v20"/>
               <path d="M478 19 v20"/><path d="M488 19 v20"/><path d="M498 19 v20"/>
             </g>
             <text class="mq-marca" x="260" y="41" text-anchor="middle" font-weight="700" font-size="34" letter-spacing="6">C<tspan fill="#D05D41">E</tspan>RNE</text>
             <!-- card do processo: visor largo e, ao lado, os seletores de etapa -->
             <rect class="o" x="1.2" y="72" width="517.6" height="240" rx="18" fill="url(#chapa)"/>
-            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#0B0B0B"/>
-            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#24342A" stroke-width="1.2"/>
-            <circle id="vzLed" cx="356" cy="109" r="3.6" fill="#2C3A31"/>
+            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#26292C"/>
+            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#7E9A71" stroke-width="1.2"/>
+            <rect x="21" y="93" width="350" height="28" rx="5" fill="#FFFFFF" opacity=".12"/>
+            <circle id="vzLed" cx="356" cy="109" r="3.6" fill="#8CA87F"/>
             <g filter="url(#lcd)">
               <text class="vz t" id="vz1" x="36" y="154"></text>
               <text class="vz" id="vz2" x="36" y="192"></text>
@@ -1760,25 +1831,27 @@ body{background-color:var(--paper);
             <g id="knobs"></g>
             <!-- card da medida: calibre ao centro; achados e afastados logo abaixo -->
             <rect class="o" x="1.2" y="326" width="517.6" height="232" rx="18" fill="url(#chapa)"/>
-            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#0B0B0B"/>
+            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#2F3236"/>
             <g id="gTicks"></g>
             <path id="gArc" d="" fill="none" stroke="#D05D41" stroke-width="7" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
             <g id="gNeedle" style="transform-origin:260px 432px;transform:rotate(-90deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1)">
-              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#EDEDED" stroke="#EDEDED" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#F2F3F4" stroke="#F2F3F4" stroke-width="1.4" stroke-linejoin="round"/>
             </g>
-            <circle cx="260" cy="432" r="9" fill="#EDEDED"/>
-            <circle cx="260" cy="432" r="3" fill="#121212"/>
-            <rect x="228" y="442" width="64" height="32" rx="6" fill="#0B0B0B" stroke="#24342A" stroke-width="1.6"/>
-            <text class="mq-lcd" id="gNum" x="260" y="467" text-anchor="middle" font-size="28" filter="url(#lcd)">00</text>
+            <circle cx="260" cy="432" r="9" fill="#F2F3F4"/>
+            <circle cx="260" cy="432" r="3" fill="#2F3236"/>
+            <rect x="228" y="442" width="64" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <text class="mq-lcd" id="gNum" x="260" y="467" text-anchor="middle" font-size="28">00</text>
             <text class="mq-rot" x="260" y="492" text-anchor="middle" font-size="10.5">DÚVIDAS FORMADAS</text>
-            <path d="M28 506 H492" stroke="#3A3A3A" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
-            <path d="M260 516 V548" stroke="#3A3A3A" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
-            <rect x="34" y="524" width="14" height="14" rx="3" fill="#D05D41" filter="url(#riso)"/>
+            <path d="M28 506 H492" stroke="#6A7078" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <path d="M260 516 V548" stroke="#6A7078" stroke-width="1.6" stroke-dasharray="1 6" stroke-linecap="round"/>
+            <rect x="34" y="524" width="14" height="14" rx="3" fill="#E8A628" stroke="#26292C" stroke-width="1.6"/>
             <text class="mq-rot" x="58" y="536" font-size="12.5">ACHADOS</text>
-            <text class="mq-lcd a" id="lgA" x="238" y="541" text-anchor="end" font-size="32" filter="url(#lcd)">0</text>
-            <rect x="282" y="524" width="14" height="14" rx="3" fill="#6E9BD1"/>
+            <rect x="184" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <text class="mq-lcd" id="lgA" x="234" y="541" text-anchor="end" font-size="30">0</text>
+            <rect x="282" y="524" width="14" height="14" rx="3" fill="#2F5D8C" stroke="#26292C" stroke-width="1.6"/>
             <text class="mq-rot" x="306" y="536" font-size="12.5">AFASTADOS</text>
-            <text class="mq-lcd f" id="lgF" x="488" y="541" text-anchor="end" font-size="32" filter="url(#lcd)">0</text>
+            <rect x="432" y="516" width="58" height="32" rx="6" fill="url(#lcdgrid)" stroke="#26292C" stroke-width="2"/>
+            <text class="mq-lcd" id="lgF" x="482" y="541" text-anchor="end" font-size="30">0</text>
           </svg>
           <section class="voto" aria-labelledby="votoT">
             <div class="voto-cab">
@@ -5046,7 +5119,7 @@ var NS = 'http://www.w3.org/2000/svg';
 var pad = function(n){return String(n).padStart(2,'0')};
 var INK='#181818', PAPER='#FCFCFC', TINT='#E8EBEF', RED='#A63A23';
 /* máquina escura: chapa, traço claro, ferrugem acesa */
-var M_CHAPA='#1E1E1E', M_TRACO='#CFCFCF', M_DIM='#8A8F96', M_RED='#D05D41';
+var M_CHAPA='#44484E', M_TRACO='#E8EAED', M_DIM='#AEB4BB', M_RED='#D05D41';
 var PROVA = JSON.parse(document.getElementById('prova').textContent);
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var keys, counts, TOTAL, MAXC;
@@ -5195,9 +5268,9 @@ var kn = $('#knobs'), KX=448, rowY=[113,183,253], kLabels=['I. Mineração','II.
 rowY.forEach(function(y,i){
   var g = el('g',{},kn);
   [-60,0,60].forEach(function(d){var r=d*Math.PI/180;el('line',{x1:(KX+19*Math.sin(r)).toFixed(1),y1:(y-19*Math.cos(r)).toFixed(1),x2:(KX+23*Math.sin(r)).toFixed(1),y2:(y-23*Math.cos(r)).toFixed(1),stroke:M_DIM,'stroke-width':2,'stroke-linecap':'round'},g)});
-  el('circle',{cx:KX,cy:y,r:15.5,fill:'#2A2A2A',stroke:'#4A4A4A','stroke-width':2.4},g);
+  el('circle',{cx:KX,cy:y,r:15.5,fill:'#5A5F66',stroke:'#2F3236','stroke-width':2.4},g);
   /* o miolo do seletor faz as vezes de lâmpada: vermelho em curso, preto concluído */
-  el('circle',{cx:KX,cy:y,r:8.6,fill:'#121212',stroke:'#4A4A4A','stroke-width':2,id:'lpo'+(i+1)},g);
+  el('circle',{cx:KX,cy:y,r:8.6,fill:'#2F3236',stroke:'#2F3236','stroke-width':2,id:'lpo'+(i+1)},g);
   el('circle',{cx:KX+1.2,cy:y-.8,r:7.2,fill:M_RED,filter:'url(#riso)',id:'lp'+(i+1),opacity:0},g);
   var p = el('g',{id:'kp'+(i+1),style:'transform-origin:'+KX+'px '+y+'px;transform:rotate(-60deg);transition:transform .45s cubic-bezier(.3,1.5,.5,1)'},g);
   el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:'#EDEDED','stroke-width':3.6,'stroke-linecap':'round'},p);
@@ -5276,7 +5349,7 @@ $('#btnCopy').addEventListener('click',function(){
 /* ---------- cabeça de impressão: rodas dentadas ---------- */
 $$('.spr .sg').forEach(function(g){
   for(var i=0;i<8;i++){var a=i*45; el('rect',{x:-2.6,y:-14,width:5.2,height:7,rx:1.6,fill:INK,transform:'rotate('+a+')'},g)}
-  el('circle',{r:10,fill:'#2A2A2A',stroke:INK,'stroke-width':2.2},g);
+  el('circle',{r:10,fill:'#5A5F66',stroke:INK,'stroke-width':2.2},g);
   el('circle',{r:3.2,fill:M_TRACO,stroke:INK,'stroke-width':1.8},g);
   el('path',{d:'M0 -9.6 V-4',stroke:M_TRACO,'stroke-width':1.8,'stroke-linecap':'round'},g);
 });
@@ -5291,7 +5364,7 @@ function render(){
   for(var i=1;i<=3;i++){
     var st = S.stage===i ? 'on' : (S.stage>i ? 'feita' : 'off');
     $('#lp'+i).setAttribute('opacity', st==='on'?1:0);
-    $('#lpo'+i).setAttribute('fill', st==='feita'?M_TRACO:'#121212');
+    $('#lpo'+i).setAttribute('fill', st==='feita'?M_TRACO:'#2F3236');
     $('#kp'+i).style.transform = 'rotate('+(st==='on'?0:st==='feita'?60:-60)+'deg)';
     var et = $('#et'+i); et.classList.toggle('on',st==='on'); et.classList.toggle('feita',st==='feita');
     var li = $$('.strip .lamps i')[i-1]; li.className = st==='off'?'':st;
@@ -5334,7 +5407,7 @@ var vzKey='';
 function setVisor(L,key){
   $('#vz1').textContent=L[0]; $('#vz2').textContent=L[1]; $('#vz3').textContent=L[2]||'';
   $('#stLbl').textContent=L[0]; $('#stSub').textContent=[L[1],L[2]].filter(Boolean).join(', ');
-  $('#vzLed').setAttribute('fill', E.playing&&!E.paused ? '#8CFFB4' : (S.stage===0?'#2C3A31':'#3FB872'));
+  $('#vzLed').setAttribute('fill', E.playing&&!E.paused ? '#16200F' : (S.stage===0?'#8CA87F':'#4E6B42'));
   var rep0 = (S.stage===0 && !E.playing);
   ['#vz1','#vz2'].forEach(function(id){ $(id).classList.toggle('pisca', rep0); });
   $('.strip .lcd').classList.toggle('pisca', rep0);
