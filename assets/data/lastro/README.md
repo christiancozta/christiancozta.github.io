@@ -12,6 +12,9 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 - `mapa_tematico_publico.pdf`: síntese do indicador de 90,2% e da estrutura operacional.
 - `diagnostico_corpus_publico.md`: síntese do total de 115.114 registros únicos.
 - `operacao_atrio_publica.md`: síntese de rotas, testes, eixos, fases e módulos.
+- `cerne_rodadas_derivada.csv`: uma linha por rodada do CERNE 5.0 reproduzida na demonstração (17 atos); tempos, contagens de dúvidas, estados, perguntas, cobertura, tentativas e classificação na régua, sem texto dos atos, prompts nem dados por lente.
+- `cerne_rodadas_derivada.sha256`: SHA-256 do derivado do CERNE.
+- `metricas_cerne_publica.md`: método, definições, resultados, linha de base ao acaso e limites das métricas do CERNE.
 
 ## Métricas reproduzidas
 
@@ -34,6 +37,11 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 245 códigos, 9 matérias, 3 ramos e 10 situações | direta | `precedentes_publico.xlsx` |
 | 115.114 registros únicos | direta | `diagnostico_corpus_publico.md` |
 | 23 rotas e 188 testes | declarada/agregada | `operacao_atrio_publica.md` |
+| 11,1 min de mediana e 12,2 min de média por rodada do CERNE | derivada | `cerne_rodadas_derivada.csv` |
+| 37,6 s de crivo por dúvida | derivada | `cerne_rodadas_derivada.csv` |
+| 218 dúvidas, 11 afastadas, 67 perguntas | direta | `cerne_rodadas_derivada.csv` |
+| 15 de 17 atos concluídos na primeira tentativa | direta | `cerne_rodadas_derivada.csv` |
+| 9 de 12 com ponto embargável; 2,2 esperados ao acaso | direta/derivada | `cerne_rodadas_derivada.csv` |
 
 ## Limites da verificação
 
