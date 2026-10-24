@@ -1740,6 +1740,39 @@ body{background-color:var(--paper);
 .boca .k::after{background:#F2F3F4}
 .boca .slit,.carro-body::before{background:#1C1E21;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
 .carro.ativo .carro-body::after{background:#E06A4C;border-color:#181818;box-shadow:0 0 0 3px rgba(224,106,76,.25)}
+
+/* =====================================================================
+   redesign 24/10/2026 ▪ I.1 Síntese ▪ matriz de campos
+   Duas camadas coordenadas: a malha de 32 px no fundo (régua de ritmo)
+   e a matriz real de layout. Cada linha (.mx-row) é uma grade; cada
+   campo (.mx-c) desenha só a própria divisória superior e esquerda, e
+   as divisórias se compartilham em qualquer largura. A matriz responde
+   à largura do próprio CERNE (container query), inclusive em iframe.
+   Campo é estrutura; card é objeto.
+   ===================================================================== */
+:root{--m:32px;--fio:#DCDBD9}
+/* a malha nasce na origem da página: a coluna lateral, múltipla de 32,
+   cai sobre uma linha da malha */
+body{background-position:0 0}
+.mx{container:mx / inline-size;overflow:clip;--pad:16px;--side-w:clamp(128px,22%,224px)}
+@supports (width:round(down,22%,32px)){.mx{--side-w:clamp(128px,round(down,22%,32px),224px)}}
+.mx-row{display:grid;grid-template-columns:minmax(0,1fr);margin-left:-1px}
+.mx-c{min-width:0;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+.mx-v{display:none}
+@container mx (min-width:641px){
+  .mx-row{grid-template-columns:var(--side-w) minmax(0,1fr)}
+  .mx-v{display:block}
+}
+@container mx (min-width:1021px){
+  .mx-c{--pad:24px}
+}
+/* rótulo de campo: caixa-alta condensada, como os rótulos da página */
+.mx-k{margin:0;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--ink)}
+.mx-k a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.25px}
+.mx-k a:hover{color:var(--red)}
+/* faixas escuras e terracota: a mesma divisória, no tom do fundo */
+.sec-d{--fio:var(--grade-d)}
+.sec-p{--fio:rgba(252,252,252,.22)}
 </style>
 </head>
 <body>
