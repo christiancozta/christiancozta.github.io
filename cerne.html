@@ -73,10 +73,6 @@ button{font:inherit;color:inherit}
 .wm .e{color:var(--red)}
 
 /* ---------- visor ---------- */
-.maq .vz{fill:#5FE08F;font-family:var(--f-lcd);font-size:24px;letter-spacing:.02em}
-.maq .vz.t{fill:#8CFFB4}
-.maq .vz.m{fill:#3FB872}
-.maq .vz.pisca{animation:pisca 1.2s steps(1,end) infinite}
 @keyframes pisca{0%{opacity:1}50%{opacity:.18}}
 
 /* ---------- botões desenhados ---------- */
@@ -91,120 +87,18 @@ a.btn{color:var(--ink);text-decoration:none}
 .btn.quiet{border-color:transparent;background:transparent;padding-left:10px;padding-right:10px;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
 .btn.quiet:hover{background:var(--tint)}
 
-/* ---------- arquivo: gaveta de pastas suspensas ---------- */
-.arquivo{--step:26px;--tabh:30px;--tabw:184px;--ins:5px;--frente:112px;--corpo:720px;--g:0px;
-  position:relative;width:100%;height:calc(14px + var(--tabh) + (var(--n) - 1) * var(--step) + 44px + var(--frente) + var(--g));
-  overflow:hidden;transition:height .7s var(--ease)}
-.arq-caixa{position:absolute;top:calc(14px + var(--tabh) - 12px);left:calc((var(--n) - 1) * var(--ins) - 14px);right:calc((var(--n) - 1) * var(--ins) - 14px);bottom:calc(var(--frente) - 8px);border:var(--lw-mech) solid var(--ink);border-bottom:0;border-radius:16px 16px 0 0;background:var(--tint)}
-.pastas{list-style:none;margin:0;padding:0}
-.pasta{position:absolute;top:calc(14px + var(--i) * var(--step));left:calc((var(--n) - 1 - var(--i)) * var(--ins));right:calc((var(--n) - 1 - var(--i)) * var(--ins));height:calc(var(--tabh) + var(--corpo));z-index:calc(var(--i) + 1);
-  transform:translateY(calc(var(--entra,0px) + var(--shift,0px) + var(--lift,0px)));opacity:var(--op,1);transition:transform .7s var(--ease),opacity .7s var(--ease)}
-.pasta.depois{--shift:var(--g)}
-.pasta.aberta{--lift:-8px}
-.pasta:not(.aberta):not(.travada):hover{--lift:-5px;transition-duration:.35s}
-.arquivo:not(.visto) .pasta{--entra:24px;--op:0}
-.arquivo.visto:not(.pronto) .pasta{transition-delay:calc(var(--i) * 55ms)}
-.pasta-corpo{position:absolute;top:var(--tabh);left:0;right:0;bottom:0;padding:18px 18px 0;border:var(--lw) solid var(--ink);border-bottom:0;border-radius:12px 12px 0 0;background:var(--paper)}
-.pasta-btn{appearance:none;position:absolute;z-index:2;left:0;right:0;top:0;height:calc(var(--tabh) + 10px);margin:0;padding:0;border:0;background:transparent;cursor:pointer}
-.pasta-btn:focus-visible{outline:none}
-.pasta-btn:focus-visible .aba{outline:2px dashed var(--ink);outline-offset:3px;border-radius:8px}
-.aba{position:absolute;top:0;left:calc((100% - var(--tabw)) * var(--f));width:var(--tabw);height:calc(var(--tabh) + 2px)}
-.aba-forma{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.aba-forma .f{fill:var(--paper);transition:fill .3s var(--ease)}
-.aba-forma .s{fill:none;stroke:var(--ink);stroke-width:var(--lw);vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.aba-rot{position:absolute;inset:2px 28px 0;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;color:var(--ink);transition:color .3s var(--ease)}
-.aba-n{font-weight:400;color:var(--ink2)}
-.pasta:not(.tem-rodada) .aba-rot{color:var(--ink2);font-weight:400}
-.aba-play{display:none;width:0;height:0;border-left:6px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;flex:none}
-.pasta.tem-rodada:not(.rodada) .aba-play{display:inline-block}
-.aba-dot{display:none;width:8px;height:8px;border-radius:50%;background-color:var(--red);background-image:var(--grain);flex:none}
-.pasta.rodada .aba-dot{display:inline-block}
-.pasta-btn:hover .aba-forma .f{fill:#fff}
-.pasta.aberta .aba-forma .f{fill:var(--ink)}
-.pasta.aberta .aba-rot,.pasta.aberta:not(.tem-rodada) .aba-rot{color:var(--paper)}
-.pasta.aberta .aba-n{color:rgba(252,252,252,.72)}
-.pasta.travada .pasta-btn{cursor:not-allowed}
-.pasta.travada .aba-rot{color:var(--ink2)}
-.pasta.negado .aba{animation:negado .38s var(--ease)}
-@keyframes negado{25%{transform:translateX(-4px)}60%{transform:translateX(3px)}}
-.arq-frente{position:absolute;z-index:40;left:0;right:0;bottom:0;height:var(--frente)}
-.arq-frente-f{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.arq-frente-f .f{fill:var(--paper)}
-.arq-frente-f .s{fill:none;stroke:var(--ink);stroke-width:var(--lw-mech);vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.arq-puxador{position:absolute;left:50%;top:calc(var(--frente) * .74);width:92px;height:44px;transform:translate(-50%,-50%)}
-.arq-placa{position:absolute;z-index:41;left:50%;bottom:calc(var(--frente) * .5);transform:translateX(-50%);min-width:176px;padding:5px 22px 4px;border:var(--lw) solid var(--ink);border-radius:4px;background:#fff;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;text-align:center;white-space:nowrap;color:var(--ink)}
-.arq-placa::before,.arq-placa::after{content:"";position:absolute;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--ink)}
-.arq-placa::before{left:7px}.arq-placa::after{right:7px}
-.arq-placa span{display:inline-block;animation:placaIn .45s var(--ease)}
-@keyframes placaIn{from{opacity:0;transform:translateY(4px)}}
-
-/* ficha do caso, dentro da pasta aberta */
-.pf{position:relative;background:#fff;border:var(--lw) solid var(--ink);border-radius:8px;padding:18px 20px;outline:var(--lw-thin) dashed var(--tint2);outline-offset:-9px;opacity:0;transform:translateY(10px);transition:opacity .45s var(--ease),transform .6s var(--ease)}
-.pasta.aberta .pf{opacity:1;transform:none;transition-delay:.12s}
-.pf-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-family:var(--f-mono);font-size:12px;color:var(--ink2)}
-.pf-st{display:inline-flex;align-items:center;gap:7px;padding:3px 10px 2px;border:var(--lw) solid var(--ink);border-radius:999px;color:var(--ink);font-size:11.5px;letter-spacing:.02em;white-space:nowrap}
-.pf-st.vazio{border-color:var(--tint2);color:var(--ink2)}
-.pf-st.em{border-color:var(--red);color:var(--red)}
-.pf-st.em::before{content:"";width:7px;height:7px;border-radius:50%;background-color:var(--red);background-image:var(--grain);animation:pisca 1.2s steps(1,end) infinite}
-.pf-t{margin:0;font-size:24px;font-weight:600;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
-.pf-sub{margin:4px 0 14px;font-size:14.5px;color:var(--ink2)}
-.pf-dl{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.2fr) minmax(0,.9fr);gap:8px 18px;margin:0 0 14px}
-.pf-dl div{padding-top:6px;border-top:var(--lw-thin) solid var(--tint2)}
-.pf-dl dt{font-family:var(--f-mono);font-size:11.5px;color:var(--ink2)}
-.pf-dl dd{margin:2px 0 0;font-size:14.5px;line-height:1.35;font-variant-numeric:tabular-nums}
-.pf-em{margin:0 0 16px;padding:2px 0 2px 14px;border-left:var(--lw-mech) solid var(--ink)}
-.pf-em b{display:block;margin-bottom:4px;font-family:var(--f-mono);font-size:11.5px;font-weight:500;color:var(--ink2)}
-.pf-em p{margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:13.5px;line-height:1.55;letter-spacing:.025em}
-.pf-vazio{margin:6px 0 16px;font-size:15px;line-height:1.45;color:var(--ink2);max-width:30em}
-.pf-acao{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+/* botão de reproduzir a rodada */
 .rodar{padding-right:6px}
 .rodar .ic{display:grid;place-items:center;width:30px;height:30px;margin-left:4px;border-radius:50%;background:rgba(252,252,252,.16);transition:transform .35s var(--ease)}
 .rodar:hover .ic{transform:translateX(2px) scale(1.06)}
 .rodar[disabled]{background:var(--tint);color:var(--ink2);border-color:var(--tint2);cursor:not-allowed;box-shadow:none;transform:none}
 .rodar[disabled] .ic{background:rgba(24,24,24,.06)}
 .rodar[disabled] .ic path{fill:var(--ink2);stroke:var(--ink2)}
-.ir{padding-right:8px}
-.ir .ic{display:grid;place-items:center;width:26px;height:26px;margin-left:2px;border-radius:50%;background:var(--tint);transition:transform .35s var(--ease)}
-.ir:hover .ic{transform:translateY(-2px)}
 
 /* ---------- 2/3/4. operação ---------- */
-.op{max-width:var(--max);margin:0 auto;padding:0 var(--padx);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
-.maq-col{position:sticky;top:16px;align-self:start;padding-top:4px}
-.maq{position:relative;padding:22px 0 14px}
-.maq-alca{position:absolute;left:50%;top:0;width:124px;height:32px;margin-left:-62px;overflow:visible}
-.gab{position:relative;z-index:1;padding:16px;border:var(--lw-mech) solid var(--ink);border-radius:30px;background:var(--tint)}
-.paraf{position:absolute;width:10px;height:10px;border:1.8px solid var(--ink);border-radius:50%;background:var(--paper)}
-.paraf::after{content:"";position:absolute;left:50%;top:-1px;bottom:-1px;width:1.6px;margin-left:-.8px;background:var(--ink);transform:rotate(-45deg)}
-.paraf.a{left:3px;top:34px}.paraf.b{right:3px;top:34px}.paraf.c{left:3px;bottom:34px}.paraf.d{right:3px;bottom:34px}
-.pan{padding:16px 16px 18px;border:var(--lw-mech) solid var(--ink);border-radius:20px;background:var(--paper)}
-.inst{display:block;width:100%;height:auto}
-.pe{position:absolute;bottom:0;width:64px;height:22px;border-radius:8px;background:var(--ink)}
-.pe.l{left:15%}.pe.r{right:15%}
-
-/* o voto auditado: o texto do ato selecionado */
-.voto{position:relative;display:flex;flex-direction:column;margin-top:18px;border:var(--lw-mech) solid var(--ink);border-radius:14px;background:#fff;box-shadow:inset 0 2px 0 rgba(24,24,24,.05);transition:box-shadow .3s var(--ease)}
-.voto:focus-within{box-shadow:inset 0 2px 0 rgba(24,24,24,.05),0 0 0 4px var(--tint),var(--reg)}
-.voto-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 16px 8px;border-bottom:var(--lw-thin) solid var(--tint2);font-family:var(--f-mono);font-size:13px}
-.voto-cab h3{margin:0;font:inherit;font-weight:500;letter-spacing:.02em;white-space:nowrap}
-.voto-st{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2);font-size:12px}
-.voto-txt{flex:1;min-height:240px;overflow:auto;padding:14px 18px 18px 16px;border-radius:0 0 12px 12px;font-size:14.5px;line-height:1.55;overscroll-behavior:contain}
-.voto-txt:focus-visible{outline:none}
-.voto-txt p{display:grid;grid-template-columns:28px minmax(0,1fr);gap:0 6px;margin:0 0 10px;opacity:0;transform:translateY(6px);animation:vtIn .5s var(--ease) forwards}
-.voto-txt .pn{font-family:var(--f-mono);font-size:11px;line-height:1.9;color:var(--ink2)}
-@keyframes vtIn{to{opacity:1;transform:none}}
-.maq .o{stroke:var(--ink);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
-.maq text{font-family:var(--f-mono);fill:var(--ink)}
-.maq-ctl{display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center;margin-top:6px}
-.maq-ctl .btn{min-height:40px;font-size:13px;padding:7px 14px 7px 12px}
-.strip{display:none}
 
 /* folha */
 .folha-col{min-width:0;padding-bottom:0}
-.boca{position:relative;height:38px;margin:0 -14px;border:var(--lw-mech) solid var(--ink);border-radius:20px;background:var(--tint);z-index:3}
-.boca .k{position:absolute;top:50%;width:22px;height:22px;margin-top:-11px;border:var(--lw-mech) solid var(--ink);border-radius:50%;background:var(--paper)}
-.boca .k::after{content:"";position:absolute;left:50%;top:3px;bottom:3px;width:2px;margin-left:-1px;background:var(--ink);border-radius:2px}
-.boca .k.l{left:8px}.boca .k.r{right:8px}
-.boca .slit{position:absolute;left:40px;right:40px;top:50%;height:8px;margin-top:-4px;border-radius:6px;background:var(--ink)}
 .folha{position:relative;margin-top:-16px;padding:16px 30px 0;border:var(--lw-mech) solid var(--ink);border-top:0;border-bottom:0;background-color:var(--paper);
   background-image:linear-gradient(var(--gmaj) 1px,transparent 1px),linear-gradient(90deg,var(--gmaj) 1px,transparent 1px),linear-gradient(var(--gmin) 1px,transparent 1px),linear-gradient(90deg,var(--gmin) 1px,transparent 1px);
   background-size:20px 20px,20px 20px,4px 4px,4px 4px;background-position:30px 0,30px 0,30px 0,30px 0}
@@ -218,16 +112,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .fi{padding:26px 34px 30px}
 .fi.fi-head{padding-top:18px;padding-bottom:6px}
 .fi.fi-o0{padding-top:34px;padding-bottom:18px}
-
-/* cabeça de impressão */
-.carro{position:relative;height:62px;margin:0 -30px;z-index:4}
-.carro[hidden]{display:none}
-.carro-body{position:absolute;left:24px;right:24px;top:22px;height:32px;border:var(--lw-mech) solid var(--ink);border-radius:16px;background:var(--tint)}
-.carro-body::before{content:"";position:absolute;left:110px;right:110px;top:50%;height:8px;margin-top:-4px;border-radius:6px;background:var(--paper);border:var(--lw-mech) solid var(--ink)}
-.carro-body::after{content:"";position:absolute;right:58px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;border:var(--lw-mech) solid var(--ink);background:var(--paper)}
-.carro.ativo .carro-body::after{background:var(--red)}
-.spr{position:absolute;top:24px;width:30px;height:30px;overflow:visible}
-.spr.l{left:0}.spr.r{right:0}
 
 /* selo */
 .selo{display:inline-flex;align-items:center;gap:14px;padding:10px 16px;border:var(--lw) solid var(--ink);border-radius:10px;outline:1px solid var(--ink);outline-offset:3px;background:var(--paper);transform:rotate(-1.2deg);font-family:var(--f-mono);font-size:14px;line-height:1.3}
@@ -322,49 +206,13 @@ a.btn{color:var(--ink);text-decoration:none}
 /* ---------- celular ---------- */
 @media (max-width:1020px){
   :root{--padx:24px}
-  .op{grid-template-columns:minmax(0,1fr);gap:0;padding:0 24px}
-  .maq-col{display:none}
-  .strip{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:12px;margin:0 -24px 14px;padding:8px 16px;background:var(--paper);border-bottom:var(--lw) solid var(--ink);border-top:var(--lw) solid var(--ink)}
-  .strip .mg{width:66px;height:42px;flex:none}
-  .strip .stg{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;font-family:var(--f-mono);font-size:13px;line-height:1.2}
-  .strip .lcd{display:flex;flex-direction:column;gap:0;padding:4px 9px 5px;border-radius:6px;background:#181818;font-family:var(--f-lcd);font-size:16px;line-height:1.05;color:#5FE08F;text-shadow:0 0 3px rgba(95,224,143,.55);min-width:0}
-  .strip .lcd b{font-weight:400;color:#8CFFB4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .strip .lcd span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .strip .lcd.pisca b,.strip .lcd.pisca span{animation:pisca 1.2s steps(1,end) infinite}
-  .strip .lamps{display:flex;gap:5px}
-  .strip .lamps i{width:11px;height:11px;border-radius:50%;border:2px solid var(--ink);background:var(--paper)}
-  .strip .lamps i.on{background-color:var(--red);background-image:var(--grain)}
-  .strip .lamps i.feita{background:var(--ink)}
-  .strip .ib{appearance:none;width:40px;height:40px;flex:none;display:grid;place-items:center;border:var(--lw) solid var(--ink);border-radius:50%;background:var(--paper);cursor:pointer}
-  .strip .ib[hidden]{display:none}
 }
 @media (max-width:640px){
   :root{--padx:16px}
-  .arquivo{--tabw:150px;--ins:3px;--step:24px;--tabh:28px;--frente:84px}
-  .aba-n{display:none}
-  .aba-rot{inset:2px 22px 0;font-size:10.5px;letter-spacing:.06em}
-  .arq-puxador{width:76px;height:36px}
-  .arq-placa{min-width:150px;font-size:10.5px;padding:4px 18px 3px}
-  .pasta-corpo{padding:14px 10px 0}
-  .pf{padding:16px 14px;outline-offset:-7px}
-  .pf-t{font-size:20px}
-  .pf-dl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .pf-dl div:first-child{grid-column:1 / -1}
-  .pf-em p{-webkit-line-clamp:4}
-  .pf-cab{flex-wrap:wrap}
   .topo{padding:16px 16px 0}
-  .op{padding:0 16px}
-  .strip{margin:0 -16px 12px;padding:6px 12px}
-  .boca{margin:0 -8px;height:32px}
-  .boca .slit{left:34px;right:34px}
   .folha{padding:12px 18px 0;background-position:18px 0,18px 0,18px 0,18px 0}
   .folha::before,.folha::after{width:18px;background-image:radial-gradient(circle at 9px 10px,var(--desk) 0 3px,var(--ink) 3.2px 4.6px,transparent 4.9px);background-size:18px 20px}
   .fi{padding:20px 12px 24px}
-  .carro{margin:0 -18px;height:56px}
-  .carro-body{left:14px;right:14px;top:20px;height:28px}
-  .carro-body::before{left:60px;right:60px}
-  .carro-body::after{right:30px}
-  .spr{width:18px;height:18px;top:25px}
   .selo{font-size:12.5px;gap:10px;padding:8px 10px;flex-wrap:wrap}
   .frase{font-size:19px}
   .toks{grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
@@ -445,7 +293,7 @@ a.btn{color:var(--ink);text-decoration:none}
     --btn-fs:12px;
     --btn-gap:8px;
     --btn-pad:7px 15px 7px 11px;
-  }
+}
   html{scrollbar-gutter:stable}
   body{font-size:14px}
   :focus-visible{outline-offset:2px}
@@ -456,7 +304,7 @@ a.btn{color:var(--ink);text-decoration:none}
   .btn svg[width="16"]{width:13px;height:13px}
   .btn svg[width="14"]{width:12px;height:12px}
 
-  /* topo e gavetas */
+  /* topo */
   .topo{padding-top:18px}
   .versoes li{grid-template-columns:minmax(0,210px) minmax(0,1fr);gap:3px 19px;padding:10px 0}
   .versoes li p{font-size:13.5px}
@@ -465,58 +313,11 @@ a.btn{color:var(--ink);text-decoration:none}
   .hero{padding-top:38px;padding-bottom:32px;gap:32px}
   .versao{gap:6px;min-height:34px;padding:5px 11px;font-size:12px}
   .versao svg{width:12px;height:12px}
-  .arquivo{--step:24px;--tabh:28px;--tabw:176px;--frente:100px}
-  .aba-rot{font-size:11px;gap:7px}
-  .arq-placa{min-width:164px;font-size:10.5px;padding:4px 20px 3px}
-  .aba-dot{width:7px;height:7px}
-  .arq-puxador{width:80px;height:38px}
-  .pasta-corpo{padding:15px 15px 0}
-  .pf{padding:15px 17px;border-radius:7px;outline-offset:-8px}
-  .pf-cab{margin-bottom:9px;font-size:11px}
-  .pf-st{font-size:10.5px;padding:2px 9px 1px}
-  .pf-t{font-size:20px}
-  .pf-sub{font-size:13px;margin-bottom:12px}
-  .pf-dl{gap:7px 15px;margin-bottom:12px}
-  .pf-dl dt{font-size:10.5px}
-  .pf-dl dd{font-size:13px}
-  .pf-em{margin-bottom:13px;padding:2px 0 2px 12px}
-  .pf-em b{font-size:10.5px}
-  .pf-em p{font-size:12px}
-  .pf-vazio{font-size:13.5px;margin-bottom:13px}
-  .ir .ic{width:22px;height:22px}
   .rodar .ic{width:24px;height:24px}
   .rodar .ic svg{width:11px;height:11px}
 
-  /* 2–5. operação: máquina + folha */
-  .op{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
-  .maq-col{top:14px;padding-top:3px}
-  .maq{padding:18px 0 11px}
-  .maq-alca{width:100px;height:26px;margin-left:-50px}
-  .gab{padding:13px;border-radius:24px}
-  .paraf{width:8px;height:8px;border-width:var(--lw-thin)}
-  .paraf::after{width:1.3px;margin-left:-.65px}
-  .paraf.a{left:2.5px;top:27px}.paraf.b{right:2.5px;top:27px}.paraf.c{left:2.5px;bottom:27px}.paraf.d{right:2.5px;bottom:27px}
-  .pan{padding:13px 13px 14px;border-radius:16px}
-  .pe{width:52px;height:18px;border-radius:6px}
-  .maq-col{display:flex;flex-direction:column;height:max(calc(100vh - 28px),760px)}
-  .maq{flex:1;display:flex;flex-direction:column;min-height:0}
-  .gab,.pan{flex:1;display:flex;flex-direction:column;min-height:0}
-  .inst{flex:none}
-  .voto{flex:1;min-height:0;margin-top:14px;border-radius:11px}
-  .voto:focus-within{box-shadow:inset 0 2px 0 rgba(24,24,24,.05),0 0 0 3px var(--tint),var(--reg)}
-  .voto-cab{gap:10px;padding:7px 13px 6px;font-size:11.5px}
-  .voto-st{font-size:10.5px}
-  .voto-txt{min-height:150px;padding:11px 15px 14px 12px;border-radius:0 0 9px 9px;font-size:12.5px}
-  .voto-txt p{grid-template-columns:24px minmax(0,1fr);margin-bottom:8px}
-  .voto-txt .pn{font-size:10px}
-  .maq-ctl{gap:5px 6px;margin-top:5px}
-  .maq-ctl .btn{min-height:34px;font-size:11.5px;padding:6px 11px 6px 10px}
+  /* 2–5. operação: folha */
 
-  .boca{height:30px;margin:0 -11px;border-radius:16px}
-  .boca .k{width:18px;height:18px;margin-top:-9px}
-  .boca .k::after{top:2.5px;bottom:2.5px;width:1.6px;margin-left:-.8px}
-  .boca .k.l{left:6px}.boca .k.r{right:6px}
-  .boca .slit{left:32px;right:32px;height:6px;margin-top:-3px;border-radius:5px}
   .folha{margin-top:-13px;padding:13px 24px 0;background-size:16px 16px,16px 16px,4px 4px,4px 4px;background-position:24px 0,24px 0,24px 0,24px 0}
   .folha::before,.folha::after{width:24px;background-image:radial-gradient(circle at 12px 8px,var(--desk) 0 3.4px,var(--ink) 3.6px 4.8px,transparent 5px);background-size:24px 16px}
   .folha::before{border-right-width:var(--lw)}
@@ -524,12 +325,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .fi{padding:21px 28px 24px}
   .fi.fi-head{padding-top:14px;padding-bottom:5px}
   .fi.fi-o0{padding-top:27px;padding-bottom:14px}
-
-  .carro{height:50px;margin:0 -24px}
-  .carro-body{left:19px;right:19px;top:18px;height:26px;border-radius:13px}
-  .carro-body::before{left:88px;right:88px;height:6px;margin-top:-3px;border-radius:5px}
-  .carro-body::after{right:46px;width:8px;height:8px;margin-top:-4px}
-  .spr{top:19px;width:24px;height:24px}
 
   .selo{gap:11px;padding:8px 13px;border-radius:8px;outline-offset:2.5px;font-size:12px}
   .selo .wm{font-size:12.5px}
@@ -638,8 +433,7 @@ body{background-color:var(--paper);
   background-size:32px 32px;background-position:center top}
 
 /* rótulos: Roboto Condensed nunca abaixo de 600 */
-.btn,.rub,.etapa h2,.pf-cab,.pf-st,.pf-dl dt,.pf-em b,.aba-rot,.arq-placa,.voto-cab,.voto-cab h3,.pq .meta,.tog,.vs-c .k,.carimbo-c,.proc .pn,.f-nota,.selo,.cnt .k,.leg b,.lnk,.canais li,.paras li,.bdg,.hashbtn{font-weight:600}
-.maq text{font-weight:600}
+.btn,.rub,.etapa h2,.pq .meta,.tog,.vs-c .k,.carimbo-c,.proc .pn,.f-nota,.selo,.cnt .k,.leg b,.lnk,.canais li,.paras li,.bdg,.hashbtn{font-weight:600}
 .est{font-weight:700}
 /* citação: Archivo 600 itálico */
 .trecho,.vs-c blockquote,.citacao{font-style:italic;font-weight:600}
@@ -650,15 +444,13 @@ body{background-color:var(--paper);
 .assinatura .e{color:var(--red)}
 @keyframes hd-abre{to{grid-template-columns:1fr}}
 @keyframes hd-fundo{from{opacity:0;transform:translateY(.3em) scale(.6);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes crivo-sobe{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 
-/* ---------- demonstração: cabeçalho ao lado das pastas ---------- */
+/* ---------- demonstração: cabeçalho ---------- */
 .ind{display:inline-flex;align-items:center;gap:10px;margin:0;font-family:var(--f-mono);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
 .ind::after{content:"";width:28px;height:1.5px;background:currentColor}
 .instr{margin:0;font-size:18px;line-height:1.5;max-width:22em}
 
-/* ---------- máquina: cores da paleta ---------- */
-.maq-col{top:calc(var(--nav-h) + 14px)}
+/* ---------- estados: cores da paleta ---------- */
 .est.h{color:var(--ink)}
 .est.h::before{background-color:var(--yellow);background-image:none}
 .cnt.h .k i{background:var(--yellow)}
@@ -759,7 +551,6 @@ body{background-color:var(--paper);
 
 /* ---------- responsivo ---------- */
 @media (min-width:1021px){
-  .maq-col{height:max(calc(100vh - var(--nav-h) - 28px),720px)}
   .instr{font-size:16px}
   .prog-num b{font-size:80px}
   .legenda{font-size:13.5px}
@@ -789,13 +580,13 @@ body{background-color:var(--paper);
 @media (min-width:1021px){:root{--fs:14px}}
 .btn{font-weight:600}
 /* caixa-alta no restante da página */
-.aba-rot,.arq-placa,.est,.ind,.canonica small,.cond-cab,.card h3 small,.card-cond,.numeros span,.sub-s,.versoes-d summary,.seta,.contador span{
+.est,.ind,.canonica small,.cond-cab,.card h3 small,.card-cond,.numeros span,.sub-s,.versoes-d summary,.seta,.contador span{
   font-family:var(--f-caps);font-size:var(--cap);text-transform:uppercase;letter-spacing:.07em}
-.aba-rot,.arq-placa,.ind,.canonica small,.cond-cab,.card h3 small,.versoes-d summary,.seta,.est{font-weight:700}
+.ind,.canonica small,.cond-cab,.card h3 small,.versoes-d summary,.seta,.est{font-weight:700}
 .card-cond,.numeros span,.sub-s,.contador span{font-weight:600}
 .card-cond b{font-weight:700}
 /* rótulos em caixa mista voltam ao corpo */
-.pf-cab,.pf-st,.pf-dl dt,.pf-em b,.voto-cab,.pq .meta,.tog,.vs-c .k,.carimbo-c,.proc .pn,.f-nota,.selo,.cnt .k,.lnk,.bdg,.hashbtn,.marca-sub,.marca-nome .v,.numeros small,.ref,.vlist .vd,.legenda b,.rub,.etapa h2,.prog-num span,.prog-barra li,.paras li,.f-num .big .de{font-family:var(--f-sans)}
+.pq .meta,.tog,.vs-c .k,.carimbo-c,.proc .pn,.f-nota,.selo,.cnt .k,.lnk,.bdg,.hashbtn,.marca-sub,.marca-nome .v,.numeros small,.ref,.vlist .vd,.legenda b,.rub,.etapa h2,.prog-num span,.prog-barra li,.paras li,.f-num .big .de{font-family:var(--f-sans)}
 
 :root{--nav-h:0px}
 .fecho-acoes+.fecho-acoes{margin-top:12px}
@@ -842,21 +633,11 @@ body{background-color:var(--paper);
 .sec-p{background:#A63A23}
 .sec-p .ind{color:#FCFCFC}
 
-/* gaveta: traço fino, frente como porta de fichário */
-.arquivo{--lw:1.5px;--lw-mech:1.5px;--frente:150px}
-.arq-frente-f .b{fill:none;stroke:var(--ink);stroke-width:1px;vector-effect:non-scaling-stroke;opacity:.28}
-.arq-puxador{top:calc(var(--frente) * .7);width:96px;height:46px}
-.arq-placa{bottom:auto;top:calc(var(--frente) * .3);transform:translate(-50%,-50%);border-width:1.5px;border-radius:2px;padding:6px 26px 5px;min-width:190px;background:#fff}
-.arq-placa::before,.arq-placa::after{width:4px;height:4px;margin-top:-2px}
-@media (max-width:640px){.arquivo{--frente:116px}.arq-puxador{width:76px;height:36px}.arq-placa{min-width:150px}}
-
 /* ajustes finos do refino */
-.arquivo .pastas{position:absolute;inset:0;clip-path:inset(-40px -40px calc(var(--frente) * .9) -40px)}
-.arq-placa{top:auto;bottom:calc(var(--frente) * .62);transform:translate(-50%,50%)}
 .sec-p .serie .n{color:rgba(252,252,252,.62)}
 .card-cond b{color:var(--red)}
 /* =====================================================================
-   refino 22/10/2026 ▪ achado/afastado, máquina escura, herói redistribuído
+   refino 22/10/2026 ▪ achado/afastado, herói redistribuído
    Estados para o público: ACHADO (ferrugem) e AFASTADO (azul). Sem
    sinaleiro: o amarelo e o verde saem da página.
    ===================================================================== */
@@ -865,13 +646,6 @@ body{background-color:var(--paper);
   --azul-d:#8FB3DC;
   --yellow:var(--azul);
   --juniper:var(--azul);
-  --m-base:#181818;   /* máquina: chapa */
-  --m-2:#1F1F1F;
-  --m-3:#2A2A2A;
-  --m-linha:#343434;
-  --m-txt:#CFCFCF;
-  --m-dim:#8A8F96;
-  --m-red:#D05D41;
   --mola:cubic-bezier(.32,.72,0,1);
   --folha-bg:linear-gradient(var(--gmaj) 1px,transparent 1px),linear-gradient(90deg,var(--gmaj) 1px,transparent 1px),linear-gradient(var(--gmin) 1px,transparent 1px),linear-gradient(90deg,var(--gmin) 1px,transparent 1px);
 }
@@ -879,7 +653,7 @@ body{background-color:var(--paper);
 .card .prob{border-left-color:var(--azul)}
 .card .evd{color:var(--azul)}
 
-/* ---------- ficha técnica ao lado da gaveta (moldura dupla) ---------- */
+/* ---------- ficha técnica ---------- */
 .ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
 .ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-d)}
@@ -893,44 +667,6 @@ body{background-color:var(--paper);
 .ft-rod{display:flex;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1.5px dashed rgba(24,24,24,.28);font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
 .ft-rod i{flex:none;width:10px;height:10px;border-radius:2px;background:var(--azul);box-shadow:-6px 0 0 -1px var(--red)}
 .ft-rod i{margin-left:6px}
-
-/* ---------- máquina escura (a folha segue papel) ---------- */
-.maq .gab{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 60px -36px rgba(24,24,24,.55)}
-.maq .pan{background:var(--m-2);border:1px solid var(--m-linha);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
-.maq .paraf{background:var(--m-3);border-color:#4A4A4A}
-.maq .paraf::after{background:#5A5A5A}
-.maq .pe{background:#0E0E0E}
-.maq .inst .o{stroke:var(--m-linha);stroke-width:1.6}
-.maq .inst text{fill:var(--m-txt)}
-.maq .inst .mq-marca{font-family:var(--f-marca);fill:#EDEDED}
-.maq .inst .mq-rot{font-family:var(--f-caps);font-weight:700;letter-spacing:.12em;fill:var(--m-dim)}
-.maq .inst .mq-esc{font-family:var(--f-caps);font-weight:600;fill:var(--m-dim)}
-.maq .inst .vz{fill:#5FE08F;font-family:var(--f-lcd);font-weight:400}
-.maq .inst .vz.t{fill:#8CFFB4}
-.maq .inst .vz.m{fill:#3FB872}
-.maq .inst .mq-lcd{font-family:var(--f-lcd);font-weight:400;fill:#8CFFB4}
-.maq .inst .mq-lcd.a{fill:#F08A6E}
-.maq .inst .mq-lcd.f{fill:var(--azul-d)}
-.maq .voto{background:#121212;border:1px solid var(--m-linha);box-shadow:inset 0 2px 0 rgba(0,0,0,.4)}
-.maq .voto:focus-within{box-shadow:0 0 0 3px rgba(208,93,65,.35)}
-.maq .voto-cab{border-bottom-color:#262626;color:#E4E4E4}
-.maq .voto-cab h3{font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--m-dim)}
-.maq .voto-st{color:#9A9FA6}
-.maq .voto{overflow:hidden}
-.maq .voto-txt{color:#D6D6D6;scrollbar-color:#3A3A3A #121212;min-height:110px}
-@media (min-width:1021px){.maq-col{height:max(calc(100vh - var(--nav-h) - 28px),740px)}}
-.maq .voto-txt .pn{color:#6E737A}
-.maq .voto-txt::selection,.maq .voto-txt ::selection{background:rgba(208,93,65,.45);color:#fff}
-
-/* barras de cima da folha: boca e cabeça de impressão também escuras */
-.boca{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
-.boca .k{background:var(--m-3);border-color:#4A4A4A}
-.boca .k::after{background:#9A9FA6}
-.boca .slit{background:#050505;box-shadow:inset 0 0 0 1px #3A3A3A}
-.carro-body{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
-.carro-body::before{background:#050505;border-color:#3A3A3A}
-.carro-body::after{background:var(--m-3);border-color:#4A4A4A}
-.carro.ativo .carro-body::after{background:var(--m-red);border-color:var(--m-red);box-shadow:0 0 8px rgba(208,93,65,.7)}
 
 /* ---------- estados na folha: § no rótulo; achado ferrugem, afastado azul ---------- */
 .est{font-variant-numeric:tabular-nums;letter-spacing:.06em;padding:2px 9px 1px}
@@ -998,130 +734,19 @@ body{background-color:var(--paper);
 @media (prefers-reduced-motion:reduce){.js-rv .rv:not(.visto){opacity:1;transform:none;filter:none}}
 
 /* =====================================================================
-   refino 22/10/2026 (b) ▪ máquina em grafite suave, visor verde com letra
-   preta; par ACHADO/AFASTADO em amarelo/azul; terracota só como acento
+   refino 22/10/2026 (b) ▪ par ACHADO/AFASTADO em amarelo/azul; terracota
+   só como acento
    ===================================================================== */
 :root{
   --amarelo:#E8A628;
   --amarelo-t:#B97F12;   /* amarelo para número grande sobre o papel */
-  --m-base:#3A3D42;
-  --m-2:#44484E;
-  --m-3:#5A5F66;
-  --m-linha:#2F3236;
-  --m-txt:#E8EAED;
-  --m-dim:#B4BAC1;
-  --lcd-bg:#A9C59B;
-  --lcd-tx:#16200F;
 }
-/* máquina */
-.maq .gab{background:var(--m-base);border-color:#2F3236;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 30px 60px -36px rgba(24,24,24,.45)}
-.maq .pan{background:var(--m-2);border-color:#55595F;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-.maq .paraf{background:var(--m-3);border-color:#2F3236}
-.maq .paraf::after{background:#2F3236}
-.maq .pe{background:#2A2C30}
-.maq .inst .o{stroke:var(--m-linha)}
-.maq .inst .mq-marca{fill:#F2F3F4}
-.maq .inst .mq-rot,.maq .inst .mq-esc{fill:var(--m-dim)}
-.maq .inst .vz,.maq .inst .vz.t,.maq .inst .vz.m,.maq .inst .mq-lcd{fill:var(--lcd-tx)}
-.maq .inst .vz.m{fill:#2E4126}
-.maq .voto{background:#2F3236;border-color:#55595F;box-shadow:inset 0 2px 0 rgba(0,0,0,.18)}
-.maq .voto-cab{border-bottom-color:#44484E}
-.maq .voto-cab h3{color:var(--m-dim)}
-.maq .voto-st{color:#C3C8CE}
-.maq .voto-txt{color:#E6E8EB;scrollbar-color:#5A5F66 #2F3236}
-.maq .voto-txt .pn{color:#9AA0A7}
-/* barras de cima da folha, no mesmo grafite */
-.boca,.carro-body{background:var(--m-base);border-color:#2F3236;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
-.boca .k,.carro-body::after{background:var(--m-3);border-color:#2F3236}
-.boca .k::after{background:#E8EAED}
-.boca .slit,.carro-body::before{background:#1E2023;border-color:#2F3236;box-shadow:none}
-/* celular: o visor da faixa também é verde com letra preta */
-.strip .lcd{background:var(--lcd-bg);color:var(--lcd-tx);text-shadow:none}
-.strip .lcd b{color:var(--lcd-tx)}
 
 /* ACHADO amarelo ▪ AFASTADO azul */
 .cnt.a .k i::before{background-color:var(--amarelo);background-image:none}
 .cnt.a .v{color:var(--amarelo-t)}
 .slip.mk::before{background-color:var(--amarelo);background-image:none}
 .ft-rod i{box-shadow:-6px 0 0 -1px var(--amarelo)}
-
-/* =====================================================================
-   refino 22/10/2026 (c) ▪ máquina clara, como objeto de mesa: alumínio
-   fosco, traço fino, sombra difusa; visor verde com letra preta.
-   A folha não muda. A faixa do herói perde o quadriculado.
-   ===================================================================== */
-:root{
-  --al-1:#F4F5F7;     /* alumínio claro */
-  --al-2:#E9EBEE;
-  --al-3:#DDE1E5;
-  --al-fio:rgba(24,28,34,.16);
-  --al-txt:#5B6169;
-  --al-sombra:0 1px 0 rgba(255,255,255,.9) inset,0 34px 60px -38px rgba(30,36,44,.42),0 3px 8px -4px rgba(30,36,44,.16);
-}
-/* gabinete em moldura dupla: casca de alumínio, núcleo claro */
-.maq .gab{background:linear-gradient(180deg,var(--al-1),var(--al-2));border:1px solid var(--al-fio);border-radius:26px;box-shadow:var(--al-sombra)}
-.maq .pan{background:#FAFAFB;border:1px solid rgba(24,28,34,.1);border-radius:18px;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(24,28,34,.04)}
-.maq .paraf{width:7px;height:7px;background:#F4F5F7;border:1px solid rgba(24,28,34,.28)}
-.maq .paraf::after{width:1px;margin-left:-.5px;background:rgba(24,28,34,.45)}
-.maq .pe{height:12px;width:56px;border-radius:0 0 6px 6px;background:var(--al-3);box-shadow:inset 0 -1px 0 rgba(24,28,34,.12)}
-.maq-alca .o{stroke:#B7BCC2;stroke-width:2}
-.maq .inst .o{stroke:#CDD1D6;stroke-width:1.2}
-.maq .inst .mq-marca{fill:#181818}
-.maq .inst .mq-rot,.maq .inst .mq-esc{fill:var(--al-txt)}
-.maq .inst .vz,.maq .inst .vz.t,.maq .inst .vz.m,.maq .inst .mq-lcd{fill:#141C10}
-.maq .inst .vz.m{fill:#33472A}
-/* texto do ato: papel limpo dentro do painel */
-.maq .voto{background:#FFFFFF;border:1px solid rgba(24,28,34,.12);box-shadow:inset 0 1px 2px rgba(24,28,34,.05)}
-.maq .voto:focus-within{box-shadow:0 0 0 3px rgba(166,58,35,.18)}
-.maq .voto-cab{border-bottom-color:rgba(24,28,34,.08);color:var(--ink)}
-.maq .voto-cab h3{color:var(--al-txt)}
-.maq .voto-st{color:var(--al-txt)}
-.maq .voto-txt{color:#262626;scrollbar-color:#C3C8CE #FFFFFF}
-.maq .voto-txt .pn{color:#9AA0A7}
-.maq .voto-txt::selection,.maq .voto-txt ::selection{background:rgba(166,58,35,.16);color:inherit}
-/* barras de cima da folha: o mesmo alumínio (a folha segue igual) */
-.boca,.carro-body{background:linear-gradient(180deg,var(--al-1),var(--al-2));border:1px solid var(--al-fio);box-shadow:inset 0 1px 0 #fff,0 10px 20px -16px rgba(30,36,44,.5)}
-.boca .k,.carro-body::after{background:#FFFFFF;border:1px solid rgba(24,28,34,.28)}
-.boca .k::after{background:var(--ink);width:1.4px;margin-left:-.7px}
-.boca .slit,.carro-body::before{background:#2B2E33;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
-.carro.ativo .carro-body::after{background:var(--red);border-color:var(--red);box-shadow:0 0 0 3px rgba(166,58,35,.16)}
-
-/* =====================================================================
-   refino 22/10/2026 (d) ▪ máquina com corpo: aço escovado médio, peças
-   pretas (placa, moldura do visor, aro do calibrador, seletores), visor
-   verde com letra preta e duas teclas de cor (achados/afastados).
-   Contorno fino em tinta só na silhueta; sombra assentada no papel.
-   ===================================================================== */
-:root{
-  --aco-1:#C9CED4;
-  --aco-2:#B8BEC5;
-  --aco-fio:#181818;
-  --aco-txt:#2E3338;
-}
-.maq .gab{background:linear-gradient(180deg,var(--aco-1) 0%,var(--aco-2) 100%);border:1.5px solid var(--aco-fio);border-radius:24px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -2px 0 rgba(24,24,24,.10),0 2px 0 rgba(24,24,24,.9),0 28px 50px -30px rgba(24,28,34,.55)}
-.maq .gab::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.5;
-  background:repeating-linear-gradient(90deg,rgba(255,255,255,.10) 0 1px,transparent 1px 3px)}
-.maq .pan{position:relative;background:#E3E6EA;border:1.5px solid var(--aco-fio);border-radius:16px;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(24,24,24,.08)}
-.maq .paraf{width:9px;height:9px;background:radial-gradient(circle at 35% 35%,#F2F3F4,#A9AFB6);border:1.2px solid var(--aco-fio)}
-.maq .paraf::after{width:1.4px;margin-left:-.7px;background:var(--aco-fio)}
-.maq .pe{height:16px;width:58px;border-radius:0 0 7px 7px;background:#1C1E21}
-.maq-alca .o{stroke:#181818;stroke-width:2.4}
-.maq .inst .o{stroke:var(--aco-fio);stroke-width:1.4}
-.maq .inst .mq-marca{fill:#F2F3F4}
-.maq .inst .mq-rot,.maq .inst .mq-esc{fill:var(--aco-txt)}
-.maq .inst .mq-tecla{font-family:var(--f-caps);font-weight:700;letter-spacing:.14em;fill:#181818}
-.maq .inst .mq-tecla.b{fill:#F2F3F4}
-.maq .inst .tecla{transition:filter .4s var(--mola)}
-.maq .voto{background:#FFFFFF;border:1.5px solid var(--aco-fio);box-shadow:inset 0 2px 0 rgba(24,24,24,.05)}
-.maq .voto-cab{border-bottom:1px solid rgba(24,24,24,.12)}
-.maq .voto-cab h3,.maq .voto-st{color:var(--aco-txt)}
-/* barras de cima da folha: mesmo aço, com a fenda preta */
-.boca,.carro-body{background:linear-gradient(180deg,var(--aco-1),var(--aco-2));border:1.5px solid var(--aco-fio);box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 2px 0 rgba(24,24,24,.9)}
-.boca .k,.carro-body::after{background:#1C1E21;border:1.2px solid var(--aco-fio)}
-.boca .k::after{background:#F2F3F4}
-.boca .slit,.carro-body::before{background:#1C1E21;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
-.carro.ativo .carro-body::after{background:#E06A4C;border-color:#181818;box-shadow:0 0 0 3px rgba(224,106,76,.25)}
 
 /* =====================================================================
    redesign 24/10/2026 ▪ I.1 Síntese ▪ matriz de campos
@@ -1262,7 +887,7 @@ body{background-position:0 0}
   .hd-lema .hd-ins em{opacity:1;animation:none}
 }
 
-/* ---------- demonstração: enquadramento em campos (gaveta, máquina e folha intactas) ---------- */
+/* ---------- demonstração: enquadramento em campos ---------- */
 .demo{position:relative}
 .demo-tit>.mx-c{padding-top:calc(var(--pad) * 2.5);padding-bottom:calc(var(--pad) * 1.5)}
 .demo-tit .ind{padding-top:.5em}
@@ -1280,11 +905,6 @@ body{background-position:0 0}
 .ft dd{max-width:34em}
 @container mx (min-width:481px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @container mx (min-width:1200px){.ft{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.arq-lado{display:flex;flex-direction:column;gap:16px}
-.arq-lado .instr{font-size:16px;line-height:1.5}
-.arq-lado .ft-rod{margin:0}
-.arquivo-col{padding-top:calc(var(--pad) * 1.5);padding-bottom:calc(var(--pad) * 2)}
-.arquivo-col .arquivo{max-width:920px;margin-inline:auto}
 
 /* ---------- fecho: prova, funil e tríptico como campos ---------- */
 .fecho{position:relative}
@@ -1353,6 +973,167 @@ body{background-position:0 0}
 .sub-s{margin:14px 0 0}
 .ponte{margin:0}
 .sec-fim>.mx-c{padding-bottom:calc(var(--pad) * 3)}
+
+/* =====================================================================
+   redesign 24/10/2026 ▪ I.2 lista e impressora
+   A gaveta de pastas vira lista: cada linha é um ato, com tribunal e
+   desfecho depois dos embargos; o ponteiro inverte a linha (negativo).
+   O registrador sai. Ao lado da folha, um painel de texto acompanha as
+   etapas; a folha sai de uma impressora em traço, no desenho das linhas
+   da página. Desfecho em forma de tinta, sem cor própria: o amarelo e o
+   azul seguem só para achado e afastado.
+   ===================================================================== */
+
+/* ---------- lista de atos ---------- */
+.lista-lado{display:flex;flex-direction:column;gap:20px}
+.lista-lado .instr{font-size:16px;line-height:1.5}
+.lista-lado .ft-rod{margin:0}
+.lista-col{padding:0}
+.atos{list-style:none;margin:0;padding:0}
+.at{box-shadow:inset 0 1px var(--fio)}
+.at:last-child{box-shadow:inset 0 1px var(--fio),inset 0 -1px var(--fio)}
+.at-h{margin:0;font:inherit}
+.lista-cab,.at-btn{display:grid;grid-template-columns:32px minmax(0,1fr) 20px;gap:4px 12px;align-items:center}
+.lista-cab{display:none}
+.at-btn{appearance:none;width:100%;margin:0;padding:14px var(--pad);border:0;border-radius:0;background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  transition:background-color .3s var(--mola),color .3s var(--mola)}
+.at-n{grid-row:1 / span 2;align-self:start;padding-top:3px;font-family:var(--f-num);font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--ink2);transition:color .3s var(--mola)}
+.at-t{grid-column:2;font-weight:600;font-size:16px;line-height:1.3;text-wrap:pretty}
+.at-tr{display:none}
+.at-ds{grid-column:2;grid-row:2;display:flex;align-items:center;gap:8px;min-width:0;font-family:var(--f-caps);font-weight:600;font-size:var(--cap);letter-spacing:.06em;line-height:1.3;text-transform:uppercase}
+.at-ds[data-tr]::before{content:attr(data-tr);font-weight:700;white-space:nowrap}
+.at-ch{grid-column:3;grid-row:1 / span 2;display:grid;place-items:center;transition:transform .45s var(--mola)}
+.at.aberta .at-ch{transform:rotate(180deg)}
+/* marca do desfecho: a forma diz, a cor acompanha a linha */
+.ds{flex:none;display:inline-block;width:11px;height:11px;border:1.5px solid currentColor;border-radius:2px}
+.ds-c{background:currentColor}
+.ds-o{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.ds-n{background:transparent}
+.ds-f{border-style:dashed;opacity:.75}
+/* negativo: ponteiro, linha aberta e foco */
+@media (hover:hover){
+  .at-btn:hover{background:var(--ink);color:var(--paper)}
+  .at-btn:hover .at-n{color:rgba(252,252,252,.7)}
+}
+.at.aberta .at-btn{background:var(--ink);color:var(--paper)}
+.at.aberta .at-n{color:rgba(252,252,252,.7)}
+.at-btn:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;border-radius:0;background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 4px var(--paper)}
+.at-btn:focus-visible .at-n{color:rgba(252,252,252,.7)}
+.at.rodada .at-t::after{content:"";display:inline-block;width:7px;height:7px;margin:0 0 .15em 8px;border-radius:50%;background-color:var(--red);background-image:var(--grain);vertical-align:middle}
+.at.aberta .at-t::after{background-color:var(--red-d)}
+/* resumo do ato: abre sob a linha */
+.at-d{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--mola)}
+.at.aberta .at-d{grid-template-rows:1fr}
+.at-dd{min-height:0;overflow:hidden}
+.at-in{margin:0 0 0 var(--pad);padding:18px var(--pad) 22px 16px;border-left:2px solid var(--ink)}
+.at-esp{margin:0 0 12px;font-size:13.5px;line-height:1.45;color:var(--ink2);max-width:44em}
+.at-dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin:0 0 14px;max-width:44em}
+.at-dl div{padding-top:6px;box-shadow:inset 0 1px var(--fio)}
+.at-dl div:first-child{grid-column:1 / -1}
+.at-dl dt,.at-em b{font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.at-dl dd{margin:2px 0 0;font-size:14px;line-height:1.35;font-variant-numeric:tabular-nums}
+.at-em{margin:0 0 16px;max-width:44em}
+.at-em b{display:block;margin-bottom:4px}
+.at-em p{margin:0;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;line-height:1.55}
+.at-vazio{margin:0;font-size:14px;color:var(--ink2)}
+.at-acao{display:flex;flex-wrap:wrap;gap:10px 16px}
+/* legenda: quantos atos em cada desfecho */
+.ds-leg{display:grid;gap:8px}
+.ds-leg-t{margin:0;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase}
+.ds-leg dl{margin:0;display:grid}
+.ds-leg dl div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:7px 0;box-shadow:inset 0 -1px var(--fio)}
+.ds-leg dt{display:flex;align-items:baseline;gap:8px;font-size:13px;line-height:1.35}
+.ds-leg dt .ds{position:relative;top:1px}
+.ds-leg dd{margin:0;font-family:var(--f-num);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+
+@container mx (min-width:641px){
+  .lista-cab,.at-btn{grid-template-columns:40px minmax(0,1fr) 56px minmax(0,20em) 20px;gap:12px 16px}
+  .lista-cab{display:grid;padding:12px var(--pad) 10px;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+  .at-n{grid-row:auto;align-self:center;padding-top:0}
+  .at-t{grid-column:auto}
+  .at-tr{display:block;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase}
+  .at-ds{grid-column:auto;grid-row:auto}
+  .at-ds[data-tr]::before{content:none}
+  .at-ch{grid-column:auto;grid-row:auto}
+  .at-in{margin-left:calc(var(--pad) + 56px)}
+  .at-dl{grid-template-columns:minmax(0,1.5fr) minmax(0,1.2fr) minmax(0,.9fr)}
+  .at-dl div:first-child{grid-column:auto}
+}
+@container mx (min-width:1021px){
+  .at-btn{padding-block:15px}
+  .at-t{font-size:15.5px}
+}
+
+/* ---------- operação: painel ao lado, folha na impressora ---------- */
+.op-lado{min-width:0}
+.op-painel{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px}
+.op-painel:focus{outline:none}
+.op-ato{margin:0;font-family:var(--f-tit);font-weight:700;font-size:22px;line-height:1.1;text-wrap:balance}
+.op-meta{margin:-6px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink2)}
+.op-etapas{list-style:none;margin:0;padding:0;display:grid}
+.op-etapas li{display:grid;grid-template-columns:10px minmax(0,1fr);gap:3px 10px;align-items:center;padding:10px 0;box-shadow:inset 0 1px var(--fio)}
+.op-etapas .lamp{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper)}
+.op-etapas li.on .lamp{background-color:var(--red);background-image:var(--grain)}
+.op-etapas li.feita .lamp{background:var(--ink)}
+.op-etapas b{font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase}
+.op-etapas li.off b{color:var(--ink2)}
+.op-l{grid-column:2;font-size:13px;line-height:1.4;color:var(--ink2);font-variant-numeric:tabular-nums}
+.op-l:empty{display:none}
+.op-ctl{display:flex;flex-wrap:wrap;gap:8px}
+.op-ctl .btn[hidden]{display:none}
+.folha-col{padding-top:calc(var(--pad) * 1.5);padding-bottom:calc(var(--pad) * 2)}
+
+/* impressora: traço em tinta sobre papel; a fenda fica à frente da folha */
+.imp-wrap{position:relative;max-width:900px;margin-inline:auto;
+  --imp-h:96px;--tampa-w:128px;--tampa-h:30px;--corpo-t:22px;--faixa:24px;--lado:58px;--fx:44px;--fenda-b:12px;--fenda-h:12px;--knob-w:20px;--knob-h:34px;--cab-w:30px;--li:2px}
+.imp{position:relative;height:var(--imp-h)}
+.imp i{position:absolute;display:block}
+.imp-corpo{left:0;right:0;top:var(--corpo-t);bottom:0;border:var(--li) solid var(--ink);border-radius:14px;background:var(--paper);z-index:1}
+.imp-tampa{left:22px;top:0;width:var(--tampa-w);height:calc(var(--tampa-h) + var(--li));border:var(--li) solid var(--ink);border-bottom:0;border-radius:10px 10px 0 0;z-index:2;
+  background:var(--paper) repeating-linear-gradient(90deg,var(--ink) 0 1.5px,transparent 1.5px 6px) no-repeat 14px 9px / 58% 40%}
+.imp-faixa{left:var(--li);right:var(--lado);top:calc(var(--corpo-t) + var(--faixa));border-top:1.5px solid var(--ink);z-index:2}
+.imp-lado{right:0;top:var(--corpo-t);bottom:0;width:var(--lado);border-left:var(--li) solid var(--ink);z-index:2}
+.imp-lado::before,.imp-lado::after{content:"";position:absolute;left:50%;top:50%;border:var(--li) solid var(--ink);transform:translate(-50%,-50%)}
+.imp-lado::before{width:var(--knob-w);height:var(--knob-h);border-radius:999px;background:var(--paper)}
+.imp-lado::after{width:calc(var(--knob-w) * .4);height:calc(var(--knob-w) * .4);border-width:1.5px;border-radius:50%}
+.imp-leds{left:calc(var(--tampa-w) + 46px);top:calc(var(--corpo-t) + var(--faixa) + 12px);width:64px;height:4px;z-index:2;opacity:.55;
+  background:radial-gradient(circle,var(--ink) 0 1.2px,transparent 1.5px) 0 0 / 8px 4px repeat-x}
+.imp-led{left:calc(var(--tampa-w) + 118px);top:calc(var(--corpo-t) + var(--faixa) + 10px);width:8px;height:8px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);z-index:2}
+.imp-cabeca{left:var(--fx);top:calc(var(--corpo-t) + var(--faixa) - 6px);width:var(--cab-w);height:11px;border:1.5px solid var(--ink);border-radius:3px;background:var(--paper);z-index:3}
+.imp-fenda{left:calc(var(--fx) - 8px);right:calc(var(--lado) + var(--fx) - 8px);bottom:var(--fenda-b);height:var(--fenda-h);border:var(--li) solid var(--ink);border-radius:999px;z-index:4}
+.imp-fenda::after{content:"";position:absolute;left:10px;right:10px;top:50%;height:2px;margin-top:-1px;background:var(--ink)}
+/* só durante a impressão: luz acesa e cabeça em curso */
+.imp.ativo .imp-led{background-color:var(--red);background-image:var(--grain);animation:pisca 1.2s steps(1,end) infinite}
+.imp.ativo .imp-cabeca{animation:imp-cabeca 1.6s ease-in-out infinite alternate}
+@keyframes imp-cabeca{to{left:calc(100% - var(--lado) - var(--fx) - var(--cab-w))}}
+/* a folha nasce na fenda: começa no meio dela e passa à frente do corpo */
+.imp-wrap .folha{z-index:3;margin:calc((var(--fenda-b) + var(--fenda-h) / 2) * -1) calc(var(--lado) + var(--fx)) 0 var(--fx)}
+
+/* régua densa: barra contínua, dezenas numeradas */
+.prog-barra.densa{gap:1px;padding:2px;border:1.5px solid var(--ink);border-radius:6px}
+.prog-barra.densa i{height:22px;border:0;border-radius:0;background:var(--tint2)}
+.prog-barra.densa li.feito i{background:var(--ink)}
+.prog-barra.densa li span{overflow:visible;white-space:nowrap;min-height:1.2em}
+.paras li span:last-child{white-space:nowrap;min-height:1.2em}
+
+@container mx (max-width:640px){
+  .op-lado{position:sticky;top:0;z-index:20;padding-block:8px;background:var(--paper);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio),0 2px 0 var(--ink)}
+  .op-painel{position:static;flex-direction:row;align-items:center;gap:10px}
+  .op-painel .ind,.op-ato,.op-meta{display:none}
+  .op-etapas{flex:1;min-width:0}
+  .op-etapas li{display:none;padding:0;box-shadow:none}
+  .op-etapas li.on,.op.fim .op-etapas li:last-child{display:grid}
+  .op-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .op-ctl{flex:none;flex-wrap:nowrap;gap:6px}
+  .op-ctl .btn{width:40px;height:40px;min-height:40px;padding:0;justify-content:center;border-radius:50%}
+  .op-ctl .btn span{display:none}
+  .imp-wrap{margin-inline:calc(var(--pad) * -1 + 4px);
+    --imp-h:66px;--tampa-w:72px;--tampa-h:20px;--corpo-t:15px;--faixa:16px;--lado:34px;--fx:12px;--fenda-b:8px;--fenda-h:10px;--knob-w:12px;--knob-h:22px;--cab-w:22px;--li:1.5px}
+  .imp-tampa{left:12px;background-position:9px 6px}
+  .imp-leds{left:calc(var(--tampa-w) + 24px);width:40px;top:calc(var(--corpo-t) + var(--faixa) + 8px)}
+  .imp-led{left:calc(var(--tampa-w) + 70px);top:calc(var(--corpo-t) + var(--faixa) + 6px);width:7px;height:7px}
+  .imp-cabeca{height:9px;top:calc(var(--corpo-t) + var(--faixa) - 5px)}
+}
 </style>
 </head>
 <body>
@@ -1417,7 +1198,7 @@ body{background-position:0 0}
 })();
 </script>
 
-<!-- 1.4 pastas -->
+<!-- 1.4 lista de atos -->
 <section class="demo mx" id="mesa" aria-labelledby="mesaT">
   <div class="mx-row demo-tit">
     <div class="mx-c"><p class="ind">Demonstração</p></div>
@@ -1435,154 +1216,71 @@ body{background-position:0 0}
         </dl>
     </div>
   </div>
-  <div class="mx-row arq-row">
-    <div class="mx-c arq-lado">
-      <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
+  <div class="mx-row lista-row">
+    <div class="mx-c lista-lado">
+      <p class="instr">Escolha um ato. Leia o resumo. Reproduza a rodada.</p>
+      <div class="ds-leg">
+        <p class="ds-leg-t">Depois dos embargos</p>
+        <dl id="dsLeg"></dl>
+      </div>
       <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
     </div>
-    <div class="mx-c arquivo-col">
-    <div class="arquivo" id="arquivo">
-      <div class="arq-caixa" aria-hidden="true"></div>
-      <ol class="pastas" id="pastas" aria-label="Atos disponíveis"></ol>
-      <p class="arq-placa" id="arqPlaca" role="status"><span>Abra uma pasta</span></p>
-      <div class="arq-frente" aria-hidden="true">
-        <svg class="arq-frente-f" viewBox="0 0 600 150" preserveAspectRatio="none">
-          <path class="f" d="M0 2 H600 L594 16 H6 Z"/>
-          <path class="s" d="M0 2 H600 L594 16 H6 Z"/>
-          <path class="f" d="M6 16 H594 L570 147 H30 Z"/>
-          <path class="s" d="M6 16 H594 L570 147 H30 Z"/>
-          <path class="b" d="M18 25 H582 L561 138 H39 Z"/>
-        </svg>
-        <svg class="arq-puxador" viewBox="0 0 96 46">
-          <g fill="#FCFCFC" stroke="#181818" stroke-width="1.5" stroke-linejoin="round">
-            <path d="M18 17 C18 9 24 5 34 5 H62 C72 5 78 9 78 17 Z"/>
-            <path d="M14 29 C14 21 21 17 32 17 H64 C75 17 82 21 82 29 Z"/>
-            <path d="M10 41 C10 33 18 29 30 29 H66 C78 29 86 33 86 41 Z"/>
-          </g>
-        </svg>
-      </div>
-    </div>
+    <div class="mx-c lista-col">
+      <div class="lista-cab" aria-hidden="true"><span>Nº</span><span>Ato</span><span>Tribunal</span><span>Depois dos embargos</span><span></span></div>
+      <ol class="atos" id="atos" aria-label="Atos disponíveis"></ol>
     </div>
   </div>
 </section>
 
-<!-- 2 a 5. operação -->
-<div class="op" id="op">
-  <!-- faixa do celular -->
-  <div class="strip" id="strip">
-    <svg class="mg" viewBox="0 0 66 42" aria-hidden="true">
-      <path d="M5 34 A28 28 0 0 1 61 34 Z" fill="#FCFCFC" stroke="#181818" stroke-width="2" stroke-linejoin="round"/>
-      <path id="mgArc" d="" fill="none" stroke="#A63A23" stroke-width="5" filter="url(#riso)" transform="translate(1 -0.7)"/>
-      <g id="mgNeedle" style="transform-origin:33px 34px"><path d="M31.4 34 L33 12 L34.6 34 Z" fill="#181818" stroke="#181818" stroke-width="1.2" stroke-linejoin="round"/></g>
-      <circle cx="33" cy="34" r="4" fill="#181818"/>
-      <text id="mgNum" x="33" y="41.5" text-anchor="middle" font-family="DM Mono, DejaVu Sans Mono, monospace" font-size="0" fill="#181818"></text>
-    </svg>
-    <div class="stg">
-      <span class="lcd"><b id="stLbl">ENTRADA: ato</b><span id="stSub">SAÍDA: lastro</span></span>
-      <span style="display:flex;align-items:center;gap:8px"><b id="stNum" style="font-family:var(--f-num);font-size:17px">00</b><span style="color:var(--ink2);font-size:11.5px">dúvidas formadas</span><span class="lamps" aria-hidden="true"><i></i><i></i><i></i></span></span>
-    </div>
-    <button class="ib" id="sPause" type="button" aria-label="Pausar" aria-pressed="false">
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><g class="ic-pause"><rect x="3" y="2.5" width="3.4" height="11" rx="1.2" fill="#181818"/><rect x="9.6" y="2.5" width="3.4" height="11" rx="1.2" fill="#181818"/></g><path class="ic-play" d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="#181818" stroke="#181818" stroke-width="1.6" stroke-linejoin="round" style="display:none"/></svg>
-    </button>
-    <button class="ib" id="sSkip" type="button" aria-label="Pular a reprodução">
-      <svg width="18" height="16" viewBox="0 0 18 16" aria-hidden="true"><path d="M2.5 3 L8.5 8 L2.5 13 Z M9 3 L15 8 L9 13 Z" fill="#181818" stroke="#181818" stroke-width="1.4" stroke-linejoin="round"/><rect x="15" y="2.6" width="2" height="10.8" rx="1" fill="#181818"/></svg>
-    </button>
-    <button class="ib" id="sPlay" type="button" aria-label="Reproduzir" hidden>
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="#181818" stroke="#181818" stroke-width="1.6" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
-
-  <p class="sr" id="vzLive" aria-live="polite"></p>
-
-  <!-- registrador -->
-  <aside class="maq-col" aria-label="Registrador">
-    <div class="maq">
-      <svg class="maq-alca" viewBox="0 0 124 32" aria-hidden="true">
-        <path class="o" d="M8 32 V20 a12 12 0 0 1 12 -12 H104 a12 12 0 0 1 12 12 V32" fill="none" stroke-width="2.6"/>
-        <path class="o" d="M22 32 V24 a4 4 0 0 1 4 -4 H98 a4 4 0 0 1 4 4 V32" fill="none"/>
-      </svg>
-      <div class="gab">
-        <i class="paraf a" aria-hidden="true"></i><i class="paraf b" aria-hidden="true"></i><i class="paraf c" aria-hidden="true"></i><i class="paraf d" aria-hidden="true"></i>
-        <div class="pan">
-          <svg class="inst" id="maq" viewBox="0 0 520 560" role="img" aria-labelledby="maqT maqD">
-            <title id="maqT">Registrador do CERNE</title>
-            <desc id="maqD">Visor digital com os três seletores de etapa ao lado (Mineração, Crivo e Consolidação). Abaixo, ao centro, o medidor de dúvidas formadas e, sob ele, a contagem de achados e afastados.</desc>
-            <defs>
-              <filter id="lcd" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="1.1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <pattern id="lcdgrid" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#B3CDA5"/><rect width="1" height="1" fill="#A7C299"/></pattern>
-              <linearGradient id="chapa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E6E9EC"/><stop offset="1" stop-color="#DCE0E4"/></linearGradient>
-            </defs>
-            <!-- placa da marca -->
-            <rect class="o" x="1.2" y="1.2" width="517.6" height="56" rx="12" fill="#1C1E21"/>
-            <g stroke="#5B6169" stroke-width="2.4" stroke-linecap="round">
-              <path d="M22 19 v20"/><path d="M32 19 v20"/><path d="M42 19 v20"/>
-              <path d="M478 19 v20"/><path d="M488 19 v20"/><path d="M498 19 v20"/>
-            </g>
-            <text class="mq-marca" x="260" y="41" text-anchor="middle" font-weight="700" font-size="34" letter-spacing="6">C<tspan fill="#E06A4C">E</tspan>RNE</text>
-            <!-- card do processo: visor largo e, ao lado, os seletores de etapa -->
-            <rect class="o" x="1.2" y="72" width="517.6" height="240" rx="18" fill="url(#chapa)"/>
-            <rect class="o" x="14" y="86" width="364" height="212" rx="10" fill="#1C1E21"/>
-            <rect x="21" y="93" width="350" height="198" rx="5" fill="url(#lcdgrid)" stroke="#93AC86" stroke-width="1.2"/>
-            <rect x="21" y="93" width="350" height="28" rx="5" fill="#FFFFFF" opacity=".18"/>
-            <circle id="vzLed" cx="356" cy="109" r="3.6" fill="#8CA87F"/>
-            <g filter="url(#lcd)">
-              <text class="vz t" id="vz1" x="36" y="154"></text>
-              <text class="vz" id="vz2" x="36" y="192"></text>
-              <text class="vz m" id="vz3" x="36" y="230"></text>
-            </g>
-            <g id="knobs"></g>
-            <!-- card da medida: calibre ao centro; achados e afastados logo abaixo -->
-            <rect class="o" x="1.2" y="326" width="517.6" height="232" rx="18" fill="url(#chapa)"/>
-            <path d="M168 436 A92 92 0 0 1 352 436 Z" fill="#1C1E21"/>
-            <path class="o mq-face" d="M176 432 A84 84 0 0 1 344 432 Z" fill="#FFFFFF"/>
-            <g id="gTicks"></g>
-            <path id="gArc" d="" fill="none" stroke="#A63A23" stroke-width="5" stroke-linecap="butt" filter="url(#riso)" transform="translate(1.2 -0.8)"/>
-            <g id="gNeedle" style="transform-origin:260px 432px;transform:rotate(-90deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1)">
-              <path d="M257.2 432 L260 362 L262.8 432 Z" fill="#181818" stroke="#181818" stroke-width="1.4" stroke-linejoin="round"/>
-            </g>
-            <circle cx="260" cy="432" r="8" fill="#181818"/>
-            <circle cx="260" cy="432" r="2.6" fill="#FFFFFF"/>
-            <rect x="228" y="442" width="64" height="32" rx="6" fill="url(#lcdgrid)" stroke="#1C1E21" stroke-width="1.6"/>
-            <text class="mq-lcd" id="gNum" x="260" y="467" text-anchor="middle" font-size="28">00</text>
-            <text class="mq-rot" x="260" y="494" text-anchor="middle" font-size="10.5">DÚVIDAS FORMADAS</text>
-            <rect class="o tecla" x="16" y="512" width="236" height="38" rx="9" fill="#E8A628"/>
-            <rect x="17" y="513" width="234" height="6" rx="5" fill="#FFFFFF" opacity=".28"/>
-            <text class="mq-tecla" x="32" y="536" font-size="12.5">ACHADOS</text>
-            <rect x="182" y="518" width="60" height="26" rx="5" fill="url(#lcdgrid)" stroke="#1C1E21" stroke-width="1.4"/>
-            <text class="mq-lcd" id="lgA" x="234" y="539" text-anchor="end" font-size="26">0</text>
-            <rect class="o tecla" x="268" y="512" width="236" height="38" rx="9" fill="#2F5D8C"/>
-            <rect x="269" y="513" width="234" height="6" rx="5" fill="#FFFFFF" opacity=".16"/>
-            <text class="mq-tecla b" x="284" y="536" font-size="12.5">AFASTADOS</text>
-            <rect x="434" y="518" width="60" height="26" rx="5" fill="url(#lcdgrid)" stroke="#1C1E21" stroke-width="1.4"/>
-            <text class="mq-lcd" id="lgF" x="486" y="539" text-anchor="end" font-size="26">0</text>
-          </svg>
-          <section class="voto" aria-labelledby="votoT">
-            <div class="voto-cab">
-              <h3 id="votoT">Ato examinado</h3>
-              <span class="voto-st" id="votoSt"></span>
-            </div>
-            <div class="voto-txt" id="votoTxt" tabindex="0" aria-label="Texto do ato examinado"></div>
-          </section>
+<!-- 2 a 5. operação: painel de etapas ao lado; impressora e folha -->
+<div class="op mx" id="op" hidden>
+  <div class="mx-row op-row">
+    <div class="mx-c op-lado">
+      <div class="op-painel" id="painel" tabindex="-1" aria-label="Rodada em reprodução">
+        <p class="ind">Rodada</p>
+        <p class="op-ato" id="opAto"></p>
+        <p class="op-meta" id="opMeta"></p>
+        <ol class="op-etapas" aria-hidden="true">
+          <li><span class="lamp"></span><b>I. Mineração</b><span class="op-l"></span></li>
+          <li><span class="lamp"></span><b>II. Crivo</b><span class="op-l"></span></li>
+          <li><span class="lamp"></span><b>III. Consolidação</b><span class="op-l"></span></li>
+          <li><span class="lamp"></span><b>Saída</b><span class="op-l"></span></li>
+        </ol>
+        <div class="op-ctl">
+          <button class="btn" id="btnPause" type="button" aria-pressed="false" aria-label="Pausar">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><g class="ic-pause"><rect x="3" y="2.5" width="3.4" height="11" rx="1.2" fill="currentColor"/><rect x="9.6" y="2.5" width="3.4" height="11" rx="1.2" fill="currentColor"/></g><path class="ic-play" d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>Pausar</span>
+          </button>
+          <button class="btn" id="btnSkip" type="button" aria-label="Imprimir tudo">
+            <svg width="16" height="14" viewBox="0 0 18 16" aria-hidden="true"><path d="M2.5 3 L8.5 8 L2.5 13 Z M9 3 L15 8 L9 13 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            <span>Imprimir tudo</span>
+          </button>
+          <button class="btn" id="btnPlay" type="button" aria-label="Reproduzir de novo" hidden>
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>Reproduzir de novo</span>
+          </button>
+          <button class="btn op-x" id="btnFechar" type="button" aria-label="Fechar a rodada">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg>
+            <span>Fechar</span>
+          </button>
         </div>
       </div>
-      <i class="pe l" aria-hidden="true"></i><i class="pe r" aria-hidden="true"></i>
+      <p class="sr" id="vzLive" aria-live="polite"></p>
     </div>
-    <div class="maq-ctl">
-      <button class="btn" id="btnPause" type="button" aria-pressed="false">
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><g class="ic-pause"><rect x="3" y="2.5" width="3.4" height="11" rx="1.2" fill="#181818"/><rect x="9.6" y="2.5" width="3.4" height="11" rx="1.2" fill="#181818"/></g><path class="ic-play" d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="#181818" stroke="#181818" stroke-width="1.6" stroke-linejoin="round" style="display:none"/></svg>
-        <span>Pausar</span>
-      </button>
-      <button class="btn quiet" id="btnSkip" type="button">Pular a reprodução</button>
-      <button class="btn" id="btnPlay" type="button" hidden>
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8 L13 8 L4.5 13.2 Z" fill="#181818" stroke="#181818" stroke-width="1.6" stroke-linejoin="round"/></svg>
-        Reproduzir
-      </button>
-    </div>
-  </aside>
 
-  <!-- a folha -->
-  <div class="folha-col">
-    <div class="boca" aria-hidden="true"><i class="k l"></i><i class="slit"></i><i class="k r"></i></div>
+    <!-- a folha sai da impressora -->
+    <div class="mx-c folha-col">
+     <div class="imp-wrap">
+      <div class="imp" id="imp" aria-hidden="true">
+        <i class="imp-tampa"></i>
+        <i class="imp-corpo"></i>
+        <i class="imp-faixa"></i>
+        <i class="imp-cabeca"></i>
+        <i class="imp-leds"></i>
+        <i class="imp-led"></i>
+        <i class="imp-lado"></i>
+        <i class="imp-fenda"></i>
+      </div>
     <div class="folha" id="folha">
       <div class="feeds" id="feeds">
 
@@ -1679,15 +1377,11 @@ body{background-position:0 0}
         </div></div>
 
       </div>
-      <div class="carro" id="carro" aria-hidden="true">
-        <svg class="spr l" viewBox="-15 -15 30 30"><g class="sg"></g></svg>
-        <div class="carro-body"></div>
-        <svg class="spr r" viewBox="-15 -15 30 30"><g class="sg"></g></svg>
-      </div>
+    </div>
+     </div>
     </div>
   </div>
 </div>
-
 
 <!-- 1.9 prova ▪ 1.10 fecho ▪ 1.11 passagem para a tese -->
 <section class="fecho mx" id="fecho" aria-label="Prova">
@@ -4886,11 +4580,7 @@ var D = JSON.parse(document.getElementById('dados').textContent);
 var ATOS = (function(){var e=document.getElementById('dados-atos'); return e ? JSON.parse(e.textContent) : {};})();
 var $ = function(s,r){return (r||document).querySelector(s)};
 var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
-var NS = 'http://www.w3.org/2000/svg';
 var pad = function(n){return String(n).padStart(2,'0')};
-var INK='#181818', PAPER='#FCFCFC', TINT='#E8EBEF', RED='#A63A23';
-/* máquina escura: chapa, traço claro, ferrugem acesa */
-var M_CHAPA='#C3C8CE', M_TRACO='#181818', M_DIM='#6B7178', M_RED='#E06A4C';
 var PROVA = JSON.parse(document.getElementById('prova').textContent);
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var keys, counts, TOTAL, MAXC;
@@ -4914,7 +4604,6 @@ function ondePerg(n){
   return 'nos parágrafos '+ps.slice(0,-1).join(', ')+' e '+ps[ps.length-1];
 }
 var esc = function(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-function el(tag, attrs, parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
 
 /* ---------- mesa ---------- */
 var CASOS = D.casos.slice().sort(function(a,b){return a.titulo.localeCompare(b.titulo,'pt')});
@@ -4925,132 +4614,89 @@ CASOS.forEach(function(c,i){
   else if(!c.d && c.rodada && KD<0){ c.d = D; KD = i; }
   c.rodada = !!c.d;
 });
+/* ementa: no STJ o rótulo "EMENTA" vem sozinho e o texto, no parágrafo seguinte;
+   sem ementa, mostra o início do ato */
 function ementa(d){
-  var t=(d||D).ato[0].texto, m=t.match(/^EMENTA:\s*([\s\S]*?RECURSO (?:PARCIALMENTE PROVIDO|NÃO PROVIDO|DESPROVIDO|PROVIDO)\.)/);
-  if(m) return m[1];
-  t=t.replace(/^EMENTA:\s*/,'');
-  if(t.length<=320) return t;
-  var c=t.slice(0,320), k=c.lastIndexOf(' ');
-  return (k>200 ? c.slice(0,k) : c)+'…';
+  var ps=(d||D).ato, t=ps[0].texto.trim(), rot='Ementa', m;
+  if(/^EMENTA\s*$/i.test(t) && ps[1]) t=ps[1].texto.trim();
+  else if(/^EMENTA:/i.test(t)){
+    t=t.replace(/^EMENTA:\s*/i,'');
+    m=t.match(/^([\s\S]*?RECURSO (?:PARCIALMENTE PROVIDO|NÃO PROVIDO|DESPROVIDO|PROVIDO)\.)/);
+    if(m) return {rot:rot, t:m[1]};
+  } else {
+    rot='Início do ato';
+    for(var i=0;i<ps.length && t.length<60;i++) t=ps[i].texto.trim();
+  }
+  if(t.length>320){ var c=t.slice(0,320), k=c.lastIndexOf(' '); t=(k>200 ? c.slice(0,k) : c)+'…'; }
+  return {rot:rot, t:t};
 }
 var playIc='<span class="ic" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 1.8 L10 6 L3 10.2 Z" fill="#FCFCFC" stroke="#FCFCFC" stroke-width="1.4" stroke-linejoin="round"/></svg></span>';
-var upIc='<span class="ic" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 7.5 L6 4.5 L9 7.5" fill="none" stroke="#181818" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
-var arq = $('#arquivo');
-arq.style.setProperty('--n', NC);
-$('#pastas').innerHTML = CASOS.map(function(c,i){
-  var n=pad(i+1), id='pasta'+n, f=(i%2 ? .84 : .3);
-  var corpo;
+var chevB='<svg width="14" height="14" viewBox="0 0 16 16"><path d="M3.5 6 L8 10.5 L12.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>';
+/* desfecho depois dos embargos: forma em tinta, sem cor própria */
+var DESF = [
+  {k:'c', t:'Correspondência'},
+  {k:'o', t:'Não alcançado, com achado corroborado'},
+  {k:'n', t:'Não alcançado'},
+  {k:'f', t:'Fora do teste'}
+];
+function desf(c){ var s=c.d ? c.d.depois.selo : ''; for(var i=0;i<DESF.length;i++) if(s===DESF[i].t) return DESF[i]; return {k:'x', t:s}; }
+var LS = $('#atos');
+LS.innerHTML = CASOS.map(function(c,i){
+  var n=pad(i+1), id='ato'+n, ds=desf(c), corpo;
+  var trib = c.d ? c.d.especie.split(' · ')[0] : '';
   if(c.rodada){
-    corpo = '<div class="pf-cab"><span>Ato '+n+'</span><span class="pf-st" data-st>Rodada registrada</span></div>'+
-      '<h3 class="pf-t" id="'+id+'t">'+esc(c.titulo)+'</h3>'+
-      '<p class="pf-sub">'+esc(c.d.especie)+'</p>'+
-      '<dl class="pf-dl"><div><dt>Processo</dt><dd>'+esc(c.d.processo)+'</dd></div>'+
+    var em=ementa(c.d);
+    corpo = '<p class="at-esp">'+esc(c.d.especie)+'</p>'+
+      '<dl class="at-dl"><div><dt>Processo</dt><dd>'+esc(c.d.processo)+'</dd></div>'+
       '<div><dt>Rodada</dt><dd>'+esc(c.d.rodada)+'</dd></div><div><dt>Extensão</dt><dd>'+esc(c.d.extensao)+'</dd></div></dl>'+
-      '<blockquote class="pf-em"><b>Ementa</b><p>'+esc(ementa(c.d))+'</p></blockquote>'+
-      '<div class="pf-acao"><button class="btn solid rodar" type="button"><span class="rodar-t">Reproduzir a rodada</span>'+playIc+'</button></div>';
+      '<blockquote class="at-em"><b>'+em.rot+'</b><p>'+esc(em.t)+'</p></blockquote>'+
+      '<div class="at-acao"><button class="btn solid rodar" type="button"><span class="rodar-t">Reproduzir a rodada</span>'+playIc+'</button></div>';
   } else {
-    corpo = '<div class="pf-cab"><span>Ato '+n+'</span><span class="pf-st vazio">Sem registro nesta página</span></div>'+
-      '<h3 class="pf-t" id="'+id+'t">'+esc(c.titulo)+'</h3>'+
-      '<p class="pf-vazio">O exame deste ato não está incluído nesta versão da página.</p>'+
-      (KD>-1 ? '<div class="pf-acao"><button class="btn ir" type="button"><span>Abrir '+esc(CASOS[KD].aba)+'</span>'+upIc+'</button></div>' : '');
+    corpo = '<p class="at-vazio">O exame deste ato não está incluído nesta versão da página.</p>';
   }
-  return '<li class="pasta'+(c.rodada?' tem-rodada':'')+'" style="--i:'+i+';--f:'+f+'">'+
-    '<button class="pasta-btn" type="button" id="'+id+'" aria-expanded="false" aria-controls="'+id+'f">'+
-      '<span class="aba" aria-hidden="true"><svg class="aba-forma" viewBox="0 0 184 32" preserveAspectRatio="none">'+
-        '<path class="f" d="M0 30.8 C14 30.8 15 1 30 1 H154 C169 1 170 30.8 184 30.8 V32 H0 Z"/>'+
-        '<path class="s" d="M0 30.8 C14 30.8 15 1 30 1 H154 C169 1 170 30.8 184 30.8"/></svg>'+
-        '<span class="aba-rot"><span class="aba-play"></span><span class="aba-dot"></span><span class="aba-n">'+n+'</span><span>'+esc(c.aba)+'</span></span></span>'+
-      '<span class="sr">Ato '+n+': '+esc(c.titulo)+(c.rodada?' (rodada registrada)':' (sem registro nesta página)')+'</span></button>'+
-    '<div class="pasta-corpo"><div class="pf" id="'+id+'f" role="region" aria-labelledby="'+id+'t" inert>'+corpo+'</div></div></li>';
+  return '<li class="at'+(c.rodada?' tem-rodada':'')+'">'+
+    '<h3 class="at-h"><button class="at-btn" type="button" id="'+id+'" aria-expanded="false" aria-controls="'+id+'d">'+
+      '<span class="at-n">'+n+'</span><span class="at-t">'+esc(c.titulo)+'</span>'+
+      '<span class="at-tr">'+esc(trib)+'</span>'+
+      '<span class="at-ds"'+(trib?' data-tr="'+esc(trib)+' ·"':'')+'><i class="ds ds-'+ds.k+'" aria-hidden="true"></i><span>'+esc(ds.t)+'</span></span>'+
+      '<span class="at-ch" aria-hidden="true">'+chevB+'</span></button></h3>'+
+    '<div class="at-d" id="'+id+'d" role="region" aria-labelledby="'+id+'" inert><div class="at-dd"><div class="at-in">'+corpo+'</div></div></div></li>';
 }).join('');
-var PASTAS = $$('.pasta');
-function placa(t){ var p=$('#arqPlaca'); if(p.textContent===t) return; p.innerHTML='<span>'+esc(t)+'</span>'; }
-function placaPadrao(){ placa(E.playing ? 'Rodada em reprodução' : (aberta>-1 ? 'Ato '+pad(aberta+1)+' aberto' : 'Abra uma pasta')); }
-function medirGaveta(){
-  if(aberta<0){ arq.style.setProperty('--g','0px'); return; }
-  arq.style.setProperty('--g', ($('.pf',PASTAS[aberta]).offsetHeight + 30)+'px');
-}
-function abrirPasta(k){
+var ATS = $$('.at');
+/* legenda: quantos atos em cada desfecho */
+$('#dsLeg').innerHTML = DESF.map(function(f){
+  var q = CASOS.filter(function(c){ return desf(c).k===f.k }).length;
+  return q ? '<div><dt><i class="ds ds-'+f.k+'" aria-hidden="true"></i>'+esc(f.t)+'</dt><dd>'+q+'</dd></div>' : '';
+}).join('');
+function abrirAto(k){
   aberta=k;
-  PASTAS.forEach(function(li,i){
-    li.classList.toggle('aberta', i===k); li.classList.toggle('depois', i>k);
-    $('.pasta-btn',li).setAttribute('aria-expanded', String(i===k));
-    var pf=$('.pf',li); if(i===k) pf.removeAttribute('inert'); else pf.setAttribute('inert','');
+  ATS.forEach(function(li,i){
+    var on=(i===k); li.classList.toggle('aberta',on);
+    $('.at-btn',li).setAttribute('aria-expanded',String(on));
+    var d=$('.at-d',li); if(on) d.removeAttribute('inert'); else d.setAttribute('inert','');
   });
-  medirGaveta(); placaPadrao();
 }
-function fecharPasta(){
-  aberta=-1;
-  PASTAS.forEach(function(li){ li.classList.remove('aberta','depois'); $('.pasta-btn',li).setAttribute('aria-expanded','false'); $('.pf',li).setAttribute('inert',''); });
-  medirGaveta(); placaPadrao();
-}
-PASTAS.forEach(function(li,i){
-  $('.pasta-btn',li).addEventListener('click',function(){
-    if(li.classList.contains('travada')){ li.classList.remove('negado'); void li.offsetWidth; li.classList.add('negado'); return; }
-    if(aberta===i) fecharPasta(); else abrirPasta(i);
+function fecharAto(){ aberta=-1; ATS.forEach(function(li){ li.classList.remove('aberta'); $('.at-btn',li).setAttribute('aria-expanded','false'); $('.at-d',li).setAttribute('inert',''); }); }
+function rotulos(){
+  ATS.forEach(function(li,i){
+    var r=$('.rodar',li); if(!r) return;
+    var em = (i===KD && E.playing), feito = (i===KD && li.classList.contains('rodada'));
+    r.disabled = em;
+    $('.rodar-t',r).textContent = em ? 'Rodada em reprodução' : (feito ? 'Reproduzir de novo' : 'Reproduzir a rodada');
   });
+}
+ATS.forEach(function(li,i){
+  $('.at-btn',li).addEventListener('click',function(){ if(aberta===i) fecharAto(); else abrirAto(i); });
   var r=$('.rodar',li); if(r && CASOS[i].rodada) r.addEventListener('click',function(){ selecionar(i); play(); });
-  var ir=$('.ir',li); if(ir) ir.addEventListener('click',function(){ abrirPasta(KD); $('.pasta-btn',PASTAS[KD]).focus({preventScroll:true}); });
-});
-function travar(on){
-  PASTAS.forEach(function(li,i){
-    if(i===KD) return;
-    li.classList.toggle('travada',on);
-    var b=$('.pasta-btn',li);
-    if(on){ b.setAttribute('aria-disabled','true'); b.title='Rodada em reprodução: pause ou pule a reprodução para escolher outro ato.'; }
-    else { b.removeAttribute('aria-disabled'); b.removeAttribute('title'); }
-  });
-  if(KD>-1){
-    var li=PASTAS[KD], r=$('.rodar',li), st=$('[data-st]',li), feito=li.classList.contains('rodada');
-    r.disabled=on; $('.rodar-t',r).textContent = on ? 'Rodada em reprodução' : (feito ? 'Reproduzir de novo' : 'Reproduzir a rodada');
-    st.classList.toggle('em',on); st.textContent = on ? 'Rodada em reprodução' : (feito ? 'Reprodução concluída' : 'Rodada registrada');
-  }
-  if(on) placa('Rodada em reprodução'); else placaPadrao();
-}
-window.addEventListener('resize',function(){ if(aberta>-1) medirGaveta(); });
-(function(){
-  function ver(){ arq.classList.add('visto'); setTimeout(function(){arq.classList.add('pronto')}, 1100); }
-  if(reduced || !('IntersectionObserver' in window)){ arq.classList.add('visto','pronto'); return; }
-  var io=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ ver(); io.disconnect(); } },{threshold:.25});
-  io.observe(arq);
-})();
-
-/* ---------- medidor ---------- */
-var CX=260, CY=432;
-function pt(r,v){var a=Math.PI - v/TOTAL*Math.PI;return [CX+r*Math.cos(a), CY-r*Math.sin(a)]}
-var gT = $('#gTicks');
-function marcarEscala(){
-while(gT.firstChild) gT.removeChild(gT.firstChild);
-for(var v=0; v<=TOTAL; v++){
-  var maj = v%6===0 || (v===TOTAL && TOTAL%6>=3), p1=pt(maj?62:67,v), p2=pt(74,v);
-  el('line',{x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),x2:p2[0].toFixed(1),y2:p2[1].toFixed(1),stroke:maj?M_TRACO:M_DIM,'stroke-width':maj?1.8:1,'stroke-linecap':'round'},gT);
-  if(maj){var pn=pt(52,v), lx=pn[0], ly=pn[1]+4; if(v===0){lx=CX-72;ly=CY+14} if(v===TOTAL){lx=CX+72;ly=CY+14} var tx=el('text',{x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':'middle','font-size':'10.5','class':'mq-esc'},gT);tx.textContent=v;}
-}
-}
-marcarEscala();
-function arc(cx,cy,r,val,tot){
-  if(val<=0) return '';
-  var a=Math.PI - val/tot*Math.PI, x=cx+r*Math.cos(a), y=cy-r*Math.sin(a);
-  return 'M'+(cx-r)+' '+cy+' A'+r+' '+r+' 0 0 1 '+x.toFixed(2)+' '+y.toFixed(2);
-}
-
-/* ---------- seletores ---------- */
-var kn = $('#knobs'), KX=448, rowY=[113,183,253], kLabels=['I. Mineração','II. Crivo','III. Consolidação'];
-rowY.forEach(function(y,i){
-  var g = el('g',{},kn);
-  [-60,0,60].forEach(function(d){var r=d*Math.PI/180;el('line',{x1:(KX+19*Math.sin(r)).toFixed(1),y1:(y-19*Math.cos(r)).toFixed(1),x2:(KX+23*Math.sin(r)).toFixed(1),y2:(y-23*Math.cos(r)).toFixed(1),stroke:M_DIM,'stroke-width':2,'stroke-linecap':'round'},g)});
-  el('circle',{cx:KX,cy:y,r:16.5,fill:'#1C1E21',stroke:'#1C1E21','stroke-width':1.4},g);
-  /* o miolo do seletor faz as vezes de lâmpada: vermelho em curso, preto concluído */
-  el('circle',{cx:KX,cy:y,r:8.6,fill:'#2E3236',stroke:'#3E4349','stroke-width':1.2,id:'lpo'+(i+1)},g);
-  el('circle',{cx:KX+1.2,cy:y-.8,r:7.2,fill:M_RED,filter:'url(#riso)',id:'lp'+(i+1),opacity:0},g);
-  var p = el('g',{id:'kp'+(i+1),style:'transform-origin:'+KX+'px '+y+'px;transform:rotate(-60deg);transition:transform .45s cubic-bezier(.3,1.5,.5,1)'},g);
-  el('path',{d:'M'+KX+' '+(y-5)+' V'+(y-13.5),stroke:'#F2F3F4','stroke-width':3,'stroke-linecap':'round'},p);
-  var t = el('text',{x:KX,y:y+33,'text-anchor':'middle','font-size':'11','class':'mq-rot'},g); t.textContent=kLabels[i];
 });
 
 /* ---------- etapa I ---------- */
+/* régua: com muitos parágrafos, a barra fica contínua e só as dezenas ganham número */
+function rotuloRegua(i,np,passo){ return (np<=passo*2 || i===0 || (i+1)%passo===0); }
 function montarCanais(){
-  $('#progBarra').innerHTML = D.ato.map(function(p){ return '<li><i></i><span>'+p.id.replace('p','')+'</span></li>'; }).join('');
+  var np=D.ato.length, pb=$('#progBarra');
+  pb.classList.toggle('densa', np>24);
+  pb.innerHTML = D.ato.map(function(p,i){ return '<li><i></i><span>'+(rotuloRegua(i,np,10)?p.id.replace('p',''):'')+'</span></li>'; }).join('');
 }
 montarCanais();
 
@@ -5064,14 +4710,12 @@ var lens = D.ato.map(function(p){return p.texto.length}), np = D.ato.length;
 $('#paras').style.gridTemplateColumns = np===10 ? '' : 'repeat('+(np<=12?np:Math.ceil(np/2))+',minmax(0,1fr))';
 $('#paras').innerHTML = D.ato.map(function(p,i){
   var h = Math.round(16 + Math.sqrt(lens[i])*2.4);
-  return '<li><span class="badges" data-p="'+p.id+'"></span><span class="slip" data-p="'+p.id+'" style="--h:'+Math.min(h,120)+'"></span><span>'+p.id+'</span></li>';
+  return '<li><span class="badges" data-p="'+p.id+'"></span><span class="slip" data-p="'+p.id+'" style="--h:'+Math.min(h,120)+'"></span><span>'+(np<=12 || rotuloRegua(i % Math.ceil(np/2),Math.ceil(np/2),5) ? p.id : '')+'</span></li>';
 }).join('');
 }
 montarParas();
 
 /* ---------- saída impressa ---------- */
-function montarFicha(){}
-function montarMatriz(){}
 var chev='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 L10.5 8 L6 12.5" fill="none" stroke="#181818" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function montarPerguntas(){
 $('#pqs').innerHTML = D.perguntas.map(function(q){
@@ -5084,7 +4728,7 @@ $('#pqs').innerHTML = D.perguntas.map(function(q){
 }).join('');
 $$('.tog').forEach(function(b){b.addEventListener('click',function(){
   var open = b.getAttribute('aria-expanded')==='true'; b.setAttribute('aria-expanded',String(!open));
-  document.getElementById(b.getAttribute('aria-controls')).hidden = open; drawTraces();
+  document.getElementById(b.getAttribute('aria-controls')).hidden = open;
 })});
 }
 montarPerguntas();
@@ -5117,38 +4761,39 @@ $('#btnCopy').addEventListener('click',function(){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(D.processo).then(done,done)}else{done()}
 });
 
-/* ---------- cabeça de impressão: rodas dentadas ---------- */
-$$('.spr .sg').forEach(function(g){
-  for(var i=0;i<8;i++){var a=i*45; el('rect',{x:-2.6,y:-14,width:5.2,height:7,rx:1.6,fill:INK,transform:'rotate('+a+')'},g)}
-  el('circle',{r:10,fill:'#C3C8CE',stroke:INK,'stroke-width':1.4},g);
-  el('circle',{r:3.2,fill:'#FFFFFF',stroke:INK,'stroke-width':1.2},g);
-  el('path',{d:'M0 -9.6 V-4',stroke:INK,'stroke-width':1.8,'stroke-linecap':'round'},g);
-});
-
 /* ---------- estado ---------- */
 var S = {stage:0, ch:0, ex:0, pq:0};
 var feeds = {}; $$('.feed').forEach(function(f){feeds[f.dataset.f]=f});
-var stageNames = ['I. Mineração','I. Mineração','II. Crivo','III. Consolidação','Saída','Saída'];
+var OP = $('#op'), IMP = $('#imp'), ETAPAS = $$('.op-etapas li');
+var ENOME = ['','I. Mineração','II. Crivo','III. Consolidação','Saída'];
 
+/* ---------- painel: etapa em curso e o que cada etapa deixou ---------- */
+function stageLines(st){
+  if(st===1){var c=Math.max(S.ch,1); return ['parágrafo '+c+' de '+D.ato.length, plural(cum(S.ch),' dúvida formada',' dúvidas formadas')];}
+  if(st===2){var af=Math.max(0,S.ex-D.contagens.achados); return [S.ex+' no crivo', plural(af,' afastado',' afastados')];}
+  if(st===3){return [plural(S.pq,' pergunta',' perguntas'), S.pq===0?'':ondePerg(S.pq)];}
+  return [plural(D.perguntas.length,' pergunta',' perguntas'),'a quem responde pelo ato'];
+}
+function feitaLinha(st){
+  var c=D.contagens, np=D.perguntas.length;
+  if(st===1) return [plural(c.formadas,' dúvida formada',' dúvidas formadas'), 'em '+D.ato.length+' parágrafos'];
+  if(st===2) return [plural(c.achados,' achado',' achados'), plural(c.afastadas,' afastado',' afastados')];
+  if(st===3) return [plural(np,' pergunta',' perguntas'), ondePerg(np)];
+  return [D.depois.selo];
+}
+function painelCab(){
+  $('#opAto').textContent = D.titulo;
+  $('#opMeta').textContent = D.especie.split(' · ')[0]+' · '+D.extensao+' · rodada de '+D.rodada.slice(0,10);
+}
+var vzKey='';
 function render(){
-  // lâmpadas e seletores
-  for(var i=1;i<=3;i++){
-    var st = S.stage===i ? 'on' : (S.stage>i ? 'feita' : 'off');
-    $('#lp'+i).setAttribute('opacity', st==='on'?1:0);
-    $('#lpo'+i).setAttribute('fill', st==='feita'?'#F2F3F4':'#2E3236');
-    $('#kp'+i).style.transform = 'rotate('+(st==='on'?0:st==='feita'?60:-60)+'deg)';
-    var et = $('#et'+i); et.classList.toggle('on',st==='on'); et.classList.toggle('feita',st==='feita');
-    var li = $$('.strip .lamps i')[i-1]; li.className = st==='off'?'':st;
+  for(var i=1;i<=4;i++){
+    var st = S.stage===i ? 'on' : (S.stage>i ? 'feita' : 'off'), li=ETAPAS[i-1];
+    li.className = st;
+    var L = st==='on' ? stageLines(i) : (st==='feita' ? feitaLinha(i) : []);
+    $('.op-l',li).textContent = L.filter(Boolean).join(' · ');
+    if(i<4){ var et=$('#et'+i); et.classList.toggle('on',st==='on'); et.classList.toggle('feita',st==='feita'); }
   }
-  // medidor
-  $('#gNeedle').style.transform = 'rotate('+(-90+S.ex/TOTAL*180)+'deg)';
-  $('#gArc').setAttribute('d', arc(CX,CY,79,S.ex,TOTAL));
-  $('#gNum').textContent = pad(S.ex);
-  var nA = D.contagens.achados;
-  $('#lgA').textContent = Math.min(S.ex,nA); $('#lgF').textContent = Math.max(0,S.ex-nA);
-  $('#mgNeedle').style.transform = 'rotate('+(-90+S.ex/TOTAL*180)+'deg)';
-  $('#mgArc').setAttribute('d', arc(33,34,24,S.ex,TOTAL));
-  $('#stNum').textContent = pad(S.ex);
   // etapa I
   $('#progN').textContent = pad(Math.min(cum(S.ch), TOTAL));
   $$('#progBarra li').forEach(function(li,i){
@@ -5161,67 +4806,14 @@ function render(){
   var by = {}; D.perguntas.slice(0,S.pq).forEach(function(q){(by[q.paragrafo]=by[q.paragrafo]||[]).push(q.n)});
   $$('.badges').forEach(function(b){var l=by[b.dataset.p]||[]; b.innerHTML=l.map(function(n){return '<span class="bdg">'+n+'</span>'}).join('')});
   $$('.slip').forEach(function(s){s.classList.toggle('mk', !!by[s.dataset.p])});
-  $('#carro').classList.toggle('ativo', E.playing && !E.paused);
-  if(E.playing || S.stage===0) setVisor(stageLines(S.stage), 'st'+S.stage);
-  else syncVisor();
-}
-
-/* ---------- visor ---------- */
-function stageLines(st){
-  if(st===0) return ['Entrada: ato','Saída: perguntas',''];
-  if(st===1){var c=Math.max(S.ch,1); return ['I. Mineração','parágrafo '+c+' de '+D.ato.length,cum(S.ch)+(cum(S.ch)===1?' dúvida formada':' dúvidas formadas')];}
-  if(st===2){var af=Math.max(0,S.ex-D.contagens.achados); return ['II. Crivo',S.ex+' no crivo',plural(af,' afastado',' afastados')];}
-  if(st===3){return ['III. Consolidação', S.pq+(S.pq===1?' pergunta':' perguntas'), S.pq===0?'':ondePerg(S.pq)];}
-  return ['Saída',plural(D.perguntas.length,' pergunta',' perguntas'),'a quem responde pelo ato'];
-}
-var vzKey='';
-function setVisor(L,key){
-  $('#vz1').textContent=L[0]; $('#vz2').textContent=L[1]; $('#vz3').textContent=L[2]||'';
-  $('#stLbl').textContent=L[0]; $('#stSub').textContent=[L[1],L[2]].filter(Boolean).join(', ');
-  $('#vzLed').setAttribute('fill', E.playing&&!E.paused ? '#16200F' : (S.stage===0?'#8CA87F':'#4E6B42'));
-  var rep0 = (S.stage===0 && !E.playing);
-  ['#vz1','#vz2'].forEach(function(id){ $(id).classList.toggle('pisca', rep0); });
-  $('.strip .lcd').classList.toggle('pisca', rep0);
-  if(key!==vzKey){ vzKey=key; $('#vzLive').textContent=L.filter(Boolean).join('. '); }
-}
-function linhasSecoes(){
-  var c = D.contagens, np = D.perguntas.length;
-  var head = ['Reprodução concluída.', plural(c.formadas,' dúvida formada',' dúvidas formadas'), plural(np,' pergunta',' perguntas')];
-  var k = (D.depois.pergunta===undefined ? 1 : D.depois.pergunta), q = k ? D.perguntas[k-1] : null;
-  return {
-    head: head,
-    s1: ['I. Mineração','parágrafo '+D.ato.length+' de '+D.ato.length, plural(c.formadas,' dúvida formada',' dúvidas formadas')],
-    s2: ['II. Crivo', c.formadas+' no crivo', plural(c.afastadas,' afastado',' afastados')],
-    s3: ['III. Consolidação', plural(np,' pergunta',' perguntas'), ondePerg(np)],
-    o0: head,
-    od: ['Estados',plural(c.achados,' achado',' achados'),plural(c.afastadas,' afastado',' afastados')],
-    of: q ? [D.depois.selo,'pergunta '+k,'§ '+q.paragrafo.replace('p','')] : [D.depois.selo,'nenhuma pergunta','sobre o ponto corrigido'],
-    og: head
-  };
-}
-var secLines = linhasSecoes();
-function syncVisor(){
-  if(E.playing || S.stage===0) return;
-  var line = window.innerHeight*0.4, cur='o0', curEl=null;
-  $$('.feed.on').forEach(function(f){ if(f.getBoundingClientRect().top<=line){ cur=f.dataset.f; } });
-  if(cur==='oe'){
-    var qs=$$('.pq'), qi=0;
-    qs.forEach(function(q,i){ if(q.getBoundingClientRect().top<=line) qi=i; });
-    var q=D.perguntas[qi];
-    setVisor(['Pergunta '+q.n+' de '+D.perguntas.length,'§ '+q.paragrafo.replace('p',''),'achado'],'q'+q.n);
-    return;
+  // impressora: luz e cabeça só correm durante a impressão
+  IMP.classList.toggle('ativo', E.playing && !E.paused);
+  OP.classList.toggle('fim', S.stage>4);
+  // leitor de tela: anuncia só a troca de etapa
+  var key='st'+S.stage;
+  if(key!==vzKey){ vzKey=key;
+    $('#vzLive').textContent = S.stage>4 ? 'Impressão concluída. '+feitaLinha(4)[0]+'.' : (S.stage ? ENOME[S.stage]+'. '+stageLines(S.stage).filter(Boolean).join(', ')+'.' : '');
   }
-  setVisor(secLines[cur]||secLines.o0,'sec'+cur);
-}
-var vzTick=false;
-window.addEventListener('scroll',function(){ if(vzTick) return; vzTick=true; requestAnimationFrame(function(){vzTick=false; syncVisor();}); },{passive:true});
-
-/* ---------- rodas dentadas: giram com o avanço da folha ---------- */
-function drawTraces(){
-  var folha=$('#folha'), carro=$('#carro');
-  var lim = carro.hidden ? folha.offsetHeight : carro.offsetTop;
-  var ang = (lim/(2*Math.PI*10))*360;
-  $$('.spr .sg').forEach(function(s){s.setAttribute('transform','rotate('+ang.toFixed(1)+')')});
 }
 
 /* ---------- linha do tempo ---------- */
@@ -5258,69 +4850,70 @@ function tick(now){
       var a=E.act[k], fr=Math.min(1,(E.t-a.at)/a.dur), full=a.f.firstElementChild.offsetHeight;
       if(fr>=1){a.f.style.height='auto'; E.act.splice(k,1);} else a.f.style.height=(full*fr).toFixed(1)+'px';
     }
-    drawTraces();
   }
   requestAnimationFrame(tick);
 }
 function setButtons(){
-  var running = E.playing;
-  $('#btnPause').hidden = !running; $('#btnSkip').hidden = !running; $('#btnPlay').hidden = running;
-  $('#sPause').hidden = !running; $('#sSkip').hidden = !running; $('#sPlay').hidden = running;
+  var running = E.playing, bp=$('#btnPause');
+  bp.hidden = !running; $('#btnSkip').hidden = !running; $('#btnPlay').hidden = running;
   var lbl = E.paused ? 'Continuar' : 'Pausar';
-  $('#btnPause span').textContent = lbl; $('#btnPause').setAttribute('aria-pressed',String(E.paused));
-  $('#sPause').setAttribute('aria-label',lbl); $('#sPause').setAttribute('aria-pressed',String(E.paused));
-  $$('.ic-pause').forEach(function(x){x.style.display=E.paused?'none':''});
-  $$('.ic-play').forEach(function(x){x.style.display=E.paused?'':'none'});
+  $('span',bp).textContent = lbl; bp.setAttribute('aria-label',lbl); bp.setAttribute('aria-pressed',String(E.paused));
+  $('.ic-pause',bp).style.display = E.paused ? 'none' : '';
+  $('.ic-play',bp).style.display = E.paused ? '' : 'none';
+  rotulos();
 }
 function reset(){
   S={stage:0,ch:0,ex:0,pq:0}; E.act=[];
   $$('.feed').forEach(function(f){f.classList.remove('on'); f.style.height='0px'});
-  $('#carro').hidden=false; $('#folha').classList.remove('fim');
+  $('#folha').classList.remove('fim');
 }
 function start(){
-  if(KD>-1 && aberta!==KD) abrirPasta(KD); travar(true);
-  carregarVoto(); E.started=true; reset(); E.list=build(); E.i=0; E.t=0; E.playing=true; E.paused=false;
-  render(); setButtons(); drawTraces();
+  OP.hidden=false; painelCab();
+  E.started=true; reset(); E.list=build(); E.i=0; E.t=0; E.playing=true; E.paused=false;
+  render(); setButtons();
   E.last=performance.now(); requestAnimationFrame(tick);
 }
 function final(){
-  carregarVoto(); E.playing=false; travar(false); E.paused=false; E.act=[]; E.started=true;
+  OP.hidden=false; painelCab();
+  E.playing=false; E.paused=false; E.act=[]; E.started=true;
   S={stage:5,ch:counts.length,ex:TOTAL,pq:D.perguntas.length};
   $$('.feed').forEach(function(f){f.classList.add('on'); f.style.height='auto'});
-  $('#carro').hidden=true; $('#folha').classList.add('fim'); marcar();
-  render(); setButtons(); drawTraces();
+  $('#folha').classList.add('fim'); marcar();
+  render(); setButtons();
 }
-function carregarVoto(){
-  var box=$('#votoTxt'); if(box.dataset.ok) return; box.dataset.ok='1';
-  box.innerHTML = D.ato.map(function(p,i){return '<p style="animation-delay:'+(i*45)+'ms"><span class="pn">'+p.id+'</span><span>'+esc(p.texto)+'</span></p>'}).join('');
-  box.scrollTop=0;
-  $('#votoSt').textContent = D.titulo+' · '+D.extensao;
-}
-function marcar(){ if(KD<0) return; PASTAS[KD].classList.add('rodada'); travar(false); }
+function marcar(){ if(KD>-1) ATS[KD].classList.add('rodada'); }
 function finish(){
-  E.playing=false; S.stage=5; travar(false);
+  E.playing=false; S.stage=5;
   $$('.feed').forEach(function(f){f.style.height='auto'});
-  $('#carro').hidden=true; $('#folha').classList.add('fim'); marcar();
-  render(); setButtons(); drawTraces();
+  $('#folha').classList.add('fim'); marcar();
+  render(); setButtons();
 }
 function togglePause(){ if(!E.playing) return; E.paused=!E.paused; E.last=performance.now(); setButtons(); render(); }
 function montarCaso(){
-  marcarEscala(); montarCanais(); montarToks(); montarParas(); montarFicha(); montarMatriz(); montarPerguntas(); montarDepois(); montarEstaticos();
-  secLines = linhasSecoes();
-  var box=$('#votoTxt'); delete box.dataset.ok; box.innerHTML=''; $('#votoSt').textContent='';
+  montarCanais(); montarToks(); montarParas(); montarPerguntas(); montarDepois(); montarEstaticos();
 }
 function selecionar(i){
   var c=CASOS[i]; if(!c || !c.d || (i===KD && c.d===D)) return;
   E.playing=false; E.paused=false;
-  if(KD>-1 && KD!==i){
-    var li=PASTAS[KD], r=$('.rodar',li), st=$('[data-st]',li); li.classList.remove('rodada');
-    if(r){ r.disabled=false; $('.rodar-t',r).textContent='Reproduzir a rodada'; }
-    if(st){ st.classList.remove('em'); st.textContent='Rodada registrada'; }
-  }
-  KD=i; D=c.d; derivar(); montarCaso(); reset(); render(); setButtons(); drawTraces();
+  if(KD>-1 && KD!==i) ATS[KD].classList.remove('rodada');
+  KD=i; D=c.d; derivar(); montarCaso(); reset(); render(); setButtons();
 }
-function play(){ $('#op').scrollIntoView({behavior: reduced?'auto':'smooth', block:'start'}); start(); }
-
+function play(){
+  OP.hidden=false;
+  if(reduced) final(); else start();
+  OP.scrollIntoView({behavior: reduced?'auto':'smooth', block:'start'});
+  $('#painel').focus({preventScroll:true});
+}
+/* fechar: recolhe a folha e volta à linha do ato */
+function fecharRodada(){
+  E.playing=false; E.paused=false; OP.hidden=true; setButtons();
+  if(KD>-1){
+    abrirAto(KD);
+    var b=$('.at-btn',ATS[KD]);
+    ATS[KD].scrollIntoView({behavior: reduced?'auto':'smooth', block:'center'});
+    b.focus({preventScroll:true});
+  }
+}
 
 /* ---------- prova (números atualizáveis em #prova) ---------- */
 (function(){
@@ -5372,22 +4965,18 @@ window.addEventListener('hashchange',porHash);
 porHash();
 
 $('#btnPause').addEventListener('click',togglePause);
-$('#sPause').addEventListener('click',togglePause);
 $('#btnSkip').addEventListener('click',final);
-$('#sSkip').addEventListener('click',final);
 $('#btnPlay').addEventListener('click',start);
-$('#sPlay').addEventListener('click',start);
+$('#btnFechar').addEventListener('click',fecharRodada);
+OP.addEventListener('keydown',function(e){ if(e.key==='Escape' && !OP.hidden) fecharRodada(); });
 $('#btnOutro').addEventListener('click',function(){
   $('#mesa').scrollIntoView({behavior: reduced?'auto':'smooth', block:'start'});
-  setTimeout(function(){$('.pasta-btn').focus({preventScroll:true})}, reduced?0:500);
+  setTimeout(function(){ $('.at-btn',ATS[KD>-1?KD:0]).focus({preventScroll:true}); }, reduced?0:500);
 });
-window.addEventListener('resize',function(){drawTraces()});
 window.CERNE = {skip:final, start:start, state:function(){return {t:E.t,stage:S.stage,playing:E.playing,end:E.list.length?E.list[E.list.length-1].at:0}}};
 
-// estado inicial
-reset(); render(); setButtons(); drawTraces();
-if(reduced){ final(); }
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(drawTraces);
+// estado inicial: a folha fica recolhida até a primeira reprodução
+reset(); render(); setButtons();
 })();
 </script>
 
