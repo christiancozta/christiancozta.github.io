@@ -1161,12 +1161,15 @@ body{background-position:0 0}
 .hd .mx-row:first-child>.mx-c{box-shadow:inset 1px 0 var(--fio)}
 .hd-bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"marca abas" "sub sub"}
 .hd-bar>.mx-c{display:flex;align-items:center;min-height:64px;padding-block:0}
-.hd-brand{grid-area:marca;gap:10px}
+.hd-atrio{grid-area:marca;gap:12px;background:#181818;color:#FCFCFC;text-decoration:none;transition:background-color .5s var(--mola)}
+.hd-atrio:hover{background:#2A2A2A}
+.hd-atrio:focus-visible{outline:2px solid #FCFCFC;outline-offset:-6px;border-radius:0}
 .hd-sub-c{grid-area:sub}
 .hd-bar>.hd-sub-c{min-height:48px}
 .hd-abas{grid-area:abas;justify-content:flex-end}
-.hd-sim{width:32px;height:32px;flex:none;display:block}
-.hd-brand .wm{font-size:19px;letter-spacing:.08em}
+.hd-atrio-sim{width:32px;height:32px;flex:none;display:block}
+.hd-atrio-wm{font-family:var(--f-marca);font-weight:700;font-size:19px;letter-spacing:.08em;line-height:1;color:#FCFCFC}
+.hd-atrio-wm .t{color:#A63A23}
 .hd-sub{margin:0;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.12em;line-height:1.3;text-transform:uppercase}
 .hd-versao{appearance:none;height:32px;margin:0;padding:0 12px;display:inline-flex;align-items:center;border:2px solid var(--ink);border-right:0;border-radius:0;background:var(--red);color:var(--paper);cursor:pointer;font-family:var(--f-caps);font-weight:700;font-size:11px;letter-spacing:.14em;line-height:1;transition:background-color .5s var(--mola),transform .5s var(--mola)}
 .hd-versao:hover{background:#8E2E1B}
@@ -1178,11 +1181,11 @@ body{background-position:0 0}
 .hd-aba .ic-play,.hd.parado .hd-aba .ic-pausa{display:none}
 .hd.parado .hd-aba .ic-play{display:block}
 
-.hd-lado{display:flex;align-items:flex-start}
-.hd-titulo{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-top:32px}
-.hd-marca{margin:0;font-size:min(14cqw,210px);line-height:.9;font-weight:700}
+.hd-tit{grid-template-columns:minmax(0,1fr)}
+.hd-titulo{display:flex;align-items:flex-end;justify-content:flex-start;gap:.22em;padding-top:32px;font-size:min(14cqw,210px)}
+.hd-marca{margin:0;font-size:1em;line-height:.9;font-weight:700}
 .hd-marca .wm{letter-spacing:.08em;margin-right:-.08em}
-.hd-sim-l{width:clamp(44px,12cqw,160px);height:auto;flex:none;display:block}
+.hd-sim-l{width:.9em;height:.9em;flex:none;display:block;margin-bottom:.02em}
 
 .hd-lema{margin:0;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(28px,7.4cqw,48px);line-height:1.05;letter-spacing:-.005em;color:var(--ink)}
 .hd-lema .hd-ins{display:inline-grid;grid-template-columns:0fr;vertical-align:bottom}
@@ -1208,8 +1211,7 @@ body{background-position:0 0}
 @container mx (min-width:641px){
   .hd-bar{grid-template-columns:var(--side-w) minmax(0,1fr) auto;grid-template-areas:"marca sub abas"}
   .hd-bar>.hd-sub-c{min-height:64px}
-  .hd-marca{font-size:min(11.5cqw,210px)}
-  .hd-sim-l{width:clamp(64px,9cqw,160px)}
+  .hd-titulo{font-size:min(12cqw,210px)}
   .hd-titulo{padding-top:48px}
   .hd-tri{grid-template-columns:var(--side-w) minmax(0,1fr) minmax(176px,.42fr)}
   .hd-lema-c{grid-column:1 / -1}
@@ -1371,7 +1373,7 @@ body{background-position:0 0}
 <!-- 1.2 e 1.3 abertura (hero anterior, com o símbolo junto ao nome) -->
 <section class="hd mx" id="hd" aria-labelledby="heroT">
   <div class="mx-row hd-bar">
-    <div class="mx-c hd-brand" aria-hidden="true"><svg class="hd-sim" viewBox="0 0 1080 1080"><use href="#rainha"/></svg><span class="wm">C<span class="e">E</span>RNE</span></div>
+    <a class="mx-c hd-atrio" href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener" aria-label="ATRIO"><svg class="hd-atrio-sim" viewBox="0 0 1080 1080" aria-hidden="true"><path fill="#FCFCFC" d="M0,810 H1080 V1080 H0 Z"/><path fill="#A63A23" d="M315,810 H765 V1080 H315 Z"/><path fill="#FCFCFC" d="M0,405 H1080 V810 H0 Z M0,405 V90 L315,0 V405 Z M382.5,405 V0 H697.5 V405 Z M765,405 V0 L1080,90 V405 Z"/></svg><span class="hd-atrio-wm" aria-hidden="true">A<span class="t">T</span>RIO</span></a>
     <div class="mx-c hd-sub-c"><p class="hd-sub">Dispositivo de governança crítica do raciocínio jurídico</p></div>
     <div class="mx-c hd-abas">
       <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões">v5.0.0</button>
@@ -1382,8 +1384,7 @@ body{background-position:0 0}
     </div>
   </div>
   <div class="mx-row hd-tit">
-    <div class="mx-c hd-lado"><p class="mx-k">Módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></p></div>
-    <div class="mx-c hd-titulo"><h1 class="hd-marca" id="heroT" aria-label="CERNE"><span class="wm">C<span class="e">E</span>RNE</span></h1><svg class="hd-sim-l" viewBox="0 0 1080 1080" aria-hidden="true"><use href="#rainha"/></svg></div>
+    <div class="mx-c hd-titulo"><svg class="hd-sim-l" viewBox="0 0 1080 1080" aria-hidden="true"><use href="#rainha"/></svg><h1 class="hd-marca" id="heroT" aria-label="CERNE"><span class="wm">C<span class="e">E</span>RNE</span></h1></div>
   </div>
   <div class="mx-row hd-tri">
     <div class="mx-c hd-lema-c"><p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p></div>
