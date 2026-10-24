@@ -1134,6 +1134,59 @@ body{background-position:0 0}
   .imp-led{left:calc(var(--tampa-w) + 70px);top:calc(var(--corpo-t) + var(--faixa) + 6px);width:7px;height:7px}
   .imp-cabeca{height:9px;top:calc(var(--corpo-t) + var(--faixa) - 5px)}
 }
+
+/* ---------- o ato como documento: janela com duas páginas (uma no celular) ---------- */
+.trecho-c{grid-column:2}
+.trecho-c .trecho{grid-column:auto}
+.ver-ato{margin:4px 0 6px;min-height:34px;font-size:12.5px;padding:5px 12px}
+.at-acao .ler{min-height:var(--tap)}
+.doc{padding:0;border:0;background:transparent;width:min(1160px,calc(100vw - 32px));height:min(90vh,900px);max-width:none;max-height:none;color:var(--ink);overflow:visible}
+.doc::backdrop{background:rgba(24,24,24,.46)}
+.doc[open] .doc-casca{animation:docSobe .5s var(--mola)}
+@keyframes docSobe{from{opacity:0;transform:translateY(18px)}}
+.doc-casca{height:100%;display:flex;flex-direction:column;border:2px solid var(--ink);background:var(--nevoa)}
+.doc-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:14px 18px 12px;background:var(--paper);box-shadow:0 2px 0 var(--ink)}
+.doc-id{min-width:0}
+.doc-k{margin:0 0 4px;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.doc-t{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(20px,2.2vw,26px);line-height:1.08;text-wrap:balance}
+.doc-m{margin:4px 0 0;font-size:12.5px;line-height:1.45;color:var(--ink2)}
+.doc-ctl{flex:none;display:flex;align-items:center;gap:8px}
+.doc-ctl .btn{min-height:32px;padding:5px 12px 5px 10px;font-size:12px}
+.doc-tudo[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.doc-vp{position:relative;flex:1;min-height:0;margin:20px 24px 0;overflow:hidden}
+.doc-pg{position:absolute;top:0;bottom:0;border:1.5px solid var(--ink);background:#fff;box-shadow:0 18px 30px -24px rgba(24,24,24,.35)}
+.doc-pg[hidden]{display:none}
+.doc-cor{position:absolute;left:20px;right:20px;top:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-family:var(--f-caps);font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.doc-np{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-family:var(--f-num);font-weight:700;font-size:11px;color:var(--ink2)}
+.doc-fluxo{position:absolute;column-fill:auto;font-size:14.5px;line-height:1.62;color:#262626;outline:none}
+.doc-fluxo:focus-visible{outline:none}
+.dp{position:relative;margin:0 0 .9em;padding-left:34px;text-wrap:pretty;orphans:2;widows:2}
+.dp-n{position:absolute;left:0;top:.2em;font-family:var(--f-num);font-weight:700;font-size:10.5px;line-height:1.4;color:var(--ink2)}
+.dp-q{position:absolute;left:-2px;top:1.7em;display:flex;flex-direction:column;gap:3px}
+.dp-q b{display:grid;place-items:center;width:20px;height:20px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);font-family:var(--f-num);font-weight:700;font-size:10px;line-height:1}
+/* o trecho de origem da pergunta: âmbar, a cor do achado */
+.dp.alvo{background:rgba(232,166,40,.2);box-shadow:-8px 0 0 rgba(232,166,40,.2),inset 3px 0 0 var(--amarelo);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.dp.alvo .dp-n{color:var(--ink)}
+.doc-rod{display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 18px 14px}
+.doc-pp{margin:0;min-width:9em;text-align:center;font-family:var(--f-num);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+.doc-nav{width:36px;height:36px;min-height:36px;padding:0;background:var(--paper)}
+.doc-nav:disabled{opacity:.35;cursor:default;transform:none}
+/* mostrar tudo: uma folha corrida, com rolagem */
+.doc.continuo .doc-vp{overflow:auto;overscroll-behavior:contain;border:1.5px solid var(--ink);background:#fff;margin-bottom:16px}
+.doc.continuo .doc-pg,.doc.continuo .doc-rod{display:none}
+.doc.continuo .doc-fluxo{position:static;max-width:46em;margin:0 auto;padding:28px 32px 40px}
+@media (max-width:640px){
+  .doc{width:100vw;height:100dvh;max-height:100dvh}
+  .doc-casca{border:0}
+  .doc-cab{padding:12px 14px 10px}
+  .doc-tudo span{display:none}
+  .doc-tudo{width:36px;height:36px;min-height:36px;padding:0}
+  .doc-vp{margin:14px 12px 0}
+  .doc-fluxo{font-size:14px}
+  .doc.continuo .doc-fluxo{padding:20px 18px 32px}
+}
+@container mx (max-width:640px){ .trecho-c{grid-column:1 / -1} }
+@media (prefers-reduced-motion:reduce){ .doc[open] .doc-casca{animation:none} }
 </style>
 </head>
 <body>
@@ -1702,6 +1755,35 @@ body{background-position:0 0}
           <li><span class="vn">0.1.0</span><span class="vd"></span><span><b>Primeiro protótipo executável.</b></span></li>
         </ol>
   </div></div>
+</dialog>
+<!-- o ato aberto como documento: duas páginas (uma no celular) -->
+<dialog class="doc" id="dlgDoc" aria-labelledby="docT">
+  <div class="doc-casca">
+    <div class="doc-cab">
+      <div class="doc-id">
+        <p class="doc-k">Ato examinado</p>
+        <h2 class="doc-t" id="docT"></h2>
+        <p class="doc-m" id="docM"></p>
+      </div>
+      <div class="doc-ctl">
+        <button class="btn doc-tudo" type="button" id="docTudo" aria-pressed="false">
+          <svg width="16" height="14" viewBox="0 0 18 16" aria-hidden="true"><path d="M2.5 3 L8.5 8 L2.5 13 Z M9 3 L15 8 L9 13 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <span>Mostrar tudo</span>
+        </button>
+        <button class="mv-x" type="button" id="docFechar" aria-label="Fechar o ato"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg></button>
+      </div>
+    </div>
+    <div class="doc-vp" id="docVp">
+      <div class="doc-pg" aria-hidden="true"><span class="doc-cor"></span><span class="doc-np"></span></div>
+      <div class="doc-pg" aria-hidden="true"><span class="doc-cor"></span><span class="doc-np"></span></div>
+      <div class="doc-fluxo" id="docFluxo" tabindex="0" aria-label="Texto do ato"></div>
+    </div>
+    <div class="doc-rod">
+      <button class="btn doc-nav" type="button" id="docAnt" aria-label="Páginas anteriores"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 L5 8 L10 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg></button>
+      <p class="doc-pp" id="docPp" aria-live="polite"></p>
+      <button class="btn doc-nav" type="button" id="docProx" aria-label="Próximas páginas"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3 L11 8 L6 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg></button>
+    </div>
+  </div>
 </dialog>
 <!-- rodapé (sempre visível) -->
 <footer class="rodape-d">
@@ -4650,7 +4732,8 @@ LS.innerHTML = CASOS.map(function(c,i){
       '<dl class="at-dl"><div><dt>Processo</dt><dd>'+esc(c.d.processo)+'</dd></div>'+
       '<div><dt>Rodada</dt><dd>'+esc(c.d.rodada)+'</dd></div><div><dt>Extensão</dt><dd>'+esc(c.d.extensao)+'</dd></div></dl>'+
       '<blockquote class="at-em"><b>'+em.rot+'</b><p>'+esc(em.t)+'</p></blockquote>'+
-      '<div class="at-acao"><button class="btn solid rodar" type="button"><span class="rodar-t">Reproduzir a rodada</span>'+playIc+'</button></div>';
+      '<div class="at-acao"><button class="btn solid rodar" type="button"><span class="rodar-t">Reproduzir a rodada</span>'+playIc+'</button>'+
+      '<button class="btn ler" type="button">Ler o ato</button></div>';
   } else {
     corpo = '<p class="at-vazio">O exame deste ato não está incluído nesta versão da página.</p>';
   }
@@ -4688,6 +4771,7 @@ function rotulos(){
 ATS.forEach(function(li,i){
   $('.at-btn',li).addEventListener('click',function(){ if(aberta===i) fecharAto(); else abrirAto(i); });
   var r=$('.rodar',li); if(r && CASOS[i].rodada) r.addEventListener('click',function(){ selecionar(i); play(); });
+  var l=$('.ler',li); if(l) l.addEventListener('click',function(){ abrirDoc(CASOS[i].d); });
 });
 
 /* ---------- etapa I ---------- */
@@ -4724,12 +4808,14 @@ $('#pqs').innerHTML = D.perguntas.map(function(q){
     '<div class="meta"><span class="sr">Pergunta '+q.n+', parágrafo '+pn+'</span><span class="est" aria-hidden="true">§ '+pn+'</span></div>'+
     '<p class="tx">'+esc(q.texto)+'</p>'+
     '<button class="tog" type="button" aria-expanded="false" aria-controls="tr'+q.n+'x">'+chev+'Trecho do ato</button>'+
-    '<blockquote class="trecho" id="tr'+q.n+'x" hidden>'+esc(q.trecho)+'</blockquote></li>';
+    '<div class="trecho-c" id="tr'+q.n+'x" hidden><blockquote class="trecho">'+esc(q.trecho)+'</blockquote>'+
+    '<button class="btn ver-ato" type="button" data-p="'+q.paragrafo+'">Ver no ato, § '+pn+'</button></div></li>';
 }).join('');
 $$('.tog').forEach(function(b){b.addEventListener('click',function(){
   var open = b.getAttribute('aria-expanded')==='true'; b.setAttribute('aria-expanded',String(!open));
   document.getElementById(b.getAttribute('aria-controls')).hidden = open;
 })});
+$$('.ver-ato').forEach(function(b){ b.addEventListener('click',function(){ abrirDoc(D, b.dataset.p); }); });
 }
 montarPerguntas();
 function montarDepois(){
@@ -4914,6 +5000,84 @@ function fecharRodada(){
     b.focus({preventScroll:true});
   }
 }
+
+/* ---------- o ato como documento: páginas em colunas, duas lado a lado ---------- */
+var DD=$('#dlgDoc'), DVP=$('#docVp'), DFX=$('#docFluxo'), DPG=$$('.doc-pg',DD);
+var DOC={d:null, n:2, k:0, tot:1, passo:0, col:0, cont:false};
+function docMontar(d, alvo){
+  var by={}; d.perguntas.forEach(function(q){(by[q.paragrafo]=by[q.paragrafo]||[]).push(q.n)});
+  DFX.innerHTML = d.ato.map(function(p){
+    var qs=by[p.id]||[];
+    return '<p class="dp'+(qs.length?' tem-q':'')+(p.id===alvo?' alvo':'')+'" data-p="'+p.id+'">'+
+      '<span class="dp-n" aria-hidden="true">'+p.id.replace('p','')+'</span>'+
+      (qs.length?'<span class="dp-q"><span class="sr">Perguntas '+qs.join(', ')+' neste parágrafo. </span>'+qs.map(function(n){return '<b aria-hidden="true">'+n+'</b>'}).join('')+'</span>':'')+
+      esc(p.texto)+'</p>';
+  }).join('');
+  $('#docT').textContent = d.titulo;
+  $('#docM').textContent = d.especie+' · '+d.processo+' · '+d.extensao;
+  DPG.forEach(function(g){ $('.doc-cor',g).textContent = d.titulo; });
+}
+function docMedir(){
+  if(DOC.cont) return;
+  var W=DVP.clientWidth, H=DVP.clientHeight, n=W>=720?2:1, sp=n===2?24:0, pad=W>=720?36:20, topo=pad+16, base=pad+24;
+  var P=(W-(n-1)*sp)/n, colW=P-2*pad, gap=2*pad+sp;
+  DOC.n=n; DOC.col=colW+gap; DOC.passo=n*(P+sp);
+  DPG.forEach(function(g,i){ g.hidden = i>=n; g.style.left=(i*(P+sp))+'px'; g.style.width=P+'px'; });
+  var s=DFX.style;
+  s.left=pad+'px'; s.top=topo+'px'; s.width=(n*colW+(n-1)*gap)+'px'; s.height=(H-topo-base)+'px';
+  s.columnCount=n; s.columnGap=gap+'px';
+  DOC.tot=Math.max(1, Math.round((DFX.scrollWidth+gap)/DOC.col));
+}
+function docIr(k, suave){
+  var max=Math.ceil(DOC.tot/DOC.n)-1; DOC.k=Math.max(0,Math.min(max,k));
+  DFX.style.transition = (suave && !reduced) ? 'transform .45s var(--mola)' : 'none';
+  DFX.style.transform='translateX('+(-DOC.k*DOC.passo)+'px)';
+  var a=DOC.k*DOC.n+1, b=Math.min(DOC.tot, a+DOC.n-1);
+  DPG.forEach(function(g,i){ var pg=a+i; $('.doc-np',g).textContent = pg<=DOC.tot ? pg : ''; });
+  $('#docPp').textContent = (b>a ? 'pp. '+a+'–'+b : 'p. '+a)+' de '+DOC.tot;
+  $('#docAnt').disabled = DOC.k===0; $('#docProx').disabled = DOC.k===max;
+}
+/* página onde está o parágrafo: posição dele dentro do fluxo de colunas */
+function docPaginaDe(el){
+  var x = el.getBoundingClientRect().left - DFX.getBoundingClientRect().left;
+  return Math.floor((x+2)/DOC.col);
+}
+function docModo(cont){
+  DOC.cont=cont; DD.classList.toggle('continuo',cont);
+  var b=$('#docTudo'); b.setAttribute('aria-pressed',String(cont)); $('span',b).textContent = cont ? 'Páginas' : 'Mostrar tudo';
+  DFX.removeAttribute('style');
+  if(!cont){ docMedir(); docIr(0); }
+  else DVP.scrollTop=0;
+}
+function abrirDoc(d, alvo){
+  DOC.d=d; docMontar(d, alvo);
+  if(!DD.open) DD.showModal();
+  docModo(false);
+  var el = alvo ? $('.dp[data-p="'+alvo+'"]',DFX) : null;
+  if(el) docIr(Math.floor(docPaginaDe(el)/DOC.n));
+  DFX.focus({preventScroll:true});
+}
+$('#docFechar').addEventListener('click',function(){ DD.close(); });
+$('#docTudo').addEventListener('click',function(){
+  var alvo=$('.dp.alvo',DFX), primeira=DOC.k*DOC.n;
+  docModo(!DOC.cont);
+  if(DOC.cont && alvo) alvo.scrollIntoView({block:'center'});
+  else if(!DOC.cont) docIr(Math.floor((alvo?docPaginaDe(alvo):primeira)/DOC.n));
+});
+$('#docAnt').addEventListener('click',function(){ docIr(DOC.k-1,true); });
+$('#docProx').addEventListener('click',function(){ docIr(DOC.k+1,true); });
+DD.addEventListener('keydown',function(e){
+  if(DOC.cont) return;
+  if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); docIr(DOC.k+1,true); }
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); docIr(DOC.k-1,true); }
+});
+DD.addEventListener('click',function(e){ if(e.target===DD) DD.close(); });
+(function(){ var x0=null;
+  DVP.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; },{passive:true});
+  DVP.addEventListener('touchend',function(e){ if(x0===null||DOC.cont) return; var dx=e.changedTouches[0].clientX-x0; x0=null;
+    if(Math.abs(dx)>48) docIr(DOC.k+(dx<0?1:-1),true); },{passive:true});
+})();
+window.addEventListener('resize',function(){ if(!DD.open||DOC.cont) return; var primeira=DOC.k*DOC.n; docMedir(); docIr(Math.floor(primeira/DOC.n)); });
 
 /* ---------- prova (números atualizáveis em #prova) ---------- */
 (function(){
