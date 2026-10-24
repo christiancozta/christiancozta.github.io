@@ -71,7 +71,6 @@ button{font:inherit;color:inherit}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wm{font-family:var(--f-marca);letter-spacing:.16em;font-weight:700}
 .wm .e{color:var(--red)}
-.rr{background-color:var(--red);background-image:var(--grain)}
 
 /* ---------- visor ---------- */
 .maq .vz{fill:#5FE08F;font-family:var(--f-lcd);font-size:24px;letter-spacing:.02em}
@@ -79,10 +78,6 @@ button{font:inherit;color:inherit}
 .maq .vz.m{fill:#3FB872}
 .maq .vz.pisca{animation:pisca 1.2s steps(1,end) infinite}
 @keyframes pisca{0%{opacity:1}50%{opacity:.18}}
-.hashbtn{appearance:none;margin-left:10px;padding:2px 10px;min-height:28px;border:1.6px solid var(--ink);border-radius:999px;background:var(--paper);font-family:var(--f-mono);font-size:12.5px;cursor:pointer;vertical-align:middle}
-.hashbtn{transition:background-color .18s var(--ease),transform .18s var(--ease)}
-.hashbtn:hover{background:var(--tint)}
-.hashbtn:active{transform:translateY(1px)}
 
 /* ---------- botões desenhados ---------- */
 .btn{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:var(--btn-gap);min-height:var(--tap);padding:var(--btn-pad);border:var(--lw) solid var(--ink);border-radius:var(--r-pill);background:var(--paper);font-family:var(--f-mono);font-size:var(--btn-fs);letter-spacing:.01em;cursor:pointer;user-select:none;transition:background-color .18s var(--ease),box-shadow .18s var(--ease),transform .18s var(--ease)}
@@ -95,13 +90,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .btn.solid:active{box-shadow:none}
 .btn.quiet{border-color:transparent;background:transparent;padding-left:10px;padding-right:10px;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
 .btn.quiet:hover{background:var(--tint)}
-
-/* ---------- topo ---------- */
-
-/* ---------- 1. mesa ---------- */
-.mesa-tit{position:relative;padding-top:8px}
-.etq{display:inline-flex;align-items:center;gap:10px;margin-bottom:26px}
-.etq svg{display:block}
 
 /* ---------- arquivo: gaveta de pastas suspensas ---------- */
 .arquivo{--step:26px;--tabh:30px;--tabw:184px;--ins:5px;--frente:112px;--corpo:720px;--g:0px;
@@ -230,7 +218,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .fi{padding:26px 34px 30px}
 .fi.fi-head{padding-top:18px;padding-bottom:6px}
 .fi.fi-o0{padding-top:34px;padding-bottom:18px}
-.fi.fi-s4{padding-bottom:20px}
 
 /* cabeça de impressão */
 .carro{position:relative;height:62px;margin:0 -30px;z-index:4}
@@ -252,22 +239,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .etapa.on h2 .lamp{background-color:var(--red);background-image:var(--grain)}
 .etapa.feita h2 .lamp{background:var(--ink)}
 .frase{margin:0 0 18px;font-size:22px;line-height:1.32;font-weight:500;letter-spacing:-.01em;max-width:30em;text-wrap:pretty}
-.most{display:inline-flex;align-items:center;gap:12px;padding:8px 14px 8px 10px;border:var(--lw) solid var(--ink);border-radius:8px;background:var(--paper);font-family:var(--f-mono);font-size:15px;font-variant-numeric:tabular-nums;min-width:min(100%,360px)}
-.most::before{content:"";width:22px;height:12px;flex:none;border:var(--lw) solid var(--ink);border-radius:3px;background:linear-gradient(90deg,var(--ink) 0 2px,transparent 2px) 3px 0/5px 100% repeat-x}
-
-.s1-vis{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:end;margin-top:22px}
-.canal-big{display:flex;flex-direction:column;line-height:1}
-.canal-big .lbl{font-family:var(--f-mono);font-size:18px;margin-bottom:-2px}
-.canal-big .num{font-family:var(--f-num);font-size:128px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:.9}
-.ctrace{display:block;width:100%;height:auto}
-.canais{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px}
-.canais li{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--f-mono);font-size:12px}
-.cel{position:relative;width:100%;height:30px;border:var(--lw) solid var(--ink);border-radius:7px;background:var(--paper);display:flex;align-items:center;justify-content:center;gap:4px}
-.cel i{width:6px;height:6px;border-radius:50%;background:var(--ink);opacity:0}
-.cel.feito{background:var(--tint)}
-.cel.feito i{opacity:1}
-.cel.ativo{background-color:var(--red);background-image:var(--grain)}
-.cel.ativo i{opacity:1;background:var(--paper)}
 
 .crivo-vis{margin-top:24px}
 .malha{height:22px;border:var(--lw) solid var(--ink);border-radius:11px;background:var(--paper) linear-gradient(90deg,var(--ink) 0 1.5px,transparent 1.5px) 0 0/9px 100%;margin:0 4px 10px}
@@ -296,16 +267,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .ficha dd{font-size:16px}
 .ficha dt:first-of-type,.ficha dd:first-of-type{border-top:0}
 .ficha .hash{font-family:var(--f-mono);font-size:13px;word-break:break-all}
-.mtx-wrap{border:var(--lw) solid var(--ink);border-radius:12px;background:var(--paper);padding:12px 14px 10px}
-.mtx{width:100%;border-collapse:separate;border-spacing:0;font-family:var(--f-mono);font-size:12px;table-layout:fixed}
-.mtx th{font-weight:500;padding:4px 0;text-align:center}
-.mtx thead th{border-bottom:var(--lw) solid var(--ink)}
-.mtx tbody th{text-align:left;padding-left:2px;width:42px;border-right:var(--lw) solid var(--ink)}
-.mtx td{text-align:center;padding:5px 0;height:30px}
-.mtx tr.hit th,.mtx tr.hit td{background:var(--tint)}
-.mk-c{display:inline-block;position:relative;width:16px;height:16px;border:var(--lw) solid var(--ink);border-radius:4px;vertical-align:middle}
-.mk-c::before{content:"";position:absolute;inset:0;border-radius:2px;background-color:var(--red);background-image:var(--grain);transform:translate(2px,-1.5px)}
-.dt-c{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--tint2);vertical-align:middle}
 .nota{margin:12px 0 0;font-size:15.5px;line-height:1.5;color:var(--ink2);max-width:36em}
 .cont{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 18px}
 .cnt{position:relative;border:var(--lw) solid var(--ink);border-radius:12px;background:var(--paper);padding:12px 16px 14px;display:flex;flex-direction:column}
@@ -315,10 +276,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .cnt.h .k i{background:var(--yellow)}
 .cnt .v{font-family:var(--f-num);font-weight:700;font-size:64px;line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
 .cnt.a .v{color:var(--red)}
-.leg{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:15.5px;line-height:1.45;max-width:38em}
-.leg b{font-family:var(--f-mono);font-weight:500}
-.leg .ult{margin-top:6px;color:var(--ink2)}
-.res-tit{font-family:var(--f-sans);font-weight:600;font-size:32px;line-height:1.1;letter-spacing:-.02em;margin:0 0 18px;text-wrap:balance}
 .pqs{list-style:none;margin:0;padding:0;display:grid;gap:16px}
 .pq{position:relative;display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 18px;border:var(--lw) solid var(--ink);border-radius:14px;background:var(--paper);padding:16px 18px 14px 14px}
 .pq .n{font-family:var(--f-num);font-weight:700;font-size:58px;line-height:.9;text-align:center;grid-row:span 3}
@@ -351,7 +308,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .sec + .sec{margin-top:0}
 
 /* ---------- 6. fecho ---------- */
-.fecho{max-width:var(--max);margin:0 auto;padding:110px var(--padx) 48px}
 .fecho[hidden]{display:none}
 .f-num{display:grid;grid-template-columns:auto minmax(0,1fr);gap:40px;align-items:end;max-width:1100px}
 .f-num .big{font-family:var(--f-num);font-weight:700;font-size:clamp(96px,14vw,200px);line-height:.82;letter-spacing:-.03em;white-space:nowrap}
@@ -362,8 +318,6 @@ a.btn{color:var(--ink);text-decoration:none}
 .f-acao{margin-top:28px}
 .citacao{margin:96px 0 0;max-width:22em;font-family:var(--f-serif);font-size:clamp(30px,3.6vw,46px);line-height:1.18;letter-spacing:-.005em}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.rodape{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px 24px;margin-top:72px;padding-top:18px;border-top:var(--lw) solid var(--ink);font-family:var(--f-mono);font-size:13.5px}
-.rodape .wm{font-size:18px;font-family:var(--f-marca)}
 
 /* ---------- celular ---------- */
 @media (max-width:1020px){
@@ -383,7 +337,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .strip .lamps i.feita{background:var(--ink)}
   .strip .ib{appearance:none;width:40px;height:40px;flex:none;display:grid;place-items:center;border:var(--lw) solid var(--ink);border-radius:50%;background:var(--paper);cursor:pointer}
   .strip .ib[hidden]{display:none}
-  .fecho{padding:80px 24px 40px}
 }
 @media (max-width:640px){
   :root{--padx:16px}
@@ -414,15 +367,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .spr{width:18px;height:18px;top:25px}
   .selo{font-size:12.5px;gap:10px;padding:8px 10px;flex-wrap:wrap}
   .frase{font-size:19px}
-  .most{font-size:13.5px;padding:7px 10px 7px 8px;gap:8px}
-  .most::before{width:16px}
-  .s1-vis{grid-template-columns:1fr;gap:8px}
-  .canal-big{flex-direction:row;align-items:baseline;gap:10px}
-  .canal-big .num{font-size:88px}
-  .canais{gap:3px}
-  .canais li{font-size:9.5px}
-  .cel{height:24px;border-radius:5px;gap:2px}
-  .cel i{width:4px;height:4px}
   .toks{grid-template-columns:repeat(9,minmax(0,1fr));gap:6px}
   .paras{gap:4px;min-height:120px}
   .paras li{font-size:10px}
@@ -433,18 +377,11 @@ a.btn{color:var(--ink);text-decoration:none}
   .ficha{grid-template-columns:1fr}
   .ficha dt{border-right:0;padding:7px 12px 3px;border-top:var(--lw-thin) solid var(--tint2)}
   .ficha dd{border-top:0;padding:2px 12px 9px}
-  .mtx-wrap{padding:8px 6px 6px}
-  .mtx{font-size:9px}
-  .mtx tbody th{width:30px}
-  .mtx td{height:24px;padding:3px 0}
-  .mk-c{width:11px;height:11px;border-width:1.5px;border-radius:3px}
-  .mk-c::before{transform:translate(1.5px,-1px)}
   .cont{gap:8px}
   .cnt{padding:10px 10px 10px}
   .cnt .k{font-size:12px;gap:5px;flex-wrap:wrap}
   .cnt .k i{width:11px;height:11px}
   .cnt .v{font-size:44px}
-  .res-tit{font-size:26px}
   .pq{grid-template-columns:38px minmax(0,1fr);gap:4px 10px;padding:12px 12px 10px 8px}
   .pq .n{font-size:40px}
   .pq .tx{font-size:17.5px}
@@ -460,8 +397,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .f-num{grid-template-columns:1fr;gap:18px}
   .f-num p{font-size:20px}
   .citacao{margin-top:64px}
-  .fecho{padding:72px 16px 36px}
-  .rodape{flex-direction:column}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
@@ -469,51 +404,12 @@ a.btn{color:var(--ink);text-decoration:none}
 
 /* ---------- topo: símbolo e autoria ---------- */
 .topo{max-width:var(--max);margin:0 auto;padding:22px var(--padx) 0;display:flex;align-items:center;justify-content:flex-start}
-.simbolo{appearance:none;display:inline-flex;align-items:flex-end;gap:12px;padding:6px 10px 6px 4px;border:0;border-radius:10px;background:transparent;cursor:pointer;text-align:left}
-.simbolo:hover{background:var(--tint)}
-.simbolo .sim{width:52px;height:52px;flex:none;display:block}
-.assin{display:flex;flex-direction:column;gap:1px;padding-bottom:4px;font-family:var(--f-mono);line-height:1.2}
-.assin .nome{font-size:13.5px;color:var(--ink)}
-.assin .papel{font-size:12px;color:var(--ink2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
-.simbolo[aria-expanded="true"] .papel{text-decoration-style:dotted}
-
-/* ---------- gavetas (abrem no lugar) ---------- */
-.gaveta{max-width:var(--max);margin:18px auto 0;padding:0 var(--padx)}
-.gav-in{border:var(--lw) solid var(--ink);border-radius:16px;background:var(--paper);padding:22px 26px 26px}
-.gav-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px}
-.gav-t{margin:0;font-size:24px}
-.gav-t .wm{font-size:24px}
-.gav-meta{margin:4px 0 0;font-family:var(--f-mono);font-size:13.5px;color:var(--ink2)}
-.gav-grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 40px}
-.gav-lead{grid-column:1 / -1;margin:0;font-size:19px;line-height:1.45;font-weight:500;max-width:46em}
-.gav-bloco h3{margin:0 0 6px;font-family:var(--f-mono);font-weight:500;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
-.gav-bloco p{margin:0 0 6px;font-size:16px;line-height:1.5;max-width:38em}
-.gav-bloco b{font-weight:600}
-.gav-bloco cite{font-style:italic}
-.lnk{color:var(--ink);font-family:var(--f-mono);font-size:14px;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px}
-.lnk:hover{color:var(--red)}
-.gav-nota{margin:0 0 16px;font-size:15px;color:var(--ink2)}
 .versoes{list-style:none;margin:0;padding:0;display:grid;gap:0}
 .versoes li{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:4px 24px;padding:12px 0;border-top:var(--lw-thin) solid var(--tint2)}
 .versoes li p{margin:0;font-size:15.5px;line-height:1.5;max-width:46em}
-.versoes .v-id{font-family:var(--f-mono);font-size:13.5px;line-height:1.5}
-.versoes .v-id b{display:block;font-family:var(--f-sans);font-size:16px;font-weight:600}
-.versoes .v-dado{grid-column:2;color:var(--ink2);font-size:14.5px}
 
 /* ---------- 01. abertura ---------- */
 .hero{max-width:var(--max);margin:0 auto;padding:48px var(--padx) 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"esq centro dir";gap:40px;align-items:center}
-.h-centro{grid-area:centro;text-align:center}
-.h-esq{grid-area:esq;display:grid;gap:26px}
-.h-dir{grid-area:dir;display:grid;gap:16px;justify-items:start}
-.h-marca{margin:0;line-height:.9}
-.h-marca .wm{font-size:clamp(64px,9vw,136px);letter-spacing:.08em;margin-right:-.08em}
-.h-sub{margin:14px 0 0;font-family:var(--f-mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase}
-.h-cit{margin:0;font-family:var(--f-serif);font-size:clamp(22px,2.2vw,28px);line-height:1.22;text-wrap:balance}
-.h-err{margin:0;font-family:var(--f-serif);font-size:clamp(22px,2vw,28px);line-height:1;padding-top:.9em;white-space:nowrap}
-.ins{position:relative;display:inline-block;width:1.05em;text-align:center}
-.ins .add{position:absolute;left:50%;bottom:.62em;transform:translateX(-50%) rotate(-5deg);font-style:italic;font-size:.66em;color:var(--red);white-space:nowrap}
-.ins .car{color:var(--red);font-family:var(--f-sans);font-size:.9em}
-.h-dir p{margin:0;font-size:16px;line-height:1.55;color:var(--ink2);max-width:28em}
 .versao{appearance:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border:var(--lw) solid var(--ink);border-radius:999px;background:var(--paper);font-family:var(--f-mono);font-size:14px;cursor:pointer}
 .versao{transition:background-color .18s var(--ease),transform .18s var(--ease)}
 .versao:hover{background:var(--tint)}
@@ -521,39 +417,14 @@ a.btn{color:var(--ink);text-decoration:none}
 .versao svg{transition:transform .2s}
 .versao[aria-expanded="true"] svg{transform:rotate(180deg)}
 
-/* ---------- 02. o que é + anexos ---------- */
-.bloco2{max-width:var(--max);margin:0 auto;padding:48px var(--padx) 72px;display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:56px;align-items:start;border-top:var(--lw) solid var(--ink)}
-.b2-esq{display:grid;gap:26px;min-width:0}
-.etimo{margin:0;padding:6px 0 6px 18px;border-left:3px solid var(--ink)}
-.etimo p{margin:0;font-family:var(--f-serif);font-style:italic;font-size:21px;line-height:1.45;max-width:30em}
-.etimo .rom{font-style:normal}
-.qa{margin:0;display:grid;gap:14px}
-.qa div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 18px;padding-top:12px;border-top:var(--lw-thin) solid var(--tint2)}
-.qa dt{font-family:var(--f-mono);font-size:20px;font-weight:500;font-style:italic;padding-top:3px}
-.qa dd{margin:0;font-size:17px;line-height:1.5;max-width:34em}
-.b2-cit{margin:1.5px 0 0;font-family:var(--f-serif);font-size:clamp(24px,2.4vw,30px);line-height:1.22;text-wrap:balance}
-.b2-dir{min-width:0;display:grid;gap:24px;justify-items:start}
-.etq-lin{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.b2-dir h2{margin:0;font-family:var(--f-sans);font-weight:600;font-size:clamp(28px,3vw,40px);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
-.etq svg{display:block}
-
 @media (max-width:1020px){
   .topo{padding:16px 24px 0}
-  .gaveta{padding:0 24px}
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"centro centro" "esq dir";padding:36px 24px 32px;gap:32px}
-  .bloco2{grid-template-columns:minmax(0,1fr);padding:40px 24px 56px;gap:44px}
 }
 @media (max-width:640px){
   .topo{padding:14px 16px 0}
-  .gaveta{padding:0 16px}
-  .gav-in{padding:18px 16px 20px}
-  .gav-grade{grid-template-columns:minmax(0,1fr)}
   .versoes li{grid-template-columns:minmax(0,1fr)}
-  .versoes .v-dado{grid-column:1}
   .hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"centro" "esq" "dir";padding:28px 16px 28px}
-  .bloco2{padding:32px 16px 44px}
-  .qa div{grid-template-columns:minmax(0,1fr)}
-  .etimo p{font-size:18px}
 }
 
 /* =====================================================================
@@ -584,60 +455,16 @@ a.btn{color:var(--ink);text-decoration:none}
   .btn svg[width="18"]{width:15px;height:15px}
   .btn svg[width="16"]{width:13px;height:13px}
   .btn svg[width="14"]{width:12px;height:12px}
-  .hashbtn{margin-left:8px;padding:1px 8px;min-height:23px;border-width:var(--lw);font-size:11px}
-
 
   /* topo e gavetas */
   .topo{padding-top:18px}
-  .simbolo{gap:10px;padding:5px 8px 5px 3px;border-radius:8px}
-  .simbolo .sim{width:42px;height:42px}
-  .assin{padding-bottom:3px}
-  .assin .nome{font-size:11.5px}
-  .assin .papel{font-size:10.5px;text-underline-offset:2.5px;text-decoration-thickness:1.25px}
-  .gaveta{margin-top:14px}
-  .gav-in{border-radius:13px;padding:18px 22px 22px}
-  .gav-cab{gap:13px;margin-bottom:10px}
-  .gav-t,.gav-t .wm{font-size:20px}
-  .gav-meta{margin-top:3px;font-size:11.5px}
-  .gav-grade{gap:14px 32px}
-  .gav-lead{font-size:16px}
-  .gav-bloco h3{margin-bottom:5px;font-size:11.5px}
-  .gav-bloco p{margin-bottom:5px;font-size:13.5px}
-  .lnk{font-size:12px;text-underline-offset:3px;text-decoration-thickness:1.25px}
-  .gav-nota{margin-bottom:13px;font-size:13px}
   .versoes li{grid-template-columns:minmax(0,210px) minmax(0,1fr);gap:3px 19px;padding:10px 0}
   .versoes li p{font-size:13.5px}
-  .versoes .v-id{font-size:11.5px}
-  .versoes .v-id b{font-size:14px}
-  .versoes .v-dado{font-size:12.5px}
 
   /* 01. abertura */
   .hero{padding-top:38px;padding-bottom:32px;gap:32px}
-  .h-esq{gap:21px}
-  .h-dir{gap:13px}
-  .h-marca .wm{font-size:clamp(64px,7vw,104px)}
-  .h-sub{margin-top:11px;font-size:12px}
-  .h-cit{font-size:clamp(19px,1.75vw,23px)}
-  .h-err{font-size:clamp(19px,1.6vw,23px)}
-  .h-dir p{font-size:13.5px}
   .versao{gap:6px;min-height:34px;padding:5px 11px;font-size:12px}
   .versao svg{width:12px;height:12px}
-
-  /* 02. o que é + anexos */
-  .bloco2{padding-top:38px;padding-bottom:58px;gap:48px}
-  .b2-esq{gap:21px}
-  .etimo{padding:5px 0 5px 14px;border-left-width:var(--lw-mech)}
-  .etimo p{font-size:17.5px}
-  .qa{gap:11px}
-  .qa div{grid-template-columns:124px minmax(0,1fr);gap:3px 14px;padding-top:10px}
-  .qa dt{font-size:12px;padding-top:2px}
-  .qa dd{font-size:14.5px}
-  .b2-cit{font-size:clamp(20px,1.95vw,24px)}
-  .b2-dir{gap:19px}
-  .b2-dir h2{font-size:clamp(24px,2.4vw,32px)}
-  .etq-lin{gap:13px}
-  .etq{margin-bottom:21px}
-  .etq svg{width:77px;height:37px}
   .arquivo{--step:24px;--tabh:28px;--tabw:176px;--frente:100px}
   .aba-rot{font-size:11px;gap:7px}
   .arq-placa{min-width:164px;font-size:10.5px;padding:4px 20px 3px}
@@ -697,7 +524,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .fi{padding:21px 28px 24px}
   .fi.fi-head{padding-top:14px;padding-bottom:5px}
   .fi.fi-o0{padding-top:27px;padding-bottom:14px}
-  .fi.fi-s4{padding-bottom:16px}
 
   .carro{height:50px;margin:0 -24px}
   .carro-body{left:19px;right:19px;top:18px;height:26px;border-radius:13px}
@@ -712,16 +538,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .etapa h2{gap:10px;margin-bottom:8px;font-size:13px}
   .etapa h2 .lamp{width:11px;height:11px}
   .frase{margin-bottom:14px;font-size:18px}
-  .most{gap:10px;padding:6px 11px 6px 8px;border-radius:7px;font-size:13px;min-width:min(100%,290px)}
-  .most::before{width:18px;height:10px;background-size:4px 100%}
-  .s1-vis{gap:19px;margin-top:18px}
-  .canal-big .lbl{font-size:15px}
-  .canal-big .num{font-size:100px}
-  .ctrace{max-width:440px}
-  .canais{margin-top:14px;gap:5px}
-  .canais li{gap:3px;font-size:10.5px}
-  .cel{height:24px;border-radius:6px;gap:3px}
-  .cel i{width:5px;height:5px}
   .crivo-vis{margin-top:19px}
   .malha{height:18px;border-radius:9px;margin:0 3px 8px;background-size:7px 100%}
   .toks{gap:5px}
@@ -743,23 +559,12 @@ a.btn{color:var(--ink);text-decoration:none}
   .ficha dt{font-size:11.5px}
   .ficha dd{font-size:14px}
   .ficha .hash{font-size:11px}
-  .mtx-wrap{border-radius:10px;padding:10px 11px 8px}
-  .mtx{font-size:10.5px}
-  .mtx th{padding:3px 0}
-  .mtx tbody th{width:34px;padding-left:2px}
-  .mtx td{padding:4px 0;height:24px}
-  .mk-c{width:13px;height:13px;border-radius:3px}
-  .mk-c::before{transform:translate(1.6px,-1.2px)}
-  .dt-c{width:3.5px;height:3.5px}
   .nota{margin-top:10px;font-size:13.5px}
   .cont{gap:10px;margin:13px 0 14px}
   .cnt{border-radius:10px;padding:10px 13px 11px}
   .cnt .k{gap:6px;font-size:12px}
   .cnt .k i{width:11px;height:11px}
   .cnt .v{margin-top:5px;font-size:52px}
-  .leg{gap:5px;font-size:13.5px}
-  .leg .ult{margin-top:5px}
-  .res-tit{font-size:26px;margin-bottom:14px}
   .pqs{gap:13px}
   .pq{grid-template-columns:52px minmax(0,1fr);gap:3px 14px;border-radius:11px;padding:13px 14px 11px 11px}
   .pq .n{font-size:46px}
@@ -787,7 +592,6 @@ a.btn{color:var(--ink);text-decoration:none}
   .sec{padding-top:5px}
 
   /* 6. fecho */
-  .fecho{padding-top:84px;padding-bottom:40px}
   .f-num{gap:32px;max-width:960px}
   .f-num .big{font-size:clamp(80px,11vw,160px)}
   .f-num p{margin-bottom:8px;font-size:20px}
@@ -796,145 +600,7 @@ a.btn{color:var(--ink);text-decoration:none}
   .f-acao{margin-top:22px}
   .citacao{margin-top:76px;font-size:clamp(26px,2.9vw,37px)}
   .links{gap:8px;margin-top:32px}
-  .rodape{gap:10px 19px;margin-top:58px;padding-top:14px;font-size:11.5px}
-  .rodape .wm{font-size:15px}
 }
-
-
-/* ---------- 01. abertura (hero D) ----------
-   Composição desenhada a 1440 px de largura: 1 unidade = 1/1440 da largura da hero.
-   Até 1020 px a composição vira coluna. */
-.hd{position:relative;container-type:inline-size;background:var(--desk);overflow:hidden}
-.hd-palco{--u:calc(100cqw / 1440);--ul:var(--u);position:relative;height:calc(var(--u) * 820);min-height:560px}
-.hd-fundo{position:absolute;inset:0;overflow:hidden;opacity:.9;pointer-events:none}
-.hd-cols i,.hd-cam i{position:absolute;display:block}
-.hd-cols i{top:0;bottom:0;width:2px}
-.hd-cam{position:absolute;inset:0}
-.hd-cam i{left:0;right:0}
-.hd-cam.fixo{-webkit-mask-image:linear-gradient(to right,#000 0 calc(var(--u) * 152.1),transparent calc(var(--u) * 152.1) calc(var(--u) * 1310),#000 calc(var(--u) * 1310));mask-image:linear-gradient(to right,#000 0 calc(var(--u) * 152.1),transparent calc(var(--u) * 152.1) calc(var(--u) * 1310),#000 calc(var(--u) * 1310))}
-.hd-cam.cinza{-webkit-mask-image:linear-gradient(to right,transparent 0 calc(var(--u) * 152.1),#000 calc(var(--u) * 152.1) calc(var(--u) * 347.6),transparent calc(var(--u) * 347.6) calc(var(--u) * 489.7),#000 calc(var(--u) * 489.7) calc(var(--u) * 1310),transparent calc(var(--u) * 1310));mask-image:linear-gradient(to right,transparent 0 calc(var(--u) * 152.1),#000 calc(var(--u) * 152.1) calc(var(--u) * 347.6),transparent calc(var(--u) * 347.6) calc(var(--u) * 489.7),#000 calc(var(--u) * 489.7) calc(var(--u) * 1310),transparent calc(var(--u) * 1310))}
-.hd-cam.verm{-webkit-mask-image:linear-gradient(to right,transparent 0 calc(var(--u) * 347.6),#000 calc(var(--u) * 347.6) calc(var(--u) * 489.7),transparent calc(var(--u) * 489.7));mask-image:linear-gradient(to right,transparent 0 calc(var(--u) * 347.6),#000 calc(var(--u) * 347.6) calc(var(--u) * 489.7),transparent calc(var(--u) * 489.7))}
-.hd-trilho{position:absolute;left:0;right:0;top:0;animation:hd-sobe 90s linear infinite}
-.hd-trilho>div{position:relative;height:calc(var(--ul) * 1640)}
-@keyframes hd-sobe{from{transform:translateY(0)}to{transform:translateY(calc(var(--ul) * -1640))}}
-@keyframes hd-pA1{0.000%{opacity:0}1.739%{opacity:1}3.478%{opacity:0}6.957%{opacity:1}8.696%{opacity:0}10.435%{opacity:1}15.652%{opacity:0}17.391%{opacity:1}20.870%{opacity:1}100%{opacity:1}}
-@keyframes hd-pA2{0.000%{opacity:0}2.162%{opacity:1}3.243%{opacity:0}4.324%{opacity:1}5.405%{opacity:0}8.649%{opacity:1}9.730%{opacity:0}10.811%{opacity:1}11.892%{opacity:0}14.054%{opacity:1}15.135%{opacity:1}100%{opacity:1}}
-@keyframes hd-pA3{0.000%{opacity:0}0.755%{opacity:1}2.264%{opacity:0}3.019%{opacity:1}5.283%{opacity:0}6.038%{opacity:1}6.792%{opacity:0}8.302%{opacity:1}9.057%{opacity:0}9.811%{opacity:1}10.566%{opacity:0}12.075%{opacity:1}12.830%{opacity:1}100%{opacity:1}}
-@keyframes hd-pB1{0.000%{opacity:0}2.826%{opacity:1}5.652%{opacity:0}11.304%{opacity:1}14.130%{opacity:0}16.957%{opacity:1}25.435%{opacity:0}28.261%{opacity:1}33.913%{opacity:1}100%{opacity:1}}
-@keyframes hd-pB2{0.000%{opacity:0}3.514%{opacity:1}5.270%{opacity:0}7.027%{opacity:1}8.784%{opacity:0}14.054%{opacity:1}15.811%{opacity:0}17.568%{opacity:1}19.324%{opacity:0}22.838%{opacity:1}24.595%{opacity:1}100%{opacity:1}}
-@keyframes hd-pB3{0.000%{opacity:0}1.226%{opacity:1}3.679%{opacity:0}4.906%{opacity:1}8.585%{opacity:0}9.811%{opacity:1}11.038%{opacity:0}13.491%{opacity:1}14.717%{opacity:0}15.943%{opacity:1}17.170%{opacity:0}19.623%{opacity:1}20.849%{opacity:1}100%{opacity:1}}
-@keyframes hd-pC1{0.000%{opacity:0}4.348%{opacity:1}8.696%{opacity:0}1 7.391%{opacity:1}21.739%{opacity:0}26.087%{opacity:1}39.130%{opacity:0}43.478%{opacity:1}52.174%{opacity:1}100%{opacity:1}}
-@keyframes hd-pC2{0.000%{opacity:0}5.405%{opacity:1}8.108%{opacity:0}10.811%{opacity:1}13.514%{opacity:0}21.622%{opacity:1}24.324%{opacity:0}27.027%{opacity:1}29.730%{opacity:0}35.135%{opacity:1}37.838%{opacity:1}100%{opacity:1}}
-@keyframes hd-pC3{0.000%{opacity:0}1.887%{opacity:1}5.660%{opacity:0}7.547%{opacity:1}13.208%{opacity:0}15.094%{opacity:1}16.981%{opacity:0}20.755%{opacity:1}22.642%{opacity:0}24.528%{opacity:1}26.415%{opacity:0}30.189%{opacity:1}32.075%{opacity:1}100%{opacity:1}}
-.hd.parado .hd-cam i{animation:none!important}
-
-.hd-faixa{position:absolute;left:0;right:0;top:0;height:18px;background:var(--ink);z-index:3}
-.hd-abas{position:absolute;top:18px;right:calc(var(--u) * 48);display:flex;align-items:flex-start;z-index:3}
-.hd-aba{appearance:none;display:grid;place-items:center;margin:0;padding:0;border:3px solid var(--ink);border-top:0;border-radius:0;background:var(--paper);color:var(--ink);cursor:pointer;font-family:var(--f-mono);line-height:1}
-.hd-aba:hover{background:var(--tint)}
-.hd-aba.pausa{width:48px;height:48px}
-.hd-aba.hd-ver{width:128px;height:60px;margin-left:-3px;font-size:14px;letter-spacing:.12em}
-.hd-aba .ic-play{display:none}
-.hd.parado .hd-aba .ic-pausa{display:none}
-.hd.parado .hd-aba .ic-play{display:block}
-
-.hd-sim-x{position:absolute;left:calc(var(--u) * 48);top:calc(var(--u) * 32);z-index:3;width:max(48px,calc(var(--u) * 64));height:max(48px,calc(var(--u) * 64));padding:0;border:0;background:none;cursor:pointer}
-.hd-sim-x svg{display:block;width:100%;height:100%}
-
-.hd-marca{position:absolute;left:0;right:0;top:calc(var(--u) * 108);height:calc(var(--u) * 175);margin:0;font-family:var(--f-marca);font-weight:700;font-size:calc(var(--u) * 203);line-height:calc(var(--u) * 175);z-index:2}
-.hd-marca span{position:absolute;top:0}
-.hd-marca .l1{left:calc(var(--u) * 135.49)}
-.hd-marca .l2{left:calc(var(--u) * 329.16);color:var(--red)}
-.hd-marca .l3{left:calc(var(--u) * 518.22)}
-.hd-marca .l4{left:calc(var(--u) * 722.04)}
-.hd-marca .l5{left:calc(var(--u) * 929.55)}
-.hd-sub{position:absolute;left:0;right:0;top:calc(var(--u) * 312);margin:0;text-align:center;font-family:var(--f-mono);font-size:max(11px,calc(var(--u) * 13));letter-spacing:.34em;text-transform:uppercase;z-index:2}
-
-.hd-esteira{position:absolute;left:0;right:0;top:calc(var(--u) * 346);height:calc(var(--u) * 288);z-index:2}
-.hd-fita{position:absolute;left:-4px;right:-4px;top:calc(var(--u) * 26);height:calc(var(--u) * 236);background:var(--paper);border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);overflow:hidden}
-.hd-furos{position:absolute;left:0;width:200%;height:calc(var(--u) * 30);background-image:radial-gradient(circle at calc(var(--u) * 12) calc(var(--u) * 15),var(--desk) 0 calc(var(--u) * 6),var(--ink) calc(var(--u) * 6) calc(var(--u) * 7.5),transparent calc(var(--u) * 7.5));background-size:calc(var(--u) * 24) calc(var(--u) * 30);animation:hd-corre 60s linear infinite}
-.hd-furos.a{top:0;border-bottom:1.5px dashed rgba(24,24,24,.35)}
-.hd-furos.b{bottom:0;border-top:1.5px dashed rgba(24,24,24,.35)}
-.hd-cartoes{position:absolute;left:0;top:calc(var(--u) * 46);display:flex;width:max-content;animation:hd-corre 60s linear infinite}
-.hd-volta{display:flex;gap:calc(var(--u) * 64);padding-right:calc(var(--u) * 64);align-items:flex-start}
-.hd-cartao{width:calc(var(--u) * 420);display:flex;flex-direction:column;gap:calc(var(--u) * 10)}
-.hd-cartao .m{display:flex;gap:calc(var(--u) * 10);align-items:center;font-family:var(--f-mono);font-size:calc(var(--u) * 12)}
-.hd-cartao .e{padding:calc(var(--u) * 2) calc(var(--u) * 9);border:2px solid var(--ink);border-radius:calc(var(--u) * 6);letter-spacing:.04em}
-.hd-cartao .e.ab{background:var(--red);color:var(--paper)}
-.hd-cartao .e.ho{background:var(--yellow);color:var(--ink)}
-.hd-cartao .q{margin:0;font-size:calc(var(--u) * 17);line-height:1.4}
-.hd-cartao .t{margin:0;font-family:var(--f-mono);font-size:calc(var(--u) * 11.5);line-height:1.5;color:var(--ink2);text-transform:uppercase}
-@keyframes hd-corre{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.hd-crivo{position:absolute;left:50%;top:0;width:calc(var(--u) * 132);height:calc(var(--u) * 288);margin-left:calc(var(--u) * -66);border:2px solid var(--ink);border-radius:calc(var(--u) * 14);background:rgba(232,235,239,.55)}
-.hd-crivo i{position:absolute;left:50%;top:calc(var(--u) * 20);bottom:calc(var(--u) * 20);width:2px;margin-left:-1px;background:var(--red);animation:hd-pulsa 1.6s steps(2) infinite}
-.hd-crivo span{position:absolute;left:50%;top:calc(var(--u) * -14);transform:translateX(-50%);padding:calc(var(--u) * 3) calc(var(--u) * 12);background:var(--ink);color:var(--paper);border-radius:999px;font-family:var(--f-mono);font-size:max(10px,calc(var(--u) * 11));letter-spacing:.2em}
-@keyframes hd-pulsa{0%,100%{opacity:1}50%{opacity:.35}}
-
-.hd-base{position:absolute;left:calc(var(--u) * 48);right:calc(var(--u) * 48);bottom:calc(var(--u) * 44);display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u) * 48);z-index:2}
-.hd-desc{width:max(300px,calc(var(--u) * 380));margin:0;font-size:max(14px,calc(var(--u) * 15));line-height:1.55;color:#2A2F36}
-.hd-desc a{color:var(--red);font-weight:700;text-decoration:none}
-.hd-desc a:hover{text-decoration:underline;text-underline-offset:3px}
-.hd-lema{margin:0;font-family:var(--f-serif);font-style:italic;font-size:calc(var(--u) * 46);line-height:1.05;letter-spacing:-.005em;white-space:nowrap;color:var(--ink)}
-.hd-lema .hd-ins{display:inline-grid;grid-template-columns:0fr;vertical-align:bottom}
-.hd-lema .hd-ins>span{min-width:0;overflow:hidden;white-space:nowrap}
-.hd-lema .hd-ins em{display:inline-block;padding-left:.24em;font-style:italic;color:var(--red);opacity:0}
-.hd-lema .i1{animation:hd-abre .9s var(--ease) 1.4s forwards}
-.hd-lema .i1 em{animation:hd-fundo 1.1s var(--ease) 1.7s forwards}
-.hd-lema .i2{animation:hd-abre .9s var(--ease) 2.9s forwards}
-.hd-lema .i2 em{animation:hd-fundo 1.1s var(--ease) 3.2s forwards}
-@keyframes hd-abre{to{grid-template-columns:1fr}}
-@keyframes hd-fundo{from{opacity:0;transform:translateY(.3em) scale(.6);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
-
-@media (max-width:1020px){
-  .hd-palco{--ul:.6px;height:auto;min-height:0;display:flex;flex-direction:column;align-items:center;gap:22px;padding:96px 16px 36px}
-  .hd-cam.fixo{-webkit-mask-image:linear-gradient(to right,#000 0 6%,transparent 6% 94%,#000 94%);mask-image:linear-gradient(to right,#000 0 6%,transparent 6% 94%,#000 94%)}
-  .hd-cam.cinza{-webkit-mask-image:linear-gradient(to right,transparent 0 6%,#000 6% 94%,transparent 94%);mask-image:linear-gradient(to right,transparent 0 6%,#000 6% 94%,transparent 94%)}
-  .hd-cam.verm{display:none}
-  .hd-abas{right:16px}
-  .hd-sim-x{left:16px;top:30px;width:52px;height:52px}
-  .hd-marca{position:relative;top:auto;height:auto;font-size:clamp(56px,17vw,170px);line-height:.9;letter-spacing:.04em;text-align:center}
-  .hd-marca span{position:static}
-  .hd-sub{position:relative;top:auto;font-size:12px;letter-spacing:.16em}
-  .hd-esteira{position:relative;top:auto;width:100%;height:250px;margin-top:6px}
-  .hd-fita{left:-16px;right:-16px;top:20px;height:210px}
-  .hd-furos{height:24px;background-image:radial-gradient(circle at 10px 12px,var(--desk) 0 5px,var(--ink) 5px 6.5px,transparent 6.5px);background-size:20px 24px}
-  .hd-cartoes{top:38px}
-  .hd-volta{gap:36px;padding-right:36px}
-  .hd-cartao{width:270px;gap:8px}
-  .hd-cartao .m{gap:8px;font-size:11px}
-  .hd-cartao .e{padding:1px 7px;border-radius:5px}
-  .hd-cartao .q{font-size:15px;line-height:1.35}
-  .hd-cartao .t{display:none}
-  .hd-crivo{width:84px;height:250px;margin-left:-42px;border-radius:12px}
-  .hd-crivo i{top:16px;bottom:16px}
-  .hd-crivo span{top:-12px;padding:2px 9px;font-size:10px}
-  .hd-base{position:relative;left:auto;right:auto;bottom:auto;width:100%;flex-direction:column-reverse;align-items:flex-start;gap:18px;margin-top:4px}
-  .hd-lema{font-size:clamp(30px,8.4vw,46px);white-space:normal}
-  .hd-desc{width:auto;max-width:34em;font-size:15px}
-}
-@media (prefers-reduced-motion:reduce){
-  .hd-trilho,.hd-cam i,.hd-furos,.hd-cartoes,.hd-crivo i{animation:none!important}
-  .hd-lema .hd-ins{grid-template-columns:1fr;animation:none}
-  .hd-lema .hd-ins em{opacity:1;animation:none}
-}
-
-.hd-marca .l6{left:calc(var(--u) * 1139);top:calc(var(--u) * 5);width:calc(var(--u) * 165);height:calc(var(--u) * 165)}
-.hd-marca .l6 svg{display:block;width:100%;height:100%}
-.hd-txt{display:grid;gap:calc(var(--u) * 14);width:max(320px,calc(var(--u) * 470))}
-.hd-txt .hd-desc{width:auto}
-.hd-proj{margin:0;font-size:max(13px,calc(var(--u) * 13.5));line-height:1.55;color:var(--ink2)}
-.hd-proj a{color:var(--red);font-weight:600;text-decoration:none}
-.hd-proj a:hover{text-decoration:underline;text-underline-offset:3px}
-.hd-aba.hd-ver{text-decoration:none}
-@media (max-width:1020px){
-  .hd-marca .l6{display:inline-block;width:.78em;height:.78em;margin-left:.12em;vertical-align:-.02em}
-  .hd-txt{width:auto;max-width:34em}
-  .hd-proj{font-size:14px}
-}
-
-/* fundo do herói: a grade aparente da página (32 px), sem as linhas animadas */
-.hd{background:transparent}
-.hd.parado .hd-furos,.hd.parado .hd-cartoes,.hd.parado .hd-crivo i{animation-play-state:paused}
 
 /* =====================================================================
    CERNE 5.0.0 ▪ camada v4 (19/10/2026)
@@ -978,79 +644,18 @@ body{background-color:var(--paper);
 /* citação: Archivo 600 itálico */
 .trecho,.vs-c blockquote,.citacao{font-style:italic;font-weight:600}
 .trecho{font-size:15px}
-
-/* ---------- navegação ---------- */
-.nav{position:sticky;top:0;z-index:500;background:rgba(252,252,252,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--grade)}
-.nav-in{max-width:var(--wrap);margin:0 auto;padding:10px var(--padx);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none}
 .marca svg{width:36px;height:36px;flex:none;display:block}
-.marca-tx{display:flex;flex-direction:column;line-height:1.1}
-.marca-nome{font-family:var(--f-marca);font-weight:700;font-size:19px;letter-spacing:.08em}
-.marca-nome .e{color:var(--red)}
-.marca-nome .v{margin-left:8px;font-family:var(--f-mono);font-weight:600;font-size:12px;letter-spacing:.04em;color:var(--ink2)}
-.marca-sub{font-family:var(--f-mono);font-weight:600;font-size:12px;letter-spacing:.02em;color:var(--ink2)}
-.nav-acoes{display:flex;align-items:center;gap:10px}
-.btn.terra{background:var(--red);border-color:var(--red);color:var(--paper)}
-.btn.terra:hover{background:#8E2E1B;border-color:#8E2E1B}
-.btn.terra svg path{fill:var(--paper);stroke:var(--paper)}
-
-/* ---------- herói ---------- */
-.heroi{border-bottom:1px solid var(--grade)}
-.heroi-in{max-width:var(--wrap);margin:0 auto;padding:clamp(40px,6vw,76px) var(--padx) clamp(44px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.9fr);gap:56px;align-items:center}
-.assin-wrap{display:flex;align-items:center;gap:18px;margin:0 0 26px}
 .assinatura{margin:0;font-family:var(--f-marca);font-weight:700;font-size:clamp(3.6rem,8vw,7rem);letter-spacing:.06em;line-height:.9;color:var(--ink)}
 .assinatura .e{color:var(--red)}
-.rainha-g{width:clamp(56px,6.4vw,92px);height:clamp(56px,6.4vw,92px);flex:none;display:block;padding:0;border:0;background:none}
-.lema{margin:0 0 22px;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.04;letter-spacing:-.015em;color:var(--ink)}
-.lema .hd-ins{display:inline-grid;grid-template-columns:0fr;vertical-align:bottom}
-.lema .hd-ins>span{min-width:0;overflow:hidden;white-space:nowrap}
-.lema .hd-ins em{display:inline-block;padding-left:.24em;font-style:italic;color:var(--red);opacity:0}
-.lema .i1{animation:hd-abre .9s var(--ease) 1.2s forwards}
-.lema .i1 em{animation:hd-fundo 1.1s var(--ease) 1.5s forwards}
-.lema .i2{animation:hd-abre .9s var(--ease) 2.7s forwards}
-.lema .i2 em{animation:hd-fundo 1.1s var(--ease) 3s forwards}
 @keyframes hd-abre{to{grid-template-columns:1fr}}
 @keyframes hd-fundo{from{opacity:0;transform:translateY(.3em) scale(.6);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
-.heroi-nota{margin:0 0 18px;max-width:34em;font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:#3A3A3A}
-.heroi-aut{margin:0 0 28px;max-width:36em;font-family:var(--f-mono);font-weight:600;font-size:14px;line-height:1.5;color:var(--ink2)}
-.heroi-aut a{color:var(--red);text-decoration:none}
-.heroi-aut a:hover{text-decoration:underline;text-underline-offset:3px}
-.heroi-acoes{display:flex;flex-wrap:wrap;gap:10px}
-
-/* painel do crivo: perguntas reais correndo */
-.crivo-p{position:relative;border:1px solid var(--grade);background:var(--nevoa)}
-.crivo-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px 10px;border-bottom:1px solid var(--grade);font-family:var(--f-mono);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
-.crivo-cab b{color:var(--ink);font-weight:700}
-.crivo-pausa{appearance:none;display:grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid var(--ink);border-radius:0;background:var(--paper);cursor:pointer}
-.crivo-pausa:hover{background:var(--tint)}
-.crivo-pausa .ic-play{display:none}
-.crivo-p.parado .crivo-pausa .ic-pausa{display:none}
-.crivo-p.parado .crivo-pausa .ic-play{display:block}
-.crivo-jan{position:relative;height:388px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 16%,#000 84%,transparent 100%)}
-.crivo-trilho{position:absolute;left:0;right:0;top:0;animation:crivo-sobe 64s linear infinite}
-.crivo-p.parado .crivo-trilho{animation-play-state:paused}
 @keyframes crivo-sobe{from{transform:translateY(0)}to{transform:translateY(-50%)}}
-.crivo-c{margin:0 16px;padding:16px 0;border-bottom:1px dashed rgba(24,24,24,.18)}
-.crivo-c .m{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-family:var(--f-mono);font-weight:600;font-size:12px;color:var(--ink2)}
-.crivo-c .q{margin:0 0 6px;font-size:16.5px;line-height:1.38;font-weight:500;color:var(--ink);text-wrap:pretty}
-.crivo-c .t{margin:0;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:13px;line-height:1.45;color:var(--ink2)}
-.selo-e{display:inline-block;padding:2px 8px;border:1.5px solid var(--ink);font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.06em;line-height:1.3}
-.selo-e.ab{background:var(--red);color:var(--paper)}
-.selo-e.ho{background:var(--yellow);color:var(--ink)}
-.crivo-linha{position:absolute;left:0;right:0;top:50%;height:0;border-top:2px solid var(--red);z-index:2;pointer-events:none}
-.crivo-linha span{position:absolute;right:12px;top:-12px;padding:3px 10px;background:var(--ink);color:var(--paper);font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.2em}
 
 /* ---------- demonstração: cabeçalho ao lado das pastas ---------- */
-.demo{max-width:var(--max);margin:0 auto;padding:clamp(48px,6vw,88px) var(--padx) 56px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
-.demo-cab{position:sticky;top:calc(var(--nav-h) + 24px);display:grid;gap:18px;justify-items:start}
 .ind{display:inline-flex;align-items:center;gap:10px;margin:0;font-family:var(--f-mono);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
 .ind::after{content:"";width:28px;height:1.5px;background:currentColor}
-.demo-cab h2{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,3.4vw,3rem);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
-.contador{display:flex;align-items:baseline;gap:12px;margin:0}
-.contador b{font-family:var(--f-num);font-weight:700;font-size:56px;line-height:1;letter-spacing:-.03em}
-.contador span{font-family:var(--f-mono);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
 .instr{margin:0;font-size:18px;line-height:1.5;max-width:22em}
-.demo .arquivo-col{min-width:0}
 
 /* ---------- máquina: cores da paleta ---------- */
 .maq-col{top:calc(var(--nav-h) + 14px)}
@@ -1074,27 +679,14 @@ body{background-color:var(--paper);
 .legenda .nota-c{display:block;margin-top:6px;color:var(--ink2)}
 
 /* ---------- fecho da vitrine ---------- */
-.fecho{padding-bottom:24px}
 .f-num .big{font-family:var(--f-num);font-weight:700;letter-spacing:-.05em}
 .f-num .big .de{font-family:var(--f-mono);font-weight:600;letter-spacing:.02em}
 .f-nota{font-family:var(--f-mono);font-weight:600;line-height:1.5;max-width:60em}
 .citacao{font-family:var(--f-tit);font-style:normal;font-weight:700;max-width:20em;line-height:1.08}
-.seta-w{display:flex;justify-content:center;margin:72px 0 24px}
-.seta{appearance:none;display:inline-flex;flex-direction:column;align-items:center;gap:12px;padding:12px 20px 8px;border:0;background:transparent;color:var(--ink);cursor:pointer;font-family:var(--f-mono);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
-.seta .ar{display:grid;place-items:center;width:58px;height:58px;border:2px solid var(--ink);border-radius:50%;background:var(--paper);transition:transform .35s var(--ease),background-color .2s}
-.seta:hover .ar{background:var(--ink)}
-.seta:hover .ar path{stroke:var(--paper)}
-.seta .ar svg{animation:seta-pulsa 1.8s var(--ease) infinite}
-.seta[aria-expanded="true"] .ar{transform:rotate(180deg)}
-.seta[aria-expanded="true"] .ar svg{animation:none}
 @keyframes seta-pulsa{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
 
 /* ---------- PARTE 2 · a tese ---------- */
-.tese{border-top:1px solid var(--grade)}
-.sec-e{padding:clamp(56px,7vw,104px) 0;border-bottom:1px solid var(--grade)}
-.sec-e .in{max-width:1240px;margin:0 auto;padding:0 var(--padx)}
 .sec-t{margin:12px 0 22px;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,3.8vw,3.1rem);line-height:1.06;letter-spacing:-.01em;max-width:22em;text-wrap:balance}
-.prosa{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
 .corpo{font-size:clamp(17px,1.35vw,19px);line-height:1.62;color:#2F2F2F;max-width:none}
 .corpo p{margin:0 0 1.1em}
 .corpo p:last-child{margin-bottom:0}
@@ -1108,18 +700,10 @@ body{background-color:var(--paper);
 .sec-d .corpo{color:var(--papel-2)}
 .sec-d .ref{color:var(--papel-2)}
 .sec-d ::selection{background:rgba(208,93,65,.4)}
-.canonica{margin:0 0 36px;padding:28px 30px;border:1px solid var(--grade-d);border-left:4px solid var(--red-d);background:rgba(24,24,24,.85);font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(21px,2.2vw,30px);line-height:1.3;max-width:34em}
-.canonica small{display:block;margin-bottom:12px;font-family:var(--f-mono);font-style:normal;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow)}
-.cond-cab{margin:36px 0 14px;font-family:var(--f-mono);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--papel-2)}
-.cond{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.cond li:last-child:nth-child(odd){grid-column:1 / -1}
-.cond li{padding:22px 20px;border:1px solid var(--grade-d);background:rgba(24,24,24,.85)}
 .cond b{display:block;margin-bottom:10px;font-family:var(--f-tit);font-weight:700;font-size:22px;color:var(--yellow)}
 .cond span{font-size:16px;line-height:1.5;color:var(--papel-2)}
 .fecho-d{margin:36px 0 0;font-family:var(--f-tit);font-weight:700;font-size:clamp(22px,2.2vw,30px);line-height:1.2;color:var(--paper)}
 /* cards */
-.cards{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.card{position:relative;display:flex;flex-direction:column;gap:12px;padding:24px 24px 22px;border:1px solid var(--ink);background:var(--paper)}
 .card-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .card-n{font-family:var(--f-num);font-weight:700;font-size:15px;color:var(--red)}
 .card-cond{font-family:var(--f-mono);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
@@ -1131,13 +715,10 @@ body{background-color:var(--paper);
 .card .evd{margin:0;font-family:var(--f-mono);font-weight:600;font-size:13.5px;color:var(--juniper)}
 .card .map{margin:auto 0 0;padding-top:12px;border-top:1px solid var(--grade);font-family:var(--f-mono);font-weight:600;font-size:12.5px;letter-spacing:.02em;color:var(--ink2)}
 /* limites */
-.lim{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--grade-d)}
 .lim li{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:22px 0;border-bottom:1px solid var(--grade-d)}
 .lim b{font-family:var(--f-tit);font-weight:700;font-size:22px;line-height:1.15;color:var(--paper)}
 .lim span{font-size:17px;line-height:1.55;color:var(--papel-2);max-width:36em}
 /* validação */
-.numeros{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:8px 0 22px}
-.numeros div{padding:20px 18px 18px;border:1px solid var(--ink);background:var(--paper)}
 .numeros b{display:block;font-family:var(--f-num);font-weight:700;font-size:52px;line-height:1;letter-spacing:-.04em}
 .numeros div.dest b{color:var(--red)}
 .numeros span{display:block;margin-top:10px;font-family:var(--f-mono);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2)}
@@ -1145,7 +726,6 @@ body{background-color:var(--paper);
 /* série: faixa plum */
 .sec-p{background:var(--plum);color:var(--paper);border-bottom:0}
 .sec-p .ind{color:var(--yellow)}
-.serie{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid rgba(252,252,252,.22)}
 .serie li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px 28px;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(252,252,252,.22)}
 .serie .ds{grid-column:2}
 .serie .n{font-family:var(--f-num);font-weight:700;font-size:15px;color:var(--yellow)}
@@ -1153,12 +733,6 @@ body{background-color:var(--paper);
 .serie .ds{font-size:16px;line-height:1.5;color:rgba(252,252,252,.82)}
 .ponte{margin:36px 0 0;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(20px,2vw,27px);line-height:1.32;max-width:30em}
 .sub-s{margin:0 0 26px;font-family:var(--f-mono);font-weight:600;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(252,252,252,.8)}
-/* autoria e versões */
-.versoes-d{margin-top:36px;border-top:1px solid var(--ink)}
-.versoes-d summary{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;cursor:pointer;list-style:none;font-family:var(--f-mono);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
-.versoes-d summary::-webkit-details-marker{display:none}
-.versoes-d summary .mais{font-family:var(--f-num);font-size:20px;line-height:1;transition:transform .25s var(--ease)}
-.versoes-d[open] summary .mais{transform:rotate(45deg)}
 .vlist{list-style:none;margin:0 0 8px;padding:0}
 .vlist li{display:grid;grid-template-columns:80px 120px minmax(0,1fr);gap:4px 20px;padding:11px 0;border-top:1px solid var(--grade);font-size:15.5px;line-height:1.45}
 .vlist .vn{font-family:var(--f-num);font-weight:700;font-size:14px}
@@ -1186,8 +760,6 @@ body{background-color:var(--paper);
 /* ---------- responsivo ---------- */
 @media (min-width:1021px){
   .maq-col{height:max(calc(100vh - var(--nav-h) - 28px),720px)}
-  .demo{gap:40px}
-  .contador b{font-size:48px}
   .instr{font-size:16px}
   .prog-num b{font-size:80px}
   .legenda{font-size:13.5px}
@@ -1196,33 +768,14 @@ body{background-color:var(--paper);
 }
 @media (max-width:1020px){
   :root{--nav-h:0px}
-  .nav{position:relative}
-  .marca-sub{display:none}
-  .heroi-in{grid-template-columns:minmax(0,1fr);gap:36px}
-  .demo{grid-template-columns:minmax(0,1fr);gap:28px;padding:48px 24px 40px}
-  .demo-cab{position:static}
-  .prosa{gap:24px}
-  .cards{grid-template-columns:minmax(0,1fr)}
-  .cond{grid-template-columns:minmax(0,1fr)}
-  .cond li:last-child:nth-child(odd){grid-column:auto}
-  .numeros{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .lim li{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:640px){
-  .nav-in{padding:10px 16px}
-  .nav-acoes .btn{display:none}
-  .heroi-in{padding:36px 16px 44px}
-  .assin-wrap{gap:12px}
-  .crivo-jan{height:330px}
-  .demo{padding:40px 16px 32px}
-  .sec-e .in{padding:0 16px}
   .serie li{grid-template-columns:36px minmax(0,1fr)}
   .serie .ds{grid-column:2}
   .vlist li{grid-template-columns:64px minmax(0,1fr)}
   .vlist .vd{grid-column:2;grid-row:1}
   .vlist .vn{grid-row:1 / span 2}
   .vlist li>span:last-child{grid-column:2}
-  .numeros{grid-template-columns:minmax(0,1fr)}
   .numeros b{font-size:40px}
   .legenda li{grid-template-columns:minmax(0,1fr);gap:2px}
   .rodape-d .in{padding:28px 16px}
@@ -1230,20 +783,11 @@ body{background-color:var(--paper);
   .prog-barra{gap:3px}
   .prog-barra li{font-size:9.5px}
 }
-@media (prefers-reduced-motion:reduce){
-  .crivo-trilho{animation:none!important}
-  .lema .hd-ins{grid-template-columns:1fr;animation:none}
-  .lema .hd-ins em{opacity:1;animation:none}
-}
 
 /* ---------- tipografia: Roboto Condensed só em caixa-alta, 2 pt abaixo do corpo ---------- */
 :root{--f-mono:var(--f-sans);--f-caps:"Roboto Condensed","Arial Narrow",sans-serif;--fs:16px;--cap:calc(var(--fs) - 2.67px)}
 @media (min-width:1021px){:root{--fs:14px}}
 .btn{font-weight:600}
-.hd-lema{font-weight:600}
-/* caixa-alta no herói: mantém a escala do desenho anterior */
-.hd-sub,.hd-cartao .t,.hd-cartao .e,.hd-crivo span{font-family:var(--f-caps);font-weight:600}
-.hd-cartao .e,.hd-crivo span{font-weight:700}
 /* caixa-alta no restante da página */
 .aba-rot,.arq-placa,.est,.ind,.canonica small,.cond-cab,.card h3 small,.card-cond,.numeros span,.sub-s,.versoes-d summary,.seta,.contador span{
   font-family:var(--f-caps);font-size:var(--cap);text-transform:uppercase;letter-spacing:.07em}
@@ -1253,43 +797,6 @@ body{background-color:var(--paper);
 /* rótulos em caixa mista voltam ao corpo */
 .pf-cab,.pf-st,.pf-dl dt,.pf-em b,.voto-cab,.pq .meta,.tog,.vs-c .k,.carimbo-c,.proc .pn,.f-nota,.selo,.cnt .k,.lnk,.bdg,.hashbtn,.marca-sub,.marca-nome .v,.numeros small,.ref,.vlist .vd,.legenda b,.rub,.etapa h2,.prog-num span,.prog-barra li,.paras li,.f-num .big .de{font-family:var(--f-sans)}
 
-
-/* =====================================================================
-   herói compacto (19/10/2026): cabe na primeira dobra, símbolo sobre o nome
-   ===================================================================== */
-.hd .hd-proj{font-size:max(14px,calc(var(--u) * 15));color:#2A2F36}
-@media (min-width:1021px){
-  .hd .hd-palco{height:calc(100svh - var(--nav-h));min-height:600px;max-height:940px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(14px,2.2vh,24px);padding:56px 48px clamp(28px,4vh,44px);box-sizing:border-box}
-  .hd .hd-marca{position:relative;top:auto;left:auto;right:auto;height:auto;display:grid;grid-template-columns:repeat(5,auto);justify-content:center;align-items:end;font-size:clamp(52px,5.2vw,84px);line-height:.88;letter-spacing:.07em}
-  .hd .hd-marca span{position:static}
-  .hd .hd-marca .l5{margin-right:-.07em}
-  .hd .hd-marca .l6{grid-column:1 / -1;grid-row:1;justify-self:center;width:.92em;height:.92em;margin:0 0 .22em;left:auto;top:auto}
-  .hd .hd-sub{position:relative;top:auto;font-size:11px;letter-spacing:.32em}
-  .hd .hd-esteira{position:relative;top:auto;width:100%;height:166px;flex:none;margin-top:clamp(4px,1.2vh,14px)}
-  .hd .hd-fita{left:-52px;right:-52px;top:14px;height:138px;border-width:1.5px}
-  .hd .hd-furos{height:18px;background-image:radial-gradient(circle at 8px 9px,var(--desk) 0 3.6px,var(--ink) 3.6px 4.8px,transparent 4.8px);background-size:16px 18px}
-  .hd .hd-cartoes{top:30px}
-  .hd .hd-volta{gap:44px;padding-right:44px}
-  .hd .hd-cartao{width:290px;gap:6px}
-  .hd .hd-cartao .m{gap:8px;font-size:10px}
-  .hd .hd-cartao .e{padding:1px 7px;border-width:1.5px;border-radius:4px}
-  .hd .hd-cartao .q{font-size:13px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .hd .hd-cartao .t{font-size:9.5px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .hd .hd-crivo{width:76px;height:166px;margin-left:-38px;border-width:1.5px;border-radius:10px}
-  .hd .hd-crivo i{top:14px;bottom:14px}
-  .hd .hd-crivo span{top:-9px;padding:2px 9px;font-size:9.5px}
-  .hd .hd-base{position:relative;left:auto;right:auto;bottom:auto;width:100%;max-width:1344px;flex-direction:row-reverse;margin-top:clamp(10px,2.6vh,32px)}
-  .hd .hd-lema{font-size:clamp(30px,3vw,44px)}
-}
-@media (max-width:1020px){.hd .hd-proj{font-size:15px}}
-.hd .hd-versao{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:8px;padding:6px 16px 5px;border:1.5px solid var(--ink);border-bottom:0;border-radius:10px 10px 0 0;background:var(--paper);color:var(--ink);font-family:var(--f-caps);font-weight:700;font-size:11px;letter-spacing:.16em;text-decoration:none;transition:background-color .4s cubic-bezier(.32,.72,0,1),padding .4s cubic-bezier(.32,.72,0,1)}
-.hd .hd-versao:hover{background:var(--tint)}
-.hd .hd-versao i{width:6px;height:6px;border-radius:50%;background:var(--red)}
-.hd .hd-faixa{display:none}
-.hd .hd-abas{top:20px;right:24px}
-.hd .hd-aba.pausa{width:36px;height:36px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper);transition:background-color .4s cubic-bezier(.32,.72,0,1),transform .4s cubic-bezier(.32,.72,0,1)}
-.hd .hd-aba.pausa:active{transform:scale(.94)}
-.hd .hd-aba.pausa svg{width:10px;height:12px}
 :root{--nav-h:0px}
 .fecho-acoes+.fecho-acoes{margin-top:12px}
 
@@ -1297,30 +804,6 @@ body{background-color:var(--paper);
    refino 19/10/2026 ▪ herói, versões em modal, larguras, gaveta, série
    ===================================================================== */
 :root{--mola:cubic-bezier(.32,.72,0,1)}
-/* herói: pausa quadrada, no módulo da grade */
-.hd .hd-abas{top:32px;right:32px}
-.hd .hd-aba.pausa{width:32px;height:32px;border:2px solid var(--ink);border-radius:0;background:var(--paper);transition:background-color .5s var(--mola),transform .5s var(--mola)}
-.hd .hd-aba.pausa:hover{background:#fff}
-.hd .hd-aba.pausa:active{transform:scale(.94)}
-.hd .hd-aba.pausa svg{width:9px;height:11px}
-/* herói: versão quadrada, na linha do lema e da última linha do projeto */
-.hd .hd-base{position:relative}
-.hd .hd-versao{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:64px;height:64px;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;border-radius:0;background:#A63A23;color:#FCFCFC;cursor:pointer;font-family:var(--f-caps);font-weight:700;letter-spacing:.08em;line-height:1;transition:background-color .6s var(--mola),transform .6s var(--mola);z-index:3}
-.hd .hd-versao small{font-size:11px;letter-spacing:.14em;opacity:.92}
-.hd .hd-versao span{font-size:13px}
-.hd .hd-versao:hover{background:#8E2E1B}
-.hd .hd-versao:active{transform:translateX(-50%) scale(.96)}
-.hd .hd-versao:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-@media (min-width:1021px){
-  .hd .hd-palco{justify-content:flex-start;padding-top:clamp(36px,6vh,72px)}
-  .hd .hd-marca .l6{width:.966em;height:.966em}
-  .hd .hd-esteira{margin-top:clamp(40px,8vh,96px)}
-  .hd .hd-base{margin-top:auto;max-width:var(--max);padding:0 var(--padx);box-sizing:border-box}
-}
-@media (max-width:1020px){
-  .hd .hd-versao{position:static;transform:none;align-self:center}
-  .hd .hd-versao:active{transform:scale(.96)}
-}
 /* modal do histórico: moldura dupla, como peça de máquina */
 .mv{padding:0;border:0;background:transparent;max-width:min(720px,calc(100vw - 32px));width:100%;color:var(--ink);overflow:visible}
 .mv::backdrop{background:rgba(24,24,24,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:mvVeu .5s var(--mola)}
@@ -1346,7 +829,6 @@ body{background-color:var(--paper);
 @media (prefers-reduced-motion:reduce){.mv[open] .mv-casca,.mv::backdrop{animation:none}}
 
 /* larguras: moldura comum; texto integral, grades só onde há itens paralelos */
-.sec-e .in{max-width:var(--max);box-sizing:border-box}
 @media (min-width:1021px){
   .canonica{max-width:none}
   .ponte{max-width:none}
@@ -1371,15 +853,8 @@ body{background-color:var(--paper);
 /* ajustes finos do refino */
 .arquivo .pastas{position:absolute;inset:0;clip-path:inset(-40px -40px calc(var(--frente) * .9) -40px)}
 .arq-placa{top:auto;bottom:calc(var(--frente) * .62);transform:translate(-50%,50%)}
-@media (min-width:1021px){.hd .hd-txt{width:min(540px,38%)}}
 .sec-p .serie .n{color:rgba(252,252,252,.62)}
 .card-cond b{color:var(--red)}
-@media (max-width:1020px){
-  .hd .hd-marca{display:grid;grid-template-columns:repeat(5,auto);justify-content:center;align-items:end}
-  .hd .hd-marca .l5{margin-right:-.04em}
-  .hd .hd-marca .l6{grid-column:1 / -1;grid-row:1;justify-self:center;width:.62em;height:.62em;margin:0 0 .16em}
-}
-
 /* =====================================================================
    refino 22/10/2026 ▪ achado/afastado, máquina escura, herói redistribuído
    Estados para o público: ACHADO (ferrugem) e AFASTADO (azul). Sem
@@ -1404,38 +879,7 @@ body{background-color:var(--paper);
 .card .prob{border-left-color:var(--azul)}
 .card .evd{color:var(--azul)}
 
-/* ---------- herói: faixa mais grossa, papel da folha, base mais alta ---------- */
-.hd .hd-fita{background-color:var(--paper);background-image:var(--folha-bg);background-size:16px 16px,16px 16px,4px 4px,4px 4px;background-position:0 0}
-.hd .hd-furos{background-color:var(--paper)}
-.hd .hd-cartoes{bottom:0;align-items:center}
-.hd .hd-volta{align-items:center}
-.hd .hd-cartao .e{background:var(--red);color:var(--paper);border-color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.06em}
-.hd .hd-cartao .q{text-wrap:pretty}
-@media (min-width:1021px){
-  .hd .hd-palco{height:calc(100svh - var(--nav-h));min-height:560px;max-height:1100px;justify-content:center;gap:0;padding:clamp(20px,4.2vh,52px) 48px clamp(22px,4.4vh,52px)}
-  .hd .hd-marca{font-size:clamp(44px,min(5.2vw,8.4vh),88px)}
-  .hd .hd-sub{margin-top:clamp(10px,1.9vh,20px)}
-  .hd .hd-esteira{height:clamp(204px,33vh,300px);margin-top:clamp(20px,4.6vh,56px)}
-  .hd .hd-fita{top:14px;bottom:14px;height:auto;border-width:2px}
-  .hd .hd-furos{height:22px;background-image:radial-gradient(circle at 10px 11px,var(--desk) 0 4.2px,var(--ink) 4.2px 5.6px,transparent 5.6px);background-size:20px 22px}
-  .hd .hd-cartoes{top:22px;bottom:22px}
-  .hd .hd-volta{gap:56px;padding-right:56px}
-  .hd .hd-cartao{width:clamp(300px,26vw,380px);gap:10px}
-  .hd .hd-cartao .m{font-size:11px}
-  .hd .hd-cartao .e{padding:2px 9px 1px;font-size:11.5px;border-radius:4px}
-  .hd .hd-cartao .q{font-size:clamp(14.5px,1.25vw,17px);line-height:1.4;-webkit-line-clamp:3}
-  .hd .hd-cartao .t{font-size:10px}
-  .hd .hd-crivo{height:100%;width:84px;margin-left:-42px}
-  .hd .hd-base{margin-top:clamp(20px,4.8vh,60px)}
-}
-@media (min-width:1021px) and (max-height:720px){
-  .hd .hd-cartao .q{-webkit-line-clamp:2}
-}
-
 /* ---------- ficha técnica ao lado da gaveta (moldura dupla) ---------- */
-.demo-cab{gap:16px}
-.ft-casca{width:100%;margin-top:14px;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
-.ft-nucleo{padding:20px 22px 18px;border:1.5px solid var(--ink);border-radius:16px;background-color:var(--paper);background-image:var(--folha-bg);background-size:16px 16px,16px 16px,4px 4px,4px 4px;box-shadow:inset 0 1px 0 #fff}
 .ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
 .ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-d)}
@@ -1444,20 +888,11 @@ body{background-color:var(--paper);
 .ft-mod a:hover{color:var(--red)}
 .ft-lead{margin:0 0 14px;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:17px;line-height:1.35;text-wrap:pretty}
 .ft{margin:0;display:grid}
-.ft div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid rgba(24,24,24,.14)}
 .ft dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
 .ft dd{margin:0;font-size:13.5px;line-height:1.48;color:#262626;text-wrap:pretty}
 .ft-rod{display:flex;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1.5px dashed rgba(24,24,24,.28);font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
 .ft-rod i{flex:none;width:10px;height:10px;border-radius:2px;background:var(--azul);box-shadow:-6px 0 0 -1px var(--red)}
 .ft-rod i{margin-left:6px}
-@media (min-width:1021px) and (max-height:760px){
-  .demo-cab{gap:12px}
-  .demo-cab h2{font-size:clamp(1.8rem,3vw,2.5rem)}
-  .ft-nucleo{padding:16px 18px 14px}
-  .ft-lead{font-size:15px;margin-bottom:8px}
-  .ft div{padding:7px 0}
-  .ft dd{font-size:12.5px;line-height:1.45}
-}
 
 /* ---------- máquina escura (a folha segue papel) ---------- */
 .maq .gab{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 60px -36px rgba(24,24,24,.55)}
@@ -1508,13 +943,10 @@ body{background-color:var(--paper);
 @media (min-width:1021px){.legenda li{grid-template-columns:84px minmax(0,1fr)}}
 
 /* ---------- fecho: prova, funil e tríptico ---------- */
-.f-grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 56px;align-items:start}
-.f-esq,.f-dir{min-width:0}
 .fecho .f-num{display:block;max-width:none}
 .f-txt{margin:6px 0 0;font-size:clamp(19px,1.7vw,24px);line-height:1.38;font-weight:500;text-wrap:pretty}
 .f-txt sup a{color:inherit;font-family:var(--f-mono);font-size:12px;text-decoration:none;margin-left:2px}
 .fecho .f-nota{max-width:none}
-.funil{margin:36px 0 0;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
 .funil>*{margin:0}
 .funil figcaption,.funil ol,.funil .fu-pe{background:var(--paper)}
 .funil figcaption{display:flex;justify-content:space-between;gap:12px;padding:16px 20px 10px;border:1.5px solid var(--ink);border-bottom:0;border-radius:16px 16px 0 0;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
@@ -1535,41 +967,16 @@ body{background-color:var(--paper);
 .fu-pe{padding:10px 20px 16px;border:1.5px solid var(--ink);border-top:1.5px dashed rgba(24,24,24,.28);border-radius:0 0 16px 16px;font-size:13px;line-height:1.45;color:var(--ink2)}
 .funil.rv:not(.visto) .fu-b i{--fu:0}
 
-.trip{margin-top:clamp(72px,9vw,120px)}
-.trip-cab{display:grid;gap:12px;margin-bottom:28px}
-.trip-t{margin:0;max-width:18em;font-family:var(--f-tit);font-weight:700;font-size:clamp(28px,3vw,42px);line-height:1.06;letter-spacing:-.01em;text-wrap:balance}
-.trip-l{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.trip-l li:nth-child(2){transition-delay:.1s}
-.trip-l li:nth-child(3){transition-delay:.2s}
-.tp-casca{height:100%;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
-.tp-nucleo{height:100%;display:flex;flex-direction:column;gap:10px;padding:22px 22px 24px;border:1.5px solid var(--ink);border-radius:16px;background:var(--paper);box-shadow:inset 0 1px 0 #fff;transition:transform .6s var(--mola),box-shadow .6s var(--mola)}
-.trip-l li:hover .tp-nucleo{transform:translateY(-3px);box-shadow:inset 0 1px 0 #fff,var(--reg)}
-.tp-n{font-family:var(--f-num);font-weight:700;font-size:13px;color:var(--red)}
-.tp-nucleo h3{margin:0;font-family:var(--f-tit);font-weight:700;font-size:24px;line-height:1.1}
-.tp-nucleo p{margin:0;font-size:15px;line-height:1.55;color:#2F2F2F;text-wrap:pretty}
-.trip-l li:nth-child(2) .tp-nucleo{background:var(--ink);border-color:var(--ink);box-shadow:none;color:var(--paper)}
-.trip-l li:nth-child(2) .tp-nucleo p{color:var(--papel-2)}
-.trip-l li:nth-child(2) .tp-n{color:var(--red-d)}
-.trip-l li:nth-child(2):hover .tp-nucleo{box-shadow:var(--reg)}
-
 /* revelação ao entrar na tela */
 .rv{transition:opacity .9s var(--mola),transform .9s var(--mola),filter .9s var(--mola)}
 .js-rv .rv:not(.visto){opacity:0;transform:translateY(28px);filter:blur(6px)}
 
-@media (max-width:1020px){
-  .f-grade{grid-template-columns:minmax(0,1fr);gap:20px}
-  .f-esq,.f-dir{display:contents}
-  .f-grade .f-num{order:1}.f-grade .f-txt{order:2}.f-grade .funil{order:3;margin-top:8px}.f-grade .f-nota{order:4;margin-top:4px}.f-grade .f-acao{order:5;margin-top:0}
-  .trip-l{grid-template-columns:minmax(0,1fr)}
-  .ft-casca{margin-top:6px}
-}
 @media (max-width:640px){
   .funil li{grid-template-columns:minmax(0,1fr) 34px;gap:4px 10px}
   .funil .fu-r{grid-column:1 / -1}
   .funil .fu-b{grid-column:1;grid-row:2}
   .funil li b{grid-row:2}
   .funil figcaption{flex-direction:column;gap:2px}
-  .ft div{grid-template-columns:minmax(0,1fr);gap:2px}
 }
 
 /* ---------- histórico de versões: linha do tempo ---------- */
@@ -1638,28 +1045,6 @@ body{background-color:var(--paper);
 .slip.mk::before{background-color:var(--amarelo);background-image:none}
 .ft-rod i{box-shadow:-6px 0 0 -1px var(--amarelo)}
 
-/* ---------- herói: o papel da faixa corre junto com as perguntas ---------- */
-.hd{--cw:264px;--cg:36px;--volta:calc((var(--cw) + var(--cg)) * 4)}
-@media (min-width:1021px){.hd{--cw:344px;--cg:56px}}
-.hd .hd-volta{gap:var(--cg);padding-right:var(--cg)}
-.hd .hd-cartao{width:var(--cw)}
-.hd .hd-cartoes{animation:hd-corre-v 60s linear infinite}
-.hd .hd-furos{width:100%;animation:hd-papel 60s linear infinite}
-.hd .hd-fita{animation:hd-papel 60s linear infinite}
-@keyframes hd-corre-v{from{transform:translateX(0)}to{transform:translateX(calc(var(--volta) * -1))}}
-@keyframes hd-papel{from{background-position-x:0}to{background-position-x:calc(var(--volta) * -1)}}
-.hd.parado .hd-fita{animation-play-state:paused}
-@media (prefers-reduced-motion:reduce){.hd .hd-fita,.hd .hd-furos,.hd .hd-cartoes{animation:none!important}}
-
-/* ---------- versão: colada ao pause, no canto direito ---------- */
-.hd .hd-abas{display:flex;align-items:stretch;gap:0}
-.hd .hd-abas .hd-versao{position:static;left:auto;bottom:auto;transform:none;width:auto;height:32px;padding:0 12px;display:inline-flex;flex-direction:row;align-items:center;gap:0;border:2px solid var(--ink);border-right:0;border-radius:0;background:#A63A23;color:#FCFCFC}
-.hd .hd-abas .hd-versao small{font-size:11px;letter-spacing:.14em;opacity:1}
-.hd .hd-abas .hd-versao span{display:none}
-.hd .hd-abas .hd-versao:hover{background:#8E2E1B}
-.hd .hd-abas .hd-versao:active{transform:scale(.96)}
-@media (max-width:1020px){.hd .hd-abas .hd-versao{align-self:stretch}}
-
 /* =====================================================================
    refino 22/10/2026 (c) ▪ máquina clara, como objeto de mesa: alumínio
    fosco, traço fino, sombra difusa; visor verde com letra preta.
@@ -1701,9 +1086,6 @@ body{background-color:var(--paper);
 .boca .slit,.carro-body::before{background:#2B2E33;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
 .carro.ativo .carro-body::after{background:var(--red);border-color:var(--red);box-shadow:0 0 0 3px rgba(166,58,35,.16)}
 
-/* herói: a faixa do meio sem quadriculado, só papel */
-.hd .hd-fita{background-image:none;background-color:var(--paper);animation:none}
-
 /* =====================================================================
    refino 22/10/2026 (d) ▪ máquina com corpo: aço escovado médio, peças
    pretas (placa, moldura do visor, aro do calibrador, seletores), visor
@@ -1740,6 +1122,236 @@ body{background-color:var(--paper);
 .boca .k::after{background:#F2F3F4}
 .boca .slit,.carro-body::before{background:#1C1E21;border:0;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
 .carro.ativo .carro-body::after{background:#E06A4C;border-color:#181818;box-shadow:0 0 0 3px rgba(224,106,76,.25)}
+
+/* =====================================================================
+   redesign 24/10/2026 ▪ I.1 Síntese ▪ matriz de campos
+   Duas camadas coordenadas: a malha de 32 px no fundo (régua de ritmo)
+   e a matriz real de layout. Cada linha (.mx-row) é uma grade; cada
+   campo (.mx-c) desenha só a própria divisória superior e esquerda, e
+   as divisórias se compartilham em qualquer largura. A matriz responde
+   à largura do próprio CERNE (container query), inclusive em iframe.
+   Campo é estrutura; card é objeto.
+   ===================================================================== */
+:root{--m:32px;--fio:#DCDBD9}
+/* a malha nasce na origem da página: a coluna lateral, múltipla de 32,
+   cai sobre uma linha da malha */
+body{background-position:0 0}
+.mx{container:mx / inline-size;overflow:clip;--pad:16px;--side-w:clamp(128px,22%,224px)}
+@supports (width:round(down,22%,32px)){.mx{--side-w:clamp(128px,round(down,22%,32px),224px)}}
+.mx-row{display:grid;grid-template-columns:minmax(0,1fr);margin-left:-1px}
+.mx-c{min-width:0;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+.mx-v{display:none}
+@container mx (min-width:641px){
+  .mx-row{grid-template-columns:var(--side-w) minmax(0,1fr)}
+  .mx-v{display:block}
+}
+@container mx (min-width:1021px){
+  .mx-c{--pad:24px}
+}
+/* rótulo de campo: caixa-alta condensada, como os rótulos da página */
+.mx-k{margin:0;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--ink)}
+.mx-k a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.25px}
+.mx-k a:hover{color:var(--red)}
+/* faixas escuras e terracota: a mesma divisória, no tom do fundo */
+.sec-d{--fio:var(--grade-d)}
+.sec-p{--fio:rgba(252,252,252,.22)}
+
+/* ---------- herói: campos contíguos (identidade, título, lema, acesso) ---------- */
+.hd{position:relative;background:transparent;--cw:264px;--cg:36px;--volta:calc((var(--cw) + var(--cg)) * 4)}
+.hd .mx-row:first-child>.mx-c{box-shadow:inset 1px 0 var(--fio)}
+.hd-bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"marca abas" "sub sub"}
+.hd-bar>.mx-c{display:flex;align-items:center;min-height:64px;padding-block:0}
+.hd-atrio{grid-area:marca;gap:12px;background:#181818;color:#FCFCFC;text-decoration:none;transition:background-color .5s var(--mola)}
+.hd-atrio:hover{background:#2A2A2A}
+.hd-atrio:focus-visible{outline:2px solid #FCFCFC;outline-offset:-6px;border-radius:0}
+.hd-sub-c{grid-area:sub}
+.hd-bar>.hd-sub-c{min-height:48px}
+.hd-abas{grid-area:abas;justify-content:flex-end}
+.hd-atrio-sim{width:32px;height:32px;flex:none;display:block}
+.hd-atrio-wm{font-family:var(--f-marca);font-weight:700;font-size:19px;letter-spacing:.08em;line-height:1;color:#FCFCFC}
+.hd-atrio-wm .t{color:#A63A23}
+.hd-sub{margin:0;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.12em;line-height:1.3;text-transform:uppercase}
+.hd-versao{appearance:none;height:32px;margin:0;padding:0 12px;display:inline-flex;align-items:center;border:2px solid var(--ink);border-right:0;border-radius:0;background:var(--red);color:var(--paper);cursor:pointer;font-family:var(--f-caps);font-weight:700;font-size:11px;letter-spacing:.14em;line-height:1;transition:background-color .5s var(--mola),transform .5s var(--mola)}
+.hd-versao:hover{background:#8E2E1B}
+.hd-versao:active{transform:scale(.96)}
+.hd-aba.pausa{appearance:none;width:32px;height:32px;margin:0;padding:0;display:grid;place-items:center;border:2px solid var(--ink);border-radius:0;background:var(--paper);cursor:pointer;transition:background-color .5s var(--mola),transform .5s var(--mola)}
+.hd-aba.pausa:hover{background:#fff}
+.hd-aba.pausa:active{transform:scale(.94)}
+.hd-aba.pausa svg{width:9px;height:11px}
+.hd-aba .ic-play,.hd.parado .hd-aba .ic-pausa{display:none}
+.hd.parado .hd-aba .ic-play{display:block}
+
+.hd-tit{grid-template-columns:minmax(0,1fr)}
+.hd-titulo{display:flex;align-items:flex-end;justify-content:flex-start;gap:.22em;padding-top:32px;font-size:min(14cqw,210px)}
+.hd-marca{margin:0;font-size:1em;line-height:.9;font-weight:700}
+.hd-marca .wm{letter-spacing:.08em;margin-right:-.08em}
+.hd-sim-l{width:.9em;height:.9em;flex:none;display:block;margin-bottom:.02em}
+
+.hd-lema{margin:0;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(28px,7.4cqw,48px);line-height:1.05;letter-spacing:-.005em;color:var(--ink)}
+.hd-lema .hd-ins{display:inline-grid;grid-template-columns:0fr;vertical-align:bottom}
+.hd-lema .hd-ins>span{min-width:0;overflow:hidden;white-space:nowrap}
+.hd-lema .hd-ins em{display:inline-block;padding-left:.24em;font-style:italic;color:var(--red);opacity:0}
+.hd-lema .i1{animation:hd-abre .9s var(--ease) 1.2s forwards}
+.hd-lema .i1 em{animation:hd-fundo 1.1s var(--ease) 1.5s forwards}
+.hd-lema .i2{animation:hd-abre .9s var(--ease) 2.7s forwards}
+.hd-lema .i2 em{animation:hd-fundo 1.1s var(--ease) 3s forwards}
+@keyframes hd-abre{to{grid-template-columns:1fr}}
+@keyframes hd-fundo{from{opacity:0;transform:translateY(.3em) scale(.6);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+.hd-txt{display:grid;align-content:start;gap:12px}
+.hd-desc{margin:0;max-width:34em;font-size:15px;line-height:1.6;color:#2A2F36}
+.hd-proj{margin:0;max-width:36em;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+.hd-desc a,.hd-proj a{color:var(--red);font-weight:600;text-decoration:none}
+.hd-desc a:hover,.hd-proj a:hover{text-decoration:underline;text-underline-offset:3px}
+.hd-acao{white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;background:var(--red);color:var(--paper);text-decoration:none;font-family:var(--f-caps);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;transition:background-color .5s var(--mola)}
+.hd-acao:hover{background:var(--ink)}
+.hd-acao svg{flex:none;transition:transform .5s var(--mola)}
+.hd-acao:hover svg{transform:translateY(3px)}
+.hd-acao:focus-visible{outline:2px solid var(--ink);outline-offset:-6px;border-radius:0;box-shadow:inset 0 0 0 4px var(--paper)}
+
+@container mx (min-width:641px){
+  .hd-bar{grid-template-columns:var(--side-w) minmax(0,1fr) auto;grid-template-areas:"marca sub abas"}
+  .hd-bar>.hd-sub-c{min-height:64px}
+  .hd-titulo{font-size:min(12cqw,210px)}
+  .hd-titulo{padding-top:48px}
+  .hd-tri{grid-template-columns:var(--side-w) minmax(0,1fr) minmax(176px,.42fr)}
+  .hd-lema-c{grid-column:1 / -1}
+  .hd-txt{grid-column:span 2}
+  .hd-lema{font-size:clamp(30px,5cqw,48px)}
+}
+@container mx (min-width:1021px){
+  .hd-tri{grid-template-columns:var(--side-w) minmax(0,42fr) minmax(0,38fr) minmax(208px,20fr)}
+  .hd-lema-c{grid-column:span 2}
+  .hd-txt{grid-column:auto}
+  .hd-lema{font-size:clamp(30px,3.2cqw,48px)}
+  .hd{--cw:344px;--cg:56px}
+}
+
+/* ---------- marquee: a folha com picotes corre sob a janela fixa do crivo ---------- */
+.hd-esteira{grid-column:1 / -1;position:relative;height:200px;padding:0}
+.hd-fita{position:absolute;inset:0;overflow:hidden;background:var(--paper);border-block:1.5px solid var(--ink)}
+.hd-furos{position:absolute;left:0;right:0;height:22px;background-color:var(--paper);
+  background-image:radial-gradient(circle at 10px 11px,var(--paper) 0 4.2px,var(--ink) 4.2px 5.6px,transparent 5.6px);background-size:20px 22px;
+  animation:hd-papel 60s linear infinite}
+.hd-furos.a{top:0;border-bottom:1.5px dashed rgba(24,24,24,.35)}
+.hd-furos.b{bottom:0;border-top:1.5px dashed rgba(24,24,24,.35)}
+.hd-cartoes{position:absolute;left:0;top:22px;bottom:22px;display:flex;align-items:center;width:max-content;animation:hd-corre 60s linear infinite}
+.hd-volta{display:flex;align-items:center;gap:var(--cg);margin:0;padding:0 var(--cg) 0 0;list-style:none}
+.hd-cartao{width:var(--cw);display:flex;flex-direction:column;gap:8px}
+.hd-cartao .m{display:flex;align-items:center;gap:8px}
+.hd-cartao .e{padding:1px 7px;border:1.5px solid var(--ink);border-radius:4px;background:var(--red);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:11px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.hd-cartao .q{margin:0;font-size:14.5px;line-height:1.4;text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hd-cartao .t{display:none;margin:0;font-family:var(--f-caps);font-weight:600;font-size:10px;letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd-crivo{position:absolute;left:50%;top:-1px;bottom:-1px;width:84px;margin-left:-42px;border:1.5px solid var(--ink);border-radius:10px;background:rgba(232,235,239,.55);pointer-events:none}
+.hd-crivo i{position:absolute;left:50%;top:16px;bottom:16px;width:2px;margin-left:-1px;background:var(--red);animation:hd-pulsa 1.6s steps(2) infinite}
+.hd-crivo span{position:absolute;left:50%;top:-9px;transform:translateX(-50%);padding:2px 9px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10px;letter-spacing:.2em;line-height:1.4}
+@keyframes hd-corre{from{transform:translateX(0)}to{transform:translateX(calc(var(--volta) * -1))}}
+@keyframes hd-papel{from{background-position-x:0}to{background-position-x:calc(var(--volta) * -1)}}
+@keyframes hd-pulsa{0%,100%{opacity:1}50%{opacity:.35}}
+/* pausa: botão, ponteiro ou foco sobre a faixa */
+.hd.parado .hd-cartoes,.hd.parado .hd-furos,.hd.parado .hd-crivo i,
+.hd-esteira:hover .hd-cartoes,.hd-esteira:hover .hd-furos{animation-play-state:paused}
+@container mx (min-width:1021px){
+  .hd-esteira{height:clamp(212px,17cqw,248px)}
+  .hd-cartao .q{font-size:clamp(14.5px,1.25cqw,17px)}
+  .hd-cartao .t{display:block}
+}
+@media (prefers-reduced-motion:reduce){
+  .hd-cartoes,.hd-furos,.hd-crivo i{animation:none!important}
+  .hd-lema .hd-ins{grid-template-columns:1fr;animation:none}
+  .hd-lema .hd-ins em{opacity:1;animation:none}
+}
+
+/* ---------- demonstração: enquadramento em campos (gaveta, máquina e folha intactas) ---------- */
+.demo{position:relative}
+.demo-tit>.mx-c{padding-top:calc(var(--pad) * 2.5);padding-bottom:calc(var(--pad) * 1.5)}
+.demo-tit .ind{padding-top:.5em}
+.demo-tit h2{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,4cqw,3rem);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
+.ft-lado .ft-cab{flex-direction:column;align-items:flex-start;gap:10px;margin:0}
+.ft-corpo{padding:0}
+.ft-corpo .ft-lead{margin:0;padding:var(--pad);max-width:46em}
+/* Entrada, Opera, Risco e Saída: quatro campos; dois por linha quando a
+   largura do CERNE aperta a leitura; um por linha no celular. Medido:
+   em quatro colunas, abaixo de ~1200 px de CERNE o campo cai para menos
+   de ~29 caracteres por linha; em 2×2 fica entre 40 e 60. */
+.ft{grid-template-columns:minmax(0,1fr)}
+.ft>div{display:flex;flex-direction:column;gap:6px;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+.ft dt{padding:0}
+.ft dd{max-width:34em}
+@container mx (min-width:481px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container mx (min-width:1200px){.ft{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.arq-lado{display:flex;flex-direction:column;gap:16px}
+.arq-lado .instr{font-size:16px;line-height:1.5}
+.arq-lado .ft-rod{margin:0}
+.arquivo-col{padding-top:calc(var(--pad) * 1.5);padding-bottom:calc(var(--pad) * 2)}
+.arquivo-col .arquivo{max-width:920px;margin-inline:auto}
+
+/* ---------- fecho: prova, funil e tríptico como campos ---------- */
+.fecho{position:relative}
+@container mx (min-width:641px) and (max-width:1020px){.r-3>.mx-c:nth-child(n+3){grid-column:2}}
+@container mx (min-width:1021px){.r-3{grid-template-columns:var(--side-w) minmax(0,3fr) minmax(0,2fr)}}
+.fecho .r-3:first-child>.mx-c{padding-top:calc(var(--pad) * 3)}
+.fecho .f-num .big{display:block;font-size:clamp(80px,13cqw,176px)}
+.f-txt-c{display:flex;align-items:flex-end}
+.fecho .f-txt{margin:0;max-width:30em;font-size:clamp(19px,2.4cqw,24px)}
+.f-esq{display:flex;flex-direction:column;gap:22px}
+.fecho .f-nota{margin:0;max-width:44em}
+.fecho .f-acao{margin:0}
+.fecho .funil{margin:0}
+.sec-cab>.mx-c{padding-top:calc(var(--pad) * 2.5);padding-bottom:calc(var(--pad) * 1.5)}
+.sec-cab .ind{padding-top:.5em}
+.trip-t{margin:0;max-width:18em;font-family:var(--f-tit);font-weight:700;font-size:clamp(28px,3.4cqw,42px);line-height:1.06;letter-spacing:-.01em;text-wrap:balance}
+.tp-n{font-family:var(--f-num);font-weight:700;font-size:13px;color:var(--red)}
+.trip-l h3{margin:0;font-family:var(--f-tit);font-weight:700;font-size:24px;line-height:1.1}
+.trip-l p{margin:0;font-size:15px;line-height:1.55;color:#2F2F2F;text-wrap:pretty}
+.trip-l li:nth-child(2){transition-delay:.1s}
+.trip-l li:nth-child(3){transition-delay:.2s}
+.f-cit{padding-block:calc(var(--pad) * 2.5)}
+.fecho .citacao{margin:0}
+/* passagem para a tese: faixa preta de largura total, o próprio botão */
+.f-tese .seta{grid-column:1 / -1;appearance:none;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:64px;margin:0;border:0;border-radius:0;background:var(--ink);color:var(--paper);box-shadow:none;cursor:pointer;text-align:left;font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase;transition:background-color .5s var(--mola)}
+.f-tese .seta:hover{background:#2A2A2A}
+.f-tese .seta:focus-visible{outline:2px solid var(--paper);outline-offset:-6px;border-radius:0}
+.f-tese .seta .ar{display:grid;place-items:center;width:32px;height:32px;border:1.5px solid currentColor;transition:transform .5s var(--mola)}
+.f-tese .seta .ar svg{animation:seta-pulsa 1.8s var(--ease) infinite}
+.f-tese .seta[aria-expanded="true"] .ar{transform:rotate(180deg)}
+.f-tese .seta[aria-expanded="true"] .ar svg{animation:none}
+@media (prefers-reduced-motion:reduce){.f-tese .seta .ar svg{animation:none}}
+
+/* ---------- tese: seções em campos; faixas escuras e terracota mantidas ---------- */
+.sec-e{position:relative}
+.sec-e .sec-t{margin:0}
+.sec-e>.mx-row:last-child>.mx-c{padding-bottom:calc(var(--pad) * 2.5)}
+.corpo{max-width:none}
+.corpo>p{max-width:40em}
+.sec-e .mx-k{padding-top:.35em}
+.sec-d .mx-k{color:var(--papel-2)}
+.sec-p .mx-k{color:rgba(252,252,252,.8)}
+/* citação: régua fina na cor do texto, sem moldura própria */
+.cit-l{padding:4px 0 4px 16px;border-left:2px solid currentColor;font-size:clamp(20px,2cqw,24px)}
+.canonica{margin:0;padding-left:16px;border-left:3px solid var(--red-d);font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:clamp(21px,2.4cqw,30px);line-height:1.3;max-width:34em}
+.fecho-d{margin:0}
+.ref{margin:0}
+/* listas paralelas como campos de uma mesma linha */
+.mx-lista{padding:0}
+.mx-campos{display:grid;grid-template-columns:minmax(0,1fr);margin:0;padding:0;list-style:none}
+.mx-campos>*{min-width:0;display:flex;flex-direction:column;gap:10px;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+@container mx (min-width:1021px){.mx-campos.c3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container mx (min-width:641px){.mx-campos.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container mx (min-width:1200px){.mx-campos.c4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.numeros.mx-campos{grid-template-columns:repeat(2,minmax(0,1fr))}
+.numeros.mx-campos>div{gap:0}
+.cond b{margin-bottom:0}
+.card{gap:12px}
+.card .map{margin-top:auto}
+.lim{list-style:none;margin:0;padding:0}
+.lim li{padding:var(--pad);box-shadow:inset 0 1px var(--fio)}
+.lim li:first-child{box-shadow:none}
+.serie{list-style:none;margin:0;padding:0}
+.serie li{padding:var(--pad);border-bottom:0;box-shadow:inset 0 1px var(--fio)}
+.serie li:first-child{box-shadow:none}
+.sub-s{margin:14px 0 0}
+.ponte{margin:0}
+.sec-fim>.mx-c{padding-bottom:calc(var(--pad) * 3)}
 </style>
 </head>
 <body>
@@ -1759,35 +1371,39 @@ body{background-color:var(--paper);
 
 <main id="topo">
 <!-- 1.2 e 1.3 abertura (hero anterior, com o símbolo junto ao nome) -->
-<section class="hd" id="hd" aria-labelledby="heroT">
- <div class="hd-palco">
-  <div class="hd-faixa" aria-hidden="true"></div>
-  <div class="hd-abas">
-    <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões"><small>v5.0.0</small><span></span></button>
-    <button class="hd-aba pausa" id="hdPausa" type="button" aria-pressed="false" aria-label="Pausar a esteira" title="Pausar a esteira">
+<section class="hd mx" id="hd" aria-labelledby="heroT">
+  <div class="mx-row hd-bar">
+    <a class="mx-c hd-atrio" href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener" aria-label="ATRIO"><svg class="hd-atrio-sim" viewBox="0 0 1080 1080" aria-hidden="true"><path fill="#FCFCFC" d="M0,810 H1080 V1080 H0 Z"/><path fill="#A63A23" d="M315,810 H765 V1080 H315 Z"/><path fill="#FCFCFC" d="M0,405 H1080 V810 H0 Z M0,405 V90 L315,0 V405 Z M382.5,405 V0 H697.5 V405 Z M765,405 V0 L1080,90 V405 Z"/></svg><span class="hd-atrio-wm" aria-hidden="true">A<span class="t">T</span>RIO</span></a>
+    <div class="mx-c hd-sub-c"><p class="hd-sub">Dispositivo de governança crítica do raciocínio jurídico</p></div>
+    <div class="mx-c hd-abas">
+      <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões">v5.0.0</button>
+      <button class="hd-aba pausa" id="hdPausa" type="button" aria-pressed="false" aria-label="Pausar a esteira" title="Pausar a esteira">
       <svg class="ic-pausa" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="1" width="4" height="14" fill="#181818"/><rect x="9" y="1" width="4" height="14" fill="#181818"/></svg>
       <svg class="ic-play" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M2 1 L13 8 L2 15 Z" fill="#181818"/></svg>
     </button>
-  </div>
-  
-  <h1 class="hd-marca" id="heroT" aria-label="CERNE"><span class="l1">C</span><span class="l2">E</span><span class="l3">R</span><span class="l4">N</span><span class="l5">E</span><span class="l6" aria-hidden="true"><svg viewBox="0 0 1080 1080"><use href="#rainha"/></svg></span></h1>
-  <p class="hd-sub">Dispositivo de governança crítica do raciocínio jurídico</p>
-  <div class="hd-esteira" aria-hidden="true">
-    <div class="hd-fita">
-      <div class="hd-furos a"></div>
-      <div class="hd-furos b"></div>
-      <div class="hd-cartoes"><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta" aria-hidden="true"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div><div class="hd-volta"><div class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></div><div class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></div></div></div>
     </div>
-    <div class="hd-crivo"><i></i><span>CRIVO</span></div>
   </div>
-  <div class="hd-base">
-    <div class="hd-txt">
+  <div class="mx-row hd-tit">
+    <div class="mx-c hd-titulo"><svg class="hd-sim-l" viewBox="0 0 1080 1080" aria-hidden="true"><use href="#rainha"/></svg><h1 class="hd-marca" id="heroT" aria-label="CERNE"><span class="wm">C<span class="e">E</span>RNE</span></h1></div>
+  </div>
+  <div class="mx-row hd-tri">
+    <div class="mx-c hd-lema-c"><p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p></div>
+    <div class="mx-c hd-txt">
       <p class="hd-desc">O CERNE lê o ato judicial pronto e examina o caminho que leva à conclusão. Devolve perguntas presas ao texto, e quem responde pelo ato decide.</p>
       <p class="hd-proj">Projeto autoral de <a href="https://christiancozta.github.io/arco.html" target="_blank" rel="noopener">Christian da Costa</a>, em uso próprio desde 11/2025, no marco da Governança do Raciocínio Jurídico.</p>
     </div>
-    <p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p>
+    <a class="mx-c hd-acao" href="#mesa"><span>Veja o percurso</span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 V17 M4 11 L10 17 L16 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
   </div>
- </div>
+  <div class="mx-row hd-esteira-row">
+    <div class="mx-c hd-esteira">
+      <div class="hd-fita">
+        <div class="hd-furos a" aria-hidden="true"></div>
+        <div class="hd-furos b" aria-hidden="true"></div>
+        <div class="hd-cartoes"><ul class="hd-volta" aria-label="Perguntas devolvidas pelo CERNE"><li class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></li></ul><ul class="hd-volta" aria-hidden="true"><li class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></li></ul><ul class="hd-volta" aria-hidden="true"><li class="hd-cartao"><div class="m"><span class="e">§ 3</span></div><p class="q">Que prova, além da falta de opção, mostra que ambos os seguros foram impostos por seguradora determinada?</p><p class="t">Seguro de proteção financeira e encargos contratuais da normalidade</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 1</span></div><p class="q">A ementa identifica com clareza os recursos especiais e o entendimento que atribui a eles?</p><p class="t">Validade da cobrança condicionada ao atendimento dos parâmetros</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">A Súmula 322 sustenta a dispensa de prova de erro para esta cobrança, fora dos contratos de abertura de crédito?</p><p class="t">Restituição na forma simples</p></li><li class="hd-cartao"><div class="m"><span class="e">§ 6</span></div><p class="q">Que fundamento justifica a restituição simples diante da cobrança indevida e da regra de devolução em dobro?</p><p class="t">Recurso parcialmente provido</p></li></ul></div>
+      </div>
+      <div class="hd-crivo" aria-hidden="true"><i></i><span>CRIVO</span></div>
+    </div>
+  </div>
 </section>
 <script>
 (function(){
@@ -1801,26 +1417,29 @@ body{background-color:var(--paper);
 </script>
 
 <!-- 1.4 pastas -->
-<section class="demo" id="mesa" aria-labelledby="mesaT">
-  <div class="demo-cab">
-    <p class="ind">Demonstração</p>
-    <h2 id="mesaT">Veja o percurso posto à prova</h2>
-    <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
-    <div class="ft-casca rv">
-      <div class="ft-nucleo">
-        <div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div>
-        <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
-        <dl class="ft">
+<section class="demo mx" id="mesa" aria-labelledby="mesaT">
+  <div class="mx-row demo-tit">
+    <div class="mx-c"><p class="ind">Demonstração</p></div>
+    <div class="mx-c"><h2 id="mesaT">Veja o percurso posto à prova</h2></div>
+  </div>
+  <div class="mx-row ft-row">
+    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div></div>
+    <div class="mx-c ft-corpo">
+      <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
+      <dl class="ft">
           <div><dt>Entrada</dt><dd>Ato judicial pronto: decisão liminar, voto, sentença ou acórdão, de 40 a 250 mil caracteres.</dd></div>
           <div><dt>Opera</dt><dd>Lê o ato inteiro por lentes de fronteira própria. Cada dúvida enfrenta acusação e defesa em funções separadas, e só se mantém se resistir ao crivo.</dd></div>
           <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto, e dúvida afastada ou mantida sem razão. O confronto testa a sustentação; não certifica fontes nem substitui o juízo humano.</dd></div>
           <div><dt>Saída</dt><dd>Achados em perguntas presas ao trecho, leitura para quem decide, relatório técnico e rastro integral, que guarda também os afastados.</dd></div>
         </dl>
-        <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
-      </div>
     </div>
   </div>
-  <div class="arquivo-col">
+  <div class="mx-row arq-row">
+    <div class="mx-c arq-lado">
+      <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
+      <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
+    </div>
+    <div class="mx-c arquivo-col">
     <div class="arquivo" id="arquivo">
       <div class="arq-caixa" aria-hidden="true"></div>
       <ol class="pastas" id="pastas" aria-label="Atos disponíveis"></ol>
@@ -1841,6 +1460,7 @@ body{background-color:var(--paper);
           </g>
         </svg>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -2068,16 +1688,20 @@ body{background-color:var(--paper);
 </div>
 
 
-<!-- 1.9 prova ▪ 1.10 fecho ▪ 1.11 seta -->
-<section class="fecho" id="fecho" aria-label="Prova">
-  <div class="f-grade">
-    <div class="f-esq">
-      <div class="f-num"><span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span></div>
+<!-- 1.9 prova ▪ 1.10 fecho ▪ 1.11 passagem para a tese -->
+<section class="fecho mx" id="fecho" aria-label="Prova">
+  <div class="mx-row r-3">
+    <div class="mx-c mx-v"></div>
+    <div class="mx-c"><div class="f-num"><span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span></div></div>
+    <div class="mx-c f-txt-c"><p class="f-txt">Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p></div>
+  </div>
+  <div class="mx-row r-3">
+    <div class="mx-c mx-v"></div>
+    <div class="mx-c f-esq">
       <p class="f-nota" id="nota1">1 Lote único, <span class="pvLote">TJPR e STJ</span>: <span id="pvA">18</span> atos selecionados, <span id="pvD3">12</span> no teste. Ficam fora os atos cujos embargos reconheceram só omissão, porque o CERNE lê só o ato, e a omissão depende dos autos. Os dois pontos fora do que os embargos corrigiram foram avaliados pelo autor. Resultado desta seleção, não taxa geral de precisão.</p>
       <div class="f-acao"><button class="btn solid" type="button" id="btnOutro">Escolher outro ato</button></div>
     </div>
-    <div class="f-dir">
-      <p class="f-txt">Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p>
+    <div class="mx-c f-dir">
       <figure class="funil rv" aria-label="Do lote ao ponto corrigido">
         <figcaption><span>Do lote ao ponto corrigido</span><span>acórdão × embargos acolhidos</span></figcaption>
         <ol>
@@ -2091,208 +1715,272 @@ body{background-color:var(--paper);
     </div>
   </div>
 
-  <div class="trip">
-    <div class="trip-cab rv">
-      <p class="ind">O dispositivo</p>
-      <h2 class="trip-t">Revisão confirmatória não encontra o que não procura.</h2>
-    </div>
-    <ol class="trip-l">
-      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">01</span><h3>Contexto</h3><p>Texto bem escrito pode esconder lacuna decisória e precedente sem pertinência material. A fluência convence antes que alguém confira o caminho.</p></div></div></li>
-      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">02</span><h3>Aplicação</h3><p>Todas as lentes leem cada ato, e nenhuma pode ser pulada. A dúvida formada enfrenta confronto adversarial e só se mantém sob critério fixo. O que resiste é consolidado por trecho, com identidade e rastro preservados.</p></div></div></li>
-      <li class="rv"><div class="tp-casca"><div class="tp-nucleo"><span class="tp-n">03</span><h3>Efeito</h3><p>Rodada sem achado é resultado válido, não certificado de correção jurídica. O registro preserva também os afastados e os argumentos que justificaram o afastamento.</p></div></div></li>
-    </ol>
+  <div class="mx-row sec-cab trip-cab">
+    <div class="mx-c"><p class="ind">O dispositivo</p></div>
+    <div class="mx-c"><h2 class="trip-t">Revisão confirmatória não encontra o que não procura.</h2></div>
   </div>
-
-  <h2 class="citacao">A IA ajuda a percorrer o caminho. Alguém ainda precisa perguntar se ela caminhou.</h2>
-  <div class="seta-w">
-    <button class="seta" type="button" id="btnTese" aria-expanded="false" aria-controls="tese">
+  <div class="mx-row">
+    <div class="mx-c mx-v"></div>
+    <div class="mx-c mx-lista">
+      <ol class="trip-l mx-campos c3">
+        <li class="rv"><span class="tp-n">01</span><h3>Contexto</h3><p>Texto bem escrito pode esconder lacuna decisória e precedente sem pertinência material. A fluência convence antes que alguém confira o caminho.</p></li>
+        <li class="rv"><span class="tp-n">02</span><h3>Aplicação</h3><p>Todas as lentes leem cada ato, e nenhuma pode ser pulada. A dúvida formada enfrenta confronto adversarial e só se mantém sob critério fixo. O que resiste é consolidado por trecho, com identidade e rastro preservados.</p></li>
+        <li class="rv"><span class="tp-n">03</span><h3>Efeito</h3><p>Rodada sem achado é resultado válido, não certificado de correção jurídica. O registro preserva também os afastados e os argumentos que justificaram o afastamento.</p></li>
+      </ol>
+    </div>
+  </div>
+  <div class="mx-row">
+    <div class="mx-c mx-v"></div>
+    <div class="mx-c f-cit"><h2 class="citacao">A IA ajuda a percorrer o caminho. Alguém ainda precisa perguntar se ela caminhou.</h2></div>
+  </div>
+  <div class="mx-row f-tese">
+    <button class="mx-c seta" type="button" id="btnTese" aria-expanded="false" aria-controls="tese">
       <span>A tese por trás do sistema</span>
-      <span class="ar" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 3 V18 M4.5 11.5 L11 18 L17.5 11.5" fill="none" stroke="#181818" stroke-width="2.4" stroke-linecap="square"/></svg></span>
+      <span class="ar" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 22 22"><path d="M11 3 V18 M4.5 11.5 L11 18 L17.5 11.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg></span>
     </button>
   </div>
 </section>
 
-<!-- PARTE 2 ▪ a tese (oculta; abre pela seta ou por #tese) -->
+<!-- PARTE 2 ▪ a tese (oculta; abre pela faixa ou por #tese) -->
 <div class="tese" id="tese" hidden>
 
   <!-- 2.1 -->
-  <section class="sec-e" aria-labelledby="t21">
-    <div class="in">
-      <p class="ind">01 ▪ O problema</p>
-      <h2 class="sec-t" id="t21" tabindex="-1">Houve supervisão. Falta saber do quê.</h2>
-      <div class="prosa">
-        <div class="corpo">
-          <p>Uma ferramenta pesquisa. Outra resume. Uma terceira compara. Um modelo formula a resposta. Alguém recebe o resultado, lê, concorda e segue.</p>
-          <p class="forte">O humano permaneceu no fluxo. Ainda falta saber o que ele fez dentro dele.</p>
-          <p>O Direito governa o raciocínio há muito tempo: fundamentação, contraditório e recurso existem porque a conclusão responde pelo percurso que a sustenta. Esse controle alcança o que se exterioriza. Quando sistemas selecionam, relacionam, inferem e reescrevem, parte da intervenção acontece antes do texto.</p>
-        </div>
-        <blockquote class="cit-l">“Governança começa quando o texto deixa de bastar como prova do caminho.”</blockquote>
+  <section class="sec-e mx" aria-labelledby="t21">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">01 ▪ O problema</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t21" tabindex="-1">Houve supervisão. Falta saber do quê.</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo">
+        <p>Uma ferramenta pesquisa. Outra resume. Uma terceira compara. Um modelo formula a resposta. Alguém recebe o resultado, lê, concorda e segue.</p>
+        <p class="forte">O humano permaneceu no fluxo. Ainda falta saber o que ele fez dentro dele.</p>
+        <p>O Direito governa o raciocínio há muito tempo: fundamentação, contraditório e recurso existem porque a conclusão responde pelo percurso que a sustenta. Esse controle alcança o que se exterioriza. Quando sistemas selecionam, relacionam, inferem e reescrevem, parte da intervenção acontece antes do texto.</p>
       </div>
+      <div class="mx-c"><blockquote class="cit-l">“Governança começa quando o texto deixa de bastar como prova do caminho.”</blockquote></div>
     </div>
   </section>
 
   <!-- 2.2 -->
-  <section class="sec-e sec-d" aria-labelledby="t22">
-    <div class="in">
-      <p class="ind">02 ▪ A tese</p>
-      <h2 class="sec-t" id="t22">Governança do Raciocínio Jurídico</h2>
-      <p class="canonica"><small>Formulação canônica</small>Disciplina que estabelece e controla as condições de formação do raciocínio tecnologicamente mediado que sustenta conclusões com consequências jurídicas.</p>
-      <div class="corpo"><p>Os marcos existentes trabalham com organização, sistema ou dado. Aqui, a unidade é a conclusão com consequência jurídica e o percurso que a tornou possível.</p></div>
-      <p class="cond-cab">Condições necessárias e insuficientes</p>
-      <ul class="cond">
-        <li><b>Lastro</b><span>Há base verificável, fática e jurídica, para o que foi afirmado?</span></li>
-        <li><b>Rastro</b><span>O percurso pode ser reconstruído a partir de registros?</span></li>
-        <li><b>Responsabilidade</b><span>As intervenções relevantes podem ser atribuídas?</span></li>
-      </ul>
-      <p class="fecho-d">Correção olha para a conclusão. Governança alcança sua formação.</p>
-      <p class="ref">Christian da Costa ▪ 2026 ▪ <a href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">DOI 10.5281/zenodo.22892157</a></p>
+  <section class="sec-e sec-d mx" aria-labelledby="t22">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">02 ▪ A tese</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t22">Governança do Raciocínio Jurídico</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c"><p class="mx-k">Formulação canônica</p></div>
+      <div class="mx-c"><p class="canonica">Disciplina que estabelece e controla as condições de formação do raciocínio tecnologicamente mediado que sustenta conclusões com consequências jurídicas.</p></div>
+      <div class="mx-c corpo"><p>Os marcos existentes trabalham com organização, sistema ou dado. Aqui, a unidade é a conclusão com consequência jurídica e o percurso que a tornou possível.</p></div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c"><p class="mx-k">Condições necessárias e insuficientes</p></div>
+      <div class="mx-c mx-lista">
+        <ul class="cond mx-campos c3">
+          <li><b>Lastro</b><span>Há base verificável, fática e jurídica, para o que foi afirmado?</span></li>
+          <li><b>Rastro</b><span>O percurso pode ser reconstruído a partir de registros?</span></li>
+          <li><b>Responsabilidade</b><span>As intervenções relevantes podem ser atribuídas?</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c"><p class="fecho-d">Correção olha para a conclusão. Governança alcança sua formação.</p></div>
+      <div class="mx-c"><p class="ref">Christian da Costa ▪ 2026 ▪ <a href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">DOI 10.5281/zenodo.22892157</a></p></div>
     </div>
   </section>
 
   <!-- 2.3 -->
-  <section class="sec-e" aria-labelledby="t23">
-    <div class="in">
-      <p class="ind">03 ▪ Do conceito ao sistema</p>
-      <h2 class="sec-t" id="t23">Princípios não executam controles.</h2>
-      <div class="corpo">
+  <section class="sec-e mx" aria-labelledby="t23">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">03 ▪ Do conceito ao sistema</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t23">Princípios não executam controles.</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo">
         <p>Na série, a resposta ganhou forma: a devolução precisa ser um estado próprio do fluxo, acompanhada do achado que a motivou, da pergunta que precisa ser respondida e do trecho que deve ser saneado.</p>
         <p class="forte">O CERNE é essa frase convertida em sistema.</p>
-        <p>Um modelo bem instruído também revisa. A diferença não está na pergunta, mas no percurso que a produz. Todas as lentes leem cada ato, e nenhuma pode ser pulada. Quem levanta a dúvida não a defende; quem a defende não a julga. As citações atribuídas ao ato são conferidas, sem que isso valide fontes externas. O resultado se diz num vocabulário fechado, que não admite adjetivo.</p>
       </div>
-      <ul class="cards">
-        <li class="card">
-          <div class="card-cab"><span class="card-n">01</span><span class="card-cond">condição: <b>Responsabilidade</b></span></div>
-          <h3><small>HUMAN OVERSIGHT</small>Supervisão humana</h3>
-          <p class="prob">“Confirmar sem poder recusar é a forma mais discreta de estar ausente.”</p>
-          <p class="ctl">O CERNE não conclui. Devolve perguntas presas a trechos, e quem responde pelo ato confirma, corrige ou recusa. Supervisão, aqui, é poder de recusa com objeto definido.</p>
-          <p class="evd" id="evd1">Nos oito atos públicos, 39 perguntas e nenhum veredito.</p>
-          <p class="map">Human-in-the-Loop ▪ EU AI Act, art. 14 ▪ Res. CNJ 615/2025 (correspondência conceitual, não certificação)</p>
-        </li>
-        <li class="card">
-          <div class="card-cab"><span class="card-n">02</span><span class="card-cond">condição: <b>Rastro</b></span></div>
-          <h3><small>TRACEABILITY</small>Rastro</h3>
-          <p class="prob">“Não sabemos dizer de onde veio essa conclusão.”</p>
-          <p class="ctl">Toda pergunta tem endereço no ato. Toda rodada fica registrada e vinculada, pelo hash, ao documento examinado. Cada dúvida deixa duas marcas: o Lastro mostra por que ela era defensável; o Rastro, como foi processada até a decisão. Dúvida sem lastro é ruído. Dúvida sem rastro é opinião.</p>
-          <p class="map">Audit Trail ▪ Record-keeping ▪ ISO/IEC 42001 (correspondência conceitual, não certificação)</p>
-        </li>
-        <li class="card">
-          <div class="card-cab"><span class="card-n">03</span><span class="card-cond">condição: <b>Lastro</b></span></div>
-          <h3><small>ADVERSARIAL REVIEW</small>Separação funcional</h3>
-          <p class="prob">“O modelo concorda consigo mesmo.”</p>
-          <p class="ctl">Quem acusa não julga. Funções separadas enfrentam cada dúvida antes que ela vire pergunta, e o que não resiste é afastado com registro.</p>
-          <p class="map">Red Teaming ▪ Model Risk Management ▪ Revisão adversarial (referências de desenho)</p>
-        </li>
-        <li class="card">
-          <div class="card-cab"><span class="card-n">04</span><span class="card-cond">condição: <b>Rastro</b></span></div>
-          <h3><small>GOVERNANCE BY DESIGN</small>Falha declarada</h3>
-          <p class="prob">“Quando falha, falha calado.”</p>
-          <p class="ctl">Falha técnica encerra a rodada inteira, sem relatório parcial. Nenhuma falha aparece como ausência de dúvida.</p>
-          <p class="map">Safety by Design ▪ Fail-Safe ▪ Incident Handling</p>
-        </li>
-      </ul>
+      <div class="mx-c corpo"><p>Um modelo bem instruído também revisa. A diferença não está na pergunta, mas no percurso que a produz. Todas as lentes leem cada ato, e nenhuma pode ser pulada. Quem levanta a dúvida não a defende; quem a defende não a julga. As citações atribuídas ao ato são conferidas, sem que isso valide fontes externas. O resultado se diz num vocabulário fechado, que não admite adjetivo.</p></div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c mx-lista">
+        <ul class="cards mx-campos c4">
+          <li class="card">
+            <div class="card-cab"><span class="card-n">01</span><span class="card-cond">condição: <b>Responsabilidade</b></span></div>
+            <h3><small>HUMAN OVERSIGHT</small>Supervisão humana</h3>
+            <p class="prob">“Confirmar sem poder recusar é a forma mais discreta de estar ausente.”</p>
+            <p class="ctl">O CERNE não conclui. Devolve perguntas presas a trechos, e quem responde pelo ato confirma, corrige ou recusa. Supervisão, aqui, é poder de recusa com objeto definido.</p>
+            <p class="evd" id="evd1">Nos oito atos públicos, 39 perguntas e nenhum veredito.</p>
+            <p class="map">Human-in-the-Loop ▪ EU AI Act, art. 14 ▪ Res. CNJ 615/2025 (correspondência conceitual, não certificação)</p>
+          </li>
+          <li class="card">
+            <div class="card-cab"><span class="card-n">02</span><span class="card-cond">condição: <b>Rastro</b></span></div>
+            <h3><small>TRACEABILITY</small>Rastro</h3>
+            <p class="prob">“Não sabemos dizer de onde veio essa conclusão.”</p>
+            <p class="ctl">Toda pergunta tem endereço no ato. Toda rodada fica registrada e vinculada, pelo hash, ao documento examinado. Cada dúvida deixa duas marcas: o Lastro mostra por que ela era defensável; o Rastro, como foi processada até a decisão. Dúvida sem lastro é ruído. Dúvida sem rastro é opinião.</p>
+            <p class="map">Audit Trail ▪ Record-keeping ▪ ISO/IEC 42001 (correspondência conceitual, não certificação)</p>
+          </li>
+          <li class="card">
+            <div class="card-cab"><span class="card-n">03</span><span class="card-cond">condição: <b>Lastro</b></span></div>
+            <h3><small>ADVERSARIAL REVIEW</small>Separação funcional</h3>
+            <p class="prob">“O modelo concorda consigo mesmo.”</p>
+            <p class="ctl">Quem acusa não julga. Funções separadas enfrentam cada dúvida antes que ela vire pergunta, e o que não resiste é afastado com registro.</p>
+            <p class="map">Red Teaming ▪ Model Risk Management ▪ Revisão adversarial (referências de desenho)</p>
+          </li>
+          <li class="card">
+            <div class="card-cab"><span class="card-n">04</span><span class="card-cond">condição: <b>Rastro</b></span></div>
+            <h3><small>GOVERNANCE BY DESIGN</small>Falha declarada</h3>
+            <p class="prob">“Quando falha, falha calado.”</p>
+            <p class="ctl">Falha técnica encerra a rodada inteira, sem relatório parcial. Nenhuma falha aparece como ausência de dúvida.</p>
+            <p class="map">Safety by Design ▪ Fail-Safe ▪ Incident Handling</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <!-- 2.4 -->
-  <section class="sec-e sec-d" aria-labelledby="t24">
-    <div class="in">
-      <p class="ind">04 ▪ Limites</p>
-      <h2 class="sec-t" id="t24">O que o CERNE se recusa a fazer</h2>
-      <ul class="lim">
-        <li><b>Triagem, não adjudicação.</b><span>Examina e pergunta. Quem responde pelo ato confirma ou corrige. Foi feito para perguntar a mais, não para concluir a mais: pergunta sobrando custa pouco, dúvida omitida custa caro.</span></li>
-        <li><b>Nenhuma nota.</b><span>Questões juridicamente diferentes não cabem numa medida comum. Somar e ponderar dúvidas já é ato jurídico, e pertence a quem responde pelo ato.</span></li>
-        <li><b>Nenhuma cota de achados.</b><span>Uma rodada sem pergunta é resultado válido. Quem precisa sempre encontrar problema está mal calibrado.</span></li>
-        <li><b>Nenhuma falha silenciosa.</b><span>A rodada que falha termina inteira, e diz que falhou.</span></li>
-        <li><b>Contrato da fonte.</b><span>Não verifica existência, vigência nem atualidade de norma ou jurisprudência. Uma fonte pode existir e continuar sem sustentar o que lhe foi atribuído: o CERNE pergunta pela sustentação, e a existência fica com quem cita.</span></li>
-        <li><b>Perímetro.</b><span>Só examina ato judicial pronto: decisão liminar, voto, sentença ou acórdão. Não escreve a conclusão, não revisa estilo e não faz validação documental.</span></li>
-        <li><b>Dados.</b><span>O texto examinado passa por modelos externos. Use atos públicos ou fictícios; sigilo e dados pessoais são saneados por quem opera.</span></li>
-      </ul>
-      <p class="fecho-d">Governar um sistema é também fixar o que ele não está autorizado a concluir.</p>
+  <section class="sec-e sec-d mx" aria-labelledby="t24">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">04 ▪ Limites</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t24">O que o CERNE se recusa a fazer</h2></div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c mx-lista">
+        <ul class="lim">
+          <li><b>Triagem, não adjudicação.</b><span>Examina e pergunta. Quem responde pelo ato confirma ou corrige. Foi feito para perguntar a mais, não para concluir a mais: pergunta sobrando custa pouco, dúvida omitida custa caro.</span></li>
+          <li><b>Nenhuma nota.</b><span>Questões juridicamente diferentes não cabem numa medida comum. Somar e ponderar dúvidas já é ato jurídico, e pertence a quem responde pelo ato.</span></li>
+          <li><b>Nenhuma cota de achados.</b><span>Uma rodada sem pergunta é resultado válido. Quem precisa sempre encontrar problema está mal calibrado.</span></li>
+          <li><b>Nenhuma falha silenciosa.</b><span>A rodada que falha termina inteira, e diz que falhou.</span></li>
+          <li><b>Contrato da fonte.</b><span>Não verifica existência, vigência nem atualidade de norma ou jurisprudência. Uma fonte pode existir e continuar sem sustentar o que lhe foi atribuído: o CERNE pergunta pela sustentação, e a existência fica com quem cita.</span></li>
+          <li><b>Perímetro.</b><span>Só examina ato judicial pronto: decisão liminar, voto, sentença ou acórdão. Não escreve a conclusão, não revisa estilo e não faz validação documental.</span></li>
+          <li><b>Dados.</b><span>O texto examinado passa por modelos externos. Use atos públicos ou fictícios; sigilo e dados pessoais são saneados por quem opera.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c"><p class="fecho-d">Governar um sistema é também fixar o que ele não está autorizado a concluir.</p></div>
     </div>
   </section>
 
   <!-- 2.5 -->
-  <section class="sec-e" aria-labelledby="t25">
-    <div class="in">
-      <p class="ind">05 ▪ Validação</p>
-      <h2 class="sec-t" id="t25">A referência está nos autos.</h2>
-      <div class="corpo"><p>Cada caso é um par: um acórdão e os embargos de declaração acolhidos contra ele. A rodada recebe só o acórdão. Os embargos entram depois, para conferir se alguma pergunta antecipou o vício que o tribunal reconheceu.</p></div>
-      <div class="numeros" aria-label="Números da validação">
-        <div><b id="vA">18</b><span>pares selecionados</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-        <div><b id="vE">12</b><span>no teste</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-        <div class="dest"><b id="vC">9</b><span>com ponto embargável</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-        <div><b id="vS">7</b><span>no ponto corrigido</span><small><span class="pvLote">TJPR e STJ</span></small></div>
+  <section class="sec-e mx" aria-labelledby="t25">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">05 ▪ Validação</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t25">A referência está nos autos.</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo"><p>Cada caso é um par: um acórdão e os embargos de declaração acolhidos contra ele. A rodada recebe só o acórdão. Os embargos entram depois, para conferir se alguma pergunta antecipou o vício que o tribunal reconheceu.</p></div>
+      <div class="mx-c mx-v"></div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c mx-lista">
+        <div class="numeros mx-campos c4" aria-label="Números da validação">
+          <div><b id="vA">18</b><span>pares selecionados</span><small><span class="pvLote">TJPR e STJ</span></small></div>
+          <div><b id="vE">12</b><span>no teste</span><small><span class="pvLote">TJPR e STJ</span></small></div>
+          <div class="dest"><b id="vC">9</b><span>com ponto embargável</span><small><span class="pvLote">TJPR e STJ</span></small></div>
+          <div><b id="vS">7</b><span>no ponto corrigido</span><small><span class="pvLote">TJPR e STJ</span></small></div>
+        </div>
       </div>
-      <div class="corpo"><p>A amostra demonstra a execução técnica do percurso e a capacidade de antecipar vícios reconhecidos depois. Não certifica sensibilidade, especificidade nem estabilidade jurídica, e não mede falsos positivos nem o desempenho em atos sem vício reconhecido. Como o sistema pergunta a mais de propósito, discordar dele não prova, por si, que ele errou.</p></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo"><p>A amostra demonstra a execução técnica do percurso e a capacidade de antecipar vícios reconhecidos depois. Não certifica sensibilidade, especificidade nem estabilidade jurídica, e não mede falsos positivos nem o desempenho em atos sem vício reconhecido. Como o sistema pergunta a mais de propósito, discordar dele não prova, por si, que ele errou.</p></div>
+      <div class="mx-c mx-v"></div>
     </div>
   </section>
 
   <!-- 2.6 -->
-  <section class="sec-e" aria-labelledby="t26">
-    <div class="in">
-      <p class="ind">06 ▪ Engenharia</p>
-      <h2 class="sec-t" id="t26">Do requisito jurídico ao controle computacional</h2>
-      <div class="prosa">
-        <div class="corpo"><p>Núcleo em Python, de arquitetura modular e execução controlada. Cada rodada fica registrada, pode ser retomada e não admite entrega parcial. Modelos distintos ocupam funções separadas. O relatório sai em duas camadas: a leitura para quem decide e o registro técnico para quem confere. Suítes de teste próprias, versões datadas. Implementação assistida por IA, sob requisitos, arquitetura e critérios definidos pelo autor. O método é reservado.</p></div>
-        <blockquote class="cit-l">Fazer o sistema produzir é a parte barata. O trabalho está em fixar o que ele pode produzir, sob quais condições e com quais limites.</blockquote>
-      </div>
+  <section class="sec-e mx" aria-labelledby="t26">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">06 ▪ Engenharia</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t26">Do requisito jurídico ao controle computacional</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo"><p>Núcleo em Python, de arquitetura modular e execução controlada. Cada rodada fica registrada, pode ser retomada e não admite entrega parcial. Modelos distintos ocupam funções separadas. O relatório sai em duas camadas: a leitura para quem decide e o registro técnico para quem confere. Suítes de teste próprias, versões datadas. Implementação assistida por IA, sob requisitos, arquitetura e critérios definidos pelo autor. O método é reservado.</p></div>
+      <div class="mx-c"><blockquote class="cit-l">Fazer o sistema produzir é a parte barata. O trabalho está em fixar o que ele pode produzir, sob quais condições e com quais limites.</blockquote></div>
     </div>
   </section>
 
   <!-- 2.7 -->
-  <section class="sec-e sec-p" aria-labelledby="t27">
-    <div class="in">
-      <p class="ind">07 ▪ A série</p>
-      <h2 class="sec-t" id="t27">Cinco textos, um percurso</h2>
-      <p class="sub-s">Governança do Raciocínio Jurídico ▪ LinkedIn ▪ 21 a 26/09/2026</p>
-      <ol class="serie">
-        <li><span class="n">01</span><span class="tt">Eu confirmo. Tu confirmo. Ele confirmo</span><span class="ds">A verificação que se reduz a gesto sem função definida.</span></li>
-        <li><span class="n">02</span><span class="tt">Eu guardo. Tu guardas. Ele lembra</span><span class="ds">A memória que decide aquilo que o raciocínio conseguirá ver.</span></li>
-        <li><span class="n">03</span><span class="tt">Nós raciocinamos. Vós sustentareis?</span><span class="ds">A fonte que precisa existir e dizer aquilo que lhe foi atribuído.</span></li>
-        <li><span class="n">04</span><span class="tt">Eu escrevo. Tu assina. Ele outorga</span><span class="ds">A formação que desaparece dentro da redação.</span></li>
-        <li><span class="n">05</span><span class="tt">— Eu respondo</span><span class="ds">Quem arca com a conclusão também precisa conseguir dar suas razões.</span></li>
-      </ol>
-      <p class="ponte">O CERNE mora no último texto, entre responder por e responder a. Faz a pergunta antes que a assinatura reduza a resposta a confirmação.</p>
+  <section class="sec-e sec-p mx" aria-labelledby="t27">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">07 ▪ A série</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t27">Cinco textos, um percurso</h2><p class="sub-s">Governança do Raciocínio Jurídico ▪ LinkedIn ▪ 21 a 26/09/2026</p></div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c mx-lista">
+        <ol class="serie">
+          <li><span class="n">01</span><span class="tt">Eu confirmo. Tu confirmo. Ele confirmo</span><span class="ds">A verificação que se reduz a gesto sem função definida.</span></li>
+          <li><span class="n">02</span><span class="tt">Eu guardo. Tu guardas. Ele lembra</span><span class="ds">A memória que decide aquilo que o raciocínio conseguirá ver.</span></li>
+          <li><span class="n">03</span><span class="tt">Nós raciocinamos. Vós sustentareis?</span><span class="ds">A fonte que precisa existir e dizer aquilo que lhe foi atribuído.</span></li>
+          <li><span class="n">04</span><span class="tt">Eu escrevo. Tu assina. Ele outorga</span><span class="ds">A formação que desaparece dentro da redação.</span></li>
+          <li><span class="n">05</span><span class="tt">— Eu respondo</span><span class="ds">Quem arca com a conclusão também precisa conseguir dar suas razões.</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="mx-row">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c"><p class="ponte">O CERNE mora no último texto, entre responder por e responder a. Faz a pergunta antes que a assinatura reduza a resposta a confirmação.</p></div>
     </div>
   </section>
 
   <!-- 2.8 opcional: a pesquisa: fora do ar até decisão do autor; para publicar, retirar o atributo hidden -->
-  <section class="sec-e" aria-labelledby="t28" hidden>
-    <div class="in">
-      <p class="ind">08 ▪ A pesquisa</p>
-      <h2 class="sec-t" id="t28">Eu respondo. Mas adotei o juízo?</h2>
-      <div class="corpo">
+  <section class="sec-e mx" aria-labelledby="t28" hidden>
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">08 ▪ A pesquisa</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t28">Eu respondo. Mas adotei o juízo?</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo">
         <p>A assinatura atribui o ato. Sozinha, não demonstra que suas razões foram adotadas. A pesquisa Governa-me ou te devoro, em desenvolvimento, investiga sob que condições uma conclusão formada com participação de IA pode ser imputada sem ficção ao titular da competência que deveria sustentá-la.</p>
         <p class="forte">Um dispositivo pode exigir resposta. Responder continua sendo de quem decide.</p>
       </div>
+      <div class="mx-c mx-v"></div>
     </div>
   </section>
 
   <!-- 2.9 e 2.10 -->
-  <section class="sec-e" aria-labelledby="t29">
-    <div class="in">
-      <p class="ind">08 ▪ Autoria</p>
-      <h2 class="sec-t" id="t29">Christian da Costa</h2>
-      <div class="corpo">
+  <section class="sec-e mx" aria-labelledby="t29">
+    <div class="mx-row sec-cab">
+      <div class="mx-c"><p class="ind">08 ▪ Autoria</p></div>
+      <div class="mx-c"><h2 class="sec-t" id="t29">Christian da Costa</h2></div>
+    </div>
+    <div class="mx-row r-3">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c corpo">
         <p>Advogado (OAB/PR 89.297), mestre em Direito pela UFPR. Legal Engineering, Legal Operations e governança de IA. Concepção, cânone, arquitetura, avaliação e interface do CERNE. Formulação da Governança do Raciocínio Jurídico.</p>
         <p>Em uso próprio desde 11/2025. Versões anteriores à 5.0 serviram ao trabalho de gabinete em Turma Recursal do TJPR até 05/2026.</p>
       </div>
+      <div class="mx-c mx-v"></div>
     </div>
   </section>
 
   <!-- 2.11 -->
-  <section class="sec-e sec-d" aria-label="Fecho da tese">
-    <div class="in">
-      <p class="epigrafe">Antes de delegar o jurídico, é preciso governar o <span class="e">raciocínio</span>.</p>
-      <div class="fecho-acoes">
-        <button class="btn" type="button" id="btnRecolher">Recolher
-          <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 L8 5.5 L13 10.5" fill="none" stroke="#FCFCFC" stroke-width="2" stroke-linecap="square"/></svg>
-        </button>
-        <button class="btn" type="button" id="btnVoltar">Voltar à demonstração</button>
-      </div>
-      <div class="fecho-acoes">
-        <a class="btn" href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">Ler a Referência Teórica</a>
-        <a class="btn" href="mailto:christiandscosta@gmail.com?subject=CERNE%205.0.0%3A%20documenta%C3%A7%C3%A3o%20t%C3%A9cnica">Solicitar documentação técnica</a>
+  <section class="sec-e sec-d mx" aria-label="Fecho da tese">
+    <div class="mx-row sec-cab sec-fim">
+      <div class="mx-c mx-v"></div>
+      <div class="mx-c">
+        <p class="epigrafe">Antes de delegar o jurídico, é preciso governar o <span class="e">raciocínio</span>.</p>
+        <div class="fecho-acoes">
+          <button class="btn" type="button" id="btnRecolher">Recolher
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 10.5 L8 5.5 L13 10.5" fill="none" stroke="#FCFCFC" stroke-width="2" stroke-linecap="square"/></svg>
+          </button>
+          <button class="btn" type="button" id="btnVoltar">Voltar à demonstração</button>
+        </div>
+        <div class="fecho-acoes">
+          <a class="btn" href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">Ler a Referência Teórica</a>
+          <a class="btn" href="mailto:christiandscosta@gmail.com?subject=CERNE%205.0.0%3A%20documenta%C3%A7%C3%A3o%20t%C3%A9cnica">Solicitar documentação técnica</a>
+        </div>
       </div>
     </div>
   </section>
