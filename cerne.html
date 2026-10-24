@@ -906,16 +906,12 @@ body{background-color:var(--paper);
 .crivo-linha span{position:absolute;right:12px;top:-12px;padding:3px 10px;background:var(--ink);color:var(--paper);font-family:var(--f-mono);font-weight:700;font-size:11px;letter-spacing:.2em}
 
 /* ---------- demonstração: cabeçalho ao lado das pastas ---------- */
-.demo{max-width:var(--max);margin:0 auto;padding:clamp(48px,6vw,88px) var(--padx) 56px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
-.demo-cab{position:sticky;top:calc(var(--nav-h) + 24px);display:grid;gap:18px;justify-items:start}
 .ind{display:inline-flex;align-items:center;gap:10px;margin:0;font-family:var(--f-mono);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
 .ind::after{content:"";width:28px;height:1.5px;background:currentColor}
-.demo-cab h2{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,3.4vw,3rem);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
 .contador{display:flex;align-items:baseline;gap:12px;margin:0}
 .contador b{font-family:var(--f-num);font-weight:700;font-size:56px;line-height:1;letter-spacing:-.03em}
 .contador span{font-family:var(--f-mono);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
 .instr{margin:0;font-size:18px;line-height:1.5;max-width:22em}
-.demo .arquivo-col{min-width:0}
 
 /* ---------- máquina: cores da paleta ---------- */
 .maq-col{top:calc(var(--nav-h) + 14px)}
@@ -1051,7 +1047,6 @@ body{background-color:var(--paper);
 /* ---------- responsivo ---------- */
 @media (min-width:1021px){
   .maq-col{height:max(calc(100vh - var(--nav-h) - 28px),720px)}
-  .demo{gap:40px}
   .contador b{font-size:48px}
   .instr{font-size:16px}
   .prog-num b{font-size:80px}
@@ -1064,8 +1059,6 @@ body{background-color:var(--paper);
   .nav{position:relative}
   .marca-sub{display:none}
   .heroi-in{grid-template-columns:minmax(0,1fr);gap:36px}
-  .demo{grid-template-columns:minmax(0,1fr);gap:28px;padding:48px 24px 40px}
-  .demo-cab{position:static}
   .prosa{gap:24px}
   .cards{grid-template-columns:minmax(0,1fr)}
   .cond{grid-template-columns:minmax(0,1fr)}
@@ -1079,7 +1072,6 @@ body{background-color:var(--paper);
   .heroi-in{padding:36px 16px 44px}
   .assin-wrap{gap:12px}
   .crivo-jan{height:330px}
-  .demo{padding:40px 16px 32px}
   .sec-e .in{padding:0 16px}
   .serie li{grid-template-columns:36px minmax(0,1fr)}
   .serie .ds{grid-column:2}
@@ -1199,9 +1191,6 @@ body{background-color:var(--paper);
 .card .evd{color:var(--azul)}
 
 /* ---------- ficha técnica ao lado da gaveta (moldura dupla) ---------- */
-.demo-cab{gap:16px}
-.ft-casca{width:100%;margin-top:14px;padding:6px;border:1px solid rgba(24,24,24,.12);border-radius:22px;background:rgba(24,24,24,.035)}
-.ft-nucleo{padding:20px 22px 18px;border:1.5px solid var(--ink);border-radius:16px;background-color:var(--paper);background-image:var(--folha-bg);background-size:16px 16px,16px 16px,4px 4px,4px 4px;box-shadow:inset 0 1px 0 #fff}
 .ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
 .ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-d)}
@@ -1210,20 +1199,11 @@ body{background-color:var(--paper);
 .ft-mod a:hover{color:var(--red)}
 .ft-lead{margin:0 0 14px;font-family:var(--f-serif);font-style:italic;font-weight:600;font-size:17px;line-height:1.35;text-wrap:pretty}
 .ft{margin:0;display:grid}
-.ft div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;padding:9px 0;border-top:1px solid rgba(24,24,24,.14)}
 .ft dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
 .ft dd{margin:0;font-size:13.5px;line-height:1.48;color:#262626;text-wrap:pretty}
 .ft-rod{display:flex;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1.5px dashed rgba(24,24,24,.28);font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
 .ft-rod i{flex:none;width:10px;height:10px;border-radius:2px;background:var(--azul);box-shadow:-6px 0 0 -1px var(--red)}
 .ft-rod i{margin-left:6px}
-@media (min-width:1021px) and (max-height:760px){
-  .demo-cab{gap:12px}
-  .demo-cab h2{font-size:clamp(1.8rem,3vw,2.5rem)}
-  .ft-nucleo{padding:16px 18px 14px}
-  .ft-lead{font-size:15px;margin-bottom:8px}
-  .ft div{padding:7px 0}
-  .ft dd{font-size:12.5px;line-height:1.45}
-}
 
 /* ---------- máquina escura (a folha segue papel) ---------- */
 .maq .gab{background:var(--m-base);border-color:var(--m-base);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 30px 60px -36px rgba(24,24,24,.55)}
@@ -1327,7 +1307,6 @@ body{background-color:var(--paper);
   .f-esq,.f-dir{display:contents}
   .f-grade .f-num{order:1}.f-grade .f-txt{order:2}.f-grade .funil{order:3;margin-top:8px}.f-grade .f-nota{order:4;margin-top:4px}.f-grade .f-acao{order:5;margin-top:0}
   .trip-l{grid-template-columns:minmax(0,1fr)}
-  .ft-casca{margin-top:6px}
 }
 @media (max-width:640px){
   .funil li{grid-template-columns:minmax(0,1fr) 34px;gap:4px 10px}
@@ -1335,7 +1314,6 @@ body{background-color:var(--paper);
   .funil .fu-b{grid-column:1;grid-row:2}
   .funil li b{grid-row:2}
   .funil figcaption{flex-direction:column;gap:2px}
-  .ft div{grid-template-columns:minmax(0,1fr);gap:2px}
 }
 
 /* ---------- histórico de versões: linha do tempo ---------- */
@@ -1618,6 +1596,30 @@ body{background-position:0 0}
   .hd-lema .hd-ins{grid-template-columns:1fr;animation:none}
   .hd-lema .hd-ins em{opacity:1;animation:none}
 }
+
+/* ---------- demonstração: enquadramento em campos (gaveta, máquina e folha intactas) ---------- */
+.demo{position:relative}
+.demo-tit>.mx-c{padding-top:calc(var(--pad) * 2.5);padding-bottom:calc(var(--pad) * 1.5)}
+.demo-tit .ind{padding-top:.5em}
+.demo-tit h2{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,4cqw,3rem);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
+.ft-lado .ft-cab{flex-direction:column;align-items:flex-start;gap:10px;margin:0}
+.ft-corpo{padding:0}
+.ft-corpo .ft-lead{margin:0;padding:var(--pad);max-width:46em}
+/* Entrada, Opera, Risco e Saída: quatro campos; dois por linha quando a
+   largura do CERNE aperta a leitura; um por linha no celular. Medido:
+   em quatro colunas, abaixo de ~1200 px de CERNE o campo cai para menos
+   de ~29 caracteres por linha; em 2×2 fica entre 40 e 60. */
+.ft{grid-template-columns:minmax(0,1fr)}
+.ft>div{display:flex;flex-direction:column;gap:6px;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+.ft dt{padding:0}
+.ft dd{max-width:34em}
+@container mx (min-width:481px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container mx (min-width:1200px){.ft{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.arq-lado{display:flex;flex-direction:column;gap:16px}
+.arq-lado .instr{font-size:16px;line-height:1.5}
+.arq-lado .ft-rod{margin:0}
+.arquivo-col{padding-top:calc(var(--pad) * 1.5);padding-bottom:calc(var(--pad) * 2)}
+.arquivo-col .arquivo{max-width:920px;margin-inline:auto}
 </style>
 </head>
 <body>
@@ -1684,26 +1686,29 @@ body{background-position:0 0}
 </script>
 
 <!-- 1.4 pastas -->
-<section class="demo" id="mesa" aria-labelledby="mesaT">
-  <div class="demo-cab">
-    <p class="ind">Demonstração</p>
-    <h2 id="mesaT">Veja o percurso posto à prova</h2>
-    <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
-    <div class="ft-casca rv">
-      <div class="ft-nucleo">
-        <div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div>
-        <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
-        <dl class="ft">
+<section class="demo mx" id="mesa" aria-labelledby="mesaT">
+  <div class="mx-row demo-tit">
+    <div class="mx-c"><p class="ind">Demonstração</p></div>
+    <div class="mx-c"><h2 id="mesaT">Veja o percurso posto à prova</h2></div>
+  </div>
+  <div class="mx-row ft-row">
+    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div></div>
+    <div class="mx-c ft-corpo">
+      <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
+      <dl class="ft">
           <div><dt>Entrada</dt><dd>Ato judicial pronto: decisão liminar, voto, sentença ou acórdão, de 40 a 250 mil caracteres.</dd></div>
           <div><dt>Opera</dt><dd>Lê o ato inteiro por lentes de fronteira própria. Cada dúvida enfrenta acusação e defesa em funções separadas, e só se mantém se resistir ao crivo.</dd></div>
           <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto, e dúvida afastada ou mantida sem razão. O confronto testa a sustentação; não certifica fontes nem substitui o juízo humano.</dd></div>
           <div><dt>Saída</dt><dd>Achados em perguntas presas ao trecho, leitura para quem decide, relatório técnico e rastro integral, que guarda também os afastados.</dd></div>
         </dl>
-        <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
-      </div>
     </div>
   </div>
-  <div class="arquivo-col">
+  <div class="mx-row arq-row">
+    <div class="mx-c arq-lado">
+      <p class="instr">Abra uma pasta. Leia o ato. Reproduza a rodada.</p>
+      <p class="ft-rod"><i aria-hidden="true"></i>Os estados qualificam cada dúvida, nunca o ato. A decisão permanece humana.</p>
+    </div>
+    <div class="mx-c arquivo-col">
     <div class="arquivo" id="arquivo">
       <div class="arq-caixa" aria-hidden="true"></div>
       <ol class="pastas" id="pastas" aria-label="Atos disponíveis"></ol>
@@ -1724,6 +1729,7 @@ body{background-position:0 0}
           </g>
         </svg>
       </div>
+    </div>
     </div>
   </div>
 </section>
