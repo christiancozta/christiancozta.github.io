@@ -647,13 +647,10 @@ body{background-color:var(--paper);
 .ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
 .ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red-d)}
-.ft-mod{font-family:var(--f-caps);font-weight:600;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
-.ft-mod a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.25px}
-.ft-mod a:hover{color:var(--red)}
 .ft-lead{margin:0 0 14px;font-family:var(--f-cit);font-style:italic;font-weight:600;font-size:17px;line-height:1.35;text-wrap:pretty}
 .ft{margin:0;display:grid}
-.ft dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
-.ft dd{margin:0;font-size:13.5px;line-height:1.48;color:#262626;text-wrap:pretty}
+.ft dt,.ft-ficha dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.ft dd,.ft-ficha dd{margin:0;font-size:13.5px;line-height:1.48;color:#262626;text-wrap:pretty}
 .ft-rod{display:flex;align-items:center;gap:10px;margin:4px 0 0;padding-top:12px;border-top:1.5px dashed rgba(24,24,24,.28);font-family:var(--f-caps);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
 .ft-rod i{flex:none;width:10px;height:10px;border-radius:2px;background:var(--azul);box-shadow:-6px 0 0 -1px var(--red)}
 .ft-rod i{margin-left:6px}
@@ -813,6 +810,7 @@ body{background-position:0 0}
 @keyframes hd-fundo{from{opacity:0;transform:translateY(.3em) scale(.6);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
 .hd-lema-c{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:24px}
 .hd-txt{display:grid;align-content:start;gap:12px}
+.hd-txt .ft-lead{margin:0}
 .hd-desc{margin:0;max-width:34em;font-size:15px;line-height:1.6;color:#2A2F36}
 .hd-proj{margin:0;max-width:36em;font-size:13.5px;line-height:1.55;color:var(--ink2)}
 .hd-desc a,.hd-proj a{color:var(--red);font-weight:600;text-decoration:none}
@@ -885,17 +883,20 @@ body{background-position:0 0}
 .demo-tit h2{margin:0;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,4cqw,3rem);line-height:1.04;letter-spacing:-.01em;text-wrap:balance}
 .ft-lado .ft-cab{flex-direction:column;align-items:flex-start;gap:10px;margin:0}
 .ft-corpo{padding:0}
-.ft-corpo .ft-lead{margin:0;padding:var(--pad);max-width:none}
-/* Entrada, Opera, Risco e Saída: quatro campos; dois por linha quando a
-   largura do CERNE aperta a leitura; um por linha no celular. Medido:
-   em quatro colunas, abaixo de ~1200 px de CERNE o campo cai para menos
-   de ~29 caracteres por linha; em 2×2 fica entre 40 e 60. */
+/* ficha: os quatro itens curtos sob o rótulo, na coluna lateral */
+.ft-ficha{margin:16px 0 0;display:grid;gap:14px}
+.ft-ficha dd{margin-top:4px}
+/* os dois parágrafos da apresentação: um campo cada, lado a lado a partir de 641 px */
+.ft-par{display:grid;grid-template-columns:minmax(0,1fr)}
+.ft-par>p{padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+@container mx (min-width:641px){.ft-par{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Mineração, Crivo e Consolidação: três campos lado a lado a partir de
+   1021 px de CERNE; um por linha abaixo disso. */
 .ft{grid-template-columns:minmax(0,1fr)}
 .ft>div{display:flex;flex-direction:column;gap:6px;padding:var(--pad);box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
 .ft dt{padding:0}
 .ft dd{max-width:34em}
-@container mx (min-width:481px){.ft{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@container mx (min-width:1200px){.ft{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@container mx (min-width:1021px){.ft{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 /* ---------- fecho: prova, funil e tríptico como campos ---------- */
 .fecho{position:relative}
@@ -1232,10 +1233,9 @@ body{background-position:0 0}
   </div>
   <div class="mx-row hd-tri">
     <div class="mx-c hd-lema-c">
-      <p class="hd-desc">O CERNE audita a sustentação argumentativa de decisões judiciais. Examina o raciocínio jurídico expresso, submete possíveis fragilidades a confronto adversarial e devolve as questões que resistem ao crivo, expressamente vinculadas aos trechos do ato.</p>
       <p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p></div>
     <div class="mx-c hd-txt">
-      <p class="hd-desc">A avaliação permanece humana. Cada achado decorre de um procedimento de base científica, mas não constitui um veredito. Pecar pelo excesso é menos custoso do que pela omissão.</p>
+      <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
       <p class="hd-proj">Projeto autoral de <a href="https://christiancozta.github.io/arco.html" target="_blank" rel="noopener">Christian da Costa</a>, em uso próprio desde 11/2025, no marco da Governança do Raciocínio Jurídico.</p>
     </div>
     <a class="mx-c hd-acao" href="#mesa"><span>Veja o percurso</span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 V17 M4 11 L10 17 L16 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
@@ -1269,15 +1269,24 @@ body{background-position:0 0}
     <div class="mx-c"><h2 id="mesaT">Veja o percurso posto à prova</h2></div>
   </div>
   <div class="mx-row ft-row">
-    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span><span class="ft-mod">módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a></span></div></div>
+    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span></div>
+      <dl class="ft-ficha">
+        <div><dt>Entrada</dt><dd>Decisão liminar, sentença, voto, acórdão</dd></div>
+        <div><dt>Opera</dt><dd>Exame do ato por lentes de fronteira própria</dd></div>
+        <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto</dd></div>
+        <div><dt>Saída</dt><dd>Achados em perguntas e registro das dúvidas afastadas</dd></div>
+      </dl>
+    </div>
     <div class="mx-c ft-corpo">
-      <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
+      <div class="ft-par">
+        <p class="hd-desc">O CERNE audita a sustentação argumentativa de decisões judiciais. Examina o raciocínio jurídico expresso, submete possíveis fragilidades a confronto adversarial e devolve as questões que resistem ao crivo, expressamente vinculadas aos trechos do ato.</p>
+        <p class="hd-desc">A avaliação permanece humana. Cada achado decorre de um procedimento de base científica, mas não constitui um veredito. Pecar pelo excesso é menos custoso do que pela omissão.</p>
+      </div>
       <dl class="ft">
-          <div><dt>Entrada</dt><dd>Ato judicial pronto: decisão liminar, voto, sentença ou acórdão, de 40 a 250 mil caracteres.</dd></div>
-          <div><dt>Opera</dt><dd>Lê o ato inteiro por lentes de fronteira própria. Cada dúvida enfrenta acusação e defesa em funções separadas, e só se mantém se resistir ao crivo.</dd></div>
-          <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto, e dúvida afastada ou mantida sem razão. O confronto testa a sustentação; não certifica fontes nem substitui o juízo humano.</dd></div>
-          <div><dt>Saída</dt><dd>Achados em perguntas presas ao trecho, leitura para quem decide, relatório técnico e rastro integral, que guarda também os afastados.</dd></div>
-        </dl>
+        <div><dt>I. Mineração</dt><dd>O ato é examinado integralmente por lentes de atuação delimitada. Possíveis fragilidades dão origem a dúvidas vinculadas a trechos identificáveis do texto. Nesta etapa, nenhuma dúvida é tratada como achado definitivo.</dd></div>
+        <div><dt>II. Crivo</dt><dd>As dúvidas formuladas são submetidas a exame crítico e contraposição fundamentada. Algumas são afastadas; outras permanecem para apreciação humana. O procedimento distingue a condição de cada dúvida e preserva as razões de seu afastamento, sem emitir juízo sobre o ato como um todo.</dd></div>
+        <div><dt>III. Consolidação</dt><dd>As dúvidas mantidas são organizadas por trecho e traduzidas em perguntas dirigidas ao responsável pelo ato. A apresentação preserva suas classificações e vínculos com o exame realizado. As dúvidas afastadas permanecem documentadas, sem integrar os achados.</dd></div>
+      </dl>
     </div>
   </div>
   <div class="mx-row lista-row">
