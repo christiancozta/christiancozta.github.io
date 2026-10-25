@@ -282,17 +282,18 @@ body{
 }
 /* o travessão que cresce: "você está aqui", sem grito e sem cor */
 .rail__link::after{
-  content:""; position:absolute; left:0; bottom:-1px; height:1px; width:0;
+  content:""; position:absolute; left:0; bottom:-1px; height:1px; width:100%;
   background:var(--paper);
-  transition:width var(--slow) var(--ease);
+  /* cresce por recorte, não por largura: nada recalcula o layout */
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path var(--slow) var(--ease);
 }
 .rail__link:hover{ color:var(--paper); }
 .rail__link:hover .n{ color:var(--pp-72); }
-.rail__link:hover::after{ width:1.75rem; }
+.rail__link:hover::after{ clip-path:inset(0 calc(100% - 1.75rem) 0 0); }
 .rail__link[aria-current="true"]{ color:var(--paper); font-weight:600; }
 .rail__link[aria-current="true"] .n{ color:var(--paper); }
-.rail__link[aria-current="true"]::after{ width:100%; }
-.rail__link[aria-current="true"]::after{ width:100%; }
+.rail__link[aria-current="true"]::after{ clip-path:inset(0); }
 
 /* Estado territorial: o acento existe somente enquanto a página-mãe está em campo. */
 .rail__link[data-view="echo"][aria-current="true"],
@@ -1247,7 +1248,7 @@ body{
   .rail__link .n{ display:none; }
   .rail__link::after{ bottom:.05rem; }
   .rail__link:hover::after,
-  .rail__link[aria-current="true"]::after{ width:100%; }
+  .rail__link[aria-current="true"]::after{ clip-path:inset(0); }
   .rail__foot{ display:none; }
   /* o filho ocupa o que sobra da tela: uma superfície de rolagem, não duas */
   .child{ height:calc(100dvh - var(--rail-h)); }
@@ -1527,8 +1528,9 @@ body{
   width:calc((100% - 6px) / 4); height:calc(100% - 6px);
   background:var(--ink);
   transform:none;
-  transition:left 640ms var(--ease), width 640ms var(--ease);
-  will-change:left,width;
+  /* desliza por transform (posta pelo JS); a largura das portas é igual */
+  transition:transform 640ms var(--ease);
+  will-change:transform;
 }
 /* cada porta é uma gaveta do fichário: rótulo à esquerda, lastro embaixo.
    O filete só existe entre duas portas fechadas — a peça de tinta não é
