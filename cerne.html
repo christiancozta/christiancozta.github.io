@@ -895,11 +895,12 @@ body{background-position:0 0}
   .hd-lema-c,.hd-txt{padding-block:48px}
 }
 
-/* ---------- reserva metodológica: campo terracota de largura total ---------- */
-.reserva{background:#A63A23;color:#FCFCFC}
-.reserva-t{padding:calc(var(--pad) * 2.5) var(--pad);font-family:"Instrument Sans",Inter,"Helvetica Neue",Arial,sans-serif;font-weight:600;font-style:normal;text-align:left}
-.reserva-t p{margin:0;max-width:38em;font-size:clamp(18px,2.2cqw,24px);line-height:1.45;text-wrap:pretty}
-.reserva-t p+p{margin-top:.9em}
+/* ---------- reserva metodológica: faixa escura de largura total ---------- */
+.reserva{background:#181818;color:#FCFCFC}
+.reserva-t{padding:calc(var(--pad) * 1.5) var(--pad);font-family:"Instrument Sans",Inter,"Helvetica Neue",Arial,sans-serif;font-weight:600;font-style:normal;text-align:left}
+.reserva-t{display:flex;align-items:flex-start;gap:12px}
+.reserva-ic{flex:none;width:20px;height:18px;margin-top:3px}
+.reserva-t p{margin:0;max-width:56em;font-size:15px;line-height:1.6;text-wrap:pretty}
 @container mx (min-width:641px){
   .reserva-t{padding-left:calc(var(--side-w) + var(--pad) - 1px)}
 }
@@ -1295,19 +1296,17 @@ body{background-position:0 0}
 })();
 </script>
 
-<!-- reserva metodológica -->
-<section class="mx reserva" aria-label="Reserva metodológica">
-  <div class="reserva-t">
-    <p>Esta página apresenta os fundamentos teóricos do CERNE, seu alcance funcional e a reprodução de rodadas registradas.</p>
-    <p>A exposição permite conhecer e examinar o procedimento, mas não reproduz integralmente os critérios e mecanismos internos que o governam, cuja formulação permanece reservada.</p>
-  </div>
-</section>
-
 <!-- 1.4 lista de atos -->
 <section class="demo mx" id="mesa" aria-labelledby="mesaT">
   <div class="mx-row demo-tit">
     <div class="mx-c"><p class="ind">Demonstração</p></div>
     <div class="mx-c"><h2 id="mesaT">Veja o percurso posto à prova</h2></div>
+  </div>
+  <div class="reserva" role="note" aria-label="Reserva metodológica">
+    <div class="reserva-t">
+      <svg class="reserva-ic" viewBox="0 0 20 18" aria-hidden="true"><path d="M10 0 L20 18 H0 Z" fill="#E8A628"/><path d="M10 6 V11.5 M10 13.5 V15.5" stroke="#181818" stroke-width="2.2"/></svg>
+      <p>Esta página apresenta os fundamentos teóricos do CERNE, seu alcance funcional e a reprodução de rodadas registradas. A exposição permite conhecer e examinar o procedimento, mas não reproduz integralmente os critérios e mecanismos internos que o governam, cuja formulação permanece reservada.</p>
+    </div>
   </div>
   <div class="mx-row ft-row">
     <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span></div>
