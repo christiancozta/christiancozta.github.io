@@ -368,7 +368,7 @@
       const usesSlab = tablist.contains(tab) && !tab.classList.contains("door--cover");
       slab.hidden = !usesSlab;
       if (!usesSlab) return;
-      slab.style.left = `${tab.offsetLeft}px`;
+      slab.style.transform = `translateX(${tab.offsetLeft - 3}px)`;   /* 3px = folga da bandeja (left do CSS) */
       slab.style.width = `${tab.offsetWidth}px`;
     }
 
