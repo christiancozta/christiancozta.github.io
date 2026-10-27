@@ -1025,13 +1025,9 @@
     const dataN = dataLink.querySelector('.n');
     const on = () => {
       dataLink.classList.add('is-data-hover');
-      dataLink.style.setProperty('color','#00455D','important');
-      dataN?.style.setProperty('color','#00455D','important');
     };
     const off = () => {
       dataLink.classList.remove('is-data-hover');
-      dataLink.style.removeProperty('color');
-      dataN?.style.removeProperty('color');
     };
     dataLink.addEventListener('mouseenter', on);
     dataLink.addEventListener('pointerenter', on);

@@ -8,7 +8,7 @@
 
   const current = document.currentScript;
   const src = current?.src || new URL("assets/arco/js/arco.js", document.baseURI).href;
-  const coreUrl = new URL("arco-core.js?v=20261019-cerne-rail", src);
+  const coreUrl = new URL("arco-core.js?v=20261027-menu-topo", src);
   const mobileUrl = new URL("arco-mobile-viewport.js?v=20260906-viewport-v1", src);
 
   installHeroStyles();
@@ -48,12 +48,11 @@
 @font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-SemiBold.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
 @font-face{font-family:"ARCO Restart Ginger";src:url("assets/fonts/RestartGinger-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
-:root{--f-display:"ARCO Restart Ginger","Schibsted Grotesk",system-ui,sans-serif}
 
 @media (min-width:821px){
   /* nascimento quase colado ao limite inferior da primeira viewport */
   .view[data-view="home"] .narr-zone{
-    min-height:max(calc(100dvh - 6px),36rem)!important;
+    min-height:max(calc(100dvh - var(--rail-h,0px) - 6px),36rem)!important;
   }
   .view[data-view="home"] .home.hero-v3-ready .narr-zone .arc{
     top:0!important;
