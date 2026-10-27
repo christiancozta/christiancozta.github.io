@@ -16,7 +16,7 @@
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FCFCFC">
 <title>CERNE</title>
-<meta name="description" content="CERNE 5.0.0: dispositivo de governança crítica do raciocínio jurídico. Reprodução de rodadas registradas em atos públicos.">
+<meta name="description" content="CERNE 5.1.0: auditoria governada do raciocínio decisório. Procedimento atual e reprodução histórica de rodadas CERNE 5.0.0.">
 <style id="cerne-fontes">
 /* Fontes embutidas (WOFF2, subconjunto latino). Licença SIL OFL 1.1: Saira Semi Condensed,
    Instrument Sans, Martian Mono (c) The Martian Mono Project Authors. Roboto Serif e o itálico
@@ -515,10 +515,10 @@ body{background-color:var(--paper);
 .sec-p{background:var(--plum);color:var(--paper);border-bottom:0}
 .sec-p .ind{color:var(--yellow)}
 .serie li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px 28px;align-items:baseline;padding:18px 0;border-bottom:1px solid rgba(252,252,252,.22)}
-.serie .ds{grid-column:2}
+.serie .serie-desc{grid-column:2}
 .serie .n{font-family:var(--f-num);font-weight:700;font-size:15px;color:var(--yellow)}
 .serie .tt{font-family:var(--f-tit);font-weight:700;font-size:21px;line-height:1.2}
-.serie .ds{font-size:16px;line-height:1.5;color:rgba(252,252,252,.82)}
+.serie .serie-desc{font-size:16px;line-height:1.5;color:rgba(252,252,252,.82)}
 .ponte{margin:36px 0 0;font-family:var(--f-cit);font-style:italic;font-weight:600;font-size:clamp(20px,2vw,27px);line-height:1.32;max-width:30em}
 .sub-s{margin:0 0 26px;font-family:var(--f-mono);font-weight:600;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(252,252,252,.8)}
 .vlist{list-style:none;margin:0 0 8px;padding:0}
@@ -558,7 +558,7 @@ body{background-color:var(--paper);
 }
 @media (max-width:640px){
   .serie li{grid-template-columns:36px minmax(0,1fr)}
-  .serie .ds{grid-column:2}
+  .serie .serie-desc{grid-column:2}
   .vlist li{grid-template-columns:64px minmax(0,1fr)}
   .vlist .vd{grid-column:2;grid-row:1}
   .vlist .vn{grid-row:1 / span 2}
@@ -939,7 +939,7 @@ body{background-position:0 0}
 .ft dt{padding:0}
 .ft dd{max-width:34em}
 /* larguras na proporção do texto de cada etapa: as três terminam na mesma linha */
-@container mx (min-width:1021px){.ft{grid-template-columns:minmax(0,22fr) minmax(0,27fr) minmax(0,26fr)}}
+@container mx (min-width:1021px){.ft{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 /* ---------- fecho: prova, funil e tríptico como campos ---------- */
 .fecho{position:relative}
@@ -997,6 +997,13 @@ body{background-position:0 0}
 .numeros.mx-campos>div{gap:0}
 .cond b{margin-bottom:0}
 .card{gap:12px}
+/* Blocos de controle precisam de largura para leitura, inclusive após a tese. */
+.controles{grid-template-columns:minmax(0,1fr)}
+@container mx (min-width:641px){.controles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.controles .ctl{font-size:16px;line-height:1.55;text-wrap:pretty}
+.controles h3{line-height:1.2}
+.hd-txt p,.ft dd,.corpo p,.lim span{word-break:normal;hyphens:none;text-wrap:pretty}
+.ref a{overflow-wrap:anywhere}
 .card .map{margin-top:auto}
 .lim{list-style:none;margin:0;padding:0}
 .lim li{padding:var(--pad);box-shadow:inset 0 1px var(--fio)}
@@ -1237,6 +1244,37 @@ body{background-position:0 0}
 .doc-fluxo{font-size:16.5px;line-height:1.6;color:#1E1E1E}
 @media (min-width:1021px){.trecho{font-size:15.5px}.vs-c blockquote{font-size:17px}}
 @media (max-width:640px){.doc-fluxo{font-size:16px}.trecho{font-size:16px}}
+
+/* Seletor de lista e ficha do Acervo/ECHO, adaptado à identidade CERNE. */
+.serie-showcase{display:grid;grid-template-columns:minmax(0,1fr);align-items:start}
+.serie-selector{list-style:none;margin:0;padding:0}
+.serie-selector li{display:block;padding:0}
+.serie-select{appearance:none;position:relative;display:flex;align-items:baseline;gap:14px;width:100%;min-height:76px;margin:0;padding:18px var(--pad);border:0;border-bottom:1px solid rgba(252,252,252,.24);border-radius:0;background:transparent;color:var(--paper);font:inherit;text-align:left;cursor:pointer;transition:background-color .2s var(--ease),color .2s var(--ease)}
+.serie-select .n{width:24px;flex:none;font-size:13px;color:rgba(252,252,252,.72)}
+.serie-select-body{display:grid;gap:6px;min-width:0}
+.serie-select .tt{font-family:var(--f-sans);font-size:16.5px;font-weight:600;line-height:1.4;letter-spacing:-.015em;text-wrap:pretty}
+.serie-select .serie-desc{grid-column:auto;display:block;width:auto;height:auto;font-size:13.5px;line-height:1.5;color:rgba(252,252,252,.86)}
+.serie-select:hover{background:rgba(0,0,0,.1)}
+.serie-select[aria-pressed="true"]{background:var(--paper);color:var(--ink);border-bottom-color:var(--paper)}
+.serie-select[aria-pressed="true"] .n{color:var(--red)}
+.serie-select[aria-pressed="true"] .serie-desc{color:var(--ink2)}
+.serie-select:focus-visible{outline:2px solid var(--ink);outline-offset:-5px;border-radius:0;box-shadow:inset 0 0 0 3px var(--paper)}
+.serie-display{min-width:0;margin:var(--pad);background:var(--ink);color:var(--paper);scroll-margin-top:16px}
+.serie-display-bar{display:flex;justify-content:space-between;gap:12px;padding:12px 20px;border-bottom:1px solid rgba(252,252,252,.2);font-size:12px;font-weight:600}
+.serie-preview{display:block;color:inherit;text-decoration:none}
+.serie-cover{aspect-ratio:16/9;display:grid;place-items:center;overflow:hidden;background:var(--tint)}
+.serie-cover img{display:block;width:100%;height:100%;object-fit:contain}
+.serie-cover p{margin:0;padding:24px;color:var(--ink);font-size:16px;line-height:1.5}
+.serie-preview-body{padding:24px}
+.serie-author{margin:0 0 12px;font-size:12px;line-height:1.5;color:rgba(252,252,252,.74)}
+.serie-preview h3{margin:0;font-family:var(--f-tit);font-size:clamp(24px,2.3cqw,32px);line-height:1.15;text-wrap:balance}
+.serie-preview-desc{margin:14px 0 24px;font-size:16px;line-height:1.55;text-wrap:pretty}
+.serie-open{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px;padding-top:12px;border-top:1px solid rgba(252,252,252,.26);font-size:14px;font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.serie-preview:hover .serie-open{text-decoration-thickness:2px}
+.serie-preview:focus-visible{outline:2px solid var(--paper);outline-offset:-5px;border-radius:0}
+@container mx (min-width:1021px){.serie-showcase{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}.serie-display{position:sticky;top:24px;max-height:calc(100svh - 48px);overflow:auto;scrollbar-width:thin;scrollbar-color:var(--paper) var(--ink)}}
+@container mx (max-width:640px){.serie-display{margin:16px}.serie-preview-body{padding:20px}}
+@media(prefers-reduced-motion:reduce){.serie-select{transition:none}}
 </style>
 </head>
 <body>
@@ -1262,9 +1300,9 @@ body{background-position:0 0}
   <div class="hd-dobra">
   <div class="mx-row hd-bar">
     <a class="mx-c hd-atrio" href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener" aria-label="ATRIO"><svg class="hd-atrio-sim" viewBox="0 0 1080 1080" aria-hidden="true"><path fill="#FCFCFC" d="M0,810 H1080 V1080 H0 Z"/><path fill="#A63A23" d="M315,810 H765 V1080 H315 Z"/><path fill="#FCFCFC" d="M0,405 H1080 V810 H0 Z M0,405 V90 L315,0 V405 Z M382.5,405 V0 H697.5 V405 Z M765,405 V0 L1080,90 V405 Z"/></svg><svg class="hd-atrio-wm" viewBox="0 0 8282 1428" aria-hidden="true"><use href="#wm-atrio"/></svg></a>
-    <div class="mx-c hd-sub-c"><p class="hd-sub">Dispositivo de governança crítica do raciocínio jurídico</p></div>
+    <div class="mx-c hd-sub-c"><p class="hd-sub">Auditoria governada do raciocínio decisório</p></div>
     <div class="mx-c hd-abas">
-      <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.0.0: histórico de versões">v5.0.0</button>
+      <button class="hd-versao" type="button" id="btnVersoes" aria-haspopup="dialog" aria-controls="dlgVersoes" aria-label="Versão 5.1.0: histórico de versões">v5.1.0</button>
       <button class="hd-aba pausa" id="hdPausa" type="button" aria-pressed="false" aria-label="Pausar a esteira" title="Pausar a esteira">
       <svg class="ic-pausa" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="1" width="4" height="14" fill="#181818"/><rect x="9" y="1" width="4" height="14" fill="#181818"/></svg>
       <svg class="ic-play" width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M2 1 L13 8 L2 15 Z" fill="#181818"/></svg>
@@ -1278,8 +1316,8 @@ body{background-position:0 0}
     <div class="mx-c hd-lema-c">
       <p class="hd-lema" aria-label="Errar não é só humano."><span aria-hidden="true">Errar<span class="hd-ins i1"><span><em>não</em></span></span> é<span class="hd-ins i2"><span><em>só</em></span></span> humano.</span></p></div>
     <div class="mx-c hd-txt">
-      <p class="ft-lead">Confronto crítico do raciocínio. Tensiona a formulação por uma lógica distinta da que a produziu.</p>
-      <p class="hd-proj">Projeto autoral de <a href="https://christiancozta.github.io/arco.html" target="_blank" rel="noopener">Christian da Costa</a>, em uso próprio desde 11/2025, no marco da Governança do Raciocínio Jurídico.</p>
+      <p class="ft-lead">Audita o raciocínio de atos judiciais. Confronta dúvidas e devolve perguntas por trecho.</p>
+      <p class="hd-proj">Criado por <a href="https://christiancozta.github.io/arco.html" target="_blank" rel="noopener">Christian da Costa</a>. Em uso próprio desde 11/2025.</p>
     </div>
     <a class="mx-c hd-acao" href="#mesa"><span>Veja o percurso</span><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 V17 M4 11 L10 17 L16 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
   </div>
@@ -1310,32 +1348,32 @@ body{background-position:0 0}
 <section class="demo mx" id="mesa" aria-labelledby="mesaT">
   <div class="mx-row demo-tit">
     <div class="mx-c"><p class="ind">Demonstração</p></div>
-    <div class="mx-c"><h2 id="mesaT">Veja o percurso posto à prova</h2></div>
+    <div class="mx-c"><h2 id="mesaT">Explore as rodadas registradas</h2></div>
   </div>
   <div class="reserva" role="note" aria-label="Reserva metodológica">
     <div class="reserva-t">
       <svg class="reserva-ic" viewBox="0 0 20 18" aria-hidden="true"><path d="M10 0 L20 18 H0 Z" fill="#E8A628"/><path d="M10 6 V11.5 M10 13.5 V15.5" stroke="#181818" stroke-width="2.2"/></svg>
-      <p>Esta página apresenta os fundamentos teóricos do CERNE, seu alcance funcional e a reprodução de rodadas registradas. A exposição permite conhecer e examinar o procedimento, mas não reproduz integralmente os critérios e mecanismos internos que o governam, cuja formulação permanece reservada.</p>
+      <p>Procedimento descrito: CERNE 5.1.0. A demonstração abaixo reproduz rodadas da versão 5.0.0; não executa nova auditoria nem comprova o desempenho da versão atual.</p>
     </div>
   </div>
   <div class="mx-row ft-row">
-    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Ficha técnica</span></div>
+    <div class="mx-c ft-lado"><div class="ft-cab"><span class="ft-pill">Procedimento 5.1.0</span></div>
       <dl class="ft-ficha">
         <div><dt>Entrada</dt><dd>Decisão liminar, sentença, voto, acórdão</dd></div>
-        <div><dt>Opera</dt><dd>Exame do ato por lentes de fronteira própria</dd></div>
-        <div><dt>Risco</dt><dd>Fragilidade jurídica encoberta pela fluência do texto</dd></div>
-        <div><dt>Saída</dt><dd>Achados em perguntas e registro das dúvidas afastadas</dd></div>
+        <div><dt>Opera</dt><dd>Onze lentes e integridade do uso da fonte</dd></div>
+        <div><dt>Risco</dt><dd>Fragilidades encobertas pela fluência do texto</dd></div>
+        <div><dt>Saída</dt><dd>Perguntas por trecho e registro dos afastados</dd></div>
       </dl>
     </div>
     <div class="mx-c ft-corpo">
       <div class="ft-par">
-        <p class="hd-desc">O CERNE audita a sustentação argumentativa de decisões judiciais. Examina o raciocínio jurídico expresso, submete possíveis fragilidades a confronto adversarial e devolve as questões que resistem ao crivo, expressamente vinculadas aos trechos do ato.</p>
-        <p class="hd-desc">A avaliação permanece humana. Cada achado decorre de um procedimento de base científica, mas não constitui um veredito. Pecar pelo excesso é menos custoso do que pela omissão.</p>
+        <p class="hd-desc">O objeto é o nexo entre a conclusão e o que a sustenta no ato: fatos, premissas, normas ou precedentes.</p>
+        <p class="hd-desc">A avaliação é humana. Quem responde pelo ato decide se explica, corrige ou mantém a posição.</p>
       </div>
       <dl class="ft">
-        <div><dt>I. Mineração</dt><dd>O ato é examinado integralmente por lentes de atuação delimitada. Possíveis fragilidades dão origem a dúvidas vinculadas a trechos identificáveis do texto. Nesta etapa, nenhuma dúvida é tratada como achado definitivo.</dd></div>
-        <div><dt>II. Crivo</dt><dd>As dúvidas formuladas são submetidas a exame crítico e contraposição fundamentada. Algumas são afastadas; outras permanecem para apreciação humana. O procedimento distingue a condição de cada dúvida e preserva as razões de seu afastamento, sem emitir juízo sobre o ato.</dd></div>
-        <div><dt>III. Consolidação</dt><dd>As dúvidas mantidas são organizadas por trecho e traduzidas em perguntas dirigidas ao responsável pelo ato. A apresentação preserva suas classificações e vínculos com o exame realizado. As dúvidas afastadas permanecem documentadas, sem integrar os achados.</dd></div>
+        <div><dt>I. Formação</dt><dd>O ato é segmentado e recebe hash. Onze lentes e uma unidade de integridade da fonte formam candidatos com trecho e âncoras verificáveis.</dd></div>
+        <div><dt>II. Confronto e decisão</dt><dd>A+ e A− argumentam separadamente sobre cada candidato. O decisor aplica D1/D2: afasta a dúvida ou a mantém como HOLD ou ABORT.</dd></div>
+        <div><dt>III. Consolidação</dt><dd>As dúvidas mantidas viram perguntas por trecho, sem perder identidade ou estado individual. Afastamentos e argumentos ficam no registro técnico.</dd></div>
       </dl>
     </div>
   </div>
@@ -1511,6 +1549,7 @@ body{background-position:0 0}
   <div class="mx-row r-3 f-row">
     <div class="mx-c mx-v"></div>
     <div class="mx-c f-esq">
+      <p class="mx-k">Amostra histórica · CERNE 5.0.0</p>
       <div class="f-num"><span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span></div>
       <p class="f-txt">Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p>
       <p class="f-nota" id="nota1">1 Lote único, <span class="pvLote">TJPR e STJ</span>: <span id="pvA">18</span> atos selecionados, <span id="pvD3">12</span> no teste. Ficam fora os atos cujos embargos reconheceram só omissão, porque o CERNE lê só o ato, e a omissão depende dos autos. Os dois pontos fora do que os embargos corrigiram foram avaliados pelo autor. Resultado desta seleção, não taxa geral de precisão.</p>
@@ -1530,20 +1569,6 @@ body{background-position:0 0}
     </div>
   </div>
 
-  <div class="mx-row sec-cab trip-cab">
-    <div class="mx-c"><p class="ind">O dispositivo</p></div>
-    <div class="mx-c"><h2 class="trip-t">Revisão confirmatória não encontra o que não procura.</h2></div>
-  </div>
-  <div class="mx-row">
-    <div class="mx-c mx-v"></div>
-    <div class="mx-c mx-lista">
-      <ol class="trip-l mx-campos c3">
-        <li class="rv"><span class="tp-n">01</span><h3>Contexto</h3><p>Texto bem escrito pode esconder lacuna decisória e precedente sem pertinência material. A fluência convence antes que alguém confira o caminho.</p></li>
-        <li class="rv"><span class="tp-n">02</span><h3>Aplicação</h3><p>Todas as lentes leem cada ato, e nenhuma pode ser pulada. A dúvida formada enfrenta confronto adversarial e só se mantém sob critério fixo. O que resiste é consolidado por trecho, com identidade e rastro preservados.</p></li>
-        <li class="rv"><span class="tp-n">03</span><h3>Efeito</h3><p>Rodada sem achado é resultado válido, não certificado de correção jurídica. O registro preserva também os afastados e os argumentos que justificaram o afastamento.</p></li>
-      </ol>
-    </div>
-  </div>
   <div class="mx-row">
     <div class="mx-c mx-v"></div>
     <div class="mx-c f-cit"><h2 class="citacao">A IA ajuda a percorrer o caminho. Alguém ainda precisa perguntar se ela caminhou.</h2></div>
@@ -1613,42 +1638,38 @@ body{background-position:0 0}
     <div class="mx-row r-3">
       <div class="mx-c mx-v"></div>
       <div class="mx-c corpo">
-        <p>Na série, a resposta ganhou forma: a devolução precisa ser um estado próprio do fluxo, acompanhada do achado que a motivou, da pergunta que precisa ser respondida e do trecho que deve ser saneado.</p>
-        <p class="forte">O CERNE é essa frase convertida em sistema.</p>
+        <p>Na versão 5.1.0, onze lentes e uma unidade transversal de integridade do uso da fonte examinam o mesmo ato. Cada candidato precisa de localização e âncoras válidas antes do confronto.</p>
+        <p class="forte">A decisão sobre o ato permanece humana.</p>
       </div>
-      <div class="mx-c corpo"><p>Um modelo bem instruído também revisa. A diferença não está na pergunta, mas no percurso que a produz. Todas as lentes leem cada ato, e nenhuma pode ser pulada. Quem levanta a dúvida não a defende; quem a defende não a julga. As citações atribuídas ao ato são conferidas, sem que isso valide fontes externas. O resultado se diz num vocabulário fechado, que não admite adjetivo.</p></div>
+      <div class="mx-c corpo"><p>A+ e A− recebem o mesmo objeto neutro, sem a argumentação inicial de quem formou a dúvida e sem acesso à resposta um do outro. O decisor recebe os argumentos em ordem sorteada e aplica D1/D2. Citações ao ato são conferidas; fontes externas não são certificadas.</p></div>
     </div>
     <div class="mx-row">
       <div class="mx-c mx-v"></div>
       <div class="mx-c mx-lista">
-        <ul class="cards mx-campos c4">
+        <ul class="cards mx-campos controles">
           <li class="card">
             <div class="card-cab"><span class="card-n">01</span><span class="card-cond">condição: <b>Responsabilidade</b></span></div>
-            <h3><small>HUMAN OVERSIGHT</small>Supervisão humana</h3>
-            <p class="prob">“Confirmar sem poder recusar é a forma mais discreta de estar ausente.”</p>
-            <p class="ctl">O CERNE não conclui. Devolve perguntas presas a trechos, e quem responde pelo ato confirma, corrige ou recusa. Supervisão, aqui, é poder de recusa com objeto definido.</p>
-            <p class="evd" id="evd1">Nos oito atos públicos, 39 perguntas e nenhum veredito.</p>
+            <h3>Supervisão humana</h3>
+            <p class="ctl">Quem responde pelo ato recebe perguntas vinculadas a trechos e pode confirmar, corrigir ou recusar o apontamento.</p>
+            <p class="evd" id="evd1">Rodadas históricas: perguntas por trecho, sem decisão sobre o mérito.</p><p class="map">Demonstração CERNE 5.0.0; estes números não validam a versão 5.1.0.</p>
             <p class="map">Human-in-the-Loop ▪ EU AI Act, art. 14 ▪ Res. CNJ 615/2025 (correspondência conceitual, não certificação)</p>
           </li>
           <li class="card">
             <div class="card-cab"><span class="card-n">02</span><span class="card-cond">condição: <b>Rastro</b></span></div>
-            <h3><small>TRACEABILITY</small>Rastro</h3>
-            <p class="prob">“Não sabemos dizer de onde veio essa conclusão.”</p>
-            <p class="ctl">Toda pergunta tem endereço no ato. Toda rodada fica registrada e vinculada, pelo hash, ao documento examinado. Cada dúvida deixa duas marcas: o Lastro mostra por que ela era defensável; o Rastro, como foi processada até a decisão. Dúvida sem lastro é ruído. Dúvida sem rastro é opinião.</p>
+            <h3>Rastro</h3>
+            <p class="ctl">O hash vincula a rodada ao ato. O registro conserva candidatos, argumentos, citações, ordem do confronto e razões de D1/D2. O lastro sustenta a dúvida; o rastro reconstrói seu percurso.</p>
             <p class="map">Audit Trail ▪ Record-keeping ▪ ISO/IEC 42001 (correspondência conceitual, não certificação)</p>
           </li>
           <li class="card">
             <div class="card-cab"><span class="card-n">03</span><span class="card-cond">condição: <b>Lastro</b></span></div>
-            <h3><small>ADVERSARIAL REVIEW</small>Separação funcional</h3>
-            <p class="prob">“O modelo concorda consigo mesmo.”</p>
-            <p class="ctl">Quem acusa não julga. Funções separadas enfrentam cada dúvida antes que ela vire pergunta, e o que não resiste é afastado com registro.</p>
+            <h3>Decisão por dúvida</h3>
+            <p class="ctl">D1 verifica se a contraposição afasta a dúvida. Se não afastar, D2 examina se sua procedência comprometeria a conclusão do capítulo: ABORT se essa dependência for demonstrada; HOLD nos demais casos. Os estados qualificam dúvidas, não o documento.</p>
             <p class="map">Red Teaming ▪ Model Risk Management ▪ Revisão adversarial (referências de desenho)</p>
           </li>
           <li class="card">
             <div class="card-cab"><span class="card-n">04</span><span class="card-cond">condição: <b>Rastro</b></span></div>
-            <h3><small>GOVERNANCE BY DESIGN</small>Falha declarada</h3>
-            <p class="prob">“Quando falha, falha calado.”</p>
-            <p class="ctl">Falha técnica encerra a rodada inteira, sem relatório parcial. Nenhuma falha aparece como ausência de dúvida.</p>
+            <h3>Falha declarada</h3>
+            <p class="ctl">Falha na formação, no tribunal ou na decisão, após os reparos previstos, encerra a rodada sem auditoria parcial. Se apenas a condensação falhar, saem perguntas individuais com aviso.</p>
             <p class="map">Safety by Design ▪ Fail-Safe ▪ Incident Handling</p>
           </li>
         </ul>
@@ -1666,13 +1687,13 @@ body{background-position:0 0}
       <div class="mx-c mx-v"></div>
       <div class="mx-c mx-lista">
         <ul class="lim">
-          <li><b>Triagem, não adjudicação.</b><span>Examina e pergunta. Quem responde pelo ato confirma ou corrige. Foi feito para perguntar a mais, não para concluir a mais: pergunta sobrando custa pouco, dúvida omitida custa caro.</span></li>
-          <li><b>Nenhuma nota.</b><span>Questões juridicamente diferentes não cabem numa medida comum. Somar e ponderar dúvidas já é ato jurídico, e pertence a quem responde pelo ato.</span></li>
-          <li><b>Nenhuma cota de achados.</b><span>Uma rodada sem pergunta é resultado válido. Quem precisa sempre encontrar problema está mal calibrado.</span></li>
-          <li><b>Nenhuma falha silenciosa.</b><span>A rodada que falha termina inteira, e diz que falhou.</span></li>
-          <li><b>Contrato da fonte.</b><span>Não verifica existência, vigência nem atualidade de norma ou jurisprudência. Uma fonte pode existir e continuar sem sustentar o que lhe foi atribuído: o CERNE pergunta pela sustentação, e a existência fica com quem cita.</span></li>
-          <li><b>Perímetro.</b><span>Só examina ato judicial pronto: decisão liminar, voto, sentença ou acórdão. Não escreve a conclusão, não revisa estilo e não faz validação documental.</span></li>
-          <li><b>Dados.</b><span>O texto examinado passa por modelos externos. Use atos públicos ou fictícios; sigilo e dados pessoais são saneados por quem opera.</span></li>
+          <li><b>Triagem, não adjudicação.</b><span>Examina e pergunta; quem responde pelo ato decide. O desenho privilegia levantar dúvidas para revisão humana.</span></li>
+          <li><b>Nenhuma nota.</b><span>Não atribui nota ao ato. A ponderação das dúvidas cabe a quem responde por ele.</span></li>
+          <li><b>Nenhuma cota de achados.</b><span>Uma rodada sem pergunta é válida e não certifica a correção do ato.</span></li>
+          <li><b>Nenhuma falha silenciosa.</b><span>Falhas de formação, confronto ou decisão encerram a rodada. Falha apenas de condensação admite perguntas individuais, com aviso.</span></li>
+          <li><b>Contrato da fonte.</b><span>Não verifica existência, vigência ou atualidade de norma ou jurisprudência. A conferência das fontes cabe a quem cita.</span></li>
+          <li><b>Perímetro.</b><span>Examina as quatro classes de ato judicial pronto. Não redige conclusões nem revisa estilo ou valida documentos.</span></li>
+          <li><b>Dados.</b><span>O texto passa por modelos externos. Cabe ao operador sanear sigilo e dados pessoais; use atos públicos ou fictícios.</span></li>
         </ul>
       </div>
     </div>
@@ -1686,11 +1707,11 @@ body{background-position:0 0}
   <section class="sec-e mx" aria-labelledby="t25">
     <div class="mx-row sec-cab">
       <div class="mx-c"><p class="ind">05 ▪ Validação</p></div>
-      <div class="mx-c"><h2 class="sec-t" id="t25">A referência está nos autos.</h2></div>
+      <div class="mx-c"><h2 class="sec-t" id="t25">Evidência e limites da demonstração</h2></div>
     </div>
     <div class="mx-row r-3">
       <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>Cada caso é um par: um acórdão e os embargos de declaração acolhidos contra ele. A rodada recebe só o acórdão. Os embargos entram depois, para conferir se alguma pergunta antecipou o vício que o tribunal reconheceu.</p></div>
+      <div class="mx-c corpo"><p>As rodadas históricas da versão 5.0.0 comparam acórdãos com embargos acolhidos. Só o acórdão entrou na auditoria; os embargos serviram à conferência posterior. Os números abaixo pertencem a essa seleção.</p></div>
       <div class="mx-c mx-v"></div>
     </div>
     <div class="mx-row">
@@ -1706,7 +1727,7 @@ body{background-position:0 0}
     </div>
     <div class="mx-row r-3">
       <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>A amostra demonstra a execução técnica do percurso e a capacidade de antecipar vícios reconhecidos depois. Não certifica sensibilidade, especificidade nem estabilidade jurídica, e não mede falsos positivos nem o desempenho em atos sem vício reconhecido. Como o sistema pergunta a mais de propósito, discordar dele não prova, por si, que ele errou.</p></div>
+      <div class="mx-c corpo"><p>Para a versão 5.1.0, o manual registra quatro casos reais de teste de workflow: evidência de execução técnica, sem desempenho jurídico validado por espécie de ato. A amostra histórica tampouco mede sensibilidade, especificidade ou falsos positivos, nem fornece taxa geral de precisão.</p></div>
       <div class="mx-c mx-v"></div>
     </div>
   </section>
@@ -1719,8 +1740,8 @@ body{background-position:0 0}
     </div>
     <div class="mx-row r-3">
       <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>Núcleo em Python, de arquitetura modular e execução controlada. Cada rodada fica registrada, pode ser retomada e não admite entrega parcial. Modelos distintos ocupam funções separadas. O relatório sai em duas camadas: a leitura para quem decide e o registro técnico para quem confere. Suítes de teste próprias, versões datadas. Implementação assistida por IA, sob requisitos, arquitetura e critérios definidos pelo autor. O método é reservado.</p></div>
-      <div class="mx-c"><blockquote class="cit-l">Fazer o sistema produzir é a parte barata. O trabalho está em fixar o que ele pode produzir, sob quais condições e com quais limites.</blockquote></div>
+      <div class="mx-c corpo"><p>Núcleo Python/FastAPI, adaptadores separados, interface local e registro em SQLite. A+ e A− executam chamadas independentes: no grau 1, usam o mesmo modelo; no grau 2, modelos de famílias distintas. O relatório técnico preserva as ocorrências; síntese e tela agrupam as perguntas por trecho.</p></div>
+      <div class="mx-c"><blockquote class="cit-l">Cada controle executa um requisito: o que pode ser produzido, sob quais condições e com quais limites.</blockquote></div>
     </div>
   </section>
 
@@ -1733,18 +1754,28 @@ body{background-position:0 0}
     <div class="mx-row">
       <div class="mx-c mx-v"></div>
       <div class="mx-c mx-lista">
-        <ol class="serie">
-          <li><span class="n">01</span><span class="tt">Eu confirmo. Tu confirmo. Ele confirmo</span><span class="ds">A verificação que se reduz a gesto sem função definida.</span></li>
-          <li><span class="n">02</span><span class="tt">Eu guardo. Tu guardas. Ele lembra</span><span class="ds">A memória que decide aquilo que o raciocínio conseguirá ver.</span></li>
-          <li><span class="n">03</span><span class="tt">Nós raciocinamos. Vós sustentareis?</span><span class="ds">A fonte que precisa existir e dizer aquilo que lhe foi atribuído.</span></li>
-          <li><span class="n">04</span><span class="tt">Eu escrevo. Tu assina. Ele outorga</span><span class="ds">A formação que desaparece dentro da redação.</span></li>
-          <li><span class="n">05</span><span class="tt">— Eu respondo</span><span class="ds">Quem arca com a conclusão também precisa conseguir dar suas razões.</span></li>
-        </ol>
+        <div class="serie-showcase">
+          <ol class="serie serie-selector" aria-label="Selecionar texto para visualizar">
+            <li><button class="serie-select" id="serieSelect1" type="button" data-serie="0" aria-pressed="true" aria-controls="serieFicha"><span class="n">01</span><span class="serie-select-body"><span class="tt">Eu confirmo. Tu confirmo. Ele confirmo</span><span class="serie-desc">A verificação que se reduz a gesto sem função definida.</span></span></button></li>
+            <li><button class="serie-select" id="serieSelect2" type="button" data-serie="1" aria-pressed="false" aria-controls="serieFicha"><span class="n">02</span><span class="serie-select-body"><span class="tt">Eu guardo. Tu guardas. Ele lembra</span><span class="serie-desc">A memória que decide aquilo que o raciocínio conseguirá ver.</span></span></button></li>
+            <li><button class="serie-select" id="serieSelect3" type="button" data-serie="2" aria-pressed="false" aria-controls="serieFicha"><span class="n">03</span><span class="serie-select-body"><span class="tt">Nós raciocinamos. Vós sustentareis?</span><span class="serie-desc">A fonte que precisa existir e dizer aquilo que lhe foi atribuído.</span></span></button></li>
+            <li><button class="serie-select" id="serieSelect4" type="button" data-serie="3" aria-pressed="false" aria-controls="serieFicha"><span class="n">04</span><span class="serie-select-body"><span class="tt">Eu escrevo. Tu assina. Ele outorga</span><span class="serie-desc">A formação que desaparece dentro da redação.</span></span></button></li>
+            <li><button class="serie-select" id="serieSelect5" type="button" data-serie="4" aria-pressed="false" aria-controls="serieFicha"><span class="n">05</span><span class="serie-select-body"><span class="tt">— Eu respondo</span><span class="serie-desc">Quem arca com a conclusão também precisa conseguir dar suas razões.</span></span></button></li>
+          </ol>
+          <aside class="serie-display" id="serieFicha" aria-labelledby="serieTitle">
+            <div class="serie-display-bar"><span>linkedin.com</span><span id="serieCount">01 / 05</span></div>
+            <a class="serie-preview" id="serieLink" href="https://www.linkedin.com/pulse/eu-confirmo-tu-ele-christian-da-costa-dkqzf" target="_blank" rel="noopener">
+              <div class="serie-cover"><img id="serieImage" src="https://media.licdn.com/dms/image/v2/D4D12AQEkTGwBHxmg1w/article-cover_image-shrink_720_1280/B4DaDBiZcPGUAQ-/0/1789953415318?e=2147483647&amp;v=beta&amp;t=BZWpc-l9gy63Y1cI6KtYPPCECfaqqm5pFBtFtl_-E1M" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer"><p id="serieImageError" hidden>Capa indisponível. Abra o artigo no LinkedIn.</p></div>
+              <div class="serie-preview-body"><p class="serie-author">Christian da Costa · Governança do Raciocínio Jurídico</p><h3 id="serieTitle">Eu confirmo. Tu confirmo. Ele confirmo</h3><p class="serie-preview-desc" id="serieDesc">A verificação que se reduz a gesto sem função definida.</p><span class="serie-open">Ler no LinkedIn <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+            </a>
+            <p class="sr" id="serieAnnouncement" role="status" aria-live="polite"></p>
+          </aside>
+        </div>
       </div>
     </div>
     <div class="mx-row">
       <div class="mx-c mx-v"></div>
-      <div class="mx-c"><p class="ponte">O CERNE mora no último texto, entre responder por e responder a. Faz a pergunta antes que a assinatura reduza a resposta a confirmação.</p></div>
+      <div class="mx-c"><p class="ponte">O último texto liga a responsabilidade pela conclusão ao dever de responder por suas razões.</p></div>
     </div>
   </section>
 
@@ -1794,7 +1825,7 @@ body{background-position:0 0}
         </div>
         <div class="fecho-acoes">
           <a class="btn" href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">Ler a Referência Teórica</a>
-          <a class="btn" href="mailto:christiandscosta@gmail.com?subject=CERNE%205.0.0%3A%20documenta%C3%A7%C3%A3o%20t%C3%A9cnica">Solicitar documentação técnica</a>
+          <a class="btn" href="mailto:christiandscosta@gmail.com?subject=CERNE%205.1.0%3A%20documenta%C3%A7%C3%A3o%20t%C3%A9cnica">Solicitar documentação técnica</a>
         </div>
       </div>
     </div>
@@ -1806,11 +1837,12 @@ body{background-position:0 0}
 <dialog class="mv" id="dlgVersoes" aria-labelledby="mvT">
   <div class="mv-casca"><div class="mv-nucleo">
     <div class="mv-cab">
-      <p class="mv-ind">C<span class="e">E</span>RNE ▪ v. 5.0.0</p>
+      <p class="mv-ind">C<span class="e">E</span>RNE ▪ v. 5.1.0</p>
       <button class="mv-x" type="button" id="mvFechar" aria-label="Fechar o histórico"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2 L12 12 M12 2 L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></button>
     </div>
     <h2 class="mv-t" id="mvT">Histórico de versões</h2>
     <ol class="vlist">
+          <li class="maior"><span class="vn">5.1.0</span><span class="vd">—</span><span><b>Manual oficial 1.1.0.</b> Onze lentes e uma unidade transversal; confronto independente por candidato, decisão D1/D2 e perguntas por trecho.</span></li>
           <li class="maior"><span class="vn">5.0.0</span><span class="vd">12/10/2026</span><span><b>Refundação.</b> Perguntas por trecho, relatório em duas camadas, nenhum veredito.</span></li>
           <li><span class="vn">4.0.2</span><span class="vd">23/09/2026</span><span><b>Fechamento computacional.</b></span></li>
           <li><span class="vn">4.0.1</span><span class="vd">23/09/2026</span><span><b>Formalização dos controles.</b></span></li>
@@ -1861,7 +1893,7 @@ body{background-position:0 0}
       <a class="btn" href="mailto:christiandscosta@gmail.com">E-mail</a>
       <a class="btn" href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener">Currículo</a>
     </div>
-    <p class="base"><svg class="wm" viewBox="0 0 9346 1428" role="img" aria-label="CERNE"><use href="#wm-cerne"/></svg> é um módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a> ▪ v. 5.0.0 ▪ Christian da Costa ▪ 2026</p>
+    <p class="base"><svg class="wm" viewBox="0 0 9346 1428" role="img" aria-label="CERNE"><use href="#wm-cerne"/></svg> é um módulo do <a href="https://christiancozta.github.io/atrio.html" target="_blank" rel="noopener">ATRIO</a> ▪ v. 5.1.0 ▪ Christian da Costa ▪ 2026</p>
   </div>
 </footer>
 
@@ -5211,5 +5243,35 @@ reset(); render(); setButtons();
 })();
 </script>
 
+
+<script type="application/json" id="serieDados">[{"title":"Eu confirmo. Tu confirmo. Ele confirmo","description":"A verificação que se reduz a gesto sem função definida.","href":"https://www.linkedin.com/pulse/eu-confirmo-tu-ele-christian-da-costa-dkqzf","image":"https://media.licdn.com/dms/image/v2/D4D12AQEkTGwBHxmg1w/article-cover_image-shrink_720_1280/B4DaDBiZcPGUAQ-/0/1789953415318?e=2147483647&v=beta&t=BZWpc-l9gy63Y1cI6KtYPPCECfaqqm5pFBtFtl_-E1M"},{"title":"Eu guardo. Tu guardas. Ele lembra","description":"A memória que decide aquilo que o raciocínio conseguirá ver.","href":"https://www.linkedin.com/pulse/eu-guardo-tu-guardas-ele-lembra-christian-da-costa-f0ngf","image":"https://media.licdn.com/dms/image/v2/D4D12AQFHy7_sM6IRqQ/article-cover_image-shrink_720_1280/B4DaDDcOpkGYAQ-/0/1789985352745?e=2147483647&v=beta&t=2fMZvD8w3uS-JsvHrEysnPwsTf2x7bSQt4uSe0MQHyg"},{"title":"Nós raciocinamos. Vós sustentareis?","description":"A fonte que precisa existir e dizer aquilo que lhe foi atribuído.","href":"https://www.linkedin.com/pulse/n%C3%B3s-raciocinamos-v%C3%B3s-sustentareis-christian-da-costa-ovpof","image":"https://media.licdn.com/dms/image/v2/D4D12AQFP1c32eR8Z1g/article-cover_image-shrink_720_1280/B4DaDPrWb4JgAU-/0/1790190645411?e=2147483647&v=beta&t=bhxhO9aXuPG1ZLRK_XGsNjrz9ASZZb4h4_fBebe1Q94"},{"title":"Eu escrevo. Tu assina. Ele outorga","description":"A formação que desaparece dentro da redação.","href":"https://www.linkedin.com/pulse/eu-escrevo-tu-assina-ele-outorga-christian-da-costa-xxlzf","image":"https://media.licdn.com/dms/image/v2/D4D12AQHiQHukc7Iq8w/article-cover_image-shrink_720_1280/B4DaDZdn3qJoAQ-/0/1790354816745?e=2147483647&v=beta&t=MjEKAJj36ZR6ZTmX3-1_AoXyVgn_CBX9Hwq6VkBoNf0"},{"title":"— Eu respondo","description":"Quem arca com a conclusão também precisa conseguir dar suas razões.","href":"https://www.linkedin.com/pulse/eu-respondo-christian-da-costa-gqcyf","image":"https://media.licdn.com/dms/image/v2/D4D12AQEb_t6cRtJ5lw/article-cover_image-shrink_720_1280/B4DaDe6.bCJ0AQ-/0/1790446399921?e=2147483647&v=beta&t=LYa_9CsbZg-KSzmAt4yhJ0nCieI_T3tjoHhRr8jgnSw"}]</script>
+<script id="serieRuntime">
+(function(){
+  'use strict';
+  var items=JSON.parse(document.getElementById('serieDados').textContent);
+  var link=document.getElementById('serieLink'),image=document.getElementById('serieImage'),ficha=document.getElementById('serieFicha');
+  var buttons=Array.from(document.querySelectorAll('.serie-select'));
+  image.addEventListener('error',function(){image.hidden=true;document.getElementById('serieImageError').hidden=false;});
+  function select(index){
+    var item=items[index];
+    link.href=item.href;document.getElementById('serieTitle').textContent=item.title;document.getElementById('serieDesc').textContent=item.description;
+    if(image.getAttribute('src')!==item.image){image.hidden=false;document.getElementById('serieImageError').hidden=true;image.src=item.image;}
+    document.getElementById('serieCount').textContent=String(index+1).padStart(2,'0')+' / '+String(items.length).padStart(2,'0');
+    buttons.forEach(function(b,i){b.setAttribute('aria-pressed',String(i===index));});
+    document.getElementById('serieAnnouncement').textContent='Texto '+(index+1)+' de '+items.length+': '+item.title;
+    // Como no Acervo: quando lista e ficha estão empilhadas, mostra a ficha escolhida.
+    requestAnimationFrame(function(){
+      var list=document.querySelector('.serie-selector');
+      if(ficha.getBoundingClientRect().top>=list.getBoundingClientRect().bottom-1){
+        var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        ficha.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+      }
+    });
+  }
+  buttons.forEach(function(b){b.addEventListener('click',function(){select(Number(b.dataset.serie));});});
+})();
+</script>
+
 </body>
 </html>
+
