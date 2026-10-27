@@ -61,7 +61,7 @@
   border:0!important;
 }
 .arco-unified-footer__seal{
-  position:absolute;left:37.5%;top:50%;transform:translate(-50%,-50%);
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   margin:0;padding:0;
   font-family:"Azeret Mono",ui-monospace,monospace;
   font-size:.58rem;font-weight:500;line-height:1.3;

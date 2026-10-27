@@ -9,11 +9,11 @@
   const src = current?.src || new URL("../assets/arco/js/arco-en.js", document.baseURI).href;
 
   const base = document.createElement("script");
-  base.src = new URL("arco-base-en-20260915.js?v=20260922-en-v3", src).href;
+  base.src = new URL("arco-base-en-20260915.js?v=20261027-menu-topo", src).href;
   base.async = false;
   base.onload = () => {
     const finalLayer = document.createElement("script");
-    finalLayer.src = new URL("arco-final-en-20260915-v2.js?v=20260922-en-v1", src).href;
+    finalLayer.src = new URL("arco-final-en-20260915-v2.js?v=20261027-menu-topo", src).href;
     finalLayer.async = false;
     finalLayer.onload = () => {
       const railLayer = document.createElement("script");
