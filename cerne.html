@@ -952,6 +952,8 @@ body{background-position:0 0}
 .f-esq{display:flex;flex-direction:column;gap:22px}
 .fecho .f-nota{margin:0;max-width:44em}
 .fecho .f-acao{margin:0}
+.f-dir{display:flex;flex-direction:column;gap:20px}
+.f-dir .f-acao .btn{width:100%;min-height:56px;border-radius:12px}
 .fecho .funil{margin:0}
 .sec-cab>.mx-c{padding-top:calc(var(--pad) * 2.5);padding-bottom:calc(var(--pad) * 1.5)}
 .sec-cab .ind{padding-top:.5em}
@@ -1554,9 +1556,9 @@ body{background-position:0 0}
       <div class="f-num"><span class="big"><span id="pvN">9</span><span class="de">de</span><span id="pvD">12</span></span></div>
       <p class="f-txt">Em <span id="pvN2">9</span> dos <span id="pvD2">12</span> atos no teste, o CERNE apontou um ponto com fundamento para embargos de declaração. Em 7, foi o ponto que os embargos depois corrigiram. Em 2, foi outro ponto: num caso o tribunal o reconheceu nos embargos, no outro a própria parte o alegou.<sup><a href="#nota1" aria-label="nota 1">1</a></sup></p>
       <p class="f-nota" id="nota1">1 Lote único, <span class="pvLote">TJPR e STJ</span>: <span id="pvA">18</span> atos selecionados, <span id="pvD3">12</span> no teste. Ficam fora os atos cujos embargos reconheceram só omissão, porque o CERNE lê só o ato, e a omissão depende dos autos. Os dois pontos fora do que os embargos corrigiram foram avaliados pelo autor. Resultado desta seleção, não taxa geral de precisão.</p>
-      <div class="f-acao"><button class="btn solid" type="button" id="btnOutro">Escolher outro ato</button></div>
     </div>
     <div class="mx-c f-dir">
+      <div class="f-acao"><button class="btn solid" type="button" id="btnOutro">Escolher outro ato</button></div>
       <figure class="funil rv" aria-label="Do lote ao ponto corrigido">
         <figcaption><span>Do lote ao ponto corrigido</span><span>acórdão × embargos acolhidos</span></figcaption>
         <ol>
@@ -1570,10 +1572,6 @@ body{background-position:0 0}
     </div>
   </div>
 
-  <div class="mx-row">
-    <div class="mx-c mx-v"></div>
-    <div class="mx-c f-cit"><h2 class="citacao">A IA ajuda a percorrer o caminho. Alguém ainda precisa perguntar se ela caminhou.</h2></div>
-  </div>
   <div class="mx-row f-tese">
     <button class="mx-c seta" type="button" id="btnTese" aria-expanded="false" aria-controls="tese">
       <span>A tese por trás do sistema</span>
@@ -1704,44 +1702,18 @@ body{background-position:0 0}
     </div>
   </section>
 
-  <!-- 2.5 -->
-  <section class="sec-e mx" aria-labelledby="t25">
-    <div class="mx-row sec-cab">
-      <div class="mx-c"><p class="ind">05 ▪ Validação</p></div>
-      <div class="mx-c"><h2 class="sec-t" id="t25">Evidência e limites da demonstração</h2></div>
-    </div>
-    <div class="mx-row r-3">
-      <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>As rodadas históricas da versão 5.0.0 comparam acórdãos com embargos acolhidos. Só o acórdão entrou na auditoria; os embargos serviram à conferência posterior. Os números abaixo pertencem a essa seleção.</p></div>
-      <div class="mx-c mx-v"></div>
-    </div>
-    <div class="mx-row">
-      <div class="mx-c mx-v"></div>
-      <div class="mx-c mx-lista">
-        <div class="numeros mx-campos c4" aria-label="Números da validação">
-          <div><b id="vA">18</b><span>pares selecionados</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-          <div><b id="vE">12</b><span>no teste</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-          <div class="dest"><b id="vC">9</b><span>com ponto embargável</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-          <div><b id="vS">7</b><span>no ponto corrigido</span><small><span class="pvLote">TJPR e STJ</span></small></div>
-        </div>
-      </div>
-    </div>
-    <div class="mx-row r-3">
-      <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>Para a versão 5.1.0, o manual registra quatro casos reais de teste de workflow: evidência de execução técnica, sem desempenho jurídico validado por espécie de ato. A amostra histórica tampouco mede sensibilidade, especificidade ou falsos positivos, nem fornece taxa geral de precisão.</p></div>
-      <div class="mx-c mx-v"></div>
-    </div>
-  </section>
+
 
   <!-- 2.6 -->
   <section class="sec-e mx" aria-labelledby="t26">
     <div class="mx-row sec-cab">
-      <div class="mx-c"><p class="ind">06 ▪ Engenharia</p></div>
+      <div class="mx-c"><p class="ind">05 ▪ Engenharia</p></div>
       <div class="mx-c"><h2 class="sec-t" id="t26">Do requisito jurídico ao controle computacional</h2></div>
     </div>
     <div class="mx-row r-3">
       <div class="mx-c mx-v"></div>
-      <div class="mx-c corpo"><p>Núcleo Python/FastAPI, adaptadores separados, interface local e registro em SQLite. A+ e A− executam chamadas independentes: no grau 1, usam o mesmo modelo; no grau 2, modelos de famílias distintas. O relatório técnico preserva as ocorrências; síntese e tela agrupam as perguntas por trecho.</p></div>
+      <div class="mx-c corpo"><p>Núcleo Python/FastAPI, adaptadores separados, interface local e registro em SQLite. A+ e A− executam chamadas independentes: no grau 1, usam o mesmo modelo; no grau 2, modelos de famílias distintas. O relatório técnico preserva as ocorrências; síntese e tela agrupam as perguntas por trecho.</p>
+        <p>Para a versão 5.1.0, o manual registra quatro casos reais de teste de workflow: evidência de execução técnica, sem desempenho jurídico validado por espécie de ato. A amostra histórica tampouco mede sensibilidade, especificidade ou falsos positivos, nem fornece taxa geral de precisão.</p></div>
       <div class="mx-c"><blockquote class="cit-l">Cada controle executa um requisito: o que pode ser produzido, sob quais condições e com quais limites.</blockquote></div>
     </div>
   </section>
@@ -1749,7 +1721,7 @@ body{background-position:0 0}
   <!-- 2.7 -->
   <section class="sec-e sec-p mx" aria-labelledby="t27">
     <div class="mx-row sec-cab">
-      <div class="mx-c"><p class="ind">07 ▪ A série</p></div>
+      <div class="mx-c"><p class="ind">06 ▪ A série</p></div>
       <div class="mx-c"><h2 class="sec-t" id="t27">Cinco textos, um percurso</h2><p class="sub-s">Governança do Raciocínio Jurídico ▪ LinkedIn ▪ 21 a 26/09/2026</p></div>
     </div>
     <div class="mx-row">
@@ -1799,7 +1771,7 @@ body{background-position:0 0}
   <!-- 2.9 e 2.10 -->
   <section class="sec-e mx" aria-labelledby="t29">
     <div class="mx-row sec-cab">
-      <div class="mx-c"><p class="ind">08 ▪ Autoria</p></div>
+      <div class="mx-c"><p class="ind">07 ▪ Autoria</p></div>
       <div class="mx-c"><h2 class="sec-t" id="t29">Christian da Costa</h2></div>
     </div>
     <div class="mx-row r-3">
