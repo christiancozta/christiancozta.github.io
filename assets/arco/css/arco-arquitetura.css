@@ -55,8 +55,8 @@
      Formada, 238/1000 é a razão exata do desenho original: sem distorção.
      --arx-span é medido em JS; o calc é só o ponto de partida. */
   --arx-span:calc(100vw - var(--sbw, 0px) - var(--pad) * 2);
-  --arx-crown-rest:calc(var(--arx-span) * .153);
-  --arx-crown-formed:calc(var(--arx-span) * .238);
+  --arx-crown-rest:calc(var(--arx-span) * .12);
+  --arx-crown-formed:calc(var(--arx-span) * .185);
   --arx-crown-h:var(--arx-crown-rest);
   --arx-fold:clamp(.9rem, 2.4dvh, 1.6rem);
   --arx-shift:6px;
@@ -227,7 +227,8 @@
   z-index:1; margin:0;
   pointer-events:none;
   font-family:var(--f-display); font-weight:800;
-  font-size:min(calc(var(--arx-crown-h) * .46), 12vw);
+  /* o nome escala com o vão, não com a flecha: o arco baixa, a marca não */
+  font-size:calc(var(--arx-span) * .095);
   line-height:.8; letter-spacing:-.045em;
   white-space:nowrap; text-align:center;
 }
@@ -801,4 +802,36 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 @media (max-width:820px){
   .arx-tech text{ font-size:12px; }
   .arx-tech text.is-small{ font-size:11px; }
+}
+
+/* ===================== ARCO NARRATIVO (ECHO e ATRIO) =====================
+   Abertura do painel: ícone, o movimento como título e, logo abaixo, os dois
+   primeiros parágrafos da leitura conceitual, em linhas cheias até o fim. */
+.arx-lede--story{
+  grid-template-columns:auto minmax(0, 1fr) auto;
+  grid-template-rows:auto auto;
+  align-items:start;
+  row-gap:clamp(.8rem, 1.4vw, 1.1rem);
+}
+.arx-lede--story .arx-plate--lede{ grid-row:1 / span 2; }
+.arx-lede--story .arx-lede__t{ grid-column:2; grid-row:1; align-self:center; }
+.arx-lede--story .arx-open{ grid-column:3; grid-row:1; align-self:center; }
+.arx-lede__story{
+  grid-column:2 / -1; grid-row:2;
+  max-width:none;
+  font-family:var(--f-body); font-size:.92rem; line-height:1.66;
+  color:var(--arx-on-text);
+}
+.arx-lede__story p{
+  margin:0; max-width:none;
+  text-align:justify; text-justify:inter-word;
+  -webkit-hyphens:auto; hyphens:auto;
+}
+.arx-lede__story p + p{ margin-top:.75em; }
+.arx-lede__story p:first-child{ color:var(--arx-on); font-weight:500; }
+@media (max-width:900px){
+  .arx-lede--story{ grid-template-columns:auto minmax(0, 1fr); }
+  .arx-lede--story .arx-plate--lede{ grid-row:1; }
+  .arx-lede--story .arx-open{ grid-column:1 / -1; grid-row:3; justify-self:start; }
+  .arx-lede__story{ grid-column:1 / -1; }
 }
