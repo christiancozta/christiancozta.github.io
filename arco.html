@@ -98,6 +98,8 @@
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261027-menu-topo">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20261027-menu-topo">
 <script src="assets/arco/js/arco.js?v=20261027-menu-topo" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261029-arco-arquitetonico">
+<script src="assets/arco/js/arco-arquitetura.js?v=20261029-arco-arquitetonico" defer></script>
 <style id="arco-hero-data-link">
 .bio__list a.bio__data-link{
   background:#181818;
@@ -334,147 +336,315 @@
     <!-- ===================== HOME: a voz da mãe ===================== -->
     <section class="view" data-view="home" data-active="true" aria-label="Origem — o arco">
       <div class="home">
-        <!-- ===== HERO — uma tela: ficha, percurso e arco. A arcada fica fora. ===== -->
-        <div class="narr-zone">
-          <div class="arco-lang" aria-label="Idioma"><a href="en/arco.html" hreflang="en" lang="en">EN</a><i class="arco-lang__sep" aria-hidden="true">|</i><span aria-current="page">PT</span></div>
+        <!-- ===== ARCO ARQUITETÔNICO — repouso, formação e interação =====
+             Identidade → Trajetória → Sistemas. A Cartografia segue abaixo.
+             Estados em .arx[data-state]: rest | tension | forming | formed.
+             Mecânica em assets/arco/js/arco-arquitetura.js; desenho em
+             assets/arco/css/arco-arquitetura.css. -->
+        <div class="arx" id="arco-arquitetura" data-state="formed" data-sel="" data-preview="">
+          <script>
+            /* Antes da primeira pintura. Sem JS, a estrutura nasce formada.
+               Com JS, cada entrada no percurso nasce em repouso; o estado
+               arquitetônico só é recuperado no retorno (voltar/avançar ou
+               vindo de uma página completa de DATA, ECHO, PLAY, ATRIO, CERNE). */
+            (function(){
+              var el = document.getElementById("arco-arquitetura");
+              var formed = false, back = false, fromSystem = false;
+              try { formed = sessionStorage.getItem("arco:arx:formed") === "1"; } catch (e) {}
+              try {
+                var nav = performance.getEntriesByType("navigation")[0];
+                back = !!nav && nav.type === "back_forward";
+              } catch (e) {}
+              try {
+                var ref = new URL(document.referrer);
+                fromSystem = ref.origin === location.origin &&
+                  /\/(data|echo|play|atrio|atrio-dentro|cerne)\.html$/.test(ref.pathname);
+              } catch (e) {}
+              if (!(formed && (back || fromSystem))) el.setAttribute("data-state", "rest");
+              document.documentElement.classList.add("arx-js");
+            })();
+          </script>
 
-        <!-- 5→1 congelado em 09/09/2026: conteúdo e proveniência vivem no HTML;
-             geometria, tipografia e mecânica permanecem nos assets versionados. -->
-        <div class="narr">
-          <svg class="narr__svg" aria-hidden="true"></svg>
-          <ul class="narr__stats">
-  <li class="narr__stat" data-step="5">
-    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-5">5</button>
-    <span class="narr__l narr__short">ÁREAS DE ATUAÇÃO <span class="narr__tag narr__tag--arco" aria-label="Proveniência: ARCO">ARCO</span></span>
-    <span class="narr__l narr__detail" id="narr-detail-5" hidden>que organizam mecanismos e suas correspondências construídos para problemas reconhecíveis no mercado privado.</span>
-    <span class="narr__l narr__mobile-copy">que organizam mecanismos e suas correspondências construídos para problemas reconhecíveis no mercado privado.</span>
-  </li>
-  <li class="narr__stat" data-step="4">
-    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-4">4</button>
-    <span class="narr__l narr__short">MÓDULOS DE IA JURÍDICA <span class="narr__tag narr__tag--atrio" aria-label="Proveniência: ATRIO">ATRIO</span></span>
-    <span class="narr__l narr__detail" id="narr-detail-4" hidden>reunidos em uma arquitetura de raciocínio jurídico para apoio decisório, aplicada à rotina de gabinete judicial.</span>
-    <span class="narr__l narr__mobile-copy">reunidos em uma arquitetura de raciocínio jurídico para apoio decisório, aplicada à rotina de gabinete judicial.</span>
-  </li>
-  <li class="narr__stat" data-step="3">
-    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-3">3</button>
-    <span class="narr__l narr__short">EIXOS OPERACIONAIS <span class="narr__tag narr__tag--echo" aria-label="Proveniência: ECHO">ECHO</span></span>
-    <span class="narr__l narr__detail" id="narr-detail-3" hidden>estruturados por uma metodologia de operações jurídicas, construída para ambientes de alto volume.</span>
-    <span class="narr__l narr__mobile-copy">estruturados por uma metodologia de operações jurídicas, construída para ambientes de alto volume.</span>
-  </li>
-  <li class="narr__stat" data-step="2">
-    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-2">2</button>
-    <span class="narr__l narr__short">CRITÉRIOS METODOLÓGICOS <span class="narr__tag narr__tag--data" aria-label="Proveniência: DATA">DATA</span></span>
-    <span class="narr__l narr__detail" id="narr-detail-2" hidden>para validar dados e indicadores jurimétricos: evidência (Lastro) e rastreabilidade (Rastro).</span>
-    <span class="narr__l narr__mobile-copy">para validar dados e indicadores jurimétricos: evidência (Lastro) e rastreabilidade (Rastro).</span>
-  </li>
-  <li class="narr__stat" data-step="1">
-    <button class="narr__n" type="button" aria-expanded="false" aria-controls="narr-detail-1">1</button>
-    <span class="narr__l narr__short">PROFISSIONAL</span>
-    <span class="narr__l narr__detail" id="narr-detail-1" hidden>capaz de medir, organizar e arquitetar sistemas jurídicos na encruzilhada atravessada por Direito, tecnologia e dados.</span>
-    <span class="narr__l narr__mobile-copy">capaz de medir, organizar e arquitetar sistemas jurídicos na encruzilhada atravessada por Direito, tecnologia e dados.</span>
-  </li>
-</ul>
-        </div>
+          <!-- 01 — REPOUSO: identidade à esquerda, itinerário à direita -->
+          <header class="arx-hero">
+            <div class="arco-lang" aria-label="Idioma"><a href="en/arco.html" hreflang="en" lang="en">EN</a><i class="arco-lang__sep" aria-hidden="true">|</i><span aria-current="page">PT</span></div>
 
-        <!-- ===== ABERTURA — ficha: marca, nome, tagline, bio, contatos, CV ===== -->
-        <section class="bio" aria-labelledby="bio-name" data-reveal="">
-          <div class="bio__head">
-            <!-- kit v1.2, matriz 06: monólito 1:1 cortado pelo oxê triangulado.
-                 A geometria é a do kit; a tinta é a da página. -->
-            <svg class="bio__mark" viewBox="0 0 120 120" role="img" aria-label="Marca pessoal de Christian da Costa">
-              <path fill="currentColor" fill-rule="evenodd" d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"></path>
-            </svg>
-            <div>
-              <h2 class="bio__name" id="bio-name">Christian da Costa</h2>
-              <p class="bio__tag">Legal Operations & Legal Engineering <i aria-hidden="true">|</i> Legal Tech &amp; AI <i aria-hidden="true">|</i> Legal Data Analytics</p>
+            <section class="arx-id" aria-labelledby="bio-name">
+              <div class="arx-id__head">
+                <!-- kit v1.2, matriz 06: monólito 1:1 cortado pelo oxê triangulado. -->
+                <svg class="arx-id__mark" viewBox="0 0 120 120" role="img" aria-label="Marca pessoal de Christian da Costa">
+                  <path fill="currentColor" fill-rule="evenodd" d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"></path>
+                </svg>
+                <div>
+                  <h1 class="arx-id__name" id="bio-name">Christian da Costa</h1>
+                  <p class="arx-id__tag">Legal Operations &amp; Legal Engineering <i aria-hidden="true">|</i> Legal Tech &amp; AI <i aria-hidden="true">|</i> Legal Data Analytics</p>
+                </div>
+              </div>
+              <p class="arx-id__summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
+              <ul class="arx-id__contacts" aria-label="Contatos">
+                <li><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener">CV</a></li>
+                <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a></li>
+                <li><a href="mailto:christiandscosta@gmail.com">E-mail</a></li>
+                <li><a href="tel:+5541991521304">WhatsApp</a></li>
+              </ul>
+            </section>
+
+            <aside class="arx-itin" aria-labelledby="arx-itin-t">
+              <h2 class="arx-itin__t" id="arx-itin-t">Itinerário</h2>
+              <p class="arx-itin__txt">
+                <span>Da gestão judicial ao método.</span>
+                <span>Do método à arquitetura de IA.</span>
+                <span>Um movimento exigiu o outro.</span>
+                <span class="arx-itin__gap" aria-hidden="true"></span>
+                <span>Narrativa situada na encruzilhada</span>
+                <span>entre Direito, tecnologia,</span>
+                <span>dados e governança.</span>
+                <span class="arx-itin__gap" aria-hidden="true"></span>
+                <em>Mapa à frente.</em>
+              </p>
+            </aside>
+          </header>
+
+          <!-- 02 a 06 — O ARCO: coroa (curva + base), três colunas, sumário -->
+          <section class="arx-arch" aria-labelledby="arx-arch-t">
+            <h2 class="arx-sr" id="arx-arch-t">Trajetória — três movimentos, três sistemas</h2>
+
+            <div class="arx-crown">
+              <!-- extradorso, intradorso, campo da coroa e linha de base.
+                   viewBox 1000×238: a base é a borda inferior da caixa. -->
+              <svg class="arx-arc" viewBox="0 0 1000 238" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path class="arx-arc__field" d="M0,238 C180,-20 820,-20 1000,238 Z"></path>
+                <path class="arx-arc__extra" vector-effect="non-scaling-stroke" d="M0,238 C180,-20 820,-20 1000,238"></path>
+                <path class="arx-arc__intra" vector-effect="non-scaling-stroke" d="M0,238 C205,45 795,45 1000,238"></path>
+                <line class="arx-arc__base" vector-effect="non-scaling-stroke" x1="0" y1="238" x2="1000" y2="238"></line>
+              </svg>
+
+              <!-- 03 — inscrição provisória (pré-seleção) -->
+              <p class="arx-ghost" aria-hidden="true">
+                <span data-sys="data">DATA</span>
+                <span data-sys="echo">ECHO</span>
+                <span data-sys="atrio">ATRIO</span>
+              </p>
+
+              <!-- 04 — inscrição confirmada: título geral do sistema selecionado -->
+              <div class="arx-titles" aria-live="polite">
+                <div class="arx-title" id="arx-title-data" data-sys="data">
+                  <p class="arx-title__k"><b>Fundação</b> Legal Data Analytics &amp; Jurimetria</p>
+                  <h2 class="arx-title__name"><img class="arx-title__mark" src="assets/data/brand/favicon.svg?v=20261014" alt="" width="64" height="64" decoding="async"><span>DATA</span></h2>
+                  <p class="arx-title__motto"><strong>Rastro e lastro</strong> <span>O percurso de um número e a sustentação do que ele permite afirmar.</span></p>
+                  <a class="arx-open" href="#data" data-arx-open="data">Abrir DATA <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="arx-title" id="arx-title-echo" data-sys="echo">
+                  <p class="arx-title__k"><b>Regência</b> Legal Operations</p>
+                  <h2 class="arx-title__name"><img class="arx-title__mark" src="assets/echo/brand/echo-symbol-clean.svg" alt="" width="64" height="64" decoding="async"><span>ECHO</span></h2>
+                  <p class="arx-title__motto"><strong>Do que se ouvia ao que permanece</strong> <span>Aquilo que voltou de fora e se tornou procedimento.</span></p>
+                  <a class="arx-open" href="#echo" data-arx-open="echo">Abrir ECHO <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="arx-title" id="arx-title-atrio" data-sys="atrio">
+                  <p class="arx-title__k"><b>Arquitetura</b> Legal Tech &amp; Inteligência Artificial</p>
+                  <h2 class="arx-title__name"><img class="arx-title__mark" src="assets/atrio/brand/atrio-rei.svg" alt="" width="64" height="64" decoding="async"><span>ATRIO</span></h2>
+                  <p class="arx-title__motto"><strong>Inteligência jurídica orquestrada</strong> <span>O modelo formula. A regra governa. O operador decide.</span></p>
+                  <a class="arx-open" href="#atrio" data-arx-open="atrio">Abrir ATRIO <span aria-hidden="true">→</span></a>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="bio__run">
-            <span class="mov__t" id="bio-creed">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</span>
-            <!-- os contatos continuam a frase visualmente: uma linha real, não um travessão -->
-            <ul class="bio__list">
-              <li><a class="bio__data-link" href="#data" data-open-view="data">Números</a></li>
-              <li><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener">CV</a></li>
-              <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a></li>
-              <li><a href="mailto:christiandscosta@gmail.com">E-mail</a></li>
-              <li><a href="tel:+5541991521304">WhatsApp</a></li>
-            </ul>
-          </div>
-        </section>
 
-        <!-- PERCURSO -->
-        <div class="hero__txt" data-reveal="">
-          <h1 class="mov__h">Itinerário</h1>
-          <p class="mov__t">
-            Da gestão judicial ao método.<br>
-            Do método à arquitetura de IA.<br>
-            Um movimento exigiu o outro.
-            <span class="mov__pause" aria-hidden="true"></span>
-            <span class="mov__pause" aria-hidden="true"></span>
-            Narrativa situada na encruzilhada<br>
-            entre Direito, tecnologia,<br>
-            dados e governança.
-            <span class="mov__pause" aria-hidden="true"></span>
-            <span class="mov__pause" aria-hidden="true"></span>
-            <em>Mapa à frente.</em>
-          </p>
+            <!-- 02 — três colunas: os movimentos da trajetória -->
+            <div class="arx-cols" role="group" aria-label="Movimentos da trajetória — selecione um sistema">
+              <button class="arx-col" type="button" data-sys="data" aria-pressed="false" aria-controls="arx-summary" aria-describedby="arx-syn-data">
+                <span class="arx-col__n">01</span>
+                <span class="arx-col__mov">Fundação</span>
+                <span class="arx-col__sys">DATA</span>
+                <span class="arx-col__syn" id="arx-syn-data"><span class="arx-col__key">Mensuração, evidência e método.</span> <span class="arx-col__more">Antes de acelerar a produção jurídica, era preciso tornar o acervo legível e a atuação mensurável.</span></span>
+              </button>
+              <button class="arx-col" type="button" data-sys="echo" aria-pressed="false" aria-controls="arx-summary" aria-describedby="arx-syn-echo">
+                <span class="arx-col__n">02</span>
+                <span class="arx-col__mov">Regência</span>
+                <span class="arx-col__sys">ECHO</span>
+                <span class="arx-col__syn" id="arx-syn-echo"><span class="arx-col__key">Estruturação de fluxos e operações.</span> <span class="arx-col__more">Da gestão de volume à regência do fluxo decisório: o ponto em que a experiência se converte em método de operação jurídica.</span></span>
+              </button>
+              <button class="arx-col" type="button" data-sys="atrio" aria-pressed="false" aria-controls="arx-summary" aria-describedby="arx-syn-atrio">
+                <span class="arx-col__n">03</span>
+                <span class="arx-col__mov">Arquitetura</span>
+                <span class="arx-col__sys">ATRIO</span>
+                <span class="arx-col__syn" id="arx-syn-atrio"><span class="arx-col__key">Implementação tecnológica e governança.</span> <span class="arx-col__more">Quando o raciocínio tentou acelerar antes do método, a lógica já construída se tornou arquitetura governada.</span></span>
+              </button>
+            </div>
+
+            <!-- 04 — sumário executivo: três dimensões nas três colunas -->
+            <div class="arx-summary" id="arx-summary">
+              <div class="arx-summary__in">
+
+                <!-- ================= DATA ================= -->
+                <article class="arx-sum" data-sys="data" aria-labelledby="arx-title-data">
+                  <div class="arx-dims">
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>01</span> Origem e finalidade</h3>
+                      <p>DATA constitui a camada transversal de mensuração dos sistemas jurídicos. Reúne indicadores derivados de operações reais, documenta seus recortes e explicita os critérios que sustentam sua interpretação.</p>
+                      <p>A mensuração converte resultados em evidências examináveis, permitindo compreender não apenas o que foi produzido, mas como se chegou ao resultado e o que ele efetivamente demonstra.</p>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>02</span> Mecanismo</h3>
+                      <p>Organização de bases, definição de universos, tratamento de períodos comparáveis, decomposição de indicadores e preservação de proveniência.</p>
+                      <p>A verificabilidade é sustentada por derivados públicos, identificação criptográfica das fontes por SHA-256 e critérios documentados de reprodução, sem exposição da base processual original.</p>
+                      <p class="arx-pull">Rastro para reconstruir o percurso. Lastro para sustentar a medida.</p>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>03</span> Evidências</h3>
+                      <ul class="arx-evs">
+                        <li class="arx-ev"><strong class="arx-ev__n">899 / 1.761</strong><span class="arx-ev__t">Votos e despachos na janela publicada, correspondentes à conversão de 51,05%.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">153 / 258</strong><span class="arx-ev__t">Votos e despachos no recorte individual do autor, apresentado sem comparação de desempenho com terceiros.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">13,2 / 6,9 <small>dias</small></strong><span class="arx-ev__t">Filas médias de votos e despachos sem voto, segregadas por natureza do trabalho.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">5 <small>bases de evidência</small></strong><span class="arx-ev__t">Recortes de operações distintas, apresentados sem agregação artificial.</span></li>
+                      </ul>
+                    </section>
+                  </div>
+                  <aside class="arx-band arx-band--note" aria-labelledby="arx-limit-data">
+                    <h3 class="arx-band__t" id="arx-limit-data">Limite interpretativo</h3>
+                    <p class="arx-band__wide">Os indicadores demonstram escala, comportamento e condições de mensuração. Associação temporal não equivale a causalidade; tempo de fila não equivale a tempo individual de trabalho.</p>
+                  </aside>
+                  <p class="arx-exit"><a class="arx-open arx-open--exit" href="#data" data-arx-open="data">Abrir DATA <span aria-hidden="true">→</span></a></p>
+                </article>
+
+                <!-- ================= ECHO ================= -->
+                <article class="arx-sum" data-sys="echo" aria-labelledby="arx-title-echo">
+                  <div class="arx-dims">
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>01</span> Origem e finalidade</h3>
+                      <p>ECHO nasceu da necessidade de organizar uma operação recursal sem procedimento comum instituído.</p>
+                      <p>A partir de entrevistas, análise de acervo e identificação de recorrências, transformou conhecimento disperso em critérios, papéis, rotinas e instrumentos reutilizáveis.</p>
+                      <p>A estruturação do trabalho jurídico converte práticas individuais em processos coordenados, verificáveis e transmissíveis, preservando a responsabilidade técnica e decisória.</p>
+                      <button class="arx-tale" type="button" data-tale="tale-echo" aria-haspopup="dialog">Quando não havia a quem perguntar</button>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>02</span> Mecanismo</h3>
+                      <p>Uma metodologia que conecta triagem, classificação, distribuição, análise, revisão e memória operacional.</p>
+                      <p>Cada instrumento responde a uma necessidade concreta e integra um fluxo comum, no qual entradas, responsabilidades, critérios de passagem e resultados podem ser reconhecidos e acompanhados.</p>
+                      <p class="arx-pull">O método estabiliza aquilo que pode ser classificado, verificado e reutilizado, sem uniformizar o raciocínio jurídico.</p>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>03</span> Evidências</h3>
+                      <ul class="arx-evs">
+                        <li class="arx-ev"><strong class="arx-ev__n">1.192 <small>processos</small></strong><span class="arx-ev__t">Triados e segmentados segundo o fluxo operacional.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">90,2%</strong><span class="arx-ev__t">Redução da complexidade categorial do mapa temático.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">631 <small>temas de precedentes</small></strong><span class="arx-ev__t">Dos quais 483 possuem tese firmada registrada, correspondentes a 76,5% do painel.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">2.758 <small>assuntos</small></strong><span class="arx-ev__t">Catalogados no Ementário, com códigos, hierarquia e textos-base recuperáveis.</span></li>
+                      </ul>
+                    </section>
+                  </div>
+                  <aside class="arx-band arx-band--module" data-module="play" aria-labelledby="arx-play-t">
+                    <header class="arx-band__head">
+                      <img class="arx-band__mark" src="assets/play/favicon.svg" alt="" width="40" height="40" decoding="async">
+                      <div>
+                        <p class="arx-band__k">Desdobramento do ECHO · Showcase operacional</p>
+                        <h3 class="arx-band__t" id="arx-play-t"><b>PLAY</b> — O método em partitura</h3>
+                      </div>
+                    </header>
+                    <div class="arx-band__cols">
+                      <div>
+                        <p>O PLAY transforma parte dos instrumentos da metodologia em uma interface interativa de consulta e produção jurídica.</p>
+                        <p>Reúne 8 dos 14 materiais do ECHO e integra quatro volumes documentais, governança da redação e ferramentas de trabalho.</p>
+                      </div>
+                      <div>
+                        <h4 class="arx-band__sub">Instrumentos disponíveis</h4>
+                        <ul class="arx-list">
+                          <li>107 fundamentos organizados para consulta.</li>
+                          <li>2.758 registros do Ementário, em base compartilhada com o ECHO.</li>
+                          <li>Calendário jurídico com contagem de prazos e exclusões configuráveis.</li>
+                          <li>Montador de minutas com seis modelos e blocos condicionais.</li>
+                          <li>Pesquisa integrada entre documentos, fundamentos, Ementário e templates.</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p>O PLAY demonstra como conhecimento documentado se converte em ferramenta operacional, com regras de aplicação, consulta estruturada e apoio à elaboração jurídica.</p>
+                        <p class="arx-pull">Não constitui metodologia independente: é uma expressão instrumental do ECHO.</p>
+                        <a class="arx-open arx-open--module" href="#play" data-arx-open="play">Abrir PLAY <span aria-hidden="true">→</span></a>
+                      </div>
+                    </div>
+                  </aside>
+                  <p class="arx-exit"><a class="arx-open arx-open--exit" href="#echo" data-arx-open="echo">Abrir ECHO <span aria-hidden="true">→</span></a></p>
+                </article>
+
+                <!-- ================= ATRIO ================= -->
+                <article class="arx-sum" data-sys="atrio" aria-labelledby="arx-title-atrio">
+                  <!-- Família de marcas: na abertura, antes de mecanismos e resultados -->
+                  <section class="arx-family" aria-labelledby="arx-family-t">
+                    <header class="arx-family__head">
+                      <h3 class="arx-family__t" id="arx-family-t">Família de marcas</h3>
+                      <p class="arx-family__lead">Cinco símbolos. Uma arquitetura.</p>
+                    </header>
+                    <ul class="arx-family__list">
+                      <li><img src="assets/atrio/brand/atrio-rei.svg" alt="" width="56" height="56" decoding="async"><b>ATRIO</b><i>Rei</i><span>Arquitetura e orquestração.</span></li>
+                      <li><img src="assets/atrio/brand/corpus-torre.svg" alt="" width="56" height="56" decoding="async"><b>CORPUS</b><i>Torre</i><span>Memória documental governada.</span></li>
+                      <li><img src="assets/atrio/brand/ratio-cavalo.svg" alt="" width="56" height="56" decoding="async"><b>RATIO</b><i>Cavalo</i><span>Formulação decisória faseada.</span></li>
+                      <li><img src="assets/atrio/brand/cerne-rainha.svg" alt="" width="56" height="56" decoding="async"><b>CERNE</b><i>Rainha</i><span>Auditoria crítica do raciocínio.</span></li>
+                      <li><img src="assets/atrio/brand/lux-bispo.svg" alt="" width="56" height="56" decoding="async"><b>LUX</b><i>Bispo</i><span>Refinamento formal e controle de circulação.</span></li>
+                    </ul>
+                  </section>
+                  <div class="arx-dims">
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>01</span> Origem e finalidade</h3>
+                      <p>ATRIO surgiu da tensão entre a aceleração da produção jurídica por inteligência artificial e a necessidade de preservar método, controle e responsabilidade decisória.</p>
+                      <p>A arquitetura transforma procedimentos, regras e critérios jurídicos em mecanismos tecnológicos verificáveis, integrando automação, rastreabilidade e supervisão humana ao percurso da decisão.</p>
+                      <button class="arx-tale" type="button" data-tale="tale-atrio" aria-haspopup="dialog">Quando o raciocínio tentou acelerar antes do método</button>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>02</span> Mecanismo</h3>
+                      <p>Uma arquitetura modular que organiza a entrada documental, estrutura a formulação jurídica, submete o raciocínio ao confronto crítico e governa o refinamento textual.</p>
+                      <p>A implementação utiliza contratos tipados, máquina de estados, persistência, cofre cifrado, proveniência e controle de versões.</p>
+                      <p class="arx-pull">Cada etapa possui função, limites e critérios de passagem. Controles impeditivos interrompem a execução quando as condições exigidas não são satisfeitas, preservando a validação humana nas transições críticas.</p>
+                    </section>
+                    <section class="arx-dim">
+                      <h3 class="arx-dim__k"><span>03</span> Implementação e evidências</h3>
+                      <ul class="arx-evs">
+                        <li class="arx-ev"><strong class="arx-ev__n">115.114 <small>julgados</small></strong><span class="arx-ev__t">Registros únicos normalizados e deduplicados no CORPUS.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">3 vias / 18 fases</strong><span class="arx-ev__t">Percursos processuais estruturados no RATIO, com controles de passagem.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">31 rotas / 188 testes</strong><span class="arx-ev__t">Rotas de API e testes automatizados aprovados na implementação local documentada.</span></li>
+                        <li class="arx-ev"><strong class="arx-ev__n">+16,18 <small>pontos percentuais</small></strong><span class="arx-ev__t">Variação operacional agregada observada entre dezembro de 2025 e abril de 2026, de 44,21% para 60,39%.</span></li>
+                      </ul>
+                      <p class="arx-note">A evolução apresenta associação temporal com a operação, sem demonstração de causalidade isolada atribuível ao ATRIO.</p>
+                    </section>
+                  </div>
+                  <aside class="arx-band arx-band--module" data-module="cerne" aria-labelledby="arx-cerne-t">
+                    <header class="arx-band__head">
+                      <img class="arx-band__mark" src="assets/atrio/brand/cerne-rainha.svg" alt="" width="40" height="40" decoding="async">
+                      <div>
+                        <p class="arx-band__k">Módulo ATRIO · Governança do Raciocínio Jurídico</p>
+                        <h3 class="arx-band__t" id="arx-cerne-t"><b>CERNE</b> — O confronto como mecanismo de auditoria</h3>
+                      </div>
+                    </header>
+                    <div class="arx-band__cols">
+                      <div>
+                        <p>O CERNE examina a sustentação do raciocínio jurídico, identificando dúvidas argumentativas e submetendo-as ao confronto entre perspectivas independentes.</p>
+                        <p>Seu procedimento vigente — CERNE 5.1.0 — estrutura a análise em lentes, confronta auditoria e contraposição (A+ e A−) e aplica critérios decisórios (D1/D2) para manter ou afastar dúvidas.</p>
+                        <p>Os apontamentos permanecem vinculados aos trechos do ato, com preservação dos argumentos, identificadores, estados e razões dos afastamentos.</p>
+                        <p>O resultado é apresentado em perguntas submetidas à avaliação humana, acompanhadas de relatório técnico e leitura sintética.</p>
+                      </div>
+                      <div>
+                        <h4 class="arx-band__sub">Demonstração histórica — CERNE 5.0.0</h4>
+                        <ul class="arx-evs">
+                          <li class="arx-ev"><strong class="arx-ev__n">9 de 12 <small>atos</small></strong><span class="arx-ev__t">Apresentaram pontos identificados com fundamento para embargos de declaração na amostra selecionada.</span></li>
+                          <li class="arx-ev"><strong class="arx-ev__n">7 <small>coincidências</small></strong><span class="arx-ev__t">O ponto identificado correspondeu àquele posteriormente corrigido nos embargos.</span></li>
+                        </ul>
+                        <p>Nos outros dois casos, foram identificados pontos distintos, posteriormente corroborados por elementos específicos do teste.</p>
+                        <p class="arx-note">Os resultados pertencem à amostra histórica, não constituem taxa geral de precisão e não validam automaticamente a versão vigente.</p>
+                      </div>
+                      <div>
+                        <h4 class="arx-band__sub">Engenharia e rastreabilidade</h4>
+                        <p>Implementação com núcleo Python/FastAPI, persistência SQLite, adaptadores de modelos e registro técnico das rodadas.</p>
+                        <p>O sistema preserva inclusive as dúvidas afastadas, permitindo reconstruir não apenas o que foi apontado, mas por que determinado apontamento resistiu ou não ao confronto.</p>
+                        <p class="arx-pull">O CERNE não decide o ato. Torna examinável o percurso das dúvidas que a decisão precisa enfrentar.</p>
+                        <a class="arx-open arx-open--module" href="#cerne" data-arx-open="cerne">Abrir CERNE <span aria-hidden="true">→</span></a>
+                      </div>
+                    </div>
+                  </aside>
+                  <p class="arx-exit"><a class="arx-open arx-open--exit" href="#atrio" data-arx-open="atrio">Abrir ATRIO <span aria-hidden="true">→</span></a></p>
+                </article>
+
+              </div>
+            </div>
+          </section>
         </div>
-
-        <!-- O ARCO: extradorso, intradorso e linha de nascença.
-             preserveAspectRatio="none" + vector-effect: a curva acompanha a
-             largura da arcada; o traço permanece com 1px em qualquer viewport.
-             viewBox fecha em 238 — a nascença É a borda inferior da caixa. Com
-             isso o pé do desenho, o topo dos pilares e o nascimento da diagonal
-             caem todos na mesma linha, sem folga de sub-pixel. -->
-        <svg class="arc" viewBox="0 0 1000 238" preserveAspectRatio="none" role="presentation" aria-hidden="true" data-reveal="">
-          <path class="extra" vector-effect="non-scaling-stroke" d="M0,238 C180,-20 820,-20 1000,238"></path>
-          <path class="intra" vector-effect="non-scaling-stroke" d="M0,238 C205,45 795,45 1000,238"></path>
-          <line class="spring" vector-effect="non-scaling-stroke" x1="0" y1="238" x2="1000" y2="238"></line>
-        </svg>
-
-        </div>
-
-        <!-- ===== ARCADA — três movimentos, um percurso ===== -->
-        <section class="arcade" aria-label="Construção — três movimentos">
-          <article class="mov" data-reveal="" style="--i:0">
-            <p class="mov__n">01</p>
-            <h2 class="mov__h">Fundação</h2>
-            <p class="mov__t">
-              O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto
-              volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga,
-              saneamento de backlog e integração digital de <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Decreto Judiciário Conjunto nº 508/2023 | TJPR" data-numerator="36.000 processos previstos no Anexo" data-denominator="4 fases de 3 meses | 7 grupos de comarcas" data-period="Núcleo de Justiça 4.0 | a partir de 27.07.2023">36 mil</span> execuções fiscais. Ali se
-              formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o
-              acervo legível.
-            </p>
-          </article>
-
-          <article class="mov" data-reveal="" style="--i:1">
-            <p class="mov__n">02</p>
-            <h2 class="mov__h">Regência</h2>
-            <p class="mov__t">
-              O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume
-              para a regência do fluxo decisório. O <button class="b-echo" type="button" data-view="echo">ECHO</button>
-              nasce desse momento: organização de acervo, segmentação temática, padronização de
-              rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em
-              que a experiência judicial se converte em método.
-            </p>
-            <button class="idlink idlink--echo" type="button" data-tale="tale-echo" aria-haspopup="dialog">Quando não havia a quem perguntar</button>
-          </article>
-
-          <article class="mov" data-reveal="" style="--i:2">
-            <p class="mov__n">03</p>
-            <h2 class="mov__h">Arquitetura</h2>
-            <p class="mov__t">
-              O terceiro movimento surge quando o método encontra a inteligência artificial. O
-              <button class="b-atrio" type="button" data-view="atrio">ATRIO</button> transforma a lógica
-              construída no <button class="b-echo" type="button" data-view="echo">ECHO</button> em
-              arquitetura modular, com base documental, raciocínio assistido, validação humana,
-              rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar
-              dentro de um percurso governado.<br><br>
-            </p>
-            <button class="idlink idlink--atrio" type="button" data-tale="tale-atrio" aria-haspopup="dialog">Quando o raciocínio acelerou antes do método</button>
-          </article>
-        </section>
 
         <!-- ===== REPERTÓRIO — o dicionário de competências, dentro da home ===== -->
         <section id="repertorio" aria-labelledby="h-repertorio">
@@ -1782,7 +1952,7 @@
 <dialog class="tale tale--atrio" id="tale-atrio" aria-label="Identidade conceitual — ATRIO">
   <div class="tale__inner">
     <p class="tale__mark"><span class="tale__k">legal tech</span></p>
-    <h2 class="tale__title">Quando o raciocínio acelerou antes do método</h2>
+    <h2 class="tale__title">Quando o raciocínio tentou acelerar antes do método</h2>
     <div class="tale__prose">
       <p class="open">A primeira notícia da IA não veio como projeto, mas como curva.</p>
       <p>Durante a implantação de uma nova metodologia de trabalho, uma mudança súbita nos indicadores revelou que uma força nova havia entrado na operação. A produção acelerava. O método, ainda não. O número sugeria ganho; a revisão mostrava assimetria.</p>
