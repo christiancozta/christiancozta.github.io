@@ -57,28 +57,151 @@
     requestAnimationFrame(frame);
   });
   const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
   /* soltura amortecida: passa um pouco do repouso e assenta */
   const release = t => Math.exp(-5.2 * t) * Math.cos(Math.PI * 2.6 * t) * (1 - t * t * t);
+
+  /* ------------------------------------------------------------------
+     GRAFISMO TÉCNICO — caixa de limites, cotas e anotações à mão.
+     Coordenadas em pixels da coroa, refeitas a cada mudança de medida
+     (inclusive enquanto a coroa cresce na formação).
+     ------------------------------------------------------------------ */
+  const tech = crown.querySelector(".arx-tech");
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const techNodes = new Map();
+
+  /* ponto da curva (viewBox 1000×238) em t, para os chamados das notas */
+  const bez = (t, p0, p1, p2, p3) => {
+    const u = 1 - t;
+    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+  };
+  const onExtra = (t, W, H) => [bez(t, 0, 180, 820, 1000) / 1000 * W, bez(t, 238, -20, -20, 238) / 238 * H];
+  const onIntra = (t, W, H) => [bez(t, 0, 205, 795, 1000) / 1000 * W, bez(t, 238, 45, 45, 238) / 238 * H];
+
+  const techNode = (key, tag, cls, delay) => {
+    let node = techNodes.get(key);
+    if (!node){
+      node = document.createElementNS(SVG_NS, tag);
+      node.setAttribute("class", cls);
+      if (tag === "path") node.setAttribute("pathLength", "1");
+      node.style.setProperty("--d", `${delay}ms`);
+      tech.appendChild(node);
+      techNodes.set(key, node);
+    }
+    return node;
+  };
+  const line = (key, cls, delay, pts) => {
+    const d = pts.map((pt, i) => `${i ? "L" : "M"}${pt[0].toFixed(1)},${pt[1].toFixed(1)}`).join(" ");
+    techNode(key, "path", cls, delay).setAttribute("d", d);
+  };
+  const label = (key, cls, delay, x, y, text, {anchor = "start", rotate = 0} = {}) => {
+    const node = techNode(key, "text", cls, delay);
+    node.setAttribute("x", x.toFixed(1));
+    node.setAttribute("y", y.toFixed(1));
+    node.setAttribute("text-anchor", anchor);
+    if (rotate) node.setAttribute("transform", `rotate(${rotate} ${x.toFixed(1)} ${y.toFixed(1)})`);
+    else node.removeAttribute("transform");
+    if (node.textContent !== text) node.textContent = text;
+  };
+  const tick = (key, cls, delay, x, y) => line(key, cls, delay, [[x - 4, y + 4], [x + 4, y - 4]]);
+  const hide = keys => keys.forEach(key => { techNodes.get(key)?.remove(); techNodes.delete(key); });
+
+  const layoutTech = () => {
+    if (!tech) return;
+    const W = crown.clientWidth;
+    const H = crown.clientHeight;
+    if (!W || !H) return;
+    const apex = 44.5 / 238 * H;          // fecho do extradorso: limite superior exato
+    const ov = 10;                         // traço de construção além do canto
+    const roomRight = document.documentElement.clientWidth - crown.getBoundingClientRect().right;
+    const wide = W >= 700;
+
+    /* caixa de limites: topo tangente ao fecho e laterais até a nascença */
+    line("box-top", "is-box", 380, [[-ov, apex], [W + ov, apex]]);
+    line("box-l", "is-box", 380, [[0, apex - ov], [0, H]]);
+    line("box-r", "is-box", 380, [[W, apex - ov], [W, H]]);
+    /* marca do fecho */
+    line("key-v", "is-dim is-in", 900, [[W / 2, apex - 7], [W / 2, apex + 7]]);
+    line("key-h", "is-dim is-in", 900, [[W / 2 - 7, apex], [W / 2 + 7, apex]]);
+    label("key-t", "is-small is-in", 1500, W / 2 + 12, apex + 19, "fecho");
+
+    /* cota do vão, acima da caixa */
+    const yv = apex - 30;
+    line("vao-el", "is-ext", 900, [[0, apex - 14], [0, yv - 8]]);
+    line("vao-er", "is-ext", 900, [[W, apex - 14], [W, yv - 8]]);
+    line("vao", "is-dim", 1000, [[0, yv], [W, yv]]);
+    tick("vao-tl", "is-dim", 1200, 0, yv);
+    tick("vao-tr", "is-dim", 1200, W, yv);
+    label("vao-t", "", 1500, W / 2, yv - 7, wide ? "vão — três movimentos" : "vão", {anchor:"middle"});
+
+    /* nascenças */
+    /* dentro do vão, afastada do pé da curva */
+    const nx = W * (wide ? .055 : .1);
+    label("nasc-l", "is-small is-in", 1600, nx, H - 10, "nascença");
+    if (wide) label("nasc-r", "is-small is-in", 1600, W - nx, H - 10, "nascença", {anchor:"end"});
+    else hide(["nasc-r"]);
+
+    /* cota da flecha, fora da caixa, quando há margem */
+    if (roomRight >= 52){
+      const xf = W + 26;
+      line("fl-et", "is-ext", 900, [[W + ov + 4, apex], [xf + 8, apex]]);
+      line("fl-eb", "is-ext", 900, [[W + 6, H], [xf + 8, H]]);
+      line("fl", "is-dim", 1000, [[xf, apex], [xf, H]]);
+      tick("fl-tt", "is-dim", 1200, xf, apex);
+      tick("fl-tb", "is-dim", 1200, xf, H);
+      label("fl-t", "", 1500, xf + 15, (apex + H) / 2, "flecha", {anchor:"middle", rotate:-90});
+    } else hide(["fl-et","fl-eb","fl","fl-tt","fl-tb","fl-t"]);
+
+    /* anotações à mão nos tímpanos e sob o intradorso */
+    if (wide){
+      const [ex, ey] = onExtra(.17, W, H);
+      label("ext-t", "", 1650, W * .025, apex + 27, "extradorso", {rotate:-2});
+      line("ext-l", "is-lead", 1450, [[W * .025 + 52, apex + 34], [ex, ey]]);
+
+      const [ix, iy] = onIntra(.25, W, H);
+      label("int-t", "is-in", 1750, W * .19, H * .8, "intradorso", {rotate:-2});
+      line("int-l", "is-lead is-in", 1550, [[W * .19 + 40, H * .8 - 15], [ix, iy + 3]]);
+
+      label("note-1", "", 1850, W * .975, apex + 25, "a flecha tensionou o arco —", {anchor:"end", rotate:-1.5});
+      label("note-2", "", 1950, W * .975, apex + 45, "e o arco virou estrutura", {anchor:"end", rotate:-1.5});
+    } else hide(["ext-t","ext-l","int-t","int-l","note-1","note-2"]);
+  };
+
+  if (tech){
+    layoutTech();
+    if ("ResizeObserver" in window) new ResizeObserver(layoutTech).observe(crown);
+    addEventListener("resize", layoutTech, {passive:true});
+    document.fonts?.ready?.then(layoutTech);
+  }
 
   /* ------------------------------------------------------------------
      02 — TENSÃO E FORMAÇÃO
      ------------------------------------------------------------------ */
   let state = root.dataset.state || "rest";
-  const setState = value => { state = value; root.dataset.state = value; };
+  const setState = value => {
+    state = value;
+    root.dataset.state = value;
+    crownTheme();
+  };
 
+  /* depois de um recolhimento, a última seleção não volta sozinha */
+  let restoreOnForm = true;
   const finishFormation = () => {
     setState("formed");
     store.set(KEY_FORMED, "1");
-    restoreSelection();
+    if (restoreOnForm) restoreSelection();
   };
 
   let forming = false;
-  const form = async ({animate = true} = {}) => {
+  let formToken = 0;
+  const form = async ({animate = true, tension = true} = {}) => {
     if (state !== "rest" || forming) return;
     /* a formação só acontece sob o olho: nunca com o ARCO fora de vista */
     if (homeView && homeView.dataset.active !== "true") return;
     forming = true;
+    const token = ++formToken;
     disarmIntent();
+    setPreview("");
 
     if (!animate || reduced()){
       drawArc(0);
@@ -87,13 +210,19 @@
       return;
     }
 
-    setState("tension");
-    await tween(520, t => drawArc(easeOutCubic(t)));
-    /* devolvida a corda, a estrutura começa a se formar */
-    setState("forming");
-    await tween(900, t => drawArc(release(t)));
-    drawArc(0);
-    await new Promise(resolve => setTimeout(resolve, 900));
+    if (tension){
+      setState("tension");
+      await tween(520, t => drawArc(easeOutCubic(t)));
+      /* devolvida a corda, a estrutura começa a se formar */
+      setState("forming");
+      await tween(900, t => drawArc(release(t)));
+      drawArc(0);
+      await wait(1100);
+    } else {
+      setState("forming");
+      await wait(1800);
+    }
+    if (token !== formToken){ forming = false; return; }
     finishFormation();
     forming = false;
   };
@@ -108,7 +237,8 @@
   const onScroll = () => { if (window.scrollY > 4) form(); };
   let intentArmed = false;
   const armIntent = () => {
-    if (intentArmed || state !== "rest") return;
+    /* depois de recolhida pelo visitante, a estrutura só volta por escolha */
+    if (intentArmed || state !== "rest" || !restoreOnForm) return;
     intentArmed = true;
     addEventListener("wheel", onWheel, {passive:true});
     addEventListener("touchmove", onTouchMove, {passive:true});
@@ -130,14 +260,15 @@
   let selected = "";
   let preview = "";
 
-  const crownTheme = () => {
-    const theme = preview || selected;
+  /* a coroa só ganha tema pela pré-seleção no repouso; formada, só pela seleção */
+  function crownTheme(){
+    const theme = selected || (state === "rest" ? preview : "");
     if (theme) root.dataset.crown = theme;
     else delete root.dataset.crown;
-  };
+  }
 
   const setPreview = sys => {
-    if (state !== "formed" && state !== "forming") sys = "";
+    if (state === "tension" || state === "forming") sys = "";
     if (sys === selected) sys = "";
     preview = sys;
     root.dataset.preview = sys;
@@ -172,8 +303,6 @@
     col.addEventListener("pointercancel", () => { if (!hovered) setPreview(""); });
 
     head.addEventListener("focus", () => {
-      /* chegar às colunas pelo teclado também é avançar no percurso */
-      if (state === "rest") form();
       if (head.matches(":focus-visible")) setPreview(sys);
     });
     head.addEventListener("blur", () => {
@@ -184,8 +313,7 @@
        guardam seus próprios gestos */
     col.addEventListener("click", event => {
       if (event.target.closest(".arx-story,[data-datum]")) return;
-      if (state === "rest") form({animate:false});
-      select(sys, {animate:true});
+      formAndSelect(sys);
     });
 
     /* teclado: setas percorrem os capitéis; Enter/Espaço confirmam (botão) */
@@ -220,7 +348,6 @@
      travada e então conduzida até a nova medida.
      ------------------------------------------------------------------ */
   let swapToken = 0;
-  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   const paint = sys => {
     root.dataset.sel = sys;
@@ -274,6 +401,89 @@
     root.classList.remove("is-swapping");
     if (motion) await animateHeight(first ? 0 : from, to, token);
     else animateHeight(0, 0, token);
+  }
+
+  /* do repouso, um clique forma a estrutura (sem nova tensão) e abre o sistema */
+  async function formAndSelect(sys){
+    if (state === "tension") return;
+    if (state === "rest"){
+      if (reduced()){
+        form({animate:false});
+      } else {
+        form({tension:false});
+        await wait(700);
+      }
+    }
+    select(sys, {animate:true});
+  }
+
+  /* fora do arco: tudo se recolhe ao repouso e as histórias reaparecem */
+  const frame = root.querySelector(".arx-frame");
+  async function collapse({keep = null} = {}){
+    if (state === "rest" || state === "tension") return;
+    const token = ++swapToken;
+    formToken++;
+    forming = false;
+    restoreOnForm = false;
+    store.set(KEY_FORMED, "0");
+    store.set(KEY_SEL, "");
+    setPreview("");
+    hovered = null;
+
+    /* o que está sob o olho não deve saltar quando o painel encolhe acima */
+    const html = document.documentElement;
+    const keepTop = keep ? keep.getBoundingClientRect().top : null;
+    let follow = 0;
+    if (keep){
+      html.style.overflowAnchor = "none";
+      const hold = () => {
+        const delta = keep.getBoundingClientRect().top - keepTop;
+        if (Math.abs(delta) > .5) window.scrollBy({top:delta, left:0, behavior:"instant"});
+        follow = requestAnimationFrame(hold);
+      };
+      follow = requestAnimationFrame(hold);
+    }
+
+    const motion = !reduced();
+    if (selected && motion){
+      root.classList.add("is-collapsing");
+      await wait(200);
+      if (token !== swapToken) return;
+      const from = summary.getBoundingClientRect().height;
+      selected = "";
+      paint("");
+      root.classList.remove("is-collapsing");
+      setState("rest");
+      await animateHeight(from, 0, token);
+    } else {
+      selected = "";
+      paint("");
+      setState("rest");
+      animateHeight(0, 0, token);
+    }
+    drawArc(0);
+
+    await wait(motion ? 900 : 0);
+    cancelAnimationFrame(follow);
+    html.style.overflowAnchor = "";
+  }
+
+  if (frame){
+    document.addEventListener("click", event => {
+      if (state !== "formed" && state !== "forming") return;
+      if (homeView && homeView.dataset.active !== "true") return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest(".arx-arch, dialog, .rail, .data-tooltip, .progress-rail")) return;
+      if (!target.closest("#stage")) return;
+      const below = event.clientY > frame.getBoundingClientRect().bottom;
+      collapse({keep: below ? target : null});
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || state === "rest") return;
+      if (!root.contains(document.activeElement)) return;
+      collapse();
+    });
   }
 
   function restoreSelection(){
