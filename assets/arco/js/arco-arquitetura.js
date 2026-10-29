@@ -129,6 +129,201 @@
     node.style.visibility = ok ? "" : "hidden";
   };
 
+  /* ------------------------------------------------------------------
+     RABISCOS DE PRANCHETA — camada densa de construção, sempre fora do vão:
+     traços duplos de esboço, réguas, pontos de construção, tangentes de
+     nascença, hachura dos tímpanos, cotas de altura da curva, escala
+     gráfica, marcas de eixo e numeração dos movimentos. Sem palavras.
+     ------------------------------------------------------------------ */
+  let clipReady = false;
+  const ensureClips = () => {
+    if (clipReady || !tech) return;
+    const defs = document.createElementNS(SVG_NS, "defs");
+    ["l", "r"].forEach(side => {
+      const clip = document.createElementNS(SVG_NS, "clipPath");
+      clip.setAttribute("id", `arx-spandrel-${side}`);
+      const path = document.createElementNS(SVG_NS, "path");
+      clip.appendChild(path);
+      defs.appendChild(clip);
+      /* a hachura se dissolve à medida que se afasta da lateral */
+      const grad = document.createElementNS(SVG_NS, "linearGradient");
+      grad.setAttribute("id", `arx-fade-g-${side}`);
+      grad.setAttribute("gradientUnits", "userSpaceOnUse");
+      [["0", "1"], ["1", "0"]].forEach(([offset, opacity]) => {
+        const stop = document.createElementNS(SVG_NS, "stop");
+        stop.setAttribute("offset", offset);
+        stop.setAttribute("stop-color", "#fff");
+        stop.setAttribute("stop-opacity", opacity);
+        grad.appendChild(stop);
+      });
+      defs.appendChild(grad);
+      const mask = document.createElementNS(SVG_NS, "mask");
+      mask.setAttribute("id", `arx-fade-${side}`);
+      mask.setAttribute("maskUnits", "userSpaceOnUse");
+      const rect = document.createElementNS(SVG_NS, "rect");
+      rect.setAttribute("fill", `url(#arx-fade-g-${side})`);
+      mask.appendChild(rect);
+      defs.appendChild(mask);
+    });
+    tech.prepend(defs);
+    clipReady = true;
+  };
+  /* tímpano = região entre a caixa e o extradorso, de cada lado do fecho */
+  const spandrelPath = (W, H, apex, side) => {
+    const pts = [];
+    for (let i = 0; i <= 24; i++){
+      const [x, y] = onExtra(i / 48, W, H);       // meia curva, do pé ao fecho
+      pts.push(side === "l" ? [x, y] : [W - x, y]);
+    }
+    const corner = side === "l" ? [0, apex] : [W, apex];
+    return "M" + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" L") +
+      ` L${(W / 2).toFixed(1)},${apex.toFixed(1)} L${corner[0].toFixed(1)},${corner[1].toFixed(1)} Z`;
+  };
+
+  function sketch(W, H, apex, wide, roomLeft, roomRight){
+    ensureClips();
+    tech.querySelector("#arx-spandrel-l path")?.setAttribute("d", spandrelPath(W, H, apex, "l"));
+    tech.querySelector("#arx-spandrel-r path")?.setAttribute("d", spandrelPath(W, H, apex, "r"));
+    const fadeReach = W * (W >= 600 ? .2 : .16);
+    ["l", "r"].forEach(side => {
+      const g = tech.querySelector(`#arx-fade-g-${side}`);
+      const r = tech.querySelector(`#arx-fade-${side} rect`);
+      const x0 = side === "l" ? 0 : W, x1 = side === "l" ? fadeReach : W - fadeReach;
+      g?.setAttribute("x1", x0); g?.setAttribute("x2", x1);
+      g?.setAttribute("y1", 0); g?.setAttribute("y2", 0);
+      if (r){
+        r.setAttribute("x", Math.min(x0, x1)); r.setAttribute("y", apex - 2);
+        r.setAttribute("width", fadeReach); r.setAttribute("height", H - apex + 4);
+      }
+    });
+    const mid = W >= 600;
+
+    /* traços duplos de esboço: a mão repassa a caixa, com folga nos cantos */
+    line("sk-top", "is-sketch", 300, [[-22, apex - 1.4], [W + 24, apex + .8]]);
+    line("sk-l", "is-sketch", 340, [[-1.2, apex - 20], [.9, H + 7]]);
+    line("sk-r", "is-sketch", 340, [[W + 1.1, apex - 18], [W - .8, H + 7]]);
+    line("sk-base", "is-sketch", 360, [[-16, H + 1.2], [W + 14, H - .6]]);
+
+    /* pontos de construção nos cantos superiores */
+    const ring = (key, cx, cy, r, delay) => {
+      const pts = [];
+      for (let i = 0; i <= 16; i++){
+        const a = i / 16 * Math.PI * 2;
+        pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+      }
+      line(key, "is-dim", delay, pts);
+    };
+    ring("pt-l", 0, apex, 3.2, 1100);
+    ring("pt-r", W, apex, 3.2, 1100);
+
+    /* régua sobre a linha superior (marcas para cima, fora do vão) */
+    const steps = mid ? 24 : 12;
+    for (let i = 1; i < steps; i++){
+      const x = W * i / steps;
+      if (Math.abs(x - W / 2) < 1) continue;
+      const len = i % 4 === 0 ? 7 : 3.5;
+      line(`ru-t${i}`, "is-tick", 1000 + i * 18, [[x, apex], [x, apex - len]]);
+    }
+    for (const key of [...techNodes.keys()]) {
+      const n = Number(key.slice(4));
+      if (key.startsWith("ru-t") && n >= steps) hide([key]);
+    }
+
+    /* régua nas laterais (marcas para fora) */
+    for (let i = 1; i < 8; i++){
+      const y = apex + (H - apex) * i / 8;
+      const len = i % 2 === 0 ? 6 : 3;
+      line(`ru-l${i}`, "is-tick", 1050 + i * 25, [[0, y], [-len, y]]);
+      line(`ru-r${i}`, "is-tick", 1050 + i * 25, [[W, y], [W + len, y]]);
+    }
+
+    /* tangentes de nascença até a linha superior, com ponto de encontro */
+    const s = (H - apex) / ((258 / 238) * H);
+    const xt = .18 * W * s;
+    line("tg-l", "is-cons", 1200, [[0, H], [xt, apex]]);
+    line("tg-r", "is-cons", 1200, [[W, H], [W - xt, apex]]);
+    ring("tg-pl", xt, apex, 2.4, 1500);
+    ring("tg-pr", W - xt, apex, 2.4, 1500);
+
+    /* hachura dos tímpanos, concentrada junto às laterais */
+    const gap = mid ? 6 : 5;
+    const reach = W * (mid ? .2 : .16);
+    let n = 0;
+    for (let k = apex; k < H + reach; k += gap, n++){
+      /* esquerda: "/" ; direita: "\" — recortadas pelo tímpano */
+      line(`ha-l${n}`, "is-hatch is-clip-l", 1300 + n * 8, [[0, k], [Math.min(reach, k - apex), k - Math.min(reach, k - apex)]]);
+      line(`ha-r${n}`, "is-hatch is-clip-r", 1300 + n * 8, [[W, k], [W - Math.min(reach, k - apex), k - Math.min(reach, k - apex)]]);
+    }
+    for (const key of [...techNodes.keys()]){
+      if (!/^ha-[lr]\d+$/.test(key)) continue;
+      if (Number(key.slice(4)) >= n) hide([key]);
+    }
+    techNodes.forEach((node, key) => {
+      if (key.startsWith("ha-l")){
+        node.setAttribute("clip-path", "url(#arx-spandrel-l)");
+        node.setAttribute("mask", "url(#arx-fade-l)");
+      }
+      if (key.startsWith("ha-r")){
+        node.setAttribute("clip-path", "url(#arx-spandrel-r)");
+        node.setAttribute("mask", "url(#arx-fade-r)");
+      }
+    });
+
+    /* cotas de altura da curva a um quarto e três quartos do vão */
+    if (mid){
+      [.25, .75].forEach((u, i) => {
+        const x = u * W, y = extraAt(u) * H;
+        line(`hm-${i}`, "is-dim", 1500, [[x, y - 3], [x, y - 13]]);
+        line(`hm-c${i}`, "is-dim", 1500, [[x - 3, y - 6], [x + 3, y - 6]]);
+        label(`hm-t${i}`, "is-small", 1800, x + (i ? -6 : 6), y - 17, `+${fmt(H - y)}`, {anchor: i ? "end" : "start"});
+      });
+    } else hide(["hm-0","hm-c0","hm-t0","hm-1","hm-c1","hm-t1"]);
+
+    /* eixo: alvo de construção acima do fecho */
+    ring("ax-ring", W / 2, apex - 9, 4.2, 950);
+    line("ax-h", "is-dim", 950, [[W / 2 - 8, apex - 9], [W / 2 + 8, apex - 9]]);
+
+    /* numeração dos movimentos sobre as cotas parciais */
+    if (wide){
+      const yc = apex - 30;
+      [0, 1, 2].forEach(i => {
+        const cx = W * i / 3 + 16;
+        ring(`mv-c${i}`, cx, yc, 6.5, 1600 + i * 80);
+        label(`mv-n${i}`, "is-small", 1700 + i * 80, cx, yc + 4, String(i + 1), {anchor:"middle"});
+      });
+    } else hide(["mv-c0","mv-c1","mv-c2","mv-n0","mv-n1","mv-n2"]);
+
+    /* escala gráfica no tímpano esquerdo, sob o 1:100 */
+    if (wide){
+      const x0 = 14, y0 = apex + 36, u = 12;
+      line("sc-base", "is-dim", 1700, [[x0, y0], [x0 + u * 4, y0]]);
+      line("sc-top", "is-dim", 1700, [[x0, y0 - 3], [x0 + u * 4, y0 - 3]]);
+      for (let i = 0; i <= 4; i++) line(`sc-t${i}`, "is-dim", 1750, [[x0 + u * i, y0 - 3], [x0 + u * i, y0 + 2]]);
+      line("sc-f1", "is-dim", 1800, [[x0, y0 - 1.5], [x0 + u, y0 - 1.5]]);
+      line("sc-f3", "is-dim", 1800, [[x0 + u * 2, y0 - 1.5], [x0 + u * 3, y0 - 1.5]]);
+      label("sc-n0", "is-small", 1850, x0, y0 + 12, "0", {anchor:"middle"});
+      label("sc-n4", "is-small", 1850, x0 + u * 4, y0 + 12, "4", {anchor:"middle"});
+    } else hide(["sc-base","sc-top","sc-t0","sc-t1","sc-t2","sc-t3","sc-t4","sc-f1","sc-f3","sc-n0","sc-n4"]);
+
+    /* rosa de orientação no tímpano direito, sob f/L */
+    if (W >= 900){
+      const cx = W - 40, cy = apex + 74;
+      ring("or-ring", cx, cy, 9, 1800);
+      line("or-v", "is-dim", 1850, [[cx, cy + 12], [cx, cy - 15]]);
+      line("or-h", "is-dim", 1850, [[cx - 12, cy], [cx + 12, cy]]);
+      line("or-a", "is-dim", 1900, [[cx - 3.5, cy - 9], [cx, cy - 15], [cx + 3.5, cy - 9]]);
+    } else hide(["or-ring","or-v","or-h","or-a"]);
+
+    /* rabiscos de margem: setas de chamada e marcas de conferência */
+    if (roomLeft >= 64){
+      line("mg-l1", "is-sketch", 1900, [[-52, H - 30], [-40, H - 40], [-28, H - 36]]);
+      line("mg-l2", "is-sketch", 1950, [[-50, apex + 24], [-44, apex + 30], [-34, apex + 16]]);
+    } else hide(["mg-l1","mg-l2"]);
+    if (roomRight >= 52){
+      line("mg-r1", "is-sketch", 1950, [[W + 44, apex - 6], [W + 50, apex + 2], [W + 58, apex - 12]]);
+    } else hide(["mg-r1"]);
+  }
+
   /* O grafismo nunca entra no vão do arco: vive acima da caixa, nas margens
      e nos tímpanos (entre a curva e a caixa). Só números, níveis e graus,
      em escala 1:100 (1 px = 1 cm). */
@@ -226,7 +421,10 @@
       label("scale", "is-small", 1900, 14, apex + 26, "1:100", {anchor:"start", rotate:-1.5});
     } else hide(["ratio","scale"]);
 
+    sketch(W, H, apex, wide, roomLeft, roomRight);
+
     ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
+    for (const key of techNodes.keys()) if (key.startsWith("hm-t")) keepAboveCurve(key, W, H);
   };
 
   /* vão real do arco, para a proporção fixa da coroa */
