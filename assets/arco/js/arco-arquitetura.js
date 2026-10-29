@@ -106,42 +106,76 @@
   const tick = (key, cls, delay, x, y) => line(key, cls, delay, [[x - 4, y + 4], [x + 4, y - 4]]);
   const hide = keys => keys.forEach(key => { techNodes.get(key)?.remove(); techNodes.delete(key); });
 
+  /* altura do extradorso (fração de H) na abscissa u = x/W */
+  const extraAt = u => {
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 22; i++){
+      const mid = (lo + hi) / 2;
+      if (bez(mid, 0, 180, 820, 1000) / 1000 < u) lo = mid; else hi = mid;
+    }
+    return bez((lo + hi) / 2, 238, -20, -20, 238) / 238;
+  };
+  const APEX = 44.5 / 238;                 // fecho do extradorso, em fração de H
+  const fmt = px => (px / 100).toLocaleString("pt-BR", {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  /* rótulo dentro da caixa só fica se couber inteiro acima da curva */
+  const keepAboveCurve = (key, W, H) => {
+    const node = techNodes.get(key);
+    if (!node) return;
+    let box;
+    try { box = node.getBBox(); } catch { return; }
+    const ok = [box.x, box.x + box.width].every(x =>
+      x > 2 && x < W - 2 && box.y + box.height < extraAt(x / W) * H - 4);
+    node.style.visibility = ok ? "" : "hidden";
+  };
+
+  /* O grafismo nunca entra no vão do arco: vive acima da caixa, nas margens
+     e nos tímpanos (entre a curva e a caixa). Só números, níveis e graus,
+     em escala 1:100 (1 px = 1 cm). */
   const layoutTech = () => {
     if (!tech) return;
     const W = crown.clientWidth;
     const H = crown.clientHeight;
     if (!W || !H) return;
-    const apex = 44.5 / 238 * H;          // fecho do extradorso: limite superior exato
-    const ov = 10;                         // traço de construção além do canto
-    const roomRight = document.documentElement.clientWidth - crown.getBoundingClientRect().right;
+    const apex = APEX * H;
+    const ov = 10;
+    const rect = crown.getBoundingClientRect();
+    const roomRight = document.documentElement.clientWidth - rect.right;
+    const roomLeft = rect.left;
     const wide = W >= 700;
 
-    /* caixa de limites: topo tangente ao fecho e laterais até a nascença */
+    /* caixa de limites: topo tangente ao fecho, laterais até a nascença */
     line("box-top", "is-box", 380, [[-ov, apex], [W + ov, apex]]);
     line("box-l", "is-box", 380, [[0, apex - ov], [0, H]]);
     line("box-r", "is-box", 380, [[W, apex - ov], [W, H]]);
-    /* marca do fecho */
-    line("key-v", "is-dim is-in", 900, [[W / 2, apex - 7], [W / 2, apex + 7]]);
-    line("key-h", "is-dim is-in", 900, [[W / 2 - 7, apex], [W / 2 + 7, apex]]);
-    label("key-t", "is-small is-in", 1500, W / 2 + 12, apex + 19, "fecho");
+    /* eixo: só acima do fecho */
+    line("axis", "is-dim", 900, [[W / 2, apex - 9], [W / 2, apex]]);
 
-    /* cota do vão, acima da caixa */
-    const yv = apex - 30;
-    line("vao-el", "is-ext", 900, [[0, apex - 14], [0, yv - 8]]);
-    line("vao-er", "is-ext", 900, [[W, apex - 14], [W, yv - 8]]);
-    line("vao", "is-dim", 1000, [[0, yv], [W, yv]]);
-    tick("vao-tl", "is-dim", 1200, 0, yv);
-    tick("vao-tr", "is-dim", 1200, W, yv);
-    label("vao-t", "", 1500, W / 2, yv - 7, wide ? "vão — três movimentos" : "vão", {anchor:"middle"});
+    /* cadeia de cotas do vão: parciais (três movimentos) e total */
+    const y1 = apex - 18;
+    line("v-ext-l", "is-ext", 900, [[0, apex - 14], [0, y1 - (wide ? 30 : 6)]]);
+    line("v-ext-r", "is-ext", 900, [[W, apex - 14], [W, y1 - (wide ? 30 : 6)]]);
+    if (wide){
+      line("v-ext-1", "is-ext", 900, [[W / 3, apex - 4], [W / 3, y1 - 6]]);
+      line("v-ext-2", "is-ext", 900, [[W * 2 / 3, apex - 4], [W * 2 / 3, y1 - 6]]);
+      line("v-part", "is-dim", 1000, [[0, y1], [W, y1]]);
+      [0, W / 3, W * 2 / 3, W].forEach((x, i) => tick(`v-pt${i}`, "is-dim", 1200, x, y1));
+      [0, 1, 2].forEach(i => label(`v-pn${i}`, "is-small", 1500 + i * 90, W * (i * 2 + 1) / 6, y1 - 6, fmt(W / 3), {anchor:"middle"}));
+      const y2 = y1 - 24;
+      line("v-tot", "is-dim", 1100, [[0, y2], [W, y2]]);
+      tick("v-tt0", "is-dim", 1250, 0, y2);
+      tick("v-tt1", "is-dim", 1250, W, y2);
+      label("v-tn", "", 1750, W / 2, y2 - 6, fmt(W), {anchor:"middle"});
+    } else {
+      hide(["v-ext-1","v-ext-2","v-part","v-pt0","v-pt1","v-pt2","v-pt3","v-pn0","v-pn1","v-pn2","v-tot","v-tt0","v-tt1"]);
+      line("v-tot-m", "is-dim", 1000, [[0, y1], [W, y1]]);
+      tick("v-tm0", "is-dim", 1200, 0, y1);
+      tick("v-tm1", "is-dim", 1200, W, y1);
+      label("v-tn-m", "is-small", 1500, W / 2, y1 - 6, fmt(W), {anchor:"middle"});
+    }
+    if (wide) hide(["v-tot-m","v-tm0","v-tm1","v-tn-m"]);
 
-    /* nascenças */
-    /* dentro do vão, afastada do pé da curva */
-    const nx = W * (wide ? .055 : .1);
-    label("nasc-l", "is-small is-in", 1600, nx, H - 10, "nascença");
-    if (wide) label("nasc-r", "is-small is-in", 1600, W - nx, H - 10, "nascença", {anchor:"end"});
-    else hide(["nasc-r"]);
-
-    /* cota da flecha, fora da caixa, quando há margem */
+    /* cota da flecha (altura do fecho sobre a nascença), à direita */
     if (roomRight >= 52){
       const xf = W + 26;
       line("fl-et", "is-ext", 900, [[W + ov + 4, apex], [xf + 8, apex]]);
@@ -149,22 +183,47 @@
       line("fl", "is-dim", 1000, [[xf, apex], [xf, H]]);
       tick("fl-tt", "is-dim", 1200, xf, apex);
       tick("fl-tb", "is-dim", 1200, xf, H);
-      label("fl-t", "", 1500, xf + 15, (apex + H) / 2, "flecha", {anchor:"middle", rotate:-90});
+      label("fl-t", "", 1550, xf + 15, (apex + H) / 2, fmt(H - apex), {anchor:"middle", rotate:-90});
     } else hide(["fl-et","fl-eb","fl","fl-tt","fl-tb","fl-t"]);
 
-    /* anotações à mão nos tímpanos e sob o intradorso */
+    /* níveis à esquerda: nascença ±0,00 e fecho +f */
+    if (roomLeft >= 64){
+      const lv = (key, y, text, delay) => {
+        line(`${key}-l`, "is-ext", delay - 300, [[-ov - 4, y], [-46, y]]);
+        line(`${key}-m`, "is-dim", delay - 200, [[-30, y - 7], [-24, y], [-18, y - 7], [-30, y - 7]]);
+        label(`${key}-t`, "is-small", delay, -14, y - 9, text, {anchor:"end"});
+      };
+      lv("lv0", H, "±0,00", 1550);
+      lv("lv1", apex, `+${fmt(H - apex)}`, 1650);
+    } else hide(["lv0-l","lv0-m","lv0-t","lv1-l","lv1-m","lv1-t"]);
+
+    /* ângulo de nascença: entre a lateral da caixa e a tangente da curva,
+       desenhado no tímpano, fora do vão */
+    const tx = .18 * W, ty = (258 / 238) * H;
+    const fromVertical = Math.atan2(tx, ty);           // radianos, a partir da vertical
+    const deg = Math.round(fromVertical * 180 / Math.PI);
+    const r = Math.min(30, H * .14);
+    const arcPath = (cx, dir) => {
+      const steps = 10, pts = [];
+      for (let i = 0; i <= steps; i++){
+        const a = fromVertical * i / steps;
+        pts.push([cx + dir * r * Math.sin(a), H - r * Math.cos(a)]);
+      }
+      return pts;
+    };
+    line("ang-l", "is-dim", 1300, arcPath(0, 1));
+    line("ang-r", "is-dim", 1300, arcPath(W, -1));
+    /* o grau pousa rente à lateral, acima do arco de medida */
+    label("ang-lt", "is-small", 1700, 5, H - r - 22, `${deg}°`, {anchor:"start"});
+    label("ang-rt", "is-small", 1700, W - 5, H - r - 22, `${deg}°`, {anchor:"end"});
+
+    /* razão flecha/vão no tímpano direito */
     if (wide){
-      const [ex, ey] = onExtra(.17, W, H);
-      label("ext-t", "", 1650, W * .025, apex + 27, "extradorso", {rotate:-2});
-      line("ext-l", "is-lead", 1450, [[W * .025 + 52, apex + 34], [ex, ey]]);
+      label("ratio", "is-small", 1850, W - 14, apex + 26, `f/L = ${((H - apex) / W).toLocaleString("pt-BR", {maximumFractionDigits:2, minimumFractionDigits:2})}`, {anchor:"end", rotate:-1.5});
+      label("scale", "is-small", 1900, 14, apex + 26, "1:100", {anchor:"start", rotate:-1.5});
+    } else hide(["ratio","scale"]);
 
-      const [ix, iy] = onIntra(.25, W, H);
-      label("int-t", "is-in", 1750, W * .19, H * .8, "intradorso", {rotate:-2});
-      line("int-l", "is-lead is-in", 1550, [[W * .19 + 40, H * .8 - 15], [ix, iy + 3]]);
-
-      label("note-1", "", 1850, W * .975, apex + 25, "a flecha tensionou o arco —", {anchor:"end", rotate:-1.5});
-      label("note-2", "", 1950, W * .975, apex + 45, "e o arco virou estrutura", {anchor:"end", rotate:-1.5});
-    } else hide(["ext-t","ext-l","int-t","int-l","note-1","note-2"]);
+    ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
   };
 
   if (tech){
@@ -262,7 +321,7 @@
 
   /* a coroa só ganha tema pela pré-seleção no repouso; formada, só pela seleção */
   function crownTheme(){
-    const theme = selected || (state === "rest" ? preview : "");
+    const theme = selected;
     if (theme) root.dataset.crown = theme;
     else delete root.dataset.crown;
   }
@@ -411,7 +470,10 @@
         form({animate:false});
       } else {
         form({tension:false});
+        const token = formToken;
         await wait(700);
+        /* recolhida no meio do caminho: a seleção não chega a acontecer */
+        if (token !== formToken || state === "rest") return;
       }
     }
     select(sys, {animate:true});
@@ -468,16 +530,30 @@
     html.style.overflowAnchor = "";
   }
 
+  /* faixa de respiro: da base do quadro até o topo da caixa (fecho),
+     laterais incluídas, barra de rolagem excluída. Dentro dela, conta como
+     "fora" o que não é arco nem quadro: margens laterais e tímpanos. */
+  const INTERACTIVE = 'a,button,input,select,textarea,label,summary,[role="button"],[role="tab"],[role="link"],[data-datum]';
+  const outsideArch = (x, y) => {
+    if (x >= document.documentElement.clientWidth) return false;
+    const c = crown.getBoundingClientRect();
+    const f = frame.getBoundingClientRect();
+    const top = c.top + APEX * c.height;
+    if (y < top || y > f.bottom) return false;
+    if (x < f.left || x > f.right) return true;
+    if (y >= c.bottom) return false;
+    return y < c.top + extraAt((x - c.left) / c.width) * c.height;
+  };
+
   if (frame){
     document.addEventListener("click", event => {
       if (state !== "formed" && state !== "forming") return;
       if (homeView && homeView.dataset.active !== "true") return;
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest(".arx-arch, dialog, .rail, .data-tooltip, .progress-rail")) return;
-      if (!target.closest("#stage")) return;
-      const below = event.clientY > frame.getBoundingClientRect().bottom;
-      collapse({keep: below ? target : null});
+      if (target.closest(INTERACTIVE) || target.closest("dialog, .rail")) return;
+      if (!outsideArch(event.clientX, event.clientY)) return;
+      collapse();
     });
     document.addEventListener("keydown", event => {
       if (event.key !== "Escape" || state === "rest") return;

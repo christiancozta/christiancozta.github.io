@@ -1,5 +1,7 @@
-/* caligrafia de prancheta para cotas e anotações */
-@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
+/* caligrafia de prancheta (cotas) e tipografias de marca, as mesmas das
+   páginas de cada sistema: DATA em Anybody, ECHO em Zalando Sans Expanded,
+   ATRIO em Science Gothic */
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Anybody:wdth,wght@125,900&family=Science+Gothic:wght@500..800&family=Zalando+Sans+Expanded:wght@700&display=swap");
 
 /* ==========================================================================
    ARCO — do arco tensionado ao arco arquitetônico
@@ -220,7 +222,7 @@
   z-index:1; margin:0;
   pointer-events:none;
   font-family:var(--f-display); font-weight:800;
-  font-size:min(calc(var(--arx-crown-h) * .48), 14vw);
+  font-size:min(calc(var(--arx-crown-h) * .46), 12vw);
   line-height:.8; letter-spacing:-.045em;
   white-space:nowrap; text-align:center;
 }
@@ -230,9 +232,21 @@
   opacity:0;
   transition:opacity 380ms var(--arx-ease), transform 520ms var(--arx-spring);
 }
-.arx-name [data-sys="data"]{ color:var(--arx-data); }
-.arx-name [data-sys="echo"]{ color:var(--arx-echo); }
-.arx-name [data-sys="atrio"]{ color:var(--arx-atrio); }
+.arx-name [data-sys="data"]{
+  color:var(--arx-data);
+  font-family:"Anybody", var(--f-display);
+  font-weight:900; font-stretch:125%; letter-spacing:-.02em;
+}
+.arx-name [data-sys="echo"]{
+  color:var(--arx-echo);
+  font-family:"Zalando Sans Expanded", var(--f-display);
+  font-weight:700; letter-spacing:-.01em;
+}
+.arx-name [data-sys="atrio"]{
+  color:var(--arx-atrio);
+  font-family:"Science Gothic", var(--f-display);
+  font-weight:650; letter-spacing:-.01em;
+}
 
 /* seleção: nome pleno. O nome transparente só existe no repouso. */
 .arx[data-sel="data"] .arx-name [data-sys="data"],
@@ -240,7 +254,7 @@
 .arx[data-sel="atrio"] .arx-name [data-sys="atrio"]{ opacity:1; transform:translate(-50%, 0); }
 .arx[data-state="rest"][data-preview="data"] .arx-name [data-sys="data"],
 .arx[data-state="rest"][data-preview="atrio"] .arx-name [data-sys="atrio"]{ opacity:.26; transform:translate(-50%, 0); }
-.arx[data-state="rest"][data-preview="echo"] .arx-name [data-sys="echo"]{ opacity:.5; transform:translate(-50%, 0); }
+.arx[data-state="rest"][data-preview="echo"] .arx-name [data-sys="echo"]{ opacity:.55; transform:translate(-50%, 0); }
 
 /* ===================== QUADRO — três colunas que se fecham ===================== */
 .arx-frame{
@@ -309,7 +323,7 @@
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
   background-color:transparent;
-  transition:background-color 380ms var(--arx-ease), color 320ms var(--arx-ease);
+  transition:background-color 380ms var(--arx-ease), color 320ms var(--arx-ease), transform 460ms var(--arx-spring);
 }
 .arx-col[data-sys="data"]{ --c:var(--arx-data); }
 .arx-col[data-sys="echo"]{
@@ -325,6 +339,12 @@
   --arx-on:var(--c-on); --arx-on-soft:var(--c-on-soft);
 }
 .arx[data-state="formed"] .arx-col.is-preview .arx-col__txt{ color:var(--c-on-text); }
+/* com um sistema aberto, o bloco sob o cursor também se desloca levemente */
+.arx:not([data-sel=""]) .arx-col.is-preview{ transform:translateY(var(--arx-shift)); }
+/* e o intradorso antecipa a cor do sistema sob o cursor, até a seleção */
+.arx:not([data-sel=""])[data-preview="data"] .arx-arc__intra{ stroke:var(--arx-data); }
+.arx:not([data-sel=""])[data-preview="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
+.arx:not([data-sel=""])[data-preview="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
 .arx[data-state="formed"] .arx-col.is-preview .arx-col__head{ opacity:1!important; }
 .arx[data-state="formed"] .arx-col.is-preview .b-data,
 .arx[data-state="formed"] .arx-col.is-preview .b-echo,
@@ -680,7 +700,7 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
   .arx-hero .arco-lang{ top:calc(var(--home-top) + .4rem); }
   .arx-id__head{ padding-right:3.5rem; }
   .arx-itin{ justify-self:start; width:auto; }
-  .arx-name{ font-size:min(calc(var(--arx-crown-h) * .42), 17vw); }
+  .arx-name{ font-size:min(calc(var(--arx-crown-h) * .4), 14.5vw); }
 }
 
 /* celular: as três colunas se empilham dentro do mesmo quadro fechado;
@@ -750,10 +770,11 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 .arx-tech .is-dim{ stroke:#8C8C8C; }
 .arx-tech .is-ext,
 .arx-tech .is-lead{ stroke:#A9A9A9; }
-.arx-tech .is-axis{ stroke:#B5B5B5; stroke-dasharray:1; }
+.arx-tech .is-level{ fill:none; }
 .arx-tech text{
   font-family:var(--arx-hand);
-  font-size:14px; letter-spacing:.01em;
+  font-size:13px; letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
   fill:#6A6A6A;
   opacity:0;
   transform-box:fill-box; transform-origin:50% 50%;
