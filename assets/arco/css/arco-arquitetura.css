@@ -817,12 +817,13 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 /* o movimento no alto, rente à mesma margem do ícone; abaixo, ícone e texto
    lado a lado, com a primeira linha no topo do ícone */
 .arx-lede--story .arx-lede__t{
-  grid-column:1 / 3; grid-row:1; align-self:center;
+  grid-column:1 / -1; grid-row:1; align-self:center;
   line-height:1;
   text-box:trim-both cap alphabetic;
   margin:0;
 }
-.arx-lede--story .arx-open{ grid-column:3; grid-row:1; align-self:center; }
+/* o acesso desce para baixo do texto, alinhado ao início dele */
+.arx-lede--story .arx-open{ grid-column:2; grid-row:3; justify-self:start; align-self:start; margin-top:.25rem; }
 .arx-lede--story .arx-plate--lede{ grid-column:1; grid-row:2; align-self:start; }
 .arx-lede__story{
   grid-column:2 / -1; grid-row:2;
@@ -840,6 +841,11 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 @media (max-width:900px){
   .arx-lede--story{ grid-template-columns:auto minmax(0, 1fr); }
   .arx-lede--story .arx-lede__t{ grid-column:1 / -1; }
-  .arx-lede--story .arx-open{ grid-column:1 / -1; grid-row:3; justify-self:start; }
   .arx-lede__story{ grid-column:2; }
+}
+@media (max-width:640px){
+  /* no celular, o acesso se estende do início do texto até a borda */
+  .arx-lede--story .arx-open{
+    grid-column:2 / -1; justify-self:stretch; justify-content:space-between;
+  }
 }
