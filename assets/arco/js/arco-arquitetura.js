@@ -411,12 +411,16 @@
   /* arco narrativo: os dois primeiros parágrafos de cada leitura conceitual
      vêm do próprio diálogo, para que o texto tenha uma única fonte */
   root.querySelectorAll(".arx-lede__story[data-tale-src]").forEach(story => {
-    const prose = document.getElementById(story.dataset.taleSrc)?.querySelector(".tale__prose");
+    const tale = document.getElementById(story.dataset.taleSrc);
+    const prose = tale?.querySelector(".tale__prose");
     const source = prose ? [...prose.querySelectorAll(":scope > p")].slice(0, 2) : [];
     if (source.length < 2) return;
-    story.replaceChildren(...source.map(p => {
+    /* o título da leitura conceitual vira a primeira frase do texto */
+    const title = (tale.querySelector(".tale__title")?.textContent || "").trim().replace(/[.:;]+$/, "");
+    story.replaceChildren(...source.map((p, i) => {
       const copy = document.createElement("p");
       copy.innerHTML = p.innerHTML;
+      if (i === 0 && title) copy.prepend(`${title}. `);
       return copy;
     }));
   });
