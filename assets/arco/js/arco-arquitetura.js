@@ -17,10 +17,10 @@
   const intra = root.querySelector(".arx-arc__intra");
   const field = root.querySelector(".arx-arc__field");
   const cols = [...root.querySelectorAll(".arx-col[data-sys]")];
-  const titles = [...root.querySelectorAll(".arx-title[data-sys]")];
+  const heads = cols.map(col => col.querySelector(".arx-col__head"));
   const sums = [...root.querySelectorAll(".arx-sum[data-sys]")];
   const summary = root.querySelector(".arx-summary");
-  if (!crown || !extra || !intra || !field || cols.length !== 3 || !summary) return;
+  if (!crown || !extra || !intra || !field || cols.length !== 3 || heads.some(h => !h) || !summary) return;
 
   const SYSTEMS = ["data", "echo", "atrio"];
   const KEY_FORMED = "arco:arx:formed";
@@ -141,14 +141,17 @@
     if (sys === selected) sys = "";
     preview = sys;
     root.dataset.preview = sys;
-    root.classList.toggle("is-previewing-other", Boolean(sys && selected));
     cols.forEach(col => col.classList.toggle("is-preview", col.dataset.sys === sys));
     crownTheme();
   };
 
   let hovered = null;
+  const keyboardFocused = () =>
+    heads.find(head => head === document.activeElement && head.matches(":focus-visible"));
+
   cols.forEach((col, index) => {
     const sys = col.dataset.sys;
+    const head = heads[index];
 
     col.addEventListener("pointerenter", event => {
       if (event.pointerType === "touch") return;
@@ -158,32 +161,35 @@
     col.addEventListener("pointerleave", event => {
       if (event.pointerType === "touch") return;
       if (hovered === col) hovered = null;
-      const focused = cols.find(c => c === document.activeElement && c.matches(":focus-visible"));
-      setPreview(focused ? focused.dataset.sys : "");
+      const focused = keyboardFocused();
+      setPreview(focused ? focused.closest(".arx-col").dataset.sys : "");
     });
 
     /* toque: pressionar antecipa, soltar confirma */
     col.addEventListener("pointerdown", event => {
-      if (event.pointerType === "touch") setPreview(sys);
+      if (event.pointerType === "touch" && !event.target.closest(".arx-story,[data-datum]")) setPreview(sys);
     });
     col.addEventListener("pointercancel", () => { if (!hovered) setPreview(""); });
 
-    col.addEventListener("focus", () => {
+    head.addEventListener("focus", () => {
       /* chegar às colunas pelo teclado também é avançar no percurso */
       if (state === "rest") form();
-      if (col.matches(":focus-visible")) setPreview(sys);
+      if (head.matches(":focus-visible")) setPreview(sys);
     });
-    col.addEventListener("blur", () => {
+    head.addEventListener("blur", () => {
       setPreview(hovered ? hovered.dataset.sys : "");
     });
 
-    col.addEventListener("click", () => {
+    /* a coluna inteira seleciona; a leitura conceitual e o dado de lastro
+       guardam seus próprios gestos */
+    col.addEventListener("click", event => {
+      if (event.target.closest(".arx-story,[data-datum]")) return;
       if (state === "rest") form({animate:false});
       select(sys, {animate:true});
     });
 
-    /* teclado: setas percorrem as colunas; Enter/Espaço confirmam (botão) */
-    col.addEventListener("keydown", event => {
+    /* teclado: setas percorrem os capitéis; Enter/Espaço confirmam (botão) */
+    head.addEventListener("keydown", event => {
       let next = -1;
       if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % cols.length;
       if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index + cols.length - 1) % cols.length;
@@ -193,7 +199,18 @@
       if (next < 0) return;
       event.preventDefault();
       event.stopPropagation();
-      cols[next].focus();
+      heads[next].focus();
+    });
+  });
+
+  /* leitura conceitual dentro do texto justificado: inline, quebra como
+     palavra; Enter e Espaço abrem o diálogo como um botão */
+  root.querySelectorAll(".arx-story[role='button']").forEach(story => {
+    story.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      event.stopPropagation();
+      story.click();
     });
   });
 
@@ -207,8 +224,11 @@
 
   const paint = sys => {
     root.dataset.sel = sys;
-    cols.forEach(col => col.setAttribute("aria-pressed", String(col.dataset.sys === sys)));
-    titles.forEach(title => title.classList.toggle("is-on", title.dataset.sys === sys));
+    cols.forEach((col, i) => {
+      const on = col.dataset.sys === sys;
+      col.classList.toggle("is-selected", on);
+      heads[i].setAttribute("aria-pressed", String(on));
+    });
     sums.forEach(sum => sum.classList.toggle("is-on", sum.dataset.sys === sys));
   };
 
