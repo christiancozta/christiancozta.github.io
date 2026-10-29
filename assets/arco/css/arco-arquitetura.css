@@ -830,7 +830,15 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 }
 /* o acesso desce para baixo do texto, alinhado ao início dele */
 .arx-lede--story .arx-open{ grid-column:2; grid-row:3; justify-self:start; align-self:start; margin-top:.25rem; }
-.arx-lede--story .arx-plate--lede{ grid-column:1; grid-row:2; align-self:start; }
+/* o ícone guarda a margem branca da placa (sem ela o amarelo e o terracota
+   se fundem ao painel), uniforme nos quatro lados; a borda da placa é a
+   margem do título. Ocupa as linhas do texto e do acesso, para que a sua
+   altura não abra vão entre o texto e o botão. */
+.arx-lede--story .arx-plate--lede{
+  grid-column:1; grid-row:2 / span 2; align-self:start;
+  width:clamp(2.6rem, 3.4vw, 3.1rem);
+  padding:10%;
+}
 .arx-lede__story{
   grid-column:2 / -1; grid-row:2;
   max-width:none;
