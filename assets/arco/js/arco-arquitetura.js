@@ -211,11 +211,14 @@
       }
       return pts;
     };
-    line("ang-l", "is-dim", 1300, arcPath(0, 1));
-    line("ang-r", "is-dim", 1300, arcPath(W, -1));
-    /* o grau pousa rente à lateral, acima do arco de medida */
-    label("ang-lt", "is-small", 1700, 5, H - r - 22, `${deg}°`, {anchor:"start"});
-    label("ang-rt", "is-small", 1700, W - 5, H - r - 22, `${deg}°`, {anchor:"end"});
+    /* em telas estreitas o tímpano é pequeno demais para o grau */
+    if (W >= 600){
+      line("ang-l", "is-dim", 1300, arcPath(0, 1));
+      line("ang-r", "is-dim", 1300, arcPath(W, -1));
+      /* o grau pousa rente à lateral, acima do arco de medida */
+      label("ang-lt", "is-small", 1700, 5, H - r - 22, `${deg}°`, {anchor:"start"});
+      label("ang-rt", "is-small", 1700, W - 5, H - r - 22, `${deg}°`, {anchor:"end"});
+    } else hide(["ang-l","ang-r","ang-lt","ang-rt"]);
 
     /* razão flecha/vão no tímpano direito */
     if (wide){
@@ -225,6 +228,21 @@
 
     ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
   };
+
+  /* vão real do arco, para a proporção fixa da coroa */
+  let spanW = 0;
+  const measureSpan = () => {
+    const w = root.querySelector(".arx-arch")?.clientWidth || 0;
+    if (!w || Math.abs(w - spanW) < .5) return;
+    spanW = w;
+    root.style.setProperty("--arx-span", `${w}px`);
+  };
+  measureSpan();
+  if ("ResizeObserver" in window){
+    const arch = root.querySelector(".arx-arch");
+    if (arch) new ResizeObserver(measureSpan).observe(arch);
+  }
+  addEventListener("resize", measureSpan, {passive:true});
 
   if (tech){
     layoutTech();
