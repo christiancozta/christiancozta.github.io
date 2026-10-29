@@ -416,7 +416,10 @@
     const source = prose ? [...prose.querySelectorAll(":scope > p")].slice(0, 2) : [];
     if (source.length < 2) return;
     /* o título da leitura conceitual vira a primeira frase do texto */
-    const title = (tale.querySelector(".tale__title")?.textContent || "").trim().replace(/[.:;]+$/, "");
+    /* sem o "Quando" inicial: a oração vira frase própria, com ponto final */
+    let title = (tale.querySelector(".tale__title")?.textContent || "").trim().replace(/[.:;]+$/, "");
+    title = title.replace(/^quando\s+/i, "");
+    if (title) title = title.charAt(0).toLocaleUpperCase("pt-BR") + title.slice(1);
     story.replaceChildren(...source.map((p, i) => {
       const copy = document.createElement("p");
       copy.innerHTML = p.innerHTML;
