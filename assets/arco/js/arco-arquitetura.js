@@ -103,6 +103,11 @@
     else node.removeAttribute("transform");
     if (node.textContent !== text) node.textContent = text;
   };
+  /* vários segmentos num só traço: menos nós, menos pintura */
+  const multi = (key, cls, delay, segs) => {
+    const d = segs.map(seg => seg.map((pt, i) => `${i ? "L" : "M"}${pt[0].toFixed(1)},${pt[1].toFixed(1)}`).join(" ")).join(" ");
+    techNode(key, "path", cls, delay).setAttribute("d", d || "M0,0");
+  };
   const tick = (key, cls, delay, x, y) => line(key, cls, delay, [[x - 4, y + 4], [x + 4, y - 4]]);
   const hide = keys => keys.forEach(key => { techNodes.get(key)?.remove(); techNodes.delete(key); });
 
@@ -218,24 +223,24 @@
 
     /* régua sobre a linha superior (marcas para cima, fora do vão) */
     const steps = mid ? 24 : 12;
+    const rulerTop = [];
     for (let i = 1; i < steps; i++){
       const x = W * i / steps;
       if (Math.abs(x - W / 2) < 1) continue;
-      const len = i % 4 === 0 ? 7 : 3.5;
-      line(`ru-t${i}`, "is-tick", 1000 + i * 18, [[x, apex], [x, apex - len]]);
+      rulerTop.push([[x, apex], [x, apex - (i % 4 === 0 ? 7 : 3.5)]]);
     }
-    for (const key of [...techNodes.keys()]) {
-      const n = Number(key.slice(4));
-      if (key.startsWith("ru-t") && n >= steps) hide([key]);
-    }
+    multi("ru-t", "is-tick", 1000, rulerTop);
 
     /* régua nas laterais (marcas para fora) */
+    const rl = [], rr = [];
     for (let i = 1; i < 8; i++){
       const y = apex + (H - apex) * i / 8;
       const len = i % 2 === 0 ? 6 : 3;
-      line(`ru-l${i}`, "is-tick", 1050 + i * 25, [[0, y], [-len, y]]);
-      line(`ru-r${i}`, "is-tick", 1050 + i * 25, [[W, y], [W + len, y]]);
+      rl.push([[0, y], [-len, y]]);
+      rr.push([[W, y], [W + len, y]]);
     }
+    multi("ru-l", "is-tick", 1050, rl);
+    multi("ru-r", "is-tick", 1050, rr);
 
     /* tangentes de nascença até a linha superior, com ponto de encontro */
     const s = (H - apex) / ((258 / 238) * H);
@@ -245,29 +250,25 @@
     ring("tg-pl", xt, apex, 2.4, 1500);
     ring("tg-pr", W - xt, apex, 2.4, 1500);
 
-    /* hachura dos tímpanos, concentrada junto às laterais */
+    /* hachura dos tímpanos, concentrada junto às laterais: um traço por
+       lado, um só recorte e uma só máscara */
     const gap = mid ? 6 : 5;
     const reach = W * (mid ? .2 : .16);
-    let n = 0;
-    for (let k = apex; k < H + reach; k += gap, n++){
-      /* esquerda: "/" ; direita: "\" — recortadas pelo tímpano */
-      line(`ha-l${n}`, "is-hatch is-clip-l", 1300 + n * 8, [[0, k], [Math.min(reach, k - apex), k - Math.min(reach, k - apex)]]);
-      line(`ha-r${n}`, "is-hatch is-clip-r", 1300 + n * 8, [[W, k], [W - Math.min(reach, k - apex), k - Math.min(reach, k - apex)]]);
+    const hl = [], hr = [];
+    for (let k = apex; k < H + reach; k += gap){
+      const d = Math.min(reach, k - apex);
+      hl.push([[0, k], [d, k - d]]);
+      hr.push([[W, k], [W - d, k - d]]);
     }
-    for (const key of [...techNodes.keys()]){
-      if (!/^ha-[lr]\d+$/.test(key)) continue;
-      if (Number(key.slice(4)) >= n) hide([key]);
+    multi("ha-l", "is-hatch", 1300, hl);
+    multi("ha-r", "is-hatch", 1300, hr);
+    const hatchL = techNodes.get("ha-l"), hatchR = techNodes.get("ha-r");
+    if (hatchL && !hatchL.hasAttribute("mask")){
+      hatchL.setAttribute("clip-path", "url(#arx-spandrel-l)");
+      hatchL.setAttribute("mask", "url(#arx-fade-l)");
+      hatchR.setAttribute("clip-path", "url(#arx-spandrel-r)");
+      hatchR.setAttribute("mask", "url(#arx-fade-r)");
     }
-    techNodes.forEach((node, key) => {
-      if (key.startsWith("ha-l")){
-        node.setAttribute("clip-path", "url(#arx-spandrel-l)");
-        node.setAttribute("mask", "url(#arx-fade-l)");
-      }
-      if (key.startsWith("ha-r")){
-        node.setAttribute("clip-path", "url(#arx-spandrel-r)");
-        node.setAttribute("mask", "url(#arx-fade-r)");
-      }
-    });
 
     /* cotas de altura da curva a um quarto e três quartos do vão */
     if (mid){
@@ -443,10 +444,23 @@
   addEventListener("resize", measureSpan, {passive:true});
 
   if (tech){
+    /* no máximo um recálculo por quadro, e só quando a medida mudou */
+    let techRaf = 0, lastW = 0, lastH = 0, lastRoom = -1;
+    const scheduleTech = force => {
+      if (techRaf) return;
+      techRaf = requestAnimationFrame(() => {
+        techRaf = 0;
+        const W = crown.clientWidth, H = crown.clientHeight;
+        const room = Math.round(document.documentElement.clientWidth - crown.getBoundingClientRect().right);
+        if (force !== true && W === lastW && Math.abs(H - lastH) < .5 && room === lastRoom) return;
+        lastW = W; lastH = H; lastRoom = room;
+        layoutTech();
+      });
+    };
     layoutTech();
-    if ("ResizeObserver" in window) new ResizeObserver(layoutTech).observe(crown);
-    addEventListener("resize", layoutTech, {passive:true});
-    document.fonts?.ready?.then(layoutTech);
+    if ("ResizeObserver" in window) new ResizeObserver(() => scheduleTech()).observe(crown);
+    addEventListener("resize", () => scheduleTech(), {passive:true});
+    document.fonts?.ready?.then(() => scheduleTech(true));
   }
 
   /* ------------------------------------------------------------------
