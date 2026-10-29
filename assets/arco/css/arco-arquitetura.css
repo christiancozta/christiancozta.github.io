@@ -50,8 +50,13 @@
   --arx-on-soft:var(--arx-soft);
   --arx-on-hair:var(--arx-hair);
 
-  --arx-crown-rest:clamp(88px, min(15vw, 22dvh), 210px);
-  --arx-crown-formed:clamp(180px, min(24vw, 34dvh), 320px);
+  /* proporção fixa: a coroa mede sempre a mesma fração do vão, então a
+     curva é o mesmo desenho em qualquer largura (nunca vira cúpula).
+     Formada, 238/1000 é a razão exata do desenho original: sem distorção.
+     --arx-span é medido em JS; o calc é só o ponto de partida. */
+  --arx-span:calc(100vw - var(--sbw, 0px) - var(--pad) * 2);
+  --arx-crown-rest:calc(var(--arx-span) * .153);
+  --arx-crown-formed:calc(var(--arx-span) * .238);
   --arx-crown-h:var(--arx-crown-rest);
   --arx-fold:clamp(.9rem, 2.4dvh, 1.6rem);
   --arx-shift:6px;
@@ -687,8 +692,6 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 
 @media (max-width:820px){
   .arx{
-    --arx-crown-rest:clamp(84px, 26vw, 150px);
-    --arx-crown-formed:clamp(150px, 44vw, 240px);
     --arx-shift:5px;
   }
   .arx-hero{
@@ -700,7 +703,6 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
   .arx-hero .arco-lang{ top:calc(var(--home-top) + .4rem); }
   .arx-id__head{ padding-right:3.5rem; }
   .arx-itin{ justify-self:start; width:auto; }
-  .arx-name{ font-size:min(calc(var(--arx-crown-h) * .4), 14.5vw); }
 }
 
 /* celular: as três colunas se empilham dentro do mesmo quadro fechado;
