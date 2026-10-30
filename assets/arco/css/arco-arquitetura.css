@@ -1134,3 +1134,33 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 }
 .arx-pop__x:hover,
 .arx-pop__x:focus-visible{ background:#181818; color:#FCFCFC; border-color:#181818; }
+
+/* ===================== CERNE em #181818 =====================
+   A faixa do CERNE sai do terracota: campo preto, letra clara, acento
+   terracota no filete superior e nos números. */
+.arx-band[data-module="cerne"]{
+  --arx-on:#FCFCFC; --arx-on-text:rgba(252,252,252,.86);
+  --arx-on-soft:rgba(252,252,252,.62); --arx-on-hair:rgba(252,252,252,.18);
+  margin-top:clamp(1rem, 2vw, 1.5rem);
+  padding:0 clamp(1rem, 2.2vw, 1.8rem) .4rem;
+  background:#181818; color:#FCFCFC;
+  border-top:4px solid #A63A23;
+}
+.arx-band[data-module="cerne"] .arx-ev__n{ color:#E2724F; }
+.arx-band[data-module="cerne"] .arx-open{ color:#181818; background:#FCFCFC; border-color:#FCFCFC; }
+.arx-band[data-module="cerne"] .arx-open:hover,
+.arx-band[data-module="cerne"] .arx-open:focus-visible{ background:transparent; color:#FCFCFC; }
+.arx-band[data-module="cerne"] .arx-pull{ border-left-color:#A63A23; }
+.arx-sum[data-sys="atrio"] .arx-family--build{ padding-bottom:clamp(1rem, 1.8vw, 1.4rem); }
+
+/* versionamento enxuto: a linha inteira abre o histórico; a seta fica no número */
+.arx-ver__v::after{
+  content:"↗"; margin-left:.35em;
+  font-family:var(--f-micro); font-size:.62em; font-weight:600;
+  color:var(--arx-on-soft); vertical-align:.35em;
+  transition:color 200ms var(--arx-ease);
+}
+.arx-ver:hover .arx-ver__v::after,
+.arx-ver:focus-visible .arx-ver__v::after{ color:var(--arx-on); }
+.arx-vers{ gap:.75rem; }
+.arx-ver{ padding-top:.7rem; }
