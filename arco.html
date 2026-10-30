@@ -98,8 +98,8 @@
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261027-menu-topo">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20261027-menu-topo">
 <script src="assets/arco/js/arco.js?v=20261027-menu-topo" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261029-r14-copy">
-<script src="assets/arco/js/arco-arquitetura.js?v=20261029-r14-copy" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261029-r16-popover">
+<script src="assets/arco/js/arco-arquitetura.js?v=20261029-r16-popover" defer></script>
 <style id="arco-hero-data-link">
 .bio__list a.bio__data-link{
   background:#181818;
@@ -526,7 +526,6 @@
                         <p>Não havia a quem perguntar. Na passagem para a instância recursal, o primeiro diagnóstico foi o silêncio.</p>
                         <p>Havia acervo, havia prazo, havia colegiado. Não havia procedimento instituído. O padrão disponível era o de primeiro grau, e ele não subia junto.</p>
                       </div>
-                      <button class="arx-tale" type="button" data-tale="tale-echo" aria-haspopup="dialog">Quando não havia a quem perguntar</button>
                       <h5 class="arx-sub">Critérios</h5>
                       <p><b>Coordenação.</b> Definir papéis, responsabilidades e pontos de passagem para que atividades distintas integrem um mesmo fluxo.</p>
                       <p><b>Procedimento.</b> Estabelecer critérios comuns para aquilo que pode ser identificado, classificado, verificado e reutilizado.</p>
@@ -596,81 +595,209 @@
                     </div>
                     <a class="arx-open" href="#atrio" data-arx-open="atrio">Explorar ATRIO <span aria-hidden="true">→</span></a>
                   </header>
-                  <!-- Família de marcas: na abertura, antes de mecanismos e resultados -->
-                  <section class="arx-family" aria-labelledby="arx-family-t">
+                  <!-- Família de marcas: construção visível (canvas 1:1, linha de base a 75%, duas cores) -->
+                  <section class="arx-family arx-family--build" aria-labelledby="arx-family-t">
                     <header class="arx-family__head">
-                      <h4 class="arx-family__t" id="arx-family-t">Família de marcas</h4>
-                      <p class="arx-family__lead">Cinco símbolos. Uma arquitetura.</p>
+                      <h4 class="arx-family__t" id="arx-family-t">Construção da marca</h4>
+                      <p class="arx-family__lead">Cinco símbolos. Uma gramática.</p>
+                      <p class="arx-family__spec">Canvas 1:1, linha de base a 75% e duas cores. Cada peça do xadrez empresta seu movimento a um módulo. Unidade por gramática; distinção por movimento.</p>
                     </header>
                     <ul class="arx-family__list">
-                      <li><span class="arx-plate"><img src="assets/atrio/brand/atrio-rei.svg" alt="" width="56" height="56" decoding="async"></span><b>ATRIO</b><i>Rei</i><span>Arquitetura e orquestração.</span></li>
-                      <li><span class="arx-plate"><img src="assets/atrio/brand/corpus-torre.svg" alt="" width="56" height="56" decoding="async"></span><b>CORPUS</b><i>Torre</i><span>Memória documental governada.</span></li>
-                      <li><span class="arx-plate"><img src="assets/atrio/brand/ratio-cavalo.svg" alt="" width="56" height="56" decoding="async"></span><b>RATIO</b><i>Cavalo</i><span>Formulação decisória faseada.</span></li>
-                      <li><span class="arx-plate"><img src="assets/atrio/brand/cerne-rainha.svg" alt="" width="56" height="56" decoding="async"></span><b>CERNE</b><i>Rainha</i><span>Auditoria crítica do raciocínio.</span></li>
-                      <li><span class="arx-plate"><img src="assets/atrio/brand/lux-bispo.svg" alt="" width="56" height="56" decoding="async"></span><b>LUX</b><i>Bispo</i><span>Refinamento formal e controle de circulação.</span></li>
+                      <li><button class="arx-family__btn" type="button" popovertarget="arx-pop-brand-atrio"><span class="arx-plate"><img src="assets/atrio/brand/atrio-rei.svg" alt="" width="96" height="96" decoding="async"></span><b>ATRIO</b><i>Rei · estrutura-mãe</i><span>Arquitetura e orquestração.</span></button></li>
+                      <li><button class="arx-family__btn" type="button" popovertarget="arx-pop-brand-corpus"><span class="arx-plate"><img src="assets/atrio/brand/corpus-torre.svg" alt="" width="96" height="96" decoding="async"></span><b>CORPUS</b><i>Torre · memória</i><span>Memória documental governada.</span></button></li>
+                      <li><button class="arx-family__btn" type="button" popovertarget="arx-pop-brand-ratio"><span class="arx-plate"><img src="assets/atrio/brand/ratio-cavalo.svg" alt="" width="96" height="96" decoding="async"></span><b>RATIO</b><i>Cavalo · formulação</i><span>Formulação decisória faseada.</span></button></li>
+                      <li><button class="arx-family__btn" type="button" popovertarget="arx-pop-brand-cerne"><span class="arx-plate"><img src="assets/atrio/brand/cerne-rainha.svg" alt="" width="96" height="96" decoding="async"></span><b>CERNE</b><i>Rainha · crítica</i><span>Auditoria crítica do raciocínio.</span></button></li>
+                      <li><button class="arx-family__btn" type="button" popovertarget="arx-pop-brand-lux"><span class="arx-plate"><img src="assets/atrio/brand/lux-bispo.svg" alt="" width="96" height="96" decoding="async"></span><b>LUX</b><i>Bispo · forma</i><span>Refinamento formal e controle de circulação.</span></button></li>
                     </ul>
+                    <!-- linha de base comum a 75% da placa, desenhada em CSS sobre as cinco marcas -->
                   </section>
                   <div class="arx-dims">
                     <section class="arx-dim">
                       <h4 class="arx-dim__k"><span>01</span> Origem</h4>
-                      <!-- origem = arco narrativo (#tale-atrio) -->
-                      <div class="arx-origin" data-tale-src="tale-atrio">
-                        <p>O raciocínio tentou acelerar antes do método. A primeira notícia da IA não veio como projeto, mas como curva.</p>
-                        <p>Durante a implantação de uma nova metodologia de trabalho, uma mudança súbita nos indicadores revelou que uma força nova havia entrado na operação. A produção acelerava. O método, ainda não. O número sugeria ganho; a revisão mostrava assimetria.</p>
-                      </div>
-                      <button class="arx-tale" type="button" data-tale="tale-atrio" aria-haspopup="dialog">Quando o raciocínio tentou acelerar antes do método</button>
+                      <p>A inteligência artificial chegou à operação como curva, antes de chegar como projeto. A produção acelerou e o método ficou para trás. O número sugeria ganho; a revisão mostrava assimetria.</p>
+                      <p>Sem arquitetura, a aceleração entregaria fluência sem lastro e revisão humana reduzida a chancela. O ATRIO nasceu para governar o percurso entre memória, raciocínio, crítica e forma.</p>
+                      <p class="arx-pull">Governar antes de acelerar.</p>
                     </section>
                     <section class="arx-dim">
-                      <h4 class="arx-dim__k"><span>02</span> Mecanismo</h4>
-                      <p>Uma arquitetura modular que organiza a entrada documental, estrutura a formulação jurídica, submete o raciocínio ao confronto crítico e governa o refinamento textual.</p>
-                      <p>A implementação utiliza contratos tipados, máquina de estados, persistência, cofre cifrado, proveniência e controle de versões.</p>
-                      <p class="arx-pull">Cada etapa possui função, limites e critérios de passagem. Controles impeditivos interrompem a execução quando as condições exigidas não são satisfeitas, preservando a validação humana nas transições críticas.</p>
+                      <h4 class="arx-dim__k"><span>02</span> Plano diretor</h4>
+                      <dl class="arx-plan">
+                        <div><dt>O que é</dt><dd>Arquitetura modular de IA que organiza documentos, raciocínio, revisão e texto sob controle humano.</dd></div>
+                        <div><dt>Por que existe</dt><dd>Velocidade não garante consistência. Controle que só aparece no fim converte a revisão em chancela.</dd></div>
+                        <div><dt>Onde se aplica</dt><dd>Em operações jurídicas de volume, repetição e decisão qualificada, em que o percurso precisa ser reconstruível.</dd></div>
+                        <div><dt>Quem decide</dt><dd>O juízo humano.</dd></div>
+                      </dl>
+                      <p class="arx-pull">O modelo formula. A regra governa. O operador decide.</p>
                     </section>
                     <section class="arx-dim">
-                      <h4 class="arx-dim__k"><span>03</span> Implementação e evidências</h4>
-                      <ul class="arx-evs">
-                        <li class="arx-ev"><strong class="arx-ev__n">115.114 <small>julgados</small></strong><span class="arx-ev__t">Registros únicos normalizados e deduplicados no CORPUS.</span></li>
-                        <li class="arx-ev"><strong class="arx-ev__n">3 vias / 18 fases</strong><span class="arx-ev__t">Percursos processuais estruturados no RATIO, com controles de passagem.</span></li>
-                        <li class="arx-ev"><strong class="arx-ev__n">31 rotas / 188 testes</strong><span class="arx-ev__t">Rotas de API e testes automatizados aprovados na implementação local documentada.</span></li>
-                        <li class="arx-ev"><strong class="arx-ev__n">+16,18 <small>pontos percentuais</small></strong><span class="arx-ev__t">Variação operacional agregada observada entre dezembro de 2025 e abril de 2026, de 44,21% para 60,39%.</span></li>
-                      </ul>
-                      <p class="arx-note">A evolução apresenta associação temporal com a operação, sem demonstração de causalidade isolada atribuível ao ATRIO.</p>
+                      <h4 class="arx-dim__k"><span>03</span> Versionamento</h4>
+                      <p class="arx-ver__lead"><b>32 versões registradas</b> em cinco módulos, entre março e outubro de 2026. Cada versão fixa o que mudou e sob qual critério.</p>
+                      <ol class="arx-vers">
+                        <li><button class="arx-ver" type="button" popovertarget="arx-pop-ver-atrio">
+                          <span class="arx-ver__name">ATRIO</span>
+                          <strong class="arx-ver__v">API 0.7.0</strong>
+                          <span class="arx-ver__track" aria-label="1 versão"><i></i></span>
+                          <span class="arx-ver__meta">1 versão · 07/2026</span>
+                          <span class="arx-ver__t">Backend local do método: contratos tipados, máquina de estados, persistência, cofre cifrado e proveniência.</span>
+                                                  <span class="arx-ver__more" aria-hidden="true">histórico ↗</span>
+                        </button></li>
+                        <li><button class="arx-ver" type="button" popovertarget="arx-pop-ver-corpus">
+                          <span class="arx-ver__name">CORPUS</span>
+                          <strong class="arx-ver__v">1.5.0</strong>
+                          <span class="arx-ver__track" aria-label="6 versões"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                          <span class="arx-ver__meta">6 versões · homologado em 27/07/2026</span>
+                          <span class="arx-ver__t">Fechado como pacote versionado e homologado contra base viva.</span>
+                                                  <span class="arx-ver__more" aria-hidden="true">histórico ↗</span>
+                        </button></li>
+                        <li><button class="arx-ver" type="button" popovertarget="arx-pop-ver-ratio">
+                          <span class="arx-ver__name">RATIO</span>
+                          <strong class="arx-ver__v">8.0.0</strong>
+                          <span class="arx-ver__track" aria-label="9 versões"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                          <span class="arx-ver__meta">9 versões · 24/03 a 28/09/2026</span>
+                          <span class="arx-ver__t">Governança de incidência e isolamento modular por firewall.</span>
+                                                  <span class="arx-ver__more" aria-hidden="true">histórico ↗</span>
+                        </button></li>
+                        <li><button class="arx-ver" type="button" popovertarget="arx-pop-ver-cerne">
+                          <span class="arx-ver__name">CERNE</span>
+                          <strong class="arx-ver__v">5.1.0</strong>
+                          <span class="arx-ver__track" aria-label="10 versões"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                          <span class="arx-ver__meta">10 versões · 0.1.0 a 5.1.0</span>
+                          <span class="arx-ver__t">Onze lentes, confronto independente e decisão D1/D2.</span>
+                                                  <span class="arx-ver__more" aria-hidden="true">histórico ↗</span>
+                        </button></li>
+                        <li><button class="arx-ver" type="button" popovertarget="arx-pop-ver-lux">
+                          <span class="arx-ver__name">LUX</span>
+                          <strong class="arx-ver__v">6.0.0</strong>
+                          <span class="arx-ver__track" aria-label="6 versões"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                          <span class="arx-ver__meta">6 versões · 30/03 a 07/2026</span>
+                          <span class="arx-ver__t">Anonimização com três modos de destino.</span>
+                                                  <span class="arx-ver__more" aria-hidden="true">histórico ↗</span>
+                        </button></li>
+                      </ol>
+                      <p class="arx-pull">Versão é entrega: cada mudança deixa rastro.</p>
                     </section>
                   </div>
+                  <ul class="arx-strip" aria-label="Evidências">
+                    <li class="arx-ev"><strong class="arx-ev__n">115.114 <small>julgados</small></strong><span class="arx-ev__t">Registros únicos normalizados e deduplicados no CORPUS.</span></li>
+                    <li class="arx-ev"><strong class="arx-ev__n">3 vias / 18 fases</strong><span class="arx-ev__t">Percursos processuais do RATIO, com controle em cada passagem.</span></li>
+                    <li class="arx-ev"><strong class="arx-ev__n">31 rotas / 188 testes</strong><span class="arx-ev__t">Rotas de API e testes automatizados aprovados na implementação local.</span></li>
+                    <li class="arx-ev"><strong class="arx-ev__n">+16,18 <small>p.p.</small></strong><span class="arx-ev__t">De 44,21% para 60,39% entre dezembro de 2025 e abril de 2026. Associação temporal, sem causalidade isolada.</span></li>
+                  </ul>
                   <aside class="arx-band arx-band--module" data-module="cerne" aria-labelledby="arx-cerne-t">
                     <header class="arx-band__head">
-                      <span class="arx-plate arx-plate--band"><img class="arx-band__mark" src="assets/atrio/brand/cerne-rainha.svg" alt="" width="40" height="40" decoding="async"></span>
+                      <span class="arx-plate arx-plate--band"><img class="arx-band__mark" src="assets/atrio/brand/cerne-rainha.svg" alt="" width="64" height="64" decoding="async"></span>
                       <div>
                         <p class="arx-band__k">Módulo ATRIO · Governança do Raciocínio Jurídico</p>
-                        <h4 class="arx-band__t" id="arx-cerne-t"><b>CERNE</b> — O confronto como mecanismo de auditoria</h4>
+                        <h4 class="arx-band__t" id="arx-cerne-t"><b>CERNE</b>: o confronto como mecanismo de auditoria</h4>
                       </div>
                     </header>
                     <div class="arx-band__cols">
                       <div>
-                        <p>O CERNE examina a sustentação do raciocínio jurídico, identificando dúvidas argumentativas e submetendo-as ao confronto entre perspectivas independentes.</p>
-                        <p>Seu procedimento vigente — CERNE 5.1.0 — estrutura a análise em lentes, confronta auditoria e contraposição (A+ e A−) e aplica critérios decisórios (D1/D2) para manter ou afastar dúvidas.</p>
-                        <p>Os apontamentos permanecem vinculados aos trechos do ato, com preservação dos argumentos, identificadores, estados e razões dos afastamentos.</p>
-                        <p>O resultado é apresentado em perguntas submetidas à avaliação humana, acompanhadas de relatório técnico e leitura sintética.</p>
+                        <p>O CERNE examina a sustentação do raciocínio jurídico e submete cada dúvida ao confronto entre auditoria e contraposição (A+ e A−), com critérios decisórios D1/D2.</p>
+                        <p>No procedimento vigente, CERNE 5.1.0, o resultado chega em perguntas por trecho do ato, com relatório técnico e rastro das dúvidas mantidas e afastadas.</p>
                       </div>
                       <div>
-                        <h5 class="arx-band__sub">Demonstração histórica — CERNE 5.0.0</h5>
+                        <h5 class="arx-band__sub">Demonstração histórica · CERNE 5.0.0</h5>
                         <ul class="arx-evs">
-                          <li class="arx-ev"><strong class="arx-ev__n">9 de 12 <small>atos</small></strong><span class="arx-ev__t">Apresentaram pontos identificados com fundamento para embargos de declaração na amostra selecionada.</span></li>
-                          <li class="arx-ev"><strong class="arx-ev__n">7 <small>coincidências</small></strong><span class="arx-ev__t">O ponto identificado correspondeu àquele posteriormente corrigido nos embargos.</span></li>
+                          <li class="arx-ev"><strong class="arx-ev__n">9 de 12 <small>atos</small></strong><span class="arx-ev__t">Com pontos de fundamento para embargos de declaração na amostra.</span></li>
+                          <li class="arx-ev"><strong class="arx-ev__n">7 <small>coincidências</small></strong><span class="arx-ev__t">O ponto apontado foi o posteriormente corrigido nos embargos.</span></li>
                         </ul>
-                        <p>Nos outros dois casos, foram identificados pontos distintos, posteriormente corroborados por elementos específicos do teste.</p>
-                        <p class="arx-note">Os resultados pertencem à amostra histórica, não constituem taxa geral de precisão e não validam automaticamente a versão vigente.</p>
+                        <p class="arx-note">Amostra histórica: não constitui taxa geral de precisão nem valida a versão vigente.</p>
                       </div>
                       <div>
-                        <h5 class="arx-band__sub">Engenharia e rastreabilidade</h5>
-                        <p>Implementação com núcleo Python/FastAPI, persistência SQLite, adaptadores de modelos e registro técnico das rodadas.</p>
-                        <p>O sistema preserva inclusive as dúvidas afastadas, permitindo reconstruir não apenas o que foi apontado, mas por que determinado apontamento resistiu ou não ao confronto.</p>
                         <p class="arx-pull">O CERNE não decide o ato. Torna examinável o percurso das dúvidas que a decisão precisa enfrentar.</p>
                         <a class="arx-open arx-open--module" href="#cerne" data-arx-open="cerne">Abrir CERNE <span aria-hidden="true">→</span></a>
                       </div>
                     </div>
                   </aside>
                   <p class="arx-exit"><a class="arx-open arx-open--exit" href="#atrio" data-arx-open="atrio">Explorar ATRIO <span aria-hidden="true">→</span></a></p>
+                  <!-- popovers: construção de cada marca e histórico de versões (dados do atrio.js) -->
+                  <div class="arx-pop" id="arx-pop-brand-atrio" popover>
+                    <header class="arx-pop__head"><span class="arx-plate"><img src="assets/atrio/brand/atrio-rei.svg" alt="" width="64" height="64" decoding="async"></span><div><p class="arx-pop__k">Rei · estrutura-mãe</p><h5 class="arx-pop__t">ATRIO</h5></div></header>
+                    <dl class="arx-pop__dl"><div><dt>Significado</dt><dd>Pórtico, entrada governada, unidade e regência.</dd></div><div><dt>Forma</dt><dd>A forma reúne acessos sob uma estrutura comum e torna visível o princípio de regência.</dd></div><div><dt>Função</dt><dd>O Rei representa especialização sob regência comum, nunca hierarquia de importância: unidade por gramática; distinção por movimento.</dd></div></dl>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-brand-atrio" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-ver-atrio" popover>
+                    <header class="arx-pop__head"><div><p class="arx-pop__k">Histórico de versões</p><h5 class="arx-pop__t">API 0.7.0</h5></div></header>
+                    <ol class="arx-pop__hist">
+                      <li><b>0.7.0</b><span>07/2026</span><p>Backend local do método: contratos tipados, máquina de estados, persistência, cofre cifrado e proveniência. Vinte e três rotas sob /v1.</p></li>
+                    </ol>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-ver-atrio" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-brand-corpus" popover>
+                    <header class="arx-pop__head"><span class="arx-plate"><img src="assets/atrio/brand/corpus-torre.svg" alt="" width="64" height="64" decoding="async"></span><div><p class="arx-pop__k">Torre · memória documental</p><h5 class="arx-pop__t">CORPUS</h5></div></header>
+                    <dl class="arx-pop__dl"><div><dt>Significado</dt><dd>Estratos, classificação, preservação e lastro.</dd></div><div><dt>Forma</dt><dd>A forma organiza camadas e sustenta uma base estável, legível e preservável.</dd></div><div><dt>Função</dt><dd>A Torre traduz a função de classificar, conservar e recuperar a memória documental que dá lastro ao sistema.</dd></div></dl>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-brand-corpus" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-ver-corpus" popover>
+                    <header class="arx-pop__head"><div><p class="arx-pop__k">Histórico de versões</p><h5 class="arx-pop__t">CORPUS 1.5.0</h5></div></header>
+                    <ol class="arx-pop__hist">
+                      <li><b>1.5.0</b><span>26/07/2026</span><p>Monorepo reorganizado e CORPUS fechado como pacote versionado. Homologado contra PostgreSQL vivo em 27/07/2026.</p></li>
+                      <li><b>1.4.0</b><span>data não recuperável</span><p>Inventários separados, documental e de pseudônimos, com consolidado XLSX.</p></li>
+                      <li><b>1.3.0</b><span>data não recuperável</span><p>Painel operacional em linguagem ATRIO, somente leitura.</p></li>
+                      <li><b>1.2.0</b><span>data não recuperável</span><p>OCR para PDF digitalizado sem camada de texto, reaproveitando motores e cofre existentes.</p></li>
+                      <li><b>1.1.0</b><span>data não recuperável</span><p>Inventário em CSV como fonte da verdade. Hash SHA-256 como chave, deduplicação por arquivo e por número CNJ.</p></li>
+                      <li><b>1.0.0</b><span>data não recuperável</span><p>Robô de entrada com pseudonimização por cofre, triagem de segredo de justiça e log de execução.</p></li>
+                    </ol>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-ver-corpus" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-brand-ratio" popover>
+                    <header class="arx-pop__head"><span class="arx-plate"><img src="assets/atrio/brand/ratio-cavalo.svg" alt="" width="64" height="64" decoding="async"></span><div><p class="arx-pop__k">Cavalo · formulação faseada</p><h5 class="arx-pop__t">RATIO</h5></div></header>
+                    <dl class="arx-pop__dl"><div><dt>Significado</dt><dd>Percurso, direção, inflexão e desvio controlado.</dd></div><div><dt>Forma</dt><dd>O movimento não avança em linha automática: muda de direção segundo escolhas verificáveis.</dd></div><div><dt>Função</dt><dd>O Cavalo traduz a formulação em fases, com inflexões controladas e validação humana ao longo do percurso.</dd></div></dl>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-brand-ratio" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-ver-ratio" popover>
+                    <header class="arx-pop__head"><div><p class="arx-pop__k">Histórico de versões</p><h5 class="arx-pop__t">RATIO 8.0.0</h5></div></header>
+                    <ol class="arx-pop__hist">
+                      <li><b>8.0.0</b><span>28/09/2026</span><p>Governança de incidência e isolamento modular. Firewall exclui módulos não ativos da cadeia de precedência; a Camada Crítica torna-se agnóstica de plataforma, com não presunção de disponibilidade das fontes e distribuição portátil como plugin.</p></li>
+                      <li><b>7.0.1</b><span>17/09/2026</span><p>Patch de governança. A classificação de risco modula apenas a densidade da exposição; não autoriza condensar fases, gates, saídas obrigatórias ou validações. O workflow permanece inalterado.</p></li>
+                      <li><b>7.0.0</b><span>07/2026</span><p>Camada Instructions com precedência sobre o core. Arquivo por módulo, mandado de segurança com rito próprio e invalidação em cascata.</p></li>
+                      <li><b>6.0.0</b><span>05/2026</span><p>Modularização por fase. Estado do Caso como objeto explícito e separação formal entre RATIO e LUX.</p></li>
+                      <li><b>5.0.0</b><span>19/04/2026</span><p>Fontes autorizadas reduzidas a três arquivos. Consulta a fonte não listada passa a ser vedada.</p></li>
+                      <li><b>4.0.0</b><span>09/04/2026</span><p>Recurso inominado e embargos unificados sob identificação automática do tipo de peça.</p></li>
+                      <li><b>3.0.0</b><span>28/03/2026</span><p>Pacote de dez arquivos nomeados substitui os acervos hospedados.</p></li>
+                      <li><b>2.0.0</b><span>27/03/2026</span><p>Banco de modelos cede lugar a biblioteca de fundamentos, com aderência material e prioridade temporal.</p></li>
+                      <li><b>1.0.0</b><span>24/03/2026</span><p>Release inicial. Prompt operacional com regras de ouro, sanção lógica e acervo de nove anos.</p></li>
+                    </ol>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-ver-ratio" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-brand-cerne" popover>
+                    <header class="arx-pop__head"><span class="arx-plate"><img src="assets/atrio/brand/cerne-rainha.svg" alt="" width="64" height="64" decoding="async"></span><div><p class="arx-pop__k">Rainha · núcleo crítico</p><h5 class="arx-pop__t">CERNE</h5></div></header>
+                    <dl class="arx-pop__dl"><div><dt>Significado</dt><dd>Escrutínio, confronto, tensão produtiva e retorno ao fundamento.</dd></div><div><dt>Forma</dt><dd>A forma concentra força no núcleo e amplia o campo de confronto sem perder o ponto de origem.</dd></div><div><dt>Função</dt><dd>A Rainha traduz a amplitude do escrutínio e o retorno ao fundamento quando a formulação precisa ser tensionada.</dd></div></dl>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-brand-cerne" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-ver-cerne" popover>
+                    <header class="arx-pop__head"><div><p class="arx-pop__k">Histórico de versões</p><h5 class="arx-pop__t">CERNE 5.1.0</h5></div></header>
+                    <ol class="arx-pop__hist">
+                      <li><b>5.1.0</b><span>vigente</span><p>Manual oficial 1.1.0. Onze lentes e uma unidade transversal; confronto independente por candidato, decisão D1/D2 e perguntas por trecho.</p></li>
+                      <li><b>5.0.0</b><span>12/10/2026</span><p>Reestruturação adversarial. O Scout forma dúvidas em onze lentes e uma unidade transversal. Auditoria (A+) e contraposição (A−) argumentam independentemente; o decisor aplica D1/D2 e classifica as dúvidas mantidas como HOLD ou ABORT. Consolidação por trecho e relatórios em duas camadas, sem gate global de avanço.</p></li>
+                      <li><b>4.0.2</b><span>23/09/2026</span><p>Fechamento computacional. Correção das regras condicionais e formalização da autoria e completude das dependências: o Prospector declara e o controlador verifica. Derivação P10 sem impedimentos conhecidos e runtime P11 preservado no pacote.</p></li>
+                      <li><b>4.0.1</b><span>23/09/2026</span><p>Formalização dos controles. Base normativa das máquinas de estados, ativação condicional de requisitos, resolução trivalente de dependências e representação verificável de fontes alegadamente inexistentes. Quatro impedimentos de implementação resolvidos, sem alteração das lentes.</p></li>
+                      <li><b>4.0.0</b><span>23/09/2026</span><p>Consolidação canônica. Arquitetura ASTRA com formação pelo Prospector, admissibilidade pelo Gatekeeper, réplica e reavaliação, seguida do tratamento dos achados na Máquina P. Onze lentes, unidade transversal, Lastro, dependências e rastreabilidade; 156 verificações aprovadas.</p></li>
+                      <li><b>3.0.0</b><span>09/09/2026</span><p>Manual canônico da auditoria por onze eixos, 23 confrontos registrados e gate consolidado em três disposições. Formalização do workflow, das saídas técnica e clara e dos controles de Rastro e Lastro.</p></li>
+                      <li><b>2.0.0</b><span>18/08/2026</span><p>Consolidação canônica. Core e Cartuchos de Domínio, VIGOR versionado, Audit Bundle e adjudicação humana no contrato.</p></li>
+                      <li><b>1.2.0</b><span>data não recuperável</span><p>Identidade de módulo na integração com o ATRIO. Auditoria adversarial a partir do handoff do RATIO, com cinco gates.</p></li>
+                      <li><b>0.2.0</b><span>data não recuperável</span><p>Segunda versão autônoma da API. Onze eixos e saídas para interface e relatório técnico.</p></li>
+                      <li><b>0.1.0</b><span>data não recuperável</span><p>Primeiro protótipo executável: triagem, roteamento por modo decisório e dois eixos fixos.</p></li>
+                    </ol>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-ver-cerne" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-brand-lux" popover>
+                    <header class="arx-pop__head"><span class="arx-plate"><img src="assets/atrio/brand/lux-bispo.svg" alt="" width="64" height="64" decoding="async"></span><div><p class="arx-pop__k">Bispo · refinamento formal</p><h5 class="arx-pop__t">LUX</h5></div></header>
+                    <dl class="arx-pop__dl"><div><dt>Significado</dt><dd>Diagonalidade, projeção, depuração, legibilidade e acabamento.</dd></div><div><dt>Forma</dt><dd>A diagonal projeta e depura, conduzindo o olhar sem romper o lastro da forma anterior.</dd></div><div><dt>Função</dt><dd>O Bispo traduz o refinamento que melhora legibilidade e acabamento sem atravessar a fronteira do mérito.</dd></div></dl>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-brand-lux" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
+                  <div class="arx-pop" id="arx-pop-ver-lux" popover>
+                    <header class="arx-pop__head"><div><p class="arx-pop__k">Histórico de versões</p><h5 class="arx-pop__t">LUX 6.0.0</h5></div></header>
+                    <ol class="arx-pop__hist">
+                      <li><b>6.0.0</b><span>07/2026</span><p>Camada de anonimização com três modos de destino e quarenta tipos de identificador. Onze arquivos reduzidos a três.</p></li>
+                      <li><b>5.0.0</b><span>04/05/2026</span><p>Modularização em onze arquivos, com validação silenciosa e instalação própria. O sistema deixa de ser prompt.</p></li>
+                      <li><b>4.0.0</b><span>22/04/2026</span><p>Obrigatoriedade do fluxo revogada. Entrega integral por padrão e perguntas intermediárias opcionais.</p></li>
+                      <li><b>3.0.0</b><span>21/04/2026</span><p>Gatilhos de modo cedem lugar a #GUIA. Seis fases, com estilo promovido a fase própria.</p></li>
+                      <li><b>2.0.0</b><span>13/04/2026</span><p>Protocolo de sete fases com aprovação obrigatória, sistema de marcação e hierarquia de regras.</p></li>
+                      <li><b>1.0.0</b><span>30/03/2026</span><p>Refinador final com entrega em três blocos, sem fases e sem handshake.</p></li>
+                    </ol>
+                    <button class="arx-pop__x" type="button" popovertarget="arx-pop-ver-lux" popovertargetaction="hide" aria-label="Fechar">×</button>
+                  </div>
                 </article>
 
                 </div>
