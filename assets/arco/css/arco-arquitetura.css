@@ -1164,3 +1164,79 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 .arx-ver:focus-visible .arx-ver__v::after{ color:var(--arx-on); }
 .arx-vers{ gap:.75rem; }
 .arx-ver{ padding-top:.7rem; }
+
+/* ===================== PLAY em #181818 =====================
+   Mesmo tratamento do CERNE: campo preto, letra clara, filete e acentos
+   no amarelo do ECHO. */
+.arx-play--dark{
+  --arx-on:#FCFCFC; --arx-on-text:rgba(252,252,252,.86);
+  --arx-on-soft:rgba(252,252,252,.62); --arx-on-hair:rgba(252,252,252,.18);
+  padding:clamp(1rem, 1.6vw, 1.3rem) clamp(1rem, 1.6vw, 1.3rem) clamp(1.1rem, 1.8vw, 1.4rem);
+  margin-bottom:1.2rem;
+  background:#181818; color:#FCFCFC;
+  border-top:4px solid #FFB627;
+}
+.arx-play--dark .arx-play__t b{ color:#FFB627; }
+.arx-play--dark p{ color:var(--arx-on-text); }
+.arx-play--dark .arx-tools li{ border-left-color:#FFB627; }
+.arx-play--dark .arx-open{ background:#FFB627; border-color:#FFB627; color:#181818; }
+.arx-play--dark .arx-open:hover,
+.arx-play--dark .arx-open:focus-visible{ background:transparent; color:#FFB627; }
+
+/* acervo: os oito materiais do PLAY deixam de ter fundo claro e passam a
+   ser marcados só por bordas quadradas */
+.arx-mat--play{
+  background:transparent;
+  box-shadow:inset 0 0 0 1px #181818;
+  border-bottom-color:transparent;
+}
+/* faixa de evidências do ECHO, abaixo das colunas */
+.arx-sum[data-sys="echo"] .arx-strip{ margin-top:.4rem; }
+.arx-mat{ padding:.4rem .65rem; }
+.arx-mat.arx-mat--play{ padding-right:2.6rem; }
+
+/* ===================== RESULTADOS NA ABERTURA =====================
+   Todos os números sobem para o bloco de cima, à direita do título. */
+.arx-lede--story{
+  grid-template-columns:auto minmax(0, 1fr) minmax(0, 1.15fr);
+  column-gap:clamp(.75rem, 1.2vw, 1rem);
+}
+.arx-lede--story .arx-lede__t{ grid-column:1 / 3; }
+.arx-lede--story .arx-lede__story{ grid-column:2; }
+.arx-lede--story .arx-open{ grid-column:2; }
+.arx-results{
+  grid-column:3; grid-row:1 / span 3; align-self:start;
+  list-style:none; margin:0 0 0 clamp(.5rem, 2vw, 2rem); padding:0;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap:1.1rem clamp(1rem, 2vw, 1.75rem);
+}
+.arx-res{ display:flex; flex-direction:column; align-items:flex-start; gap:.4rem; min-width:0; }
+.arx-res__n{
+  display:inline-block;
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(1.35rem, 2.1vw, 1.9rem); line-height:1;
+  letter-spacing:-.03em; color:var(--arx-on);
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.arx-res__n small{ font-size:.48em; font-weight:700; letter-spacing:-.005em; color:var(--arx-on-text); }
+.arx-res__t{ font-family:var(--f-body); font-size:.76rem; line-height:1.45; color:var(--arx-on-text); }
+
+/* ATRIO sem a coluna de evidências: origem e versionamento lado a lado */
+.arx-dims--two{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+
+@media (max-width:900px){
+  .arx-lede--story{ grid-template-columns:auto minmax(0, 1fr); }
+  .arx-lede--story .arx-lede__t{ grid-column:1 / -1; }
+  .arx-results{
+    grid-column:1 / -1; grid-row:4; margin:1rem 0 0;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  .arx-dims--two{ grid-template-columns:1fr; }
+}
+/* quatro resultados em 2×2; três numa linha. Números longos podem quebrar. */
+.arx-results{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+.arx-results:not(:has(> :nth-child(4))){ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.arx-res__n{ white-space:normal; font-size:clamp(1.25rem, 1.85vw, 1.7rem); }
+@media (max-width:900px){
+  .arx-results:not(:has(> :nth-child(4))){ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
