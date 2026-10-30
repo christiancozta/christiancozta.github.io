@@ -622,7 +622,7 @@
 
   /* arco narrativo: os dois primeiros parágrafos de cada leitura conceitual
      vêm do próprio diálogo, para que o texto tenha uma única fonte */
-  root.querySelectorAll(".arx-lede__story[data-tale-src]").forEach(story => {
+  root.querySelectorAll("[data-tale-src]").forEach(story => {
     const tale = document.getElementById(story.dataset.taleSrc);
     const prose = tale?.querySelector(".tale__prose");
     const source = prose ? [...prose.querySelectorAll(":scope > p")].slice(0, 2) : [];
@@ -638,6 +638,46 @@
       if (i === 0 && title) copy.prepend(`${title}. `);
       return copy;
     }));
+  });
+
+  /* ECHO: uma única linha, derivada do pentagrama, liga os materiais do
+     PLAY (na coluna do acervo) ao título PLAY (na coluna de aplicação).
+     As notas marcam os oito materiais; nenhum conector individual. */
+  const drawStaff = svg => {
+    const dims = svg.parentElement;
+    const plays = [...dims.querySelectorAll(".arx-mat--play")];
+    const title = dims.querySelector(".arx-play__t");
+    const cols = dims.querySelectorAll(":scope > .arx-dim");
+    if (!plays.length || !title || cols.length < 3) return;
+    const box = dims.getBoundingClientRect();
+    if (!box.width || getComputedStyle(svg).display === "none") return;
+    const right2 = cols[1].getBoundingClientRect().right - box.left;
+    const left3 = cols[2].getBoundingClientRect().left - box.left;
+    const x = right2 + (left3 - right2) * .5;
+    const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - box.top; };
+    const ys = plays.map(mid);
+    const ty = mid(title);
+    const top = Math.min(ys[0], ty), bottom = ys[ys.length - 1];
+    const NS = "http://www.w3.org/2000/svg";
+    svg.replaceChildren();
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", `M${right2.toFixed(1)},${ys[0].toFixed(1)} H${x.toFixed(1)} M${x.toFixed(1)},${top.toFixed(1)} V${bottom.toFixed(1)} M${x.toFixed(1)},${ty.toFixed(1)} H${(left3 - 6).toFixed(1)}`);
+    svg.appendChild(path);
+    ys.forEach(y => {
+      const note = document.createElementNS(NS, "ellipse");
+      note.setAttribute("cx", x.toFixed(1)); note.setAttribute("cy", y.toFixed(1));
+      note.setAttribute("rx", "3.4"); note.setAttribute("ry", "2.5");
+      note.setAttribute("transform", `rotate(-22 ${x.toFixed(1)} ${y.toFixed(1)})`);
+      svg.appendChild(note);
+    });
+  };
+  root.querySelectorAll(".arx-staff").forEach(svg => {
+    let raf = 0;
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawStaff(svg); }); };
+    if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(svg.parentElement);
+    addEventListener("resize", schedule, {passive:true});
+    document.fonts?.ready?.then(schedule);
+    schedule();
   });
 
   /* leitura conceitual dentro do texto justificado: inline, quebra como
