@@ -992,6 +992,26 @@
     armIntent();
   }
 
+  /* Correspondências: a competência abre o sistema no arco */
+  document.querySelectorAll("[data-arx-comp]").forEach(button => {
+    if (button.getAttribute("role") === "button"){
+      button.addEventListener("keydown", event => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        button.click();
+      });
+    }
+    button.addEventListener("click", async () => {
+      const sys = button.dataset.arxComp;
+      if (!SYSTEMS.includes(sys)) return;
+      const rail = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
+      const top = crown.getBoundingClientRect().top + window.scrollY - rail - 12;
+      window.scrollTo({top:Math.max(0, top), left:0, behavior:reduced() ? "instant" : "smooth"});
+      await wait(reduced() ? 0 : 450);
+      formAndSelect(sys);
+    });
+  });
+
   window.__ARCO_ARCH__ = Object.freeze({
     form:() => form({animate:true}),
     select:sys => select(sys, {animate:true}),
