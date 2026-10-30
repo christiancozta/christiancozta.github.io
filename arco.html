@@ -85,11 +85,6 @@
       });
     }
     syncFavicon();
-
-    const dataAnchor = document.querySelector('.bio__data-link[data-open-view="data"]');
-    dataAnchor?.addEventListener("click", () => {
-      document.querySelector('.rail__link--data[data-view="data"]')?.click();
-    });
   });
 })();
 </script>
@@ -97,24 +92,10 @@
 
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261027-menu-topo">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20261027-menu-topo">
-<script src="assets/arco/js/arco.js?v=20261027-menu-topo" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261029-r25-correspondencias">
-<script src="assets/arco/js/arco-arquitetura.js?v=20261029-r25-correspondencias" defer></script>
-<style id="arco-hero-data-link">
-.bio__list a.bio__data-link{
-  background:#181818;
-  border-color:#181818;
-  color:#FCFCFC;
-  font-weight:700;
-  transition:background var(--fast) var(--ease),color var(--fast) var(--ease),border-color var(--fast) var(--ease);
-}
-.bio__list a.bio__data-link:hover,
-.bio__list a.bio__data-link:focus-visible{
-  background:#0057FF;
-  border-color:#0057FF;
-  color:#FCFCFC;
-}
-</style>
+<script src="assets/arco/js/arco-shell.js?v=20261030-limpo" defer></script>
+<script src="assets/arco/js/arco-rail-final.js?v=20260929-atrio-architecture-anchor" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261029-r28-leitura">
+<script src="assets/arco/js/arco-arquitetura.js?v=20261029-r28-leitura" defer></script>
 <style id="arco-tale-card-design">
 /* ARCO — fichas de identidade herdam a linguagem dos cards originais. */
 
@@ -384,10 +365,10 @@
                 <div class="arx-id__about">
                 <p class="arx-id__summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
                 <ul class="arx-id__contacts" aria-label="Contatos">
-                  <li><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener">CV</a></li>
-                  <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">LinkedIn</a></li>
-                  <li><a href="mailto:christiandscosta@gmail.com">E-mail</a></li>
-                  <li><a href="tel:+5541991521304">WhatsApp</a></li>
+                  <li><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener"><span class="arx-id__k">CV</span><span class="arx-id__v">Currículo em PDF</span><i aria-hidden="true">↗</i></a></li>
+                  <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener"><span class="arx-id__k">LinkedIn</span><span class="arx-id__v">in/christiandcosta</span><i aria-hidden="true">↗</i></a></li>
+                  <li><a href="mailto:christiandscosta@gmail.com"><span class="arx-id__k">E-mail</span><span class="arx-id__v">christiandscosta@gmail.com</span><i aria-hidden="true">→</i></a></li>
+                  <li><a href="https://wa.me/5541991521304" target="_blank" rel="noopener"><span class="arx-id__k">WhatsApp</span><span class="arx-id__v">+55 41 99152-1304</span><i aria-hidden="true">↗</i></a></li>
                 </ul>
                 </div>
               <aside class="arx-itin" aria-labelledby="arx-itin-t">
@@ -1101,12 +1082,6 @@
   </main>
 </div>
 
-<!-- CONCEPT READER -->
-<dialog class="reader" id="reader" aria-labelledby="reader-tag">
-  <p class="reader__tag" id="reader-tag">Leitura conceitual</p>
-  <p class="reader__text" id="reader-text"></p>
-  <button class="reader__close" type="button" data-reader-close="">Fechar</button>
-</dialog>
 
 <!-- IDENTIDADE CONCEITUAL — echo -->
 <dialog class="tale tale--echo" id="tale-echo" aria-label="Identidade conceitual — echo">
