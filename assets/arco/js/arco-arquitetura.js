@@ -798,7 +798,8 @@
 
   /* do repouso, um clique forma a estrutura (sem nova tensão) e abre o sistema */
   async function formAndSelect(sys){
-    if (state === "tension") return;
+    /* pedida no meio da formação, a seleção espera a estrutura assentar */
+    for (let i = 0; (state === "tension" || forming) && i < 50; i++) await wait(100);
     if (state === "rest"){
       if (reduced()){
         form({animate:false});
@@ -998,6 +999,8 @@
     button.addEventListener("click", async () => {
       const sys = button.dataset.arxComp;
       if (!SYSTEMS.includes(sys)) return;
+      /* a rolagem até o arco não deve disparar a tensão no caminho */
+      disarmIntent();
       const rail = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
       const top = crown.getBoundingClientRect().top + window.scrollY - rail - 12;
       window.scrollTo({top:Math.max(0, top), left:0, behavior:reduced() ? "instant" : "smooth"});
