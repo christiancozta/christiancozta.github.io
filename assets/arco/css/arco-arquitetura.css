@@ -1302,3 +1302,59 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 }
 .arx-id__row{ justify-content:start; grid-template-columns:minmax(0, 62ch) minmax(0, 27rem); gap:clamp(2rem, 5.5vw, 6.5rem); }
 @media (max-width:900px){ .arx-id__row{ grid-template-columns:1fr; } }
+
+/* ===================== COMPETÊNCIAS NAS ABERTURAS =====================
+   Abaixo da descrição, ao lado do símbolo: número e nome de cada uma. */
+.arx-lede--story{ grid-template-rows:auto auto auto auto; }
+.arx-lede--story .arx-comps{ grid-column:2; grid-row:3; }
+.arx-lede--story .arx-open{ grid-row:4; }
+.arx-lede--story .arx-results{ grid-row:1 / span 4; }
+.arx-comps{
+  list-style:none; margin:.35rem 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(2, minmax(0, max-content));
+  gap:.35rem 1.4rem;
+}
+.arx-comps li{
+  display:flex; align-items:baseline; gap:.55rem;
+  font-family:var(--f-display); font-weight:700; font-size:.88rem;
+  line-height:1.3; letter-spacing:-.008em; color:var(--arx-on);
+}
+.arx-comps b{
+  font-family:var(--f-micro); font-size:.62rem; font-weight:600;
+  letter-spacing:.08em; color:var(--arx-on-soft);
+}
+.arx-comps:not(:has(> :nth-child(2))){ grid-template-columns:1fr; }
+@media (max-width:900px){
+  .arx-lede--story .arx-comps{ grid-column:2; grid-row:3; }
+  .arx-lede--story .arx-open{ grid-row:4; }
+  .arx-lede--story .arx-results{ grid-row:5; }
+}
+@media (max-width:640px){
+  .arx-comps{ grid-template-columns:1fr; }
+}
+
+/* ===================== CORRESPONDÊNCIAS =====================
+   Só o dicionário: termo de mercado, tradução e a(s) competência(s) que o
+   sustentam. A competência leva ao sistema correspondente no arco. */
+.arx-lex{ margin-top:clamp(1.5rem, 3vw, 2.5rem); }
+.lex__s--comp{ display:inline; }
+.lex__k{
+  cursor:pointer;
+  text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:.2em;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+  transition:text-decoration-color 200ms var(--arx-ease, ease), color 200ms ease;
+}
+.lex__k b{ font-family:var(--f-micro); font-size:.82em; font-weight:600; margin-right:.2em; }
+.lex__k--data{ text-decoration-color:#0057FF; }
+.lex__k--data b{ color:#0057FF; }
+.lex__k--echo{ text-decoration-color:#FFB627; }
+.lex__k--atrio{ text-decoration-color:#A63A23; }
+.lex__k--atrio b{ color:#A63A23; }
+.lex__k:hover,
+.lex__k:focus-visible{ text-decoration-thickness:3px; color:var(--ink, #181818); }
+.lex__k:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+/* Fronteira: fecha a página logo após as correspondências */
+.arx-front{ margin-top:clamp(2rem, 4vw, 3.5rem); }
+.arx-front .fronteira-limit strong{ font-weight:700; color:inherit; }
+.arx-front .outchips{ margin-top:.8rem; }
+.lex__all{ font-family:var(--f-micro); font-size:.82em; font-weight:600; margin-right:.2em; }
