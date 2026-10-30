@@ -949,3 +949,188 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 @media (max-width:900px){
   .arx-staff{ display:none; }
 }
+
+/* ===================== MARCAS EM DESTAQUE =====================
+   Todas as marcas crescem: abertura, PLAY, família ATRIO e CERNE. */
+.arx-lede--story .arx-plate--lede{ width:clamp(3.2rem, 4.4vw, 4rem); }
+.arx-plate--play{ width:2.8rem; }
+.arx-plate--band{ width:clamp(3rem, 4.2vw, 3.8rem); }
+
+/* ===================== ATRIO: construção da marca =====================
+   As cinco marcas lado a lado, tudo à mostra, sobre uma linha de base
+   comum a 75% da placa (o datum do kit), com as medidas anotadas. */
+.arx-family--build{
+  grid-template-columns:minmax(0, 1fr) minmax(0, 2.4fr);
+  align-items:start;
+}
+.arx-family__spec{
+  margin:.8rem 0 0; max-width:34ch;
+  font-family:var(--f-body); font-size:.8rem; line-height:1.55;
+  color:var(--arx-on-text);
+}
+.arx-family--build .arx-family__list{
+  position:relative;
+  gap:clamp(.8rem, 1.6vw, 1.5rem);
+  padding-top:1.2rem;
+}
+.arx-family--build .arx-family__list .arx-plate{
+  width:100%; max-width:6.4rem; padding:7%;
+  margin-bottom:.7rem;
+}
+.arx-family--build .arx-family__list b{ font-family:"Science Gothic", var(--f-display); font-weight:650; font-size:.98rem; letter-spacing:0; }
+/* datum: a mesma linha atravessa as cinco marcas a 75% do canvas (JS mede) */
+.arx-datum{
+  position:absolute; left:-.6rem; right:-.6rem; top:var(--arx-datum, 0px);
+  height:0; border-top:1px dashed var(--arx-on-soft);
+  pointer-events:none;
+}
+.arx-family--build .arx-family__list::after{
+  content:"1:1 · 75%"; position:absolute; right:0; top:-.15rem;
+  font-family:var(--arx-hand); font-size:.82rem; color:var(--arx-on-soft);
+}
+
+/* Plano diretor: quatro perguntas, respostas curtas */
+.arx-plan{ margin:0; display:grid; gap:.85rem; }
+.arx-plan > div{ padding-top:.75rem; border-top:var(--arx-lw) solid var(--arx-on-hair); }
+.arx-plan > div:first-child{ padding-top:0; border-top:0; }
+.arx-plan dt{
+  margin:0 0 .3rem;
+  font-family:var(--f-micro); font-size:.6rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--arx-on-soft);
+}
+.arx-plan dd{
+  margin:0;
+  font-family:var(--f-body); font-size:.86rem; line-height:1.5; color:var(--arx-on);
+}
+
+/* Versionamento: cada módulo com sua versão vigente e a trilha de versões */
+.arx-ver__lead{ margin-bottom:1rem!important; }
+.arx-vers{ list-style:none; margin:0; padding:0; display:grid; gap:.9rem; }
+.arx-ver{
+  display:grid; grid-template-columns:minmax(0, 1fr) auto;
+  column-gap:.8rem; row-gap:.2rem;
+  width:100%; margin:0;
+  padding:.8rem 0 0; border:0; border-top:var(--arx-lw) solid var(--arx-on-hair);
+  background:none; color:inherit; font:inherit; text-align:left; cursor:pointer;
+}
+.arx-vers > li:first-child .arx-ver{ padding-top:0; border-top:0; }
+.arx-ver__more{
+  grid-column:1 / -1; justify-self:start; margin-top:.15rem;
+  font-family:var(--f-micro); font-size:.56rem; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--arx-on);
+  text-decoration:underline; text-underline-offset:.25em; text-decoration-color:var(--arx-on-hair);
+  transition:text-decoration-color 200ms var(--arx-ease);
+}
+.arx-ver:hover .arx-ver__more,
+.arx-ver:focus-visible .arx-ver__more{ text-decoration-color:var(--arx-on); }
+.arx-ver:focus-visible{ outline:2px solid var(--arx-on); outline-offset:4px; }
+.arx-ver__name{
+  font-family:"Science Gothic", var(--f-display); font-weight:650;
+  font-size:.95rem; color:var(--arx-on);
+}
+.arx-ver__v{
+  grid-column:2; grid-row:1 / span 2; align-self:start;
+  font-family:var(--f-display); font-weight:800; font-size:1.35rem;
+  letter-spacing:-.02em; color:var(--arx-on); font-variant-numeric:tabular-nums;
+}
+.arx-ver__track{ grid-column:1; display:flex; align-items:center; gap:.3rem; min-height:.7rem; }
+.arx-ver__track i{
+  display:block; width:.42rem; height:.42rem; border-radius:50%;
+  border:1px solid var(--arx-on); background:transparent;
+}
+.arx-ver__track i:last-child{ background:var(--arx-on); }
+.arx-ver__track i + i{ position:relative; }
+.arx-ver__meta{
+  grid-column:1 / -1;
+  font-family:var(--f-micro); font-size:.58rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--arx-on-soft);
+}
+.arx-ver__t{ grid-column:1 / -1; font-family:var(--f-body); font-size:.78rem; line-height:1.45; color:var(--arx-on-text); }
+
+/* Evidências do ATRIO em faixa única de quatro números */
+.arx-strip{
+  list-style:none; margin:0; padding:clamp(1.1rem, 2vw, 1.5rem) 0;
+  display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  column-gap:calc(var(--arx-pad) * 1.2);
+  border-top:2px solid var(--arx-on);
+}
+.arx-strip .arx-ev{ padding-top:0; border-top:0; }
+
+@media (max-width:1000px){
+  .arx-family--build{ grid-template-columns:1fr; }
+}
+@media (max-width:900px){
+  .arx-strip{ grid-template-columns:repeat(2, minmax(0, 1fr)); row-gap:1.1rem; }
+}
+@media (max-width:640px){
+  .arx-datum,
+  .arx-family--build .arx-family__list::after{ display:none; }
+}
+
+/* família clicável: a informação essencial já está à mostra; o clique
+   abre a construção completa da marca */
+.arx-family__btn{
+  display:flex; flex-direction:column; align-items:flex-start; gap:.12rem;
+  width:100%; margin:0; padding:0; border:0; background:none;
+  font:inherit; color:inherit; text-align:left; cursor:pointer;
+}
+.arx-family__btn .arx-plate{ transition:transform 320ms var(--arx-spring); }
+.arx-family__btn:hover .arx-plate,
+.arx-family__btn:focus-visible .arx-plate{ transform:translateY(-3px); }
+.arx-family__btn:focus-visible{ outline:2px solid var(--arx-on); outline-offset:4px; }
+.arx-family__btn span:last-child{ font-family:var(--f-body); font-size:.72rem; line-height:1.4; color:var(--arx-on-text); }
+
+/* ===================== POPOVER =====================
+   Cartão claro, recortado do painel, ancorado ao elemento clicado (JS);
+   sem âncora, centraliza. */
+.arx-pop{
+  position:fixed; inset:auto; margin:0;
+  width:min(26rem, calc(100vw - 2rem));
+  max-height:min(70vh, 34rem); overflow:auto;
+  padding:1.2rem 1.25rem 1.3rem;
+  border:0; border-top:4px solid #A63A23;
+  background:#FCFCFC; color:#181818;
+  box-shadow:0 18px 50px rgba(24,24,24,.22);
+  font-family:var(--f-body);
+  opacity:0; transform:translateY(6px);
+  transition:opacity 220ms var(--arx-ease), transform 260ms var(--arx-ease), overlay 220ms allow-discrete, display 220ms allow-discrete;
+}
+.arx-pop:popover-open{ opacity:1; transform:none; }
+@starting-style{ .arx-pop:popover-open{ opacity:0; transform:translateY(6px); } }
+.arx-pop::backdrop{ background:transparent; }
+.arx-pop__head{ display:flex; align-items:center; gap:.8rem; padding-right:2rem; margin-bottom:.9rem; }
+.arx-pop__head .arx-plate{ width:3rem; padding:0; background:none; }
+.arx-pop__k{
+  margin:0 0 .25rem;
+  font-family:var(--f-micro); font-size:.58rem; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:#A63A23;
+}
+.arx-pop__t{
+  margin:0;
+  font-family:"Science Gothic", var(--f-display); font-weight:650; font-size:1.3rem;
+  letter-spacing:-.01em; color:#181818;
+}
+.arx-pop__dl{ margin:0; display:grid; gap:.75rem; }
+.arx-pop__dl dt{
+  margin:0 0 .2rem;
+  font-family:var(--f-micro); font-size:.56rem; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:rgba(24,24,24,.6);
+}
+.arx-pop__dl dd{ margin:0; font-size:.84rem; line-height:1.5; }
+.arx-pop__hist{ list-style:none; margin:0; padding:0; display:grid; gap:.7rem; }
+.arx-pop__hist li{
+  display:grid; grid-template-columns:auto 1fr; column-gap:.7rem; row-gap:.15rem;
+  padding-top:.7rem; border-top:1px solid rgba(24,24,24,.12);
+}
+.arx-pop__hist li:first-child{ padding-top:0; border-top:0; }
+.arx-pop__hist b{ font-family:var(--f-display); font-weight:800; font-size:.95rem; color:#A63A23; font-variant-numeric:tabular-nums; }
+.arx-pop__hist span{ align-self:center; font-family:var(--f-micro); font-size:.58rem; letter-spacing:.08em; color:rgba(24,24,24,.6); }
+.arx-pop__hist p{ grid-column:1 / -1; margin:0; font-size:.8rem; line-height:1.48; }
+.arx-pop__x{
+  position:absolute; top:.9rem; right:.9rem;
+  width:1.9rem; height:1.9rem; display:grid; place-items:center;
+  border:1px solid rgba(24,24,24,.3); border-radius:50%; background:none;
+  font:400 1rem/1 var(--f-body); color:#181818; cursor:pointer;
+}
+.arx-pop__x:hover,
+.arx-pop__x:focus-visible{ background:#181818; color:#FCFCFC; border-color:#181818; }

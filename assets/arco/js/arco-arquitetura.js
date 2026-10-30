@@ -680,6 +680,55 @@
     schedule();
   });
 
+  /* popovers do ATRIO: ancorados ao elemento clicado, dentro da tela */
+  const placePopover = (pop, trigger) => {
+    const r = trigger.getBoundingClientRect();
+    const w = pop.offsetWidth, h = pop.offsetHeight, m = 12;
+    let left = Math.min(Math.max(m, r.left), innerWidth - w - m);
+    let top = r.bottom + 10;
+    if (top + h > innerHeight - m) top = Math.max(m, r.top - h - 10);
+    pop.style.left = `${left}px`;
+    pop.style.top = `${top}px`;
+  };
+  root.querySelectorAll("[popovertarget]").forEach(trigger => {
+    const pop = document.getElementById(trigger.getAttribute("popovertarget"));
+    if (!pop || trigger.getAttribute("popovertargetaction") === "hide") return;
+    trigger.addEventListener("click", () => requestAnimationFrame(() => {
+      if (pop.matches(":popover-open")) placePopover(pop, trigger);
+    }));
+  });
+  /* com um popover aberto, o clique fora só o fecha: o arco não recolhe */
+  let popoverWasOpen = false;
+  document.addEventListener("pointerdown", () => {
+    popoverWasOpen = Boolean(root.querySelector(".arx-pop:popover-open"));
+  }, {capture:true});
+  addEventListener("scroll", () => {
+    root.querySelectorAll(".arx-pop:popover-open").forEach(pop => pop.hidePopover?.());
+  }, {passive:true});
+  let popoverClosedAt = 0;
+  root.querySelectorAll(".arx-pop").forEach(pop => pop.addEventListener("toggle", event => {
+    if (event.newState === "closed") popoverClosedAt = performance.now();
+  }));
+  const popoverBusy = () =>
+    Boolean(root.querySelector(".arx-pop:popover-open")) || performance.now() - popoverClosedAt < 250;
+
+  /* ATRIO: linha de base comum (datum a 75% do canvas 1:1 de cada marca) */
+  root.querySelectorAll(".arx-family--build .arx-family__list").forEach(list => {
+    const datum = document.createElement("i");
+    datum.className = "arx-datum";
+    datum.setAttribute("aria-hidden", "true");
+    list.appendChild(datum);
+    const measure = () => {
+      const img = list.querySelector(".arx-plate img");
+      if (!img || !img.offsetHeight) return;
+      const y = img.getBoundingClientRect().top - list.getBoundingClientRect().top + img.offsetHeight * .75;
+      datum.style.setProperty("--arx-datum", `${y.toFixed(1)}px`);
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(measure).observe(list);
+    addEventListener("resize", measure, {passive:true});
+    measure();
+  });
+
   /* leitura conceitual dentro do texto justificado: inline, quebra como
      palavra; Enter e Espaço abrem o diálogo como um botão */
   root.querySelectorAll(".arx-story[role='button']").forEach(story => {
@@ -841,12 +890,15 @@
       if (homeView && homeView.dataset.active !== "true") return;
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (target.closest(INTERACTIVE) || target.closest("dialog, .rail")) return;
+      if (target.closest(INTERACTIVE) || target.closest("dialog, .rail, .arx-pop")) return;
+      if (popoverWasOpen){ popoverWasOpen = false; return; }
       if (!outsideArch(event.clientX, event.clientY)) return;
       collapse();
     });
     document.addEventListener("keydown", event => {
       if (event.key !== "Escape" || state === "rest") return;
+      /* o Esc fecha primeiro o popover; o arco só recolhe num segundo Esc */
+      if (typeof popoverBusy === "function" && popoverBusy()) return;
       if (!root.contains(document.activeElement)) return;
       collapse();
     });
