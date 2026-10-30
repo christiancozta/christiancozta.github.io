@@ -37,7 +37,7 @@
      Geometria da curva (viewBox 1000×238). k = 0 é o desenho original;
      k > 0 puxa o extradorso e o intradorso para cima, como a corda puxada.
      ------------------------------------------------------------------ */
-  const PULL = 118;
+  const PULL = 128;
   const drawArc = k => {
     const e = (-20 - PULL * k).toFixed(2);
     const i = (45 - PULL * .82 * k).toFixed(2);
@@ -56,10 +56,11 @@
     };
     requestAnimationFrame(frame);
   });
-  const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-  /* soltura amortecida: passa um pouco do repouso e assenta */
-  const release = t => Math.exp(-5.2 * t) * Math.cos(Math.PI * 2.6 * t) * (1 - t * t * t);
+  /* tensão firme: começa e termina sem tranco */
+  const easeInOutSine = t => -(Math.cos(Math.PI * t) - 1) / 2;
+  /* soltura sem quique: volta ao repouso e assenta, sem passar dele */
+  const release = t => Math.pow(1 - t, 3);
 
   /* ------------------------------------------------------------------
      GRAFISMO TÉCNICO — caixa de limites, cotas e anotações à mão.
@@ -473,12 +474,14 @@
     crownTheme();
   };
 
-  /* depois de um recolhimento, a última seleção não volta sozinha */
-  let restoreOnForm = true;
+  /* A formação nunca reabre sozinha a última seleção: a primeira leitura é
+     sempre a das histórias. A seleção só volta no retorno de uma página de
+     sistema (ver Partida). Depois de recolhida pelo visitante, a estrutura
+     também não se refaz pela rolagem: só por escolha. */
+  let autoForm = true;
   const finishFormation = () => {
     setState("formed");
     store.set(KEY_FORMED, "1");
-    if (restoreOnForm) restoreSelection();
   };
 
   let forming = false;
@@ -501,10 +504,10 @@
 
     if (tension){
       setState("tension");
-      await tween(520, t => drawArc(easeOutCubic(t)));
+      await tween(820, t => drawArc(easeInOutSine(t)));
       /* devolvida a corda, a estrutura começa a se formar */
       setState("forming");
-      await tween(900, t => drawArc(release(t)));
+      await tween(820, t => drawArc(release(t)));
       drawArc(0);
       await wait(1100);
     } else {
@@ -516,31 +519,23 @@
     forming = false;
   };
 
-  /* primeira tentativa de rolagem — nunca bloqueia a rolagem */
-  const INTENT_KEYS = new Set(["ArrowDown", "PageDown", "End", " ", "Spacebar"]);
-  const onWheel = event => { if (event.deltaY > 0) form(); };
-  const onTouchMove = () => form();
-  const onKey = event => {
-    if (INTENT_KEYS.has(event.key) && !event.target.closest?.("input,textarea,select,[contenteditable]")) form();
-  };
-  const onScroll = () => { if (window.scrollY > 4) form(); };
-  let intentArmed = false;
+  /* A tensão espera a leitura: só acontece quando as três histórias já
+     passaram inteiras pela tela, isto é, quando a base do quadro entra na
+     vista. Quem chega já abaixo dela encontra a estrutura formada. */
+  const frameFoot = root.querySelector(".arx-frame__foot");
+  let readObserver = null;
   const armIntent = () => {
-    /* depois de recolhida pelo visitante, a estrutura só volta por escolha */
-    if (intentArmed || state !== "rest" || !restoreOnForm) return;
-    intentArmed = true;
-    addEventListener("wheel", onWheel, {passive:true});
-    addEventListener("touchmove", onTouchMove, {passive:true});
-    addEventListener("keydown", onKey);
-    addEventListener("scroll", onScroll, {passive:true});
+    if (readObserver || state !== "rest" || !autoForm || !frameFoot || !("IntersectionObserver" in window)) return;
+    readObserver = new IntersectionObserver(([entry]) => {
+      if (state !== "rest") return;
+      if (entry.isIntersecting) form();
+      else if (entry.boundingClientRect.bottom < 0) form({animate:false});
+    }, {rootMargin:"0px 0px -6% 0px", threshold:0});
+    readObserver.observe(frameFoot);
   };
   function disarmIntent(){
-    if (!intentArmed) return;
-    intentArmed = false;
-    removeEventListener("wheel", onWheel);
-    removeEventListener("touchmove", onTouchMove);
-    removeEventListener("keydown", onKey);
-    removeEventListener("scroll", onScroll);
+    readObserver?.disconnect();
+    readObserver = null;
   }
 
   /* ------------------------------------------------------------------
@@ -825,7 +820,7 @@
     const token = ++swapToken;
     formToken++;
     forming = false;
-    restoreOnForm = false;
+    autoForm = false;
     store.set(KEY_FORMED, "0");
     store.set(KEY_SEL, "");
     setPreview("");
@@ -984,9 +979,8 @@
     drawArc(0);
     setState("formed");
     restoreSelection();
-  } else if (window.scrollY > 4 || isHomeAnchor(location.hash)){
-    /* chegada já rolada, ou por âncora da própria home (#repertorio):
-       a estrutura nasce formada, sem animação fora do olhar */
+  } else if (isHomeAnchor(location.hash)){
+    /* chegada por âncora da própria home (#repertorio): formada, sem animação */
     form({animate:false});
   } else {
     armIntent();
