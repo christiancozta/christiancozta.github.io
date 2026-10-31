@@ -656,7 +656,9 @@
     const NS = "http://www.w3.org/2000/svg";
     svg.replaceChildren();
     const path = document.createElementNS(NS, "path");
-    path.setAttribute("d", `M${right2.toFixed(1)},${ys[0].toFixed(1)} H${x.toFixed(1)} M${x.toFixed(1)},${top.toFixed(1)} V${bottom.toFixed(1)} M${x.toFixed(1)},${ty.toFixed(1)} H${(left3 - 6).toFixed(1)}`);
+    /* cada material do PLAY liga-se ao eixo; o eixo liga-se ao título */
+    const ties = ys.map(y => `M${right2.toFixed(1)},${y.toFixed(1)} H${x.toFixed(1)}`).join(" ");
+    path.setAttribute("d", `${ties} M${x.toFixed(1)},${top.toFixed(1)} V${bottom.toFixed(1)} M${x.toFixed(1)},${ty.toFixed(1)} H${(left3 - 6).toFixed(1)}`);
     svg.appendChild(path);
     ys.forEach(y => {
       const note = document.createElementNS(NS, "ellipse");
