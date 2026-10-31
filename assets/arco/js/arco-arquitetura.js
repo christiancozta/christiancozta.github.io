@@ -593,7 +593,7 @@
 
     /* toque: pressionar antecipa, soltar confirma */
     col.addEventListener("pointerdown", event => {
-      if (event.pointerType === "touch" && !event.target.closest(".arx-story,[data-datum]")) setPreview(sys);
+      if (event.pointerType === "touch" && !event.target.closest("[data-datum]")) setPreview(sys);
     });
     col.addEventListener("pointercancel", () => { if (!hovered) setPreview(""); });
 
@@ -604,10 +604,9 @@
       setPreview(hovered ? hovered.dataset.sys : "");
     });
 
-    /* a coluna inteira seleciona; a leitura conceitual e o dado de lastro
-       guardam seus próprios gestos */
+    /* a coluna inteira seleciona; dados de lastro preservam o próprio gesto */
     col.addEventListener("click", event => {
-      if (event.target.closest(".arx-story,[data-datum]")) return;
+      if (event.target.closest("[data-datum]")) return;
       /* o campo já selecionado é um botão pressionado: clicar de novo recolhe */
       if (sys === selected && state === "formed"){ collapse({keep:col}); return; }
       formAndSelect(sys);
@@ -626,26 +625,6 @@
       event.stopPropagation();
       heads[next].focus();
     });
-  });
-
-  /* arco narrativo: os dois primeiros parágrafos de cada leitura conceitual
-     vêm do próprio diálogo, para que o texto tenha uma única fonte */
-  root.querySelectorAll("[data-tale-src]").forEach(story => {
-    const tale = document.getElementById(story.dataset.taleSrc);
-    const prose = tale?.querySelector(".tale__prose");
-    const source = prose ? [...prose.querySelectorAll(":scope > p")].slice(0, 2) : [];
-    if (source.length < 2) return;
-    /* o título da leitura conceitual vira a primeira frase do texto */
-    /* sem o "Quando" inicial: a oração vira frase própria, com ponto final */
-    let title = (tale.querySelector(".tale__title")?.textContent || "").trim().replace(/[.:;]+$/, "");
-    title = title.replace(/^quando\s+/i, "");
-    if (title) title = title.charAt(0).toLocaleUpperCase("pt-BR") + title.slice(1);
-    story.replaceChildren(...source.map((p, i) => {
-      const copy = document.createElement("p");
-      copy.innerHTML = p.innerHTML;
-      if (i === 0 && title) copy.prepend(`${title}. `);
-      return copy;
-    }));
   });
 
   /* ECHO: uma única linha, derivada do pentagrama, liga os materiais do
@@ -742,17 +721,6 @@
     if ("ResizeObserver" in window) new ResizeObserver(measure).observe(list);
     addEventListener("resize", measure, {passive:true});
     measure();
-  });
-
-  /* leitura conceitual dentro do texto justificado: inline, quebra como
-     palavra; Enter e Espaço abrem o diálogo como um botão */
-  root.querySelectorAll(".arx-story[role='button']").forEach(story => {
-    story.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      event.stopPropagation();
-      story.click();
-    });
   });
 
   /* ------------------------------------------------------------------
