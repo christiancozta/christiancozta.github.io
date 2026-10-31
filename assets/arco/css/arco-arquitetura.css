@@ -79,9 +79,10 @@
 .arx[data-state="formed"]{ --arx-crown-h:var(--arx-crown-formed); }
 
 .arx[data-sel="data"]{
-  --arx-fill:var(--arx-data);
-  --arx-on:#FCFCFC; --arx-on-text:rgba(252,252,252,.92);
-  --arx-on-soft:rgba(252,252,252,.72); --arx-on-hair:rgba(252,252,252,.3);
+  --arx-fill:#FCFCFC;
+  --arx-on:#181818; --arx-on-text:rgba(24,24,24,.9);
+  --arx-on-soft:rgba(24,24,24,.68); --arx-on-hair:rgba(24,24,24,.18);
+  --arx-accent:var(--arx-data);
 }
 .arx[data-sel="echo"]{
   --arx-fill:var(--arx-echo);
@@ -89,9 +90,10 @@
   --arx-on-soft:rgba(24,24,24,.68); --arx-on-hair:rgba(24,24,24,.26);
 }
 .arx[data-sel="atrio"]{
-  --arx-fill:var(--arx-atrio);
-  --arx-on:#FCFCFC; --arx-on-text:rgba(252,252,252,.92);
-  --arx-on-soft:rgba(252,252,252,.72); --arx-on-hair:rgba(252,252,252,.3);
+  --arx-fill:#FCFCFC;
+  --arx-on:#181818; --arx-on-text:rgba(24,24,24,.9);
+  --arx-on-soft:rgba(24,24,24,.68); --arx-on-hair:rgba(24,24,24,.18);
+  --arx-accent:var(--arx-atrio);
 }
 
 .arx-sr{
@@ -1138,4 +1140,39 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
     transition-delay:0s!important;
     animation:none!important;
   }
+}
+
+/* DATA + ATRIO — cor concentrada na coroa; plano documental #FCFCFC.
+   Regras compartilhadas pelos layouts desktop e mobile. ECHO preservado. */
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-arc__field{
+  fill:var(--arx-accent)!important;
+  fill-opacity:1;
+}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-arc__intra{
+  stroke:rgba(252,252,252,.34);
+}
+.arx[data-sel="data"] .arx-name [data-sys="data"],
+.arx[data-sel="atrio"] .arx-name [data-sys="atrio"]{
+  color:#FCFCFC;
+}
+/* Acentos restritos aos números, índices e destaques funcionais. */
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-res__n,
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-ev__n,
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-comps b,
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-dim__k span,
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-col.is-selected .arx-col__n{
+  color:var(--arx-accent);
+}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-res__n small,
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-ev__n small{
+  color:var(--arx-on-text);
+}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-open:not(.arx-band .arx-open){
+  background:var(--arx-accent); border-color:var(--arx-accent); color:#FCFCFC;
+}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-open:not(.arx-band .arx-open):is(:hover,:focus-visible){
+  background:transparent; color:var(--arx-accent);
+}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-plate{
+  background:#FCFCFC;
 }
