@@ -265,22 +265,6 @@
       link.href = target.href;
     }));
 
-  /* ---- Leituras conceituais: diálogo de página inteira ---- */
-  let opener = null;
-  document.querySelectorAll("[data-tale]").forEach(btn =>
-    btn.addEventListener("click", () => {
-      const t = document.getElementById(btn.dataset.tale);
-      if (!t) return;
-      opener = btn;
-      t.showModal();
-      t.scrollTop = 0;
-    }));
-  document.querySelectorAll("dialog.tale").forEach(t => {
-    t.querySelector("[data-tale-close]").addEventListener("click", () => t.close());
-    t.addEventListener("click", e => { if (e.target === t) t.close(); });
-    t.addEventListener("close", () => opener?.focus());
-  });
-
 
 })();
 

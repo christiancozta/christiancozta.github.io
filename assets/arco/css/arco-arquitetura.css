@@ -501,20 +501,6 @@
   cursor:pointer;
   transition:background-color 320ms var(--arx-ease), color 320ms var(--arx-ease);
 }
-/* leitura conceitual dentro do texto: quebra como palavra */
-.arx-story{
-  display:inline; margin:0; padding:0; border:0; background:none;
-  font:inherit; font-weight:700; color:inherit; cursor:pointer;
-  text-align:inherit;
-  -webkit-hyphens:auto; hyphens:auto;
-  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.14em;
-  text-decoration-color:currentColor;
-  transition:text-decoration-color 180ms var(--arx-ease);
-}
-.arx-story:hover,
-.arx-story:focus-visible{ text-decoration-color:transparent; }
-.arx-story:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
-
 /* com seleção: as colunas recolhem aos capitéis e viram seletores */
 .arx:not([data-sel=""]) .arx-col{ padding-bottom:clamp(.8rem, 1.4vw, 1.1rem); }
 .arx:not([data-sel=""]) .arx-col__txt{ display:none; }
@@ -1430,7 +1416,6 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 
 /* HISTÓRIA do movimento no painel: texto inteiro, fundo neutro */
 .arx-mov p{ font-size:.98rem; line-height:1.66; color:var(--arx-text); }
-.arx-mov .arx-story{ font-weight:700; }
 
 /* LINHAS DA GRADE — borda de 1px em cada célula, não fresta entre caixas.
    A fresta (gap) caía em frações de pixel e saía com 0, 1 ou 2 px; a borda
