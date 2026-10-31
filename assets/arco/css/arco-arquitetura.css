@@ -1385,6 +1385,46 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* bloco ícone + título + subtítulo: margem superior generosa, sem centralizar */
 .arx-cell.arx-lede{ padding-top:clamp(2.2rem, 4vw, 3.4rem); }
 
+/* estrutura do título:
+   [ícone 1/2] [título]                [explorar]
+   [ícone 2/2] [subtítulo]
+   [descrição]
+   [competências] */
+.arx-lede{ row-gap:0; }
+/* o ícone mede a altura de título + subtítulo */
+.arx-plate--lede{ grid-column:1; grid-row:1 / span 2; align-self:start; width:clamp(3.6rem, 4.6vw, 4.4rem); height:auto; padding:6%; }
+.arx-plate--lede img{ width:100%; height:auto; }
+.arx-lede__t{ grid-column:2; grid-row:1; align-self:end; }
+.arx-lede .arx-lede__sub{
+  grid-column:2; grid-row:2; align-self:start;
+  margin:.6rem 0 0;
+  font-family:var(--f-display); font-weight:600; font-size:clamp(.95rem, 1.2vw, 1.05rem);
+  line-height:1.25; letter-spacing:-.01em; color:var(--arx-text);
+}
+.arx-lede__sub b{ font-weight:800; color:var(--arx-accent-text, #181818); }
+.arx-lede .arx-open{ grid-column:3; grid-row:1; align-self:start; }
+.arx-lede__story{ grid-column:1 / -1; grid-row:3; margin-top:clamp(1.1rem, 1.8vw, 1.4rem); max-width:none; }
+.arx-comps{ grid-row:4; }
+@media (max-width:900px){
+  .arx-lede .arx-open{ grid-column:1 / -1; grid-row:4; justify-self:start; align-self:start; margin-top:1rem; }
+  .arx-comps{ grid-row:5; }
+}
+@media (max-width:640px){
+  .arx-lede .arx-open{ justify-self:stretch; }
+}
+
+/* competências: repouso no acento claro; hover e ficha aberta no acento pleno */
+.arx-comp{
+  background:color-mix(in srgb, var(--arx-accent, #181818) 22%, #FCFCFC);
+  color:var(--arx-ink);
+}
+.arx-comp:hover,
+.arx-comps__list li:has(> .arx-pop:popover-open) > .arx-comp,
+.arx[data-sel="echo"] .arx-comp:hover,
+.arx[data-sel="echo"] .arx-comps__list li:has(> .arx-pop:popover-open) > .arx-comp{
+  background:var(--arx-accent, #181818); border-color:#181818; color:var(--arx-accent-on, #FCFCFC);
+}
+
 /* datas no lugar do número de ordem: mono, sem o espaçamento largo do índice */
 .arx-col__n{ letter-spacing:.06em; white-space:nowrap; font-variant-numeric:tabular-nums; }
 
