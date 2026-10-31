@@ -96,6 +96,16 @@
   --arx-accent:var(--arx-atrio);
 }
 
+/* coroa e seletor levam o campo do sistema; o resto é papel e tinta.
+   --arx-accent: campo e marcas; --arx-accent-text: acento legível como letra;
+   --arx-accent-on: letra sobre o campo. */
+.arx[data-sel="data"]{ --arx-accent-text:var(--arx-data); --arx-accent-on:#FCFCFC; }
+.arx[data-sel="echo"]{
+  --arx-fill:#FCFCFC; --arx-on-hair:rgba(24,24,24,.18);
+  --arx-accent:var(--arx-echo); --arx-accent-text:#181818; --arx-accent-on:#181818;
+}
+.arx[data-sel="atrio"]{ --arx-accent-text:var(--arx-atrio); --arx-accent-on:#FCFCFC; }
+
 .arx-sr{
   position:absolute!important; width:1px; height:1px; margin:-1px; padding:0;
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
@@ -519,9 +529,24 @@
 .arx:not([data-sel=""]) .arx-col__txt{ display:none; }
 .arx:not([data-sel=""]) .arx-col__head{ transition:opacity 320ms var(--arx-ease); }
 .arx:not([data-sel=""]) .arx-col:not(.is-selected):not(.is-preview) .arx-col__head{ opacity:.58; }
-.arx:not([data-sel=""]) .arx-col.is-selected .arx-col__mov{
-  text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:.22em;
+/* o campo selecionado recebe o mesmo fundo da coroa, sem divisória entre
+   os dois: a sombra cobre a linha de base sobre o campo. As demais linhas
+   continuam fechando a área. */
+.arx:not([data-sel=""]) .arx-col{
+  box-shadow:0 -3px 0 transparent;
+  transition:background-color 380ms var(--arx-ease), box-shadow 380ms var(--arx-ease), color 320ms var(--arx-ease), transform 460ms var(--arx-spring);
 }
+.arx:not([data-sel=""]) .arx-col.is-selected{
+  z-index:1;
+  background-color:var(--c);
+  box-shadow:0 -3px 0 var(--c);
+  --arx-on:var(--c-on); --arx-on-soft:var(--c-on-soft);
+}
+.arx:not([data-sel=""]) .arx-col.is-selected .arx-col__head{ opacity:1; }
+.arx:not([data-sel=""]) .arx-col.is-selected .arx-col__n{ color:var(--c-on-soft)!important; }
+.arx:not([data-sel=""]) .arx-cols::before,
+.arx:not([data-sel=""]) .arx-cols::after{ opacity:1; }
+.arx:not([data-sel=""]) .arx-cols{ border-bottom:var(--arx-lw) solid var(--arx-line); }
 
 /* as histórias reaparecem com calma quando a seleção se desfaz */
 @keyframes arx-rise{
@@ -565,129 +590,140 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
 }
 .arx-plate img{ display:block; width:100%; height:auto; aspect-ratio:1; }
 
-/* abertura, na ordem da proposta E: título e subtítulo; indicador-mãe;
-   grade modular (resultados e competências). A cor é do quadro inteiro:
-   nenhum bloco interno recebe campo próprio. */
+/* PROPOSTA E — grade modular dentro do quadro. As linhas completam a
+   área: o painel é uma grade de 12 colunas com 1px de tinta entre células
+   de papel; cada célula declara seu peso em --w. Fora da coroa e do
+   seletor, fundo #FCFCFC e tinta #181818; o acento fica nos detalhes. */
+.arx-sum{
+  grid-template-columns:repeat(12, minmax(0, 1fr));
+  gap:var(--arx-lw);
+  padding:0;
+  background:var(--arx-line);
+  color:var(--arx-ink);
+}
+.arx-js .arx-sum.is-on,
+html:not(.arx-js) .arx-sum{ display:grid; }
+.arx-cell{
+  grid-column:span var(--w, 12);
+  min-width:0;
+  padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem);
+  background:#FCFCFC;
+  font-family:var(--f-body); font-size:.84rem; line-height:1.64;
+  color:var(--arx-text);
+}
+.arx-cell p{
+  margin:0;
+  text-align:justify; text-justify:inter-word;
+  -webkit-hyphens:auto; hyphens:auto;
+}
+.arx-cell p + p,
+.arx-cell .arx-origin + p{ margin-top:.8em; }
+.arx-cell p b{ font-weight:700; color:var(--arx-ink); }
+
+/* um rótulo por bloco, e só um */
+.arx-k{
+  margin:0 0 1rem;
+  font-family:var(--f-micro); font-size:.7rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; line-height:1.3;
+  color:var(--arx-soft);
+}
+
+/* título e subtítulo; competências abaixo; acesso à direita */
 .arx-lede{
   display:grid;
   grid-template-columns:auto minmax(0, 1fr) auto;
   align-items:start;
   column-gap:clamp(1rem, 1.8vw, 1.5rem);
-  padding-top:clamp(1.2rem, 2.2vw, 1.8rem);
-  border-top:var(--arx-lw) solid var(--arx-on-hair);
-  border-bottom:var(--arx-lw) solid var(--arx-on-hair);
 }
 .arx-plate--lede{
   grid-column:1; grid-row:1 / span 2; align-self:start;
-  width:clamp(4.2rem, 5.6vw, 5.4rem);
+  width:clamp(4rem, 5.2vw, 5rem);
   padding:6%;
 }
 .arx-lede__t{
   grid-column:2; grid-row:1; align-self:start;
   margin:0;
   font-family:var(--f-display); font-weight:800;
-  font-size:clamp(1.25rem, 2vw, 1.75rem); line-height:1; letter-spacing:-.03em;
-  color:var(--arx-on);
+  font-size:clamp(1.35rem, 2.2vw, 1.95rem); line-height:1; letter-spacing:-.03em;
+  color:var(--arx-ink);
   text-box:trim-both cap alphabetic;
 }
 .arx-lede__story{
   grid-column:2; grid-row:2;
-  max-width:64ch; margin-top:.6rem;
-  font-family:var(--f-body); font-size:.92rem; line-height:1.45;
-  color:var(--arx-on-text);
+  max-width:62ch; margin-top:.65rem;
+  font-size:.92rem; line-height:1.45;
 }
-.arx-lede__story p{
-  margin:0;
-  text-align:justify; text-justify:inter-word;
-  -webkit-hyphens:auto; hyphens:auto;
-}
-.arx-lede__story p + p{ margin-top:.35em; }
 .arx-lede__story p:first-child{ text-box:trim-start cap alphabetic; }
-.arx-lede .arx-open{
-  grid-column:3; grid-row:1 / span 2;
-  justify-self:end; align-self:start;
-}
-
-/* rótulos da grade: mono, na tinta do quadro */
-.arx-mae__k,
-.arx-comps__k{
-  margin:0;
-  font-family:var(--f-micro); font-size:.7rem; font-weight:600;
-  letter-spacing:.14em; text-transform:uppercase; line-height:1.3;
-  color:var(--arx-on);
-}
-
-/* indicador-mãe: o número que abre a grade, na mesma métrica de três
-   colunas das dimensões abaixo */
-.arx-mae{
-  grid-column:1 / -1;
-  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
-  column-gap:calc(var(--arx-pad) * 2); row-gap:.9rem; align-items:end;
-  margin-top:clamp(1.2rem, 2.2vw, 1.8rem);
-  padding:clamp(1.1rem, 2vw, 1.5rem) 0 clamp(1.3rem, 2.4vw, 1.9rem);
-  border-top:var(--arx-lw) solid var(--arx-on-hair);
-}
-.arx-mae__k{ grid-column:1 / -1; }
-.arx-mae__n{
-  grid-column:1 / 3;
-  font-family:var(--f-display); font-weight:800;
-  font-size:clamp(3.4rem, 7.2vw, 6rem); line-height:.85; letter-spacing:-.04em;
-  color:var(--arx-on); font-variant-numeric:tabular-nums;
-}
-.arx-mae__n small{ font-size:.3em; font-weight:700; letter-spacing:-.005em; }
-.arx-mae__t{
-  grid-column:3; margin:0;
-  font-family:var(--f-body); font-size:.88rem; line-height:1.45;
-  color:var(--arx-on-text); text-wrap:pretty;
-}
-
-/* grade modular: três resultados nas três colunas; competências na largura toda */
-.arx-results{
-  grid-column:1 / -1;
-  list-style:none; margin:0; padding:0;
-  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
-  column-gap:calc(var(--arx-pad) * 2);
-  border-top:var(--arx-lw) solid var(--arx-on-hair);
-}
-.arx-res{
-  display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; min-width:0;
-  padding:clamp(1rem, 1.8vw, 1.35rem) 0 clamp(1.1rem, 2vw, 1.5rem);
-}
-.arx-res__n{
-  display:inline-block;
-  font-family:var(--f-display); font-weight:800;
-  font-size:clamp(1.25rem, 1.85vw, 1.7rem); line-height:1;
-  letter-spacing:-.03em; color:var(--arx-on);
-  font-variant-numeric:tabular-nums;
-}
-.arx-res__n small{ font-size:.48em; font-weight:700; letter-spacing:-.005em; color:var(--arx-on-text); }
-.arx-res__t{ font-family:var(--f-body); font-size:.76rem; line-height:1.45; color:var(--arx-on-text); }
-
+.arx-lede .arx-open{ grid-column:3; grid-row:1 / span 2; justify-self:end; align-self:start; }
 .arx-comps{
   grid-column:1 / -1;
-  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
-  column-gap:calc(var(--arx-pad) * 2); align-items:baseline;
-  padding:clamp(1rem, 1.8vw, 1.35rem) 0 clamp(1.1rem, 2vw, 1.5rem);
-  border-top:var(--arx-lw) solid var(--arx-on-hair);
+  margin-top:clamp(1.25rem, 2.2vw, 1.75rem);
+  padding-top:clamp(1rem, 1.8vw, 1.35rem);
+  border-top:var(--arx-lw) solid var(--arx-hair);
 }
-.arx-comps__list{
-  grid-column:2 / -1;
-  list-style:none; margin:0; padding:0;
-  display:flex; flex-wrap:wrap; gap:.5rem;
-}
+.arx-comps .arx-k{ margin-bottom:.75rem; }
+.arx-comps__list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.5rem; }
 /* competência: sem número; abre a ficha ao clicar */
 .arx-comp{
   appearance:none; margin:0; cursor:pointer;
   padding:.55em .85em .6em;
-  border:var(--arx-lw) solid var(--arx-on); background:transparent; color:var(--arx-on);
+  border:var(--arx-lw) solid var(--arx-ink); background:transparent; color:var(--arx-ink);
   font-family:var(--f-display); font-weight:700; font-size:.86rem; line-height:1.2; letter-spacing:-.008em;
-  transition:background 240ms var(--arx-ease), color 240ms var(--arx-ease);
+  transition:background 240ms var(--arx-ease), color 240ms var(--arx-ease), border-color 240ms var(--arx-ease);
 }
 .arx-comp:hover,
 .arx-comps__list li:has(> .arx-pop:popover-open) > .arx-comp{
-  background:var(--arx-on); color:var(--arx-fill, #FCFCFC);
+  background:var(--arx-accent, #181818); border-color:var(--arx-accent, #181818);
+  color:var(--arx-accent-on, #FCFCFC);
 }
-.arx-comp:focus-visible{ outline:2px solid var(--arx-on); outline-offset:3px; }
+.arx-comp:focus-visible{ outline:2px solid var(--arx-ink); outline-offset:3px; }
+
+/* indicador-mãe: um único bloco, ao lado da abertura, com o que for
+   preciso para ler o número */
+.arx-mae{ display:flex; flex-direction:column; }
+.arx-mae__n{
+  display:block;
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(3.2rem, 5.6vw, 5.4rem); line-height:.85; letter-spacing:-.04em;
+  color:var(--arx-accent-text, #181818); font-variant-numeric:tabular-nums;
+}
+.arx-mae__n small{ font-size:.3em; font-weight:700; letter-spacing:-.005em; color:var(--arx-ink); }
+.arx-mae__t{ margin-top:1rem!important; font-size:.88rem; line-height:1.45; color:var(--arx-text); text-align:left!important; }
+.arx-mae .arx-formula{ margin:1rem 0 0!important; }
+.arx-mae__base{ margin-top:.7rem!important; text-align:left!important; }
+
+/* resultados: número no topo, leitura na base */
+.arx-res{
+  display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start;
+  gap:1.4rem; min-height:clamp(7rem, 10vw, 9rem);
+}
+.arx-res__n{
+  display:inline-block;
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(1.5rem, 2.4vw, 2.2rem); line-height:1;
+  letter-spacing:-.03em; color:var(--arx-accent-text, #181818);
+  font-variant-numeric:tabular-nums;
+}
+.arx-res__n small{ font-size:.45em; font-weight:700; letter-spacing:-.005em; color:var(--arx-ink); }
+.arx-res__t{ font-size:.78rem; line-height:1.45; color:var(--arx-text); }
+
+/* ECHO: o amarelo não passa contraste como letra; marca o número por baixo */
+.arx[data-sel="echo"] :is(.arx-mae__n, .arx-res__n){
+  background:linear-gradient(transparent 62%, var(--arx-echo) 62%, var(--arx-echo) 92%, transparent 92%);
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+
+/* CERNE como célula de papel: placa, título e prova */
+.arx-cerne__head{ display:flex; align-items:center; gap:.9rem; margin-bottom:1rem; }
+.arx-cerne__t{
+  font-family:var(--f-display); font-weight:800; font-size:clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height:1.12; letter-spacing:-.022em; color:var(--arx-ink); text-align:left!important;
+}
+.arx-cerne .arx-evs{ margin:1rem 0 0; grid-template-columns:repeat(2, minmax(0, 1fr)); column-gap:var(--arx-pad); }
+.arx-cerne .arx-ev,
+.arx-cerne .arx-ev:first-child{ padding-top:.85rem; border-top:var(--arx-lw) solid var(--arx-hair); }
+.arx-cerne .arx-ev__n{ color:var(--arx-atrio); }
+.arx-cerne .arx-pull{ border-left-color:var(--arx-atrio); }
 
 /* acesso à página completa: o único gesto que navega */
 .arx-open{
@@ -1139,11 +1175,17 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
   .arx-lede{ grid-template-columns:auto minmax(0, 1fr); }
   .arx-plate--lede{ width:clamp(3.6rem, 16vw, 4.6rem); }
   .arx-lede .arx-open{ grid-column:1 / -1; grid-row:3; justify-self:start; margin-top:1rem; }
+  .arx-comps{ grid-row:4; }
+  /* tablet: abertura e indicador-mãe em largura total; resultados em 3 */
+  .arx-lede,
   .arx-mae,
-  .arx-comps{ grid-template-columns:1fr; row-gap:.9rem; }
-  .arx-mae__n,
-  .arx-mae__t,
-  .arx-comps__list{ grid-column:1; }
+  .arx-cell.arx-text,
+  .arx-cell.arx-family,
+  .arx-cell.arx-dims{ grid-column:1 / -1; }
+  .arx-res{ grid-column:span 4; }
+  .arx-cell.arx-family{ grid-template-columns:1fr; }
+  .arx-cell .arx-dim + .arx-dim{ margin-top:1.4rem; padding-top:1.2rem; border-top:var(--arx-lw) solid var(--arx-hair); }
+  .arx-cerne .arx-evs{ grid-template-columns:1fr; }
 
   .arx-staff{ display:none; }
 }
@@ -1183,8 +1225,7 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
   .arx:not([data-sel=""]) .arx-col{ padding-top:.75rem; padding-bottom:.75rem; }
   .arx:not([data-sel=""]) .arx-col__head{ flex-direction:row; align-items:baseline; gap:.7rem; }
 
-  .arx-results{ grid-template-columns:1fr; }
-  .arx-res + .arx-res{ border-top:var(--arx-lw) solid var(--arx-on-hair); }
+  .arx-res{ grid-column:1 / -1; min-height:0; gap:.6rem; }
   .arx-lede .arx-open{ justify-self:stretch; justify-content:space-between; }
   .arx-family__list{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
   .arx-datum,
@@ -1203,37 +1244,44 @@ html:not(.arx-js) .arx-sum + .arx-sum{ border-top:1px solid var(--arx-hair); }
   }
 }
 
-/* DATA + ATRIO — cor concentrada na coroa; plano documental #FCFCFC.
-   Regras compartilhadas pelos layouts desktop e mobile. ECHO preservado. */
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-arc__field{
+/* COROA — campo pleno na cor do sistema, nos três: DATA azul, ECHO
+   amarelo, ATRIO terracota. Letra #FCFCFC sobre azul e terracota; #181818
+   sobre amarelo. Fora da coroa e do seletor, papel e tinta. */
+.arx:not([data-sel=""]) .arx-arc__field{
   fill:var(--arx-accent)!important;
   fill-opacity:1;
 }
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-arc__intra{
-  stroke:rgba(252,252,252,.34);
-}
+.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-arc__intra{ stroke:rgba(252,252,252,.34); }
+.arx[data-sel="echo"] .arx-arc__intra{ stroke:rgba(24,24,24,.3); }
 .arx[data-sel="data"] .arx-name [data-sys="data"],
-.arx[data-sel="atrio"] .arx-name [data-sys="atrio"]{
-  color:#FCFCFC;
+.arx[data-sel="atrio"] .arx-name [data-sys="atrio"]{ color:#FCFCFC; }
+.arx[data-sel="echo"] .arx-name [data-sys="echo"]{ color:#181818; }
+
+/* acentos: só números, índices e o acesso */
+.arx:not([data-sel=""]) .arx-ev__n{ color:var(--arx-accent-text); }
+.arx:not([data-sel=""]) .arx-ev__n small{ color:var(--arx-on-text); }
+.arx:not([data-sel=""]) .arx-open{
+  background:var(--arx-accent); border-color:var(--arx-accent); color:var(--arx-accent-on);
 }
-/* Acentos restritos aos números, índices e destaques funcionais. */
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-res__n,
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-ev__n,
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-comps b,
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-dim__k span,
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-col.is-selected .arx-col__n{
-  color:var(--arx-accent);
+.arx:not([data-sel=""]) .arx-open:is(:hover,:focus-visible){
+  background:transparent; border-color:var(--arx-ink); color:var(--arx-ink);
 }
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-res__n small,
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-ev__n small{
-  color:var(--arx-on-text);
+.arx:not([data-sel=""]) .arx-plate{ background:#FCFCFC; }
+
+/* células herdadas: PLAY, família de marcas e dimensões do ECHO em papel */
+.arx-cell .arx-dim{ padding:0; color:var(--arx-text); }
+.arx-cell.arx-dims{ column-gap:calc(var(--arx-pad) * 2); }
+.arx-play{
+  margin-bottom:1.1rem;
+  padding:1rem 1.1rem 1.15rem;
+  border:var(--arx-lw) solid var(--arx-ink);
+  border-top:4px solid var(--arx-echo);
 }
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-open:not(.arx-band .arx-open){
-  background:var(--arx-accent); border-color:var(--arx-accent); color:#FCFCFC;
+.arx-play__t{ color:var(--arx-ink); }
+.arx-cell.arx-family{
+  display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 2.2fr);
+  gap:clamp(1rem, 2vw, 1.75rem);
+  padding-bottom:clamp(1.25rem, 2.2vw, 1.85rem);
+  border-bottom:0;
 }
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-open:not(.arx-band .arx-open):is(:hover,:focus-visible){
-  background:transparent; color:var(--arx-accent);
-}
-.arx:is([data-sel="data"],[data-sel="atrio"]) .arx-plate{
-  background:#FCFCFC;
-}
+.arx-family__head .arx-k{ margin-bottom:.8rem; }
