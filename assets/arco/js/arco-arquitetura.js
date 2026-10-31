@@ -471,8 +471,11 @@
   const setState = value => {
     state = value;
     root.dataset.state = value;
+    /* o grafismo da coroa, uma vez desenhado, fica: não se apaga ao recolher */
+    if (value === "formed" || value === "forming") root.classList.add("is-drawn");
     crownTheme();
   };
+  if (state === "formed") root.classList.add("is-drawn");
 
   /* A formação nunca reabre sozinha a última seleção: a primeira leitura é
      sempre a das histórias. A seleção só volta no retorno de uma página de
@@ -486,7 +489,9 @@
 
   let forming = false;
   let formToken = 0;
-  const form = async ({animate = true, tension = true} = {}) => {
+  /* sem tensão: a corda puxada e solta lia como quique; a estrutura se
+     forma direto, sem o arco subir e voltar */
+  const form = async ({animate = true, tension = false} = {}) => {
     if (state !== "rest" || forming) return;
     /* a formação só acontece sob o olho: nunca com o ARCO fora de vista */
     if (homeView && homeView.dataset.active !== "true") return;
@@ -522,16 +527,22 @@
   /* A tensão espera a leitura: só acontece quando as três histórias já
      passaram inteiras pela tela, isto é, quando a base do quadro entra na
      vista. Quem chega já abaixo dela encontra a estrutura formada. */
-  const frameFoot = root.querySelector(".arx-frame__foot");
+  /* A formação acontece com as histórias a 70% na tela: 70% do bloco de
+     textos visível, ou 70% da altura da tela ocupada por ele (no celular o
+     bloco é mais alto que a tela). Quem chega já abaixo dele encontra a
+     estrutura formada. */
+  const storyBlock = root.querySelector(".arx-cols");
   let readObserver = null;
   const armIntent = () => {
-    if (readObserver || state !== "rest" || !autoForm || !frameFoot || !("IntersectionObserver" in window)) return;
+    if (readObserver || state !== "rest" || !autoForm || !storyBlock || !("IntersectionObserver" in window)) return;
+    const steps = Array.from({length:21}, (_, i) => i / 20);
     readObserver = new IntersectionObserver(([entry]) => {
       if (state !== "rest") return;
-      if (entry.isIntersecting) form();
+      const seen = entry.intersectionRatio >= .7 || entry.intersectionRect.height >= innerHeight * .7;
+      if (entry.isIntersecting && seen) form();
       else if (entry.boundingClientRect.bottom < 0) form({animate:false});
-    }, {rootMargin:"0px 0px -6% 0px", threshold:0});
-    readObserver.observe(frameFoot);
+    }, {threshold:steps});
+    readObserver.observe(storyBlock);
   };
   function disarmIntent(){
     readObserver?.disconnect();
@@ -597,6 +608,8 @@
        guardam seus próprios gestos */
     col.addEventListener("click", event => {
       if (event.target.closest(".arx-story,[data-datum]")) return;
+      /* o campo já selecionado é um botão pressionado: clicar de novo recolhe */
+      if (sys === selected && state === "formed"){ collapse({keep:col}); return; }
       formAndSelect(sys);
     });
 
@@ -644,21 +657,26 @@
     const title = dims.querySelector(".arx-play__t");
     const cols = dims.querySelectorAll(":scope > .arx-dim");
     if (!plays.length || !title || cols.length < 3) return;
-    const box = dims.getBoundingClientRect();
+    /* as três dimensões são células da grade (o invólucro não tem caixa):
+       mede-se pelo próprio SVG, que cobre o painel */
+    const box = svg.getBoundingClientRect();
     if (!box.width || getComputedStyle(svg).display === "none") return;
-    const right2 = cols[1].getBoundingClientRect().right - box.left;
     const left3 = cols[2].getBoundingClientRect().left - box.left;
-    const x = right2 + (left3 - right2) * .5;
+    const head = title.closest(".arx-head") || title;
+    const into = head.getBoundingClientRect().left - box.left;
+    /* o eixo corre na calha esquerda da célula Aplicação */
+    const x = left3 + (into - left3) * .5;
     const mid = el => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - box.top; };
     const ys = plays.map(mid);
+    const ends = plays.map(el => el.getBoundingClientRect().right - box.left);
     const ty = mid(title);
-    const top = Math.min(ys[0], ty), bottom = ys[ys.length - 1];
+    const top = Math.min(ys[0], ty), bottom = Math.max(ys[ys.length - 1], ty);
     const NS = "http://www.w3.org/2000/svg";
     svg.replaceChildren();
     const path = document.createElementNS(NS, "path");
     /* cada material do PLAY liga-se ao eixo; o eixo liga-se ao título */
-    const ties = ys.map(y => `M${right2.toFixed(1)},${y.toFixed(1)} H${x.toFixed(1)}`).join(" ");
-    path.setAttribute("d", `${ties} M${x.toFixed(1)},${top.toFixed(1)} V${bottom.toFixed(1)} M${x.toFixed(1)},${ty.toFixed(1)} H${(left3 - 6).toFixed(1)}`);
+    const ties = ys.map((y, i) => `M${ends[i].toFixed(1)},${y.toFixed(1)} H${x.toFixed(1)}`).join(" ");
+    path.setAttribute("d", `${ties} M${x.toFixed(1)},${top.toFixed(1)} V${bottom.toFixed(1)} M${x.toFixed(1)},${ty.toFixed(1)} H${(into - 6).toFixed(1)}`);
     svg.appendChild(path);
     ys.forEach(y => {
       const note = document.createElementNS(NS, "ellipse");
@@ -671,7 +689,7 @@
   root.querySelectorAll(".arx-staff").forEach(svg => {
     let raf = 0;
     const schedule = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawStaff(svg); }); };
-    if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(svg.parentElement);
+    if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(svg.closest(".arx-sum") || svg.parentElement);
     addEventListener("resize", schedule, {passive:true});
     document.fonts?.ready?.then(schedule);
     schedule();

@@ -1192,6 +1192,7 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   /* tablet: abertura e indicador-mãe em largura total; resultados em 3 */
   .arx-lede,
   .arx-mae,
+  .arx-mov,
   .arx-cell.arx-text,
   .arx-cell.arx-family,
   .arx-cell.arx-dims{ grid-column:1 / -1; }
@@ -1354,3 +1355,89 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 .arx[data-state="formed"] .arx-col.is-preview:not(.is-selected) .b-data{ background:#0057FF!important; color:#FCFCFC!important; }
 .arx[data-state="formed"] .arx-col.is-preview:not(.is-selected) .b-echo{ background:var(--arx-echo)!important; color:#181818!important; }
 .arx[data-state="formed"] .arx-col.is-preview:not(.is-selected) .b-atrio{ background:var(--arx-atrio)!important; color:#FCFCFC!important; }
+/* o campo selecionado recolhe o painel ao ser clicado de novo */
+.arx:not([data-sel=""]) .arx-col.is-selected{ cursor:pointer; }
+
+/* COROA plena; CAMPO no acento claro, sem divisória com a coroa; o resto
+   (história, abertura, indicadores) em papel */
+.arx:not([data-sel=""]) .arx-col.is-selected{
+  --c-light:color-mix(in srgb, var(--c) 22%, #FCFCFC);
+  background-color:var(--c-light);
+  /* a linha de base entre coroa e campo permanece */
+  box-shadow:none;
+  --arx-on:var(--arx-ink); --arx-on-soft:var(--arx-soft);
+}
+/* a única junta sem divisória: campo e texto do mesmo projeto, quando o
+   texto está logo abaixo do campo (DATA, coluna da esquerda) */
+@media (min-width:641px){
+  .arx[data-sel="data"] .arx-sum[data-sys="data"] .arx-mov{ border-top-color:transparent; }
+}
+.arx:not([data-sel=""]) .arx-col.is-selected .arx-col__mov{ color:var(--arx-ink); }
+.arx:not([data-sel=""]) .arx-col.is-selected .arx-col__n{ color:var(--arx-ink)!important; }
+.arx[data-state="formed"] .arx-col.is-preview:not(.is-selected){
+  background-color:color-mix(in srgb, var(--c) 10%, #FCFCFC);
+}
+
+/* GRAFISMO PERMANENTE — desenhado uma vez, fica */
+.arx.is-drawn .arx-tech path{ stroke-dashoffset:0; }
+.arx.is-drawn .arx-tech text{ opacity:1; }
+
+/* bloco ícone + título + subtítulo: margem superior generosa, sem centralizar */
+.arx-cell.arx-lede{ padding-top:clamp(2.2rem, 4vw, 3.4rem); }
+
+/* datas no lugar do número de ordem: mono, sem o espaçamento largo do índice */
+.arx-col__n{ letter-spacing:.06em; white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+/* HISTÓRIA do movimento no painel: texto inteiro, fundo neutro */
+.arx-mov p{ font-size:.98rem; line-height:1.66; color:var(--arx-text); }
+.arx-mov .arx-story{ font-weight:700; }
+
+/* LINHAS DA GRADE — borda de 1px em cada célula, não fresta entre caixas.
+   A fresta (gap) caía em frações de pixel e saía com 0, 1 ou 2 px; a borda
+   é sempre um pixel inteiro, igual em toda a área. */
+.arx-sum{ position:relative; gap:0; background:#FCFCFC; }
+.arx-cell{
+  border-left:var(--arx-lw) solid var(--arx-line);
+  border-top:var(--arx-lw) solid var(--arx-line);
+}
+.arx:not([data-sel=""]) .arx-cols{ border-bottom:0; }
+/* ECHO: as três dimensões são células da grade; o invólucro não tem caixa */
+.arx-dims.arx-dims--echo{ display:contents; }
+.arx-cell.arx-dim{ padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem); }
+/* PLAY sem cartão próprio: a célula é o cartão */
+.arx-play{ margin:0 0 1.1rem; padding:0; border:0; }
+
+/* LEGIBILIDADE — raiz a 14,4px; nada funcional abaixo de ~11px */
+.arx-cell{ font-size:1rem; line-height:1.6; }
+.arx-lede__story{ font-size:1.02rem; }
+.arx-mae__t{ font-size:.98rem; }
+.arx-res__t{ font-size:.9rem; }
+.arx-res__note,
+.arx-note{ font-size:.84rem!important; }
+.arx-k{ font-size:.8rem; }
+.arx-open{ font-size:.78rem; }
+.arx-mat__n,
+.arx-mat__tag,
+.arx-ver__meta,
+.arx-family__list i{ font-size:.76rem; }
+.arx-pop__k,
+.arx-pop__dl dt{ font-size:.76rem; }
+.arx-col__n{ font-size:.76rem; }
+
+/* texto corrido: alinhado à esquerda e com medida de leitura */
+.arx-cell p,
+.arx-lede__story p{ text-align:left; -webkit-hyphens:manual; hyphens:manual; max-width:70ch; }
+
+/* SELETOR — contraste sem opacidade: só o nome esmaece, em cinza sólido */
+.arx:not([data-sel=""]) .arx-col:not(.is-selected):not(.is-preview) .arx-col__head{ opacity:1; }
+.arx:not([data-sel=""]) .arx-col:not(.is-selected) .arx-col__mov{ color:var(--arx-soft); }
+.arx:not([data-sel=""]) .arx-col:not(.is-selected) .arx-col__n{ color:var(--arx-soft); }
+
+@media (max-width:640px){
+  /* o campo escolhido sobe para junto da coroa */
+  .arx:not([data-sel=""]) .arx-col.is-selected{ order:-1; }
+  /* alvo de toque com a altura da linha */
+  .arx:not([data-sel=""]) .arx-col{ padding-top:0; padding-bottom:0; }
+  .arx:not([data-sel=""]) .arx-col__head{ min-height:2.9rem; align-items:center; }
+  .arx-cell.arx-dim{ grid-column:1 / -1; }
+}
