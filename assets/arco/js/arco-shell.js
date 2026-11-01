@@ -69,6 +69,8 @@
   /* ---- Casca: cordão → palco ---- */
   function show(view, {push = true} = {}){
     if (!VIEWS.includes(view)) view = "home";
+    const current = views.find(v => v.dataset.active === "true");
+    if (current && current.dataset.view !== view) document.documentElement.classList.add("view-swap");
     views.forEach(v => v.dataset.active = String(v.dataset.view === view));
     railLinks.forEach(l => l.setAttribute("aria-current", String(l.dataset.view === view)));
 

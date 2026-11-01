@@ -358,6 +358,10 @@ body{
 .stage:focus{ outline:none; }
 .view{ display:none; }
 .view[data-active="true"]{ display:block; }
+/* troca de vista pelo menu: a nova entra por transparência, sem deslocamento.
+   Só depois da primeira troca — a chegada à página não espera animação. */
+.view-swap .view[data-active="true"]{ animation:view-in 280ms var(--ease) backwards; }
+@keyframes view-in{ from{ opacity:0; } }
 
 /* ===========================================================================
    HOME — papel branco. A mãe fala com a voz dela.
@@ -1073,7 +1077,7 @@ body{
 }
 .child__full:hover{ color:var(--paper); }
 /* a seta aponta para fora: a página inteira abre em outra aba */
-.child__full .arrow{ display:inline-block; font-family:var(--f-micro); transform:rotate(-45deg); transition:transform var(--slow) var(--ease); }
+.child__full .arrow{ display:inline-block; font-family:var(--f-micro); transform:rotate(-45deg); transition:transform 260ms var(--ease); }
 .child__full:hover .arrow{ transform:translate(2px,-2px) rotate(-45deg); }
 
 /* fio de carga: some quando o filho termina de entrar */
@@ -1088,7 +1092,11 @@ body{
   60%{ transform:scaleX(.85); }
   100%{ transform:scaleX(1); opacity:0; }
 }
-.child__frame{ flex:1; border:0; width:100%; background:var(--bg); }
+.child__frame{ flex:1; border:0; width:100%; background:var(--bg); transition:opacity 420ms var(--ease); }
+/* a página interna só aparece pronta: sem quadro pela metade */
+.child[data-loading="true"] .child__frame{ opacity:0; animation:frame-safe 0s 6s forwards; }
+/* salvaguarda: se o load nunca chegar, a página aparece mesmo assim */
+@keyframes frame-safe{ to{ opacity:1; } }
 
 /* ===========================================================================
    CONCEPT READER — o registro poético. Só a mãe ousa aqui.
