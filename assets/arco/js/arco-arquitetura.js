@@ -746,12 +746,14 @@
       summary.classList.add("is-resting");
       return;
     }
+    /* recolher é mais curto que abrir */
+    const ms = to < from ? 520 : 620;
     summary.classList.remove("is-resting");
     summary.style.height = `${from}px`;
     void summary.offsetHeight;
-    summary.style.transition = "height 620ms cubic-bezier(.22,1,.36,1)";
+    summary.style.transition = `height ${ms}ms cubic-bezier(.22,1,.36,1)`;
     summary.style.height = `${to}px`;
-    await wait(640);
+    await wait(ms + 20);
     if (token !== swapToken) return;
     summary.style.transition = "";
     summary.style.height = "";
@@ -768,10 +770,12 @@
     const motion = animate && !reduced();
     const from = summary.getBoundingClientRect().height;
 
-    if (!first && motion){
-      root.classList.add("is-swapping");
-      await wait(220);
-      if (token !== swapToken) return;
+    /* troca: o painel se apaga; primeira abertura: as histórias se apagam
+       antes de as colunas recolherem, em vez de sumirem num quadro só */
+    if (motion){
+      root.classList.add(first ? "is-folding" : "is-swapping");
+      await wait(first ? 180 : 220);
+      if (token !== swapToken){ root.classList.remove("is-folding"); return; }
     }
 
     selected = sys;
@@ -779,7 +783,7 @@
     setPreview("");
 
     const to = summary.scrollHeight;
-    root.classList.remove("is-swapping");
+    root.classList.remove("is-swapping", "is-folding");
     if (motion) await animateHeight(first ? 0 : from, to, token);
     else animateHeight(0, 0, token);
   }
