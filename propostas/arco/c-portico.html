@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ARCO — Proposta C · Pórtico</title>
+<meta name="theme-color" content="#181818">
+<link rel="stylesheet" href="base.css">
+<style>
+/* C — PÓRTICO. O menu é a verga de um pórtico: a página clara entra no
+   escuro pela MESMA figura, de corda embaixo (linha de nascença) e curva
+   para cima (intradorso). Sobram dois tímpanos escuros nas bordas.
+   Arquitetura: vão. Narrativa: a porta por onde o percurso começa.
+   Flecha: a corda é a linha de mira; o vértice marca o centro do texto. */
+
+.por{position:sticky;top:0;z-index:10;color:var(--ink)}
+.por__bar{
+  background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  height:60px;padding:0 var(--gutter);
+}
+.por__arch{position:absolute;left:0;right:0;top:calc(100% - 1px);background:var(--ink);pointer-events:none}
+.por__arch .arco-fig{color:var(--paper)}
+.por__arch::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--ink-12)}
+.por__end{display:flex;align-items:center;gap:18px}
+
+/* HERO no vão */
+.hero{text-align:center;padding:clamp(120px,13vw,200px) var(--gutter) clamp(96px,10vw,160px)}
+.hero__h{font-size:clamp(60px,10vw,156px);line-height:.88;letter-spacing:-.05em}
+.hero__poem{margin:40px auto 0;font-size:clamp(17px,1.5vw,20px);line-height:1.55;color:var(--ink-70)}
+.hero__poem span{display:block}
+.hero__poem span+span{margin-top:14px}
+.hero__poem em{font-style:normal;color:var(--ink)}
+
+/* ÍNDICE */
+.idx{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.sec{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(24px,4vw,64px);padding:clamp(56px,6vw,96px) 0;border-top:1px solid var(--ink)}
+.sec__label .micro{display:block;margin-bottom:14px}
+.sec__label h2{font-size:clamp(28px,3vw,40px);line-height:1}
+
+.ficha__name{font-size:clamp(40px,5vw,72px);line-height:.92;letter-spacing:-.045em}
+.ficha__tag{margin-top:16px;font:500 11px/1.6 var(--f-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-50)}
+.ficha__bio{margin:28px 0;font-size:18px;line-height:1.6;color:var(--ink-70);max-width:56ch}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl details{border-bottom:1px solid var(--ink-12)}
+.tbl details:first-child{border-top:1px solid var(--ink-12)}
+.tbl summary{display:grid;grid-template-columns:72px 1fr 80px;align-items:baseline;padding:16px 0}
+.tbl__n{font:600 34px/1 var(--f-display);letter-spacing:-.04em}
+.tbl__l{font:500 12px/1.3 var(--f-micro);letter-spacing:.14em;text-transform:uppercase}
+.tbl__t{text-align:right;font:500 11px/1 var(--f-micro);letter-spacing:.16em;color:var(--ink-50)}
+.tbl p{padding:0 80px 20px 72px;color:var(--ink-70)}
+.tbl summary:hover .tbl__l{color:var(--ink-70)}
+
+.movs{display:grid;gap:0}
+.mv{display:grid;grid-template-columns:72px 1fr;padding:28px 0;border-bottom:1px solid var(--ink-12)}
+.mv:first-child{padding-top:0}
+.mv__n{font:500 11px/2.4 var(--f-micro);letter-spacing:.14em;color:var(--ink-50)}
+.mv h3{font-size:clamp(26px,2.6vw,36px);margin-bottom:14px}
+.mv p{color:var(--ink-70);line-height:1.66}
+.mv b{font-weight:600;color:var(--ink)}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.stat__n{font:600 clamp(64px,8vw,120px)/.85 var(--f-display);letter-spacing:-.05em}
+.stat--lead .stat__n{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:12px}
+.stat__l{margin-top:16px;font:500 11px/1.4 var(--f-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-50)}
+.sub{margin-top:clamp(56px,6vw,88px)}
+.sub h3{font-size:24px;margin-bottom:16px}
+.sub p{color:var(--ink-70);font-size:17px}
+.sub p+p{margin-top:10px}
+.sub .chips{margin-top:22px}
+.rules{margin:24px 0 0;padding:0;list-style:none;counter-reset:r}
+.rules li{counter-increment:r;display:grid;grid-template-columns:44px 1fr;padding:12px 0;border-top:1px solid var(--ink-12);color:var(--ink-70)}
+.rules li::before{content:counter(r,decimal-leading-zero);font:500 11px/1.9 var(--f-micro);color:var(--ink-50)}
+
+.final{padding:clamp(96px,10vw,160px) var(--gutter);text-align:center;border-top:1px solid var(--ink)}
+.final p{max-width:22ch;margin:0 auto;font:600 clamp(30px,3.8vw,56px)/1.08 var(--f-display);letter-spacing:-.035em}
+
+.foot{padding:28px var(--gutter) 40px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--ink-12)}
+
+@media (max-width:860px){
+  .por__bar{flex-wrap:wrap;height:auto;padding-top:14px;padding-bottom:12px;row-gap:12px}
+  .por__nav{order:3;width:100%;overflow-x:auto;scrollbar-width:none}
+  .sec{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr;gap:32px}
+  .tbl summary{grid-template-columns:52px 1fr auto}
+  .tbl p{padding:0 0 18px 52px}
+  .mv{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="por">
+  <div class="por__bar">
+    <a class="mark" href="#top" aria-label="ARCO — início">ARCO</a>
+    <nav class="por__nav" aria-label="Navegação principal">
+      <ul class="nav">
+        <li><a href="../../echo.html">ECHO</a></li>
+        <li><a href="../../play.html">PLAY</a></li>
+        <li><span class="nav__sep" aria-hidden="true"></span></li>
+        <li><a href="../../atrio.html">ATRIO</a></li>
+        <li><a href="../../cerne.html">CERNE</a></li>
+        <li><span class="nav__sep" aria-hidden="true"></span></li>
+        <li><a href="#cartografia">Cartografia</a></li>
+        <li><a href="../../data.html">DATA</a></li>
+      </ul>
+    </nav>
+    <ul class="nav por__end">
+      <li><a href="../../en/arco.html" hreflang="en">EN</a></li>
+      <li><a aria-current="page">PT</a></li>
+    </ul>
+  </div>
+  <div class="por__arch" aria-hidden="true"><span class="arco-fig arco-fig--up"></span></div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="h-itin">
+    <h1 class="hero__h" id="h-itin">Itinerário</h1>
+    <p class="hero__poem">
+      <span>Da gestão judicial ao método.<br>Do método à arquitetura de IA.<br>Um movimento exigiu o outro.</span>
+      <span>Narrativa situada na encruzilhada<br>entre Direito, tecnologia, dados e governança.</span>
+      <span><em>Mapa à frente.</em></span>
+    </p>
+  </section>
+
+  <div class="idx">
+    <section class="sec" aria-labelledby="h-ficha">
+      <div class="sec__label"><span class="micro">I</span><h2>Ficha</h2></div>
+      <div>
+        <h3 class="ficha__name" id="h-ficha">Christian da Costa</h3>
+        <p class="ficha__tag">Legal Operations &amp; Legal Engineering · Legal Tech &amp; AI · Legal Data Analytics</p>
+        <p class="ficha__bio">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
+        <ul class="links">
+          <li><a class="is-primary" href="../../data.html">Números</a></li>
+          <li><a href="../../CV-Christian_daCosta.pdf">CV</a></li>
+          <li><a href="https://www.linkedin.com/in/christiandcosta">LinkedIn</a></li>
+          <li><a href="mailto:christiandscosta@gmail.com">E-mail</a></li>
+          <li><a href="tel:+5541991521304">WhatsApp</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="h-cinco">
+      <div class="sec__label"><span class="micro">II</span><h2 id="h-cinco">De cinco a um</h2></div>
+      <div class="tbl">
+        <details class="step"><summary><span class="tbl__n">5</span><span class="tbl__l">Áreas de atuação</span><span class="tbl__t">ARCO</span></summary><p>que organizam mecanismos e suas correspondências construídos para problemas reconhecíveis no mercado privado.</p></details>
+        <details class="step"><summary><span class="tbl__n">4</span><span class="tbl__l">Módulos de IA jurídica</span><span class="tbl__t">ATRIO</span></summary><p>reunidos em uma arquitetura de raciocínio jurídico para apoio decisório, aplicada à rotina de gabinete judicial.</p></details>
+        <details class="step"><summary><span class="tbl__n">3</span><span class="tbl__l">Eixos operacionais</span><span class="tbl__t">ECHO</span></summary><p>estruturados por uma metodologia de operações jurídicas, construída para ambientes de alto volume.</p></details>
+        <details class="step"><summary><span class="tbl__n">2</span><span class="tbl__l">Critérios metodológicos</span><span class="tbl__t">DATA</span></summary><p>para validar dados e indicadores jurimétricos: evidência (Lastro) e rastreabilidade (Rastro).</p></details>
+        <details class="step"><summary><span class="tbl__n">1</span><span class="tbl__l">Profissional</span><span class="tbl__t">&nbsp;</span></summary><p>capaz de medir, organizar e arquitetar sistemas jurídicos na encruzilhada atravessada por Direito, tecnologia e dados.</p></details>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="h-movs">
+      <div class="sec__label"><span class="micro">III</span><h2 id="h-movs">Três movimentos</h2></div>
+      <div class="movs">
+        <article class="mv"><p class="mv__n">01</p><div><h3>Fundação</h3><p>O primeiro movimento ocorreu na Vara de Execuções Fiscais, diante de um acervo de alto volume e forte repetição estrutural. A experiência envolveu triagem, organização de carga, saneamento de backlog e integração digital de <b>36 mil</b> execuções fiscais. Ali se formou a percepção inicial: antes de acelerar a produção jurídica, era preciso tornar o acervo legível.</p></div></article>
+        <article class="mv"><p class="mv__n">02</p><div><h3>Regência</h3><p>O segundo movimento amadureceu na Turma Recursal, com a passagem da gestão de volume para a regência do fluxo decisório. O <b>ECHO</b> nasce desse momento: organização de acervo, segmentação temática, padronização de rotinas, controle de prioridades, gestão de equipe e qualidade de minutas. É o ponto em que a experiência judicial se converte em método.</p></div></article>
+        <article class="mv"><p class="mv__n">03</p><div><h3>Arquitetura</h3><p>O terceiro movimento surge quando o método encontra a inteligência artificial. O <b>ATRIO</b> transforma a lógica construída no <b>ECHO</b> em arquitetura modular, com base documental, raciocínio assistido, validação humana, rastreabilidade e controle de qualidade. A IA não substitui a decisão: passa a operar dentro de um percurso governado.</p></div></article>
+      </div>
+    </section>
+
+    <section class="sec" id="cartografia" aria-labelledby="h-carto">
+      <div class="sec__label"><span class="micro">IV</span><h2 id="h-carto">Cartografia</h2></div>
+      <div>
+        <p class="sub" style="margin-top:0;color:var(--ink-70);font-size:18px;max-width:56ch">A presente seção apresenta o que foi construído na prática, mapeado e traduzido em problemas, mecanismos e linguagem profissional reconhecível.</p>
+        <div class="stats sub">
+          <div class="stat"><div class="stat__n">5</div><p class="stat__l">domínios de construção</p></div>
+          <div class="stat stat--lead"><div class="stat__n">17</div><p class="stat__l">classes de atuação</p></div>
+          <div class="stat"><div class="stat__n">46</div><p class="stat__l">correspondências de mercado indexadas</p></div>
+        </div>
+        <section class="sub" aria-labelledby="h-fronteira">
+          <h3 id="h-fronteira">Fronteira</h3>
+          <p>O que foi construído na prática, traduzido em problemas, mecanismos e linguagem profissional reconhecível.</p>
+          <p>Hipóteses, revisões e decisões abandonadas permanecem registradas. O erro assumido e documentado é o acerto pelo método.</p>
+        </section>
+        <section class="sub" aria-labelledby="h-limite">
+          <h3 id="h-limite">Ainda não demonstrado</h3>
+          <p>Nenhuma entrada toca a face financeira de Legal Ops. É metade do mapa no privado e não há evidência para reivindicá-la. RAG e busca semântica ficam de fora porque preparo não é mecanismo; os demais, porque analogia não é transferência desenhada. Declarar a fronteira custa menos do que deixá-la ser descoberta.</p>
+          <div class="chips"><span>e-billing</span><span>spend management</span><span>outside counsel management</span><span>vendor management</span><span>matter budgeting</span><span>contratos comerciais</span><span>Contract Lifecycle Management</span><span>RAG</span><span>busca semântica</span><span>Master Data Management</span><span>Enterprise Architecture</span><span>Continuous Delivery</span><span>Product Operations</span><span>Workflow Automation</span></div>
+          <ol class="rules">
+            <li>só entra o que possui implementação e evidência;</li>
+            <li>aliases não aumentam a contagem;</li>
+            <li>uma correspondência pode ser demonstrada por mais de uma classe;</li>
+            <li>uma classe pode sustentar várias correspondências;</li>
+            <li>uma nova ferramenta ou tecnologia não cria automaticamente nova classe;</li>
+            <li>o número só muda quando surge unidade com função própria, evidência específica e possibilidade de teste independente.</li>
+          </ol>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <section class="final"><p>As classes constituem a prova. As correspondências constituem a tradução.</p></section>
+</main>
+
+<footer class="foot"><span class="proposal-tag">Proposta C · Pórtico</span><span class="proposal-tag">LAW | OPS | TECH | AI</span></footer>
+</body>
+</html>
