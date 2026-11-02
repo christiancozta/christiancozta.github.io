@@ -1543,3 +1543,48 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   .arx:not([data-sel=""]) .arx-col__head{ min-height:2.9rem; align-items:center; }
   .arx-cell.arx-dim{ grid-column:1 / -1; }
 }
+
+
+/* ========================================================================
+   ARCO — contrato tipográfico do texto corrido (hero, painéis e repertório).
+   Escala editorial única: .83rem / 400 / 1.45.
+   Títulos, números, microetiquetas e negritos semânticos mantêm sua hierarquia.
+   ======================================================================== */
+.arx{
+  --arx-prose-size:.83rem;
+  --arx-prose-leading:1.45;
+}
+.arx :is(
+  .arx-id__summary,
+  .arx-itin__txt,
+  .arx-itin__le,
+  .arx-col__txt,
+  .arx-cell,
+  .arx-lede__story,
+  .arx-mae__t,
+  .arx-res__t,
+  .arx-dim,
+  .arx-ev__t,
+  .arx-band__cols > div,
+  .arx-mat,
+  .arx-tools li,
+  .arx-family__spec,
+  .arx-family__list li,
+  .arx-head__d,
+  .arx-mov p,
+  .arx-pop__dl dd,
+  .arx-pop__hist p,
+  .arx-pop__note
+),
+#repertorio :is(.eq__lead, .lex__e, .fronteira-txt p){
+  font-family:var(--f-body);
+  font-size:var(--arx-prose-size, .83rem);
+  font-weight:400;
+  line-height:var(--arx-prose-leading, 1.45);
+}
+/* Estas notas tinham declarações !important inclusive no layout responsivo. */
+.arx :is(.arx-res__note, .arx-note){
+  font-size:var(--arx-prose-size)!important;
+  font-weight:400;
+  line-height:var(--arx-prose-leading)!important;
+}
