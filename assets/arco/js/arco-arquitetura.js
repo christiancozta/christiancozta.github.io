@@ -1001,6 +1001,21 @@
     });
   });
 
+  /* Correspondências: o filtro por projeto só marca o recorte; o CSS atenua o resto */
+  const lex = document.getElementById("eq-dicionario");
+  const lexCount = document.querySelector(".lexf__n");
+  document.querySelectorAll("[data-lexf]").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const f = chip.dataset.lexf;
+      if (!lex) return;
+      if (f) lex.dataset.lexf = f; else delete lex.dataset.lexf;
+      document.querySelectorAll("[data-lexf]").forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
+      const total = lex.querySelectorAll(".lex__e").length;
+      const hits = f ? lex.querySelectorAll(`.lex__e[data-proj~="${f}"]`).length : total;
+      if (lexCount) lexCount.textContent = f ? `${hits} de ${total} verbetes` : `${total} verbetes`;
+    });
+  });
+
   window.__ARCO_ARCH__ = Object.freeze({
     form:() => form({animate:true}),
     select:sys => select(sys, {animate:true}),

@@ -1159,6 +1159,70 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 .lex__k:focus-visible{ text-decoration-thickness:3px; color:var(--ink, #181818); }
 .lex__k:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
 
+/* Dicionário com matriz: a composição continua a do dicionário (colunas,
+   texto justificado), e cada verbete ganha a marca dos sistemas a que
+   pertence — a leitura da matriz sem sair da ordem alfabética. */
+.arx-lex{ margin-top:1rem; }
+.arx-lex .lex__e{
+  text-align:justify; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:anywhere;
+  transition:opacity 240ms var(--arx-ease, ease);
+}
+/* em coluna estreita, a lista de competências precisa poder quebrar */
+.arx-lex .lex__s{ white-space:normal; }
+.lex__tags{ white-space:nowrap; }
+.lex__tag{
+  display:inline-block; vertical-align:.12em; text-indent:0;
+  margin-right:.25rem; padding:.18em .42em .12em;
+  font-family:var(--f-micro); font-size:8.5px; font-weight:600; font-style:normal;
+  line-height:1.3; letter-spacing:.06em; text-transform:uppercase;
+}
+.lex__tag--data{ background:#0057FF; color:var(--paper, #FCFCFC); }
+.lex__tag--echo{ background:var(--echo-band, #FFB627); color:var(--echo-ink, #000); }
+.lex__tag--atrio{ background:var(--atrio-band, #A63A23); color:var(--atrio-ink, #FCFCFC); }
+.lex__tag--arco{ background:var(--ink, #181818); color:var(--paper, #FCFCFC); }
+
+/* o recorte por projeto: o que fica fora não some, recua */
+.arx-lex[data-lexf="data"] .lex__e:not([data-proj~="data"]),
+.arx-lex[data-lexf="echo"] .lex__e:not([data-proj~="echo"]),
+.arx-lex[data-lexf="atrio"] .lex__e:not([data-proj~="atrio"]),
+.arx-lex[data-lexf="transversal"] .lex__e:not([data-proj~="transversal"]){ opacity:.25; }
+
+.lexf{
+  display:flex; flex-wrap:wrap; align-items:center; gap:.4rem;
+  margin-top:clamp(1.5rem, 3vw, 2.5rem);
+}
+.lexf__b{
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.45em;
+  min-height:1.9rem; padding:0 .7rem;
+  border:1px solid rgba(24,24,24,.18); border-radius:0; background:transparent;
+  font-family:var(--f-micro); font-size:.62rem; font-weight:600;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-78, rgba(24,24,24,.84));
+  transition:background-color 200ms var(--arx-ease, ease), color 200ms var(--arx-ease, ease), border-color 200ms var(--arx-ease, ease);
+}
+.lexf__b:hover{ border-color:var(--ink, #181818); color:var(--ink, #181818); }
+.lexf__b[aria-pressed="true"]{ background:var(--ink, #181818); border-color:var(--ink, #181818); color:var(--paper, #FCFCFC); }
+.lexf__b:focus-visible{ outline:2px solid var(--ink, #181818); outline-offset:2px; }
+.lexf__sw{ width:.55rem; height:.55rem; flex:none; }
+.lexf__b[aria-pressed="true"] .lex__tag--arco{ box-shadow:0 0 0 1px var(--paper, #FCFCFC); }
+.lexf__n{
+  margin-left:auto;
+  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-62, rgba(24,24,24,.7));
+}
+
+@media (min-width:1200px){
+  .arx-lex{ columns:3; }
+}
+@media (max-width:640px){
+  .arx-lex .lex__e{ text-align:left; }
+  .lexf__n{ flex-basis:100%; margin-left:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .arx-lex .lex__e,
+  .lexf__b{ transition:none; }
+}
+
 .arx-front{ margin-top:clamp(2rem, 4vw, 3.5rem); }
 .arx-front .fronteira-limit strong{ font-weight:700; color:inherit; }
 .arx-front .outchips{ margin-top:.8rem; }
