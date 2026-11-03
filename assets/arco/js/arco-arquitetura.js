@@ -37,7 +37,8 @@
      Geometria da curva (viewBox 1000×238). k = 0 é o desenho original;
      k > 0 puxa o extradorso e o intradorso para cima, como a corda puxada.
      ------------------------------------------------------------------ */
-  const PULL = 128;
+  /* expansão contida: o fecho sobe cerca de um terço da sua altura e volta */
+  const PULL = 40;
   const drawArc = k => {
     const e = (-20 - PULL * k).toFixed(2);
     const i = (45 - PULL * .82 * k).toFixed(2);
@@ -350,25 +351,22 @@
 
     /* cadeia de cotas do vão: parciais (três movimentos) e total */
     const y1 = apex - 18;
-    line("v-ext-l", "is-ext", 900, [[0, apex - 14], [0, y1 - (wide ? 30 : 6)]]);
-    line("v-ext-r", "is-ext", 900, [[W, apex - 14], [W, y1 - (wide ? 30 : 6)]]);
+    line("v-ext-l", "is-ext", 900, [[0, apex - 14], [0, y1 - 6]]);
+    line("v-ext-r", "is-ext", 900, [[W, apex - 14], [W, y1 - 6]]);
     if (wide){
       line("v-ext-1", "is-ext", 900, [[W / 3, apex - 4], [W / 3, y1 - 6]]);
       line("v-ext-2", "is-ext", 900, [[W * 2 / 3, apex - 4], [W * 2 / 3, y1 - 6]]);
       line("v-part", "is-dim", 1000, [[0, y1], [W, y1]]);
       [0, W / 3, W * 2 / 3, W].forEach((x, i) => tick(`v-pt${i}`, "is-dim", 1200, x, y1));
       [0, 1, 2].forEach(i => label(`v-pn${i}`, "is-small", 1500 + i * 90, W * (i * 2 + 1) / 6, y1 - 6, fmt(W / 3), {anchor:"middle"}));
-      const y2 = y1 - 24;
-      line("v-tot", "is-dim", 1100, [[0, y2], [W, y2]]);
-      tick("v-tt0", "is-dim", 1250, 0, y2);
-      tick("v-tt1", "is-dim", 1250, W, y2);
-      label("v-tn", "", 1750, W / 2, y2 - 6, fmt(W), {anchor:"middle"});
+      /* sem a cota total no topo: as parciais bastam */
+      hide(["v-tot","v-tt0","v-tt1","v-tn"]);
     } else {
       hide(["v-ext-1","v-ext-2","v-part","v-pt0","v-pt1","v-pt2","v-pt3","v-pn0","v-pn1","v-pn2","v-tot","v-tt0","v-tt1"]);
       line("v-tot-m", "is-dim", 1000, [[0, y1], [W, y1]]);
       tick("v-tm0", "is-dim", 1200, 0, y1);
       tick("v-tm1", "is-dim", 1200, W, y1);
-      label("v-tn-m", "is-small", 1500, W / 2, y1 - 6, fmt(W), {anchor:"middle"});
+      hide(["v-tn-m"]);
     }
     if (wide) hide(["v-tot-m","v-tm0","v-tm1","v-tn-m"]);
 
@@ -489,9 +487,9 @@
 
   let forming = false;
   let formToken = 0;
-  /* sem tensão: a corda puxada e solta lia como quique; a estrutura se
-     forma direto, sem o arco subir e voltar */
-  const form = async ({animate = true, tension = false} = {}) => {
+  /* a formação expande o arco e o devolve à altura em que repousa:
+     sobe firme, volta sem passar do ponto, e só então o desenho técnico nasce */
+  const form = async ({animate = true, tension = true} = {}) => {
     if (state !== "rest" || forming) return;
     /* a formação só acontece sob o olho: nunca com o ARCO fora de vista */
     if (homeView && homeView.dataset.active !== "true") return;
@@ -509,10 +507,10 @@
 
     if (tension){
       setState("tension");
-      await tween(820, t => drawArc(easeInOutSine(t)));
+      await tween(640, t => drawArc(easeInOutSine(t)));
       /* devolvida a corda, a estrutura começa a se formar */
       setState("forming");
-      await tween(820, t => drawArc(release(t)));
+      await tween(720, t => drawArc(release(t)));
       drawArc(0);
       await wait(1100);
     } else {
@@ -796,9 +794,11 @@
       if (reduced()){
         form({animate:false});
       } else {
-        form({tension:false});
+        form();
         const token = formToken;
-        await wait(700);
+        /* espera a expansão terminar antes de abrir o sistema */
+        for (let i = 0; state === "tension" && i < 40; i++) await wait(50);
+        await wait(500);
         /* recolhida no meio do caminho: a seleção não chega a acontecer */
         if (token !== formToken || state === "rest") return;
       }

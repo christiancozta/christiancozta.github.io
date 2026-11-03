@@ -59,7 +59,8 @@
      curva é o mesmo desenho em qualquer largura. --arx-span é medido em
      JS; o calc é só o ponto de partida. */
   --arx-span:calc(100vw - var(--sbw, 0px) - var(--pad) * 2);
-  --arx-crown-rest:calc(var(--arx-span) * .12);
+  /* o repouso já tem a altura do desenho: a formação só expande e devolve */
+  --arx-crown-rest:var(--arx-crown-formed);
   --arx-crown-formed:calc(var(--arx-span) * .185);
   --arx-crown-h:var(--arx-crown-rest);
   --arx-shift:6px;
@@ -241,12 +242,10 @@
   position:relative;
   isolation:isolate;
   height:var(--arx-crown-h);
-  margin-top:0;
-  transition:margin-top 900ms var(--arx-ease);
+  /* respiro para as cotas parciais acima do fecho, só onde o fecho é baixo;
+     igual em todos os estados, para nada saltar na formação */
+  margin-top:max(0px, calc(36px - var(--arx-span) * .0346));
 }
-/* respiro para a cota do vão, que nasce acima da caixa */
-.arx[data-state="forming"] .arx-crown,
-.arx[data-state="formed"] .arx-crown{ margin-top:clamp(.75rem, 2vw, 1.5rem); }
 
 .arx-arc{
   position:absolute; inset:0; z-index:0;
@@ -266,14 +265,11 @@
   /* a cor do campo também viaja: DATA → ECHO → ATRIO sem corte seco */
   transition:fill-opacity 480ms var(--arx-ease), fill 480ms var(--arx-ease);
 }
-/* a base nasce do centro para as nascenças */
+/* a base é parte do arco desde o repouso */
 .arx-arc__base{
   transform-box:fill-box; transform-origin:50% 50%;
-  transform:scaleX(0);
-  transition:transform 700ms var(--arx-ease);
+  transform:scaleX(1);
 }
-.arx[data-state="forming"] .arx-arc__base,
-.arx[data-state="formed"] .arx-arc__base{ transform:scaleX(1); }
 
 /* ECHO selecionado: o campo da coroa se inverte para o amarelo permanecer visível */
 .arx[data-crown="echo"] .arx-arc__field{ fill-opacity:1; }
@@ -1693,7 +1689,8 @@ html:not(.arx-js) .arx-sum{ display:grid; }
    Em telas largas o texto acompanha o vão em vez de ficar preso à esquerda. */
 @media (min-width:901px){
   .arx-id__row{
-    --arx-hero-measure:37rem;
+    /* 32rem: ~63 caracteres por linha; mesma altura de hero que a 37rem */
+    --arx-hero-measure:32rem;
     grid-template-columns:repeat(2, minmax(0, 1fr));
   }
   .arx-id__summary,
@@ -1765,6 +1762,8 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 
 /* o léxico em minúsculas; o projeto fica só no sublinhado da competência */
 #repertorio .arx-lex{ text-transform:lowercase; }
+/* siglas guardam a caixa alta */
+#repertorio .arx-lex .lex__sg{ text-transform:none; }
 /* a letra abre a parte: corpo de título, tinta cheia */
 #repertorio .lex__l{
   margin:2.1rem 0 .75rem;
