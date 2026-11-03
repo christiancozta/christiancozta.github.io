@@ -38,7 +38,11 @@
   /* linhas: cinza-escuro finíssimo que não se confunde com o preto */
   --arx-line:#6A6A6A;
   --arx-line-soft:#CBCBCB;
+  /* intradorso: mais claro que o extradorso, mais escuro que o grafismo (#C2C2C2) */
+  --arx-line-mid:#9C9C9C;
   --arx-lw:1px;
+  /* as linhas do arco: traço finíssimo em qualquer estado, aberto ou fechado */
+  --arx-arc-lw:.6px;
 
   --arx-text:rgba(24,24,24,.84);
   --arx-soft:rgba(24,24,24,.62);
@@ -250,7 +254,7 @@
   overflow:visible; pointer-events:none;
 }
 .arx-arc path,
-.arx-arc line{ fill:none; stroke-width:var(--arx-lw); }
+.arx-arc line{ fill:none; stroke-width:var(--arx-arc-lw); }
 .arx-arc__extra,
 .arx-arc__base{ stroke:var(--arx-line); }
 /* o intradorso é a linha clara que acompanha a curva a todo momento */
@@ -315,9 +319,9 @@
 .arx[data-sel="data"] .arx-name [data-sys="data"],
 .arx[data-sel="echo"] .arx-name [data-sys="echo"],
 .arx[data-sel="atrio"] .arx-name [data-sys="atrio"]{ opacity:1; transform:translate(-50%, 0); }
-.arx[data-state="rest"][data-preview="data"] .arx-name [data-sys="data"],
-.arx[data-state="rest"][data-preview="atrio"] .arx-name [data-sys="atrio"]{ opacity:.26; transform:translate(-50%, 0); }
-.arx[data-state="rest"][data-preview="echo"] .arx-name [data-sys="echo"]{ opacity:.55; transform:translate(-50%, 0); }
+.arx[data-sel=""][data-preview="data"] .arx-name [data-sys="data"],
+.arx[data-sel=""][data-preview="atrio"] .arx-name [data-sys="atrio"]{ opacity:.26; transform:translate(-50%, 0); }
+.arx[data-sel=""][data-preview="echo"] .arx-name [data-sys="echo"]{ opacity:.55; transform:translate(-50%, 0); }
 
 
 /* ===================== 4 — GRAFISMO TÉCNICO =====================
@@ -1417,7 +1421,7 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* LINHAS — um só peso em todo o arco: 1px na cor de linha. */
 .arx,
 .arx[data-sel]{ --arx-hair:var(--arx-line); --arx-on-hair:var(--arx-line); }
-.arx .arx-arc__intra{ stroke:var(--arx-line); }
+.arx .arx-arc__intra{ stroke:var(--arx-line-mid); }
 .arx-staff path{ stroke:var(--arx-line); }
 .arx-mat--play{ box-shadow:inset 0 0 0 var(--arx-lw) var(--arx-line); }
 .arx-play{ border:var(--arx-lw) solid var(--arx-line); border-top:4px solid var(--arx-echo); }
@@ -1465,8 +1469,9 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 .arx:not([data-sel=""]) .arx-col.is-selected{
   --c-light:color-mix(in srgb, var(--c) 22%, #FCFCFC);
   background-color:var(--c-light);
-  /* a linha de base entre coroa e campo permanece */
-  box-shadow:none;
+  /* a linha de base entre coroa e campo permanece: o campo fica por cima
+     da linha do SVG, então a desenha ele mesmo */
+  box-shadow:inset 0 var(--arx-lw) 0 color-mix(in srgb, var(--arx-line) 60%, transparent);
   --arx-on:var(--arx-ink); --arx-on-soft:var(--arx-soft);
 }
 /* a única junta sem divisória: campo e texto do mesmo projeto, quando o
