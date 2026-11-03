@@ -234,13 +234,6 @@
 
     frontierText.replaceChildren();
 
-    const dataBoundary = document.createElement('p');
-    dataBoundary.className = 'fronteira-data';
-    dataBoundary.innerHTML = 'I extracted metrics and calculated indicators from raw lists exported by the system. During my professional experience, however, systematic measurement was limited to the team productivity indicator. The remaining indicators were calculated later, as a retrospective exercise to develop this capability. For that reason, this exercise does not count jurimetric mechanisms attributed to <button class="b-data" type="button">DATA</button>.';
-    frontierText.appendChild(dataBoundary);
-    dataBoundary.querySelector('.b-data')?.addEventListener('click',() =>
-      document.querySelector('.rail__link--data[data-view="data"]')?.click());
-
     const limitCopy = document.createElement('p');
     limitCopy.className = 'fronteira-limit';
     limitCopy.innerHTML = '<strong>Not yet demonstrated:</strong> No entry covers the financial side of Legal Ops. There is no evidence to support that claim. RAG and semantic search are excluded because preparation alone is not a mechanism; the others because analogy is not the same as a deliberately designed transfer. Declaring the boundary costs less than letting someone else discover it.';
