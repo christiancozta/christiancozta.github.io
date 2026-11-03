@@ -13,12 +13,10 @@ for (const e of entries) {
   if (e.includes("lex__all")) ["data", "echo", "atrio"].forEach(p => projs.add(p));
   const transversal = e.includes("lex__c") || e.includes("lex__all");
 
+  // o transversal não tem tag: vive no "princípio transversal" do verbete e no data-proj (filtro)
   const tags = [...e.matchAll(/lex__tag--(\w+)" role="img" aria-label="([^"]+)">(\w+)</g)];
-  const tagged = tags.map(t => t[1]).filter(p => p !== "arco");
-  assert.deepEqual(new Set(tagged), projs, `${id}: tags ≠ competências`);
-  assert.equal(tags.some(t => t[1] === "arco"), transversal, `${id}: tag ARCO`);
-  for (const [, p, label, text] of tags)
-    assert.equal(label, p === "arco" ? "Transversal: ARCO" : `Projeto ${text}`, `${id}: aria-label`);
+  assert.deepEqual(new Set(tags.map(t => t[1])), projs, `${id}: tags ≠ competências`);
+  for (const [, , label, text] of tags) assert.equal(label, `Projeto ${text}`, `${id}: aria-label`);
 
   const tokens = e.match(/data-proj="([^"]*)"/)[1].split(" ").filter(Boolean);
   assert.deepEqual(new Set(tokens), new Set([...projs, ...(transversal ? ["transversal"] : [])]), `${id}: data-proj`);
