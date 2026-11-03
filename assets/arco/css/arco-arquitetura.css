@@ -1175,10 +1175,7 @@ html:not(.arx-js) .arx-sum{ display:grid; }
    texto justificado), e cada verbete ganha a marca dos sistemas a que
    pertence — a leitura da matriz sem sair da ordem alfabética. */
 .arx-lex{ margin-top:1rem; }
-.arx-lex .lex__e{
-  text-align:justify; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:anywhere;
-  transition:opacity 240ms var(--arx-ease, ease);
-}
+.arx-lex .lex__e{ text-align:justify; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:anywhere; }
 /* em coluna estreita, a lista de competências precisa poder quebrar */
 .arx-lex .lex__s{ white-space:normal; }
 .lex__tags{ white-space:nowrap; }
@@ -1191,22 +1188,33 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 .lex__tag--data{ background:#0057FF; color:var(--paper, #FCFCFC); }
 .lex__tag--echo{ background:var(--echo-band, #FFB627); color:var(--echo-ink, #000); }
 .lex__tag--atrio{ background:var(--atrio-band, #A63A23); color:var(--atrio-ink, #FCFCFC); }
-.lex__tag--arco{ background:var(--ink, #181818); color:var(--paper, #FCFCFC); }
 
-/* o recorte por projeto: o que fica fora não some, recua */
-.arx-lex[data-lexf="data"] .lex__e:not([data-proj~="data"]),
-.arx-lex[data-lexf="echo"] .lex__e:not([data-proj~="echo"]),
-.arx-lex[data-lexf="atrio"] .lex__e:not([data-proj~="atrio"]),
-.arx-lex[data-lexf="transversal"] .lex__e:not([data-proj~="transversal"]){ opacity:.25; }
+/* o recorte: o que não pertence sai da coluna (e do leitor de tela) */
+.arx-lex [hidden],
+.lexf[hidden],
+.lexf__vazio[hidden]{ display:none !important; }
 
 .lexf{
-  display:flex; flex-wrap:wrap; align-items:center; gap:.4rem;
+  display:flex; flex-wrap:wrap; align-items:center; gap:.6rem 1.2rem;
   margin-top:clamp(1.5rem, 3vw, 2.5rem);
 }
+.lexf__q{ flex:1 1 15rem; max-width:24rem; }
+.lexf__i{
+  appearance:none; -webkit-appearance:none; width:100%;
+  min-height:2.1rem; padding:0 .1rem;
+  border:0; border-bottom:1px solid rgba(24,24,24,.32); border-radius:0; background:transparent;
+  font-family:var(--f-body); font-size:.86rem; color:var(--ink, #181818);
+  caret-color:var(--ink, #181818);
+  transition:border-color 200ms var(--arx-ease, ease);
+}
+.lexf__i::placeholder{ color:var(--ink-62, rgba(24,24,24,.7)); }
+.lexf__i:hover{ border-bottom-color:var(--ink, #181818); }
+.lexf__i:focus{ outline:none; border-bottom-color:var(--ink, #181818); box-shadow:0 1px 0 var(--ink, #181818); }
+.lexf__g{ display:flex; flex-wrap:wrap; gap:.4rem; margin-left:auto; }
 .lexf__b{
   appearance:none; -webkit-appearance:none; cursor:pointer;
   display:inline-flex; align-items:center; gap:.45em;
-  min-height:1.9rem; padding:0 .7rem;
+  min-height:2.1rem; padding:0 .7rem;
   border:1px solid rgba(24,24,24,.18); border-radius:0; background:transparent;
   font-family:var(--f-micro); font-size:.62rem; font-weight:600;
   letter-spacing:.08em; text-transform:uppercase; color:var(--ink-78, rgba(24,24,24,.84));
@@ -1215,24 +1223,52 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 .lexf__b:hover{ border-color:var(--ink, #181818); color:var(--ink, #181818); }
 .lexf__b[aria-pressed="true"]{ background:var(--ink, #181818); border-color:var(--ink, #181818); color:var(--paper, #FCFCFC); }
 .lexf__b:focus-visible{ outline:2px solid var(--ink, #181818); outline-offset:2px; }
+.lexf__c{ font-weight:400; opacity:.72; font-variant-numeric:tabular-nums; }
 .lexf__sw{ width:.55rem; height:.55rem; flex:none; }
-.lexf__b[aria-pressed="true"] .lex__tag--arco{ box-shadow:0 0 0 1px var(--paper, #FCFCFC); }
-.lexf__n{
-  margin-left:auto;
-  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.08em; text-transform:uppercase;
-  color:var(--ink-62, rgba(24,24,24,.7));
+.lexf__sw--transversal{ background:var(--ink, #181818); }
+.lexf__b[aria-pressed="true"] .lexf__sw--transversal{ box-shadow:0 0 0 1px var(--paper, #FCFCFC); }
+.lexf__vazio{
+  margin:1.4rem 0 0; font-family:var(--f-body); font-size:.86rem; color:var(--ink-78, rgba(24,24,24,.84));
 }
+.lexf__limpa{
+  appearance:none; border:0; background:none; padding:0; cursor:pointer;
+  font:inherit; color:var(--ink, #181818);
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.2em;
+}
+.lexf__limpa:focus-visible{ outline:2px solid var(--ink, #181818); outline-offset:2px; }
 
 @media (min-width:1200px){
   .arx-lex{ columns:3; }
 }
+/* celular: o dicionário vira índice — termo, tradução e projetos; o resto abre ao toque */
+@media (max-width:820px){
+  .lexf__q{ flex-basis:100%; max-width:none; }
+  .lexf__g{ margin-left:0; }
+  .lexf__i,
+  .lexf__b{ min-height:44px; }
+  .arx-lex .lex__e[data-open]{
+    position:relative; margin:0; min-height:44px; box-sizing:border-box;
+    padding:.66rem 1.8rem .66rem 12px;
+    border-top:1px solid rgba(24,24,24,.1); cursor:pointer;
+  }
+  .arx-lex .lex__l + .lex__e[data-open]{ border-top:0; }
+  .arx-lex .lex__e[data-open="false"] :is(.lex__c, .lex__s, .lex__v){ display:none; }
+  .arx-lex .lex__e[data-open]::after{
+    content:""; position:absolute; right:.45rem; top:1.02rem;
+    width:.42rem; height:.42rem;
+    border-right:1.5px solid var(--ink-62, rgba(24,24,24,.7)); border-bottom:1.5px solid var(--ink-62, rgba(24,24,24,.7));
+    transform:rotate(45deg); transition:transform 220ms var(--arx-ease, ease);
+  }
+  .arx-lex .lex__e[data-open="true"]::after{ transform:translateY(.2rem) rotate(-135deg); }
+  .arx-lex .lex__t[role="button"]:focus-visible{ outline:2px solid var(--ink, #181818); outline-offset:3px; }
+}
 @media (max-width:640px){
   .arx-lex .lex__e{ text-align:left; }
-  .lexf__n{ flex-basis:100%; margin-left:0; }
 }
 @media (prefers-reduced-motion:reduce){
-  .arx-lex .lex__e,
-  .lexf__b{ transition:none; }
+  .lexf__b,
+  .lexf__i,
+  .arx-lex .lex__e[data-open]::after{ transition:none; }
 }
 
 .arx-front{ margin-top:clamp(2rem, 4vw, 3.5rem); }

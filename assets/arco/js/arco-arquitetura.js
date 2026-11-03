@@ -1001,20 +1001,93 @@
     });
   });
 
-  /* Correspondências: o filtro por projeto só marca o recorte; o CSS atenua o resto */
+  /* Correspondências: busca e projeto recortam o dicionário; letra sem verbete sai junto.
+     No celular, o verbete fecha em termo + tradução + projetos e abre ao toque. */
   const lex = document.getElementById("eq-dicionario");
-  const lexCount = document.querySelector(".lexf__n");
-  document.querySelectorAll("[data-lexf]").forEach(chip => {
-    chip.addEventListener("click", () => {
-      const f = chip.dataset.lexf;
-      if (!lex) return;
-      if (f) lex.dataset.lexf = f; else delete lex.dataset.lexf;
-      document.querySelectorAll("[data-lexf]").forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
-      const total = lex.querySelectorAll(".lex__e").length;
-      const hits = f ? lex.querySelectorAll(`.lex__e[data-proj~="${f}"]`).length : total;
-      if (lexCount) lexCount.textContent = f ? `${hits} de ${total} verbetes` : `${total} verbetes`;
+  const lexBar = document.querySelector(".lexf");
+  if (lex && lexBar){
+    const entries = [...lex.querySelectorAll(".lex__e")];
+    const letters = [...lex.querySelectorAll(".lex__l")];
+    const chips = [...lexBar.querySelectorAll("[data-lexf]")];
+    const input = lexBar.querySelector(".lexf__i");
+    const status = document.getElementById("lexf-status");
+    const empty = document.querySelector(".lexf__vazio");
+    const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    const text = new Map(entries.map(e => [e, fold(e.textContent)]));
+    const narrow = window.matchMedia("(max-width:820px)");
+    let proj = "";
+    const setOpen = (e, open) => {
+      e.dataset.open = String(open);
+      e.querySelector(".lex__t").setAttribute("aria-expanded", String(open));
+    };
+
+    const inProj = (e, p) => !p || e.dataset.proj.split(" ").includes(p);
+    const apply = () => {
+      const q = fold(input.value.trim());
+      const hit = e => text.get(e).includes(q);
+      let shown = 0;
+      entries.forEach(e => {
+        const on = inProj(e, proj) && hit(e);
+        e.hidden = !on;
+        if (on) shown++;
+      });
+      letters.forEach(l => {
+        let n = l.nextElementSibling, any = false;
+        while (n && !n.classList.contains("lex__l")){ if (n.matches(".lex__e") && !n.hidden) any = true; n = n.nextElementSibling; }
+        l.hidden = !any;
+      });
+      chips.forEach(c => { c.querySelector(".lexf__c").textContent = entries.filter(e => inProj(e, c.dataset.lexf) && hit(e)).length; });
+      empty.hidden = shown > 0;
+      status.textContent = shown ? `${shown} de ${entries.length} verbetes` : "Nenhum verbete neste recorte";
+    };
+
+    chips.forEach(chip => chip.addEventListener("click", () => {
+      proj = chip.dataset.lexf;
+      chips.forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
+      apply();
+    }));
+    /* buscando, o motivo do acerto pode estar na parte recolhida: abre; limpando, fecha */
+    input.addEventListener("input", () => {
+      const q = Boolean(input.value.trim());
+      entries.forEach(e => { if (e.dataset.open) setOpen(e, q); });
+      apply();
     });
-  });
+    empty.querySelector(".lexf__limpa").addEventListener("click", () => {
+      input.value = "";
+      chips[0].click();
+      input.focus();
+    });
+
+    /* recolhimento: só no celular; no desktop o termo volta a ser texto */
+    const toggle = e => setOpen(e, e.dataset.open !== "true");
+    const setNarrow = () => entries.forEach(e => {
+      const t = e.querySelector(".lex__t");
+      if (narrow.matches){
+        e.dataset.open = "false";
+        t.setAttribute("role", "button");
+        t.setAttribute("tabindex", "0");
+        t.setAttribute("aria-expanded", "false");
+      } else {
+        delete e.dataset.open;
+        ["role", "tabindex", "aria-expanded"].forEach(a => t.removeAttribute(a));
+      }
+    });
+    lex.addEventListener("click", ev => {
+      const e = ev.target.closest(".lex__e[data-open]");
+      if (!e || ev.target.closest(".lex__k")) return;
+      toggle(e);
+    });
+    lex.addEventListener("keydown", ev => {
+      const t = ev.target.closest(".lex__t[role='button']");
+      if (!t || (ev.key !== "Enter" && ev.key !== " ")) return;
+      ev.preventDefault();
+      toggle(t.closest(".lex__e"));
+    });
+    narrow.addEventListener("change", setNarrow);
+    setNarrow();
+    apply();
+    lexBar.hidden = false;
+  }
 
   window.__ARCO_ARCH__ = Object.freeze({
     form:() => form({animate:true}),

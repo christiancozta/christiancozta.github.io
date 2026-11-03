@@ -94,8 +94,8 @@
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20261103-plus">
 <script src="assets/arco/js/arco-shell.js?v=20261031-motion" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20260929-atrio-architecture-anchor" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261103-plus600">
-<script src="assets/arco/js/arco-arquitetura.js?v=20261101-lex" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-arquitetura.css?v=20261103-recorte-plus600">
+<script src="assets/arco/js/arco-arquitetura.js?v=20261103-recorte" defer></script>
 </head>
 <body>
 
@@ -712,15 +712,19 @@
               A presente seção apresenta o que foi construído na prática, traduzido em linguagem profissional reconhecível.
             </p>
           </div>
-          <!-- Filtro por projeto: atenua os verbetes fora do recorte, sem tirar ninguém da ordem alfabética -->
-          <div class="lexf" role="group" aria-label="Filtrar correspondências por projeto" aria-controls="eq-dicionario" data-reveal="" style="--i:2">
-            <button class="lexf__b" type="button" data-lexf="" aria-pressed="true">Todos</button>
-            <button class="lexf__b" type="button" data-lexf="data" aria-pressed="false"><i class="lexf__sw lex__tag--data" aria-hidden="true"></i>DATA</button>
-            <button class="lexf__b" type="button" data-lexf="echo" aria-pressed="false"><i class="lexf__sw lex__tag--echo" aria-hidden="true"></i>ECHO</button>
-            <button class="lexf__b" type="button" data-lexf="atrio" aria-pressed="false"><i class="lexf__sw lex__tag--atrio" aria-hidden="true"></i>ATRIO</button>
-            <button class="lexf__b" type="button" data-lexf="transversal" aria-pressed="false"><i class="lexf__sw lex__tag--arco" aria-hidden="true"></i>Transversal</button>
-            <span class="lexf__n" aria-live="polite">46 verbetes</span>
+          <!-- Busca e filtro por projeto: recortam o dicionário; a ordem alfabética permanece -->
+          <div class="lexf" data-reveal="" style="--i:2" hidden>
+            <label class="lexf__q"><span class="arx-sr">Buscar verbete</span><input class="lexf__i" type="search" placeholder="Buscar termo, tradução ou competência" autocomplete="off" spellcheck="false" aria-controls="eq-dicionario"></label>
+            <div class="lexf__g" role="group" aria-label="Filtrar por projeto" aria-controls="eq-dicionario">
+              <button class="lexf__b" type="button" data-lexf="" aria-pressed="true">Todos <span class="lexf__c"></span></button>
+              <button class="lexf__b" type="button" data-lexf="data" aria-pressed="false"><i class="lexf__sw lex__tag--data" aria-hidden="true"></i>DATA <span class="lexf__c"></span></button>
+              <button class="lexf__b" type="button" data-lexf="echo" aria-pressed="false"><i class="lexf__sw lex__tag--echo" aria-hidden="true"></i>ECHO <span class="lexf__c"></span></button>
+              <button class="lexf__b" type="button" data-lexf="atrio" aria-pressed="false"><i class="lexf__sw lex__tag--atrio" aria-hidden="true"></i>ATRIO <span class="lexf__c"></span></button>
+              <button class="lexf__b" type="button" data-lexf="transversal" aria-pressed="false"><i class="lexf__sw lexf__sw--transversal" aria-hidden="true"></i>Transversal <span class="lexf__c"></span></button>
+            </div>
+            <p class="arx-sr" id="lexf-status" aria-live="polite"></p>
           </div>
+          <p class="lexf__vazio" hidden>Nenhum verbete neste recorte. <button class="lexf__limpa" type="button">Limpar busca e filtro</button></p>
           <div class="lex arx-lex" id="eq-dicionario" data-reveal="" style="--i:2">
 
                 <h4 class="lex__l">A</h4>
@@ -819,17 +823,17 @@
 
                 <h4 class="lex__l">L</h4>
                 <p class="lex__e" data-proj="echo atrio transversal" id="des-01" tabindex="-1">
-                  <b class="lex__t">Legal Design</b> [<i class="lex__p">Design jurídico</i>] <span class="lex__tags"><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Legal Design</b> [<i class="lex__p">Design jurídico</i>] <span class="lex__tags"><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo"><b>03</b> Governança de conteúdo e linguagem controlada</span>; <span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo"><b>04</b> Mapeamento e desenho de processos</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>10</b> Geração textual controlada</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Information Design; Design da informação.</span>
                 </p>
                 <p class="lex__e" data-proj="atrio transversal" id="prd-02" tabindex="-1">
-                  <b class="lex__t">Legal Engineering</b> [<i class="lex__p">Engenharia jurídica</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Legal Engineering</b> [<i class="lex__p">Engenharia jurídica</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>06</b> Orquestração decisória</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>07</b> Avaliação adversarial</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>10</b> Geração textual controlada</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>08</b> Privacy by Design</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>09</b> Traceability</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Legal Tech; Legal Solutions Engineering.</span>
                 </p>
                 <p class="lex__e" data-proj="data echo atrio transversal" id="prd-03" tabindex="-1">
-                  <b class="lex__t">Legal Operations</b> [<i class="lex__p">Operações jurídicas</i>] <span class="lex__tags"><span class="lex__tag lex__tag--data" role="img" aria-label="Projeto DATA">DATA</span><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Legal Operations</b> [<i class="lex__p">Operações jurídicas</i>] <span class="lex__tags"><span class="lex__tag lex__tag--data" role="img" aria-label="Projeto DATA">DATA</span><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <span class="lex__s lex__s--comp"><b class="lex__all">01–10</b> todas as competências.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Legal Ops; Legal Service Delivery.</span>
                 </p>
                 <p class="lex__e" data-proj="atrio" id="iax-07" tabindex="-1">
@@ -843,7 +847,7 @@
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>05</b> Engenharia de dados e corpus</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Data Catalog; Data Modeling; Catálogo de dados; Modelagem de dados.</span>
                 </p>
                 <p class="lex__e" data-proj="atrio transversal" id="arq-01" tabindex="-1">
-                  <b class="lex__t">Modular Architecture</b> [<i class="lex__p">Arquitetura modular</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Modular Architecture</b> [<i class="lex__p">Arquitetura modular</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>06</b> Orquestração decisória</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Systems Architecture; Solution Architecture; Separation of concerns; Arquitetura de sistemas.</span>
                 </p>
@@ -880,7 +884,7 @@
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo"><b>04</b> Mapeamento e desenho de processos</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Uniformização; Consistency.</span>
                 </p>
                 <p class="lex__e" data-proj="echo atrio transversal" id="prd-04" tabindex="-1">
-                  <b class="lex__t">Product Thinking</b> [<i class="lex__p">Pensamento de produto</i>] <span class="lex__tags"><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Product Thinking</b> [<i class="lex__p">Pensamento de produto</i>] <span class="lex__tags"><span class="lex__tag lex__tag--echo" role="img" aria-label="Projeto ECHO">ECHO</span><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo"><b>04</b> Mapeamento e desenho de processos</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>06</b> Orquestração decisória</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Business Analysis; Análise de negócios.</span>
                 </p>
@@ -897,7 +901,7 @@
 
                 <h4 class="lex__l">R</h4>
                 <p class="lex__e" data-proj="atrio transversal" id="arq-05" tabindex="-1">
-                  <b class="lex__t">Requirements Management</b> [<i class="lex__p">Gestão de requisitos</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Requirements Management</b> [<i class="lex__p">Gestão de requisitos</i>] <span class="lex__tags"><span class="lex__tag lex__tag--atrio" role="img" aria-label="Projeto ATRIO">ATRIO</span></span>
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>06</b> Orquestração decisória</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Product Requirements; Requisitos funcionais; Escopo.</span>
                 </p>
@@ -924,7 +928,7 @@
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo"><b>03</b> Governança de conteúdo e linguagem controlada</span>; <span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio"><b>10</b> Geração textual controlada</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Controlled Vocabulary; Controlled Language; Editorial Governance; Manual de estilo.</span>
                 </p>
                 <p class="lex__e" data-proj="transversal" id="arq-06" tabindex="-1">
-                  <b class="lex__t">Systems Thinking</b> [<i class="lex__p">Pensamento sistêmico</i>] <span class="lex__tags"><span class="lex__tag lex__tag--arco" role="img" aria-label="Transversal: ARCO">ARCO</span></span>
+                  <b class="lex__t">Systems Thinking</b> [<i class="lex__p">Pensamento sistêmico</i>]
                   <i class="lex__c">princípio transversal</i>
                   <span class="lex__s lex__s--comp">.</span> <span class="lex__v"><abbr class="lex__ab" title="também">tb.</abbr> Interdependências; Visão sistêmica.</span>
                 </p>
