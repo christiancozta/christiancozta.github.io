@@ -1,7 +1,7 @@
 /* Caligrafia de prancheta (cotas) e tipografias de marca, as mesmas das
    páginas de cada sistema: DATA em Anybody, ECHO em Zalando Sans Expanded,
    ATRIO em Science Gothic. */
-@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Anybody:wdth,wght@125,900&family=Science+Gothic:wght@500..800&family=Zalando+Sans+Expanded:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Anybody:ital,wdth,wght@0,125,900;1,125,900&family=Science+Gothic:wght@500..800&family=Zalando+Sans+Expanded:wght@700&display=swap");
 
 /* ==========================================================================
    ARCO — página inicial: do arco tensionado ao arco arquitetônico
@@ -299,7 +299,7 @@
 .arx-name [data-sys="data"]{
   color:var(--arx-data);
   font-family:"Anybody", var(--f-display);
-  font-weight:900; font-stretch:125%; letter-spacing:-.02em;
+  font-weight:900; font-stretch:125%; font-style:italic; letter-spacing:-.02em;
 }
 .arx-name [data-sys="echo"]{
   color:var(--arx-echo);
@@ -470,6 +470,19 @@
   background:none; border:0; border-radius:0; cursor:pointer;
   touch-action:manipulation;
 }
+/* o sinal de abertura: o mesmo nos três capitéis, sem hierarquia.
+   Gira em × quando o campo está aberto (aria-pressed): clicar de novo recolhe. */
+.arx-col__head{ position:relative; }
+.arx-col__plus{
+  position:absolute; top:-.08em; right:0;
+  font-family:"Anybody", var(--f-display);
+  font-weight:900; font-stretch:125%; font-style:normal;
+  font-size:clamp(1.9rem, 3vw, 2.7rem); line-height:.7;
+  color:var(--arx-on);
+  transition:transform 420ms var(--arx-spring), color 420ms var(--arx-ease);
+  pointer-events:none;
+}
+.arx-col__head[aria-pressed="true"] .arx-col__plus{ transform:rotate(45deg); }
 .arx-col__head:focus{ outline:none; }
 .arx-col__head:focus-visible .arx-col__mov{ outline:2px solid currentColor; outline-offset:4px; }
 .arx-col__n{
@@ -1588,3 +1601,7 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   font-weight:400;
   line-height:var(--arx-prose-leading)!important;
 }
+
+@media (prefers-reduced-motion:reduce){ .arx-col__plus{ transition:none; } }
+/* celular, com um campo aberto: os capitéis viram linhas; o sinal acompanha o centro */
+@media (max-width:640px){ .arx:not([data-sel=""]) .arx-col__plus{ top:50%; translate:0 -50%; } }
