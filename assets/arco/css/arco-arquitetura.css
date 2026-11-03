@@ -1597,13 +1597,19 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 
 /* ========================================================================
    ARCO — contrato tipográfico do texto corrido (hero, painéis e repertório).
-   Escala editorial única: .83rem / 400 / 1.45.
-   Títulos, números, microetiquetas e negritos semânticos mantêm sua hierarquia.
+   Dois corpos, mesma família, mesmo peso, mesma entrelinha (raiz a 14,4px):
+     narrativo  .97rem / 400 / 1.5  ≈ 14px
+     auxiliar   .90rem / 400 / 1.5  ≈ 13px
+   Títulos, números, datas, microetiquetas e negritos semânticos mantêm sua hierarquia.
    ======================================================================== */
-.arx{
-  --arx-prose-size:.83rem;
-  --arx-prose-leading:1.45;
+/* o repertório fica fora de .arx: os tokens valem para os dois */
+.arx,
+#repertorio{
+  --arx-prose-size:.97rem;
+  --arx-aux-size:.9rem;
+  --arx-prose-leading:1.5;
 }
+/* narrativo. Célula e dimensão entram como contêiner: seus parágrafos sem classe herdam o corpo. */
 .arx :is(
   .arx-id__summary,
   .arx-itin__txt,
@@ -1614,27 +1620,37 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   .arx-mae__t,
   .arx-res__t,
   .arx-dim,
-  .arx-ev__t,
-  .arx-band__cols > div,
-  .arx-mat,
-  .arx-tools li,
-  .arx-family__spec,
-  .arx-family__list li,
   .arx-head__d,
-  .arx-mov p,
-  .arx-pop__dl dd,
-  .arx-pop__hist p,
-  .arx-pop__note
+  .arx-mov p
 ),
 #repertorio :is(.eq__lead, .lex__e, .fronteira-txt p){
   font-family:var(--f-body);
-  font-size:var(--arx-prose-size, .83rem);
+  font-size:var(--arx-prose-size);
   font-weight:400;
-  line-height:var(--arx-prose-leading, 1.45);
+  line-height:var(--arx-prose-leading);
+}
+/* auxiliar: legendas, materiais catalogados, bases de cálculo e popovers.
+   Mesma especificidade da regra acima e declarada depois dela: vence também
+   onde o popover mora dentro da trajetória (.arx-mov p). */
+.arx :is(
+  .arx-ev__t,
+  .arx-mat,
+  .arx-mae__base,
+  .arx-tools li,
+  .arx-family__spec,
+  .arx-family__list li,
+  .arx-pop__dl dd,
+  .arx-pop__hist p,
+  .arx-pop__note
+){
+  font-family:var(--f-body);
+  font-size:var(--arx-aux-size);
+  font-weight:400;
+  line-height:var(--arx-prose-leading);
 }
 /* Estas notas tinham declarações !important inclusive no layout responsivo. */
 .arx :is(.arx-res__note, .arx-note){
-  font-size:var(--arx-prose-size)!important;
+  font-size:var(--arx-aux-size)!important;
   font-weight:400;
   line-height:var(--arx-prose-leading)!important;
 }
@@ -1671,6 +1687,17 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* desktop: o itinerário sobe e a tese fica na altura da linha de títulos */
 @media (min-width:901px){
   .arx-itin{ margin-top:calc(-1 * (clamp(.8rem, 1.2vw, 1rem) + clamp(.68rem, .88vw, .8rem) * 1.35) - 3px); }
+}
+/* desktop: a hero se apoia no eixo do arco. Duas metades iguais; biografia e
+   itinerário com a mesma medida, e o itinerário começa logo depois do fecho.
+   Em telas largas o texto acompanha o vão em vez de ficar preso à esquerda. */
+@media (min-width:901px){
+  .arx-id__row{
+    --arx-hero-measure:40rem;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  .arx-id__summary,
+  .arx-itin{ max-width:var(--arx-hero-measure); }
 }
 /* celular estreito: a tese pode quebrar */
 @media (max-width:560px){
