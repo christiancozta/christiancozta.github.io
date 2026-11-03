@@ -242,9 +242,13 @@
   position:relative;
   isolation:isolate;
   height:var(--arx-crown-h);
-  /* respiro para as cotas parciais acima do fecho, só onde o fecho é baixo;
-     igual em todos os estados, para nada saltar na formação */
-  margin-top:max(0px, calc(36px - var(--arx-span) * .0346));
+  /* respiro: a cota do topo fica a ~16–28px do parágrafo (46px é a altura
+     da cadeia de cotas acima do fecho; .0346 × vão é o fecho). Igual em todos
+     os estados, para nada saltar na formação. */
+  margin-top:max(0px, calc(clamp(16px, 1.25vw, 28px) + 46px - var(--arx-span) * .0346));
+}
+@media (max-width:900px){
+  .arx-crown{ margin-top:max(0px, calc(28px - var(--arx-span) * .0346)); }
 }
 
 .arx-arc{
@@ -1737,9 +1741,7 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* desktop: reserva de repouso 16px menor (mais ar entre parágrafo e arco do que antes);
    ao formar, a coroa ocupa o que faltar e o conteúdo abaixo desce suave. */
 @media (min-width:901px){
-  .arx-hero{
-    padding-bottom:max(0px, calc(clamp(1rem, 1.6vw, 1.75rem) + var(--arx-crown-formed) - var(--arx-crown-h) - 16px));
-  }
+  .arx-hero{ padding-bottom:0; }
 }
 
 /* ===================== DO TERMO À PROVA — léxico ===================== */
@@ -1764,6 +1766,125 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 #repertorio .arx-lex{ text-transform:lowercase; }
 /* siglas guardam a caixa alta */
 #repertorio .arx-lex .lex__sg{ text-transform:none; }
+
+/* ===================== LINHA DO TEMPO NA BASE ===================== */
+/* três marcos, um por movimento: aberto, em curso, cheio */
+.arx-tech circle.is-tl{
+  fill:#FCFCFC; stroke:#8E8E8E; stroke-width:.8px;
+  opacity:0;
+  transition:opacity var(--arx-back) var(--arx-ease), fill 420ms var(--arx-ease), stroke 420ms var(--arx-ease);
+}
+.arx-tech circle.is-tl--dot{ fill:#8E8E8E; stroke:none; }
+.arx-tech circle.is-tl--2{ fill:#8E8E8E; }
+.arx-tech path.is-tl-line{ stroke:#8E8E8E; stroke-width:.8px; }
+.arx[data-state="forming"] .arx-tech circle.is-tl{
+  opacity:1;
+  transition:opacity 700ms var(--arx-ease) var(--d, 1500ms);
+}
+.arx[data-state="formed"] .arx-tech circle.is-tl,
+.arx.is-drawn .arx-tech circle.is-tl{ opacity:1; }
+/* o marco do movimento aberto ganha a cor do sistema */
+.arx[data-sel="data"] .arx-tech .is-tl--0{ stroke:var(--arx-data); fill:var(--arx-data); }
+.arx[data-sel="echo"] .arx-tech .is-tl--1{ stroke:#C98A00; }
+.arx[data-sel="echo"] .arx-tech .is-tl--dot{ fill:#C98A00; }
+.arx[data-sel="atrio"] .arx-tech .is-tl--2{ stroke:var(--arx-atrio); fill:var(--arx-atrio); }
+
+/* ===================== FRONTEIRA ===================== */
+/* Não é cartão: é a linha onde o portfólio termina. Um corte hachurado, como
+   nos tímpanos do arco, marca o limite; o aforismo carrega o peso; a lista
+   diz o que fica do lado de fora, agrupada pela razão. */
+.arx-front2{
+  --fr-ink:#181818;
+  --fr-text:rgba(24,24,24,.84);
+  --fr-soft:rgba(24,24,24,.56);
+  --fr-hair:rgba(24,24,24,.14);
+  position:relative;
+  margin:clamp(5rem, 11vw, 9rem) 0 clamp(4.5rem, 9vw, 8rem);
+}
+.front__cut{
+  height:12px;
+  border-top:.5px solid rgba(24,24,24,.5);
+  border-bottom:.5px solid rgba(24,24,24,.18);
+  background:repeating-linear-gradient(-45deg, rgba(24,24,24,.22) 0 .6px, transparent .6px 6px);
+  -webkit-mask-image:linear-gradient(90deg, #000 0, #000 62%, transparent 100%);
+          mask-image:linear-gradient(90deg, #000 0, #000 62%, transparent 100%);
+}
+.front__grid{
+  display:grid;
+  grid-template-columns:minmax(0, 5fr) minmax(0, 7fr);
+  column-gap:clamp(2rem, 6vw, 7rem);
+  padding-top:clamp(2.75rem, 5.5vw, 4.75rem);
+}
+.front__k{
+  display:flex; align-items:center; gap:.7rem;
+  margin:0 0 clamp(1.1rem, 2vw, 1.6rem);
+  font-family:var(--f-micro, ui-monospace, monospace); font-weight:600;
+  font-size:.66rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--fr-ink);
+}
+.front__k::before{
+  content:""; width:1.75rem; height:0;
+  border-top:.5px solid var(--fr-ink);
+}
+.front__t{
+  margin:0; max-width:15ch;
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(1.85rem, 3.5vw, 3.15rem); line-height:1.02;
+  letter-spacing:-.035em; color:var(--fr-ink);
+  text-wrap:balance;
+}
+.front__body{ padding-top:clamp(.25rem, 2.6vw, 2.35rem); }
+.front__lead{
+  margin:0; max-width:52ch;
+  font-family:var(--f-body); font-size:var(--arx-prose-size, .97rem); line-height:1.6;
+  color:var(--fr-text); text-wrap:pretty;
+}
+.front__lead strong{ font-weight:700; color:var(--fr-ink); }
+.front__list{ margin:clamp(1.75rem, 3vw, 2.5rem) 0 0; }
+.front__row{
+  display:grid; grid-template-columns:minmax(10rem, 13rem) minmax(0, 1fr);
+  column-gap:clamp(1.25rem, 3vw, 2.5rem);
+  padding:1.05rem 0 1.15rem;
+  border-top:.5px solid var(--fr-hair);
+}
+.front__row:last-child{ border-bottom:.5px solid var(--fr-hair); }
+.front__row dt{
+  font-family:var(--f-display); font-weight:700;
+  font-size:.95rem; line-height:1.3; letter-spacing:-.01em; color:var(--fr-ink);
+}
+.front__row dt span{
+  display:block; margin-top:.3rem;
+  font-family:var(--f-body); font-weight:400; font-style:italic;
+  font-size:.82rem; letter-spacing:0; color:var(--fr-soft);
+}
+.front__row dd{ margin:0; }
+.front__row ul{
+  list-style:none; margin:0; padding:0;
+  display:flex; flex-wrap:wrap; gap:.1rem 1.6rem;
+}
+.front__row li{
+  font-family:var(--f-micro, ui-monospace, monospace);
+  font-size:.74rem; line-height:1.9; letter-spacing:.02em;
+  color:var(--fr-soft);
+}
+/* entrada: o corte se traça da esquerda; o resto sobe com o reveal da página */
+.js-reveal .arx-front2 .front__cut{
+  transform:scaleX(0); transform-origin:0 50%;
+  transition:transform 1100ms cubic-bezier(.32,.72,0,1) 120ms;
+}
+.js-reveal .arx-front2.is-in .front__cut{ transform:scaleX(1); }
+@media (prefers-reduced-motion:reduce){
+  .js-reveal .arx-front2 .front__cut{ transform:none; transition:none; }
+}
+@media (max-width:900px){
+  .front__grid{ grid-template-columns:1fr; row-gap:1.75rem; }
+  .front__body{ padding-top:0; }
+  .front__t{ max-width:18ch; }
+}
+@media (max-width:560px){
+  .front__row{ grid-template-columns:1fr; row-gap:.55rem; }
+  .front__row ul{ column-gap:1.1rem; }
+}
 /* a letra abre a parte: corpo de título, tinta cheia */
 #repertorio .lex__l{
   margin:2.1rem 0 .75rem;
