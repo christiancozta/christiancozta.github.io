@@ -1658,13 +1658,23 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* tese no lugar do título do itinerário: fala do autor, abaixo do nome em escala */
 .arx-itin__tese{
   margin:0 0 .85rem;
-  font-family:var(--f-display); font-weight:700;
-  font-size:clamp(1.02rem, 1.4vw, 1.24rem); line-height:1.24;
+  font-family:var(--f-display); font-weight:700; font-style:italic;
+  /* 1pt abaixo da escala anterior; em desktop estreito encolhe para caber em uma linha */
+  font-size:max(13px, min(calc(clamp(1.02rem, 1.4vw, 1.24rem) - 1pt), calc(2.5vw - 15.5px))); line-height:1.24;
   letter-spacing:-.018em; color:var(--arx-ink);
-  text-wrap:balance;
+  white-space:nowrap; width:max-content;
 }
-.arx-itin__tese span{ color:var(--arx-soft); font-weight:600; }
-/* ordem: tese, três linhas, parágrafo (margens originais do itinerário) */
+.arx-itin__tese span{ color:var(--arx-soft); }
+/* ordem: tese, três linhas, parágrafo; um pouco mais de ar antes do parágrafo */
+.arx-itin__txt + .arx-itin__le{ margin-top:1.35rem; }
+/* desktop: o itinerário sobe e a tese fica na altura da linha de títulos */
+@media (min-width:901px){
+  .arx-itin{ margin-top:calc(-1 * (clamp(.8rem, 1.2vw, 1rem) + clamp(.68rem, .88vw, .8rem) * 1.35) - 3px); }
+}
+/* celular estreito: a tese pode quebrar */
+@media (max-width:560px){
+  .arx-itin__tese{ white-space:normal; width:auto; text-wrap:balance; }
+}
 
 /* contatos: quatro linhas viram duas, cada coluna com o seu fio */
 .arx-id__contacts{
@@ -1699,10 +1709,10 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   .arx-id__contacts li{ padding-left:.8rem; }
   .arx-id__contacts a{ grid-template-columns:auto; row-gap:.1rem; }
 }
-/* desktop: arco 50px mais perto do topo. A reserva de repouso encolhe;
+/* desktop: reserva de repouso 16px menor (mais ar entre parágrafo e arco do que antes);
    ao formar, a coroa ocupa o que faltar e o conteúdo abaixo desce suave. */
 @media (min-width:901px){
   .arx-hero{
-    padding-bottom:max(0px, calc(clamp(1rem, 1.6vw, 1.75rem) + var(--arx-crown-formed) - var(--arx-crown-h) - 50px));
+    padding-bottom:max(0px, calc(clamp(1rem, 1.6vw, 1.75rem) + var(--arx-crown-formed) - var(--arx-crown-h) - 16px));
   }
 }
