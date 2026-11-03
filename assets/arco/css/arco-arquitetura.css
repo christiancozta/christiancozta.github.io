@@ -1744,3 +1744,78 @@ html:not(.arx-js) .arx-sum{ display:grid; }
     padding-bottom:max(0px, calc(clamp(1rem, 1.6vw, 1.75rem) + var(--arx-crown-formed) - var(--arx-crown-h) - 16px));
   }
 }
+
+/* ===================== DO TERMO À PROVA — léxico ===================== */
+/* abertura em duas metades, como a hero: título e texto à esquerda,
+   as dez competências ao lado, sem somar altura à página */
+.eq__open{
+  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+  column-gap:clamp(2rem, 5.5vw, 6.5rem); align-items:end;
+}
+.eq__comps{
+  list-style:none; margin:0; padding:0;
+  columns:2; column-gap:clamp(1.25rem, 2.5vw, 2.5rem);
+  font-family:var(--f-body); font-size:var(--arx-aux-size); line-height:1.5;
+  color:var(--ink-78, rgba(24,24,24,.84)); text-transform:lowercase;
+}
+.eq__comps li{ break-inside:avoid; padding:.2rem 0; }
+@media (max-width:900px){
+  .eq__open{ grid-template-columns:1fr; row-gap:1.25rem; }
+}
+
+/* o léxico em minúsculas; o projeto fica só no sublinhado da competência */
+#repertorio .arx-lex{ text-transform:lowercase; }
+/* a letra abre a parte: corpo de título, tinta cheia */
+#repertorio .lex__l{
+  margin:2.1rem 0 .75rem;
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(1.6rem, 2.4vw, 2.1rem); line-height:1; letter-spacing:-.03em;
+  text-transform:lowercase; color:var(--ink, #181818);
+}
+#repertorio .lex__l:first-child{ margin-top:0; }
+/* verbete mais fechado por dentro, mais ar entre um e outro */
+#repertorio .arx-lex .lex__e{ font-size:.87rem; line-height:1.42; }
+@media (min-width:821px){
+  #repertorio .arx-lex .lex__e{ margin-bottom:1.05rem; }
+}
+/* a tradução por sílabas não se hifeniza de novo */
+#repertorio .lex__p > [aria-hidden]{ -webkit-hyphens:manual; hyphens:manual; }
+
+/* filtros: o nome do projeto num retângulo de acento, a contagem num quadrado
+   colado a ele. O quadrado mantém o estilo anterior: vazio, e cheio quando escolhido. */
+.lexf__b,
+.lexf__b:hover,
+.lexf__b[aria-pressed="true"]{
+  gap:0; padding:0; border:0; background:transparent; align-items:stretch;
+}
+.lexf__n{
+  display:inline-flex; align-items:center; box-sizing:border-box;
+  min-height:2.1rem; padding:0 .7rem;
+  background:var(--lexf-bg); color:var(--lexf-on);
+}
+.lexf__c{
+  display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box;
+  min-width:2.1rem; min-height:2.1rem; padding:0 .35rem;
+  border:1px solid rgba(24,24,24,.18); border-left:0;
+  color:var(--ink-78, rgba(24,24,24,.84)); opacity:1;
+  transition:background-color 200ms var(--arx-ease, ease), color 200ms var(--arx-ease, ease), border-color 200ms var(--arx-ease, ease);
+}
+.lexf__b--data{ --lexf-bg:#0057FF; --lexf-on:#FCFCFC; }
+.lexf__b--echo{ --lexf-bg:#FFB627; --lexf-on:#181818; }
+.lexf__b--atrio{ --lexf-bg:#A63A23; --lexf-on:#FCFCFC; }
+.lexf__b--transversal{ --lexf-bg:#181818; --lexf-on:#FCFCFC; }
+/* todos: o retângulo também no estilo anterior */
+.lexf__b--todos .lexf__n{
+  border:1px solid rgba(24,24,24,.18);
+  background:transparent; color:var(--ink-78, rgba(24,24,24,.84));
+  transition:background-color 200ms var(--arx-ease, ease), color 200ms var(--arx-ease, ease), border-color 200ms var(--arx-ease, ease);
+}
+.lexf__b:hover .lexf__c,
+.lexf__b--todos:hover .lexf__n{ border-color:var(--ink, #181818); color:var(--ink, #181818); }
+.lexf__b[aria-pressed="true"] .lexf__c,
+.lexf__b--todos[aria-pressed="true"] .lexf__n{
+  background:var(--ink, #181818); border-color:var(--ink, #181818); color:var(--paper, #FCFCFC);
+}
+@media (max-width:820px){
+  .lexf__c{ min-width:44px; }
+}
