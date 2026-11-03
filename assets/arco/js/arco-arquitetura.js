@@ -34,14 +34,16 @@
   };
 
   /* ------------------------------------------------------------------
-     Geometria da curva (viewBox 1000×238). k = 0 é o desenho original;
-     k > 0 puxa o extradorso e o intradorso para cima, como a corda puxada.
+     Geometria da curva (viewBox 1000×238), medida a partir da base.
+     s = 1 é o desenho (a altura em que se leem os nomes); s = REST é o
+     arco em repouso, mais baixo. A formação só abre: de REST até 1.
      ------------------------------------------------------------------ */
-  /* expansão contida: o fecho sobe cerca de um terço da sua altura e volta */
-  const PULL = 40;
-  const drawArc = k => {
-    const e = (-20 - PULL * k).toFixed(2);
-    const i = (45 - PULL * .82 * k).toFixed(2);
+  const REST = .65;
+  let arcS = REST;
+  const drawArc = s => {
+    arcS = s;
+    const e = (238 - 258 * s).toFixed(2);
+    const i = (238 - 193 * s).toFixed(2);
     extra.setAttribute("d", `M0,238 C180,${e} 820,${e} 1000,238`);
     intra.setAttribute("d", `M0,238 C205,${i} 795,${i} 1000,238`);
     field.setAttribute("d", `M0,238 C180,${e} 820,${e} 1000,238 Z`);
@@ -58,10 +60,8 @@
     requestAnimationFrame(frame);
   });
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-  /* tensão firme: começa e termina sem tranco */
-  const easeInOutSine = t => -(Math.cos(Math.PI * t) - 1) / 2;
-  /* soltura sem quique: volta ao repouso e assenta, sem passar dele */
-  const release = t => Math.pow(1 - t, 3);
+  /* abertura tensionada: arranque contido, avanço firme, chegada seca, sem retorno */
+  const tense = t => t < .5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2;
 
   /* ------------------------------------------------------------------
      GRAFISMO TÉCNICO — caixa de limites, cotas e anotações à mão.
@@ -351,16 +351,20 @@
 
     /* cadeia de cotas do vão: parciais (três movimentos) e total */
     const y1 = apex - 18;
-    line("v-ext-l", "is-ext", 900, [[0, apex - 14], [0, y1 - 6]]);
-    line("v-ext-r", "is-ext", 900, [[W, apex - 14], [W, y1 - 6]]);
+    line("v-ext-l", "is-ext", 900, [[0, apex - 14], [0, y1 - (wide ? 30 : 6)]]);
+    line("v-ext-r", "is-ext", 900, [[W, apex - 14], [W, y1 - (wide ? 30 : 6)]]);
     if (wide){
       line("v-ext-1", "is-ext", 900, [[W / 3, apex - 4], [W / 3, y1 - 6]]);
       line("v-ext-2", "is-ext", 900, [[W * 2 / 3, apex - 4], [W * 2 / 3, y1 - 6]]);
       line("v-part", "is-dim", 1000, [[0, y1], [W, y1]]);
       [0, W / 3, W * 2 / 3, W].forEach((x, i) => tick(`v-pt${i}`, "is-dim", 1200, x, y1));
       [0, 1, 2].forEach(i => label(`v-pn${i}`, "is-small", 1500 + i * 90, W * (i * 2 + 1) / 6, y1 - 6, fmt(W / 3), {anchor:"middle"}));
-      /* sem a cota total no topo: as parciais bastam */
-      hide(["v-tot","v-tt0","v-tt1","v-tn"]);
+      /* cota total: a linha fica, o número não */
+      const y2 = y1 - 24;
+      line("v-tot", "is-dim", 1100, [[0, y2], [W, y2]]);
+      tick("v-tt0", "is-dim", 1250, 0, y2);
+      tick("v-tt1", "is-dim", 1250, W, y2);
+      hide(["v-tn"]);
     } else {
       hide(["v-ext-1","v-ext-2","v-part","v-pt0","v-pt1","v-pt2","v-pt3","v-pn0","v-pn1","v-pn2","v-tot","v-tt0","v-tt1"]);
       line("v-tot-m", "is-dim", 1000, [[0, y1], [W, y1]]);
@@ -422,6 +426,23 @@
     } else hide(["ratio","scale"]);
 
     sketch(W, H, apex, wide, roomLeft, roomRight);
+
+    /* LINHA DO TEMPO na base: um marco por movimento, no centro de cada vão,
+       em três estados (aberto, em curso, cheio), e o sentido do tempo na ponta */
+    [0, 1, 2].forEach(i => {
+      const cx = W * (i * 2 + 1) / 6;
+      const node = techNode(`tl-${i}`, "circle", `is-tl is-tl--${i}`, 1550 + i * 140);
+      node.setAttribute("cx", cx.toFixed(1));
+      node.setAttribute("cy", H.toFixed(1));
+      node.setAttribute("r", i === 2 ? "2.6" : "3.1");
+      if (i === 1){
+        const dot = techNode("tl-1d", "circle", "is-tl is-tl--dot", 1690);
+        dot.setAttribute("cx", cx.toFixed(1));
+        dot.setAttribute("cy", H.toFixed(1));
+        dot.setAttribute("r", "1.1");
+      }
+    });
+    line("tl-ar", "is-tl-line", 1980, [[W - 9, H - 3.2], [W - 2, H], [W - 9, H + 3.2]]);
 
     ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
     for (const key of techNodes.keys()) if (key.startsWith("hm-t")) keepAboveCurve(key, W, H);
@@ -487,8 +508,15 @@
 
   let forming = false;
   let formToken = 0;
-  /* a formação expande o arco e o devolve à altura em que repousa:
-     sobe firme, volta sem passar do ponto, e só então o desenho técnico nasce */
+  /* a formação só abre: o arco se ergue tensionado até a altura do desenho,
+     para ali, e então o desenho técnico começa. Sem vai e volta. */
+  let arcToken = 0;
+  const openArc = async ms => {
+    const token = ++arcToken, from = arcS;
+    if (from >= 1){ drawArc(1); return; }
+    await tween(ms, t => { if (token === arcToken) drawArc(from + (1 - from) * tense(t)); });
+    if (token === arcToken) drawArc(1);
+  };
   const form = async ({animate = true, tension = true} = {}) => {
     if (state !== "rest" || forming) return;
     /* a formação só acontece sob o olho: nunca com o ARCO fora de vista */
@@ -499,20 +527,19 @@
     setPreview("");
 
     if (!animate || reduced()){
-      drawArc(0);
+      arcToken++;
+      drawArc(1);
       finishFormation();
       forming = false;
       return;
     }
 
-    if (tension){
+    if (tension && arcS < 1){
       setState("tension");
-      await tween(640, t => drawArc(easeInOutSine(t)));
-      /* devolvida a corda, a estrutura começa a se formar */
+      await openArc(980);
+      /* aberto, o desenho começa */
       setState("forming");
-      await tween(720, t => drawArc(release(t)));
-      drawArc(0);
-      await wait(1100);
+      await wait(1500);
     } else {
       setState("forming");
       await wait(1800);
@@ -850,7 +877,9 @@
       setState("rest");
       animateHeight(0, 0, token);
     }
-    drawArc(0);
+    /* recolhido, o arco fica aberto: o desenho, uma vez feito, permanece */
+    arcToken++;
+    drawArc(1);
 
     await wait(motion ? 900 : 0);
     cancelAnimationFrame(follow);
@@ -969,7 +998,7 @@
 
   if (state !== "rest"){
     /* já formada nesta sessão (ou sem armazenamento disponível) */
-    drawArc(0);
+    drawArc(1);
     setState("formed");
     restoreSelection();
   } else if (isHomeAnchor(location.hash)){
