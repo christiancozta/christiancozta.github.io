@@ -1642,3 +1642,14 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 @media (prefers-reduced-motion:reduce){ .arx-col__plus{ transition:none; } }
 /* celular, com um campo aberto: os capitéis viram linhas; o sinal acompanha o centro */
 @media (max-width:640px){ .arx:not([data-sel=""]) .arx-col__plus{ top:50%; translate:0 -50%; } }
+
+/* trajetória no arco aberto: mesma entrelinha e mesma justificação das histórias fechadas */
+.arx .arx-mov p{
+  text-align:justify; text-justify:inter-word;
+  -webkit-hyphens:auto; hyphens:auto;
+  hyphenate-limit-chars:6 3 3;
+}
+/* o selo do sistema (botão) não pode alargar a linha em que cai */
+.arx .arx-mov p :is(.b-data, .b-echo, .b-atrio){ line-height:1.2; }
+/* métricas da trajetória em negrito, aberta ou fechada */
+.arx [data-datum]{ font-weight:700; }
