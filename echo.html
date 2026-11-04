@@ -1081,11 +1081,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
    a cadeia operacional como espelho de violino ao lado da lista:
    seis cordas (uma por etapa), pestana, cavalete e estandarte.
    cada material pousa nas cordas que percorre. */
-.cordas-cab{display:flex;align-items:flex-end;justify-content:flex-start;gap:16px clamp(20px,3vw,48px);margin-top:clamp(40px,5vw,72px);min-height:72px}
-.cordas-leitura{flex:1 1 auto;max-width:72ch;min-width:0}
-.cordas-leitura small{display:block;font:500 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(24,24,24,.6)}
-.cordas-leitura p{margin:9px 0 0;font-size:13.5px;line-height:1.5;text-wrap:pretty}
-.cordas-leitura b{font-weight:600}
+.cordas-cab{display:flex;align-items:center}
 .cordas-som{flex:none;display:inline-flex;align-items:center;gap:8px;height:26px;padding:0 3px 0 12px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(24,24,24,.3);color:#181818;font:500 8.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .5s cubic-bezier(.32,.72,0,1),color .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1),transform .3s cubic-bezier(.32,.72,0,1)}
 .cordas-som i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(24,24,24,.08);transition:transform .5s cubic-bezier(.32,.72,0,1),background .5s cubic-bezier(.32,.72,0,1)}
 .cordas-som svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -1119,7 +1115,26 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .cordas-etapa:hover,.cordas-etapa.on{color:#FFB627}
 .cordas-etapa:active{transform:translateX(-50%) scale(.94)}
 .cordas-etapa:focus-visible{outline:1.5px solid #FFB627;outline-offset:1px;border-radius:3px}
-@media (max-width:600px){.acervo-lista{--cordas-w:84px}.cordas-etapa .z{display:none}.cordas-cab{flex-wrap:wrap;align-items:flex-start}}
+@media (max-width:600px){.acervo-lista{--cordas-w:84px}.cordas-etapa .z{display:none}}
+
+/* ===== ajustes: bloco escuro, problema, percursos e miniatura ===== */
+.ec-escuro .ec-k,.ec-escuro .ec-sk{color:rgba(255,182,39,.72)}
+.ec-escuro .ec-tabs{border-top-color:#FFB627}
+.ec-escuro .ec-tab{border-bottom-color:rgba(255,182,39,.28)}
+.ec-escuro .ec-p--fecho{border-top-color:#FFB627}
+.ec-t--sub{margin:0;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;text-wrap:pretty}
+.ec-cond{margin-top:0}
+.acervo-percursos{width:fit-content;max-width:100%}
+.acervo-percursos__cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.acervo-percursos__cab .acervo-percursos__k{margin:0}
+.acervo-percursos__grade{display:flex;flex-wrap:wrap;gap:8px}
+.acervo-percursos__grade button{width:auto;padding-left:14px!important;padding-right:14px!important}
+.ficha__previa{gap:0}
+.ficha__lupa{position:absolute;z-index:3;top:10px;left:66px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(24,24,24,.86);color:#F2EFE9;box-shadow:0 0 0 1px rgba(242,239,233,.18);transition:transform .7s var(--mola),background .4s var(--mola)}
+.ficha__lupa svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ficha__previa[data-forma="paisagem"] .ficha__lupa{top:8px;left:124px}
+.ficha__previa:hover .ficha__lupa{transform:translateY(-3px) scale(1.06);background:#181818}
+@media(prefers-reduced-motion:reduce){.ficha__lupa{transition:none}}
 </style>
 </helmet>
 
@@ -1156,9 +1171,9 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </h1>
 </header>
 
-<section id="preliminares" style="background:#FFB627;color:#181818;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
+<section id="preliminares" class="ec-escuro" style="background:#181818;color:#FFB627;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
   <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em;text-wrap:pretty"><span style="display:inline-block;margin-right:.62em;color:transparent;-webkit-text-stroke:1px #181818">01</span>Preliminares</h2>
+    <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em;text-wrap:pretty"><span style="display:inline-block;margin-right:.62em;color:transparent;-webkit-text-stroke:1px #FFB627">01</span>Preliminares</h2>
   </div>
 
   <div class="ec-row" id="origem" data-reveal style="margin-top:clamp(40px,5vw,72px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
@@ -1168,9 +1183,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       <p class="ec-p">Na passagem para a instância recursal, o primeiro diagnóstico foi o silêncio.</p>
       <p class="ec-p">Havia acervo, havia prazo, havia colegiado. Não havia procedimento instituído. O padrão disponível era o de primeiro grau, e ele não subia junto.</p>
       <p class="ec-p">Foi nessa ausência que o problema se tornou claro: o que faltava era anterior ao registro. Não havia ainda uma prática comum a documentar. Faltava definir como um processo entrava, como era classificado, como era distribuído e como era escrito, sem tradição a que recorrer e sem ninguém, dentro, que pudesse responder.</p>
-      <p class="ec-p">Sem padrão, o gabinete podia produzir volume sem rastreabilidade, classificação sem critério e coerência por coincidência.</p>
-      <p class="ec-p">As duas fontes possíveis estavam fora: entrevistas em outros gabinetes e análise do acervo decisório. Uma via oral, uma via documental.</p>
-      <p class="ec-p ec-p--fecho">O ECHO nasceu do que voltou dessas duas perguntas: para que a coerência do colegiado não dependesse de quem estivesse na sala.</p>
+      <p class="ec-p ec-p--fecho">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
     </div>
     <div class="ec-r ec-tabs">
       <div class="ec-tab">
@@ -1195,18 +1208,12 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
     </div>
   </div>
+</section>
 
-  <div class="ec-row" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div class="ec-l">
-      <p class="ec-lead">O ECHO nasceu dentro de uma operação jurídica que precisava funcionar como unidade, embora o conhecimento estivesse distribuído entre pessoas, práticas e decisões cotidianas. Não faltava trabalho: faltava forma comum para reconhecê-lo, distribuí-lo, verificá-lo e fazê-lo permanecer.</p>
-      <h3 class="ec-t ec-t--seg">O problema era não saber por onde começar</h3>
-      <p class="ec-p">Não havia procedimento comum para a operação colegiada. O padrão disponível vinha de outra lógica de trabalho e não se transportava integralmente para o novo contexto.</p>
-      <p class="ec-p">Parte decisiva da atividade acontecia antes da produção jurídica propriamente dita: receber, identificar, classificar, distribuir, verificar, produzir e devolver conhecimento à operação. Sem uma estrutura comum, essas etapas dependiam de leituras fragmentadas e decisões repetidas.</p>
-      <p class="ec-p">O conhecimento existia em sinais dispersos. Era preciso transformá-lo em critério.</p>
-    </div>
-    <div class="ec-r">
-      <p class="ec-k ec-k--gap">MANIFESTAÇÕES DO PROBLEMA</p>
-    <div class="q4" style="border-top:1px solid #181818;border-left:1px solid #181818">
+<section id="problema" style="background:#FFB627;color:#181818;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
+  <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <h3 class="ec-t ec-t--sub">O problema era não saber por onde começar</h3>
+    <div class="q4" style="margin-top:clamp(24px,3vw,40px);border-top:1px solid #181818;border-left:1px solid #181818">
       <div style="border-right:1px solid #181818;border-bottom:1px solid #181818;padding:clamp(20px,2.2vw,28px)">
         <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.4rem,4.6vw,3.4rem);line-height:.86;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px #181818">01</p>
         <p style="margin:clamp(16px,1.6vw,22px) 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:17px;line-height:1.14;letter-spacing:-.025em">Padrão não transportável</p>
@@ -1228,23 +1235,19 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p style="margin:8px 0 0;font-size:13.5px;line-height:1.5;text-wrap:pretty">Vícios formais e questões verificáveis na entrada podiam consumir tempo técnico qualificado antes de qualquer análise substancial.</p>
       </div>
     </div>
-    </div>
   </div>
 
-  <div class="ec-row" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+  <div class="ec-row" data-reveal style="margin-top:clamp(64px,8vw,120px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <div class="ec-l">
       <h3 class="ec-t">Dar forma ao que ainda não tinha procedimento instituído</h3>
-      <p class="ec-p">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
-      <p class="ec-p">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
+      <p class="ec-p">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos.</p>
     </div>
     <div class="ec-r">
-      <p class="ec-k">REGIME DO ACERVO</p>
-      <h3 class="ec-t ec-t--r">O procedimento busca estabilizar aquilo que pode ser verificado, classificado, registrado e reutilizado.</h3>
       <ul class="ec-cond">
-        <li><b>Autoridade decisória.</b> O método organiza a execução sem deslocar a responsabilidade institucional de quem decide.</li>
-        <li><b>Coordenação.</b> Papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis.</li>
-        <li><b>Procedimento comum.</b> Materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível.</li>
-        <li><b>Memória.</b> A experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável.</li>
+        <li><b>Regente.</b> O método organiza a execução sem deslocar a responsabilidade institucional de quem decide.</li>
+        <li><b>Regência.</b> Papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis.</li>
+        <li><b>Registro.</b> A experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável.</li>
+        <li><b>Regimento.</b> Materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível.</li>
       </ul>
     </div>
   </div>
@@ -1258,7 +1261,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
       </div>
       <div class="acervo-percursos" role="group" aria-labelledby="acervo-percursos-k">
-        <p class="acervo-percursos__k" id="acervo-percursos-k">Percursos</p>
+        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Percursos</p><div id="cordas-cab" class="cordas-cab"></div></div>
         <div class="acervo-percursos__grade">
         <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="4">
           <span>
@@ -1303,9 +1306,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     </a>
   </div>
 
-
-  <div id="cordas-cab" class="cordas-cab" aria-label="Cordas do acervo"></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:clamp(18px,2vw,28px);align-items:start">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:clamp(28px,3vw,44px);align-items:start">
     <div id="acervo-lista" class="acervo-lista" style="min-width:0;border-top:1px solid #181818">
       <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
         <button type="button" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" style="position:relative;display:flex;width:100%;text-align:left;align-items:baseline;gap:14px;cursor:pointer;padding:16px 14px 17px;border:0;border-bottom:1px solid rgba(24,24,24,.24);border-left:3px solid transparent;background:transparent;color:#181818;font-family:'Commissioner',system-ui,sans-serif" style-hover="background:rgba(24,24,24,.05)" style-focus="outline:2px solid #FFB627;outline-offset:-2px">
@@ -1336,8 +1337,12 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
                 <img class="ficha__folha ficha__folha--2" src="{{ ficha.previa2 }}" alt="" loading="lazy" decoding="async">
               </sc-if>
               <img class="ficha__folha" src="{{ ficha.previa1 }}" alt="" loading="lazy" decoding="async">
+              <span class="ficha__lupa" aria-hidden="true">
+                <sc-if value="{{ ficha.amplia }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-6.5 6.5M4 20l6.5-6.5"/></svg></sc-if>
+                <sc-if value="{{ ficha.abre }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24"><path d="M8 16 16 8M9 8h7v7"/></svg></sc-if>
+              </span>
             </span>
-            <span class="ficha__ver">{{ ficha.previaAcao }}</span>
+            
           </button>
         </sc-if>
         <div class="ficha__cab">
@@ -1372,7 +1377,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       <div class="ec-nota">
       <h3 class="method-note__title">Nota metodológica</h3>
       <p class="method-note__lead">Nem todos os números representam o mesmo tipo de resultado.</p>
-      <p style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.55;text-wrap:pretty">Os indicadores demonstram aplicação e escala operacional. Eles não isolam causalidade e não substituem análise qualitativa. Número, base e limite interpretativo permanecem visíveis para evitar que a métrica seja separada do contexto em que foi produzida.</p>
+      <p style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.55;text-wrap:pretty">Os indicadores demonstram aplicação e escala operacional. Eles não isolam causalidade e não substituem análise qualitativa.</p>
       </div>
     </div>
     <div class="ec-r">
@@ -1414,20 +1419,6 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
     </div>
       </div>
-    </div>
-  </div>
-
-  <div data-reveal class="precedent-proof" style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div>
-      <p style="margin:0;font-size:12.5px;font-weight:600">Precedentes com tese firmada</p>
-      <p tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/data/lastro/precedentes_publico.xlsx" data-denominator="631 temas catalogados" data-period="Painel temático" style="margin:14px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(4rem,13vw,10rem);line-height:.84;letter-spacing:-.055em">483</p>
-      <p style="margin:18px 0 0;font-size:clamp(15px,1.8vw,20px);line-height:1.4;font-weight:600;text-wrap:pretty"><span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="483 temas com tese | precedentes_publico.xlsx" data-numerator="483 temas com tese firmada" data-denominator="631 temas catalogados | 483 ÷ 631 = 76,54%" data-period="Painel temático">76,5%</span> dos temas do painel têm tese firmada registrada</p>
-    </div>
-    <div class="precedent-proof__support">
-      <div><strong tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/echo/documentos/localizadores.pdf" data-denominator="vocabulário controlado da Turma" data-period="Mapa de Localizadores">245</strong><span>códigos de assunto</span></div>
-      <div><strong tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/echo/documentos/mapa_tematico.pdf" data-denominator="3 ramos do direito" data-period="Classificação hierárquica">9</strong><span>matérias</span></div>
-      <div><strong tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/echo/documentos/mapa_tematico.pdf" data-denominator="segmentação superior da classificação" data-period="Classificação hierárquica">3</strong><span>ramos do direito</span></div>
-      <div><strong tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/echo/documentos/mapa_tematico.pdf" data-denominator="631 temas catalogados" data-period="Painel temático">10</strong><span>situações catalogadas</span></div>
     </div>
   </div>
 </section>
@@ -1564,11 +1555,9 @@ window.EcoCordas = (function () {
     var porTitulo = materiais.slice();
 
     /* cabeçalho: leitura e som */
-    var leit = el('div', 'cordas-leitura');
-    leit.setAttribute('aria-live', 'polite');
     var somB = el('button', 'cordas-som', 'som<i>' + ICONE + '</i>');
     somB.type = 'button'; somB.setAttribute('aria-pressed', 'false'); somB.setAttribute('aria-label', 'Som das cordas');
-    if (cab) { cab.innerHTML = ''; cab.appendChild(leit); cab.appendChild(somB); }
+    if (cab) { cab.innerHTML = ''; cab.appendChild(somB); }
 
     /* braço: as seis cordas, com pestana em cima e estandarte embaixo */
     var braco = el('div', 'cordas');
@@ -1696,22 +1685,6 @@ window.EcoCordas = (function () {
         p.classList.toggle('on', on);
         chaves[i].classList.toggle('on', on);
       });
-      fala(tipo, alvo);
-    }
-    function fala(tipo, alvo) {
-      var h;
-      if (tipo === 'm') {
-        h = '<small>' + esc(trecho(alvo)) + ' | ' + (leitura(alvo) ? 'documento de leitura' : 'base de consulta') + '</small><p><b>' + esc(alvo.titulo) + '</b> ' + esc(alvo.funcao) + '</p>';
-      } else if (tipo === 'g') {
-        var doPlay = o.linhas.filter(function (l) { return noPlay(l.m); }).map(function (l) { return esc(l.m.titulo); });
-        h = '<small>No PLAY</small><p><b>' + doPlay.length + ' materiais.</b> ' + doPlay.join(', ') + '.</p>';
-      } else if (tipo === 'e') {
-        var lst = o.linhas.filter(function (l) { return cobre(l.m, alvo); }).map(function (l) { return esc(l.m.titulo); });
-        h = '<small>Corda ' + ('0' + (alvo + 1)) + ' | ' + ETAPAS[alvo] + '</small><p><b>' + lst.length + ' materiais.</b> ' + lst.join(', ') + '.</p>';
-      } else {
-        h = '<small>Leitura</small><p><b>' + o.linhas.length + ' materiais, seis cordas.</b> Cada corda é uma etapa da cadeia: entrada, classificação, distribuição, verificação, produção e memória. Toque um material para ver as cordas que ele faz vibrar, ou uma corda para reunir os materiais que a atravessam.</p>';
-      }
-      if (o.h !== h) { o.h = h; leit.innerHTML = h; }
     }
     function tocaMaterial(m, forte) {
       estado('m', m);
@@ -1994,7 +1967,8 @@ class Component extends DCLogic {
     ficha.previa2 = previa[1] ? 'assets/echo/previas/' + previa[1] + '.jpg' : '';
     ficha.temVerso = !!previa[1];
     ficha.forma = (alvo && alvo.forma) || 'retrato';
-    ficha.previaAcao = previewHref ? 'Ver em tela inteira' : alvo && alvo.formato === 'Web' ? 'Abrir no PLAY' : 'Abrir planilha';
+    ficha.amplia = !!previewHref;
+    ficha.abre = !previewHref;
     ficha.previaRotulo = (previewHref ? 'Visualizar ' : 'Abrir ') + (alvo ? alvo.titulo : '');
     ficha.abrePrevia = () => {
       if (!alvo) return;
