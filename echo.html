@@ -1043,6 +1043,83 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .method-note__lead{margin:0 0 18px;font-size:clamp(19px,2vw,25px);font-weight:600;line-height:1.35;color:#fff;text-wrap:pretty}
 @media(prefers-reduced-motion:reduce){.echo-metric__reading{transition:none}}
 
+
+/* ===== DUAS COLUNAS: argumento à esquerda, prova à direita ===== */
+.ec-row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:clamp(32px,5.5vw,104px);align-items:start}
+.ec-row + .ec-row{margin-top:clamp(64px,8vw,120px)}
+.ec-l > :first-child,.ec-r > :first-child{margin-top:0}
+@media (max-width:1099px){.ec-row{grid-template-columns:minmax(0,1fr);row-gap:clamp(28px,4vw,44px)}}
+.ec-k{margin:0;font-size:10px;font-weight:600;letter-spacing:.06em;color:rgba(24,24,24,.72)}
+.ec-k--gap{margin-bottom:clamp(14px,1.6vw,22px)}
+.ec-t{margin:14px 0 0;font-family:var(--section-display);font-weight:700;font-size:clamp(1.5rem,2.9vw,2.35rem);line-height:1.06;letter-spacing:-.04em;text-wrap:balance}
+.ec-t--seg{margin-top:clamp(36px,4vw,56px)}
+.ec-t--r{font-size:clamp(1.3rem,2.2vw,1.85rem);line-height:1.12;letter-spacing:-.03em;text-wrap:pretty}
+.ec-lead{margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty}
+.ec-p{margin:16px 0 0;max-width:62ch;font-size:15px;line-height:1.6;text-wrap:pretty}
+.ec-p + .ec-p{margin-top:12px}
+.ec-p--fecho{margin-top:22px!important;padding-top:18px;border-top:1px solid #181818;font-weight:600}
+.ec-tabs{border-top:1px solid #181818}
+.ec-tab{display:grid;grid-template-columns:minmax(0,11.5rem) minmax(0,1fr);gap:8px clamp(16px,2.4vw,36px);align-items:start;padding:clamp(16px,1.8vw,24px) 0;border-bottom:1px solid rgba(24,24,24,.28)}
+.ec-tab--eco{grid-template-columns:minmax(0,7rem) minmax(0,1fr) auto;align-items:baseline}
+.ec-sk{margin:0;font-size:9px;font-weight:500;color:rgba(24,24,24,.72)}
+.ec-st{margin:6px 0 0;font-family:var(--section-display);font-weight:700;font-size:clamp(1.2rem,1.9vw,1.6rem);line-height:1.02;letter-spacing:-.035em}
+.ec-sp{margin:0;font-size:14.5px;line-height:1.5;align-self:center;text-wrap:pretty}
+@media (max-width:560px){.ec-tab,.ec-tab--eco{grid-template-columns:minmax(0,1fr)}}
+.ec-cond{margin:clamp(22px,2.6vw,34px) 0 0;padding:0;list-style:none;border-top:1px solid #181818}
+.ec-cond li{padding:14px 0 15px;border-bottom:1px solid rgba(24,24,24,.28);font-size:14.5px;line-height:1.55;text-wrap:pretty}
+.ec-cond b{font-weight:700;font-family:var(--section-display);letter-spacing:-.01em}
+/* manifestações e achados: 2 x 2 dentro da coluna */
+@media (min-width:1100px){
+  .ec-row .q4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ec-row .q4-strip>div:nth-child(n){padding:26px 22px 30px;border-right:0;border-bottom:1px solid #2e2e2e}
+  .ec-row .q4-strip>div:nth-child(odd){padding-left:0;border-right:1px solid #2e2e2e}
+  .ec-row .q4-strip>div:nth-child(n+3){border-bottom:0}
+}
+.ec-nota{margin-top:clamp(36px,4.4vw,60px);padding-top:clamp(24px,2.8vw,36px);border-top:1px solid #2e2e2e}
+
+/* ===== CORDAS DO ACERVO =====
+   a cadeia operacional como espelho de violino ao lado da lista:
+   seis cordas (uma por etapa), pestana, cavalete e estandarte.
+   cada material pousa nas cordas que percorre. */
+.cordas-cab{display:flex;align-items:flex-end;justify-content:flex-start;gap:16px clamp(20px,3vw,48px);margin-top:clamp(40px,5vw,72px);min-height:72px}
+.cordas-leitura{flex:1 1 auto;max-width:72ch;min-width:0}
+.cordas-leitura small{display:block;font:500 9px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:rgba(24,24,24,.6)}
+.cordas-leitura p{margin:9px 0 0;font-size:13.5px;line-height:1.5;text-wrap:pretty}
+.cordas-leitura b{font-weight:600}
+.cordas-som{flex:none;display:inline-flex;align-items:center;gap:8px;height:26px;padding:0 3px 0 12px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(24,24,24,.3);color:#181818;font:500 8.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .5s cubic-bezier(.32,.72,0,1),color .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1),transform .3s cubic-bezier(.32,.72,0,1)}
+.cordas-som i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(24,24,24,.08);transition:transform .5s cubic-bezier(.32,.72,0,1),background .5s cubic-bezier(.32,.72,0,1)}
+.cordas-som svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cordas-som:hover{box-shadow:inset 0 0 0 1px #181818}
+.cordas-som:hover i{transform:translate(1px,-1px) scale(1.06)}
+.cordas-som:active{transform:scale(.98)}
+.cordas-som[aria-pressed="true"]{background:#181818;color:#F2EFE9;box-shadow:none}
+.cordas-som[aria-pressed="true"] i{background:#FFB627;color:#181818}
+.cordas-som:focus-visible{outline:1.5px solid #181818;outline-offset:2px}
+.acervo-lista{--cordas-w:112px;position:relative;padding-right:var(--cordas-w);padding-bottom:72px}
+.acervo-lista > button{transition:opacity .5s cubic-bezier(.32,.72,0,1)}
+.acervo-lista.cordas-vivo > button.corda-off{opacity:.5}
+.cordas{position:absolute;inset:0;z-index:4;pointer-events:none}
+.cordas::before{content:"";position:absolute;top:0;right:0;bottom:0;width:var(--cordas-w);background:#181818;border-radius:0 0 26px 26px}
+.cordas-svg{position:absolute;left:0;top:0;overflow:visible}
+.cordas .pestana{stroke:#F2EFE9;stroke-width:2;stroke-linecap:round;opacity:.85}
+.cordas .cavalete{fill:none;stroke:#F2EFE9;stroke-width:2;stroke-linecap:round;opacity:.7}
+.cordas .estandarte{fill:none;stroke:rgba(242,239,233,.45);stroke-width:1}
+.cordas .corda{fill:none;stroke:rgba(242,239,233,.42);stroke-width:1;transition:stroke .5s cubic-bezier(.32,.72,0,1),stroke-width .5s cubic-bezier(.32,.72,0,1)}
+.cordas .corda.on{stroke:#FFB627;stroke-width:1.5}
+.cordas .liga{fill:none;stroke:rgba(242,239,233,.5);stroke-width:1}
+.cordas .conta{stroke-width:1.2;transition:fill .45s cubic-bezier(.32,.72,0,1),stroke .45s cubic-bezier(.32,.72,0,1),opacity .45s cubic-bezier(.32,.72,0,1)}
+.cordas .cheia .conta{fill:#F2EFE9;stroke:#F2EFE9}
+.cordas .vazada .conta{fill:#181818;stroke:#F2EFE9}
+.cordas .barra.on .conta{stroke:#FFB627}
+.cordas .cheia.on .conta{fill:#FFB627}
+.cordas .barra.on .liga{stroke:#FFB627}
+.cordas .barra.off{opacity:.28}
+.cordas .barra{transition:opacity .45s cubic-bezier(.32,.72,0,1)}
+.cordas-etapa{position:absolute;top:4px;z-index:5;transform:translateX(-50%);width:18px;height:22px;padding:0;border:0;background:none;color:rgba(242,239,233,.62);font:500 8px/1 var(--mono);letter-spacing:0;cursor:pointer;transition:color .4s cubic-bezier(.32,.72,0,1),transform .4s cubic-bezier(.32,.72,0,1)}
+.cordas-etapa:hover,.cordas-etapa.on{color:#FFB627}
+.cordas-etapa:active{transform:translateX(-50%) scale(.94)}
+.cordas-etapa:focus-visible{outline:1.5px solid #FFB627;outline-offset:1px;border-radius:3px}
+@media (max-width:600px){.acervo-lista{--cordas-w:84px}.cordas-etapa .z{display:none}.cordas-cab{flex-wrap:wrap;align-items:flex-start}}
 </style>
 </helmet>
 
@@ -1050,7 +1127,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   <div class="legal-ops-topline" aria-hidden="true"></div>
   <div class="legal-ops-pillrail">
     <button class="legal-ops-pill" id="legal-ops-trigger" type="button"
-      onClick="{{ abrirNota }}" aria-expanded="{{ notaAberta }}" aria-controls="legal-ops-note" aria-haspopup="dialog">
+      onClick="{{ irOrigem }}" aria-controls="origem">
       <span class="legal-ops-pill__label">legal ops</span>
       <span class="legal-ops-pill__arrow" aria-hidden="true">→</span>
     </button>
@@ -1079,91 +1156,56 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </h1>
 </header>
 
-<sc-if value="{{ notaAberta }}">
-<aside class="legal-ops-note" id="legal-ops-note" role="dialog" aria-modal="false"
-  aria-labelledby="legal-ops-note-">
-  <div class="legal-ops-note__head">
-    <p class="legal-ops-note__kicker">legal ops</p>
-    <button class="legal-ops-note__close" id="legal-ops-close" type="button" onClick="{{ fecharNota }}" aria-label="Fechar">×</button>
-  </div>
-  <h2 id="legal-ops-note-title">Quando não havia a quem perguntar</h2>
-  <p>Na passagem para a instância recursal, o primeiro diagnóstico foi o silêncio.</p>
-  <p>Havia acervo, havia prazo, havia colegiado. Não havia procedimento instituído. O padrão disponível era o de primeiro grau, e ele não subia junto.</p>
-  <p>Foi nessa ausência que o problema se tornou claro: o que faltava era anterior ao registro. Não havia ainda uma prática comum a documentar. Faltava definir como um processo entrava, como era classificado, como era distribuído e como era escrito, sem tradição a que recorrer e sem ninguém, dentro, que pudesse responder.</p>
-  <p>Sem padrão, o gabinete podia produzir volume sem rastreabilidade, classificação sem critério e coerência por coincidência.</p>
-  <p>As duas fontes possíveis estavam fora: entrevistas em outros gabinetes e análise do acervo decisório. Uma via oral, uma via documental.</p>
-  <p class="legal-ops-note__resolution">O ECHO nasceu do que voltou dessas duas perguntas, e existe para converter resposta externa em processo documentado, papel definido, critério de controle e conhecimento reutilizável, para que a coerência do colegiado não dependesse de quem estivesse na sala.</p>
-</aside>
-</sc-if>
-
-<section class="echo-intro" id="visao-geral">
-  <div class="matrix-wrap" id="eco-onda">
-    <p class="matrix-title">Materiais × cadeia operacional</p>
-  </div>
-  <a class="play-faixa" id="play-faixa" href="play.html" aria-label="Abrir o PLAY, playbook de elaboração de votos, que reúne oito materiais do acervo">
-    <span class="play-faixa__in">
-      <span class="play-faixa__t" aria-hidden="true">PLAY</span>
-      <span class="play-faixa__sep" aria-hidden="true"></span>
-      <span class="play-faixa__l"><b>Oito destes materiais tocam juntos no PLAY</b>, o playbook de elaboração de votos: os quatro volumes da coleção, as regras do texto e as ferramentas de consulta, numa só partitura.</span>
-      <span class="play-faixa__cta">Abrir o PLAY<i aria-hidden="true">↗</i></span>
-    </span>
-  </a>
-</section>
-
 <section id="preliminares" style="background:#FFB627;color:#181818;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
   <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em;text-wrap:pretty"><span style="display:inline-block;margin-right:.62em;color:transparent;-webkit-text-stroke:1px #181818">01</span>Preliminares</h2>
-    <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O ECHO nasceu dentro de uma operação jurídica que precisava funcionar como unidade, embora o conhecimento estivesse distribuído entre pessoas, práticas e decisões cotidianas. Não faltava trabalho: faltava forma comum para reconhecê-lo, distribuí-lo, verificá-lo e fazê-lo permanecer.</p>
   </div>
 
-  <div data-reveal style="margin-top:clamp(40px,5vw,72px);border-top:1px solid #181818;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(14px,3vw,48px);padding:clamp(20px,2.4vw,32px) 0;border-bottom:1px solid rgba(24,24,24,.28)">
-      <div style="flex:0 1 300px;min-width:0">
-        <p style="margin:0;font-size:9px;font-weight:500;color:rgba(24,24,24,.72)">METODOLOGIA</p>
-        <p style="margin:8px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-.035em;color:#181818">O que é</p>
-      </div>
-      <p style="flex:3 1 380px;margin:0;font-size:15px;line-height:1.5;align-self:center">Metodologia de operações jurídicas construída a partir da leitura de rotinas, ruídos, papéis e recorrências.</p>
+  <div class="ec-row" id="origem" data-reveal style="margin-top:clamp(40px,5vw,72px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <div class="ec-l">
+      <p class="ec-k">ORIGEM</p>
+      <h3 class="ec-t">Quando não havia a quem perguntar</h3>
+      <p class="ec-p">Na passagem para a instância recursal, o primeiro diagnóstico foi o silêncio.</p>
+      <p class="ec-p">Havia acervo, havia prazo, havia colegiado. Não havia procedimento instituído. O padrão disponível era o de primeiro grau, e ele não subia junto.</p>
+      <p class="ec-p">Foi nessa ausência que o problema se tornou claro: o que faltava era anterior ao registro. Não havia ainda uma prática comum a documentar. Faltava definir como um processo entrava, como era classificado, como era distribuído e como era escrito, sem tradição a que recorrer e sem ninguém, dentro, que pudesse responder.</p>
+      <p class="ec-p">Sem padrão, o gabinete podia produzir volume sem rastreabilidade, classificação sem critério e coerência por coincidência.</p>
+      <p class="ec-p">As duas fontes possíveis estavam fora: entrevistas em outros gabinetes e análise do acervo decisório. Uma via oral, uma via documental.</p>
+      <p class="ec-p ec-p--fecho">O ECHO nasceu do que voltou dessas duas perguntas: para que a coerência do colegiado não dependesse de quem estivesse na sala.</p>
     </div>
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(14px,3vw,48px);padding:clamp(20px,2.4vw,32px) 0;border-bottom:1px solid rgba(24,24,24,.28)">
-      <div style="flex:0 1 300px;min-width:0">
-        <p style="margin:0;font-size:9px;font-weight:500;color:rgba(24,24,24,.72)">CONTINUIDADE</p>
-        <p style="margin:8px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-.035em;color:#181818">Por que existe</p>
+    <div class="ec-r ec-tabs">
+      <div class="ec-tab">
+        <div><p class="ec-sk">METODOLOGIA</p><p class="ec-st">O que é</p></div>
+        <p class="ec-sp">Metodologia de operações jurídicas construída a partir da leitura de rotinas, ruídos, papéis e recorrências.</p>
       </div>
-      <p style="flex:3 1 380px;margin:0;font-size:15px;line-height:1.5;align-self:center">Para tornar explícito como o trabalho se organiza, onde perde informação e quais critérios precisam permanecer além de quem os formulou.</p>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(14px,3vw,48px);padding:clamp(20px,2.4vw,32px) 0;border-bottom:1px solid rgba(24,24,24,.28)">
-      <div style="flex:0 1 300px;min-width:0">
-        <p style="margin:0;font-size:9px;font-weight:600;color:rgba(24,24,24,.72)">ACERVO</p>
-        <p style="margin:8px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-.035em;color:#181818">Como opera</p>
+      <div class="ec-tab">
+        <div><p class="ec-sk">CONTINUIDADE</p><p class="ec-st">Por que existe</p></div>
+        <p class="ec-sp">Para tornar explícito como o trabalho se organiza, onde perde informação e quais critérios precisam permanecer além de quem os formulou.</p>
       </div>
-      <p style="flex:3 1 380px;margin:0;font-size:15px;line-height:1.5;align-self:center">Por materiais reutilizáveis que estruturam entrada, classificação, distribuição, verificação, produção e memória.</p>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(14px,3vw,48px);padding:clamp(20px,2.4vw,32px) 0;border-bottom:1px solid rgba(24,24,24,.28)">
-      <div style="flex:0 1 300px;min-width:0">
-        <p style="margin:0;font-size:9px;font-weight:500;color:rgba(24,24,24,.72)">OPERAÇÃO</p>
-        <p style="margin:8px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-.035em;color:#181818">Onde se forma</p>
+      <div class="ec-tab">
+        <div><p class="ec-sk">ACERVO</p><p class="ec-st">Como opera</p></div>
+        <p class="ec-sp">Por materiais reutilizáveis que estruturam entrada, classificação, distribuição, verificação, produção e memória.</p>
       </div>
-      <p style="flex:3 1 380px;margin:0;font-size:15px;line-height:1.5;align-self:center">Em ambiente jurídico de volume, sob prazos, autoridade decisória, diversidade temática e necessidade de consistência.</p>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(14px,3vw,48px);padding:clamp(20px,2.4vw,32px) 0;border-bottom:1px solid rgba(24,24,24,.28)">
-      <div style="flex:0 1 300px;min-width:0">
-        <p style="margin:0;font-size:9px;font-weight:500;color:rgba(24,24,24,.72)">CAPACIDADE</p>
-        <p style="margin:8px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.4rem,2.6vw,2.1rem);line-height:1.02;letter-spacing:-.035em;color:#181818">O que revela</p>
+      <div class="ec-tab">
+        <div><p class="ec-sk">OPERAÇÃO</p><p class="ec-st">Onde se forma</p></div>
+        <p class="ec-sp">Em ambiente jurídico de volume, sob prazos, autoridade decisória, diversidade temática e necessidade de consistência.</p>
       </div>
-      <p style="flex:3 1 380px;margin:0;font-size:15px;line-height:1.5;align-self:center">Que experiência operacional pode ser convertida em procedimento comum sem apagar a responsabilidade técnica de quem decide.</p>
+      <div class="ec-tab">
+        <div><p class="ec-sk">CAPACIDADE</p><p class="ec-st">O que revela</p></div>
+        <p class="ec-sp">Que experiência operacional pode ser convertida em procedimento comum sem apagar a responsabilidade técnica de quem decide.</p>
+      </div>
     </div>
   </div>
 
-  <div data-reveal style="margin-top:clamp(56px,7vw,104px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">O problema era não saber por onde começar</p>
-
-    <div style="margin-top:clamp(24px,2.8vw,38px)">
-      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Não havia procedimento comum para a operação colegiada. O padrão disponível vinha de outra lógica de trabalho e não se transportava integralmente para o novo contexto.</p>
-      <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">Parte decisiva da atividade acontecia antes da produção jurídica propriamente dita: receber, identificar, classificar, distribuir, verificar, produzir e devolver conhecimento à operação. Sem uma estrutura comum, essas etapas dependiam de leituras fragmentadas e decisões repetidas.</p>
-      <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">O conhecimento existia em sinais dispersos. Era preciso transformá-lo em critério.</p>
+  <div class="ec-row" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <div class="ec-l">
+      <p class="ec-lead">O ECHO nasceu dentro de uma operação jurídica que precisava funcionar como unidade, embora o conhecimento estivesse distribuído entre pessoas, práticas e decisões cotidianas. Não faltava trabalho: faltava forma comum para reconhecê-lo, distribuí-lo, verificá-lo e fazê-lo permanecer.</p>
+      <h3 class="ec-t ec-t--seg">O problema era não saber por onde começar</h3>
+      <p class="ec-p">Não havia procedimento comum para a operação colegiada. O padrão disponível vinha de outra lógica de trabalho e não se transportava integralmente para o novo contexto.</p>
+      <p class="ec-p">Parte decisiva da atividade acontecia antes da produção jurídica propriamente dita: receber, identificar, classificar, distribuir, verificar, produzir e devolver conhecimento à operação. Sem uma estrutura comum, essas etapas dependiam de leituras fragmentadas e decisões repetidas.</p>
+      <p class="ec-p">O conhecimento existia em sinais dispersos. Era preciso transformá-lo em critério.</p>
     </div>
-
-    <p style="margin:clamp(36px,4.4vw,60px) 0 clamp(16px,1.8vw,24px);font-size:10px;font-weight:600;color:rgba(24,24,24,.72)">MANIFESTAÇÕES DO PROBLEMA</p>
+    <div class="ec-r">
+      <p class="ec-k ec-k--gap">MANIFESTAÇÕES DO PROBLEMA</p>
     <div class="q4" style="border-top:1px solid #181818;border-left:1px solid #181818">
       <div style="border-right:1px solid #181818;border-bottom:1px solid #181818;padding:clamp(20px,2.2vw,28px)">
         <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.4rem,4.6vw,3.4rem);line-height:.86;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px #181818">01</p>
@@ -1186,13 +1228,24 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p style="margin:8px 0 0;font-size:13.5px;line-height:1.5;text-wrap:pretty">Vícios formais e questões verificáveis na entrada podiam consumir tempo técnico qualificado antes de qualquer análise substancial.</p>
       </div>
     </div>
+    </div>
   </div>
 
-  <div data-reveal style="margin-top:clamp(56px,7vw,104px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Dar forma ao que ainda não tinha procedimento instituído</p>
-    <div style="margin-top:clamp(24px,2.8vw,38px)">
-      <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
-      <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
+  <div class="ec-row" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <div class="ec-l">
+      <h3 class="ec-t">Dar forma ao que ainda não tinha procedimento instituído</h3>
+      <p class="ec-p">Converter a rotina em materiais utilizáveis, como manuais, mapas, matrizes e registros, e fixar, a partir de sinais dispersos da operação, critérios comuns até então não definidos, registrando-os em suportes reutilizáveis e conectando-os às etapas em que efetivamente produzem efeito.</p>
+      <p class="ec-p">O objetivo não era criar documentação paralela ao trabalho. Era fazer com que o próprio trabalho passasse a deixar rastro, memória e referência comum.</p>
+    </div>
+    <div class="ec-r">
+      <p class="ec-k">REGIME DO ACERVO</p>
+      <h3 class="ec-t ec-t--r">O procedimento busca estabilizar aquilo que pode ser verificado, classificado, registrado e reutilizado.</h3>
+      <ul class="ec-cond">
+        <li><b>Autoridade decisória.</b> O método organiza a execução sem deslocar a responsabilidade institucional de quem decide.</li>
+        <li><b>Coordenação.</b> Papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis.</li>
+        <li><b>Procedimento comum.</b> Materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível.</li>
+        <li><b>Memória.</b> A experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável.</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -1236,14 +1289,14 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <span><b>Playbook</b><b>ECHO</b></span>
       </span>
       <span class="play-folha__papel">
-        <span class="play-folha__k">Novo · showcase do playbook</span>
+        <span class="play-folha__k">Novo | showcase do playbook</span>
         <span class="play-folha__linha">
         <span class="play-folha__t">PLAY</span>
         <span class="play-folha__pauta" aria-hidden="true"><svg viewBox="0 0 320 44" preserveAspectRatio="none" aria-hidden="true" focusable="false"><line x1="0" y1="6" x2="320" y2="6"/><line x1="0" y1="14" x2="320" y2="14"/><line x1="0" y1="22" x2="320" y2="22"/><line x1="0" y1="30" x2="320" y2="30"/><line x1="0" y1="38" x2="320" y2="38"/><path d="M0 22H6L8.1 21.7L10.3 20.7L12.4 19.2L14.6 17.5L16.7 15.8L18.8 14.3L21.0 13.3L23.1 13.0L25.2 13.3L27.4 14.3L29.5 15.8L31.7 17.5L33.8 19.2L35.9 20.7L38.1 21.7L40.2 22.0L42.4 21.7L44.5 20.7L46.6 19.2L48.8 17.5L50.9 15.8L53.1 14.3L55.2 13.3L57.3 13.0L59.5 13.7L61.6 15.6L63.8 18.6L65.9 22.0L68.0 25.4L70.2 28.4L72.3 30.3L74.4 31.0L76.6 30.3L78.7 28.4L80.9 25.4L83.0 22.0L85.1 18.6L87.3 15.6L89.4 13.7L91.6 13.0L93.7 13.7L95.8 15.6L98.0 18.6L100.1 22.0L102.2 25.4L104.4 28.4L106.5 30.3L108.7 31.0L110.8 30.3L112.9 28.4L115.1 25.4L117.2 22.0L119.4 18.6L121.5 15.6L123.6 13.7L125.8 13.0L127.9 13.3L130.1 14.3L132.2 15.8L134.3 17.5L136.5 19.2L138.6 20.7L140.8 21.7L142.9 22.0L145.0 21.7L147.2 20.7L149.3 19.2L151.4 17.5L153.6 15.8L155.7 14.3L157.9 13.3L160.0 13.0L162.1 13.7L164.3 15.6L166.4 18.6L168.6 22.0L170.7 25.4L172.8 28.4L175.0 30.3L177.1 31.0L179.2 30.3L181.4 28.4L183.5 25.4L185.7 22.0L187.8 18.6L189.9 15.6L192.1 13.7L194.2 13.0L196.4 13.7L198.5 15.6L200.6 18.6L202.8 22.0L204.9 25.4L207.1 28.4L209.2 30.3L211.3 31.0L213.5 30.3L215.6 28.4L217.7 25.4L219.9 22.0L222.0 18.6L224.2 15.6L226.3 13.7L228.4 13.0L230.6 13.7L232.7 15.6L234.9 18.6L237.0 22.0L239.1 25.4L241.3 28.4L243.4 30.3L245.6 31.0L247.7 30.3L249.8 28.4L252.0 25.4L254.1 22.0L256.2 18.6L258.4 15.6L260.5 13.7L262.7 13.0L264.8 13.3L266.9 14.3L269.1 15.8L271.2 17.5L273.4 19.2L275.5 20.7L277.6 21.7L279.8 22.0L281.9 21.7L284.1 20.7L286.2 19.2L288.3 17.5L290.5 15.8L292.6 14.3L294.8 13.3L296.9 13.0L299.0 13.3L301.2 14.3L303.3 15.8L305.4 17.5L307.6 19.2L309.7 20.7L311.9 21.7L314.0 22.0H320"/><circle cx="23.1" cy="13" r="2.7"/><circle cx="57.3" cy="13" r="2.7" class="on"/><circle cx="74.4" cy="31" r="2.7" class="on"/><circle cx="91.6" cy="13" r="2.7" class="on"/><circle cx="108.7" cy="31" r="2.7" class="on"/><circle cx="125.8" cy="13" r="2.7" class="on"/><circle cx="160.0" cy="13" r="2.7"/><circle cx="177.1" cy="31" r="2.7"/><circle cx="194.2" cy="13" r="2.7"/><circle cx="211.3" cy="31" r="2.7"/><circle cx="228.4" cy="13" r="2.7"/><circle cx="245.6" cy="31" r="2.7" class="on"/><circle cx="262.7" cy="13" r="2.7" class="on"/><circle cx="296.9" cy="13" r="2.7" class="on"/></svg></span>
         </span>
         <span class="play-folha__l">O acervo aplicado à redação de votos de RI e ED: quatro volumes, a governança do texto e as ferramentas de consulta, editados juntos numa partitura.</span>
         <span class="play-folha__pe">
-          <span class="play-folha__n"><span>8 de 14 materiais</span> · <span>107 fundamentos</span> · <span>2.758 assuntos</span></span>
+          <span class="play-folha__n"><span>8 de 14 materiais</span> | <span>107 fundamentos</span> | <span>2.758 assuntos</span></span>
           <span class="play-folha__cta">Abrir o PLAY<i aria-hidden="true">↗</i></span>
         </span>
       </span>
@@ -1251,8 +1304,9 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
   </div>
 
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:clamp(40px,5vw,72px);align-items:start">
-    <div style="min-width:0;border-top:1px solid #181818">
+  <div id="cordas-cab" class="cordas-cab" aria-label="Cordas do acervo"></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(16px,2.5vw,40px);margin-top:clamp(18px,2vw,28px);align-items:start">
+    <div id="acervo-lista" class="acervo-lista" style="min-width:0;border-top:1px solid #181818">
       <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
         <button type="button" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" style="position:relative;display:flex;width:100%;text-align:left;align-items:baseline;gap:14px;cursor:pointer;padding:16px 14px 17px;border:0;border-bottom:1px solid rgba(24,24,24,.24);border-left:3px solid transparent;background:transparent;color:#181818;font-family:'Commissioner',system-ui,sans-serif" style-hover="background:rgba(24,24,24,.05)" style-focus="outline:2px solid #FFB627;outline-offset:-2px">
           <sc-if value="{{ m.selecionado }}" hint-placeholder-val="{{ false }}">
@@ -1305,19 +1359,24 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
     </aside>
   </div>
-
-  <p id="regime" style="margin:clamp(48px,6vw,88px) 0 clamp(14px,1.6vw,20px);font-size:12.5px;font-weight:600;color:rgba(24,24,24,.72);scroll-margin-top:24px">Regime do acervo</p>
-  <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;letter-spacing:-.04em;text-wrap:pretty">Harmonia é <span style="background:#FFB627;padding:0 .08em">coordenação</span> de diferenças</p>
-  <p style="margin:clamp(20px,2.4vw,32px) 0 0;max-width:78ch;font-size:15px;line-height:1.7;text-wrap:pretty">A filosofia de trabalho permanece como origem conceitual. No ECHO, ela se traduz em quatro condições que atravessam todo o acervo: <b style="font-weight:600">autoridade decisória</b>, porque o método organiza a execução sem deslocar a responsabilidade institucional de quem decide; <b style="font-weight:600">coordenação</b>, porque papéis, entradas, distribuições e devoluções precisam operar por relações compreensíveis; <b style="font-weight:600">procedimento comum</b>, porque materiais compartilhados reduzem variação desnecessária e tornam o trabalho transmissível; e <b style="font-weight:600">memória</b>, porque a experiência precisa retornar ao sistema como registro, orientação e critério reaproveitável. O procedimento não busca uniformizar o raciocínio jurídico: busca estabilizar aquilo que pode ser verificado, classificado, registrado e reutilizado.</p>
 </section>
 
 <section id="achados" style="background:#181818;color:#F2EFE9;padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(72px,9vw,132px)">
   <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:transparent;-webkit-text-stroke:1px #FFB627">03</span>Achados</h2>
-    <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">Provas antes de adjetivos. Os indicadores não atribuem causalidade isolada a cada material: demonstram a escala em que o acervo foi construído, utilizado e incorporado à operação.</p>
   </div>
 
-  <div data-reveal class="q4 q4-strip" style="margin-top:clamp(40px,5vw,72px);border-top:1px solid #F2EFE9;border-bottom:1px solid #F2EFE9;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+  <div class="ec-row ec-row--achados" data-reveal style="margin-top:clamp(36px,4.4vw,64px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <div class="ec-l">
+      <p class="ec-lead" style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">Provas antes de adjetivos. Os indicadores não atribuem causalidade isolada a cada material: demonstram a escala em que o acervo foi construído, utilizado e incorporado à operação.</p>
+      <div class="ec-nota">
+      <h3 class="method-note__title">Nota metodológica</h3>
+      <p class="method-note__lead">Nem todos os números representam o mesmo tipo de resultado.</p>
+      <p style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.55;text-wrap:pretty">Os indicadores demonstram aplicação e escala operacional. Eles não isolam causalidade e não substituem análise qualitativa. Número, base e limite interpretativo permanecem visíveis para evitar que a métrica seja separada do contexto em que foi produzida.</p>
+      </div>
+    </div>
+    <div class="ec-r">
+      <div class="q4 q4-strip" style="border-top:1px solid #F2EFE9;border-bottom:1px solid #F2EFE9">
     <div class="echo-metric" tabindex="0" data-datum data-regime="lastro" data-source="assets/data/lastro/ementario_publico.xlsx" data-denominator="2.758 assuntos catalogados" data-period="Acervo integral | código, hierarquia e fundamento">
       <p style="margin:0;font-size:12.5px;font-weight:600">Ementário</p>
       <p style="margin:10px 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4vw,3.4rem);line-height:1;letter-spacing:-.05em;color:#FFB627">2.758</p>
@@ -1354,6 +1413,8 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p class="echo-metric__reading"><strong>Leitura</strong> A base converte pesquisa de tese dispersa em memória jurídica estruturada e recuperável.</p>
       </div>
     </div>
+      </div>
+    </div>
   </div>
 
   <div data-reveal class="precedent-proof" style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
@@ -1369,52 +1430,23 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       <div><strong tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/echo/documentos/mapa_tematico.pdf" data-denominator="631 temas catalogados" data-period="Painel temático">10</strong><span>situações catalogadas</span></div>
     </div>
   </div>
-
-  <div data-reveal style="margin-top:clamp(48px,6vw,88px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
-    <h3 class="method-note__title">Nota metodológica</h3>
-    <p class="method-note__lead">Nem todos os números representam o mesmo tipo de resultado.</p>
-    <p style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.55;text-wrap:pretty">Os indicadores demonstram aplicação e escala operacional. Eles não isolam causalidade e não substituem análise qualitativa. Número, base e limite interpretativo permanecem visíveis para evitar que a métrica seja separada do contexto em que foi produzida.</p>
-
-    <div style="margin-top:32px;border-top:1px solid #2e2e2e">
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Entregáveis</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes e registros.</p>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Aplicação operacional</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">1.192 processos triados.</p>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Taxonomia operacional</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">90,2% de redução de complexidade de classificação em sistema interno.</p>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Memória de precedentes</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">631 temas, dos quais 483 com tese firmada.</p>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Memória</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">2.758 assuntos catalogados.</p>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px clamp(16px,3vw,48px);padding:16px 0;border-bottom:1px solid #2e2e2e">
-        <p style="flex:0 1 280px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em;color:#FFB627">Vocabulário controlado</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">245 códigos de assunto em 9 matérias, 3 ramos e 10 situações.</p>
-      </div>
-    </div>
-  </div>
 </section>
 
 <section id="autoria" style="padding:clamp(64px,8vw,120px) clamp(18px,4vw,56px) clamp(40px,5vw,64px)">
   <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <h2 style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2rem,5.6vw,4.4rem);line-height:.98;letter-spacing:-.045em"><span style="display:inline-block;margin-right:.62em;color:#FFB627;-webkit-text-stroke:1px #181818">04</span>Autoria</h2>
-    <p style="margin:20px 0 0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O ECHO foi construído dentro da operação que procura organizar. Seus materiais não partiram de um modelo pronto: surgiram da identificação de ruídos concretos, da formulação de critérios e de sua conversão progressiva em instrumentos de trabalho.</p>
+  </div>
+
+  <div class="ec-row" style="margin-top:clamp(36px,4.4vw,64px)">
+    <div class="ec-l" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    <p class="ec-lead" style="margin:0;font-size:clamp(15px,1.6vw,18px);line-height:1.5;text-wrap:pretty">O ECHO foi construído dentro da operação que procura organizar. Seus materiais não partiram de um modelo pronto: surgiram da identificação de ruídos concretos, da formulação de critérios e de sua conversão progressiva em instrumentos de trabalho.</p>
     <div style="margin-top:clamp(20px,2.4vw,32px)">
       <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">Seu lastro está no próprio acervo. A autoria aparece nas estruturas produzidas, nas decisões de organização e na forma como experiência dispersa foi convertida em procedimento comum.</p>
       <p style="margin:14px 0 0;font-size:15px;line-height:1.6;text-wrap:pretty">O projeto nasce de uma operação jurídica real e permanece legível por seus materiais, bases e critérios.</p>
     </div>
-  </div>
-
-  <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:18px clamp(20px,3vw,44px);margin-top:clamp(40px,5vw,72px);padding:clamp(20px,2.4vw,32px) 0;border-top:1px solid #181818;border-bottom:1px solid #181818;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+    </div>
+    <div class="ec-r">
+  <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:18px clamp(20px,3vw,44px);margin-top:0;padding:clamp(20px,2.4vw,32px) 0;border-top:1px solid #181818;border-bottom:1px solid #181818;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <svg viewBox="0 0 100 100" width="54" height="54" role="img" aria-label="Marca de Christian da Costa" style="flex:none"><rect width="100" height="100" fill="#FFB627"></rect><path fill="#181818" d="M13.75 13.75 50 50 13.75 86.25Z"></path><path fill="#181818" d="M86.25 13.75 50 50 86.25 86.25Z"></path></svg>
     <div style="flex:1 1 240px">
       <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.035em">Christian da Costa</p>
@@ -1426,36 +1458,38 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     </div>
   </div>
 
-  <div data-reveal style="margin-top:clamp(44px,5.4vw,80px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+  <div data-reveal style="margin-top:clamp(32px,3.6vw,52px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <p style="margin:0 0 clamp(16px,1.8vw,24px);font-size:12.5px;font-weight:600;color:rgba(24,24,24,.72)">Ficha técnica e proveniência</p>
     <div style="border-top:1px solid #181818">
-      <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
-        <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Ambiente de origem</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Operação recursal de volume, sob autoridade decisória, prazos, acervo heterogêneo e exigência de consistência.</p>
+      <div class="ec-tab" style="padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
+        <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Ambiente de origem</p>
+        <p style="margin:0;font-size:14px;line-height:1.5">Operação recursal de volume, sob autoridade decisória, prazos, acervo heterogêneo e exigência de consistência.</p>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
-        <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Materialização</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas e registros.</p>
+      <div class="ec-tab" style="padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
+        <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Materialização</p>
+        <p style="margin:0;font-size:14px;line-height:1.5">Manuais, mapas, matrizes, roteiros, checklists, planilhas e registros.</p>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,3vw,48px);padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
-        <p style="flex:0 1 240px;margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Aplicação</p>
-        <p style="flex:3 1 360px;margin:0;font-size:14px;line-height:1.5">Entrada, classificação, distribuição, verificação, produção, acompanhamento e memória.</p>
+      <div class="ec-tab" style="padding:15px 0;border-bottom:1px solid rgba(24,24,24,.24)">
+        <p style="margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:-.02em">Aplicação</p>
+        <p style="margin:0;font-size:14px;line-height:1.5">Entrada, classificação, distribuição, verificação, produção, acompanhamento e memória.</p>
       </div>
     </div>
   </div>
 
-  <div data-reveal style="margin-top:clamp(44px,5.4vw,80px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
+  <div data-reveal style="margin-top:clamp(32px,3.6vw,52px);opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">
     <p style="margin:0 0 clamp(16px,1.8vw,24px);font-size:12.5px;font-weight:600;color:rgba(24,24,24,.72)">Ecossistema</p>
-    <a href="arco.html" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,3vw,44px);padding:clamp(18px,2.2vw,28px) 0;border-bottom:1px solid rgba(24,24,24,.24)" style-hover="background:rgba(24,24,24,.05);color:#181818">
-      <span style="flex:0 1 200px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,2.4vw,1.9rem);letter-spacing:-.035em">Arco</span>
-      <span style="flex:3 1 360px;font-size:14px;line-height:1.5">O percurso em que essa construção se insere, com repertório de competências e currículo.</span>
+    <a href="arco.html" class="ec-tab ec-tab--eco" style="padding:clamp(18px,2.2vw,28px) 0;border-bottom:1px solid rgba(24,24,24,.24)" style-hover="background:rgba(24,24,24,.05);color:#181818">
+      <span style="font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,2.4vw,1.9rem);letter-spacing:-.035em">Arco</span>
+      <span style="font-size:14px;line-height:1.5">O percurso em que essa construção se insere, com repertório de competências e currículo.</span>
       <span style="flex:none;font-size:13.5px;font-weight:600">Ver o percurso ↗</span>
     </a>
-    <a href="atrio.html" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,3vw,44px);padding:clamp(18px,2.2vw,28px) 0;border-bottom:1px solid rgba(24,24,24,.24)" style-hover="background:rgba(24,24,24,.05);color:#181818">
-      <span style="flex:0 1 200px;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,2.4vw,1.9rem);letter-spacing:-.035em">ATRIO</span>
-      <span style="flex:3 1 360px;font-size:14px;line-height:1.5">Outra arquitetura, voltada ao raciocínio assistido, governado e rastreável.</span>
+    <a href="atrio.html" class="ec-tab ec-tab--eco" style="padding:clamp(18px,2.2vw,28px) 0;border-bottom:1px solid rgba(24,24,24,.24)" style-hover="background:rgba(24,24,24,.05);color:#181818">
+      <span style="font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.3rem,2.4vw,1.9rem);letter-spacing:-.035em">ATRIO</span>
+      <span style="font-size:14px;line-height:1.5">Outra arquitetura, voltada ao raciocínio assistido, governado e rastreável.</span>
       <span style="flex:none;font-size:13.5px;font-weight:600">Abrir ATRIO ↗</span>
     </a>
+  </div>
+    </div>
   </div>
 
   <p data-reveal style="margin:clamp(56px,7vw,104px) 0 0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(1.7rem,5vw,3.8rem);line-height:1.02;letter-spacing:-.045em;text-wrap:pretty;opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.32,.72,0,1),transform .8s cubic-bezier(.32,.72,0,1)">Antes de ampliar inteligência, é preciso dar forma ao <span style="background:#FFB627;padding:0 .08em">trabalho</span>.</p>
@@ -1487,318 +1521,267 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </div>
 
 <script>
-/* Linha de tinta do acervo, vinda da proposta Eco do PLAY.
-   Cada material é uma tecla, de Si3 a Dó5: cristas nas brancas (documentos de leitura, em PDF),
-   vales nas pretas (bases de consulta: planilhas e ferramentas), zero onde o piano não tem preta.
-   Tocar um material faz a corda vibrar e acende, na cadeia abaixo, o trecho que ele percorre;
-   tocar uma etapa ergue juntos os materiais que a atravessam. O clique leva à ficha no acervo. */
-window.EcoOnda = (function () {
+/* CORDAS DO ACERVO — a cadeia operacional como cordas verticais.
+   Seis cordas, uma por etapa (entrada, classificação, distribuição, verificação,
+   produção, memória), correm ao lado da lista dos 14 materiais. Cada material
+   pousa nas cordas das etapas que percorre: cheio quando é documento de leitura,
+   vazado quando é base de consulta. Tocar um material faz vibrar as suas cordas;
+   tocar uma corda reúne os materiais que a atravessam. O som é opcional. */
+window.EcoCordas = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   var ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
-  /* 17 pontos a meio passo de tecla. Pares: brancas. Ímpares: fronteira, com material se há preta, 0 se não há (Si–Dó e Mi–Fá).
-     Os documentos seguem a cadeia da entrada à produção; cada base fica ao lado do documento que sustenta. */
-  var TECLAS = ['m2', 0, 'm1', 'm14', 'm3', 'm10', 'm4', 0, 'm5', 'm9', 'm6', 'm8', 'm7', 'm13', 'm11', 0, 'm12'];
-  var BRANCAS = ['B3', 'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'];
   var NS = 'http://www.w3.org/2000/svg';
   var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
+  /* afinação das cordas (soltas, da grave à aguda) e uma nota por material */
+  var SOLTAS = ['G3', 'D4', 'A4', 'E5', 'B5', 'F#6'];
+  var NOTAS = { m2: 'B3', m1: 'C4', m14: 'C#4', m3: 'D4', m10: 'D#4', m4: 'E4', m5: 'F4', m9: 'F#4', m6: 'G4', m8: 'G#4', m7: 'A4', m13: 'A#4', m11: 'B4', m12: 'C5' };
 
-  function nota(k) { var n = BRANCAS[k >> 1]; return k % 2 ? n[0] + '#' + n.slice(1) : n; }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function sv(tag, cls) { var e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); return e; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function trecho(m) { var e = m.etapas; return e[0] === e[1] ? ETAPAS[e[0]] : ETAPAS[e[0]] + ' → ' + ETAPAS[e[1]]; }
   function cobre(m, i) { return m.etapas[0] <= i && i <= m.etapas[1]; }
+  function leitura(m) { return m.formato === 'PDF'; }
+  function noPlay(m) { return !!(m.play || /^play\.html/.test(m.href || '')); }
 
-  /* som: corda de triângulo com dois harmônicos, como no PLAY */
   var ctx = null, somOn = false;
   function freq(n) { var i = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[n[0]] + (n[1] === '#' ? 1 : 0); return 440 * Math.pow(2, ((+n.slice(-1) - 4) * 12 + i - 9) / 12); }
   function som(n, vol) {
     if (!somOn || !ctx || !n) return;
     var t = ctx.currentTime, g = ctx.createGain(), f = freq(n);
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.18, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
-    [[1, 'triangle', 1], [2, 'sine', .25], [3, 'sine', .08]].forEach(function (h) {
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.16, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+    [[1, 'sawtooth', .22], [1, 'triangle', 1], [2, 'sine', .3], [3, 'sine', .1]].forEach(function (h) {
       var o = ctx.createOscillator(), og = ctx.createGain(); o.type = h[1]; o.frequency.value = f * h[0]; og.gain.value = h[2];
-      o.connect(og); og.connect(g); o.start(t); o.stop(t + 2.5);
+      o.connect(og); og.connect(g); o.start(t); o.stop(t + 2.7);
     });
     g.connect(ctx.destination);
   }
 
-  function monta(wrap, materiais, escolhe) {
-    if (!wrap || wrap.dataset.onda) return;
-    wrap.dataset.onda = '1';
-    var M = {}; materiais.forEach(function (m) { M[m.id] = m; });
+  function monta(lista, cab, materiais) {
+    if (!lista || lista.dataset.cordas) return;
+    lista.dataset.cordas = '1';
+    lista.classList.add('acervo-lista');
+    var porTitulo = materiais.slice();
 
-    /* estrutura */
-    var raiz = el('div', 'onda-eco');
-    raiz.setAttribute('role', 'group');
-    raiz.setAttribute('aria-label', 'Materiais do acervo como linha de tinta. Cristas: documentos de leitura. Vales: bases de consulta.');
-    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('aria-hidden', 'true');
-    var eixo = document.createElementNS(NS, 'line'); eixo.setAttribute('class', 'eixo');
-    var traco = document.createElementNS(NS, 'path'); traco.setAttribute('class', 'traco');
-    svg.appendChild(eixo); svg.appendChild(traco); raiz.appendChild(svg);
+    /* cabeçalho: leitura e som */
+    var leit = el('div', 'cordas-leitura');
+    leit.setAttribute('aria-live', 'polite');
+    var somB = el('button', 'cordas-som', 'som<i>' + ICONE + '</i>');
+    somB.type = 'button'; somB.setAttribute('aria-pressed', 'false'); somB.setAttribute('aria-label', 'Som das cordas');
+    if (cab) { cab.innerHTML = ''; cab.appendChild(leit); cab.appendChild(somB); }
 
-    var o = { pts: [], amp: [], vel: [], alvoA: [], raf: 0, fixo: null, ptr: null, ex: [] };
-    TECLAS.forEach(function (id, k) {
-      var m = id ? M[id] : null;
-      o.pts.push({ k: k, pol: k % 2 ? (m ? -1 : 0) : 1, m: m, nota: m ? nota(k) : null });
-      o.amp.push(0); o.vel.push(0); o.alvoA.push(0);
-    });
-    var total = o.pts.filter(function (p) { return p.m; }).length;
+    /* braço: as seis cordas, com pestana em cima e estandarte embaixo */
+    var braco = el('div', 'cordas');
+    braco.setAttribute('aria-hidden', 'true');
+    var svg = sv('svg', 'cordas-svg');
+    var pestana = sv('line', 'pestana'), cavalete = sv('path', 'cavalete'), estandarte = sv('path', 'estandarte');
+    svg.appendChild(pestana); svg.appendChild(estandarte); svg.appendChild(cavalete);
+    var fios = ETAPAS.map(function () { var p = sv('path', 'corda'); svg.appendChild(p); return p; });
+    var barras = sv('g', 'barras'); svg.appendChild(barras);
+    braco.appendChild(svg);
+    lista.appendChild(braco);
 
-    var cad = el('div', 'onda-cadeia');
-    var fio = el('span', 'fio'), rota = el('span', 'rota');
-    cad.appendChild(fio); cad.appendChild(rota);
-    var paradas = ETAPAS.map(function (nome, i) {
-      var n = o.pts.filter(function (p) { return p.m && cobre(p.m, i); }).length;
-      var b = el('button', 'etapa', '<i></i><span>' + nome + '</span>');
+    var chaves = ETAPAS.map(function (nome, i) {
+      var b = el('button', 'cordas-etapa', '<span class="z">0</span>' + (i + 1));
       b.type = 'button';
-      b.setAttribute('aria-label', 'Etapa ' + nome + ': ' + n + ' materiais');
-      cad.appendChild(b);
+      var n = materiais.filter(function (m) { return cobre(m, i); }).length;
+      b.setAttribute('aria-label', 'Corda ' + (i + 1) + ', ' + nome + ': ' + n + ' materiais');
+      b.title = nome;
+      lista.appendChild(b);
       return b;
     });
-    var leit = el('div', 'onda-leitura');
-    var somB = el('button', 'onda-som', 'som<i>' + ICONE + '</i>');
-    somB.type = 'button';
-    somB.setAttribute('aria-pressed', 'false');
-    somB.setAttribute('aria-label', 'Som da linha de tinta');
 
-    wrap.appendChild(somB); wrap.appendChild(raiz); wrap.appendChild(cad); wrap.appendChild(leit);
+    var o = { amp: ETAPAS.map(function () { return 0; }), fase: ETAPAS.map(function () { return 0; }), raf: 0, linhas: [], fixo: null, x: [], top: 0, bot: 0 };
 
-    o.pts.forEach(function (pt, ix) {
-      if (!pt.m) return;
-      var m = pt.m;
-      pt.ponto = el('span', 'ponto'); raiz.appendChild(pt.ponto);
-      pt.rot = el('p', 'rot' + (pt.pol < 0 ? ' p' : ''), esc(m.titulo));
-      raiz.appendChild(pt.rot);
-      var a = el('a', 'no'); a.href = '#acervo';
-      a.setAttribute('aria-label', m.titulo + (pt.pol < 0 ? ', base de consulta. ' : ', documento. ') + (m.etapas[0] === m.etapas[1] ? 'Etapa: ' : 'Etapas: ') + trecho(m).replace(' → ', ' a ') + '. Abrir no acervo.');
-      raiz.appendChild(a); pt.a = a;
-      a.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') toque(ix, 'mouse'); });
-      a.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
-      a.addEventListener('focus', function () { if (!o.ptr) toque(ix, 'teclado'); });
-      a.addEventListener('blur', function () { solta(); });
-      a.addEventListener('pointerdown', function (e) { o.ptr = e.pointerType; vibra(ix, 1); som(pt.nota); });
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        var ptr = o.ptr; o.ptr = null;
-        /* no toque, o primeiro toque fixa a leitura; o segundo, na mesma tecla, abre a ficha */
-        if (ptr && ptr !== 'mouse' && !(o.fixo && o.fixo[0] === 'm' && o.fixo[1] === ix)) { o.fixo = ['m', ix]; toque(ix, 'toque'); return; }
-        escolhe(m.id);
+    function linhas() {
+      var bts = [].slice.call(lista.querySelectorAll(':scope > button[aria-pressed]'));
+      return bts.map(function (b) {
+        var m = porTitulo.find(function (mm) { return b.textContent.indexOf(mm.titulo) >= 0; });
+        return m ? { b: b, m: m } : null;
+      }).filter(Boolean);
+    }
+
+    function geo() {
+      o.linhas = linhas();
+      var W = lista.clientWidth, H = lista.scrollHeight;
+      var gw = parseFloat(getComputedStyle(lista).getPropertyValue('--cordas-w')) || 112;
+      var passo = (gw - 30) / 5;
+      var x0 = W - gw + 12;
+      o.x = ETAPAS.map(function (_, i) { return x0 + passo * i; });
+      o.top = 30; o.bot = H - 8; o.ponte = H - 62; o.cauda = H - 38; o.W = W; o.H = H;
+      o.r = Math.max(2.6, Math.min(3.6, passo * 0.3));
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.setAttribute('width', W); svg.setAttribute('height', H);
+      pestana.setAttribute('x1', o.x[0] - 7); pestana.setAttribute('x2', o.x[5] + 7);
+      pestana.setAttribute('y1', o.top); pestana.setAttribute('y2', o.top);
+      var cx = (o.x[0] + o.x[5]) / 2;
+      estandarte.setAttribute('d', 'M' + (o.x[0] - 5) + ' ' + o.cauda + ' L' + (o.x[5] + 5) + ' ' + o.cauda + ' L' + (cx + 9) + ' ' + o.bot + ' L' + (cx - 9) + ' ' + o.bot + ' Z');
+      cavalete.setAttribute('d', 'M' + (o.x[0] - 8) + ' ' + (o.ponte + 3) + ' Q' + cx + ' ' + (o.ponte - 5) + ' ' + (o.x[5] + 8) + ' ' + (o.ponte + 3));
+      chaves.forEach(function (b, i) { b.style.left = o.x[i] + 'px'; });
+      o.linhas.forEach(function (l) {
+        var r = l.b.getBoundingClientRect(), R = lista.getBoundingClientRect();
+        l.y = r.top - R.top + lista.scrollTop + r.height / 2;
       });
-    });
-
-    paradas.forEach(function (b, i) {
-      b.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') acorde(i); });
-      b.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
-      b.addEventListener('focus', function () { if (!o.ptr) acorde(i); });
-      b.addEventListener('blur', function () { solta(); });
-      b.addEventListener('pointerdown', function (e) { o.ptr = e.pointerType; });
-      b.addEventListener('click', function () {
-        var ptr = o.ptr; o.ptr = null;
-        if (ptr && ptr !== 'mouse') o.fixo = ['e', i];
-        acorde(i, true);
-      });
-    });
-
-    /* a faixa do PLAY faz soar, juntos, os materiais que o playbook reúne */
-    var faixa = document.getElementById('play-faixa');
-    var noPlay = function (m) { return !!(m.play || /^play\.html/.test(m.href)); };
-    if (faixa) {
-      faixa.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') grupo(true); });
-      faixa.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
-      faixa.addEventListener('focus', function () { grupo(false); });
-      faixa.addEventListener('blur', function () { solta(); });
+      barrasMonta();
+      desenha(performance.now());
     }
 
-    leit.addEventListener('click', function (e) { var b = e.target.closest('.onda-ir'); if (b) escolhe(b.dataset.id); });
-
-    somB.addEventListener('click', function () {
-      somOn = !somOn; somB.setAttribute('aria-pressed', String(somOn));
-      if (somOn && !ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ctx = null; } }
-      if (ctx && ctx.state === 'suspended') ctx.resume();
-      if (somOn) { som('C4', .14); setTimeout(function () { som('G4', .14); }, 120); }
-    });
-
-    /* geometria */
-    function geo(forcaVert) {
-      var w = raiz.clientWidth;
-      var vert = forcaVert || w < 760;
-      raiz.classList.toggle('vert', vert);
-      cad.classList.toggle('alterna', w < 560);
-      var h = raiz.clientHeight;
-      o.vert = vert; o.w = w; o.h = h;
-      o.g = Math.max(0, -parseFloat(getComputedStyle(raiz).marginLeft) || 0);
-      var L = vert ? h : w, marg = vert ? 24 : o.g + 6;
-      o.L = L; o.a0 = marg; o.passo = (L - 2 * marg) / 18; o.mid = vert ? w * 0.5 : h * 0.5;
-      o.base = vert ? Math.min(24, w * 0.06) : Math.max(16, Math.min(32, h * 0.065));
-      o.A0 = vert ? 30 : Math.max(44, Math.min(60, h * 0.12));
-    }
-    function transborda() { return o.pts.some(function (p) { return p.rot && p.rot.scrollWidth > p.rot.clientWidth + 1; }); }
-    function layout() {
-      geo(false);
-      if (!o.vert) {
-        o.fs = Math.max(10.5, Math.min(15, Math.round(o.passo * 0.31 * 4) / 4));
-        for (var t = 0; t < 8; t++) {
-          raiz.style.setProperty('--rot-fs', o.fs + 'px'); desenha();
-          if (!transborda()) break;
-          if (o.fs <= 10.5) { geo(true); break; }
-          o.fs = Math.max(10.5, o.fs - 0.5);
-        }
-      }
-      if (o.vert) raiz.style.setProperty('--rot-fs', '13.5px');
-      desenha(); cadeia();
-      if (o.estado) estado(o.estado[0], o.estado[1], o.estado[2]);
-    }
-    function desenha() {
-      var pts = [[0, 0], [o.a0, 0]].concat(o.pts.map(function (pt, ix) { return [o.a0 + (ix + 1) * o.passo, pt.pol * o.base + o.amp[ix]]; })).concat([[o.L - o.a0, 0], [o.L, 0]]);
-      var d = '', N = 8;
-      for (var i = 0; i < pts.length - 1; i++) {
-        var a = pts[i], b = pts[i + 1];
-        for (var s = (i ? 1 : 0); s <= N; s++) {
-          var t = s / N, u = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * (1 - Math.cos(Math.PI * t)) / 2;
-          var X = o.vert ? o.mid + y : u, Y = o.vert ? u : o.mid - y;
-          d += (d ? 'L' : 'M') + X.toFixed(1) + ' ' + Y.toFixed(1);
-        }
-      }
-      traco.setAttribute('d', d);
-      if (o.vert) { eixo.setAttribute('x1', o.mid); eixo.setAttribute('x2', o.mid); eixo.setAttribute('y1', 0); eixo.setAttribute('y2', o.h); }
-      else { eixo.setAttribute('x1', 0); eixo.setAttribute('x2', o.w); eixo.setAttribute('y1', o.mid); eixo.setAttribute('y2', o.mid); }
-      o.pts.forEach(function (pt, ix) {
-        if (!pt.a) return;
-        var u = o.a0 + (ix + 1) * o.passo, y = pt.pol * o.base + o.amp[ix];
-        var X = o.vert ? o.mid + y : u, Y = o.vert ? u : o.mid - y;
-        pt.ponto.style.left = X + 'px'; pt.ponto.style.top = Y + 'px';
-        var as = pt.a.style, rs = pt.rot.style;
-        if (o.vert) {
-          var zh = pt.pol < 0 ? o.passo * 1.3 : o.passo * 1.9;
-          as.top = (u - zh / 2) + 'px'; as.height = zh + 'px'; as.left = (pt.pol < 0 ? 0 : o.mid) + 'px'; as.width = (o.w * 0.5) + 'px';
-          /* o rótulo começa além da maior excursão da corda, para o ponto nunca invadir o texto */
-          var borda = o.base + o.A0 + 14;
-          rs.top = u + 'px'; rs.textAlign = pt.pol < 0 ? 'right' : 'left';
-          if (pt.pol < 0) { rs.left = o.g + 'px'; rs.width = Math.max(0, o.mid - borda - o.g) + 'px'; }
-          else { rs.left = (o.mid + borda) + 'px'; rs.width = Math.max(0, o.w - o.mid - borda - o.g) + 'px'; }
-        } else {
-          /* rótulos ancorados pela base (cristas) ou pelo topo (vales), além da maior excursão da corda */
-          var folga = o.base + o.A0 + 18, zw = o.passo * 1.9;
-          as.left = (u - zw / 2) + 'px'; as.width = zw + 'px';
-          as.top = (pt.pol < 0 ? o.mid : o.mid - folga - 46) + 'px'; as.height = (folga + 46) + 'px';
-          rs.left = u + 'px'; rs.width = (o.passo * 2 - 8) + 'px'; rs.textAlign = '';
-          rs.top = (pt.pol < 0 ? o.mid + folga : o.mid - folga) + 'px';
-        }
+    function barrasMonta() {
+      barras.innerHTML = '';
+      o.linhas.forEach(function (l) {
+        var g = sv('g', 'barra' + (leitura(l.m) ? ' cheia' : ' vazada'));
+        var e0 = l.m.etapas[0], e1 = l.m.etapas[1];
+        var liga = sv('path', 'liga'); g.appendChild(liga);
+        var contas = [];
+        for (var i = e0; i <= e1; i++) { var c = sv('circle', 'conta'); c.setAttribute('r', o.r.toFixed(1)); g.appendChild(c); contas.push([i, c]); }
+        l.g = g; l.liga = liga; l.contas = contas;
+        barras.appendChild(g);
       });
     }
-    function cadeia() {
-      var w = cad.clientWidth, x0, x1;
-      if (o.vert) { x0 = o.g + (w - 2 * o.g) * 0.06; x1 = w - x0; } else { x0 = o.a0 + o.passo; x1 = o.a0 + 17 * o.passo; }
-      o.ex = ETAPAS.map(function (_, i) { return x0 + (x1 - x0) * i / 5; });
-      paradas.forEach(function (b, i) { b.style.left = o.ex[i] + 'px'; });
-      fio.style.left = x0 + 'px'; fio.style.width = (x1 - x0) + 'px';
-    }
 
-    /* movimento: mola amortecida por ponto */
+    /* deslocamento de cada corda na altura y: onda estacionária amortecida */
+    function desloca(i, y, t) {
+      var L = o.ponte - o.top; if (L <= 0 || !o.amp[i] || y > o.ponte) return 0;
+      var u = (y - o.top) / L;
+      return o.amp[i] * Math.sin(Math.PI * u) * Math.sin(o.fase[i] + t * 0.042);
+    }
+    function desenha(t) {
+      fios.forEach(function (p, i) {
+        var d = '', N = 32;
+        for (var k = 0; k <= N; k++) {
+          var y = o.top + (o.ponte - o.top) * k / N;
+          d += (k ? 'L' : 'M') + (o.x[i] + desloca(i, y, t)).toFixed(1) + ' ' + y.toFixed(1);
+        }
+        var cx = (o.x[0] + o.x[5]) / 2;
+        d += 'L' + (o.x[i] + (cx - o.x[i]) * 0.18).toFixed(1) + ' ' + o.cauda;
+        p.setAttribute('d', d);
+      });
+      o.linhas.forEach(function (l) {
+        if (!l.contas) return;
+        var xs = l.contas.map(function (c) { return o.x[c[0]] + desloca(c[0], l.y, t); });
+        l.contas.forEach(function (c, j) { c[1].setAttribute('cx', xs[j].toFixed(1)); c[1].setAttribute('cy', l.y.toFixed(1)); });
+        l.liga.setAttribute('d', xs.length > 1 ? 'M' + xs[0].toFixed(1) + ' ' + l.y.toFixed(1) + ' L' + xs[xs.length - 1].toFixed(1) + ' ' + l.y.toFixed(1) : '');
+      });
+    }
     function anima() {
-      if (o.raf) return;
-      var ult = performance.now();
+      if (o.raf || reduz) return;
       var passo = function (now) {
-        var dt = Math.min(0.033, (now - ult) / 1000); ult = now; var vivo = false;
-        for (var i = 0; i < o.amp.length; i++) {
-          var f = (o.alvoA[i] - o.amp[i]) * 190 - o.vel[i] * 9;
-          o.vel[i] += f * dt; o.amp[i] += o.vel[i] * dt;
-          if (Math.abs(o.vel[i]) > 0.05 || Math.abs(o.alvoA[i] - o.amp[i]) > 0.05) vivo = true;
-        }
-        desenha();
+        var vivo = false;
+        o.amp = o.amp.map(function (a) { var n = a * 0.955; if (Math.abs(n) > 0.08) vivo = true; return Math.abs(n) > 0.08 ? n : 0; });
+        desenha(now);
         o.raf = vivo ? requestAnimationFrame(passo) : 0;
       };
       o.raf = requestAnimationFrame(passo);
     }
-    function aplica() { if (reduz) { o.amp = o.alvoA.slice(); o.vel = o.vel.map(function () { return 0; }); desenha(); } else anima(); }
-    function vibra(ix, forca) {
+    function belisca(i, forca) {
       if (reduz) return;
-      var pol = o.pts[ix].pol || 1;
-      o.vel = o.vel.map(function (v, j) { var d = Math.abs(j - ix); return v + pol * forca * 900 * Math.exp(-d * d / 6) * (d % 2 ? -0.6 : 1); });
+      o.amp[i] = Math.min(9, Math.abs(o.amp[i]) + 7 * forca);
+      o.fase[i] = Math.random() * Math.PI;
       anima();
     }
 
-    /* estados: material, etapa ou repouso */
-    function toque(ix, via) {
-      var pt = o.pts[ix];
-      o.alvoA = o.alvoA.map(function (_, j) { var d = Math.abs(j - ix); return d === 0 ? pt.pol * o.A0 : d === 1 ? pt.pol * o.A0 * -0.18 : 0; });
-      estado('m', ix, via); aplica();
-    }
-    function acorde(i, toca) {
-      o.alvoA = o.pts.map(function (p) { return p.m && cobre(p.m, i) ? p.pol * o.A0 * 0.5 : 0; });
-      estado('e', i); aplica();
-      if (toca) {
-        o.pts.forEach(function (p, j) {
-          if (!p.m || !cobre(p.m, i)) return;
-          setTimeout(function () { vibra(j, 0.35); som(p.nota, 0.1); }, reduz ? 0 : j * 45);
-        });
-      }
-    }
-    function grupo(toca) {
-      o.alvoA = o.pts.map(function (p) { return p.m && noPlay(p.m) ? p.pol * o.A0 * 0.5 : 0; });
-      estado('g'); aplica();
-      if (toca) o.pts.forEach(function (p, j) { if (p.m && noPlay(p.m)) setTimeout(function () { vibra(j, 0.3); som(p.nota, 0.08); }, reduz ? 0 : j * 40); });
-    }
-    function solta() {
-      if (o.fixo) { if (o.fixo[0] === 'm') toque(o.fixo[1], 'toque'); else acorde(o.fixo[1]); return; }
-      o.alvoA = o.alvoA.map(function () { return 0; });
-      estado(null); aplica();
-    }
-    function estado(tipo, alvo, via) {
-      o.estado = tipo ? [tipo, alvo, via] : null;
-      raiz.classList.toggle('vivo', !!tipo);
-      var mat = tipo === 'm' ? o.pts[alvo].m : null;
-      o.pts.forEach(function (p, j) {
-        if (!p.m) return;
-        var on = tipo === 'm' ? j === alvo : tipo === 'e' ? cobre(p.m, alvo) : tipo === 'g' ? noPlay(p.m) : false;
-        p.rot.classList.toggle('on', on); p.ponto.classList.toggle('on', on);
+    /* estados: material, etapa, PLAY ou repouso */
+    function estado(tipo, alvo) {
+      o.estado = tipo ? [tipo, alvo] : null;
+      lista.classList.toggle('cordas-vivo', !!tipo);
+      var mat = tipo === 'm' ? alvo : null;
+      o.linhas.forEach(function (l) {
+        var on = tipo === 'm' ? l.m === mat : tipo === 'e' ? cobre(l.m, alvo) : tipo === 'g' ? noPlay(l.m) : false;
+        l.b.classList.toggle('corda-on', !!tipo && on);
+        l.b.classList.toggle('corda-off', !!tipo && !on);
+        if (l.g) { l.g.classList.toggle('on', !!tipo && on); l.g.classList.toggle('off', !!tipo && !on); }
       });
-      paradas.forEach(function (b, i) {
-        b.classList.toggle('on', mat ? cobre(mat, i) : tipo === 'e' && i === alvo);
-        b.classList.toggle('off', mat ? !cobre(mat, i) : tipo === 'e' && i !== alvo);
+      fios.forEach(function (p, i) {
+        var on = mat ? cobre(mat, i) : tipo === 'e' ? i === alvo : false;
+        p.classList.toggle('on', on);
+        chaves[i].classList.toggle('on', on);
       });
-      if (mat && o.ex.length) {
-        rota.style.left = o.ex[mat.etapas[0]] + 'px';
-        rota.style.width = (o.ex[mat.etapas[1]] - o.ex[mat.etapas[0]]) + 'px';
-        rota.classList.add('on');
-      } else rota.classList.remove('on');
-      leitura(tipo, alvo, via);
+      fala(tipo, alvo);
     }
-    function leitura(tipo, alvo, via) {
+    function fala(tipo, alvo) {
       var h;
       if (tipo === 'm') {
-        var m = o.pts[alvo].m;
-        h = '<small>' + trecho(m) + '</small><p><b>' + esc(m.titulo) + '</b>' + esc(m.funcao) + '</p>' +
-          (via === 'toque' ? '<button type="button" class="onda-ir" data-id="' + m.id + '">Ver no acervo<span aria-hidden="true">↓</span></button>'
-            : '<em>' + (via === 'teclado' ? 'Enter' : 'clique') + ' abre a ficha no acervo</em>');
+        h = '<small>' + esc(trecho(alvo)) + ' | ' + (leitura(alvo) ? 'documento de leitura' : 'base de consulta') + '</small><p><b>' + esc(alvo.titulo) + '</b> ' + esc(alvo.funcao) + '</p>';
       } else if (tipo === 'g') {
-        var doPlay = o.pts.filter(function (p) { return p.m && noPlay(p.m); }).map(function (p) { return esc(p.m.titulo); });
-        h = '<small>No PLAY</small><p><b>' + doPlay.length + ' materiais</b>' + doPlay.join(', ') + '.</p>';
+        var doPlay = o.linhas.filter(function (l) { return noPlay(l.m); }).map(function (l) { return esc(l.m.titulo); });
+        h = '<small>No PLAY</small><p><b>' + doPlay.length + ' materiais.</b> ' + doPlay.join(', ') + '.</p>';
       } else if (tipo === 'e') {
-        var lista = o.pts.filter(function (p) { return p.m && cobre(p.m, alvo); }).map(function (p) { return esc(p.m.titulo); });
-        h = '<small>Etapa ' + ('0' + (alvo + 1)) + ' · ' + ETAPAS[alvo] + '</small><p><b>' + lista.length + ' materiais</b>' + lista.join(', ') + '.</p>';
+        var lst = o.linhas.filter(function (l) { return cobre(l.m, alvo); }).map(function (l) { return esc(l.m.titulo); });
+        h = '<small>Corda ' + ('0' + (alvo + 1)) + ' | ' + ETAPAS[alvo] + '</small><p><b>' + lst.length + ' materiais.</b> ' + lst.join(', ') + '.</p>';
       } else {
-        h = '<small>Leitura</small><p><b>' + total + ' materiais, uma linha.</b>Cristas são documentos de leitura; vales, bases de consulta. Toque um material para ver o trecho da cadeia que ele percorre, ou uma etapa para reunir os materiais que a atravessam.</p>';
+        h = '<small>Leitura</small><p><b>' + o.linhas.length + ' materiais, seis cordas.</b> Cada corda é uma etapa da cadeia: entrada, classificação, distribuição, verificação, produção e memória. Toque um material para ver as cordas que ele faz vibrar, ou uma corda para reunir os materiais que a atravessam.</p>';
       }
-      /* só redesenha o que mudou: o botão da leitura precisa sobreviver ao blur da tecla */
-      if (o.leitH !== h) { o.leitH = h; leit.innerHTML = h; }
+      if (o.h !== h) { o.h = h; leit.innerHTML = h; }
+    }
+    function tocaMaterial(m, forte) {
+      estado('m', m);
+      for (var i = m.etapas[0]; i <= m.etapas[1]; i++) belisca(i, forte ? 1 : .55);
+      if (forte) som(NOTAS[m.id]);
+    }
+    function tocaEtapa(i, forte) {
+      estado('e', i);
+      belisca(i, forte ? 1.1 : .6);
+      if (forte) {
+        som(SOLTAS[i], .14);
+        o.linhas.forEach(function (l, j) { if (cobre(l.m, i)) setTimeout(function () { som(NOTAS[l.m.id], .06); }, reduz ? 0 : 90 + j * 40); });
+      }
+    }
+    function tocaPlay(forte) {
+      estado('g');
+      o.linhas.forEach(function (l, j) {
+        if (!noPlay(l.m)) return;
+        setTimeout(function () { for (var i = l.m.etapas[0]; i <= l.m.etapas[1]; i++) belisca(i, .35); if (forte) som(NOTAS[l.m.id], .07); }, reduz ? 0 : j * 50);
+      });
+    }
+    function solta() {
+      if (o.fixo) { if (o.fixo[0] === 'm') estado('m', o.fixo[1]); else estado('e', o.fixo[1]); return; }
+      estado(null);
     }
 
-    /* início */
-    var pendente = 0;
-    function agenda() { if (pendente) return; pendente = requestAnimationFrame(function () { pendente = 0; layout(); }); }
-    if (window.ResizeObserver) new ResizeObserver(agenda).observe(wrap); else window.addEventListener('resize', agenda);
+    /* eventos: delegados na lista, para sobreviver às renderizações */
+    var linhaDe = function (t) { var b = t && t.closest && t.closest('button[aria-pressed]'); if (!b || b.parentElement !== lista) return null; return o.linhas.find(function (l) { return l.b === b; }) || null; };
+    lista.addEventListener('pointerover', function (e) { if (e.pointerType !== 'mouse') return; var l = linhaDe(e.target); if (l && (!o.estado || o.estado[1] !== l.m)) tocaMaterial(l.m, false); });
+    lista.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
+    lista.addEventListener('focusin', function (e) { var l = linhaDe(e.target); if (l) tocaMaterial(l.m, false); });
+    lista.addEventListener('focusout', function (e) { if (!lista.contains(e.relatedTarget)) solta(); });
+    lista.addEventListener('click', function (e) {
+      var l = linhaDe(e.target);
+      if (l) { o.fixo = ['m', l.m]; tocaMaterial(l.m, true); }
+    });
+    chaves.forEach(function (b, i) {
+      b.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') tocaEtapa(i, false); });
+      b.addEventListener('focus', function () { tocaEtapa(i, false); });
+      b.addEventListener('click', function () { o.fixo = ['e', i]; tocaEtapa(i, true); });
+    });
+    var folha = document.querySelector('#acervo .play-folha');
+    if (folha) {
+      folha.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') tocaPlay(true); });
+      folha.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') solta(); });
+      folha.addEventListener('focus', function () { tocaPlay(false); });
+      folha.addEventListener('blur', function () { solta(); });
+    }
+    somB.addEventListener('click', function () {
+      somOn = !somOn; somB.setAttribute('aria-pressed', String(somOn));
+      if (somOn && !ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ctx = null; } }
+      if (ctx && ctx.state === 'suspended') ctx.resume();
+      if (somOn) { som('G3', .12); setTimeout(function () { som('D4', .12); }, 110); setTimeout(function () { som('A4', .12); }, 220); }
+    });
+
+    /* início: medida, e uma passada de arco quando o acervo entra na tela */
+    var pend = 0;
+    function agenda() { if (pend) return; pend = requestAnimationFrame(function () { pend = 0; geo(); if (o.estado) estado(o.estado[0], o.estado[1]); }); }
+    if (window.ResizeObserver) new ResizeObserver(agenda).observe(lista); else window.addEventListener('resize', agenda);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(agenda);
-    estado(null);
-    layout();
+    geo(); estado(null);
     if (!reduz && window.IntersectionObserver) {
       var io = new IntersectionObserver(function (es) {
         if (!es.some(function (e) { return e.isIntersecting; })) return;
         io.disconnect();
-        o.pts.forEach(function (pt, ix) { if (pt.m) setTimeout(function () { vibra(ix, 0.42); }, 260 + ix * 70); });
-      }, { threshold: 0.45 });
-      io.observe(raiz);
+        ETAPAS.forEach(function (_, i) { setTimeout(function () { belisca(i, .7); }, 200 + i * 110); });
+      }, { threshold: 0.35 });
+      io.observe(lista);
     }
+    return { refaz: agenda };
   }
 
   return { monta: monta };
@@ -1808,20 +1791,20 @@ window.EcoOnda = (function () {
 
 
 const MATERIAIS = [
-  {id:'m1',meta:'Volume 01 · PDF, 13 páginas',previa:['m1-1','m1-2'],forma:'retrato',fundador:true,etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',href:'assets/play/manuais/1-notas-introdutorias.pdf',play:'play.html#vol-01'},
+  {id:'m1',meta:'Volume 01 | PDF, 13 páginas',previa:['m1-1','m1-2'],forma:'retrato',fundador:true,etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',href:'assets/play/manuais/1-notas-introdutorias.pdf',play:'play.html#vol-01'},
   {id:'m2',meta:'PDF, 2 páginas',previa:['m2-1'],forma:'paisagem',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
   {id:'m5',meta:'PDF, 4 páginas',previa:['m5-1'],forma:'paisagem',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',href:'assets/echo/documentos/localizadores.pdf'},
-  {id:'m4',meta:'Volume 02 · PDF, 9 páginas',previa:['m4-1','m4-2'],forma:'retrato',fundador:true,etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',href:'assets/play/manuais/2-mapa-tematico.pdf',play:'play.html#vol-02'},
-  {id:'m3',meta:'Volume 03 · PDF, 12 páginas',previa:['m3-1','m3-2'],forma:'retrato',fundador:true,etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',href:'assets/play/manuais/3-afinacao-processual.pdf',play:'play.html#vol-03'},
+  {id:'m4',meta:'Volume 02 | PDF, 9 páginas',previa:['m4-1','m4-2'],forma:'retrato',fundador:true,etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',href:'assets/play/manuais/2-mapa-tematico.pdf',play:'play.html#vol-02'},
+  {id:'m3',meta:'Volume 03 | PDF, 12 páginas',previa:['m3-1','m3-2'],forma:'retrato',fundador:true,etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',href:'assets/play/manuais/3-afinacao-processual.pdf',play:'play.html#vol-03'},
   {id:'m6',meta:'PDF, 1 página',previa:['m6-1'],forma:'paisagem',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',href:'assets/echo/documentos/matriz_papeis.pdf'},
   {id:'m7',meta:'PDF, 2 páginas',previa:['m7-1'],forma:'paisagem',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
-  {id:'m8',meta:'Planilha XLSX · 631 temas',previa:['m8-1'],forma:'paisagem',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',href:'assets/echo/documentos/precedentes.xlsx'},
+  {id:'m8',meta:'Planilha XLSX | 631 temas',previa:['m8-1'],forma:'paisagem',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',href:'assets/echo/documentos/precedentes.xlsx'},
   {id:'m9',meta:'Planilha XLSX',previa:['m9-1'],forma:'paisagem',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
-  {id:'m10',meta:'Planilha XLSX · 2.758 assuntos',previa:['m10-1'],forma:'paisagem',etapas:[1,5],titulo:'Ementário',formato:'XLSX',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',play:'play.html#ementario'},
-  {id:'m11',meta:'Volume 04 · PDF, 20 páginas',previa:['m11-1','m11-2'],forma:'retrato',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',href:'assets/play/manuais/4-guia-estilo.pdf',play:'play.html#guia'},
-  {id:'m12',meta:'Anexo do PLAY · PDF, 11 páginas',previa:['m12-1','m12-2'],forma:'retrato',etapas:[4,4],titulo:'Templates',formato:'PDF',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',href:'assets/play/anexos/templates.pdf',play:'play.html#templates'},
-  {id:'m13',meta:'Ferramenta no PLAY · 107 temas',previa:['m13-1'],forma:'paisagem',etapas:[4,5],titulo:'Fundamentos',formato:'Web',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',href:'play.html#fundamentos'},
-  {id:'m14',meta:'Ferramenta no PLAY · 2025 e 2026',previa:['m14-1'],forma:'paisagem',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',href:'play.html#calendario'},
+  {id:'m10',meta:'Planilha XLSX | 2.758 assuntos',previa:['m10-1'],forma:'paisagem',etapas:[1,5],titulo:'Ementário',formato:'XLSX',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',play:'play.html#ementario'},
+  {id:'m11',meta:'Volume 04 | PDF, 20 páginas',previa:['m11-1','m11-2'],forma:'retrato',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',href:'assets/play/manuais/4-guia-estilo.pdf',play:'play.html#guia'},
+  {id:'m12',meta:'Anexo do PLAY | PDF, 11 páginas',previa:['m12-1','m12-2'],forma:'retrato',etapas:[4,4],titulo:'Templates',formato:'PDF',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',href:'assets/play/anexos/templates.pdf',play:'play.html#templates'},
+  {id:'m13',meta:'Ferramenta no PLAY | 107 temas',previa:['m13-1'],forma:'paisagem',etapas:[4,5],titulo:'Fundamentos',formato:'Web',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',href:'play.html#fundamentos'},
+  {id:'m14',meta:'Ferramenta no PLAY | 2025 e 2026',previa:['m14-1'],forma:'paisagem',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',href:'play.html#calendario'},
 ];
 
 const ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
@@ -1834,12 +1817,12 @@ const PERCURSOS = [
 ];
 
 class Component extends DCLogic {
-  state = { sel: 'm1', perc: null, nota: false };
+  state = { sel: 'm1', perc: null };
 
   componentDidMount() {
     this._prevState = { ...this.state };
     this._montaOnda();
-    if (!window.EcoOnda) window.addEventListener('load', () => this._montaOnda(), { once: true });
+    if (!window.EcoCordas) window.addEventListener('load', () => this._montaOnda(), { once: true });
     this._fired = false;
     if (typeof IntersectionObserver === 'function') {
       this._io = new IntersectionObserver((entries) => {
@@ -1855,13 +1838,6 @@ class Component extends DCLogic {
     this._t1 = setTimeout(() => this._sweep(), 400);
     this._t2 = setTimeout(() => { if (!this._fired) this._showAll(); }, 1500);
 
-    this._legalOpsKeydown = (event) => {
-      if (event.key !== 'Escape' || !this.state.nota) return;
-      event.preventDefault();
-      this._restoreLegalOpsFocus = true;
-      this.setState({ nota: false });
-    };
-    document.addEventListener('keydown', this._legalOpsKeydown);
   }
 
   componentDidUpdate() {
@@ -1885,23 +1861,6 @@ class Component extends DCLogic {
         );
       });
     }
-
-    if (!prevState.nota && this.state.nota) {
-      requestAnimationFrame(() => {
-        const note = document.getElementById('legal-ops-note');
-        const close = document.getElementById('legal-ops-close');
-        if (note) note.scrollTop = 0;
-        if (close) close.focus({ preventScroll: true });
-      });
-    }
-
-    if (prevState.nota && !this.state.nota && this._restoreLegalOpsFocus) {
-      this._restoreLegalOpsFocus = false;
-      requestAnimationFrame(() => {
-        const trigger = document.getElementById('legal-ops-trigger');
-        if (trigger) trigger.focus({ preventScroll: true });
-      });
-    }
   }
 
   componentWillUnmount() {
@@ -1909,12 +1868,11 @@ class Component extends DCLogic {
     if (this._acervoAnimation) this._acervoAnimation.cancel();
     clearTimeout(this._t1);
     clearTimeout(this._t2);
-    if (this._legalOpsKeydown) document.removeEventListener('keydown', this._legalOpsKeydown);
   }
 
   _montaOnda() {
-    const alvo = document.getElementById('eco-onda');
-    if (alvo && window.EcoOnda) window.EcoOnda.monta(alvo, MATERIAIS, (id) => this._abreNoAcervo(id));
+    const lista = document.getElementById('acervo-lista');
+    if (lista && window.EcoCordas) window.EcoCordas.monta(lista, document.getElementById('cordas-cab'), MATERIAIS);
   }
 
   // lista e ficha empilhadas (telas estreitas): a escolha leva até a ficha
@@ -2004,7 +1962,7 @@ class Component extends DCLogic {
     const ficha = ativo
       ? {
           tom: 'escuro',
-          meta: 'Percurso · ' + ativo.materiais.length + ' materiais',
+          meta: 'Percurso | ' + ativo.materiais.length + ' materiais',
           titulo: ativo.nome,
           lead: ativo.efeito,
           notaRotulo: 'Antes',
@@ -2048,15 +2006,11 @@ class Component extends DCLogic {
 
     return {
       materiais, percursos, ficha,
-      notaAberta: this.state.nota,
-      abrirNota: () => {
-        const open = !this.state.nota;
-        this._restoreLegalOpsFocus = false;
-        this.setState({ nota: open });
-      },
-      fecharNota: () => {
-        this._restoreLegalOpsFocus = true;
-        this.setState({ nota: false });
+      irOrigem: () => {
+        const alvo = document.getElementById('origem');
+        if (!alvo) return;
+        const reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY - 32, behavior: reduz ? 'auto' : 'smooth' });
       }
     };
   }
@@ -2232,7 +2186,7 @@ class Component extends DCLogic {
     await Promise.all(jobs);
     if(cycle!==renderCycle)return;
     count.textContent=second?pad(firstPage)+'–'+pad(second)+' / '+pad(pdf.numPages):pad(firstPage)+' / '+pad(pdf.numPages);
-    status.textContent=spread===1?'PDF · 1 página':'PDF · 2 páginas';
+    status.textContent=spread===1?'PDF | 1 página':'PDF | 2 páginas';
     prev.disabled=firstPage<=1;
     next.disabled=firstPage+spread>pdf.numPages;
   }
