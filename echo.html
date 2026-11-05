@@ -643,9 +643,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 @keyframes gamba-dedo{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}
 
 /* os rótulos: um por traste, ligados ao braço por pontilhado */
-.gamba__rotulos{position:absolute;top:0;right:calc(100% - 100px);width:420px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
+.gamba__rotulos{position:absolute;top:0;right:calc(100% - 76px);width:396px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
 .gamba__rotulos > li{position:absolute;right:0;height:0;display:flex;align-items:center}
-.gamba__rotulos > li::after{content:"";position:absolute;left:100%;top:0;width:var(--guia,30px);border-top:1.2px dotted rgba(24,24,24,.55)}
+.gamba__rotulos > li::after{content:"";position:absolute;left:100%;top:0;width:var(--guia,30px);border-top:1.2px dotted rgba(24,24,24,.55);transform:rotate(var(--ang,0rad));transform-origin:0 0}
 .gamba__rotulo{
   pointer-events:auto;
   display:flex;align-items:center;justify-content:flex-end;gap:10px;
@@ -1236,11 +1236,11 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .acervo-percursos__cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
 .acervo-percursos__cab .acervo-percursos__k{margin:0}
 .acervo-percursos__grade{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.acervo-etapa{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border-radius:999px;padding:6px 14px;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;font:600 11px/1.2 'Commissioner',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1),transform .45s cubic-bezier(.32,.72,0,1)}
+.acervo-etapa{display:inline-flex;align-items:center;gap:7px;cursor:pointer;border-radius:999px;padding:5px 12px;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;font:600 9.5px/1.2 'Commissioner',system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1),transform .45s cubic-bezier(.32,.72,0,1)}
 .acervo-etapa:hover{border-color:#181818;background:rgba(24,24,24,.06)}
 .acervo-etapa[aria-pressed="true"]{border-color:#181818;background:#181818;color:#F2EFE9}
 .acervo-etapa[aria-pressed="true"]:hover{transform:translateY(-1px)}
-.acervo-etapa i{font-style:normal;font-size:13px;line-height:1;color:#FFB627}
+.acervo-etapa i{font-style:normal;font-size:12px;line-height:1;color:#FFB627}
 .acervo-etapa:focus-visible{outline:2px solid #181818;outline-offset:2px}
 
 /* ===== ESCALA TIPOGRÁFICA DO ECHO =====
@@ -1643,13 +1643,20 @@ window.EcoGamba = (function () {
   function rotulos() { return [].slice.call(o.raiz.querySelectorAll('.gamba__rotulo')); }
   function escala() { var s = parseFloat(getComputedStyle(o.raiz).getPropertyValue('--s')); return s > 0 ? s : 1; }
 
-  /* rótulos na altura do ponto de pressão; no desktop, o braço desce se o texto ao lado crescer */
+  /* no desktop, a lista corre em passo constante, alinhada à direita; os trastes se apertam rumo à caixa,
+     então cada guia desce até o seu ponto de pressão num ângulo próprio. Telas estreitas: rótulo na altura do traste.
+     O braço desce se o texto ao lado crescer. */
+  var BORDA = 76; /* onde os rótulos terminam, em px da gravura: igual ao right do .gamba__rotulos */
   function posiciona() {
-    var s = escala();
+    var s = escala(), plano = s === 1;
+    var passo = (DEDOS[DEDOS.length - 1] - DEDOS[0]) / (DEDOS.length - 1);
     [].slice.call(o.raiz.querySelectorAll('.gamba__rotulos > li')).forEach(function (li, k) {
       if (k >= DEDOS.length) return;
-      li.style.top = (DEDOS[k] * s).toFixed(1) + 'px';
-      li.style.setProperty('--guia', Math.max(0, 180 - braco(DEDOS[k]) - 100).toFixed(1) + 'px');
+      var y = plano ? DEDOS[0] + passo * k : DEDOS[k];
+      var dx = Math.max(0, 180 - braco(DEDOS[k]) - BORDA), dy = DEDOS[k] - y;
+      li.style.top = (y * s).toFixed(1) + 'px';
+      li.style.setProperty('--guia', Math.hypot(dx, dy).toFixed(1) + 'px');
+      li.style.setProperty('--ang', Math.atan2(dy, dx).toFixed(4) + 'rad');
     });
     o.raiz.style.marginTop = '';
     if (s === 1 && o.txt) {
