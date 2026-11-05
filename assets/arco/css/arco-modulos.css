@@ -1,0 +1,61 @@
+/* Proposta D, integrada ao grid editorial do ARCO. */
+.arx-cell.arx-modules { padding:0; }
+.arx-modules__header { display:flex; justify-content:space-between; align-items:start; gap:1.5rem; padding:var(--arx-pad); }
+.arx-modules__header p { margin-top:.6rem; max-width:48ch; text-align:left; }
+.arx-modules__sequence { font-family:var(--f-micro); font-size:.75rem; line-height:1.8; color:var(--arx-atrio); }
+.arx-modules__columns { display:grid; border-top:1px solid var(--arx-line-soft); }
+.arx-module { min-width:0; background:var(--arx-paper); border-bottom:1px solid var(--arx-line-soft); transition:background-color 360ms ease,color 360ms ease; }
+.arx-module__heading { margin:0; font:inherit; }
+.arx-module__select { width:100%; display:grid; grid-template-columns:auto 40px 1fr auto; align-items:center; gap:.8rem; padding:1.2rem; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; font:inherit; }
+.arx-module__index { font-family:var(--f-micro); font-size:.7rem; }
+.arx-module__symbol { display:grid; place-items:center; width:52px; height:52px; background:var(--arx-paper); }
+.arx-module__symbol img { display:block; width:100%; height:100%; object-fit:contain; }
+.arx-module__name { font-family:"Science Gothic",var(--f-display); font-size:1.1rem; font-weight:750; letter-spacing:-.025em; }
+.arx-module__name em { color:var(--arx-atrio); font-style:normal; }
+.arx-module__role { grid-column:3; font-size:.9rem; line-height:1.4; }
+.arx-module__version { grid-column:3; font-family:var(--f-micro); font-size:.75rem; }
+.arx-module__mark { grid-column:4; grid-row:1 / 4; font-size:1.4rem; }
+.arx-module__content { padding:0 1.2rem 1.5rem; }
+.arx-module__content[hidden] { display:none; }
+.arx-module__content p { text-align:left; hyphens:none; }
+.arx-module__function { font-size:1.05rem; line-height:1.55; }
+.arx-module__facts { display:grid; gap:1.15rem; margin:1.5rem 0; }
+.arx-module__field dt { margin-bottom:.35rem; font:600 .72rem/1.5 var(--f-micro); letter-spacing:.04em; text-transform:uppercase; }
+.arx-module__field dd { margin:0; font-size:1rem; line-height:1.6; }
+.arx-module__field a { color:inherit; text-decoration:underline; text-underline-offset:.2em; }
+.arx-module__links { display:flex; flex-wrap:wrap; gap:.65rem 1.1rem; align-items:center; padding-top:1.2rem; border-top:1px solid var(--arx-line-soft); }
+.arx-module__links a { color:inherit; text-decoration:underline; text-underline-offset:.25em; font-size:.85rem; line-height:1.7; }
+.arx-module__links .arx-module__sheet { flex-basis:100%; font-size:1rem; font-weight:650; }
+.arx-module__note { margin-top:1rem!important; font-size:.85rem; line-height:1.6; }
+.arx-cell .arx-modules__provenance { padding:1.2rem var(--arx-pad); margin:0; font-size:.85rem; line-height:1.6; text-align:left; }
+.arx-module__select:hover { background:rgba(166,58,35,.07); }
+.arx-module__select:focus-visible,.arx-module a:focus-visible { outline:3px solid var(--arx-atrio); outline-offset:3px; }
+.arx-modules.is-ready .arx-module.is-selected { background:var(--arx-ink); color:var(--arx-paper); }
+.arx-module.is-selected .arx-module__name em { color:#f49b80; }
+.arx-module.is-selected .arx-module__field dt { color:#f49b80; }
+.arx-module.is-selected .arx-module__select:focus-visible,.arx-module.is-selected a:focus-visible { outline-color:#f49b80; }
+@media(min-width:1100px) {
+  .arx-modules.is-ready .arx-modules__columns { grid-template-columns:var(--module-columns,4fr 1fr 1fr 1fr 1fr); transition:grid-template-columns 420ms cubic-bezier(.22,1,.36,1); }
+  .arx-modules.is-ready .arx-module { border-bottom:0; border-right:1px solid var(--arx-line-soft); }
+  .arx-modules.is-ready .arx-module:last-child { border-right:0; }
+  .arx-modules.is-ready .arx-module__select { display:flex; flex-direction:column; align-items:flex-start; gap:.7rem; padding:1.3rem 1rem; }
+  .arx-modules.is-ready .arx-module__role { min-height:2.8em; font-size:.85rem; }
+  .arx-modules.is-ready .arx-module__mark { align-self:flex-end; }
+  .arx-modules.is-ready .arx-module__content { padding:0 1.4rem 1.6rem; }
+  .arx-modules.is-ready .arx-module__version { font-size:.7rem; }
+}
+@media(max-width:1099px) {
+  .arx-modules__header { flex-direction:column; gap:1rem; }
+  .arx-module__select { grid-template-columns:1.2rem 52px 1fr 1rem; gap:.35rem .8rem; }
+  .arx-module__symbol { grid-row:1 / 4; grid-column:2; }
+  .arx-module__index { grid-row:1 / 4; }
+  .arx-module__content { padding:0 1.2rem 1.5rem; }
+  .arx-module__facts { grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.4rem; }
+}
+@media(max-width:540px) {
+  .arx-module__facts { grid-template-columns:1fr; }
+  .arx-modules__sequence { font-size:.68rem; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .arx-module,.arx-modules.is-ready .arx-modules__columns { transition:none; }
+}

@@ -1,0 +1,17 @@
+.technical-sheet { box-sizing:border-box; width:min(860px,calc(100% - 2rem)); max-height:calc(100dvh - 2rem); padding:clamp(1.2rem,4vw,2.5rem); border:1px solid #6a6a6a; background:#fcfcfc; color:#181818; font-family:var(--f-body,"Commissioner",system-ui,sans-serif); }
+.technical-sheet::backdrop { background:rgba(0,0,0,.65); }
+.technical-sheet__header { display:flex; justify-content:space-between; align-items:start; gap:1rem; margin-bottom:1.5rem; }
+.technical-sheet__header h2 { margin:0; font-size:1.5rem; }
+.technical-sheet__header button { flex:none; border:1px solid #6a6a6a; padding:.5rem .8rem; background:transparent; color:inherit; cursor:pointer; font:inherit; }
+.technical-sheet__body dl { margin:1.5rem 0; }
+.technical-sheet__body dl div { display:grid; grid-template-columns:8rem 1fr; gap:1rem; border-top:1px solid #cbcbcb; padding:1rem 0; }
+.technical-sheet__body dt { font-weight:650; }
+.technical-sheet__body dd { margin:0; line-height:1.65; }
+.technical-sheet__body p { font-size:.95rem; line-height:1.65; }
+.technical-sheet a { color:inherit; text-decoration:underline; text-underline-offset:.2em; }
+.technical-sheet :focus-visible,.module-docs a:focus-visible { outline:3px solid #a63a23; outline-offset:3px; }
+html:has(.technical-sheet[open]) { overflow:hidden; }
+.module-docs { display:flex; flex-wrap:wrap; gap:.8rem 1.4rem; padding:1.2rem 0; border-top:1px solid currentColor; font-size:.9rem; }
+.module-card__flow > .module-docs { grid-column:1 / -1; }
+.module-docs a { color:inherit; text-underline-offset:.25em; }
+@media(max-width:540px) { .technical-sheet__body dl div { grid-template-columns:1fr; gap:.4rem; } }
