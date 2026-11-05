@@ -600,7 +600,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 @media(max-width:719px){.echo-trace{display:none}}
 
 /* ACERVO — a viola da gamba em pé, em gravura.
-   Texto e percursos ao lado da voluta; os rótulos descem pelo braço, um por traste;
+   Texto e etapas ao lado da voluta; os rótulos descem pelo braço, um por traste;
    do outro lado, o PLAY e a ficha. Papel com grão, tinta com falhas de prensa. */
 #acervo{position:relative;background-image:url(assets/echo/acervo/grao.png?v=20261105);background-size:300px 300px}
 .acervo-palco{
@@ -678,9 +678,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   position:sticky;
   top:24px;
   min-width:0;
-  max-height:calc(100vh - 48px);
-  overflow:auto;
-  scrollbar-width:thin;
   padding:clamp(22px,2.2vw,30px) clamp(22px,2.4vw,32px) clamp(24px,2.2vw,30px);
   background:url(assets/echo/acervo/grao.png?v=20261105) 0 0/300px 300px,#181818;
   color:var(--tinta);
@@ -741,10 +738,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .ficha__lupa svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .ficha__visor:hover .ficha__lupa{transform:scale(1.08) rotate(-4deg)}
 .ficha__cab{min-width:0}
-.ficha__meta{margin:0;font:500 9px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tinta)}
+.ficha__dados{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:end}
+.ficha__meta{margin:0;font:500 9px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--tinta);white-space:pre-line}
 #acervo-ficha:not([data-tom="ambar"]) .ficha__meta{color:#FFB627}
 .ficha__titulo{
-  margin:10px 0 0;
+  margin:12px 0 0;
   font-family:'Schibsted Grotesk',sans-serif;
   font-size:clamp(1.5rem,2.3vw,2.05rem);
   font-weight:700;
@@ -752,16 +750,16 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   letter-spacing:-.045em;
   text-wrap:balance;
 }
-.ficha__cordas{display:flex;align-items:center;gap:12px;margin:14px 0 0;font:500 9.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.ficha__cordas{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0;font:500 9.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .ficha__marcas{display:flex;gap:4px;align-items:flex-end}
 .ficha__marcas i{display:block;width:2px;height:14px;background:var(--fio)}
 .ficha__marcas i[data-c="1"]{width:2.5px;background:var(--tinta)}
 .ficha__lead{margin:18px 0 0;font-size:15px;line-height:1.55;text-wrap:pretty}
 .ficha__nota{
   display:grid;
-  grid-template-columns:58px minmax(0,1fr);
+  grid-template-columns:auto minmax(0,1fr);
   gap:12px;
-  margin:18px 0 0;
+  margin:14px 0 0;
   padding-top:14px;
   border-top:1.2px dashed var(--fio);
   font-size:13.5px;
@@ -806,6 +804,17 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 #acervo-ficha[data-tom="ambar"] .ficha__cta--fio{background:transparent;color:#181818;box-shadow:inset 0 0 0 1px rgba(24,24,24,.5)}
 #acervo-ficha[data-tom="ambar"] .ficha__cta--fio:hover{color:#181818;box-shadow:inset 0 0 0 1px #181818}
 #acervo-ficha[data-tom="ambar"] .ficha__cta--fio i{background:#181818;color:#FFB627}
+
+/* telas baixas: o visor encolhe para a ficha inteira caber na altura, sem rolagem */
+@media(min-width:1100px) and (max-height:860px){
+  .ficha__visor{max-height:max(150px,calc(100vh - 470px));margin-bottom:18px}
+  .ficha__folhas{scale:.8}
+}
+@media(min-width:1100px) and (max-height:720px){
+  #acervo-ficha{top:12px}
+  .ficha__folhas{scale:.62}
+  .ficha__titulo{font-size:1.5rem}
+}
 
 /* LIVRO: no desktop, as setas do visor abrem a própria ficha em duas páginas.
    A capa (a ficha) gira sobre a lombada para a esquerda; o documento ocupa o miolo. */
@@ -873,7 +882,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .gamba__tt::before{transform-origin:0 50%}
   #acervo-ficha{
     order:2;position:sticky;top:auto;bottom:10px;z-index:5;width:min(100%,580px);justify-self:center;box-sizing:border-box;
-    max-height:min(58vh,420px);
     display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:start;
     box-shadow:0 -20px 34px -22px rgba(24,24,24,.45);
   }
@@ -884,17 +892,26 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .ficha__visor::after{background-image:url(assets/echo/acervo/moldura-miniatura.png)}
   .ficha__lupa{top:auto;bottom:-8px;right:-8px;width:30px;height:30px}
   .ficha__titulo{font-size:1.35rem}
-  .ficha__lead{display:none}
+  .ficha__dados{gap:14px}
+  .ficha__lead{grid-column:1 / -1;margin-top:14px;font-size:14px!important;line-height:1.5}
   .ficha__nota,.ficha__acoes{grid-column:1 / -1}
-  .ficha__nota{margin-top:14px;padding-top:12px;grid-template-columns:auto minmax(0,1fr);font-size:13px}
+  .ficha__nota{margin-top:12px;padding-top:10px;grid-template-columns:auto minmax(0,1fr);font-size:13px}
   .ficha__acoes{margin-top:16px}
 }
 @media(max-width:600px){
+  /* sem a coluna do rótulo, o ruído cabe numa linha */
+  .ficha__nota{grid-template-columns:minmax(0,1fr);gap:2px}
   .gamba{--s:.62;width:100%;height:670px}
   .gamba__rotulos{left:calc(254px * .62)}
   .gamba__tt{font-size:14px;padding:4px 7px}
   .gamba__nm{min-width:18px;font-size:19px}
   .gamba__rotulo{height:26px;margin-top:-13px}
+}
+@media(max-width:360px){
+  #acervo-ficha{padding-left:18px;padding-right:18px}
+  .ficha__dados{grid-template-columns:minmax(0,1fr);gap:6px}
+  .ficha__lead{font-size:13px!important}
+  .ficha__nota{font-size:12px!important}
 }
 @media(prefers-reduced-motion:reduce){
   .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.gamba__tt::before,.gamba__dedo{transition:none;animation:none}
@@ -1112,10 +1129,6 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 .play-faixa:hover .play-faixa__cta i,.play-faixa:focus-visible .play-faixa__cta i{transform:translate(2px,-1px) scale(1.06)}
 .play-faixa:active .play-faixa__cta{transform:scale(.98)}
-@media(max-width:420px){
-  .acervo-percursos__grade{grid-template-columns:1fr 1fr}
-  .acervo-percursos__grade button{padding-left:10px!important;padding-right:10px!important;white-space:normal!important}
-}
 @media(max-width:760px){
   .play-folha{transform:none}
   .play-folha:hover,.play-folha:focus-visible{transform:translateY(-2px)}
@@ -1222,8 +1235,13 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .acervo-percursos{width:fit-content;max-width:100%}
 .acervo-percursos__cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
 .acervo-percursos__cab .acervo-percursos__k{margin:0}
-.acervo-percursos__grade{display:flex;flex-wrap:wrap;gap:6px}
-.acervo-percursos__grade button{width:auto;padding-left:12px!important;padding-right:12px!important}
+.acervo-percursos__grade{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.acervo-etapa{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border-radius:999px;padding:6px 14px;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;font:600 11px/1.2 'Commissioner',system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1),transform .45s cubic-bezier(.32,.72,0,1)}
+.acervo-etapa:hover{border-color:#181818;background:rgba(24,24,24,.06)}
+.acervo-etapa[aria-pressed="true"]{border-color:#181818;background:#181818;color:#F2EFE9}
+.acervo-etapa[aria-pressed="true"]:hover{transform:translateY(-1px)}
+.acervo-etapa i{font-style:normal;font-size:13px;line-height:1;color:#FFB627}
+.acervo-etapa:focus-visible{outline:2px solid #181818;outline-offset:2px}
 
 /* ===== ESCALA TIPOGRÁFICA DO ECHO =====
    display 4.4rem (seções e fecho) | título 2.35rem | subtítulo 1.6rem | item 17px
@@ -1365,15 +1383,15 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p class="acervo-lead">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
       </div>
       <div class="acervo-percursos" role="group" aria-labelledby="acervo-percursos-k">
-        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Percursos</p><div id="cordas-cab" class="cordas-cab"></div></div>
+        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Etapas</p><div id="cordas-cab" class="cordas-cab"></div></div>
         <div class="acervo-percursos__grade">
-        <sc-for list="{{ percursos }}" as="p" hint-placeholder-count="4">
+        <sc-for list="{{ etapas }}" as="p" hint-placeholder-count="6">
           <span>
             <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}">
-              <button type="button" onClick="{{ p.toggle }}" aria-pressed="true" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:13px;font-weight:600;white-space:nowrap;border:1px solid #181818;background:#181818;color:#F2EFE9;transition:transform .45s cubic-bezier(.32,.72,0,1)" style-hover="transform:translateY(-1px)">{{ p.nome }}</button>
+              <button type="button" class="acervo-etapa" onClick="{{ p.toggle }}" aria-pressed="true" aria-label="{{ p.rotulo }}">{{ p.nome }}<i aria-hidden="true">×</i></button>
             </sc-if>
             <sc-if value="{{ p.off }}" hint-placeholder-val="{{ true }}">
-              <button type="button" onClick="{{ p.toggle }}" aria-pressed="false" style="cursor:pointer;border-radius:999px;padding:7px 16px;font-family:'Commissioner',system-ui,sans-serif;font-size:13px;font-weight:600;white-space:nowrap;border:1px solid rgba(24,24,24,.35);background:transparent;color:#181818;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1)" style-hover="border-color:#181818;background:rgba(24,24,24,.06)">{{ p.nome }}</button>
+              <button type="button" class="acervo-etapa" onClick="{{ p.toggle }}" aria-pressed="false" aria-label="{{ p.rotulo }}">{{ p.nome }}</button>
             </sc-if>
           </span>
         </sc-for>
@@ -1439,16 +1457,14 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
           </button>
         </sc-if>
         <div class="ficha__cab">
-          <p class="ficha__meta">{{ ficha.meta }}</p>
-          <h3 class="ficha__titulo">{{ ficha.titulo }}</h3>
-          <sc-if value="{{ ficha.temCordas }}" hint-placeholder-val="{{ true }}">
+          <div class="ficha__dados">
+            <p class="ficha__meta">{{ ficha.meta }}</p>
             <p class="ficha__cordas"><span class="ficha__marcas" aria-hidden="true"><sc-for list="{{ ficha.marcas }}" as="k" hint-placeholder-count="6"><i data-c="{{ k.c }}"></i></sc-for></span><span>{{ ficha.trecho }}</span></p>
-          </sc-if>
+          </div>
+          <h3 class="ficha__titulo">{{ ficha.titulo }}</h3>
         </div>
         <p class="ficha__lead">{{ ficha.lead }}</p>
-        <sc-if value="{{ ficha.temNota }}" hint-placeholder-val="{{ true }}">
-          <p class="ficha__nota"><b>{{ ficha.notaRotulo }}</b><span>{{ ficha.nota }}</span></p>
-        </sc-if>
+        <p class="ficha__nota"><b>Ruído</b><span>{{ ficha.nota }}</span></p>
         <div class="ficha__acoes">
           <sc-if value="{{ ficha.temArquivo }}" hint-placeholder-val="{{ true }}">
             <a class="ficha__cta" href="{{ ficha.href }}" target="_blank" rel="noopener">{{ ficha.acao }}<i aria-hidden="true">{{ ficha.seta }}</i></a>
@@ -1713,7 +1729,7 @@ window.EcoGamba = (function () {
   function monta(raiz, cab, materiais) {
     if (!raiz) return;
     if (o && o.raiz === raiz && raiz.isConnected) { atualiza(); return; }
-    o = { raiz: raiz, materiais: materiais, camada: raiz.querySelector('.gamba__camada'), txt: document.querySelector('#acervo .acervo-cab__txt'), assinatura: null };
+    o = { raiz: raiz, materiais: materiais, camada: raiz.querySelector('.gamba__camada'), txt: document.querySelector('#acervo .acervo-percursos__cab'), assinatura: null };
     if (!o.camada) { o = null; return; }
 
     /* trastes: a área entre um traste e o anterior também aciona o material */
@@ -1776,33 +1792,26 @@ window.EcoGamba = (function () {
 
 
 const MATERIAIS = [
-  {id:'m1',resumo:'Integração e orientação inicial.',meta:'Volume 01 | PDF, 13 páginas',previa:['m1-1','m1-2'],forma:'retrato',fundador:true,etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',funcao:'Alinhar cultura operacional, entrada, papéis iniciais e expectativa de trabalho.',ruido:'Onboarding informal e repetição de orientações básicas.',href:'assets/play/manuais/1-notas-introdutorias.pdf',play:'play.html#vol-01'},
-  {id:'m2',resumo:'Diagnóstico de rotinas operacionais.',meta:'PDF, 2 páginas',previa:['m2-1'],forma:'paisagem',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',funcao:'Ouvir rotinas, comparar práticas e identificar ruídos operacionais.',ruido:'Diagnóstico baseado apenas em impressão individual.',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
-  {id:'m5',resumo:'Simplificação de categorias operacionais.',meta:'PDF, 4 páginas',previa:['m5-1'],forma:'paisagem',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',funcao:'Converter assuntos granulares em localizadores operacionais.',ruido:'Excesso de categorias pouco úteis para a gestão do acervo.',href:'assets/echo/documentos/localizadores.pdf'},
-  {id:'m4',resumo:'Organização por afinidade temática.',meta:'Volume 02 | PDF, 9 páginas',previa:['m4-1','m4-2'],forma:'retrato',fundador:true,etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',funcao:'Organizar matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e baixa visibilidade de concentração temática.',href:'assets/play/manuais/2-mapa-tematico.pdf',play:'play.html#vol-02'},
-  {id:'m3',resumo:'Verificação de requisitos processuais.',meta:'Volume 03 | PDF, 12 páginas',previa:['m3-1','m3-2'],forma:'retrato',fundador:true,etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',funcao:'Registrar requisitos, prazos e pontos de entrada e orientar a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vícios simples consumindo tempo técnico qualificado e análise formal dispersa.',href:'assets/play/manuais/3-afinacao-processual.pdf',play:'play.html#vol-03'},
-  {id:'m6',resumo:'Responsabilidades, autonomia e supervisão.',meta:'PDF, 1 página',previa:['m6-1'],forma:'paisagem',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',funcao:'Definir responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Ambiguidade de função e dependência de orientação oral.',href:'assets/echo/documentos/matriz_papeis.pdf'},
-  {id:'m7',resumo:'Desenvolvimento e progressão profissional.',meta:'PDF, 2 páginas',previa:['m7-1'],forma:'paisagem',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',funcao:'Estruturar maturidade, autonomia e desenvolvimento por critérios.',ruido:'Avaliação intuitiva e pouco documentada da evolução da equipe.',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
-  {id:'m8',resumo:'Teses e julgamentos relevantes.',meta:'Planilha XLSX | 631 temas',previa:['m8-1'],forma:'paisagem',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',funcao:'Consolidar teses firmadas e questões submetidas a julgamento, por tema, situação e ramo.',ruido:'Pesquisa de tese dispersa e citação inconsistente do precedente aplicável.',href:'assets/echo/documentos/precedentes.xlsx'},
-  {id:'m9',resumo:'Monitoramento de indicadores operacionais.',meta:'Planilha XLSX',previa:['m9-1'],forma:'paisagem',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',funcao:'Consolidar produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto tratado como desempenho, sem série histórica nem distinção entre tipos de entrega.',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
-  {id:'m10',resumo:'Classificação e modelos de ementa.',meta:'Planilha XLSX | 2.758 assuntos',previa:['m10-1'],forma:'paisagem',etapas:[1,5],titulo:'Ementário',formato:'XLSX',funcao:'Organizar assuntos, hierarquias e referências da Turma para orientar classificação temática e padronização de ementas.',ruido:'Taxonomia extensa e conhecimento disperso dificultando localizar assuntos, precedentes e padrões já consolidados.',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',play:'play.html#ementario'},
-  {id:'m11',resumo:'Padronização da redação judicial.',meta:'Volume 04 | PDF, 20 páginas',previa:['m11-1','m11-2'],forma:'retrato',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',funcao:'Padronizar redação, estrutura, fundamentação e ementas para assegurar consistência entre votos judiciais.',ruido:'Variações de linguagem, estrutura e fundamentação ampliando retrabalho e reduzindo uniformidade institucional.',href:'assets/play/manuais/4-guia-estilo.pdf',play:'play.html#guia'},
-  {id:'m12',resumo:'Modelos estruturados de votos.',meta:'Anexo do PLAY | PDF, 11 páginas',previa:['m12-1','m12-2'],forma:'retrato',etapas:[4,4],titulo:'Templates',formato:'PDF',funcao:'Materializar a estrutura dos votos de RI e ED em modelos anotados, com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minutas montadas sobre modelos pessoais, com estrutura variável e blocos aplicados sem a condição demonstrada.',href:'assets/play/anexos/templates.pdf',play:'play.html#templates'},
-  {id:'m13',resumo:'Repertório argumentativo por tema.',meta:'Ferramenta no PLAY | 107 temas',previa:['m13-1'],forma:'paisagem',etapas:[4,5],titulo:'Fundamentos',formato:'Web',funcao:'Reunir o repertório argumentativo por tema, com gatilhos, função, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída a cada caso e aplicada pelo gatilho, sem conferência de requisitos e limites.',href:'play.html#fundamentos'},
-  {id:'m14',resumo:'Contagem de prazos processuais.',meta:'Ferramenta no PLAY | 2025 e 2026',previa:['m14-1'],forma:'paisagem',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',funcao:'Contar prazos processuais cíveis em dias úteis, com recorte territorial explícito, sobre a referência diária de 2026.',ruido:'Prazo contado de memória de feriados e suspensões, sem base temporal verificável.',href:'play.html#calendario'},
+  {id:'m1',resumo:'Integração e orientação inicial.',meta:'Volume 01 | PDF, 13 páginas',previa:['m1-1','m1-2'],forma:'retrato',fundador:true,etapas:[0,0],titulo:'Notas Introdutórias',formato:'PDF',funcao:'Alinha cultura operacional, papéis iniciais e expectativas de quem chega.',ruido:'Integração informal e orientação repetida.',href:'assets/play/manuais/1-notas-introdutorias.pdf',play:'play.html#vol-01'},
+  {id:'m2',resumo:'Diagnóstico de rotinas operacionais.',meta:'PDF, 2 páginas',previa:['m2-1'],forma:'paisagem',etapas:[0,0],titulo:'Roteiro de Entrevistas',formato:'PDF',funcao:'Ouve rotinas, compara práticas e identifica ruídos operacionais.',ruido:'Diagnóstico por impressão individual.',href:'assets/echo/documentos/roteiro_entrevista.pdf',preview:'assets/echo/documentos/visualizar/roteiro_entrevista.pdf'},
+  {id:'m5',resumo:'Simplificação de categorias operacionais.',meta:'PDF, 4 páginas',previa:['m5-1'],forma:'paisagem',etapas:[1,2],titulo:'Mapa de Localizadores',formato:'PDF',funcao:'Converte assuntos granulares em localizadores úteis à gestão do acervo.',ruido:'Categorias demais e pouco operacionais.',href:'assets/echo/documentos/localizadores.pdf'},
+  {id:'m4',resumo:'Organização por afinidade temática.',meta:'Volume 02 | PDF, 9 páginas',previa:['m4-1','m4-2'],forma:'retrato',fundador:true,etapas:[1,2],titulo:'Mapa Temático',formato:'PDF',funcao:'Organiza as matérias por núcleos, agrupadores, temas e afinidades.',ruido:'Distribuição casuística e temas sem mapa.',href:'assets/play/manuais/2-mapa-tematico.pdf',play:'play.html#vol-02'},
+  {id:'m3',resumo:'Verificação de requisitos processuais.',meta:'Volume 03 | PDF, 12 páginas',previa:['m3-1','m3-2'],forma:'retrato',fundador:true,etapas:[0,3],titulo:'Afinação Processual',formato:'PDF',funcao:'Orienta a checagem de cabimento, tempestividade, preparo e representação.',ruido:'Vício simples consumindo tempo técnico.',href:'assets/play/manuais/3-afinacao-processual.pdf',play:'play.html#vol-03'},
+  {id:'m6',resumo:'Responsabilidades, autonomia e supervisão.',meta:'PDF, 1 página',previa:['m6-1'],forma:'paisagem',etapas:[2,3],titulo:'Matriz de Papéis',formato:'PDF',funcao:'Define responsabilidades, níveis de autonomia, supervisão e progressão.',ruido:'Função ambígua e orientação apenas oral.',href:'assets/echo/documentos/matriz_papeis.pdf'},
+  {id:'m7',resumo:'Desenvolvimento e progressão profissional.',meta:'PDF, 2 páginas',previa:['m7-1'],forma:'paisagem',etapas:[3,4],titulo:'Matriz de Competências',formato:'PDF',funcao:'Estrutura maturidade, autonomia e desenvolvimento por critérios.',ruido:'Evolução da equipe avaliada por intuição.',href:'assets/echo/documentos/matriz_competencias.pdf',preview:'assets/echo/documentos/visualizar/matriz_competencias.pdf'},
+  {id:'m8',resumo:'Teses e julgamentos relevantes.',meta:'Planilha XLSX | 631 temas',previa:['m8-1'],forma:'paisagem',etapas:[4,5],titulo:'Precedentes',formato:'XLSX',funcao:'Consolida teses firmadas e questões em julgamento, por tema, situação e ramo.',ruido:'Precedente buscado e citado sem padrão.',href:'assets/echo/documentos/precedentes.xlsx'},
+  {id:'m9',resumo:'Monitoramento de indicadores operacionais.',meta:'Planilha XLSX',previa:['m9-1'],forma:'paisagem',etapas:[5,5],titulo:'Controle de Produtividade',formato:'XLSX',funcao:'Consolida produção, composição das entregas e evolução dos indicadores.',ruido:'Volume bruto lido como desempenho.',href:'assets/echo/documentos/controle_produtividade.xlsx',preview:'assets/echo/documentos/visualizar/controle_produtividade.pdf'},
+  {id:'m10',resumo:'Classificação e modelos de ementa.',meta:'Planilha XLSX | 2.758 assuntos',previa:['m10-1'],forma:'paisagem',etapas:[1,5],titulo:'Ementário',formato:'XLSX',funcao:'Hierarquiza assuntos e referências para classificar e padronizar ementas.',ruido:'Taxonomia extensa e saber disperso.',href:'assets/echo/documentos/ementario.xlsx',preview:'assets/echo/documentos/visualizar/ementario.pdf',play:'play.html#ementario'},
+  {id:'m11',resumo:'Padronização da redação judicial.',meta:'Volume 04 | PDF, 20 páginas',previa:['m11-1','m11-2'],forma:'retrato',etapas:[3,4],titulo:'Guia de Estilo',formato:'PDF',funcao:'Padroniza redação, estrutura, fundamentação e ementas dos votos.',ruido:'Linguagem variável e retrabalho na revisão.',href:'assets/play/manuais/4-guia-estilo.pdf',play:'play.html#guia'},
+  {id:'m12',resumo:'Modelos estruturados de votos.',meta:'Anexo do PLAY | PDF, 11 páginas',previa:['m12-1','m12-2'],forma:'retrato',etapas:[4,4],titulo:'Templates',formato:'PDF',funcao:'Modela votos de RI e ED com texto fixo, blocos condicionais e conteúdo variável.',ruido:'Minuta montada sobre modelo pessoal.',href:'assets/play/anexos/templates.pdf',play:'play.html#templates'},
+  {id:'m13',resumo:'Repertório argumentativo por tema.',meta:'Ferramenta no PLAY | 107 temas',previa:['m13-1'],forma:'paisagem',etapas:[4,5],titulo:'Fundamentos',formato:'Web',funcao:'Reúne argumentos por tema, com gatilho, requisitos, limites e formulação-base.',ruido:'Fundamentação reconstruída caso a caso.',href:'play.html#fundamentos'},
+  {id:'m14',resumo:'Contagem de prazos processuais.',meta:'Ferramenta no PLAY | 2025 e 2026',previa:['m14-1'],forma:'paisagem',etapas:[3,3],titulo:'Calendário Jurídico',formato:'Web',funcao:'Conta prazos cíveis em dias úteis, com recorte territorial explícito.',ruido:'Prazo contado de memória de feriados.',href:'play.html#calendario'},
 ];
 
 const ETAPAS = ['entrada', 'classificação', 'distribuição', 'verificação', 'produção', 'memória'];
 
-const PERCURSOS = [
-  {id:'p1',nome:'Entrada e triagem',antes:'Demandas podiam avançar à análise técnica antes de uma verificação mínima comum de requisitos, levando questões formais simples para etapas de maior custo técnico.',materiais:['m3','m2'],rotulo:'Afinação Processual estrutura a verificação. Roteiros e checklists tornam recorrências verificáveis antes da produção.',efeito:'A entrada passa a ser mais legível e comparável, com menor incidência de retrabalho técnico em questões previamente verificáveis.',prova:'m3'},
-  {id:'p2',nome:'Distribuição temática',antes:'A distribuição dependia de leitura casuística da matéria e de conhecimento individual sobre afinidades, recorrências e concentração do acervo.',materiais:['m4','m5','m9'],rotulo:'Mapa Temático organiza assuntos por núcleos e afinidades. Mapa de Localizadores converte granularidade em categorias úteis à operação. Controle de Produtividade oferece leitura sobre carga e comportamento do fluxo.',efeito:'A carga torna-se legível por mais de uma dimensão, permitindo distribuição comparável e maior visibilidade sobre repetição e risco de gargalo.',prova:'m4'},
-  {id:'p3',nome:'Novos integrantes',antes:'O ingresso de novos integrantes não dispunha de um percurso documentado que articulasse identidade, papéis, expectativas e progressão de autonomia.',materiais:['m1','m6','m7'],rotulo:'Notas Introdutórias estabelecem a referência inicial. Matriz de Papéis delimita funções e responsabilidades. Matriz de Competências organiza desenvolvimento e progressão.',efeito:'A entrada deixa de depender apenas da convivência e passa a contar com critérios comuns para orientação, supervisão e construção de autonomia.',prova:'m6'},
-  {id:'p4',nome:'Elaboração do voto',antes:'A redação do voto dependia de modelos pessoais, de pesquisa refeita a cada caso e de prazo contado de memória, com variação de estrutura e de linguagem entre minutas.',materiais:['m11','m12','m13','m10','m14'],rotulo:'Guia de Estilo fixa forma e linguagem. Templates dão a estrutura de RI e ED. Fundamentos e Ementário oferecem repertório e assunto já catalogados. Calendário Jurídico confere o prazo em dias úteis.',efeito:'O voto parte de estrutura, modelo e repertório comuns, reunidos no PLAY, e chega à revisão com menos variação entre minutas.',prova:'m11',link:{href:'play.html',acao:'Abrir o PLAY'}}
-];
-
 class Component extends DCLogic {
-  state = { sel: 'm1', perc: null };
+  state = { sel: 'm1', etapa: null };
 
   componentDidMount() {
     this._prevState = { ...this.state };
@@ -1832,7 +1841,7 @@ class Component extends DCLogic {
     this._sweep();
     this._montaOnda();
 
-    if (prevState.sel !== this.state.sel || prevState.perc !== this.state.perc) {
+    if (prevState.sel !== this.state.sel || prevState.etapa !== this.state.etapa) {
       requestAnimationFrame(() => {
         const card = document.getElementById('acervo-ficha');
         if (!card || typeof card.animate !== 'function') return;
@@ -1861,7 +1870,7 @@ class Component extends DCLogic {
   }
 
   _abreNoAcervo(id) {
-    this.setState({ sel: id, perc: null });
+    this.setState({ sel: id, etapa: null });
     // duas voltas de quadro: a ficha já traz o material escolhido quando a rolagem é medida
     requestAnimationFrame(() => requestAnimationFrame(() => {
       // o traste escolhido entra na tela; a ficha acompanha (fixa ao lado ou presa na base)
@@ -1899,14 +1908,14 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { sel, perc } = this.state;
-    const ativo = PERCURSOS.find((p) => p.id === perc) || null;
-    const acesos = ativo ? ativo.materiais : null;
+    const { sel, etapa } = this.state;
+    // um material pertence a toda etapa que suas cordas percorrem
+    const naEtapa = (x, i) => i !== null && x.etapas[0] <= i && i <= x.etapas[1];
 
     const materiais = MATERIAIS.map((m, i) => {
-      const selecionado = m.id === sel && !ativo;
-      const aceso = acesos ? acesos.indexOf(m.id) > -1 : false;
-      const apagado = !!acesos && !aceso;
+      const selecionado = m.id === sel;
+      const aceso = !selecionado && naEtapa(m, etapa);
+      const apagado = etapa !== null && !selecionado && !aceso;
       return {
         ...m,
         num: String(i + 1).padStart(2, '0'),
@@ -1918,73 +1927,62 @@ class Component extends DCLogic {
         estado: selecionado ? 'sel' : aceso ? 'aceso' : apagado ? 'apagado' : '',
         fundadorTxt: m.fundador ? '1' : '',
         rotulo: (i + 1) + ', ' + m.titulo + (m.fundador ? ', documento fundador' : ''),
-        select: () => this.setState({ sel: m.id, perc: null })
+        // fora da etapa filtrada, escolher o material devolve a visão completa
+        select: () => this.setState({ sel: m.id, etapa: naEtapa(m, etapa) ? etapa : null })
       };
     });
 
-    const percursos = PERCURSOS.map((p) => {
-      const on = p.id === perc;
-      return { ...p, on, off: !on, toggle: () => this.setState({ perc: on ? null : p.id }) };
+    const etapas = ETAPAS.map((nome, i) => {
+      const on = i === etapa;
+      const docs = MATERIAIS.filter((x) => naEtapa(x, i));
+      return {
+        nome, on, off: !on,
+        rotulo: on ? nome + ', filtro ativo: mostrar todos os documentos' : nome + ', ' + docs.length + ' documentos',
+        toggle: () => {
+          if (on) { this.setState({ etapa: null }); return; }
+          const atual = MATERIAIS.find((x) => x.id === sel);
+          this.setState({ etapa: i, sel: atual && naEtapa(atual, i) ? sel : docs[0].id });
+        }
+      };
     });
 
     const m = MATERIAIS.find((x) => x.id === sel) || MATERIAIS[0];
-    const prova = ativo ? MATERIAIS.find((x) => x.id === ativo.prova) : null;
-    // a prévia é sempre de um documento: o material escolhido ou a prova do percurso
-    const alvo = ativo ? prova : m;
-    const previewHref = !alvo ? '' : alvo.preview || (alvo.formato === 'PDF' ? alvo.href : '');
-    const previa = (alvo && alvo.previa) || [];
-    const ficha = ativo
-      ? {
-          tom: 'escuro',
-          meta: 'Percurso | ' + ativo.materiais.length + ' materiais',
-          titulo: ativo.nome,
-          lead: ativo.efeito,
-          notaRotulo: 'Antes',
-          nota: ativo.antes,
-          temArquivo: !!(ativo.link || prova),
-          href: ativo.link ? ativo.link.href : prova ? prova.href : '#acervo',
-          acao: ativo.link ? ativo.link.acao : prova ? 'Abrir ' + prova.titulo : '',
-          seta: ativo.link ? '↗' : '↓',
-          temPlay: false,
-          play: ''
-        }
-      : {
-          tom: m.fundador ? 'ambar' : 'escuro',
-          meta: m.meta,
-          titulo: m.titulo,
-          lead: m.funcao,
-          notaRotulo: 'Ruído',
-          nota: m.ruido,
-          temArquivo: true,
-          href: m.href,
-          acao: m.formato === 'XLSX' ? 'Abrir planilha' : m.formato === 'Web' ? 'Abrir no PLAY' : 'Baixar PDF',
-          seta: m.formato === 'Web' ? '↗' : '↓',
-          temPlay: !!m.play,
-          play: m.play || ''
-        };
-    ficha.temNota = !!ficha.nota;
+    const previewHref = m.preview || (m.formato === 'PDF' ? m.href : '');
+    const previa = m.previa || [];
+    const ficha = {
+      tom: m.fundador ? 'ambar' : 'escuro',
+      // tipo e páginas em duas linhas, à esquerda das etapas
+      meta: m.meta.replace(' | ', '\n'),
+      titulo: m.titulo,
+      lead: m.funcao,
+      nota: m.ruido,
+      temArquivo: true,
+      href: m.href,
+      acao: m.formato === 'XLSX' ? 'Abrir planilha' : m.formato === 'Web' ? 'Abrir no PLAY' : 'Baixar PDF',
+      seta: m.formato === 'Web' ? '↗' : '↓',
+      temPlay: !!m.play,
+      play: m.play || ''
+    };
     // as cordas que o material pressiona: as etapas da cadeia, só na ficha
-    ficha.temCordas = !ativo;
-    ficha.trecho = ativo ? '' : (m.etapas[0] === m.etapas[1] ? ETAPAS[m.etapas[0]] : ETAPAS[m.etapas[0]] + ' → ' + ETAPAS[m.etapas[1]]);
-    ficha.marcas = ETAPAS.map((_, i) => ({ c: !ativo && m.etapas[0] <= i && i <= m.etapas[1] ? '1' : '' }));
+    ficha.trecho = m.etapas[0] === m.etapas[1] ? ETAPAS[m.etapas[0]] : ETAPAS[m.etapas[0]] + ' → ' + ETAPAS[m.etapas[1]];
+    ficha.marcas = ETAPAS.map((_, i) => ({ c: m.etapas[0] <= i && i <= m.etapas[1] ? '1' : '' }));
     ficha.temPrevia = previa.length > 0;
     ficha.previa1 = previa[0] ? 'assets/echo/previas/' + previa[0] + '.jpg' : '';
     ficha.previa2 = previa[1] ? 'assets/echo/previas/' + previa[1] + '.jpg' : '';
     ficha.temVerso = !!previa[1];
-    ficha.forma = (alvo && alvo.forma) || 'retrato';
+    ficha.forma = m.forma || 'retrato';
     ficha.amplia = !!previewHref;
     ficha.abre = !previewHref;
-    ficha.previaRotulo = (previewHref ? 'Visualizar ' : 'Abrir ') + (alvo ? alvo.titulo : '');
+    ficha.previaRotulo = (previewHref ? 'Visualizar ' : 'Abrir ') + m.titulo;
     ficha.abrePrevia = () => {
-      if (!alvo) return;
-      if (!previewHref) { window.open(alvo.href, '_blank', 'noopener'); return; }
+      if (!previewHref) { window.open(m.href, '_blank', 'noopener'); return; }
       window.dispatchEvent(new CustomEvent('echo:preview', {
-        detail: { titulo: alvo.titulo, href: previewHref, paginas: ficha.forma === 'retrato' ? 2 : 1 }
+        detail: { titulo: m.titulo, href: previewHref, paginas: ficha.forma === 'retrato' ? 2 : 1 }
       }));
     };
 
     return {
-      materiais, percursos, ficha,
+      materiais, etapas, ficha,
       irOrigem: () => {
         const alvo = document.getElementById('origem');
         if (!alvo) return;
