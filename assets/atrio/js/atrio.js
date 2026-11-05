@@ -492,6 +492,18 @@ if(!MODULE_ORDER.includes(key))return;
 if(moduleState.phase==="active"&&moduleState.activeKey===key){frameArchitecture();return}
 activateModule(key);
 };
+/* Contextual entry from ARCO, using this page's canonical version history. */
+const documentationRequest = new URLSearchParams(location.search);
+const requestedModule = documentationRequest.get("module");
+if(MODULE_ORDER.includes(requestedModule)){
+  window.addEventListener("load",async()=>{
+    await activateModule(requestedModule);
+    if(documentationRequest.get("panel")==="history"){
+      const trigger=moduleCardByKey.get(requestedModule)?.querySelector("[data-version-of]");
+      if(trigger)setVersionOpen(true,{trigger});
+    }
+  },{once:true});
+}
 document.addEventListener("pointerdown",event=>{if(moduleSystem?.contains(event.target))setArchitectureInputMode("pointer")},true);
 document.addEventListener("keydown",event=>{if(ARCHITECTURE_NAV_KEYS.has(event.key))setArchitectureInputMode("keyboard")},true);
 brandTriggers.forEach(trigger=>trigger.addEventListener("click",()=>{const open=trigger.getAttribute("aria-expanded")!=="true";if(open){setLegalTechOpen(false,{restoreFocus:false});setSampleOpen(false,{restoreFocus:false})}setBrandOpen(open,{trigger,restoreFocus:false})}));

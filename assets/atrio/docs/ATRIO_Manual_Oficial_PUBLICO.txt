@@ -1,0 +1,361 @@
+ATRIO
+MANUAL OFICIAL DO SISTEMA
+Manual-orquestrador | Composição vigente | Edição de 05 nov. 2026 | Família ATRIO
+Versão pública. Os trechos marcados [OCULTADO] constam do manual completo, de acesso restrito.
+
+Natureza do documento
+Este manual descreve o comportamento canônico do ATRIO como orquestrador: a ordem de operação entre CORPUS, RATIO, CERNE e LUX, os contratos de passagem, os estados da execução, as paradas humanas, os retornos, a conferência final e a liberação. O funcionamento interno de cada módulo pertence ao manual próprio do módulo; este manual não o repete nem o altera. Em divergência sobre o interior de um módulo, prevalece o manual do módulo. Em divergência sobre a passagem entre módulos, prevalece este manual.
+
+Regra de vigência
+Este manual é específico do ATRIO e não de uma versão. Não se vincula à linha de nenhum módulo: depende apenas do que cada módulo recebe e entrega na cadeia. Versões minor e patch dos módulos, e versões major que preservem esse contrato de entrada e saída, não alteram este texto. Nova edição só é exigida quando uma versão major de módulo alterar o que ele recebe ou entrega, ou quando a própria ordem de operação mudar. A composição de versões em uso, os identificadores técnicos e os limites próprios de cada distribuição constam do Anexo de parâmetros, atualizado sem nova edição do manual.
+
+SUMÁRIO
+
+01 — Identidade e perímetro
+02 — Contrato operacional
+03 — Arquitetura
+04 — Workflow canônico
+05 — Etapas e gates
+06 — Controles transversais
+07 — Hard stops, retornos e invalidação
+08 — Atuação humana vinculada
+09 — Interfaces e dependências
+10 — Limites declarados
+11 — Rastro e Lastro
+12 — Glossário
+
+
+01 — IDENTIDADE E PERÍMETRO
+
+1.1 O que é o ATRIO
+
+O ATRIO, Arquitetura de Raciocínio via Inteligência Orquestrada, é a camada que encadeia quatro módulos sob uma única execução registrada:
+
+CORPUS | memória documental governada
+RATIO  | formação decisória faseada
+CERNE  | auditoria crítica do raciocínio
+LUX    | refinamento formal e proteção de dados na saída
+
+O ATRIO não produz conteúdo jurídico. Fixa a ordem, verifica as condições de passagem, registra quem autorizou cada avanço e impede que o fluxo prossiga onde a regra não foi satisfeita.
+
+O modelo formula. A regra governa. O operador decide.
+
+1.2 O que o ATRIO não é
+
+O ATRIO:
+— não é um quinto módulo jurídico;
+— não substitui a lógica interna de nenhum módulo;
+— não decide mérito, rota ou destino do ato;
+— não converte o resultado de um módulo em autorização para o seguinte quando a passagem exige decisão humana;
+— não aceita ordem que se refira a estado já superado;
+— não libera peça sem refinamento final registrado e conferência de integridade aprovada;
+— não apresenta falha técnica como resultado.
+
+1.3 Unidade de operação
+
+A unidade de operação é a execução: um caso, um destino de circulação declarado e uma composição de versões fixada na abertura.
+
+Tudo o que ocorre ao caso dentro do ATRIO pertence a uma execução e só a ela.
+
+1.4 Percurso
+
+Percurso ordinário:
+CORPUS → RATIO → CERNE → LUX → conferência final → liberação.
+
+Retornos previstos:
+CERNE → RATIO, por reformulação;
+conferência final → LUX, por novo refinamento;
+falha técnica → etapa em que ocorreu.
+
+O CORPUS é fonte e destino. A peça liberada pode voltar ao acervo como nova entrada, sob as regras do próprio CORPUS.
+
+
+02 — CONTRATO OPERACIONAL
+
+2.1 Entrada
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+2.2 Saídas
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+2.3 Situação da execução
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+2.4 Estágios
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+03 — ARQUITETURA
+
+3.1 Controle e execução
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.2 Máquina de estados
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.3 Estado vigente
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.4 Composição de versões
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.5 Artefatos
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.6 Domínios separados
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.7 Destino como parâmetro da cadeia
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+04 — WORKFLOW CANÔNICO
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+05 — ETAPAS E GATES
+
+5.1 Abertura
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.2 Ingestão e governança da memória
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.3 Formação decisória
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.4 Auditoria do raciocínio
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.5 Decisão sobre a auditoria
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.6 Reformulação
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.7 Refinamento e proteção de saída
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.8 Conferência final de integridade
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.9 Liberação
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+06 — CONTROLES TRANSVERSAIS
+
+6.1 Ordem única de operação
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.2 Recusa fora do estágio
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.3 Estado vigente
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.4 Decisão humana identificada
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.5 Proveniência por evento
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.6 Composição fixa
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.7 Proteção propagada
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.8 Idempotência
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.9 Falha declarada
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+07 — HARD STOPS, RETORNOS E INVALIDAÇÃO
+
+7.1 Paradas obrigatórias
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.2 Retornos
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.3 Invalidação
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.4 Cancelamento
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.5 Estados terminais
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+08 — ATUAÇÃO HUMANA VINCULADA
+
+A pessoa responsável:
+— abre a execução e declara o destino;
+— decide a revisão do acervo e ordena a retomada;
+— responde às decisões que o RATIO lhe apresenta;
+— decide, após a auditoria, entre refinamento, reformulação e bloqueio;
+— reabre o bloqueio, quando for o caso;
+— aprova ou reprova a conferência final;
+— libera a peça.
+
+O ATRIO ordena. O módulo executa. O humano decide.
+
+A decisão registrada atribui a passagem. Não transforma informação não verificada em informação verificada.
+
+
+09 — INTERFACES E DEPENDÊNCIAS
+
+9.1 CORPUS
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.2 RATIO
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.3 CERNE
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.4 LUX
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.5 Registro e cofre
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.6 Inferência
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+10 — LIMITES DECLARADOS
+
+10.1 Compromisso
+
+O ATRIO não promete eliminar erro jurídico.
+
+Garante, dentro de seu perímetro:
+— ordem de operação;
+— recusa de ordem fora do estágio ou sobre estado superado;
+— parada nos pontos de decisão humana;
+— registro de cada passagem, com ator e versão;
+— liberação condicionada a refinamento e conferência.
+
+Não garante:
+— correção jurídica da peça;
+— desempenho dos módulos além do que cada manual declara;
+— que a decisão humana registrada tenha sido deliberada com o cuidado devido;
+— proteção de dados além da que cada módulo assegura;
+— disponibilidade de provedores externos.
+
+10.2 Natureza das garantias
+
+Na distribuição integrada, sucessão, recusa, registro e condição de liberação são impostos por código.
+
+O conteúdo de cada etapa depende do módulo e da sua forma de distribuição.
+
+Quando os módulos operam por instruções, fora da distribuição integrada, o encadeamento é conduzido pelo operador. As regras deste manual valem então como regra de condução, não como trava técnica.
+
+
+11 — RASTRO E LASTRO
+
+11.1 Regra de governança
+
+Governança exige Rastro e Lastro.
+
+Rastro reconstrói o percurso da execução.
+Lastro demonstra com base em que cada passagem foi autorizada.
+
+Rastro sem Lastro mostra que a execução andou, mas não por quê.
+Lastro sem Rastro mostra os artefatos, mas não a ordem em que foram produzidos e autorizados.
+
+O ATRIO exige ambos.
+
+11.2 Rastro no ATRIO
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+11.3 Lastro no ATRIO
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+11.4 Unidade entre Rastro e Lastro
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+12 — GLOSSÁRIO
+
+[OCULTADO | definições reservadas ao manual completo]
+
+ARTEFATO VERSIONADO
+COMPOSIÇÃO DE VERSÕES
+CONFERÊNCIA FINAL DE INTEGRIDADE
+DESTINO DE CIRCULAÇÃO
+ESTÁGIO
+ESTADO TERMINAL
+EVENTO
+EXECUÇÃO
+FALHA TÉCNICA
+LIBERAÇÃO
+ORDEM
+PASSAGEM
+REFORMULAÇÃO
+SITUAÇÃO
+
+ANEXO — PARÂMETROS DA COMPOSIÇÃO VIGENTE
+
+Natureza do anexo
+Não normativo. Registra a composição de referência, os identificadores técnicos e os limites da distribuição vigente. É atualizado sem nova edição do manual. Em conflito com o corpo do manual, prevalece o corpo.
+
+A.1 Composição de referência
+[OCULTADO | parâmetro da versão]
+
+A.2 Identificadores técnicos dos estágios
+[OCULTADO | parâmetro da versão]
+
+A.3 Classificação de passagem da auditoria na distribuição integrada
+[OCULTADO | parâmetro da versão]
+
+A.4 Motivos de revisão do acervo
+[OCULTADO | parâmetro da versão]
+
+A.5 Destinos
+[OCULTADO | parâmetro da versão]
+
+A.6 Controles de composição
+[OCULTADO | parâmetro da versão]
+
+A.7 Inferência
+[OCULTADO | parâmetro da versão]
+
+A.8 Limites conhecidos
+[OCULTADO | parâmetro da versão]
+
+— FIM —

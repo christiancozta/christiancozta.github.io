@@ -1,0 +1,428 @@
+CORPUS
+MANUAL OFICIAL DO SISTEMA
+Linha 1.x | Edição de 05 nov. 2026 | Família ATRIO
+Versão pública. Os trechos marcados [OCULTADO] constam do manual completo, de acesso restrito.
+
+Natureza do documento
+Este manual descreve o comportamento canônico do CORPUS: seu perímetro, fluxo de ingestão, triagem de segredo de justiça, tratamento de conteúdo, pseudonimização, segregação, organização da memória, inventário, registro, Rastro e Lastro. Em caso de divergência funcional, prevalece a regra operacional vigente do sistema.
+
+Regra de vigência
+Este manual é específico do CORPUS e vale para toda a linha 1.x. Versões minor e patch não alteram este texto: limiares, listas, formatos, pilha tecnológica, rótulos de apresentação e limites próprios de cada versão constam do Anexo de parâmetros, que acompanha a versão e é atualizado sem nova edição do manual. Nova edição só acompanha versão major.
+
+O CORPUS integra o ecossistema ATRIO como camada de ingestão e governança da memória jurídica. Sua função é transformar documentos brutos em conteúdo estruturado, pseudonimizado e rastreável, apto a ser utilizado pelos demais módulos.
+
+SUMÁRIO
+
+01 — Identidade e perímetro
+02 — Contrato operacional
+03 — Arquitetura
+04 — Workflow canônico
+05 — Etapas e gates
+06 — Controles transversais
+07 — Hard stops, retornos e segregação
+08 — Atuação humana vinculada
+09 — Interfaces e dependências
+10 — Limites declarados
+11 — Rastro e Lastro
+12 — Glossário
+
+
+01 — IDENTIDADE E PERÍMETRO
+
+1.1 O que é o CORPUS
+
+O CORPUS é a camada de ingestão e governança da memória jurídica.
+
+É um conjunto de rotinas locais, executadas no computador do operador. Não é módulo de plataforma. A tecnologia de implementação consta do Anexo (A.1).
+
+Ele recebe documentos brutos e controla sua passagem por um fluxo de identificação, extração, triagem, proteção, organização e registro.
+
+Sua função não é apenas armazenar.
+
+É decidir, em etapas verificáveis, se um documento:
+— é novo ou duplicado;
+— tem texto extraível ou depende de OCR;
+— deve ser segregado por segredo de justiça;
+— deve ser marcado para revisão humana de segredo;
+— precisa ser pseudonimizado;
+— pode compor a base pseudonimizada.
+
+O CORPUS governa aquilo que o sistema pode lembrar.
+
+1.2 O que o CORPUS não é
+
+O CORPUS:
+— não produz decisão jurídica;
+— não constrói raciocínio jurídico;
+— não audita mérito;
+— não revisa estilo;
+— não trata PDF sem camada de texto como se fosse legível;
+— não confunde existência documental com autorização de uso;
+— não mascara o número CNJ, que funciona como chave do acervo;
+— não exige que os módulos consumidores leiam o cofre;
+— não presume que todo documento recebido pode integrar a base.
+
+1.3 Resultado do sistema
+
+O resultado do CORPUS não é simplesmente um arquivo armazenado.
+
+É um estado documental governado.
+
+Esse estado pode ser, conforme o percurso:
+— duplicado;
+— aguardando OCR;
+— OCR falhou;
+— segredo;
+— revisar segredo;
+— na base.
+
+
+02 — CONTRATO OPERACIONAL
+
+2.1 Entrada
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+2.2 Saídas
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+2.3 Estados documentais
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+03 — ARQUITETURA
+
+3.1 Domínios separados
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.2 Documento e autorização de uso
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.3 Organização por processo
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+3.4 Memória utilizável
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+04 — WORKFLOW CANÔNICO
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+05 — ETAPAS E GATES
+
+5.1 Depósito
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.2 Hash e deduplicação
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.3 Extração
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.4 OCR
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.5 Triagem de segredo de justiça
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.6 Segregação
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.7 Detecção de identificadores
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.8 Pseudonimização
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.9 Cofre
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.10 Organização e preservação do original
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.11 Inventário
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.12 Exportação do inventário
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.13 Log e painel
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+5.14 Base pseudonimizada
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+06 — CONTROLES TRANSVERSAIS
+
+6.1 Deduplicação por hash
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.2 Não inferência de ilegibilidade
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.3 Separação entre registro e reutilização
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.4 Proteção antes da base
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.5 Estabilidade de pseudotokens
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.6 Separação do cofre
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.7 Inventário e log obrigatórios
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.8 Menor exposição operacional
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+6.9 Verificação de dependências
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+07 — HARD STOPS, RETORNOS E SEGREGAÇÃO
+
+7.1 Interrupções
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.2 Retorno após OCR
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.3 Reprocessamento
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.4 Segregação como destino válido
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+7.5 Revisão de segredo
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+08 — ATUAÇÃO HUMANA VINCULADA
+
+A automação documental não elimina responsabilidade humana.
+
+A atuação humana é necessária para:
+— depositar os documentos na entrada e executar as rotinas;
+— instalar as dependências indicadas pela verificação;
+— ler os documentos em revisão de segredo e decidir seu destino;
+— revisar os documentos com OCR falho;
+— conferir documentos no inventário;
+— custodiar originais, cofre, pasta de segredo e inventário de pseudônimos;
+— autorizar e executar reidentificação;
+— revisar incidentes de exposição;
+— decidir sobre reprocessamento.
+
+A reidentificação, quando existir, é ato controlado e excepcional, feito por consulta humana ao cofre.
+
+O acesso humano ao original ou ao cofre não deve transformar a base em circulação indiscriminada de dado identificável.
+
+
+09 — INTERFACES E DEPENDÊNCIAS
+
+9.1 Módulos consumidores
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.2 Motor de detecção compartilhado
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.3 Validação documental e raciocínio
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.4 Cofre
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.5 OCR
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+9.6 Reconhecimento de nomes
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+10 — LIMITES DECLARADOS
+
+10.1 Compromisso
+
+O CORPUS não promete que todo documento recebido se tornará memória utilizável.
+
+Seu compromisso é governar essa passagem.
+
+O CORPUS garante, dentro de seu perímetro:
+— identificação por hash;
+— decisão explícita de destino para cada arquivo;
+— não tratamento aproximativo de ilegibilidade;
+— separação, por diretório, entre original, base e cofre;
+— triagem de segredo antes da pseudonimização;
+— substituição dos identificadores detectados;
+— inventário e log do processamento;
+— base restrita ao conteúdo que atravessou as etapas aplicáveis.
+
+10.2 O que o sistema não garante
+
+O sistema não garante:
+— legibilidade de todo arquivo;
+— sucesso absoluto de OCR;
+— confiança do texto reconhecido além do mínimo de caracteres;
+— detecção de todos os identificadores;
+— detecção de nomes sem pista textual quando o reconhecimento de entidades não estiver instalado;
+— acerto da triagem de segredo, que é lexical e sujeita a falso positivo e falso negativo;
+— que o documento com gatilho fraco tenha sido revisado antes de ser usado;
+— que o número CNJ da pasta seja o do próprio processo, e não o de processo citado;
+— validade jurídica da fonte apenas porque o documento foi armazenado;
+— correção semântica de conteúdo defeituoso na origem.
+
+10.3 Natureza das garantias
+
+Deduplicação, extração, fila de OCR, triagem, substituição, organização, inventário e log são executados por código.
+
+Restrição de acesso, criptografia, cópia de segurança e custódia de originais, cofre, segredo e inventário de pseudônimos dependem do ambiente e do operador.
+
+A deduplicação depende da integridade do inventário documental escrito pela ingestão. Limites de implementação que afetem essa integridade são declarados no Anexo (A.8).
+
+10.4 Pseudonimização e reidentificação
+
+A base pseudonimizada continua sujeita ao regime de proteção de dados pessoais, porque a reidentificação permanece possível.
+
+São vetores de reidentificação declarados:
+— o cofre;
+— o inventário de pseudônimos e a planilha consolidada da exportação, que reproduzem valores reais;
+— o número CNJ preservado no texto tratado, que permite consulta pública ao processo;
+— a estabilidade global dos pseudotokens, que liga a mesma pessoa entre processos;
+— nomes de arquivo registrados no inventário;
+— identificadores não detectados.
+
+O inventário documental escrito pela ingestão não contém valor real de identificador, mas contém número CNJ e nomes de arquivo. A pasta do inventário, depois da exportação, contém o mapa de reidentificação e recebe o mesmo cuidado do cofre.
+
+
+11 — RASTRO E LASTRO
+
+11.1 Regra de governança
+
+Governança exige Rastro e Lastro.
+
+Rastro reconstrói o percurso documental.
+Lastro demonstra de que documento e de que transformação surgiu o conteúdo que entrou na base.
+
+Rastro sem Lastro registra estados sem demonstrar sua origem.
+Lastro sem Rastro liga o conteúdo a uma fonte, mas não mostra como essa fonte foi tratada até se tornar utilizável.
+
+O CORPUS exige ambos.
+
+11.2 Rastro no CORPUS
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+11.3 Lastro no CORPUS
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+11.4 Lastro sem exposição
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+11.5 Unidade entre Rastro e Lastro
+
+[OCULTADO | direção operacional reservada ao manual completo]
+
+
+12 — GLOSSÁRIO
+
+[OCULTADO | definições reservadas ao manual completo]
+
+BASE PSEUDONIMIZADA
+COFRE
+DEDUPLICAÇÃO
+EXTRAÇÃO
+GATILHO FORTE
+GATILHO FRACO
+HASH
+INVENTÁRIO DE PSEUDÔNIMOS
+INVENTÁRIO DOCUMENTAL
+LASTRO
+LOG
+OCR
+ORIGINAL
+PSEUDONIMIZAÇÃO
+PSEUDOTOKEN
+RASTRO
+REVISAR SEGREDO
+SEGREGAÇÃO
+TRIAGEM DE SEGREDO
+
+ANEXO — PARÂMETROS DA VERSÃO
+
+Natureza do anexo
+Não normativo. Registra os valores operacionais da versão de referência. É atualizado em versão minor ou patch sem nova edição do manual. Em conflito com o corpo do manual, prevalece o corpo.
+
+Versão de referência: CORPUS 1.5.0.
+
+A.1 Implementação
+[OCULTADO | parâmetro da versão]
+
+A.2 Formatos de entrada
+[OCULTADO | parâmetro da versão]
+
+A.3 Limiares
+[OCULTADO | parâmetro da versão]
+
+A.4 Listas da triagem de segredo
+[OCULTADO | parâmetro da versão]
+
+A.5 Tipos de identificador e prefixos
+[OCULTADO | parâmetro da versão]
+
+A.6 Cofre
+[OCULTADO | parâmetro da versão]
+
+A.7 Inventário, exportação e log
+[OCULTADO | parâmetro da versão]
+
+A.8 Limites conhecidos da versão
+[OCULTADO | parâmetro da versão]
+
+— FIM —
