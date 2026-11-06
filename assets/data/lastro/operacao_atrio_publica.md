@@ -4,9 +4,9 @@
 
 | Indicador | Valor | Como se confere |
 |---|---|---|
-| Rotas sob `/v1` | 23 | registro da versão corrente confirmado pelo autor |
+| Caminhos sob `/v1` | 31 | contagem das rotas declaradas em `src/atrio_api/api.py` |
+| Operações HTTP | 33 | mesma contagem, somando os métodos de cada caminho |
 | Testes aprovados | 188 | suíte local, medição de 26.08.2026 |
-| Eixos analíticos | 11 | CERNE, exame adversarial do raciocínio |
 | Fases nomeadas | 18 | RATIO: RI_01–06, ED_01–05, MS_01–07 |
 | Módulos independentes | 4 | CORPUS, RATIO, CERNE, LUX |
 
@@ -15,10 +15,13 @@ ligado depois dela. O número não inflou: cresceu por adição nomeável.
 
 ## Método da contagem
 
-A métrica publicada registra 23 rotas sob `/v1` na versão corrente do ATRIO,
-conforme confirmação autoral. O código-fonte completo necessário para recontagem
-independente não integra este derivado público; por isso, a contagem é documentada
-como declaração da versão, e não apresentada como verificação externa autônoma.
+Os caminhos e as operações são contados sobre a árvore de sintaxe de `api.py`,
+não sobre um documento intermediário: percorrem-se os decoradores de rota da
+aplicação e contam-se os caminhos distintos sob `/v1` e o total de métodos
+declarados. Dois caminhos admitem GET e POST — `corpus/documents` e
+`cerne/audit` —, o que explica a diferença entre 31 e 33. O contrato
+`openapi.json` exportado reflete a release anterior; a referência corrente é o código.
+A contagem é determinística e reproduzível por quem tiver o código.
 
 ## Limite de interpretação
 

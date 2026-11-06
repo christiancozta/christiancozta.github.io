@@ -1,61 +1,119 @@
-/* Proposta D, integrada ao grid editorial do ARCO. */
-.arx-cell.arx-modules { padding:0; }
-.arx-modules__header { display:flex; justify-content:space-between; align-items:start; gap:1.5rem; padding:var(--arx-pad); }
-.arx-modules__header p { margin-top:.6rem; max-width:48ch; text-align:left; }
-.arx-modules__sequence { font-family:var(--f-micro); font-size:.75rem; line-height:1.8; color:var(--arx-atrio); }
-.arx-modules__columns { display:grid; border-top:1px solid var(--arx-line-soft); }
-.arx-module { min-width:0; background:var(--arx-paper); border-bottom:1px solid var(--arx-line-soft); transition:background-color 360ms ease,color 360ms ease; }
-.arx-module__heading { margin:0; font:inherit; }
-.arx-module__select { width:100%; display:grid; grid-template-columns:auto 40px 1fr auto; align-items:center; gap:.8rem; padding:1.2rem; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; font:inherit; }
-.arx-module__index { font-family:var(--f-micro); font-size:.7rem; }
-.arx-module__symbol { display:grid; place-items:center; width:52px; height:52px; background:var(--arx-paper); }
-.arx-module__symbol img { display:block; width:100%; height:100%; object-fit:contain; }
-.arx-module__name { font-family:"Science Gothic",var(--f-display); font-size:1.1rem; font-weight:750; letter-spacing:-.025em; }
-.arx-module__name em { color:var(--arx-atrio); font-style:normal; }
-.arx-module__role { grid-column:3; font-size:.9rem; line-height:1.4; }
-.arx-module__version { grid-column:3; font-family:var(--f-micro); font-size:.75rem; }
-.arx-module__mark { grid-column:4; grid-row:1 / 4; font-size:1.4rem; }
-.arx-module__content { padding:0 1.2rem 1.5rem; }
-.arx-module__content[hidden] { display:none; }
-.arx-module__content p { text-align:left; hyphens:none; }
-.arx-module__function { font-size:1.05rem; line-height:1.55; }
-.arx-module__facts { display:grid; gap:1.15rem; margin:1.5rem 0; }
-.arx-module__field dt { margin-bottom:.35rem; font:600 .72rem/1.5 var(--f-micro); letter-spacing:.04em; text-transform:uppercase; }
-.arx-module__field dd { margin:0; font-size:1rem; line-height:1.6; }
-.arx-module__field a { color:inherit; text-decoration:underline; text-underline-offset:.2em; }
-.arx-module__links { display:flex; flex-wrap:wrap; gap:.65rem 1.1rem; align-items:center; padding-top:1.2rem; border-top:1px solid var(--arx-line-soft); }
-.arx-module__links a { color:inherit; text-decoration:underline; text-underline-offset:.25em; font-size:.85rem; line-height:1.7; }
-.arx-module__links .arx-module__sheet { flex-basis:100%; font-size:1rem; font-weight:650; }
-.arx-module__note { margin-top:1rem!important; font-size:.85rem; line-height:1.6; }
-.arx-cell .arx-modules__provenance { padding:1.2rem var(--arx-pad); margin:0; font-size:.85rem; line-height:1.6; text-align:left; }
-.arx-module__select:hover { background:rgba(166,58,35,.07); }
-.arx-module__select:focus-visible,.arx-module a:focus-visible { outline:3px solid var(--arx-atrio); outline-offset:3px; }
-.arx-modules.is-ready .arx-module.is-selected { background:var(--arx-ink); color:var(--arx-paper); }
-.arx-module.is-selected .arx-module__name em { color:#f49b80; }
-.arx-module.is-selected .arx-module__field dt { color:#f49b80; }
-.arx-module.is-selected .arx-module__select:focus-visible,.arx-module.is-selected a:focus-visible { outline-color:#f49b80; }
-@media(min-width:1100px) {
-  .arx-modules.is-ready .arx-modules__columns { grid-template-columns:var(--module-columns,4fr 1fr 1fr 1fr 1fr); transition:grid-template-columns 420ms cubic-bezier(.22,1,.36,1); }
-  .arx-modules.is-ready .arx-module { border-bottom:0; border-right:1px solid var(--arx-line-soft); }
-  .arx-modules.is-ready .arx-module:last-child { border-right:0; }
-  .arx-modules.is-ready .arx-module__select { display:flex; flex-direction:column; align-items:flex-start; gap:.7rem; padding:1.3rem 1rem; }
-  .arx-modules.is-ready .arx-module__role { min-height:2.8em; font-size:.85rem; }
-  .arx-modules.is-ready .arx-module__mark { align-self:flex-end; }
-  .arx-modules.is-ready .arx-module__content { padding:0 1.4rem 1.6rem; }
-  .arx-modules.is-ready .arx-module__version { font-size:.7rem; }
+/* Módulos do ATRIO, proposta C (átrio e salas).
+   ATRIO ocupa a faixa inteira; abaixo, CORPUS → RATIO → CERNE → LUX.
+   As linhas internas repetem o fio de 1px do painel; o acento fica nos
+   detalhes (número, letra do nome, filete da seleção). */
+.arx-cell.arx-modules{
+  --mod-tint:#F8F2F1;              /* papel + 5% do acento, sólido: um tom translúcido deixaria o fio vazar */
+  display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:var(--arx-lw); padding:0; background:var(--arx-line);
 }
-@media(max-width:1099px) {
-  .arx-modules__header { flex-direction:column; gap:1rem; }
-  .arx-module__select { grid-template-columns:1.2rem 52px 1fr 1rem; gap:.35rem .8rem; }
-  .arx-module__symbol { grid-row:1 / 4; grid-column:2; }
-  .arx-module__index { grid-row:1 / 4; }
-  .arx-module__content { padding:0 1.2rem 1.5rem; }
-  .arx-module__facts { grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.4rem; }
+.arx-modules > *{ min-width:0; background:var(--arx-paper); }
+.arx-modules__k{ grid-column:1 / -1; margin:0; padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) 1rem; }
+
+/* gatilhos: faixa ATRIO e quatro salas */
+.arx-mod{
+  position:relative; appearance:none; margin:0; border:0; border-radius:0;
+  font:inherit; color:var(--arx-text); text-align:left; cursor:pointer;
+  padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem);
+  transition:background-color 200ms var(--arx-ease);
 }
-@media(max-width:540px) {
-  .arx-module__facts { grid-template-columns:1fr; }
-  .arx-modules__sequence { font-size:.68rem; }
+.arx-mod::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:3px;
+  background:var(--arx-atrio); transform:scaleX(0); transform-origin:left;
+  transition:transform 260ms var(--arx-ease);
 }
-@media(prefers-reduced-motion:reduce) {
-  .arx-module,.arx-modules.is-ready .arx-modules__columns { transition:none; }
+.arx-modules.is-ready .arx-mod.is-selected{ background:var(--mod-tint); }
+.arx-modules.is-ready .arx-mod.is-selected::after{ transform:scaleX(1); }
+@media (hover:hover){ .arx-mod:hover{ background:var(--mod-tint); } }
+.arx-mod:focus-visible,
+.arx-sheet a:focus-visible{ outline:2px solid var(--arx-atrio); outline-offset:-4px; }
+
+.arx-mod__sym{ display:block; width:44px; height:44px; object-fit:contain; }
+.arx-mod__id{ display:flex; flex-direction:column; gap:.2rem; }
+.arx-mod__name{ font-family:"Science Gothic", var(--f-display); font-size:1.15rem; font-weight:750; letter-spacing:-.025em; line-height:1; color:var(--arx-ink); }
+.arx-mod__name em{ font-style:normal; color:var(--arx-atrio); }
+.arx-mod__role{ font-size:.8rem; line-height:1.4; }
+.arx-mod__ver{ font-family:var(--f-micro); font-size:.7rem; color:var(--arx-soft); }
+.arx-mod__stat{ display:flex; flex-direction:column; gap:.45rem; }
+.arx-mod__lab{ font-size:.76rem; line-height:1.4; }
+
+/* faixa ATRIO */
+.arx-mod--atrio{
+  grid-column:1 / -1;
+  display:grid; grid-template-columns:64px minmax(0, 1fr) minmax(0, 1.5fr) auto;
+  align-items:center; column-gap:clamp(1rem, 2vw, 1.6rem);
+}
+.arx-mod--atrio .arx-mod__sym{ width:64px; height:64px; }
+.arx-mod--atrio .arx-mod__name{ font-size:1.5rem; }
+.arx-mod__fn{ max-width:58ch; font-size:.92rem; line-height:1.5; color:var(--arx-ink); }
+.arx-mod--atrio .arx-mod__stat{ align-items:flex-end; text-align:right; }
+.arx-mod--atrio .arx-mod__lab{ max-width:13rem; }
+
+/* salas, ligadas por seta no fio */
+.arx-mod--room{ display:flex; flex-direction:column; gap:.9rem; }
+.arx-mod--room .arx-mod__ver{ position:absolute; top:clamp(1.15rem, 2vw, 1.7rem); right:var(--arx-pad); }
+.arx-mod--room .arx-mod__stat{ margin-top:.3rem; }
+.arx-mod--room + .arx-mod--room::before{
+  content:"→"; position:absolute; z-index:1; left:-.8rem; top:50%;
+  display:grid; place-items:center; width:1.6rem; height:1.6rem; margin-top:-.8rem;
+  border:var(--arx-lw) solid var(--arx-line); background:var(--arx-paper);
+  font-family:var(--f-micro); font-size:.75rem; color:var(--arx-atrio);
+}
+
+/* ficha do módulo selecionado */
+.arx-sheet{
+  grid-column:1 / -1;
+  display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:var(--arx-lw); background:var(--arx-line-soft);
+}
+.arx-sheet[hidden]{ display:none; }
+.arx-sheet > *,
+.arx-sheet__f{ background:var(--arx-paper); }
+.arx-modules.is-ready .arx-sheet{ animation:arx-mod-in 240ms var(--arx-ease); }
+@keyframes arx-mod-in{ from{ opacity:0; } to{ opacity:1; } }
+.arx-cell .arx-sheet__fn{
+  grid-column:1 / -1; max-width:none; margin:0;
+  padding:1.1rem var(--arx-pad);
+  font-size:.98rem; line-height:1.5; color:var(--arx-ink);
+}
+.arx-sheet__facts{ display:contents; }
+.arx-sheet__f{ padding:1rem var(--arx-pad) 1.15rem; }
+.arx-sheet__f dt{ margin:0 0 .35rem; font:600 .64rem/1.4 var(--f-micro); letter-spacing:.08em; text-transform:uppercase; color:var(--arx-soft); }
+.arx-sheet__f dd{ margin:0; font-size:.84rem; line-height:1.55; }
+.arx-sheet__links{
+  grid-column:1 / -1;
+  display:flex; flex-wrap:wrap; align-items:center; gap:.6rem;
+  padding:1rem var(--arx-pad);
+}
+/* mesmo botão da ficha; só a ficha leva o fundo terracota */
+.arx-modules .arx-sheet__links .arx-open.arx-open--ghost{
+  background:transparent; border-color:var(--arx-ink); color:var(--arx-ink);
+}
+.arx-modules .arx-sheet__links .arx-open.arx-open--ghost:is(:hover, :focus-visible){
+  border-color:var(--arx-atrio); color:var(--arx-atrio);
+}
+
+.arx-cell .arx-modules__provenance{
+  grid-column:1 / -1; max-width:none; margin:0;
+  padding:1rem var(--arx-pad); font-size:.76rem; line-height:1.55; color:var(--arx-soft);
+}
+
+/* tablet e celular: ATRIO empilha; salas em 2 × 2, sem setas */
+@media (max-width:900px){
+  .arx-cell.arx-modules,
+  .arx-sheet{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .arx-mod--atrio{ grid-template-columns:52px minmax(0, 1fr); row-gap:1rem; }
+  .arx-mod--atrio .arx-mod__sym{ width:52px; height:52px; }
+  .arx-mod__fn,
+  .arx-mod--atrio .arx-mod__stat{ grid-column:1 / -1; align-items:flex-start; text-align:left; }
+  .arx-mod--room + .arx-mod--room::before{ display:none; }
+}
+@media (max-width:540px){
+  .arx-sheet{ grid-template-columns:1fr; }
+  .arx-mod--room .arx-mod__ver{ position:static; }
+  .arx-mod--room{ gap:.7rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .arx-mod, .arx-mod::after{ transition:none; }
+  .arx-modules.is-ready .arx-sheet{ animation:none; }
 }
