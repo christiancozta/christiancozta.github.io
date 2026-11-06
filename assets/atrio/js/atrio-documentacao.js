@@ -14,14 +14,14 @@
     sheet.dataset.technicalSheet = key;
     sheet.textContent = 'Ficha técnica';
     const manual = document.createElement('a');
-    manual.href = new URL(`${key.toUpperCase()}_Manual_Oficial_PUBLICO.txt`, base);
+    manual.href = new URL(`${key.toUpperCase()}_Manual_Oficial_PUBLICO${key === 'corpus' ? '_linha1x' : ''}.txt`, base);
     manual.target = '_blank';
     manual.rel = 'noopener';
     manual.textContent = key === 'corpus' ? 'Manual público: linha 1.x' : 'Manual público';
     nav.append(sheet, manual);
     if (key === 'corpus') {
       const otherLine = document.createElement('a');
-      otherLine.href = new URL('CORPUS_Manual_Oficial_PUBLICO_2.txt', base);
+      otherLine.href = new URL('CORPUS_Manual_Oficial_PUBLICO.txt', base);
       otherLine.target = '_blank';
       otherLine.rel = 'noopener';
       otherLine.textContent = 'Manual público: linha 2.x, outra linha';
@@ -33,7 +33,7 @@
   let dialog, body, title, download, lastTrigger;
   let requestId = 0;
   const cache = new Map();
-  const plain = value => value.replace(/\*\*/g, '').replace(/^\*|\*$/g, '').trim();
+  const plain = value => value.replace(/\*/g, '').trim();
   function createDialog() {
     dialog = document.createElement('dialog');
     dialog.className = 'technical-sheet';
@@ -86,7 +86,7 @@
           term.textContent = cells[i]; definition.textContent = cells[i + 1];
           row.append(term, definition); list.append(row);
         }
-      } else if (line.trim() && !line.startsWith('#')) {
+      } else if (line.trim() && !line.startsWith('#') && !line.startsWith('|')) {
         const p = document.createElement('p'); p.textContent = plain(line); fragment.append(p);
       }
     });

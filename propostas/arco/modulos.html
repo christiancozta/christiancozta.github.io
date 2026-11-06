@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCO · Módulos ATRIO: três propostas</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&family=Azeret+Mono:wght@500;600&family=Science+Gothic:wght@500..800&display=swap");
+
+/* Tokens copiados de arco-arquitetura.css (painel ATRIO). */
+:root{
+  --ink:#181818; --paper:#FCFCFC; --acc:#A63A23; --tint:#F8F2F1;
+  --line:#6A6A6A; --soft:#CBCBCB;
+  --text:rgba(24,24,24,.84); --mute:rgba(24,24,24,.62); --hair:rgba(24,24,24,.14);
+  --pad:clamp(1.3rem,2.6vw,2.8rem);
+  --fd:"Archivo",system-ui,sans-serif; --fb:"Instrument Sans",system-ui,sans-serif; --fm:"Azeret Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;color:var(--ink);font-family:var(--fb);font-size:15px;line-height:1.55;background:var(--paper)}
+a{color:inherit}
+.wrap{max-width:1376px;margin:0 auto;padding:clamp(2rem,4vw,4rem) clamp(1rem,2.8vw,2.5rem) 6rem}
+
+/* página de propostas */
+.doc-h{font-family:var(--fd);font-weight:800;font-size:clamp(1.8rem,3vw,2.6rem);letter-spacing:-.03em;line-height:1;margin:0 0 1rem}
+.doc-p{max-width:68ch;color:var(--text);margin:0}
+.audit{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:2rem 0 0}
+.audit div{background:var(--paper);padding:1rem 1.2rem;font-size:.84rem;line-height:1.5;color:var(--text)}
+.audit b{display:block;color:var(--ink);font-family:var(--fd);font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+.prop{margin-top:clamp(4rem,7vw,6rem)}
+.prop__h{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin:0 0 .6rem}
+.prop__l{font-family:var(--fm);font-weight:600;font-size:.8rem;color:var(--acc)}
+.prop__t{font-family:var(--fd);font-weight:800;font-size:clamp(1.4rem,2.4vw,2rem);letter-spacing:-.03em;line-height:1.05;margin:0}
+.prop__d{max-width:72ch;color:var(--text);margin:0 0 1.6rem}
+.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.6rem;margin-top:1.6rem;font-size:.84rem;line-height:1.5;color:var(--text)}
+.notes b{display:block;color:var(--ink);font-weight:700;margin-bottom:.25rem}
+.notes p{margin:0}
+@media(max-width:900px){.notes{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.notes{grid-template-columns:1fr}}
+.rec{margin-top:5rem;padding-top:1.4rem;border-top:1px solid var(--ink);max-width:72ch}
+.rec h2{font-family:var(--fd);font-weight:800;font-size:1.3rem;letter-spacing:-.02em;margin:0 0 .5rem}
+.rec p{margin:0;color:var(--text)}
+
+/* ===== moldura que imita .arx-sum: 12 colunas, 1px de tinta entre células ===== */
+.sum{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.cell{grid-column:span var(--w,12);min-width:0;background:var(--paper);padding:clamp(1.15rem,2vw,1.7rem) var(--pad);font-size:.84rem;line-height:1.64;color:var(--text)}
+.k{margin:0 0 .5rem;font-family:var(--fm);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;line-height:1.3;color:var(--acc)}
+.lead{margin:0;max-width:60ch}
+.mn{font-family:"Science Gothic",var(--fd);font-weight:750;letter-spacing:-.025em;color:var(--ink)}
+.mn em{font-style:normal;color:var(--acc)}
+.sym{display:block;object-fit:contain}
+.ver{font-family:var(--fm);font-size:.7rem;color:var(--mute)}
+.prov{grid-column:span 12;background:var(--paper);padding:1rem var(--pad);font-size:.76rem;line-height:1.55;color:var(--mute)}
+.links{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.2rem}
+.links a{font-size:.82rem;text-underline-offset:.25em}
+.btn{display:inline-flex;align-items:center;gap:.6em;padding:.68em 1.1em;font-family:var(--fm);font-size:.66rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;white-space:nowrap;color:var(--paper);background:var(--acc);border:1px solid var(--acc)}
+.btn:hover{background:var(--paper);color:var(--acc)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.dt{font-family:var(--fm);font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 .3rem}
+.dd{margin:0;color:var(--text)}
+.dd a{text-underline-offset:.2em}
+.big{display:block;font-family:var(--fd);font-weight:800;font-size:clamp(1.9rem,3vw,2.6rem);line-height:.9;letter-spacing:-.035em;color:var(--acc);font-variant-numeric:tabular-nums}
+
+/* ===== A · MATRIZ ===== */
+.mxw{grid-column:span 12;background:var(--paper);overflow-x:auto}
+.mx{width:100%;min-width:900px;border-collapse:collapse;table-layout:fixed}
+.mx col.rh{width:9.5rem}
+.mx th,.mx td{text-align:left;vertical-align:top;padding:.95rem 1rem;border-top:1px solid var(--hair);border-left:1px solid var(--hair);font-size:.8rem;line-height:1.5;font-weight:400;color:var(--text)}
+.mx tr > :first-child{border-left:0;padding-left:var(--pad);position:sticky;left:0;background:var(--paper);z-index:1}
+.mx thead th{border-top:0;padding-top:1.3rem;padding-bottom:1.1rem}
+.mx thead .sym{width:40px;height:40px;margin-bottom:.8rem}
+.mx thead .mn{display:block;font-size:1.05rem}
+.mx thead .role{display:block;margin:.15rem 0 .35rem;font-size:.8rem;color:var(--text)}
+.mx tbody th{font-family:var(--fm);font-size:.64rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.mx .num{display:block;font-family:var(--fd);font-weight:800;font-size:1.5rem;line-height:1;letter-spacing:-.03em;color:var(--acc);margin-bottom:.3rem}
+.mx tr.fn td{font-size:.86rem;color:var(--ink)}
+.mx tfoot td{padding-bottom:1.2rem}
+.mx tfoot a{display:block;font-size:.8rem;line-height:1.8;text-underline-offset:.22em}
+.mx tfoot a:first-child{font-weight:700;color:var(--ink)}
+/* coluna inteira acende sob o ponteiro, sem JS */
+.mx:has(:is(td,th):nth-child(2):hover) :is(td,th):nth-child(2),
+.mx:has(:is(td,th):nth-child(3):hover) :is(td,th):nth-child(3),
+.mx:has(:is(td,th):nth-child(4):hover) :is(td,th):nth-child(4),
+.mx:has(:is(td,th):nth-child(5):hover) :is(td,th):nth-child(5),
+.mx:has(:is(td,th):nth-child(6):hover) :is(td,th):nth-child(6){background:var(--tint)}
+
+/* ===== B · ÍNDICE E FOLHA ===== */
+.bi{padding:0;display:flex;flex-direction:column}
+.bi__h{padding:clamp(1.15rem,2vw,1.7rem) var(--pad) 1rem}
+.ix{appearance:none;display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:.2rem 1rem;width:100%;margin:0;padding:.95rem var(--pad);border:0;border-top:1px solid var(--hair);background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;position:relative;transition:background 200ms var(--ease)}
+.ix:last-child{border-bottom:0}
+.ix .sym{width:40px;height:40px;grid-row:1 / 3;opacity:.55;transition:opacity 200ms var(--ease)}
+.ix .mn{font-size:1rem;opacity:.62}
+.ix .role{grid-column:2;font-size:.78rem;color:var(--mute)}
+.ix .ver{grid-column:3;grid-row:1 / 3}
+.ix::before{content:"";position:absolute;left:0;top:-1px;bottom:0;width:3px;background:var(--acc);transform:scaleY(0);transform-origin:top;transition:transform 260ms var(--ease)}
+.ix[aria-selected="true"]{background:var(--tint)}
+.ix[aria-selected="true"]::before{transform:scaleY(1)}
+.ix[aria-selected="true"] :is(.sym,.mn){opacity:1}
+@media(hover:hover){.ix:hover :is(.sym,.mn){opacity:1}}
+.bs{display:grid;grid-template-rows:auto auto 1fr auto;padding:0}
+.bs__top{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:1.1rem;align-items:start;padding:clamp(1.15rem,2vw,1.7rem) var(--pad)}
+.bs__top .sym{width:56px;height:56px}
+.bs__top .mn{display:block;font-size:1.6rem;line-height:1}
+.bs__top .role{display:block;margin-top:.35rem;font-size:.86rem;color:var(--text)}
+.bs__fn{grid-column:2 / -1;margin:.3rem 0 0;font-size:1rem;line-height:1.5;color:var(--ink);max-width:62ch}
+.bs__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--hair);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.bs__facts > div{background:var(--paper);padding:1rem var(--pad) 1.1rem}
+.bs__facts > div:last-child:nth-child(odd){grid-column:span 2}
+.bs__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;padding:1rem var(--pad)}
+.bs__note{grid-column:1 / -1;padding:0 var(--pad) 1rem;font-size:.76rem;color:var(--mute);margin:0}
+.fade{animation:fade 240ms var(--ease)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ===== C · ÁTRIO E SALAS ===== */
+.ca{display:grid;grid-template-columns:64px minmax(0,1.1fr) minmax(0,1.6fr) auto;gap:1.4rem;align-items:center}
+.ca .sym{width:64px;height:64px}
+.ca .mn{display:block;font-size:1.5rem;line-height:1}
+.ca .role{display:block;margin-top:.35rem;font-size:.84rem}
+.ca .lead{color:var(--ink);font-size:.92rem;line-height:1.5}
+.ca__stat{text-align:right}
+.ca__stat small{display:block;margin-top:.4rem;font-size:.74rem;line-height:1.35;color:var(--text);max-width:13rem;margin-left:auto}
+.cr{position:relative;appearance:none;margin:0;border:0;cursor:pointer;text-align:left;font:inherit;display:flex;flex-direction:column;gap:.15rem;transition:background 200ms var(--ease)}
+.cr .sym{width:44px;height:44px;margin-bottom:.8rem}
+.cr .mn{font-size:1.15rem}
+.cr .role{font-size:.8rem;color:var(--text);margin-bottom:1.1rem}
+.cr .big{font-size:clamp(1.7rem,2.6vw,2.3rem)}
+.cr small{margin-top:.45rem;font-size:.74rem;line-height:1.35;color:var(--text)}
+.cr .ver{position:absolute;top:clamp(1.15rem,2vw,1.7rem);right:var(--pad)}
+/* conector do percurso: seta no fio entre as salas */
+.cr + .cr::before{content:"→";position:absolute;left:-.8rem;top:50%;width:1.6rem;height:1.6rem;margin-top:-.8rem;display:grid;place-items:center;background:var(--paper);border:1px solid var(--line);font-family:var(--fm);font-size:.75rem;color:var(--acc);z-index:1}
+.cr::after,.ca::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform 260ms var(--ease)}
+.ca{position:relative;cursor:pointer}
+.is-sel::after{transform:scaleX(1)}
+.cr.is-sel,.ca.is-sel{background:var(--tint)}
+@media(hover:hover){.cr:hover,.ca:hover{background:var(--tint)}}
+.cd{padding:0}
+.cd__in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hair)}
+.cd__in > div{background:var(--paper);padding:1.1rem var(--pad) 1.2rem}
+.cd__fn{grid-column:1 / -1;display:flex;justify-content:space-between;gap:2rem;align-items:start}
+.cd__fn p{margin:0;font-size:.98rem;line-height:1.5;color:var(--ink);max-width:66ch}
+.cd__fn .mn{font-size:.9rem;white-space:nowrap}
+.cd__foot{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center}
+.cd__foot .dd{max-width:60ch}
+
+/* celular: colapsos explícitos */
+@media(max-width:900px){
+  .sum > .cell{grid-column:span 12}
+  .ca{grid-template-columns:52px minmax(0,1fr)}
+  .ca .sym{width:52px;height:52px}
+  .ca .lead,.ca__stat{grid-column:1 / -1;text-align:left}
+  .ca__stat small{margin-left:0}
+  .crow{grid-column:span 12;display:grid;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;gap:1px;background:var(--line)}
+  .crow .cr{scroll-snap-align:start}
+  .cr + .cr::before{display:none}
+  .cd__in{grid-template-columns:1fr 1fr}
+  .bs__top{grid-template-columns:44px minmax(0,1fr)}
+  .bs__top .sym{width:44px;height:44px}
+  .bs__top .ver{grid-column:2}
+  .bs__fn{grid-column:1 / -1}
+  .bi__list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(9.5rem,40%);overflow-x:auto;scroll-snap-type:x mandatory}
+  .bi__list .ix{scroll-snap-align:start;border-top:1px solid var(--hair);border-left:1px solid var(--hair)}
+}
+@media(min-width:901px){.crow{display:contents}}
+@media(max-width:540px){
+  .bs__facts,.cd__in{grid-template-columns:1fr}
+  .bs__facts > div:last-child:nth-child(odd){grid-column:auto}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <h1 class="doc-h">Módulos do ATRIO: três propostas</h1>
+  <p class="doc-p">Redesign do bloco “Cinco componentes, um percurso governado”, que entrou no painel ATRIO do <code>arco.html</code> no commit <code>188465d</code>. As três propostas usam só o que o painel já tem: grade de 12 colunas com fio de 1px, papel #FCFCFC, tinta #181818, acento ATRIO #A63A23, Archivo, Instrument Sans, Azeret Mono e Science Gothic nos nomes. Conteúdo real dos cinco módulos; nada inventado.</p>
+
+  <div class="audit" aria-label="Diagnóstico do bloco atual">
+    <div><b>Coluna escura isolada</b>O módulo aberto vira um bloco #181818 com rótulos em #F49B80. Rompe a regra do painel (papel e tinta, acento só nos detalhes) e cria uma sexta cor.</div>
+    <div><b>Quatro colunas vazias</b>No desktop, as colunas fechadas esticam até a altura da aberta: cerca de 700px de papel em branco ao lado do texto.</div>
+    <div><b>Leitura em coluna estreita</b>Função, cinco campos e três links empilhados num só fio: o bloco chega a ~1.050px, o mais alto do painel.</div>
+    <div><b>Movimento caro</b>A troca anima <code>grid-template-columns</code> (4fr/1fr): o layout inteiro se recalcula e o texto salta durante a transição.</div>
+    <div><b>Ruído de numeração</b>Índices 01 a 05, “+”/“−” e a sequência solta à direita (que omite o próprio ATRIO) dizem a mesma coisa três vezes.</div>
+  </div>
+
+  <!-- ================= A ================= -->
+  <section class="prop" aria-labelledby="pa">
+    <div class="prop__h"><span class="prop__l">Proposta A</span><h2 class="prop__t" id="pa">Matriz</h2></div>
+    <p class="prop__d">Os cinco módulos têm os mesmos campos: o conteúdo já é uma tabela. Módulos em colunas, campos em linhas, tudo visível ao mesmo tempo, sem clique. A leitura horizontal compara (quantos limites cada etapa impõe); a vertical apresenta um módulo. O texto integral continua na ficha técnica.</p>
+
+    <div class="sum">
+      <div class="cell" style="--w:12">
+        <h4 class="k">Cinco componentes, um percurso governado</h4>
+        <p class="lead">Cada coluna é um módulo; cada linha, um mesmo critério. Texto integral e manuais na ficha técnica de cada um.</p>
+      </div>
+      <div class="mxw"><table class="mx" id="mx"></table></div>
+      <p class="prov">(A) dado bruto em arquivo; (B) documento do autor sem dado bruto localizado. Estados e volumes conforme índice de 05/11/2026. Arquitetura, regras jurídicas, metodologia e governança: Christian da Costa. Código implementado com apoio intensivo de IA, sob sua especificação e revisão.</p>
+    </div>
+
+    <div class="notes">
+      <p><b>Ideia</b>Comparação direta. Nenhum estado escondido: o que está na tela é tudo.</p>
+      <p><b>Resolve</b>Zero clique, zero JS, zero espaço morto. Semântica de <code>&lt;table&gt;</code> com cabeçalhos de linha e coluna: a mais acessível das três.</p>
+      <p><b>Custo</b>Exige condensar o texto de cada campo (versão curta aqui, integral na ficha). É a mais longa: ~1.000px, quase o mesmo do bloco atual, mas sem espaço morto.</p>
+      <p><b>Celular</b>Tabela rola na horizontal com a coluna de rótulos fixa à esquerda.</p>
+    </div>
+  </section>
+
+  <!-- ================= B ================= -->
+  <section class="prop" aria-labelledby="pb">
+    <div class="prop__h"><span class="prop__l">Proposta B</span><h2 class="prop__t" id="pb">Índice e folha</h2></div>
+    <p class="prop__d">Repete o compasso que o painel já usa no topo (Movimento em 4 colunas, abertura em 8). À esquerda, o índice dos cinco módulos; à direita, a folha do módulo selecionado com os campos em grade 2×2. A seleção é marcada por um filete no acento, não por inversão de cor.</p>
+
+    <div class="sum">
+      <div class="cell bi" style="--w:4">
+        <div class="bi__h"><h4 class="k">Cinco componentes, um percurso governado</h4><p class="lead">Selecione um módulo.</p></div>
+        <div class="bi__list" role="tablist" aria-orientation="vertical" aria-label="Módulos do ATRIO" id="bi"></div>
+      </div>
+      <div class="cell bs" style="--w:8" role="tabpanel" id="bs" aria-live="polite"></div>
+      <p class="prov">(A) dado bruto em arquivo; (B) documento do autor sem dado bruto localizado. Estados e volumes conforme índice de 05/11/2026. Arquitetura, regras jurídicas, metodologia e governança: Christian da Costa. Código implementado com apoio intensivo de IA, sob sua especificação e revisão.</p>
+    </div>
+
+    <div class="notes">
+      <p><b>Ideia</b>Um módulo por vez, lido por inteiro, sem perder de vista os outros quatro.</p>
+      <p><b>Resolve</b>Altura de ~690px a 1280px de largura, sem colunas vazias. Texto integral mantido. Padrão de abas com setas do teclado.</p>
+      <p><b>Custo</b>Esconde quatro de cinco módulos. Comparar exige alternar.</p>
+      <p><b>Celular</b>O índice vira faixa horizontal com rolagem e encaixe; a folha fica abaixo, campos em uma coluna.</p>
+    </div>
+  </section>
+
+  <!-- ================= C ================= -->
+  <section class="prop" aria-labelledby="pc">
+    <div class="prop__h"><span class="prop__l">Proposta C</span><h2 class="prop__t" id="pc">Átrio e salas</h2></div>
+    <p class="prop__d">O bloco desenha o que o título diz. ATRIO ocupa a faixa inteira, como o átrio que dá acesso às salas; abaixo, CORPUS → RATIO → CERNE → LUX em quatro células iguais, ligadas por setas no próprio fio da grade. Cada célula mostra um único número, o mesmo critério para todos: quantos limites a etapa impõe. O clique abre a ficha resumida numa faixa abaixo.</p>
+
+    <div class="sum" id="c">
+      <div class="cell" style="--w:12"><h4 class="k">Cinco componentes, um percurso governado</h4></div>
+      <div class="cell ca" style="--w:12" id="ca"></div>
+      <div class="crow" id="crow"></div>
+      <div class="cell cd" style="--w:12" id="cd" aria-live="polite"></div>
+      <p class="prov">(A) dado bruto em arquivo; (B) documento do autor sem dado bruto localizado. Estados e volumes conforme índice de 05/11/2026. Arquitetura, regras jurídicas, metodologia e governança: Christian da Costa. Código implementado com apoio intensivo de IA, sob sua especificação e revisão.</p>
+    </div>
+
+    <div class="notes">
+      <p><b>Ideia</b>Arquitetura legível antes do texto: quem orquestra, em que ordem, com quantas travas.</p>
+      <p><b>Resolve</b>Primeira leitura compacta (~450px até as salas; ~900px com a ficha aberta); detalhe sob demanda numa faixa larga, em quatro colunas. Fecha a contradição do “01 ATRIO” versus a sequência que o omite.</p>
+      <p><b>Custo</b>Um número por módulo é escolha editorial. Torna redundante a célula “5 marcas” logo acima, que pode sair.</p>
+      <p><b>Celular</b>ATRIO em cima; as quatro salas em faixa horizontal com encaixe; ficha em duas colunas, depois uma.</p>
+    </div>
+  </section>
+
+  <section class="rec">
+    <h2>Recomendação</h2>
+    <p>C, porque o painel é um sumário executivo: mostra a arquitetura e o critério comum em uma tela e deixa o texto integral para quem pede. B é a alternativa segura se o texto completo precisar ficar sempre à mão. A serve melhor como conteúdo da página ATRIO do que do sumário.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const S = "../../assets/atrio/brand/";
+  // Conteúdo do commit 188465d. "short" = versão condensada para a Matriz.
+  const M = [
+    { k:"atrio", n:"A<em>T</em>RIO", role:"Orquestração", ver:"API 0.7.0", sym:"atrio-rei.svg",
+      fn:"Encadeia CORPUS, RATIO, CERNE e LUX numa execução registrada e só libera a peça com decisão humana identificada.",
+      stack:"Python, FastAPI, PostgreSQL, Docker e OpenAPI 3.1.",
+      ia:"Inferência local com Ollama. Implementação de código assistida por Claude Code e Codex.",
+      gov:"3 paradas para decisão humana e 3 estados de bloqueio. Comando fora de ordem é recusado em código.",
+      ev:"31 rotas e 33 operações HTTP (A). 219 funções de teste no código (A). Publicação declara 188 testes aprovados em 26/08/2026 (B), sem saída de execução salva.",
+      st:"Validação. 3 homologações com caso sintético, de 31/07 a 01/08/2026 (A), sem registro de liberação final nos transcritos.",
+      num:"3 + 3", numT:"paradas humanas e estados de bloqueio",
+      short:{ stack:"Python, FastAPI, PostgreSQL, Docker, OpenAPI 3.1", ia:"Ollama, local", ev:"219 testes no código (A); 31 rotas (A)", st:"Validação" } },
+    { k:"corpus", n:"C<em>O</em>RPUS", role:"Memória documental", ver:"1.5.0", sym:"corpus-torre.svg",
+      fn:"Pseudonimiza documentos jurídicos na entrada e guarda base, original e cofre em separado.",
+      stack:"Python, OCR local (Tesseract) e cofre cifrado.",
+      ia:"Nenhum modelo generativo no fluxo. Detecção por regras, com reconhecimento de nomes opcional (spaCy).",
+      gov:"6 interrupções: duplicado, texto insuficiente, erro de extração, erro de OCR, OCR abaixo do mínimo e segredo de justiça. Revisão humana do segredo e da reidentificação.",
+      ev:"115.114 julgados na base (A). 37 testes no código: 26 na API e 11 na biblioteca compartilhada atrio_pii (A), sem resultado de execução salvo.",
+      st:"Produção individual. Pipeline 1.x com 23 execuções de ingestão, de 22/06 a 28/09/2026 (A).",
+      note:"A linha 2.x é distinta da versão publicada 1.5.0. O índice registra 15 execuções da aplicação 2.0.0-dev, de 02 a 18/10/2026 (A).",
+      num:"6", numT:"interrupções antes da base",
+      short:{ stack:"Python, Tesseract (OCR local), cofre cifrado", ia:"Sem modelo generativo; regras e spaCy opcional", ev:"115.114 julgados (A); 37 testes (A)", st:"Produção individual" } },
+    { k:"ratio", n:"R<em>A</em>TIO", role:"Formulação decisória", ver:"8.0.0", sym:"ratio-cavalo.svg",
+      fn:"Elabora a minuta em fases, uma via processual por vez, e só avança com escolha humana registrada.",
+      stack:"Camada crítica de instruções e arquivos de conhecimento. Na API, Python.",
+      ia:"Claude Projects e GPT personalizado. Na API, inferência local com Ollama.",
+      gov:"8 gates, 18 hard stops mínimos e 9 pontos de validação humana, da escolha da via à liberação.",
+      ev:"3 vias e 18 fases. 72 testes na API, por contagem estática (A), sem resultado de execução salvo.",
+      st:"Validação. 3 homologações pela API com caso sintético, de 31/07 a 01/08/2026 (A).",
+      num:"18", numT:"hard stops mínimos, com 9 validações humanas",
+      short:{ stack:"Instruções e conhecimento; API em Python", ia:"Claude Projects, GPT; Ollama na API", ev:"3 vias, 18 fases; 72 testes (A)", st:"Validação" } },
+    { k:"cerne", n:"C<em>E</em>RNE", role:"Auditoria do raciocínio", ver:"5.1.0", sym:"cerne-rainha.svg",
+      fn:"Audita o raciocínio de atos judiciais e devolve perguntas presas a trechos, sem julgar o ato.",
+      stack:"Python, FastAPI e SQLite.",
+      ia:"Modelos externos por API: Gemini, OpenAI, OpenRouter, Groq, Mistral e ExpLabs, com opção de famílias distintas entre os lados do confronto.",
+      gov:"8 hard stops. Falha encerra a rodada sem relatório parcial. A decisão sobre o ato é humana.",
+      ev:"25 rodadas sobre decisões públicas, 18 concluídas, de 16 a 28/10/2026, dentro de 67 rodadas registradas de 11 a 28/10/2026 (A). Média de 12,2 minutos por rodada medida na versão 5.0.0 (A). 110 testes no código (A), sem resultado de execução salvo.",
+      st:"Produção individual, com rodadas registradas sobre decisões públicas (A).",
+      num:"8", numT:"hard stops; falha encerra a rodada",
+      short:{ stack:"Python, FastAPI, SQLite", ia:"Gemini, OpenAI, OpenRouter, Groq, Mistral, ExpLabs", ev:"25 rodadas públicas, 18 concluídas (A); 110 testes (A)", st:"Produção individual" } },
+    { k:"lux", n:"L<em>U</em>X", role:"Refinamento formal", ver:"6.0.0", sym:"lux-bispo.svg",
+      fn:"Refina a forma de texto já decidido e protege dados conforme o destino, sem tocar no mérito.",
+      stack:"Kernel de instruções e dois arquivos de conhecimento. Na API, Python com biblioteca própria de detecção de dados.",
+      ia:"GPT personalizado, Gemini Gem ou Claude Project.",
+      gov:"12 hard stops. Diante deles, preserva o trecho original. Validação humana depois da entrega.",
+      ev:"11 testes na API e 11 na biblioteca compartilhada atrio_pii, por contagem estática (A), sem resultado de execução salvo.",
+      st:"Implementado, sem uso registrado. Volume de uso sem contagem localizada no índice.",
+      num:"12", numT:"hard stops; preserva o trecho original",
+      short:{ stack:"Instruções e conhecimento; API em Python", ia:"GPT, Gemini Gem ou Claude Project", ev:"11 + 11 testes (A)", st:"Implementado, sem uso" } }
+  ];
+  const img = (m, s) => `<img class="sym" src="${S + m.sym}" alt="" width="${s}" height="${s}">`;
+  const name = m => m.n.replace(/<\/?em>/g, "");
+  const links = m => `<a href="#" onclick="return false">Ficha técnica →</a><a href="#" onclick="return false">Manual público${m.k === "corpus" ? ": 1.x" : ""}</a>${m.k === "corpus" ? '<a href="#" onclick="return false">Manual público: 2.x</a>' : ""}<a href="#" onclick="return false">Evolução</a>`;
+
+  /* A · Matriz */
+  const rows = [["Função", m => m.fn], ["Stack", m => m.short.stack], ["IA", m => m.short.ia],
+    ["Governança", m => `<span class="num">${m.num}</span>${m.numT}`], ["Evidência", m => m.short.ev], ["Estado de uso", m => m.short.st]];
+  document.getElementById("mx").innerHTML =
+    `<colgroup><col class="rh">${M.map(() => "<col>").join("")}</colgroup>` +
+    `<thead><tr><td></td>${M.map(m => `<th scope="col">${img(m, 40)}<span class="mn">${m.n}</span><span class="role">${m.role}</span><span class="ver">${m.ver}</span></th>`).join("")}</tr></thead>` +
+    `<tbody>${rows.map(([l, f], i) => `<tr${i ? "" : ' class="fn"'}><th scope="row">${l}</th>${M.map(m => `<td>${f(m)}</td>`).join("")}</tr>`).join("")}</tbody>` +
+    `<tfoot><tr><th scope="row" class="dt" style="font-family:var(--fm)">Documentação</th>${M.map(m => `<td>${links(m)}</td>`).join("")}</tr></tfoot>`;
+
+  /* B · Índice e folha */
+  const bi = document.getElementById("bi"), bs = document.getElementById("bs");
+  bi.innerHTML = M.map(m => `<button class="ix" role="tab" id="bt-${m.k}" aria-controls="bs" aria-selected="false" tabindex="-1">${img(m, 40)}<span class="mn">${m.n}</span><span class="role">${m.role}</span><span class="ver">${m.ver}</span></button>`).join("");
+  const tabs = [...bi.children];
+  const fact = (l, v) => `<div><p class="dt">${l}</p><p class="dd">${v}</p></div>`;
+  function selB(i, focus) {
+    tabs.forEach((t, j) => { t.setAttribute("aria-selected", i === j); t.tabIndex = i === j ? 0 : -1; });
+    if (focus) tabs[i].focus();
+    const m = M[i];
+    bs.setAttribute("aria-labelledby", "bt-" + m.k);
+    bs.innerHTML = `<div class="bs__top fade">${img(m, 56)}<div><span class="mn">${m.n}</span><span class="role">${m.role}</span></div><span class="ver">${m.ver}</span><p class="bs__fn">${m.fn}</p></div>` +
+      `<div class="bs__facts fade">${fact("Tecnologias e stack", m.stack)}${fact("Ferramentas e modelos de IA", m.ia)}${fact("Governança e limite", m.gov)}${fact("Evidência", m.ev)}${fact("Estado de uso", m.st)}</div>` +
+      (m.note ? `<p class="bs__note" style="padding-top:1rem">${m.note}</p>` : "<span></span>") +
+      `<div class="bs__foot"><a class="btn" href="#" onclick="return false">Ficha técnica →</a><nav class="links" aria-label="Documentação de ${name(m)}">${links(m).replace(/<a[^>]*>Ficha técnica →<\/a>/, "")}</nav></div>`;
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => selB(i));
+    t.addEventListener("keydown", e => {
+      const d = { ArrowDown:1, ArrowRight:1, ArrowUp:-1, ArrowLeft:-1 }[e.key];
+      if (d) { e.preventDefault(); selB((i + d + 5) % 5, true); }
+      if (e.key === "Home") { e.preventDefault(); selB(0, true); }
+      if (e.key === "End") { e.preventDefault(); selB(4, true); }
+    });
+  });
+  selB(0);
+
+  /* C · Átrio e salas */
+  const ca = document.getElementById("ca"), crow = document.getElementById("crow"), cd = document.getElementById("cd");
+  const A = M[0];
+  ca.setAttribute("role", "button"); ca.tabIndex = 0; ca.setAttribute("aria-controls", "cd");
+  ca.innerHTML = `${img(A, 64)}<div><span class="mn">${A.n}</span><span class="role">${A.role} <span class="ver">· ${A.ver}</span></span></div><p class="lead">${A.fn}</p><div class="ca__stat"><span class="big">${A.num}</span><small>${A.numT}</small></div>`;
+  crow.innerHTML = M.slice(1).map((m, i) => `<button class="cell cr" style="--w:3" aria-controls="cd" data-i="${i + 1}">${img(m, 44)}<span class="mn">${m.n}</span><span class="role">${m.role}</span><span class="ver">${m.ver}</span><span class="big">${m.num}</span><small>${m.numT}</small></button>`).join("");
+  const triggers = [ca, ...crow.children];
+  function selC(i) {
+    triggers.forEach((t, j) => { t.classList.toggle("is-sel", i === j); t.setAttribute("aria-expanded", i === j); });
+    const m = M[i];
+    cd.innerHTML = `<div class="cd__in fade">${i ? `<div class="cd__fn"><p>${m.fn}</p><span class="mn">${m.n}</span></div>` : ""}${fact("Tecnologias e stack", m.stack)}${fact("Ferramentas e modelos de IA", m.ia)}${fact("Governança e limite", m.gov)}${fact("Evidência", m.ev)}` +
+      `<div class="cd__foot"><div><p class="dt">Estado de uso</p><p class="dd">${m.st}${m.note ? " " + m.note : ""}</p></div><div class="links"><a class="btn" href="#" onclick="return false">Ficha técnica →</a>${links(m).replace(/<a[^>]*>Ficha técnica →<\/a>/, "")}</div></div></div>`;
+  }
+  triggers.forEach((t, i) => {
+    t.addEventListener("click", () => selC(i));
+    if (t === ca) t.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selC(0); } });
+  });
+  selC(0);
+})();
+</script>
+</body>
+</html>
