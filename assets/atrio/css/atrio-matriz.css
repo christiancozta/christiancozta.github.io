@@ -1,6 +1,6 @@
 /* ==========================================================================
    ATRIO — Arquitetura em matriz, presa ao grid visível da página.
-   Desktop: rótulos em 2 células e um módulo por célula (6 = largura do board);
+   Desktop: rótulos em 1 célula e um módulo por célula (6 = largura do board);
    linhas em múltiplos de --board-row. Celular: rótulos em 1 célula, um módulo
    por tela (3 células), linhas em múltiplos de --grid-row. O atrio.js arredonda
    cada altura para o múltiplo seguinte; o CSS não desenha linhas próprias:
@@ -14,7 +14,7 @@
 .at-mx__wrap{overflow-x:auto;scroll-snap-type:x mandatory}
 .at-mx__wrap:focus-visible{outline:2px solid var(--terra);outline-offset:-2px}
 .at-mx__table{
-  display:grid;grid-template-columns:calc(var(--cell)*2) repeat(4,var(--cell));
+  display:grid;grid-template-columns:repeat(6,var(--cell));
   width:calc(var(--cell)*6);border-collapse:collapse
 }
 .at-mx__table :is(thead,tbody,tfoot,tr){display:contents}
@@ -50,10 +50,12 @@
 .at-mx .at-mx__btn:is(:hover,:focus-visible) span{transform:translateX(3px)}
 
 /* coluna em foco: sob o ponteiro ou chamada pelo ARCO (data-active) */
+.at-mx__table:has([data-col="atrio"]:hover) [data-col="atrio"],
 .at-mx__table:has([data-col="corpus"]:hover) [data-col="corpus"],
 .at-mx__table:has([data-col="ratio"]:hover) [data-col="ratio"],
 .at-mx__table:has([data-col="cerne"]:hover) [data-col="cerne"],
 .at-mx__table:has([data-col="lux"]:hover) [data-col="lux"],
+.at-mx[data-active="atrio"] [data-col="atrio"],
 .at-mx[data-active="corpus"] [data-col="corpus"],
 .at-mx[data-active="ratio"] [data-col="ratio"],
 .at-mx[data-active="cerne"] [data-col="cerne"],
@@ -64,7 +66,7 @@
 @media(max-width:760px){
   .at-mx__head{padding:1.25rem 1rem}
   /* rótulos fixos em 1 célula; um módulo por tela em 3 células, parada sempre na linha do grid */
-  .at-mx__table{grid-template-columns:var(--cell) repeat(4,calc(var(--cell)*3));width:calc(var(--cell)*13)}
+  .at-mx__table{grid-template-columns:var(--cell) repeat(5,calc(var(--cell)*3));width:calc(var(--cell)*16)}
   .at-mx__table tr>:first-child{position:sticky;left:0;z-index:1;padding-left:10px;padding-right:6px}
   .at-mx__table :is(tbody,tfoot) th{font-size:.625rem;letter-spacing:.04em}
   .at-mx__table [data-col]{scroll-snap-align:start;scroll-margin-left:var(--cell)}
