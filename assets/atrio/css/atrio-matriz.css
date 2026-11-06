@@ -6,12 +6,14 @@
    cada altura para o múltiplo seguinte; o CSS não desenha linhas próprias:
    quem divide os campos é o grid do fundo.
    ========================================================================== */
+/* clip corta como hidden, mas não vira contêiner de rolagem: o cabeçalho fixo funciona */
+.section.field-light--architecture{overflow:clip}
+
 .at-mx{grid-column:1/-1;min-width:0}
 .at-mx__head{padding:31px var(--gutter) 22px;border-bottom:1px solid var(--terra)}
 .at-mx__head .at-t{max-width:32ch}
 .at-mx__ev{margin:12px 0 0;max-width:72ch;font:400 .8125rem/1.5 var(--font-body);color:var(--muted-on-light)}
 
-.at-mx__wrap{overflow-x:auto;scroll-snap-type:x mandatory}
 .at-mx__wrap:focus-visible{outline:2px solid var(--terra);outline-offset:-2px}
 .at-mx__table{
   display:grid;grid-template-columns:repeat(6,var(--cell));
@@ -22,9 +24,9 @@
   min-width:0;margin:0;padding:14px 12px 16px;text-align:left;vertical-align:top;border:0;
   font:400 .8125rem/1.5 var(--font-body);color:var(--text-dark);
   overflow-wrap:break-word;hyphens:auto;
-  transition:background-color .24s cubic-bezier(.22,1,.36,1)
+  transition:background-color .24s cubic-bezier(.22,1,.36,1),box-shadow .24s cubic-bezier(.22,1,.36,1),color .24s ease
 }
-.at-mx__table tr>:first-child{padding-left:var(--gutter);background:var(--surface-light-architecture)}
+.at-mx__table tr>:first-child{padding-left:var(--gutter);background-color:var(--surface-light-architecture)}
 .at-mx__table :is(tbody,tfoot) th{font:700 .6875rem/1.3 var(--font-heading);letter-spacing:.08em;text-transform:uppercase;color:var(--terra)}
 .at-mx__table thead th{padding-top:20px}
 .at-mx__sym{display:block;width:44px;height:44px;margin-bottom:12px}
@@ -32,6 +34,12 @@
 .at-mx__name em{font-style:normal;color:var(--terra)}
 .at-mx__ver{display:block;margin-top:7px;font:500 .75rem/1.3 var(--font-heading);letter-spacing:.04em;color:var(--muted-on-light)}
 .at-mx__fn td{font:500 .875rem/1.45 var(--font-heading);letter-spacing:-.005em}
+
+/* linha dos módulos: fixa no topo até o fim da matriz */
+.at-mx__table thead :is(th,td){
+  position:sticky;top:0;z-index:2;
+  background-color:var(--surface-light-architecture);box-shadow:inset 0 -1px 0 var(--terra)
+}
 
 /* documentação: só a ficha leva o fundo terracota */
 .at-mx__docs{display:flex;flex-direction:column;align-items:stretch;gap:6px}
@@ -49,25 +57,44 @@
 .at-mx .at-mx__btn span{transition:transform .32s cubic-bezier(.32,.72,0,1)}
 .at-mx .at-mx__btn:is(:hover,:focus-visible) span{transform:translateX(3px)}
 
-/* coluna em foco: sob o ponteiro ou chamada pelo ARCO (data-active) */
-.at-mx__table:has([data-col="atrio"]:hover) [data-col="atrio"],
-.at-mx__table:has([data-col="corpus"]:hover) [data-col="corpus"],
-.at-mx__table:has([data-col="ratio"]:hover) [data-col="ratio"],
-.at-mx__table:has([data-col="cerne"]:hover) [data-col="cerne"],
-.at-mx__table:has([data-col="lux"]:hover) [data-col="lux"],
+/* coluna chamada pelo ARCO (data-active) */
 .at-mx[data-active="atrio"] [data-col="atrio"],
 .at-mx[data-active="corpus"] [data-col="corpus"],
 .at-mx[data-active="ratio"] [data-col="ratio"],
 .at-mx[data-active="cerne"] [data-col="cerne"],
 .at-mx[data-active="lux"] [data-col="lux"]{background-color:#F7F0EE}
 
+/* TABULEIRO — só nesta seção. Cada campo tem cor de casa, como no xadrez
+   (canto superior esquerdo claro). Sob o cursor, o campo afunda: casa clara
+   com camada branca; casa escura com camada cinza-escura. De um campo ao
+   vizinho, as camadas se alternam. Linhas: cabeçalho = 0, tbody = 1..9,
+   rodapé = 10; casa escura quando linha + coluna é ímpar. */
+@media(hover:hover){
+  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within){
+    background-color:#FFFFFF;
+    box-shadow:inset 0 4px 12px rgba(42,37,41,.3),inset 0 0 0 1px rgba(42,37,41,.12)
+  }
+  .at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even):is(:hover,:focus-within),
+  .at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd):is(:hover,:focus-within){
+    background-color:#2A2529;color:#E4E4E4;
+    box-shadow:inset 0 4px 12px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.35)
+  }
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__name{color:#FAFAFA}
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__ver{color:rgba(250,250,250,.68)}
+  .at-mx .at-mx__table tbody tr:nth-child(odd)>th:nth-child(odd):is(:hover,:focus-within),
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__name em{color:#E06A4E}
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__btn.at-mx__btn--ghost{border-color:#FAFAFA;color:#FAFAFA}
+}
+
 .at-mx__autoria{margin:0;padding:16px var(--gutter) 20px;font:400 .8125rem/1.5 var(--font-body);color:var(--muted-on-light)}
 
 @media(max-width:760px){
   .at-mx__head{padding:1.25rem 1rem}
   /* rótulos fixos em 1 célula; um módulo por tela em 3 células, parada sempre na linha do grid */
+  .at-mx__wrap{overflow-x:auto;scroll-snap-type:x mandatory}
   .at-mx__table{grid-template-columns:var(--cell) repeat(5,calc(var(--cell)*3));width:calc(var(--cell)*16)}
   .at-mx__table tr>:first-child{position:sticky;left:0;z-index:1;padding-left:10px;padding-right:6px}
+  .at-mx__table thead tr>:first-child{z-index:3}
   .at-mx__table :is(tbody,tfoot) th{font-size:.625rem;letter-spacing:.04em}
   .at-mx__table [data-col]{scroll-snap-align:start;scroll-margin-left:var(--cell)}
   .at-mx__autoria{padding:1rem}
