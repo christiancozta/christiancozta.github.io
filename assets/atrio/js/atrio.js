@@ -487,19 +487,36 @@ prepareArchitecture();
 /* A mae aciona um modulo pelo cordao. activateModule ja enquadra a secao pelo
    frameArchitecture, entao nao ha rolagem propria aqui: a jogada acontece com a
    secao em quadro, nunca durante o trajeto. */
+/* A Arquitetura é a matriz das fichas: acionar um módulo destaca a sua coluna. */
 window.atrioActivateModule = key => {
 if(!MODULE_ORDER.includes(key))return;
-if(moduleState.phase==="active"&&moduleState.activeKey===key){frameArchitecture();return}
-activateModule(key);
+const matrix=document.getElementById("at-mx");if(matrix)matrix.dataset.active=key;
 };
+/* Matriz presa ao grid visível: começa numa linha do grid e cada faixa (cabeçalho,
+   linhas da tabela, autoria) cresce até o múltiplo seguinte da fileira do fundo:
+   --board-row (168px) no desktop, --grid-row (84px) no celular; base fixa de 21px. */
+const atMatrix=document.getElementById("at-mx");
+function snapMatrix(){
+const table=atMatrix?.querySelector(".at-mx__table"),frame=atMatrix?.closest(".frame");if(!table||!frame)return;
+const unit=mobileArchitecture.matches?84:168,up=h=>Math.max(unit,Math.ceil(Math.round(h)/unit)*unit);
+const bands=[atMatrix.querySelector(".at-mx__head"),atMatrix.querySelector(".at-mx__autoria")].filter(Boolean);
+atMatrix.style.marginTop="";bands.forEach(el=>el.style.minHeight="");table.style.gridTemplateRows="";
+const offset=Math.round(atMatrix.getBoundingClientRect().top-frame.getBoundingClientRect().top),gap=(unit-offset%unit)%unit;
+if(gap)atMatrix.style.marginTop=`${gap}px`;
+bands.forEach(el=>el.style.minHeight=`${up(el.getBoundingClientRect().height)}px`);
+table.style.gridTemplateRows=[...table.rows].map(row=>`${up(row.cells[0].getBoundingClientRect().height)}px`).join(" ");
+}
+/* reencaixa quando a largura muda (já com --cell novo) e quando as fontes chegam */
+let atMatrixWidth=0;if(atMatrix)new ResizeObserver(([entry])=>{const width=Math.round(entry.contentRect.width);if(width!==atMatrixWidth){atMatrixWidth=width;snapMatrix()}}).observe(atMatrix);
+document.fonts?.ready.then(snapMatrix);addEventListener("load",snapMatrix);
 /* Contextual entry from ARCO, using this page's canonical version history. */
 const documentationRequest = new URLSearchParams(location.search);
 const requestedModule = documentationRequest.get("module");
 if(MODULE_ORDER.includes(requestedModule)){
   window.addEventListener("load",async()=>{
-    await activateModule(requestedModule);
+    window.atrioActivateModule(requestedModule);
     if(documentationRequest.get("panel")==="history"){
-      const trigger=moduleCardByKey.get(requestedModule)?.querySelector("[data-version-of]");
+      const trigger=document.querySelector(`[data-version-of="${requestedModule}"]`);
       if(trigger)setVersionOpen(true,{trigger});
     }
   },{once:true});

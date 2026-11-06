@@ -3,33 +3,6 @@
   "use strict";
   const keys = ['atrio', 'corpus', 'ratio', 'cerne', 'lux'];
   const base = new URL('../docs/', document.currentScript.src);
-  keys.forEach(key => {
-    const card = document.querySelector(`[data-module-card="${key}"]`);
-    if (!card) return;
-    const nav = document.createElement('nav');
-    nav.className = 'module-docs';
-    nav.setAttribute('aria-label', `Documentação de ${key.toUpperCase()}`);
-    const sheet = document.createElement('a');
-    sheet.href = new URL(`FT_${key.toUpperCase()}.md`, base);
-    sheet.dataset.technicalSheet = key;
-    sheet.textContent = 'Ficha técnica';
-    const manual = document.createElement('a');
-    manual.href = new URL(`${key.toUpperCase()}_Manual_Oficial_PUBLICO${key === 'corpus' ? '_linha1x' : ''}.txt`, base);
-    manual.target = '_blank';
-    manual.rel = 'noopener';
-    manual.textContent = key === 'corpus' ? 'Manual público: linha 1.x' : 'Manual público';
-    nav.append(sheet, manual);
-    if (key === 'corpus') {
-      const otherLine = document.createElement('a');
-      otherLine.href = new URL('CORPUS_Manual_Oficial_PUBLICO.txt', base);
-      otherLine.target = '_blank';
-      otherLine.rel = 'noopener';
-      otherLine.textContent = 'Manual público: linha 2.x, outra linha';
-      otherLine.title = 'Documentação de outra linha, distinta da versão publicada 1.5.0';
-      nav.append(otherLine);
-    }
-    (card.querySelector('.module-card__flow') || card).append(nav);
-  });
   let dialog, body, title, download, lastTrigger;
   let requestId = 0;
   const cache = new Map();
