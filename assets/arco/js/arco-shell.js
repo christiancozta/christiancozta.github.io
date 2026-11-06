@@ -702,9 +702,6 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
       legacyFooter?.remove();
     }
 
-    if (view === 'atrio'){
-      doc.querySelector('.project-sequence')?.remove();
-    }
   }
 
   function prepareChildScrollbar(frame,win,doc,view){
