@@ -1711,20 +1711,9 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 }
 /* uma linha em branco entre a abertura e os três projetos */
 .arx-itin__le + .arx-itin__le{ margin-top:calc(var(--arx-prose-leading, 1.5) * 1em); }
-/* no itinerário, o selo do sistema vira sublinhado grosso na cor do sistema:
-   as três cores não se encostam e a marca não pesa como bloco */
-.arx-itin__le :is(.b-data, .b-echo, .b-atrio){
-  --arx-u:var(--arx-ink);
-  padding:0 .06em; margin:0;
-  color:var(--arx-ink); font-weight:700;
-  background:linear-gradient(transparent 62%, var(--arx-u) 62%, var(--arx-u) 92%, transparent 92%);
-  box-shadow:none;
-}
-.arx-itin__le .b-data{ --arx-u:var(--arx-data); }
-.arx-itin__le .b-echo{ --arx-u:var(--arx-echo); }
-.arx-itin__le .b-atrio{ --arx-u:var(--arx-atrio); }
-.arx-itin__le :is(.b-data, .b-echo, .b-atrio):hover{ box-shadow:none; background:linear-gradient(transparent 40%, var(--arx-u) 40%, var(--arx-u) 92%, transparent 92%); }
-.arx-itin__le :is(.b-data, .b-echo, .b-atrio):focus-visible{ box-shadow:none; outline:2px solid var(--arx-ink); outline-offset:2px; }
+/* no itinerário, os três selos ficam em bloco mais baixo: sem folga vertical,
+   a faixa não alcança a linha de cima nem a de baixo e as cores não se encostam */
+.arx-itin__le :is(.b-data, .b-echo, .b-atrio){ padding:0 .32em; }
 /* celular estreito: a tese pode quebrar */
 @media (max-width:560px){
   .arx-itin__tese{ white-space:normal; width:auto; text-wrap:balance; }
