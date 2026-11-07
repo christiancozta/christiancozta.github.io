@@ -1700,6 +1700,11 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   .arx-id__summary,
   .arx-itin{ max-width:var(--arx-hero-measure); }
 }
+/* PT: a tese desce para baixo dos contatos; o itinerário, sem ela, alinha ao resumo */
+.arx-id__about .arx-itin__tese{ margin:clamp(1.1rem, 1.8vw, 1.4rem) 0 0; }
+@media (min-width:901px){
+  .arx-itin:not(:has(> .arx-itin__tese)){ margin-top:0; }
+}
 /* celular estreito: a tese pode quebrar */
 @media (max-width:560px){
   .arx-itin__tese{ white-space:normal; width:auto; text-wrap:balance; }
