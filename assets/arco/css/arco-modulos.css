@@ -24,10 +24,13 @@
 
 /* gatilhos: faixa ATRIO e quatro salas */
 .arx-mod{
+  --mod-pt:clamp(1.15rem, 2vw, 1.7rem);
   position:relative; appearance:none; margin:0; border:0; border-radius:0;
   font:inherit; color:var(--arx-text); text-align:center; cursor:pointer;
-  padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem);
+  padding:var(--mod-pt) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem);
   transition:background-color 200ms var(--arx-ease);
+  /* o número vaza pelo topo e pela direita; a esquerda fica livre para a seta */
+  clip-path:inset(0 0 0 -1rem);
 }
 .arx-mod::after{
   content:""; position:absolute; left:0; right:0; bottom:0; height:3px;
@@ -50,25 +53,30 @@
   letter-spacing:.06em; text-transform:uppercase; color:var(--arx-soft);
 }
 .arx-mod__ver{ font-family:var(--f-micro); font-size:.7rem; font-weight:400; color:var(--arx-soft); }
-/* indicador: número no alto, à direita; descrição em duas linhas, mesmo peso */
+/* indicador: número encostado no canto superior direito, vazando o bloco,
+   translúcido como parte do fundo; legenda colada logo abaixo */
 .arx-mod__stat{
   order:-1; align-self:flex-end;
-  display:flex; flex-direction:column; align-items:flex-end; gap:.4rem;
+  display:flex; flex-direction:column; align-items:flex-end; gap:0;
+  margin:calc(-1 * var(--mod-pt)) calc(-1 * var(--arx-pad)) 0 0;
   text-align:right;
 }
-.arx-mod__lab{ font-size:.76rem; font-weight:400; line-height:1.4; }
+.arx-mod .arx-mod__stat .arx-res__n{
+  font-size:clamp(4.6rem, 7.4vw, 6.6rem); line-height:.74; letter-spacing:-.05em;
+  margin:-.12em -.08em -.13em 0; opacity:.2;
+}
+.arx-mod__lab{ padding-right:var(--arx-pad); font-size:.76rem; font-weight:400; line-height:1.15; }
 
 /* faixa ATRIO: indicador no canto; o eixo central fica livre */
 .arx-mod--atrio{ grid-column:1 / -1; }
-.arx-mod--atrio .arx-mod__stat{
-  position:absolute; top:clamp(1.15rem, 2vw, 1.7rem); right:var(--arx-pad);
-}
+.arx-mod--atrio .arx-mod__stat{ position:absolute; top:0; right:0; margin:0; }
+.arx-mod--atrio .arx-mod__stat .arx-res__n{ font-size:clamp(6rem, 10vw, 9rem); }
 .arx-mod--atrio .arx-mod__sym{ width:88px; height:88px; }
 .arx-mod--atrio .arx-mod__name{ font-size:1.9rem; }
 .arx-mod__fn{ max-width:58ch; margin-top:1rem; font-size:.92rem; line-height:1.5; color:var(--arx-ink); }
 
 /* salas, ligadas por seta no fio */
-.arx-mod--room .arx-mod__stat{ margin-bottom:.9rem; }
+.arx-mod--room .arx-mod__stat{ margin-bottom:.7rem; }
 .arx-mod--room + .arx-mod--room::before{
   content:"→"; position:absolute; z-index:1; left:-.8rem; top:50%;
   display:grid; place-items:center; width:1.6rem; height:1.6rem; margin-top:-.8rem;
@@ -118,7 +126,11 @@
 }
 @media (max-width:540px){
   .arx-sheet{ grid-template-columns:1fr; }
-  .arx-mod--atrio .arx-mod__stat{ position:static; margin-bottom:.9rem; }
+  .arx-mod--atrio .arx-mod__stat{
+    position:static;
+    margin:calc(-1 * var(--mod-pt)) calc(-1 * var(--arx-pad)) .7rem 0;
+  }
+  .arx-mod--atrio .arx-mod__stat .arx-res__n{ font-size:6rem; }
   .arx-mod__sym{ width:56px; height:56px; }
   .arx-mod__name{ font-size:1.25rem; }
 }
