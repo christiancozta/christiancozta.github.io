@@ -1702,9 +1702,29 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 }
 /* PT: a tese desce para baixo dos contatos; o itinerário, sem ela, alinha ao resumo */
 .arx-id__about .arx-itin__tese{ margin:clamp(1.1rem, 1.8vw, 1.4rem) 0 0; }
+/* desktop: a epígrafe sobe à linha das especialidades e o resto do itinerário
+   desce até terminar na altura da tese */
 @media (min-width:901px){
-  .arx-itin:not(:has(> .arx-itin__tese)){ margin-top:0; }
+  .arx-id__row:has(.arx-id__about > .arx-itin__tese){ align-items:stretch; }
+  .arx-itin:not(:has(> .arx-itin__tese)){ display:flex; flex-direction:column; }
+  .arx-itin:not(:has(> .arx-itin__tese)) > .arx-itin__txt + .arx-itin__le{ margin-top:auto; padding-top:1.35rem; }
 }
+/* uma linha em branco entre a abertura e os três projetos */
+.arx-itin__le + .arx-itin__le{ margin-top:calc(var(--arx-prose-leading, 1.5) * 1em); }
+/* no itinerário, o selo do sistema vira sublinhado grosso na cor do sistema:
+   as três cores não se encostam e a marca não pesa como bloco */
+.arx-itin__le :is(.b-data, .b-echo, .b-atrio){
+  --arx-u:var(--arx-ink);
+  padding:0 .06em; margin:0;
+  color:var(--arx-ink); font-weight:700;
+  background:linear-gradient(transparent 62%, var(--arx-u) 62%, var(--arx-u) 92%, transparent 92%);
+  box-shadow:none;
+}
+.arx-itin__le .b-data{ --arx-u:var(--arx-data); }
+.arx-itin__le .b-echo{ --arx-u:var(--arx-echo); }
+.arx-itin__le .b-atrio{ --arx-u:var(--arx-atrio); }
+.arx-itin__le :is(.b-data, .b-echo, .b-atrio):hover{ box-shadow:none; background:linear-gradient(transparent 40%, var(--arx-u) 40%, var(--arx-u) 92%, transparent 92%); }
+.arx-itin__le :is(.b-data, .b-echo, .b-atrio):focus-visible{ box-shadow:none; outline:2px solid var(--arx-ink); outline-offset:2px; }
 /* celular estreito: a tese pode quebrar */
 @media (max-width:560px){
   .arx-itin__tese{ white-space:normal; width:auto; text-wrap:balance; }
