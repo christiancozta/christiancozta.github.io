@@ -1,19 +1,31 @@
 /* Módulos do ATRIO, proposta C (átrio e salas).
    ATRIO ocupa a faixa inteira; abaixo, CORPUS → RATIO → CERNE → LUX.
-   As linhas internas repetem o fio de 1px do painel; o acento fica nos
-   detalhes (número, letra do nome, filete da seleção). */
+   As linhas internas repetem o fio de 1px do painel; só o contorno
+   externo do bloco leva o acento, um fio levemente mais espesso.
+   Em cada módulo: indicador no alto, à direita; abaixo, símbolo, nome,
+   subtítulo e versão centralizados. */
 .arx-cell.arx-modules{
   --mod-tint:#F8F2F1;              /* papel + 5% do acento, sólido: um tom translúcido deixaria o fio vazar */
   display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  --mod-edge:2px;                  /* contorno externo: fio do painel + 1px */
+  position:relative;
   gap:var(--arx-lw); padding:0; background:var(--arx-line);
 }
+/* em telas densas, 1.5px já se lê mais espesso que o fio de 1px */
+@media (min-resolution:2dppx){ .arx-cell.arx-modules{ --mod-edge:1.5px; } }
 .arx-modules > *{ min-width:0; background:var(--arx-paper); }
-.arx-modules__k{ grid-column:1 / -1; margin:0; padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) 1rem; }
+/* contorno externo em terracota, por cima dos fios que cercam o bloco
+   (topo e base: as linhas da grade do painel; laterais: o quadro) */
+.arx-cell.arx-modules::after{
+  content:""; position:absolute; z-index:3; inset:-1px 0;
+  border:var(--mod-edge) solid var(--arx-atrio);
+  background:none; pointer-events:none;
+}
 
 /* gatilhos: faixa ATRIO e quatro salas */
 .arx-mod{
   position:relative; appearance:none; margin:0; border:0; border-radius:0;
-  font:inherit; color:var(--arx-text); text-align:left; cursor:pointer;
+  font:inherit; color:var(--arx-text); text-align:center; cursor:pointer;
   padding:clamp(1.15rem, 2vw, 1.7rem) var(--arx-pad) clamp(1.25rem, 2.2vw, 1.85rem);
   transition:background-color 200ms var(--arx-ease);
 }
@@ -28,31 +40,35 @@
 .arx-mod:focus-visible,
 .arx-sheet a:focus-visible{ outline:2px solid var(--arx-atrio); outline-offset:-4px; }
 
-.arx-mod__sym{ display:block; width:44px; height:44px; object-fit:contain; }
-.arx-mod__id{ display:flex; flex-direction:column; gap:.2rem; }
-.arx-mod__name{ font-family:"Science Gothic", var(--f-display); font-size:1.15rem; font-weight:750; letter-spacing:-.025em; line-height:1; color:var(--arx-ink); }
+.arx-mod{ display:flex; flex-direction:column; align-items:center; }
+.arx-mod__sym{ display:block; width:64px; height:64px; object-fit:contain; }
+.arx-mod__id{ display:flex; flex-direction:column; align-items:center; gap:.4rem; margin-top:.95rem; }
+.arx-mod__name{ font-family:"Science Gothic", var(--f-display); font-size:1.45rem; font-weight:750; letter-spacing:-.025em; line-height:1; color:var(--arx-ink); }
 .arx-mod__name em{ font-style:normal; color:var(--arx-atrio); }
-.arx-mod__role{ font-size:.8rem; line-height:1.4; }
-.arx-mod__ver{ font-family:var(--f-micro); font-size:.7rem; color:var(--arx-soft); }
-.arx-mod__stat{ display:flex; flex-direction:column; gap:.45rem; }
-.arx-mod__lab{ font-size:.76rem; line-height:1.4; }
-
-/* faixa ATRIO */
-.arx-mod--atrio{
-  grid-column:1 / -1;
-  display:grid; grid-template-columns:64px minmax(0, 1fr) minmax(0, 1.5fr) auto;
-  align-items:center; column-gap:clamp(1rem, 2vw, 1.6rem);
+.arx-mod__role{
+  font-size:calc(.8rem - 1pt); font-weight:700; line-height:1.35;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--arx-soft);
 }
-.arx-mod--atrio .arx-mod__sym{ width:64px; height:64px; }
-.arx-mod--atrio .arx-mod__name{ font-size:1.5rem; }
-.arx-mod__fn{ max-width:58ch; font-size:.92rem; line-height:1.5; color:var(--arx-ink); }
-.arx-mod--atrio .arx-mod__stat{ align-items:flex-end; text-align:right; }
-.arx-mod--atrio .arx-mod__lab{ max-width:13rem; }
+.arx-mod__ver{ font-family:var(--f-micro); font-size:.7rem; font-weight:400; color:var(--arx-soft); }
+/* indicador: número no alto, à direita; descrição em duas linhas, mesmo peso */
+.arx-mod__stat{
+  order:-1; align-self:flex-end;
+  display:flex; flex-direction:column; align-items:flex-end; gap:.4rem;
+  text-align:right;
+}
+.arx-mod__lab{ font-size:.76rem; font-weight:400; line-height:1.4; }
+
+/* faixa ATRIO: indicador no canto; o eixo central fica livre */
+.arx-mod--atrio{ grid-column:1 / -1; }
+.arx-mod--atrio .arx-mod__stat{
+  position:absolute; top:clamp(1.15rem, 2vw, 1.7rem); right:var(--arx-pad);
+}
+.arx-mod--atrio .arx-mod__sym{ width:88px; height:88px; }
+.arx-mod--atrio .arx-mod__name{ font-size:1.9rem; }
+.arx-mod__fn{ max-width:58ch; margin-top:1rem; font-size:.92rem; line-height:1.5; color:var(--arx-ink); }
 
 /* salas, ligadas por seta no fio */
-.arx-mod--room{ display:flex; flex-direction:column; gap:.9rem; }
-.arx-mod--room .arx-mod__ver{ position:absolute; top:clamp(1.15rem, 2vw, 1.7rem); right:var(--arx-pad); }
-.arx-mod--room .arx-mod__stat{ margin-top:.3rem; }
+.arx-mod--room .arx-mod__stat{ margin-bottom:.9rem; }
 .arx-mod--room + .arx-mod--room::before{
   content:"→"; position:absolute; z-index:1; left:-.8rem; top:50%;
   display:grid; place-items:center; width:1.6rem; height:1.6rem; margin-top:-.8rem;
@@ -93,25 +109,18 @@
   border-color:var(--arx-atrio); color:var(--arx-atrio);
 }
 
-.arx-cell .arx-modules__provenance{
-  grid-column:1 / -1; max-width:none; margin:0;
-  padding:1rem var(--arx-pad); font-size:.76rem; line-height:1.55; color:var(--arx-soft);
-}
-
 /* tablet e celular: ATRIO empilha; salas em 2 × 2, sem setas */
 @media (max-width:900px){
   .arx-cell.arx-modules,
   .arx-sheet{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
-  .arx-mod--atrio{ grid-template-columns:52px minmax(0, 1fr); row-gap:1rem; }
-  .arx-mod--atrio .arx-mod__sym{ width:52px; height:52px; }
-  .arx-mod__fn,
-  .arx-mod--atrio .arx-mod__stat{ grid-column:1 / -1; align-items:flex-start; text-align:left; }
+  .arx-mod--atrio .arx-mod__sym{ width:76px; height:76px; }
   .arx-mod--room + .arx-mod--room::before{ display:none; }
 }
 @media (max-width:540px){
   .arx-sheet{ grid-template-columns:1fr; }
-  .arx-mod--room .arx-mod__ver{ position:static; }
-  .arx-mod--room{ gap:.7rem; }
+  .arx-mod--atrio .arx-mod__stat{ position:static; margin-bottom:.9rem; }
+  .arx-mod__sym{ width:56px; height:56px; }
+  .arx-mod__name{ font-size:1.25rem; }
 }
 @media (prefers-reduced-motion:reduce){
   .arx-mod, .arx-mod::after{ transition:none; }
