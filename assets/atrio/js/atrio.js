@@ -505,6 +505,24 @@ const offset=Math.round(atMatrix.getBoundingClientRect().top-frame.getBoundingCl
 if(gap)atMatrix.style.marginTop=`${gap}px`;
 bands.forEach(el=>el.style.minHeight=`${up(el.getBoundingClientRect().height)}px`);
 table.style.gridTemplateRows=[...table.rows].map(row=>`${up(row.cells[0].getBoundingClientRect().height)}px`).join(" ");
+guardJustify();
+}
+/* Salvaguarda da justificação: mede o vão entre palavras vizinhas em cada linha
+   da casa; se algum passar de 3 espaços, a casa volta ao alinhamento à esquerda
+   (.is-ragged). Se mais de 4 casas precisarem disso, a matriz inteira volta,
+   para o tabuleiro não ficar misturado. A justificação não muda as quebras, só
+   os vãos, então a altura das fileiras já encaixadas não se altera. */
+function guardJustify(){
+const cells=[...(atMatrix?.querySelectorAll("tbody td")||[])];
+cells.forEach(td=>td.classList.remove("is-ragged"));
+const wideCells=cells.filter(td=>{
+if(getComputedStyle(td).textAlign!=="justify")return false;
+const probe=document.createElement("span");probe.textContent="\u00a0";td.append(probe);const space=probe.getBoundingClientRect().width;probe.remove();
+const words=[],walker=document.createTreeWalker(td,NodeFilter.SHOW_TEXT);let node;
+while((node=walker.nextNode())){for(const m of node.data.matchAll(/\S+/g)){const r=document.createRange();r.setStart(node,m.index);r.setEnd(node,m.index+m[0].length);const rects=[...r.getClientRects()].filter(x=>x.width>0);if(rects.length)words.push([rects[0],rects.at(-1)])}}
+return words.some((w,i)=>{const prev=words[i-1];return prev&&Math.abs(prev[1].top-w[0].top)<3&&w[0].left-prev[1].right>space*3});
+});
+(wideCells.length>4?cells:wideCells).forEach(td=>td.classList.add("is-ragged"));
 }
 /* reencaixa quando a largura muda (já com --cell novo) e quando as fontes chegam */
 let atMatrixWidth=0;if(atMatrix)new ResizeObserver(([entry])=>{const width=Math.round(entry.contentRect.width);if(width!==atMatrixWidth){atMatrixWidth=width;snapMatrix()}}).observe(atMatrix);
