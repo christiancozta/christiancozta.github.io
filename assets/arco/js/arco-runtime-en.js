@@ -109,7 +109,7 @@
     opacity:0;
     pointer-events:auto;
   }
-  .narr__tag--arco{background:#181818;color:#FCFCFC}
+  .narr__tag--arco{background:#2C2C2C;color:#FCFCFC}
   .narr__tag--atrio{background:var(--atrio-band);color:var(--atrio-ink)}
   .narr__tag--echo{background:var(--echo-band);color:var(--echo-ink)}
   .narr__tag--data{background:#2E71FF;color:#FCFCFC}

@@ -14,8 +14,8 @@
    Ler na vertical é ler um passo. O Registro fica fora do sistema, como anotações na folha de rosto. */
 :root{
   color-scheme: light;
-  --papel:#FCFCFC; --papel-2:#FCFCFC; --tinta:#181818; --grafite:rgba(24,24,24,.64); --cinza:rgba(24,24,24,.44);
-  --fio:rgba(24,24,24,.2); --fio-2:rgba(24,24,24,.1); --ambar:#FFB627; --ambar-luz:rgba(255,182,39,.16); --latao:#9C7426;
+  --papel:#FCFCFC; --papel-2:#FCFCFC; --tinta:#2C2C2C; --grafite:rgba(44,44,44,.64); --cinza:rgba(44,44,44,.44);
+  --fio:rgba(44,44,44,.2); --fio-2:rgba(44,44,44,.1); --ambar:#FFB627; --ambar-luz:rgba(255,182,39,.16); --latao:#9C7426;
   --serif:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif;
   --body:"Commissioner",system-ui,sans-serif;
   --mono:"Azeret Mono",ui-monospace,monospace;
@@ -42,9 +42,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .volta:hover{color:var(--tinta)}
 .pil{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--fio);
   font:500 12.5px/1 var(--body);transition:background .5s var(--mola),transform .3s var(--mola)}
-.pil:hover{background:rgba(24,24,24,.04)}
+.pil:hover{background:rgba(44,44,44,.04)}
 .pil:active{transform:scale(.98)}
-.pil kbd{font:500 10px/1 var(--mono);color:var(--cinza);padding:7px 9px;border-radius:999px;background:rgba(24,24,24,.05)}
+.pil kbd{font:500 10px/1 var(--mono);color:var(--cinza);padding:7px 9px;border-radius:999px;background:rgba(44,44,44,.05)}
 .pil .b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--tinta);color:var(--papel);transition:transform .5s var(--mola),background .5s var(--mola),color .5s var(--mola)}
 .pil:hover .b{transform:translate(2px,-1px) scale(1.06);background:var(--ambar);color:var(--tinta)}
 .pil[aria-pressed="true"] .b{background:var(--ambar);color:var(--tinta)}
@@ -116,7 +116,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .pauta .tie{fill:none;stroke:var(--tinta);stroke-width:1.1}
 .pauta .r{fill:var(--tinta);opacity:.8}
 .pauta text{font:italic 400 13px var(--serif);fill:var(--grafite)}
-.voz:hover .l{stroke:rgba(24,24,24,.42)}
+.voz:hover .l{stroke:rgba(44,44,44,.42)}
 .sistema[data-m] .pauta [data-m]{opacity:.22}
 .sistema[data-m="1"] .pauta [data-m="1"],.sistema[data-m="2"] .pauta [data-m="2"],.sistema[data-m="3"] .pauta [data-m="3"],
 .sistema[data-m="4"] .pauta [data-m="4"],.sistema[data-m="5"] .pauta [data-m="5"]{opacity:1}
@@ -137,10 +137,10 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .rodape b{color:var(--tinta);font-weight:500}
 
 /* a parte: folha que se abre sobre a partitura */
-.veu{position:fixed;inset:0;z-index:40;background:rgba(24,24,24,.16);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .6s var(--mola)}
+.veu{position:fixed;inset:0;z-index:40;background:rgba(44,44,44,.16);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .6s var(--mola)}
 .veu.on{opacity:1;pointer-events:auto}
 .parte{position:fixed;z-index:45;top:0;right:0;bottom:0;width:min(780px,94vw);background:var(--papel-2);
-  box-shadow:-40px 0 80px -40px rgba(24,24,24,.35),-1px 0 0 var(--fio);transform:translateX(104%);transition:transform .9s var(--mola);display:flex;flex-direction:column}
+  box-shadow:-40px 0 80px -40px rgba(44,44,44,.35),-1px 0 0 var(--fio);transform:translateX(104%);transition:transform .9s var(--mola);display:flex;flex-direction:column}
 .parte.on{transform:none}
 .parte-h{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(20px,4vw,48px);border-bottom:1px solid var(--fio-2)}
 .parte-h span{font:500 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--grafite)}
@@ -165,7 +165,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta:hover .b{transform:translate(2px,-1px) scale(1.06);background:var(--ambar);color:var(--tinta)}
 .cta:active{transform:scale(.98)}
 .cta.cl{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 1px var(--fio)}
-.cta.cl .b{background:rgba(24,24,24,.06)}
+.cta.cl .b{background:rgba(44,44,44,.06)}
 .botoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
 .campos{display:grid;grid-template-columns:1fr 120px;gap:12px;max-width:520px}
 .campo label{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--cinza);margin-bottom:8px}
@@ -296,7 +296,7 @@ var LETRA=A.passos.concat(['Ao final, aplicar os critérios operacionais e confe
 $('#marcas').innerHTML=MARCAS.map(function(m,i){return '<button type="button" data-m="'+(i+1)+'"><span class="ensaio">'+m[0]+'</span><small>'+m[1]+'</small></button>'}).join('');
 $('#letra').innerHTML=LETRA.map(function(t,i){return '<p><b>'+MARCAS[i][0]+'</b>'+t+'</p>'}).join('');
 $('#naipes').innerHTML=NAIPES.map(function(g){
-  return '<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">'+g.n+'</span>'+(g.tipo==='colchete'?'<span class="colchete"></span>':'<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" fill="none" stroke="#181818" stroke-width="2.6" vector-effect="non-scaling-stroke"/></svg>')+'</div>'+
+  return '<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">'+g.n+'</span>'+(g.tipo==='colchete'?'<span class="colchete"></span>':'<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" fill="none" stroke="#2C2C2C" stroke-width="2.6" vector-effect="non-scaling-stroke"/></svg>')+'</div>'+
   g.vozes.map(function(v){
     var p=v.parte?P[v.parte]:null;
     return '<div class="linha voz" data-id="'+v.id+'"><span></span><a class="nm" href="#'+v.id+'"><b>'+v.nome+'</b><small>'+v.sub+'</small></a><svg class="pauta" data-v="'+v.id+'" aria-hidden="true"></svg>'+

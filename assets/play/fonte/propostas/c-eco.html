@@ -13,8 +13,8 @@
    A geometria do piano continua lá, como traço de som. Tocar uma crista faz a corda vibrar e sobe a folha. */
 :root{
   color-scheme: light;
-  --ambar:#FFB627; --tinta:#181818; --papel:#F2EFE9; --papel-2:#F7F5F0;
-  --t2:rgba(24,24,24,.66); --t3:rgba(24,24,24,.46); --fio:rgba(24,24,24,.16); --fio-2:rgba(24,24,24,.09);
+  --ambar:#FFB627; --tinta:#2C2C2C; --papel:#F2EFE9; --papel-2:#F7F5F0;
+  --t2:rgba(44,44,44,.66); --t3:rgba(44,44,44,.46); --fio:rgba(44,44,44,.16); --fio-2:rgba(44,44,44,.09);
   --sobre:rgba(242,239,233,.62); --fio-e:rgba(242,239,233,.12);
   --marca:"Zalando Sans Expanded",system-ui,sans-serif;
   --titulo:"Schibsted Grotesk",system-ui,sans-serif;
@@ -37,8 +37,8 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .topo{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px var(--g) 0}
 .obra{font:700 15px/1.2 var(--titulo);letter-spacing:-.01em}
 .obra small{display:block;font:500 9.5px/1.4 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--t2);margin-top:5px}
-.pil{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(24,24,24,.28);font:600 12.5px/1 var(--body);transition:background .5s var(--mola),transform .3s var(--mola)}
-.pil:hover{background:rgba(24,24,24,.06)}
+.pil{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(44,44,44,.28);font:600 12.5px/1 var(--body);transition:background .5s var(--mola),transform .3s var(--mola)}
+.pil:hover{background:rgba(44,44,44,.06)}
 .pil.volta{padding:0 5px}
 .pil:active{transform:scale(.98)}
 .pil .b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--tinta);color:var(--ambar);transition:transform .5s var(--mola)}
@@ -67,9 +67,9 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 /* ilha de ferramentas */
 .ilha{position:fixed;z-index:30;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:2px;padding:5px;border-radius:999px;
-  background:rgba(242,239,233,.86);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);box-shadow:0 24px 44px -18px rgba(24,24,24,.55),inset 0 0 0 1px rgba(255,255,255,.5)}
+  background:rgba(242,239,233,.86);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);box-shadow:0 24px 44px -18px rgba(44,44,44,.55),inset 0 0 0 1px rgba(255,255,255,.5)}
 .ilha button{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;font:500 13px/1 var(--body);color:var(--t2);transition:background .5s var(--mola),color .5s var(--mola)}
-.ilha button:hover{background:rgba(24,24,24,.06);color:var(--tinta)}
+.ilha button:hover{background:rgba(44,44,44,.06);color:var(--tinta)}
 .ilha button[aria-expanded="true"]{background:var(--tinta);color:var(--ambar)}
 .ilha .ic{width:16px;height:16px;stroke-width:1.15}
 
@@ -111,7 +111,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .mini a:hover i{transform:scale(1.5)}
 .mini a[aria-current="page"] i{background:var(--ambar);box-shadow:0 0 0 1.5px var(--tinta);transform:scale(1.6)}
 .fecha{display:inline-flex;align-items:center;gap:10px;height:36px;padding:0 5px 0 15px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--fio);font:600 12.5px/1 var(--body)}
-.fecha kbd{font:500 10px/1 var(--mono);padding:7px 9px;border-radius:999px;background:rgba(24,24,24,.06);color:var(--t2)}
+.fecha kbd{font:500 10px/1 var(--mono);padding:7px 9px;border-radius:999px;background:rgba(44,44,44,.06);color:var(--t2)}
 .folha-c{flex:1;min-height:0;overflow:auto}
 .folha-in{max-width:1180px;margin:0 auto;padding:clamp(40px,8vh,88px) var(--g) 120px;transition:opacity .35s var(--mola),transform .35s var(--mola)}
 .folha-in.sai{opacity:0;transform:translateY(14px)}
@@ -144,11 +144,11 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .cta:hover .b{transform:translate(2px,-1px) scale(1.06)}
 .cta:active{transform:scale(.98)}
 .cta.cl{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 1px var(--fio)}
-.cta.cl .b{background:rgba(24,24,24,.07)}
+.cta.cl .b{background:rgba(44,44,44,.07)}
 .botoes{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 
 /* gaveta das ferramentas */
-.veu{position:fixed;inset:0;z-index:50;background:rgba(24,24,24,.4);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .6s var(--mola)}
+.veu{position:fixed;inset:0;z-index:50;background:rgba(44,44,44,.4);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .6s var(--mola)}
 .veu.on{opacity:1;pointer-events:auto}
 .gav{position:fixed;z-index:55;left:50%;bottom:12px;width:min(720px,calc(100vw - 24px));height:min(78dvh,680px);transform:translate(-50%,110%);transition:transform .9s var(--mola);
   padding:7px;border-radius:30px;background:rgba(242,239,233,.12);box-shadow:inset 0 0 0 1px rgba(242,239,233,.16),0 40px 80px -30px rgba(0,0,0,.7);display:flex;visibility:hidden;transition:transform .9s var(--mola),visibility 0s .9s}
@@ -163,7 +163,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .campo label{display:block;font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin:0 0 8px 2px}
 .campo input{width:100%;height:50px;padding:0 18px;border:0;border-radius:16px;background:var(--papel-2);box-shadow:inset 0 0 0 1px var(--fio);font:500 18px/1 var(--titulo);font-variant-numeric:tabular-nums;color:var(--tinta)}
 .campo input:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--tinta)}
-.res{margin-top:14px;border-radius:22px;padding:6px;background:rgba(24,24,24,.06)}
+.res{margin-top:14px;border-radius:22px;padding:6px;background:rgba(44,44,44,.06)}
 .res-in{border-radius:17px;background:var(--ambar);padding:22px 22px 20px}
 .res-in small{font:500 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
 .res-in strong{display:block;margin-top:10px;font:800 clamp(28px,4vw,40px)/1 var(--titulo);letter-spacing:-.045em}
