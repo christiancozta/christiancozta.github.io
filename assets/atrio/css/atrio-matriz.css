@@ -64,18 +64,20 @@
 .at-mx[data-active="cerne"] [data-col="cerne"],
 .at-mx[data-active="lux"] [data-col="lux"]{background-color:#F7F0EE}
 
-/* TABULEIRO — hover cromático plano, sem relevo ou sombra de botão.
-   Preserva o destaque escuro e a leitura dos textos na célula ativa. */
+/* TABULEIRO — hover escuro apenas nas casas alternadas (xadrez).
+   Sem sombra interna ou aparência de botão; demais casas preservam o fundo. */
 @media(hover:hover){
-  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within){
+  .at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even):is(:hover,:focus-within),
+  .at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd):is(:hover,:focus-within){
     background-color:#2A2529;
     color:#E4E4E4;
     box-shadow:none
   }
-  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within) .at-mx__name{color:#FAFAFA}
-  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within) .at-mx__ver{color:rgba(250,250,250,.68)}
-  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within) .at-mx__name em{color:#E06A4E}
-  .at-mx .at-mx__table :is(th,td):is(:hover,:focus-within) .at-mx__btn.at-mx__btn--ghost{border-color:#FAFAFA;color:#FAFAFA}
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__name{color:#FAFAFA}
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__ver{color:rgba(250,250,250,.68)}
+  .at-mx .at-mx__table tbody tr:nth-child(odd)>th:nth-child(odd):is(:hover,:focus-within),
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__name em{color:#E06A4E}
+  :is(.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd)):is(:hover,:focus-within) .at-mx__btn.at-mx__btn--ghost{border-color:#FAFAFA;color:#FAFAFA}
 }
 
 .at-mx__autoria{margin:0;padding:16px var(--gutter) 20px;font:400 .8125rem/1.5 var(--font-body);color:var(--muted-on-light)}
