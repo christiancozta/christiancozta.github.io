@@ -2,7 +2,7 @@
 name: PLAY
 description: Partitura de regência numa folha sobre base de tinta. O acervo do Playbook é o sistema que o regente lê; cada material é uma pauta, os compassos são a ordem de utilização; os três primeiros manuais abrem numa gaveta sob a pauta, o resto numa parte sobre a partitura.
 colors:
-  tinta: "#181818"
+  tinta: "#2C2C2C"
   papel: "#FCFCFC"
   ambar: "#FFB627"
   latao: "#8A6620"
@@ -14,10 +14,10 @@ colors:
   surface: "#F3F3F2"
   rule: "#DADADA"
   ink-3: "#5C5C5C"
-  grafite: "rgba(24, 24, 24, .66)"
-  cinza: "rgba(24, 24, 24, .55)"
-  fio: "rgba(24, 24, 24, .2)"
-  fio-2: "rgba(24, 24, 24, .1)"
+  grafite: "rgba(44, 44, 44, .66)"
+  cinza: "rgba(44, 44, 44, .55)"
+  fio: "rgba(44, 44, 44, .2)"
+  fio-2: "rgba(44, 44, 44, .1)"
 typography:
   titulo:
     fontFamily: "'Bodoni Moda', Didot, 'Bodoni 72', Georgia, serif"
@@ -124,7 +124,7 @@ components:
     backgroundColor: "{colors.tinta}"
     border: "laterais {spacing.borda}; topo e pé {spacing.topo}, um pouco mais finos"
   prendedor:
-    backgroundColor: "laca #181818 com brilho no dorso"
+    backgroundColor: "laca #2C2C2C com brilho no dorso"
     textColor: "{colors.ambar}"
     typography: "{typography.prendedor}"
   carimbo:
@@ -133,11 +133,11 @@ components:
     size: "clamp(104px, 9.4vw, 140px)"
   selo-seco:
     textColor: "{colors.papel}"
-    shadow: "drop-shadow(-1px -1px 0 #fff) drop-shadow(1px 1.3px .7px rgba(24, 24, 24, .2))"
+    shadow: "drop-shadow(-1px -1px 0 #fff) drop-shadow(1px 1.3px .7px rgba(44, 44, 44, .2))"
     size: "calc(carimbo × 1,1)"
   gaveta:
     backgroundColor: "#FDFCFA com fibra; encarte dobrado ao meio"
-    shadow: "0 22px 30px -24px rgba(24, 24, 24, .42); inset 0 12px 14px -12px rgba(24, 24, 24, .2)"
+    shadow: "0 22px 30px -24px rgba(44, 44, 44, .42); inset 0 12px 14px -12px rgba(44, 44, 44, .2)"
   button-primary:
     backgroundColor: "{colors.tinta}"
     textColor: "{colors.papel}"
@@ -171,7 +171,7 @@ Os três primeiros manuais (Notas Introdutórias, Mapa Temático, Afinação Pro
 O mundo tem um material, o papel #FCFCFC, e uma luz, o âmbar #FFB627. A tinta escreve; o âmbar marca o que está em foco (o nome aberto, o compasso sob o cursor, a batuta, o vencimento calculado); o latão, âmbar com tinta, marca códigos, numerais e links no texto.
 
 **Key Characteristics:**
-- A folha de papel #FCFCFC sobre a base de tinta #181818; texto em tinta.
+- A folha de papel #FCFCFC sobre a base de tinta #2C2C2C; texto em tinta.
 - Âmbar como luz única, em marca-texto, faixa de coluna e batuta.
 - Notação musical verdadeira: pautas de cinco linhas, barras de compasso, barra dupla final, pausas, semínimas, semibreves ligadas, chaves e colchetes de naipe, marcas de ensaio, indicações *tacet* e *ad lib.*
 - A notação informa: cada nota corresponde a uma regra escrita.
@@ -194,7 +194,7 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 - **Marca-texto de busca** (#FDDC9C): termos encontrados.
 
 ### Neutros
-- **Tinta** (#181818): a base sob a folha, a laca do prendedor e os carimbos; todo o texto principal, barras e chaves da partitura, botão primário, vencimento no calendário.
+- **Tinta** (#2C2C2C): a base sob a folha, a laca do prendedor e os carimbos; todo o texto principal, barras e chaves da partitura, botão primário, vencimento no calendário.
 - **Papel** (#FCFCFC): a folha e tudo o que se abre sobre ela, inclusive a parte e o montador.
 - **Grafite** (tinta a 66%) e **Cinza** (tinta a 55%, cerca de 3,9:1 sobre o papel): texto secundário, indicações, rótulos.
 - **Fio** (tinta a 20%) e **Fio 2** (tinta a 10%): linhas da pauta, separadores.
@@ -203,7 +203,7 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 ### Named Rules
 **A Regra da Luz Única.** Só o âmbar acende. Nada de segunda cor de destaque na interface; o laranja #C84D00 da coleção impressa fica nas capas dos manuais.
 
-**A Regra do Papel.** Uma folha, #FCFCFC, sobre uma base, #181818. Fibra, linhas de papel vergê e luz são só textura: o papel vazio continua medindo #FBFBFB a #FCFCFC. Nenhum #FFFFFF ou #000000; o escuro é só a base em volta da folha. A outra exceção é o leitor de PDF: o palco escurece em tinta a 96%, como no "Visualizar" do ECHO, para que a página do PDF seja o único papel em cena.
+**A Regra do Papel.** Uma folha, #FCFCFC, sobre uma base, #2C2C2C. Fibra, linhas de papel vergê e luz são só textura: o papel vazio continua medindo #FBFBFB a #FCFCFC. Nenhum #FFFFFF ou #000000; o escuro é só a base em volta da folha. A outra exceção é o leitor de PDF: o palco escurece em tinta a 96%, como no "Visualizar" do ECHO, para que a página do PDF seja o único papel em cena.
 
 ## Typography
 
@@ -234,8 +234,8 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 A página é uma folha sobre a base: bordas de tinta nas laterais (clamp(12px, 3vw, 48px)) e, um pouco mais finas, no topo e no pé (clamp(10px, 2.2vw, 34px)). Dentro dela, o conteúdo tem largura máxima de 1560px, com margem lateral clamp(16px, 4.4vw, 72px).
 
 - **Papel:** fibra em ruído fractal (SVG), linhas de vergê a cada 4px quase invisíveis, luz rasante do alto à esquerda e sombra leve nas bordas. Por baixo, duas folhas do maço (#EEECE7 e #F5F3EF), levemente fora de esquadro, aparecem nas laterais e no pé. Dois cantos dobrados de clamp(22px, 2.6vw, 38px), no alto à direita e no pé à esquerda, recortam a folha (clip-path), mostram o maço e projetam sombra curta.
-- **Prendedor:** preso à borda de cima, no alto à esquerda, girado −2,4°: corpo de laca #181818 com brilho no dorso, "PLAYBOOK / ECHO" em âmbar e as hastes de aço deitadas para baixo sobre a folha, com sombra. No hover, ergue 2px. No celular, em 62%.
-- **Carimbo da busca:** no alto à direita, dentro da folha, espelhando a margem do prendedor e na altura do título. É um carimbo redondo de cartório no porte de um carimbo real sobre a folha (clamp(104px, 9,4vw, 140px); 78px no celular): anel grosso, filete, "BUSCAR · PLAYBOOK ECHO · CTRL K ·" em volta e a lupa ao centro, em tinta #181818 com falhas de entintamento (filtro SVG), a 62% de opacidade, girado −6°. No hover a tinta firma; ao clicar, afunda. Abre a busca, como Ctrl K e "/".
+- **Prendedor:** preso à borda de cima, no alto à esquerda, girado −2,4°: corpo de laca #2C2C2C com brilho no dorso, "PLAYBOOK / ECHO" em âmbar e as hastes de aço deitadas para baixo sobre a folha, com sombra. No hover, ergue 2px. No celular, em 62%.
+- **Carimbo da busca:** no alto à direita, dentro da folha, espelhando a margem do prendedor e na altura do título. É um carimbo redondo de cartório no porte de um carimbo real sobre a folha (clamp(104px, 9,4vw, 140px); 78px no celular): anel grosso, filete, "BUSCAR · PLAYBOOK ECHO · CTRL K ·" em volta e a lupa ao centro, em tinta #2C2C2C com falhas de entintamento (filtro SVG), a 62% de opacidade, girado −6°. No hover a tinta firma; ao clicar, afunda. Abre a busca, como Ctrl K e "/".
 - **Selo seco do som:** à esquerda, centrado sob o prendedor, logo abaixo das hastes (146px do topo da folha), descendo até a casa em branco do cabeçalho dos compassos; sempre 10% maior que o carimbo da busca, na mesma cor do papel. Só o relevo o revela (luz branca no alto à esquerda, sombra embaixo à direita): anel, filete, "OUVIR OS COMPASSOS · PLAY · ECHO ·" em volta e a nota ao centro. No hover o relevo se aprofunda; ao clicar, e enquanto o som estiver ligado, fica afundado (luz e sombra invertidas). No celular, à esquerda, entre o subtítulo e os compassos.
 - **Folha de rosto:** o título PLAY e o subtítulo, centrados. A folha de rosto tem altura mínima para que o selo da busca caiba entre o fim das hastes do prendedor e o cabeçalho dos compassos.
 - **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Shantell Sans 300 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.

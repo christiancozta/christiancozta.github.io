@@ -3,37 +3,37 @@
 /* ========================================================================== */
 /* ===========================================================================
    PALETA — dois valores. Nada mais.
-   Tudo que parece "cinza" é #181818 (ou #FCFCFC) em opacidade: continua
+   Tudo que parece "cinza" é #2C2C2C (ou #FCFCFC) em opacidade: continua
    sendo a mesma tinta, com menos pressão. É desenho a nanquim, não paleta.
    =========================================================================== */
 :root{
-  --ink:      #181818;
+  --ink:      #2C2C2C;
   --paper:    #FCFCFC;
 
   /* Sinais de território — só onde a marca é nomeada e nos acentos das leituras */
   --echo:     #FFB627;
-  --atrio:    #A63A23;
+  --atrio:    #D94F2D;
 
   /* A FAIXA DA MARCA — o nome não recebe cor de tinta: recebe campo próprio.
      ECHO em creme com letra preta, ATRIO em terra com letra branca. Vale em
      qualquer superfície da página: o campo carrega o contraste consigo. */
   --echo-band:  #FFB627;
   --echo-ink:   #000000;
-  --atrio-band: #A63A23;
+  --atrio-band: #D94F2D;
   --atrio-ink:  #FCFCFC;
 
   /* tinta sobre papel — todas AA */
-  --ink-78:   rgba(24,24,24,.84);   /* corpo secundario: cinza mais denso    */
-  --ink-62:   rgba(24,24,24,.70);   /* microtextos: cinza mais definido      */
-  --ink-55:   rgba(24,24,24,.62);   /* display secundario: maior densidade   */
-  --hair:     rgba(24,24,24,.18);
-  --hair-soft:rgba(24,24,24,.07);
+  --ink-78:   rgba(44,44,44,.84);   /* corpo secundario: cinza mais denso    */
+  --ink-62:   rgba(44,44,44,.70);   /* microtextos: cinza mais definido      */
+  --ink-55:   rgba(44,44,44,.62);   /* display secundario: maior densidade   */
+  --hair:     rgba(44,44,44,.18);
+  --hair-soft:rgba(44,44,44,.07);
 
-  --ink-70:   rgba(24,24,24,.77);   /* microtexto do Indice: maior contraste */
+  --ink-70:   rgba(44,44,44,.77);   /* microtexto do Indice: maior contraste */
 
   /* massa tonal do Índice — o domínio não é tinta, é papel de outro peso.
      Alterna para separar conjuntos sem gastar uma única borda. A tinta cheia
-     (#181818) segue reservada à Fronteira. */
+     (#2C2C2C) segue reservada à Fronteira. */
   --grp-a:    #FBFBFB;
   --grp-b:    #FCFCFC;
 
@@ -828,7 +828,7 @@ body{
 }
 .grp:nth-of-type(even){ background:var(--grp-b); }
 /* Para as superficies cinzas do Indice: menor perda de contraste. */
-.grp{--ink-78:rgba(24,24,24,.88);--ink-62:rgba(24,24,24,.77);--ink-70:rgba(24,24,24,.83);}
+.grp{--ink-78:rgba(44,44,44,.88);--ink-62:rgba(44,44,44,.77);--ink-70:rgba(44,44,44,.83);}
 .grp > summary{
   list-style:none; cursor:pointer;
   display:flex; align-items:baseline; gap:.8rem;
@@ -914,8 +914,8 @@ body{
    é o próprio termo procurado ficando aceso — realce de verbete, não moldura */
 .lex__e:focus{ outline:none; }
 .lex__e:focus .lex__t{
-  background:rgba(24,24,24,.10);
-  box-shadow:0 0 0 .2em rgba(24,24,24,.10);
+  background:rgba(44,44,44,.10);
+  box-shadow:0 0 0 .2em rgba(44,44,44,.10);
 }
 
 /* a marca nomeada — a caixa é da marca: echo é sempre minúsculo, ATRIO sempre alto */
@@ -1107,7 +1107,7 @@ body{
   max-width:50ch; padding:clamp(2rem,5vw,3.5rem);
   z-index:var(--z-reader);
 }
-.reader::backdrop{ background:rgba(24,24,24,.72); }
+.reader::backdrop{ background:rgba(44,44,44,.72); }
 .reader__tag{
   font-family:var(--f-micro); font-size:.62rem; letter-spacing:.16em;
   text-transform:uppercase; color:var(--ink-62); margin:0 0 1.25rem;
@@ -1321,7 +1321,7 @@ body{
 .hero__txt .mov__t{
   line-height:1.55;
   font-style:italic;
-  border-left:2px solid rgba(24,24,24,.5);
+  border-left:2px solid rgba(44,44,44,.5);
   padding-left:clamp(.9rem,1.6vw,1.45rem);
 }
 .hero__txt .mov__t em{ font-style:normal; }
@@ -1657,8 +1657,8 @@ body{
   .progress-rail{position:fixed;top:14vh;bottom:14vh;right:22px;width:9px;z-index:30;pointer-events:none}
   .progress-rail[data-ready="false"]{visibility:hidden}
   .progress-rail__track{position:absolute;top:0;bottom:0;left:4px;width:1px;background:rgba(17,19,22,.14)}
-  .progress-rail__fill{position:absolute;top:0;left:3.5px;width:2px;height:100%;transform:scaleY(0);transform-origin:50% 0;background:#181818}
-  .progress-rail__head{position:absolute;left:4.5px;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#181818;display:none}
+  .progress-rail__fill{position:absolute;top:0;left:3.5px;width:2px;height:100%;transform:scaleY(0);transform-origin:50% 0;background:#2C2C2C}
+  .progress-rail__head{position:absolute;left:4.5px;top:0;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:#2C2C2C;display:none}
   .progress-rail__mark{position:absolute;left:4px;width:7px;height:1px;background:rgba(17,19,22,.28);transform:translateY(-.5px)}
   /* modo echo: rastro contínuo, altura cheia, sem marcação estrutural */
   .progress-rail[data-mode="echo"]{top:44px;bottom:0;right:6px}
@@ -1953,7 +1953,7 @@ body{
 }
 .eq__stats--rank .eq__l{ margin:0; max-width:26ch; }
 .eq__stats--rank .eq__stat--lead{
-  background:linear-gradient(90deg,rgba(24,24,24,.05),rgba(24,24,24,0) 64%);
+  background:linear-gradient(90deg,rgba(44,44,44,.05),rgba(44,44,44,0) 64%);
 }
 .eq__stats--rank .eq__stat--lead .eq__n{ font-size:clamp(2.6rem,5.4vw,4.2rem); letter-spacing:-.055em; }
 .eq__stats--rank .eq__stat--lead .eq__l{ color:var(--ink); font-weight:600; }
@@ -2288,7 +2288,7 @@ body{
 /* Estado = a caixa do território, a mesma dos algarismos do hero:
    DATA e ATRIO/CERNE em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
    Hover e corrente falam a mesma língua; o corrente apenas permanece. */
-.rail .rail__link[data-view="data"]{ --tone:#0057FF; --tone-ink:var(--paper); }
+.rail .rail__link[data-view="data"]{ --tone:#4A90E2; --tone-ink:var(--paper); }
 .rail .rail__link[data-view="echo"],
 .rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
