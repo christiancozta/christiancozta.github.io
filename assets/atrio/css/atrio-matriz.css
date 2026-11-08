@@ -64,6 +64,12 @@
 .at-mx[data-active="cerne"] [data-col="cerne"],
 .at-mx[data-active="lux"] [data-col="lux"]{background-color:#F7F0EE}
 
+/* TABULEIRO — malha estática de casas alternadas, sem sombra.
+   A cor de repouso permanece visível mesmo sem mouse. */
+.at-mx .at-mx__table :is(th,td){background-color:#FCFCFC}
+.at-mx .at-mx__table :is(thead tr,tbody tr:nth-child(even),tfoot tr)>:nth-child(even),
+.at-mx .at-mx__table tbody tr:nth-child(odd)>:nth-child(odd){background-color:#F6F6F6}
+
 /* TABULEIRO — hover escuro apenas nas casas alternadas (xadrez).
    Sem sombra interna ou aparência de botão; demais casas preservam o fundo. */
 @media(hover:hover){
