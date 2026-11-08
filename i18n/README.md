@@ -2,13 +2,17 @@
 
 ## Escopo
 Páginas: `arco.html`, `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `data.html`.
+Fora do escopo: `atrio-dentro.html` (linkada pelo ARCO; o leitor EN chega à versão PT).
 
-## Inventário inicial confirmado
-- `en/arco.html`: tradução inglesa já existente; preservar como fonte editorial de referência.
-- `assets/arco/js/arco-en.js`, `arco-runtime-en.js`, `arco-base-en-20260915.js`, `arco-final-en-20260915-v2.js`: scripts ingleses existentes; verificar diferenças funcionais antes de consolidar.
-- `arco.html`: HTML principal em português, com componentes de navegação, conteúdo e fichas técnicas.
-- `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `data.html`: páginas em português; PLAY contém textos também gerados por `assets/play/play.js`.
-- CERNE contém fontes embutidas em data URI; preservar bytes e evitar reescrita global do HTML.
+## Inventário confirmado
+- `en/arco.html`: a tradução inglesa anterior foi usada como fonte editorial de referência e substituída pelo artefato gerado. Ela estava defasada em relação ao PT: não tinha a seção de arquitetura e os módulos (31 IDs só no PT) e mantinha estrutura própria (50 IDs só no EN, incluindo o verbete `prd-03`, retirado do PT no commit `94ba52e`). A versão anterior permanece no histórico do git.
+- `assets/arco/js/arco-en.js`, `arco-base-en-20260915.js`, `arco-runtime-en.js`, `arco-core-en.js`, `arco-final-en-20260915-v2.js`: cadeia de cinco scripts da versão EN anterior. Removidos, porque o EN gerado reutiliza os scripts do PT. A terminologia do tooltip e do rodapé foi reaproveitada.
+- `arco.html`: HTML principal em português, com componentes de navegação, conteúdo e fichas técnicas; incorpora as demais páginas em iframes.
+- `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `data.html`: páginas em português.
+- PLAY é artefato de build: `play.html`, `play.css`, `play.js`, `play-dados.js`, `play-fundamentos.js` e `play-ementario.js` saem de `assets/play/fonte/build/build.py` e não se editam à mão. A tradução entra em `assets/play/fonte/` e no build.
+- DATA é um Design Component: o conteúdo fica num bloco `<x-dc>` escondido por CSS e montado no navegador por `assets/shared/js/support-core-20260916.js`, que localiza o bloco por regex no código-fonte. Há cerca de 30 strings no JavaScript embutido (meses, séries, rótulos de métricas) e formatação numérica fixada em `'pt-BR'`. Os valores de `data-props` (`taxa`, `votos`, `despachos`) são identificadores e não se traduzem.
+- CERNE contém fontes embutidas em data URI e cerca de 325 KB de JavaScript embutido, com mais de 500 strings PT; preservar bytes e evitar reescrita global do HTML.
+- `echo.html` não declara `lang` no `<html>`.
 
 ## Contrato de implementação
 1. Uma única fonte de estrutura, estilos e comportamento por página. Não manter HTML traduzido à mão.
@@ -21,9 +25,34 @@ Páginas: `arco.html`, `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `da
 8. Alterações de conteúdo PT sinalizam chaves EN desatualizadas; tradução automática é etapa opcional, dependente de credenciais e revisão editorial.
 9. Não publicar na branch principal sem revisão e autorização posterior.
 
-## Glossário editorial inicial
-Preservar como nomes próprios: ARCO, ECHO, PLAY, ATRIO, CERNE, CORPUS, RATIO, LUX.
-Tratar com revisão contextual: Governança do Raciocínio Jurídico; lastro; rastro; responsabilidade; auditoria; controle humano; método; operações jurídicas.
+## Decisões editoriais
+- Documentos vinculados (fichas técnicas e manuais do ATRIO, bases do PLAY, arquivos de lastro do DATA) permanecem em português. A interface que os apresenta é traduzida.
+- Léxico "Do termo à prova": o termo de mercado (já em inglês) é mantido; o equivalente português entre colchetes permanece, como marca bilíngue, com `lang="pt-BR"` na versão acessível. Sinônimos portugueses que só repetiam o equivalente foram retirados da lista "aka"; os demais foram traduzidos. **Revisar.**
+- Números e datas seguem o glossário do CV: `16,18 p.p.` → `16.18 pp`; `1.192` → `1,192`; `dez/2025` → `Dec 2025`; datas completas como `26 Aug 2026`.
+- Nomes de ferramentas do PLAY: Ementário → Headnote Index; Fundamentos → Legal Grounds; Calendário Jurídico → Legal Calendar; Montador de Minutas → Draft Builder; Busca Integrada → Integrated Search. **Revisar** antes da tradução do PLAY, que deve usar os mesmos nomes.
+
+## Glossário editorial
+Preservar como nomes próprios: ARCO, ECHO, PLAY, ATRIO, CERNE, CORPUS, RATIO, LUX, DATA.
+Fixados nesta etapa: Governança do Raciocínio Jurídico → Legal Reasoning Governance; rastro → trace; lastro → grounding; gabinete → chambers; acervo → caseload; despacho → order; voto → opinion; taxa de finalização → finalization rate; jurimetria → jurimetrics; Turma Recursal → Appellate Panel; Fronteira → Boundary; ficha técnica → technical sheet.
+Tratar com revisão contextual: responsabilidade; auditoria; controle humano; método; operações jurídicas.
+
+## Como funciona
+`i18n/build.mjs` (Node, sem dependências) lê a página PT e o catálogo EN e gera:
+- `en/<pagina>.html`, com `lang="en"`, canonical, hreflang, `og:url` e seletor de idioma próprios, e caminhos reescritos para `../`;
+- `<script>.en.js` ao lado de cada script com texto de interface, para que caminhos relativos ao próprio script continuem válidos;
+- o bloco `<!-- i18n:alternates -->` (canonical e hreflang) no `<head>` da página PT.
+
+Os catálogos ficam em `i18n/catalogs/`. Em `<pagina>.en.json`, a chave é o texto PT normalizado de cada unidade (frase com sua marcação inline, atributo de acessibilidade, metadado ou número com separador) e o valor é o HTML EN. `keep` lista o que permanece idêntico, `raw` cobre trocas estruturais (o seletor de idioma) e `links` troca URLs (o CV em inglês). `scripts.en.json` traz as strings dos scripts.
+
+Comandos:
+- `node i18n/build.mjs`: gera tudo. Não grava nada enquanto faltar tradução.
+- `node i18n/build.mjs --check`: falha se faltar tradução, se houver chave órfã (texto PT que mudou ou saiu) ou se algum gerado estiver defasado. Rodar antes de cada commit que toque uma página PT.
+- `node i18n/build.mjs --pending`: lista em JSON as unidades PT sem tradução.
+- `node scripts/check-correspondencias.mjs`: coerência do léxico e paridade de verbetes entre PT e EN.
+
+Para incluir uma página, acrescente-a em `i18n/pages.json` com seu catálogo e os scripts que carregam texto de interface.
 
 ## Estado
-Inventário e branch de isolamento criados. **A internacionalização das seis páginas ainda não foi implementada.**
+- **ARCO: implementado.** 463 unidades (266 traduzidas, 155 mantidas, 42 equivalentes PT marcados) e 3 scripts localizados. Verificado no navegador, em PT e EN: sem erros de console além do Google Analytics bloqueado no ambiente de teste, tooltip, rodapé, busca e filtro do léxico, leitor de fichas técnicas, iframes e largura de 390 px sem rolagem horizontal. As páginas filhas abrem em PT dentro do ARCO EN até serem traduzidas; o gerador passa a apontar para a versão EN de cada uma quando ela entrar em `pages.json`.
+- Próximas: ECHO, ATRIO e DATA; depois PLAY (via build próprio) e CERNE.
+- Pendente: revisão editorial do catálogo do ARCO, em especial a bio, as frases de abertura dos três movimentos e as decisões marcadas acima.
