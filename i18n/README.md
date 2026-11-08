@@ -1,14 +1,13 @@
 # Internacionalização do portfólio — PT-BR / EN
 
 ## Escopo
-Páginas: `arco.html`, `echo.html`, `play.html`, `atrio.html`, `cerne.html`.
-`data.html` não integra esta entrega.
+Páginas: `arco.html`, `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `data.html`.
 
 ## Inventário inicial confirmado
 - `en/arco.html`: tradução inglesa já existente; preservar como fonte editorial de referência.
 - `assets/arco/js/arco-en.js`, `arco-runtime-en.js`, `arco-base-en-20260915.js`, `arco-final-en-20260915-v2.js`: scripts ingleses existentes; verificar diferenças funcionais antes de consolidar.
 - `arco.html`: HTML principal em português, com componentes de navegação, conteúdo e fichas técnicas.
-- `echo.html`, `play.html`, `atrio.html`, `cerne.html`: páginas em português; PLAY contém textos também gerados por `assets/play/play.js`.
+- `echo.html`, `play.html`, `atrio.html`, `cerne.html`, `data.html`: páginas em português; PLAY contém textos também gerados por `assets/play/play.js`.
 - CERNE contém fontes embutidas em data URI; preservar bytes e evitar reescrita global do HTML.
 
 ## Contrato de implementação
@@ -27,4 +26,4 @@ Preservar como nomes próprios: ARCO, ECHO, PLAY, ATRIO, CERNE, CORPUS, RATIO, L
 Tratar com revisão contextual: Governança do Raciocínio Jurídico; lastro; rastro; responsabilidade; auditoria; controle humano; método; operações jurídicas.
 
 ## Estado
-Inventário e branch de isolamento criados. **A internacionalização das cinco páginas ainda não foi implementada.**
+Inventário e branch de isolamento criados. **A internacionalização das seis páginas ainda não foi implementada.**
