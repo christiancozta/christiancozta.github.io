@@ -57,12 +57,9 @@
 .at-mx .at-mx__btn span{transition:transform .32s cubic-bezier(.32,.72,0,1)}
 .at-mx .at-mx__btn:is(:hover,:focus-visible) span{transform:translateX(3px)}
 
-/* coluna chamada pelo ARCO (data-active) */
-.at-mx[data-active="atrio"] [data-col="atrio"],
-.at-mx[data-active="corpus"] [data-col="corpus"],
-.at-mx[data-active="ratio"] [data-col="ratio"],
-.at-mx[data-active="cerne"] [data-col="cerne"],
-.at-mx[data-active="lux"] [data-col="lux"]{background-color:#F7F0EE}
+/* Coluna chamada pelo ARCO (data-active): sem fundo próprio. Um tom rosa aqui
+   perdia em especificidade para as casas alternadas e aparecia em xadrez
+   quebrado; a coluna segue o mesmo tabuleiro das demais. */
 
 /* TABULEIRO — malha estática de casas alternadas, sem sombra.
    A cor de repouso permanece visível mesmo sem mouse. */
