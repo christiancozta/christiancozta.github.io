@@ -38,6 +38,6 @@ sh assets/play/fonte/build/capas.sh
 
 ## Paleta
 
-`#181818` tinta, `#FCFCFC` papel, `#FFB627` âmbar (a luz: marca-texto, batuta, compasso em foco) e `#8A6620` latão (âmbar com tinta: códigos, numerais e links). O laranja `#C84D00` fica na coleção impressa. Tints e cinzas são misturas dessas cores com o papel.
+`#2C2C2C` tinta, `#FCFCFC` papel, `#FFB627` âmbar (a luz: marca-texto, batuta, compasso em foco) e `#8A6620` latão (âmbar com tinta: códigos, numerais e links). O laranja `#C84D00` fica na coleção impressa. Tints e cinzas são misturas dessas cores com o papel.
 
 Na partitura, o compasso sob o cursor acende em âmbar e o resto esmaece; o nome do material aberto ganha o marca-texto âmbar. O sistema visual completo está em `DESIGN.md`.
