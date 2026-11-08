@@ -81,7 +81,7 @@
   display:inline;padding:.1em .36em .14em;margin:0 .02em;border:0;
   font:inherit;font-weight:600;letter-spacing:.008em;text-decoration:none;
   -webkit-box-decoration-break:clone;box-decoration-break:clone;
-  background:#0057FF;color:#FCFCFC;cursor:pointer;
+  background:#4A90E2;color:#FCFCFC;cursor:pointer;
   transition:box-shadow var(--fast) var(--ease)
 }
 .b-data:hover,.b-data:focus-visible{box-shadow:0 0 0 1px var(--ink)}
@@ -401,13 +401,13 @@
   .view[data-view="home"] .home.hero-commit01-final .narr__glyph{position:relative;z-index:1}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n{background:transparent!important;box-shadow:none!important}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat.is-provenance-hover .narr__n::before{opacity:1}
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n::before{background:#181818}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n::before{background:#2C2C2C}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="5"].is-provenance-hover .narr__n{color:#FCFCFC!important}
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n::before{background:#A63A23}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n::before{background:#D94F2D}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="4"].is-provenance-hover .narr__n{color:#FCFCFC!important}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n::before{background:#FFB627}
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n{color:#181818!important}
-  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n::before{background:#0057FF}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="3"].is-provenance-hover .narr__n{color:#2C2C2C!important}
+  .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n::before{background:#4A90E2}
   .view[data-view="home"] .home.hero-commit01-final .narr__stat[data-step="2"].is-provenance-hover .narr__n{color:#FCFCFC!important}
   .arco-provenance-tag{
     position:fixed;left:0;top:0;z-index:1000;display:inline-flex;align-items:center;min-height:1.42em;
@@ -416,10 +416,10 @@
     pointer-events:none;transition:opacity 120ms cubic-bezier(.22,.68,0,1),visibility 0s linear 120ms
   }
   .arco-provenance-tag.is-visible{opacity:1;visibility:visible;transition:opacity 120ms cubic-bezier(.22,.68,0,1)}
-  .arco-provenance-tag--arco{background:#181818;color:#FCFCFC}
-  .arco-provenance-tag--atrio{background:#A63A23;color:#FCFCFC}
-  .arco-provenance-tag--echo{background:#FFB627;color:#181818}
-  .arco-provenance-tag--data{background:#0057FF;color:#FCFCFC}
+  .arco-provenance-tag--arco{background:#2C2C2C;color:#FCFCFC}
+  .arco-provenance-tag--atrio{background:#D94F2D;color:#FCFCFC}
+  .arco-provenance-tag--echo{background:#FFB627;color:#2C2C2C}
+  .arco-provenance-tag--data{background:#4A90E2;color:#FCFCFC}
 }
 @media (max-width:820px){.arco-provenance-tag{display:none!important}}
 @media (prefers-reduced-motion:reduce){

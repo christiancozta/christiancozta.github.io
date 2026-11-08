@@ -522,11 +522,11 @@
   const stage = document.querySelector('.stage');
   const childStates = new WeakMap();
   const childProgressInk = {
-    echo:'#181818',
+    echo:'#2C2C2C',
     play:'#FFB627',
-    atrio:'#A63A23',
-    cerne:'#A63A23',
-    data:'#0057FF'
+    atrio:'#D94F2D',
+    cerne:'#D94F2D',
+    data:'#4A90E2'
   };
 
   cleanupPreviousEndcap();
@@ -563,7 +563,7 @@
   width:100%;height:${FOOTER_H}px;min-height:${FOOTER_H}px;
   margin:0;padding:0;
   overflow:hidden;
-  background:#181818!important;color:#FCFCFC!important;
+  background:#2C2C2C!important;color:#FCFCFC!important;
   border:0!important;
 }
 .arco-unified-footer__seal{
@@ -589,11 +589,11 @@
 .arco-unified-footer__method strong{
   font-family:"Commissioner",system-ui,sans-serif;
   font-size:.74rem;font-weight:600;line-height:1;
-  letter-spacing:-.008em;color:#0057FF;white-space:nowrap;
+  letter-spacing:-.008em;color:#4A90E2;white-space:nowrap;
 }
 .arco-unified-footer__method:hover strong,
 .arco-unified-footer__method:focus-visible strong{color:#2e71ff}
-.arco-unified-footer__method:focus-visible{outline:2px solid #0057FF;outline-offset:3px}
+.arco-unified-footer__method:focus-visible{outline:2px solid #4A90E2;outline-offset:3px}
 @media(max-width:1000px){
   .arco-unified-footer__seal{left:50%}
   .arco-unified-footer__method{right:max(1rem,env(safe-area-inset-right,0px));gap:.32rem}
@@ -790,7 +790,7 @@ html[data-arco-embedded="true"] .echo-trace{
 .arco-child-scrollbar__fill{
   position:absolute;inset:0 0 auto 0;width:100%;height:100%;
   transform:scaleY(0);transform-origin:50% 0;
-  background:var(--arco-child-progress-ink,#181818);
+  background:var(--arco-child-progress-ink,#2C2C2C);
   box-shadow:0 0 0 .5px rgba(252,252,252,.52);
   will-change:transform;
 }
@@ -802,7 +802,7 @@ html[data-arco-embedded="true"] .echo-trace{
 }`;
       doc.head.appendChild(style);
     }
-    doc.documentElement.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#181818');
+    doc.documentElement.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#2C2C2C');
   }
 
   function ensureChildScrollbar(view,doc){
@@ -815,7 +815,7 @@ html[data-arco-embedded="true"] .echo-trace{
       rail.innerHTML = '<span class="arco-child-scrollbar__fill"></span>';
       doc.body.appendChild(rail);
     }
-    rail.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#181818');
+    rail.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#2C2C2C');
     return {rail,fill:rail.querySelector('.arco-child-scrollbar__fill')};
   }
 
