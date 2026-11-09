@@ -110,8 +110,24 @@
 .at-coda{grid-column:1/-1;display:flex;align-items:flex-end;padding:0 var(--gutter) var(--base)}
 .at-coda p{margin:0;font:750 clamp(1.4rem,calc(var(--cell)*.25),2.7rem)/calc(var(--base)*2) var(--font-heading);letter-spacing:-.015em;color:var(--terra)}
 
+/* hero: A, R, I, O em grafite; T em branco */
+.hero h1 span{color:#2C2C2C}
+.hero h1 span:nth-child(2){color:#FCFCFC}
+
+/* seletor de idioma no hero, alinhado à borda direita do tabuleiro */
+.atrio-lang{
+  position:absolute;z-index:5;top:clamp(18px,3vh,32px);right:calc(var(--cell) + var(--gutter));
+  display:flex;align-items:center;gap:.7em;color:#FCFCFC;
+  font:500 .6875rem/1 var(--font-ui);letter-spacing:.14em;text-transform:uppercase
+}
+.atrio-lang a{padding:6px 0;color:#FCFCFC;text-decoration:none;border-bottom:1px solid transparent}
+.atrio-lang a:hover,.atrio-lang a:focus-visible{border-bottom-color:currentColor;outline:none}
+.atrio-lang [aria-current]{color:#2C2C2C;font-weight:700}
+.atrio-lang i{font-style:normal;opacity:.7}
+
 @media(max-width:760px){
   .at-autoria{display:block}
+  .atrio-lang{right:1rem;top:1rem}
   .at-autoria article{padding:1.1rem 1rem}
   .at-coda{padding:1.25rem 1rem}
 }

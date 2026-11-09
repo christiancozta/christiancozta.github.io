@@ -256,8 +256,17 @@
       target?.scrollIntoView({block:"start", behavior: reduce ? "auto" : "smooth"});
     }));
 
+  /* A troca de idioma preserva o contexto: numa view (#atrio, #echo...), leva à
+     mesma view no outro idioma; na home, ao repertório se ele estiver em quadro. */
   document.querySelectorAll(".arco-lang a").forEach(link =>
     link.addEventListener("click", () => {
+      const view = document.querySelector('.view[data-active="true"]')?.dataset.view;
+      if (view && view !== "home"){
+        const target = new URL(link.href, location.href);
+        target.hash = view;
+        link.href = target.href;
+        return;
+      }
       const repertoire = document.getElementById("repertorio");
       if (!repertoire) return;
       const rect = repertoire.getBoundingClientRect();
