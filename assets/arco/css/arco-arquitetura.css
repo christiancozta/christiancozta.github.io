@@ -475,7 +475,8 @@
   touch-action:manipulation;
 }
 /* o sinal de abertura: o mesmo nos três capitéis, sem hierarquia.
-   Gira em × quando o campo está aberto (aria-pressed): clicar de novo recolhe. */
+   ▶ aponta para baixo em repouso e gira para a direita quando o campo está
+   aberto (aria-pressed): clicar de novo recolhe. U+FE0E evita o emoji no iOS. */
 .arx-col__head{ position:relative; }
 .arx-col__plus{
   position:absolute; top:-.08em; right:0;
@@ -486,7 +487,8 @@
   transition:transform 420ms var(--arx-spring), color 420ms var(--arx-ease);
   pointer-events:none;
 }
-.arx-col__head[aria-pressed="true"] .arx-col__plus{ transform:rotate(45deg); }
+.arx-col__plus{ font-family:var(--f-body); font-size:clamp(.95rem,1.45vw,1.3rem); line-height:1; top:.12em; transform:rotate(90deg); }
+.arx-col__head[aria-pressed="true"] .arx-col__plus{ transform:rotate(0deg); }
 .arx-col__head:focus{ outline:none; }
 .arx-col__head:focus-visible .arx-col__mov{ outline:2px solid currentColor; outline-offset:4px; }
 .arx-col__n{
@@ -1797,13 +1799,13 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 /* ===================== LINHA DO TEMPO NA BASE ===================== */
 /* três marcos, um por movimento: aberto, em curso, cheio */
 .arx-tech circle.is-tl{
-  fill:#FCFCFC; stroke:#8E8E8E; stroke-width:.8px;
+  fill:#FCFCFC; stroke:#2C2C2C; stroke-width:1.6px;
   opacity:0;
   transition:opacity var(--arx-back) var(--arx-ease), fill 420ms var(--arx-ease), stroke 420ms var(--arx-ease);
 }
-.arx-tech circle.is-tl--dot{ fill:#8E8E8E; stroke:none; }
-.arx-tech circle.is-tl--2{ fill:#8E8E8E; }
-.arx-tech path.is-tl-line{ stroke:#8E8E8E; stroke-width:.8px; }
+.arx-tech circle.is-tl--dot{ fill:#2C2C2C; stroke:none; }
+.arx-tech circle.is-tl--2{ fill:#2C2C2C; }
+.arx-tech path.is-tl-line{ stroke:#2C2C2C; stroke-width:1.4px; }
 .arx[data-state="forming"] .arx-tech circle.is-tl{
   opacity:1;
   transition:opacity 700ms var(--arx-ease) var(--d, 1500ms);
