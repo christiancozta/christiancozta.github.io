@@ -7,6 +7,8 @@ Esta pasta guarda a fonte do PLAY. A página publicada (`/play.html`) e os arqui
 `play-ementario.js` são gerados a partir dela e não devem ser editados à mão. As duas
 últimas bases são injetadas pelo `play.js` só quando a ferramenta é aberta.
 
+A versão em inglês (`en/play.html`, `assets/play/play.en.js` e `assets/play/play-dados.en.js`) é gerada a partir dessa saída por `i18n/build.mjs`, com os catálogos em `i18n/catalogs/`. Depois de mudar a fonte, rode o build do PLAY e, em seguida, `node i18n/build.mjs`. Documentos do Playbook, modelos e bases continuam em português.
+
 ## Estrutura
 
 | Pasta ou arquivo | Conteúdo |
