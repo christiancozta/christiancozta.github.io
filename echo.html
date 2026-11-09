@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GD0Q3Z4KQ9"></script>
@@ -15,17 +15,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="assets/shared/js/support.js?v=20261014"></script>
 <title>ECHO</title>
+<!-- i18n:alternates -->
+<link rel="canonical" href="https://christiancozta.github.io/echo.html">
+<link rel="alternate" hreflang="pt-BR" href="https://christiancozta.github.io/echo.html">
+<link rel="alternate" hreflang="en" href="https://christiancozta.github.io/en/echo.html">
+<link rel="alternate" hreflang="x-default" href="https://christiancozta.github.io/echo.html">
+<!-- /i18n:alternates -->
 <meta property="og:title" content="ECHO | Modelo operacional">
 <meta property="og:description" content="Metodologia de operações jurídicas para estruturação institucional.">
 <meta property="og:image" content="https://christiancozta.github.io/assets/echo/brand/og-echo.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://christiancozta.github.io/ECHO.html">
+<meta property="og:url" content="https://christiancozta.github.io/echo.html">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ECHO | Modelo operacional">
 <meta name="twitter:description" content="Metodologia de operações jurídicas para estruturação institucional.">
-<meta name="twitter:image" content="https://christiancozta.github.io/assets/echo/brand/og.png">
+<meta name="twitter:image" content="https://christiancozta.github.io/assets/echo/brand/og-echo.png">
 <link rel="shortcut icon" href="assets/echo/brand/favicon.ico?v=20261014" type="image/x-icon">
 <link rel="icon" href="assets/echo/brand/favicon-16.png?v=20261014" type="image/png" sizes="16x16">
 <link rel="icon" href="assets/echo/brand/favicon-32.png?v=20261014" type="image/png" sizes="32x32">
@@ -1260,6 +1266,13 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .ficha__cta{font-size:13px}
 .cordas-som{font-size:9px}
 .echo-metric__reading{font-size:12px}
+/* Seletor de idioma no hero, alinhado à frase de abertura */
+.echo-lang{position:absolute;z-index:3;top:clamp(18px,3vh,32px);right:32px;display:flex;align-items:center;gap:.7em;font:500 10px/1 "Azeret Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#2C2C2C}
+.echo-lang a{padding:6px 0;color:#2C2C2C;text-decoration:none;opacity:.72;border-bottom:1px solid transparent}
+.echo-lang a:hover,.echo-lang a:focus-visible{opacity:1;border-bottom-color:currentColor;outline:none}
+.echo-lang [aria-current]{font-weight:700}
+.echo-lang i{font-style:normal;opacity:.6}
+@media(max-width:760px){.echo-lang{right:18px;top:16px}}
 </style>
 </helmet>
 
@@ -1272,6 +1285,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       <span class="legal-ops-pill__arrow" aria-hidden="true">→</span>
     </button>
   </div>
+  <nav class="echo-lang" aria-label="Idioma"><a href="en/echo.html" hreflang="en" lang="en">EN</a><i aria-hidden="true">/</i><span aria-current="page">PT</span></nav>
   <div class="echo-copy">
     <p>Do que se ouvia ao que permanece.</p>
     <p>Práticas dispersas em estrutura, memória e procedimento.</p>
@@ -2122,6 +2136,23 @@ class Component extends DCLogic {
 </script>
 <div class="echo-trace" aria-hidden="true"><i></i><b></b><s></s></div>
 
+<script>
+/* Idioma: dentro do ARCO, a troca leva o ARCO inteiro ao outro idioma, já na
+   view do ECHO; fora dele, o link segue para a página do outro idioma. */
+document.addEventListener('click', (event) => {
+  const link = event.target.closest && event.target.closest('.echo-lang a');
+  if (!link || window.parent === window) return;
+  let parentPath;
+  try { parentPath = window.parent.location.pathname; } catch (e) { return; }
+  if (!/\/arco\.html$/.test(parentPath)) return;
+  event.preventDefault();
+  const target = new URL(link.href);
+  target.pathname = target.pathname.replace(/echo\.html$/, 'arco.html');
+  target.search = '';
+  target.hash = 'echo';
+  window.top.location.href = target.href;
+});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 (() => {
