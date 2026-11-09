@@ -38,7 +38,7 @@
      s = 1 é o desenho (a altura em que se leem os nomes); s = REST é o
      arco em repouso, mais baixo. A formação só abre: de REST até 1.
      ------------------------------------------------------------------ */
-  const REST = .65;
+  const REST = .85;
   let arcS = REST;
   const drawArc = s => {
     arcS = s;
