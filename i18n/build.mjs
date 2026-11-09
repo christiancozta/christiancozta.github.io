@@ -46,7 +46,8 @@ const outputs = new Map();
 
 const hasLetters = s => /\p{L}/u.test(s);
 // Números com separador decimal ou de milhar mudam de grafia em inglês.
-const translatable = s => hasLetters(s) || /\d[.,]\d/.test(s);
+// Expressões de modelo ({{ ... }}) são código, não texto.
+const translatable = s => { const t = s.replace(/\{\{[^}]*\}\}/g, ""); return hasLetters(t) || /\d[.,]\d/.test(t); };
 const norm = s => s.replace(/\s+/g, " ").trim();
 
 /* ---------------- HTML: árvore mínima com posições no texto fonte ---------------- */
@@ -241,7 +242,8 @@ function collectSegments(html, root, translatableData) {
 
 function rewriteUrl(url, links) {
   if (links[url]) return links[url];
-  if (!url || /^(#|\/|\?|\.\.?\/|[a-z][a-z0-9+.-]*:)/i.test(url)) return url;
+  // expressões de modelo ({{ ... }}) resolvem caminhos já reescritos no script
+  if (!url || url.includes("{{") || /^(#|\/|\?|\.\.?\/|[a-z][a-z0-9+.-]*:)/i.test(url)) return url;
   const path = url.split(/[?#]/)[0];
   if (!path.includes("/") && EN_PAGES.has(path)) return url;
   return `../${url}`;
@@ -250,7 +252,10 @@ function rewriteUrl(url, links) {
 const rewriteCssUrls = (css, links) =>
   css.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g, (m, q, u) => `url(${q}${rewriteUrl(u, links)}${q})`);
 
-const rewriteJsPaths = js => js.replace(/(["'`])assets\//g, "$1../assets/");
+// Em scripts do EN: recursos sobem um nível; páginas sem versão EN também.
+const rewriteJsPaths = js => js
+  .replace(/(["'`])assets\//g, "$1../assets/")
+  .replace(/(["'`])([\w-]+\.html)(?=[#?"'`])/g, (m, q, page) => EN_PAGES.has(page) ? m : `${q}../${page}`);
 
 function rewritePaths(html, links, localized, textAttrs) {
   const root = parse(html);

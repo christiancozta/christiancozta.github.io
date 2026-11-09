@@ -698,7 +698,7 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
   function cleanupChild(view,doc){
     if (view === 'echo'){
       const ecosystemLabel = [...doc.querySelectorAll('p')]
-        .find(node => node.textContent.trim() === 'Ecossistema');
+        .find(node => node.textContent.trim() === 'Ecosystem');
       const ecosystemBlock = ecosystemLabel?.closest('div[data-reveal]') || ecosystemLabel?.parentElement;
       ecosystemBlock?.remove();
 
@@ -706,7 +706,7 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
         const children = [...node.children];
         if (children.length !== 3 || children.some(child => child.tagName !== 'SPAN')) return false;
         return children[0].textContent.trim() === 'ECHO' &&
-          children[1].textContent.trim() === 'Christian da Costa, Curitiba, Brasil' &&
+          children[1].textContent.trim() === 'Christian da Costa, Curitiba, Brazil' &&
           children[2].textContent.trim() === '2026';
       });
       legacyFooter?.remove();

@@ -12,7 +12,7 @@ Fora do escopo: `atrio-dentro.html` (linkada pelo ARCO; o leitor EN chega à ver
 - PLAY é artefato de build: `play.html`, `play.css`, `play.js`, `play-dados.js`, `play-fundamentos.js` e `play-ementario.js` saem de `assets/play/fonte/build/build.py` e não se editam à mão. A tradução entra em `assets/play/fonte/` e no build.
 - DATA é um Design Component: o conteúdo fica num bloco `<x-dc>` escondido por CSS e montado no navegador por `assets/shared/js/support-core-20260916.js`, que localiza o bloco por regex no código-fonte. Há cerca de 30 strings no JavaScript embutido (meses, séries, rótulos de métricas) e formatação numérica fixada em `'pt-BR'`. Os valores de `data-props` (`taxa`, `votos`, `despachos`) são identificadores e não se traduzem.
 - CERNE contém fontes embutidas em data URI e cerca de 325 KB de JavaScript embutido, com mais de 500 strings PT; preservar bytes e evitar reescrita global do HTML.
-- `echo.html` não declara `lang` no `<html>`.
+- `echo.html` não declarava `lang`, e seu `og:url` apontava para `ECHO.html` (404); ambos corrigidos.
 
 ## Contrato de implementação
 1. Uma única fonte de estrutura, estilos e comportamento por página. Não manter HTML traduzido à mão.
@@ -29,6 +29,7 @@ Fora do escopo: `atrio-dentro.html` (linkada pelo ARCO; o leitor EN chega à ver
 - Documentos vinculados (fichas técnicas e manuais do ATRIO, bases do PLAY, arquivos de lastro do DATA) permanecem em português. A interface que os apresenta é traduzida.
 - Léxico "Do termo à prova": o termo de mercado (já em inglês) é mantido; o equivalente português entre colchetes permanece, como marca bilíngue, com `lang="pt-BR"` na versão acessível. Sinônimos portugueses que só repetiam o equivalente foram retirados da lista "aka"; os demais foram traduzidos. **Revisar.**
 - Números e datas seguem o glossário do CV: `16,18 p.p.` → `16.18 pp`; `1.192` → `1,192`; `dez/2025` → `Dec 2025`; datas completas como `26 Aug 2026`.
+- ECHO: Acervo → Collection (o conjunto de materiais), mas acervo → caseload quando se refere a processos; Regente/Regência/Registro/Regimento → Conductor/Conducting/Record/Regimen; nomes dos materiais traduzidos (Introductory Notes, Procedural Tuning, Headnote Index…).
 - ATRIO: rastro → trace e lastro → grounding também no tooltip; peças do xadrez da marca como King, Rook, Knight, Queen e Bishop; os rótulos ACHADO/AFASTADO, que o CERNE emite em português, aparecem com glosa (found/dismissed).
 - Nomes de ferramentas do PLAY: Ementário → Headnote Index; Fundamentos → Legal Grounds; Calendário Jurídico → Legal Calendar; Montador de Minutas → Draft Builder; Busca Integrada → Integrated Search. **Revisar** antes da tradução do PLAY, que deve usar os mesmos nomes.
 
@@ -56,5 +57,6 @@ Para incluir uma página, acrescente-a em `i18n/pages.json` com seu catálogo e 
 ## Estado
 - **ARCO: implementado.** 463 unidades (266 traduzidas, 155 mantidas, 42 equivalentes PT marcados) e 3 scripts localizados. Verificado no navegador, em PT e EN: sem erros de console além do Google Analytics bloqueado no ambiente de teste, tooltip, rodapé, busca e filtro do léxico, leitor de fichas técnicas, iframes e largura de 390 px sem rolagem horizontal. As páginas filhas abrem em PT dentro do ARCO EN até serem traduzidas; o gerador passa a apontar para a versão EN de cada uma quando ela entrar em `pages.json`.
 - **ATRIO: implementado.** 177 unidades no HTML e 92 strings em `atrio.js` (históricos de versão, notas da marca, tooltip; datas DD/MM/AAAA convertidas para `9 Apr 2026`). Verificado no navegador: diálogos de marca e de versões, tooltip, fichas técnicas e encaixe na grade em PT e EN; o ARCO EN passa a abrir o ATRIO EN no iframe. A página não tem seletor de idioma visível; a alternância fica no ARCO e nos metadados hreflang.
-- Próximas: ECHO e DATA; depois PLAY (via build próprio) e CERNE.
+- **ECHO: implementado.** 119 unidades no HTML e 89 literais nos scripts embutidos (dados dos 14 materiais, etapas, leitor de PDF, tooltip). Materiais em PDF/XLSX continuam em português e aparecem marcados como "(PT)". `support.js` ganhou cópia EN porque carrega o runtime por caminho relativo à página. O ARCO EN passa a embutir o ECHO EN, e o `arco-shell.en.js` compara os textos em inglês ("Ecosystem", "Christian da Costa, Curitiba, Brazil") ao limpar a página incorporada. Seletor de idioma no hero, com o mesmo comportamento do ATRIO dentro do ARCO.
+- Próximas: DATA; depois PLAY (via build próprio) e CERNE.
 - Pendente: revisão editorial do catálogo do ARCO, em especial a bio, as frases de abertura dos três movimentos e as decisões marcadas acima.
