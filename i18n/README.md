@@ -29,6 +29,7 @@ Fora do escopo: `atrio-dentro.html` (linkada pelo ARCO; o leitor EN chega à ver
 - Documentos vinculados (fichas técnicas e manuais do ATRIO, bases do PLAY, arquivos de lastro do DATA) permanecem em português. A interface que os apresenta é traduzida.
 - Léxico "Do termo à prova": o termo de mercado (já em inglês) é mantido; o equivalente português entre colchetes permanece, como marca bilíngue, com `lang="pt-BR"` na versão acessível. Sinônimos portugueses que só repetiam o equivalente foram retirados da lista "aka"; os demais foram traduzidos. **Revisar.**
 - Números e datas seguem o glossário do CV: `16,18 p.p.` → `16.18 pp`; `1.192` → `1,192`; `dez/2025` → `Dec 2025`; datas completas como `26 Aug 2026`.
+- ATRIO: rastro → trace e lastro → grounding também no tooltip; peças do xadrez da marca como King, Rook, Knight, Queen e Bishop; os rótulos ACHADO/AFASTADO, que o CERNE emite em português, aparecem com glosa (found/dismissed).
 - Nomes de ferramentas do PLAY: Ementário → Headnote Index; Fundamentos → Legal Grounds; Calendário Jurídico → Legal Calendar; Montador de Minutas → Draft Builder; Busca Integrada → Integrated Search. **Revisar** antes da tradução do PLAY, que deve usar os mesmos nomes.
 
 ## Glossário editorial
@@ -54,5 +55,6 @@ Para incluir uma página, acrescente-a em `i18n/pages.json` com seu catálogo e 
 
 ## Estado
 - **ARCO: implementado.** 463 unidades (266 traduzidas, 155 mantidas, 42 equivalentes PT marcados) e 3 scripts localizados. Verificado no navegador, em PT e EN: sem erros de console além do Google Analytics bloqueado no ambiente de teste, tooltip, rodapé, busca e filtro do léxico, leitor de fichas técnicas, iframes e largura de 390 px sem rolagem horizontal. As páginas filhas abrem em PT dentro do ARCO EN até serem traduzidas; o gerador passa a apontar para a versão EN de cada uma quando ela entrar em `pages.json`.
-- Próximas: ECHO, ATRIO e DATA; depois PLAY (via build próprio) e CERNE.
+- **ATRIO: implementado.** 177 unidades no HTML e 92 strings em `atrio.js` (históricos de versão, notas da marca, tooltip; datas DD/MM/AAAA convertidas para `9 Apr 2026`). Verificado no navegador: diálogos de marca e de versões, tooltip, fichas técnicas e encaixe na grade em PT e EN; o ARCO EN passa a abrir o ATRIO EN no iframe. A página não tem seletor de idioma visível; a alternância fica no ARCO e nos metadados hreflang.
+- Próximas: ECHO e DATA; depois PLAY (via build próprio) e CERNE.
 - Pendente: revisão editorial do catálogo do ARCO, em especial a bio, as frases de abertura dos três movimentos e as decisões marcadas acima.
