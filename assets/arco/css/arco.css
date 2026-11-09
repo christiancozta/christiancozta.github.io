@@ -2315,6 +2315,14 @@ body{
 }
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover){ color:var(--tone-ink); }
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover)::after{ opacity:1; }
+/* a passagem entre projetos: ▶ pequeno e discreto no vão antes de ECHO e de
+   ATRIO (DATA ▶ ECHO—PLAY ▶ ATRIO—CERNE). U+FE0E evita o emoji no iOS. */
+.rail .rail__nav > :is([data-view="echo"],[data-view="atrio"])::before{
+  content:"\25B6\FE0E"; position:absolute; top:50%; right:100%; z-index:-2;
+  width:var(--nav-gap); transform:translateY(-50%);
+  font-family:var(--f-body); font-size:.42rem; line-height:1; letter-spacing:0;
+  text-align:center; color:var(--pp-58); pointer-events:none;
+}
 /* o conectivo: fio de 1px que preenche o vão entre mãe e filho */
 .rail .rail__link--child::before{
   content:""; position:absolute; top:50%; right:100%; z-index:-2;
@@ -2393,6 +2401,9 @@ body{
   .rail .rail__nav{ justify-content:flex-end; }
   .rail .rail__link{ font-size:clamp(.66rem,2.8vw,.74rem) !important; letter-spacing:.05em; }
   .rail .rail__nav .rail__link::after{ left:-.32rem; right:-.32rem; }
+  /* o ▶ precisa de ar fora da caixa do item ativo */
+  .rail .rail__nav > :is([data-view="echo"],[data-view="atrio"]){ margin-left:.55rem; }
+  .rail .rail__nav > :is([data-view="echo"],[data-view="atrio"])::before{ width:calc(var(--nav-gap) + .55rem); font-size:.36rem; }
 }
 
 /* Celular, numa view filha: o idioma desce para a faixa da página inteira,
