@@ -527,6 +527,19 @@ return words.some((w,i)=>{const prev=words[i-1];return prev&&Math.abs(prev[1].to
 /* reencaixa quando a largura muda (já com --cell novo) e quando as fontes chegam */
 let atMatrixWidth=0;if(atMatrix)new ResizeObserver(([entry])=>{const width=Math.round(entry.contentRect.width);if(width!==atMatrixWidth){atMatrixWidth=width;snapMatrix()}}).observe(atMatrix);
 document.fonts?.ready.then(snapMatrix);addEventListener("load",snapMatrix);
+/* Faixas presas ao grid visível no desktop: cada [data-grid-band] cresce até o
+   múltiplo seguinte de --board-row (168px). As internas são medidas antes das
+   que as contêm, para que a externa já some as alturas encaixadas. A folga
+   de 2px absorve a borda de 1px que coincide com a linha do fundo. */
+const gridBands=[...document.querySelectorAll("[data-grid-band]")].reverse();
+function snapBands(){
+gridBands.forEach(el=>el.style.minHeight="");
+if(mobileArchitecture.matches)return;
+const unit=168;
+gridBands.forEach(el=>{const h=Math.round(el.getBoundingClientRect().height);el.style.minHeight=`${Math.max(unit,Math.ceil((h-2)/unit)*unit)}px`});
+}
+let bandsWidth=0;new ResizeObserver(([entry])=>{const width=Math.round(entry.contentRect.width);if(width!==bandsWidth){bandsWidth=width;snapBands()}}).observe(document.body);
+document.fonts?.ready.then(snapBands);addEventListener("load",snapBands);
 /* Contextual entry from ARCO, using this page's canonical version history. */
 const documentationRequest = new URLSearchParams(location.search);
 const requestedModule = documentationRequest.get("module");
