@@ -193,7 +193,23 @@ function collectSegments(html, root, translatableData) {
   const addAttrsDeep = node => {
     if (node.type !== "el") return;
     addAttrs(node);
-    if (!OPAQUE.has(node.name)) node.children.forEach(addAttrsDeep);
+    if (node.name === "svg") scanSvg(node);
+    else if (!OPAQUE.has(node.name)) node.children.forEach(addAttrsDeep);
+  };
+  // Dentro de SVG só há texto em <text>, <textPath>, <title> e <desc>.
+  const SVG_TEXT = new Set(["text", "textpath", "tspan", "title", "desc"]);
+  const scanSvg = el => {
+    for (const c of el.children) {
+      if (c.type !== "el") continue;
+      addAttrs(c);
+      if (SVG_TEXT.has(c.name) && c.children.length && c.children.every(n => n.type === "text")) {
+        const raw = html.slice(c.openEnd, c.closeStart);
+        if (!translatable(raw)) continue;
+        const start = c.openEnd + (raw.length - raw.trimStart().length);
+        const end = c.closeStart - (raw.length - raw.trimEnd().length);
+        units.push({ start, end, key: norm(html.slice(start, end)) });
+      } else scanSvg(c);
+    }
   };
 
   // Uma unidade é a menor sequência de texto e marcação inline que se lê
@@ -222,6 +238,7 @@ function collectSegments(html, root, translatableData) {
 
   const walk = el => {
     addAttrs(el);
+    if (el.name === "svg") return scanSvg(el);
     if (OPAQUE.has(el.name) || (RAW.has(el.name) && el.name !== "title")) return;
     let run = [];
     for (const child of el.children) {
@@ -333,6 +350,8 @@ function withAlternates(html, block, file) {
 const enScriptPath = p => p.replace(/\.js$/, ".en.js");
 const KEY_NAMES = new Set(["Escape", "Enter", "Tab", "Home", "End", "Space", "Backspace", "Delete"]);
 
+const header = path => `/* GERADO por i18n/build.mjs a partir de ${path.split("/").pop()} | não editar à mão. */\n`;
+
 function localizeScript(path) {
   const entry = scriptCatalog[path];
   const src = read(path);
@@ -342,6 +361,8 @@ function localizeScript(path) {
     out = out.split(pt).join(en);
   }
   const unquote = k => k.replace(/^["'`]|["'`]$/g, "");
+  // detect:false para scripts que carregam conteúdo PT por decisão (bases, documentos)
+  if (entry.detect === false) return header(path) + rewriteJsPaths(out);
   const known = new Set([...Object.keys(entry.strings || {}), ...(entry.ignore || [])].map(unquote));
   const body = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:"'`\\])\/\/.*$/gm, "$1");
   for (const m of body.matchAll(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g)) {
@@ -351,8 +372,7 @@ function localizeScript(path) {
     if ((/[À-ÿ]/.test(lit) || label) && ![...known].some(k => lit.includes(k)))
       report.missing.push(`${path}: literal sem catálogo "${lit.slice(0, 80)}"`);
   }
-  const header = `/* GERADO por i18n/build.mjs a partir de ${path.split("/").pop()} | não editar à mão. */\n`;
-  return header + rewriteJsPaths(out);
+  return header(path) + rewriteJsPaths(out);
 }
 
 /* ---------------- página ---------------- */
