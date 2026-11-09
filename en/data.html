@@ -15,23 +15,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="../assets/shared/js/support.en.js?v=20261014"></script>
-<script>
-/* Idioma: dentro do ARCO, a troca leva o ARCO inteiro ao outro idioma, já na
-   view do DATA; fora dele, o link segue para a página do outro idioma. */
-document.addEventListener('click', (event) => {
-  const link = event.target.closest && event.target.closest('.data-lang a');
-  if (!link || window.parent === window) return;
-  let parentPath;
-  try { parentPath = window.parent.location.pathname; } catch (e) { return; }
-  if (!/\/arco\.html$/.test(parentPath)) return;
-  event.preventDefault();
-  const target = new URL(link.href);
-  target.pathname = target.pathname.replace(/data\.html$/, 'arco.html');
-  target.search = '';
-  target.hash = 'data';
-  window.top.location.href = target.href;
-});
-</script>
 <title>DATA | Jurimetrics</title>
 <!-- i18n:alternates -->
 <link rel="canonical" href="https://christiancozta.github.io/en/data.html">
@@ -180,12 +163,6 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 .dp-tgl span{font-size:16px}
 /* fecho */
 .dp-coda{margin:clamp(28px,4vh,44px) 0 0;font-weight:300;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.12;letter-spacing:-.03em;color:#2C2C2C;text-wrap:balance}
-/* Seletor de idioma no topo */
-.data-lang{position:absolute;z-index:3;top:clamp(18px,3vh,32px);right:clamp(20px,5vw,96px);display:flex;align-items:center;gap:.7em;font:600 10px/1 "Azeret Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#FCFCFC}
-.data-lang a{padding:6px 0;color:#FCFCFC;text-decoration:none;opacity:.72;border-bottom:1px solid transparent}
-.data-lang a:hover,.data-lang a:focus-visible{opacity:1;border-bottom-color:currentColor;outline:none}
-.data-lang [aria-current]{font-weight:700}
-.data-lang i{font-style:normal;opacity:.6}
 </style>
 </helmet>
 <section id="topo" aria-labelledby="h-data" style="position:relative;overflow:hidden;padding:clamp(48px,8vh,104px) clamp(20px,5vw,96px) clamp(48px,7vh,96px)">
@@ -212,7 +189,6 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
       </div>
     </div>
   </div>
-  <nav class="data-lang" aria-label="Language"><span aria-current="page">EN</span><i aria-hidden="true">/</i><a href="../data.html" hreflang="pt-BR" lang="pt-BR">PT</a></nav>
 </section>
 
 <section id="origem" class="dp-origem" aria-labelledby="h-origem">

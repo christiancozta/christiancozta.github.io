@@ -689,18 +689,3 @@ const ro=new ResizeObserver(measure);ro.observe(document.documentElement);const 
   window.addEventListener("scroll", hideTooltip, { passive: true });
   window.addEventListener("resize", hideTooltip, { passive: true });
 })();
-
-/* Idioma: dentro do ARCO, a troca leva o ARCO inteiro ao outro idioma, já na
-   view do ATRIO; fora dele, o link segue para a página do outro idioma. */
-document.querySelectorAll(".atrio-lang a").forEach(link => link.addEventListener("click", event => {
-  if (window.parent === window) return;
-  let parentPath;
-  try { parentPath = window.parent.location.pathname; } catch { return; }
-  if (!/\/arco\.html$/.test(parentPath)) return;
-  event.preventDefault();
-  const target = new URL(link.href);
-  target.pathname = target.pathname.replace(/atrio\.html$/, "arco.html");
-  target.search = "";
-  target.hash = "atrio";
-  window.top.location.href = target.href;
-}));
