@@ -2394,3 +2394,19 @@ body{
   .rail .rail__link{ font-size:clamp(.66rem,2.8vw,.74rem) !important; letter-spacing:.05em; }
   .rail .rail__nav .rail__link::after{ left:-.32rem; right:-.32rem; }
 }
+
+/* Celular, numa view filha: o idioma desce para a faixa da página inteira,
+   à esquerda, sem segundo seletor. O link carrega a view (#atrio, #echo…).
+   Fixed porque o cordão tem overflow:hidden; nas views filhas a página não rola. */
+@media (max-width:820px){
+  html:has(.view[data-active="true"]:not([data-view="home"])) .rail__end{
+    display:flex; align-items:center;
+    position:fixed; top:var(--rail-h, 3.1rem); left:max(clamp(1rem,3vw,2rem), env(safe-area-inset-left, 0px));
+    height:var(--child-bar-h, 1.45rem); z-index:calc(var(--z-rail) + 1);
+  }
+  .rail__end .arco-lang{ position:static; gap:.4rem; font-size:.6rem; color:var(--pp-58); }
+  .rail__end .arco-lang a:hover,
+  .rail__end .arco-lang a:focus-visible,
+  .rail__end .arco-lang [aria-current="page"]{ color:var(--paper); }
+  .rail__end .arco-lang__sep{ color:var(--pp-58); }
+}
