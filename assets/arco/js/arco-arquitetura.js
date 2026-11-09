@@ -434,15 +434,15 @@
       const node = techNode(`tl-${i}`, "circle", `is-tl is-tl--${i}`, 1550 + i * 140);
       node.setAttribute("cx", cx.toFixed(1));
       node.setAttribute("cy", H.toFixed(1));
-      node.setAttribute("r", i === 2 ? "5.4" : "6");
+      node.setAttribute("r", i === 2 ? "3.8" : "4.2");
       if (i === 1){
         const dot = techNode("tl-1d", "circle", "is-tl is-tl--dot", 1690);
         dot.setAttribute("cx", cx.toFixed(1));
         dot.setAttribute("cy", H.toFixed(1));
-        dot.setAttribute("r", "2.4");
+        dot.setAttribute("r", "1.6");
       }
     });
-    line("tl-ar", "is-tl-line", 1980, [[W - 12, H - 4.5], [W - 2, H], [W - 12, H + 4.5]]);
+    line("tl-ar", "is-tl-line", 1980, [[W - 10, H - 3.8], [W - 2, H], [W - 10, H + 3.8]]);
 
     ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
     for (const key of techNodes.keys()) if (key.startsWith("hm-t")) keepAboveCurve(key, W, H);
