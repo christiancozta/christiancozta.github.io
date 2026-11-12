@@ -501,7 +501,8 @@
      sempre a das histórias. A seleção só volta no retorno de uma página de
      sistema (ver Partida). Depois de recolhida pelo visitante, a estrutura
      também não se refaz pela rolagem: só por escolha. */
-  let autoForm = true;
+  const showcase = root.hasAttribute("data-showcase");
+  let autoForm = !showcase;
   const finishFormation = () => {
     setState("formed");
     store.set(KEY_FORMED, "1");
@@ -632,7 +633,14 @@
 
     /* a coluna inteira seleciona; dados de lastro preservam o próprio gesto */
     col.addEventListener("click", event => {
-      if (event.target.closest("[data-datum]")) return;
+      if (event.target.closest('[data-datum], a, input, select, textarea, [role="link"]') ||
+          (event.target.closest("button") && !head.contains(event.target))) return;
+      if (showcase){
+        const activation = new CustomEvent("arx:activate", {detail:{sys}, cancelable:true});
+        if (!root.dispatchEvent(activation)) return;
+        formAndSelect(sys);
+        return;
+      }
       /* o campo já selecionado é um botão pressionado: clicar de novo recolhe */
       if (sys === selected && state === "formed"){ collapse({keep:col}); return; }
       formAndSelect(sys);
@@ -815,7 +823,15 @@
   }
 
   /* do repouso, um clique forma a estrutura (sem nova tensão) e abre o sistema */
+  let activationToken = 0;
   async function formAndSelect(sys){
+    const activation = ++activationToken;
+    if (showcase){
+      root.dispatchEvent(new CustomEvent("arx:manual", {detail:{sys}}));
+      await form({animate:false});
+      if (activation === activationToken) select(sys, {animate:true});
+      return;
+    }
     /* pedida no meio da formação, a seleção espera a estrutura assentar */
     for (let i = 0; (state === "tension" || forming) && i < 50; i++) await wait(100);
     if (state === "rest"){
@@ -1001,7 +1017,7 @@
     /* já formada nesta sessão (ou sem armazenamento disponível) */
     drawArc(1);
     setState("formed");
-    restoreSelection();
+    if (!showcase) restoreSelection();
   } else if (isHomeAnchor(location.hash)){
     /* chegada por âncora da própria home (#repertorio): formada, sem animação */
     form({animate:false});
