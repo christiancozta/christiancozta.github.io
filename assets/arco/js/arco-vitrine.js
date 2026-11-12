@@ -410,9 +410,9 @@
   const viewTop = () => {
     let top = window.visualViewport?.offsetTop || 0;
     const rail = document.querySelector(".rail");
-    if (rail && getComputedStyle(rail).position === "fixed"){
+    if (rail && ["fixed", "sticky"].includes(getComputedStyle(rail).position)){
       const r = rail.getBoundingClientRect();
-      if (r.width >= innerWidth * .8 && r.top <= top) top = Math.max(top, r.bottom);
+      if (r.width >= innerWidth * .8 && r.top <= top + 1) top = Math.max(top, r.bottom);
     }
     return top;
   };
@@ -445,11 +445,22 @@
     // bloco sob o cursor ou em foco; sem nenhum dos dois, segue a ordem
     // com um sistema aberto, a animação fica no bloco dele
     const sel = SYSTEMS.indexOf(root.dataset.sel || "");
-    let target = sel >= 0 ? sel : pinned;
+    let target = sel >= 0 ? sel : pinned, ring = null;
     if (target < 0 && stacked()){
-      const v = seen(); target = v.indexOf(Math.max(...v));
+      // no celular: com mais de um bloco inteiro na tela, a ordem roda entre
+      // eles; com um só, fica nele (no empate, o mais perto do centro)
+      const v = seen(), full = v.map((f, i) => f >= .98 ? i : -1).filter(i => i >= 0);
+      if (full.length > 1) ring = full;
+      else {
+        const mid = innerHeight / 2, dist = i => { const r = cols[i].getBoundingClientRect(); return Math.abs((r.top + r.bottom) / 2 - mid); };
+        target = v.reduce((best, f, i) => f > v[best] + .01 || (Math.abs(f - v[best]) <= .01 && dist(i) < dist(best)) ? i : best, 0);
+      }
     }
     if (target >= 0) switchTo(target);
+    else if (ring){
+      if (!ring.includes(cur)) switchTo(ring[0]);
+      else if (curT >= SHOW) switchTo(ring[(ring.indexOf(cur) + 1) % ring.length]);
+    }
     else if (curT >= SHOW) switchTo((cur + 1) % surfaces.length);
     curT += dt; prevT += dt; xf = Math.min(XF, xf + dt);
     render();

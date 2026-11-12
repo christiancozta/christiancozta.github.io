@@ -67,7 +67,12 @@
 }
 /* Selecionado, o bloco mantém a animação no lugar do fundo claro do arco;
    a coroa, essa sim, fica plena na cor do sistema. */
-.arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ background-color:transparent; order:-1; }
+.arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ order:-1; }
+/* a animação ocupa o lugar do fundo claro do arco só quando roda; com
+   movimento reduzido, o bloco selecionado mantém o tom do arco */
+@media (prefers-reduced-motion:no-preference){
+  .arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ background-color:transparent; }
+}
 /* O bloco escolhido passa a ser o primeiro, logo acima da célula Movimento do
    painel; sem divisória entre os dois, a animação ocupa ambos como um campo. */
 .arx[data-showcase] .arx-sum .arx-mov{ position:relative; isolation:isolate; }
@@ -78,7 +83,6 @@
 @media (min-width:641px){
   .arx[data-showcase]:not([data-sel=""]) .arx-sum .arx-mov{ border-top-color:transparent; }
 }
-.arx[data-showcase] .arx-col:has(:focus-visible){ outline:2px solid #2C2C2C; outline-offset:-4px; }
 .arx[data-showcase] .arx-col.is-selected .arx-col__mov{ text-decoration:underline; text-underline-offset:.2em; }
 /* Na vitrine as histórias não sobem: o texto já está no lugar quando o arco se forma. */
 .arx[data-showcase="CLEAN"] .arx-col__txt,
