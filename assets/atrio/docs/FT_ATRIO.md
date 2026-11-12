@@ -2,7 +2,7 @@
 
 (A) dado bruto conferido; (B) declarado pelo autor.
 
-| **Função** | Encadeia CORPUS, RATIO, CERNE e LUX numa execução registrada e só libera a peça com decisão humana identificada. | **Versão** | API 0.7.0. Data: [NÃO LOCALIZADO]. |
+| **Função** | Encadeia CORPUS, RATIO, CERNE e LUX numa execução registrada e só libera a peça com decisão humana identificada. | **Versão** | API 0.7.0. Data: 07/2026. |
 |---|---|---|---|
 | **Entrada** | Documentos (TXT, DOCX ou PDF) e destino declarado (interno, externo ou público). | **Saída** | Peça liberada, com trilha de eventos e versões por execução. |
 | **Arquitetura** | CORPUS → RATIO → CERNE → LUX → conferência final → liberação. 31 rotas e 33 operações HTTP (A). | **Governança** | 3 paradas para decisão humana e 3 estados de bloqueio. Comando fora de ordem é recusado em código. |
