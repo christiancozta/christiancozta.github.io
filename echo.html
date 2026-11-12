@@ -210,8 +210,9 @@ a:hover{color:#2C2C2C}
 /* =========================================================
    HERO
    A abertura ocupa 100dvh completos. A seção seguinte começa
-   fora do viewport inicial. Apenas a palavra vaza 3dvh além da
-   fronteira, aparecendo quando a rolagem começa.
+   fora do viewport inicial. Apenas a palavra vaza além da fronteira
+   (3.2vw, proporcional ao próprio tamanho), cortada na base e
+   emendando na seção escura seguinte.
    ========================================================= */
 .echo-hero{
   height:100vh;
@@ -228,7 +229,10 @@ a:hover{color:#2C2C2C}
    Justificado; corpo em vw (15.5px em 1920) para quebrar igual em toda largura: maior vão ≈1.1× o espaço. */
 .echo-copy{
   position:absolute;
-  top:27%;
+  /* preso ao topo do "h", não à altura da tela: no app-shell do ARCO a moldura é mais baixa
+     que larga e o "h" (27.87vw de palavra − 3.2vw de sangria) subiria sobre o bloco.
+     4.8em = 3 linhas; 3.4vw de folga; nunca acima de 72px do topo. */
+  top:max(72px,calc(100% - 27.87vw + 3.2vw - 3.4vw - 4.8em));
   left:51.55vw;
   right:.73vw;
   z-index:4;
@@ -250,7 +254,7 @@ a:hover{color:#2C2C2C}
 .echo-word{
   position:absolute;
   left:50%;
-  bottom:-1.5dvh;
+  bottom:-3.2vw;
   z-index:5;
   transform:translateX(-50%);
   margin:0;
@@ -532,9 +536,6 @@ a:hover{color:#2C2C2C}
 }
 @media(max-width:720px){
   .echo-copy{font-size:11px}
-  .echo-word{
-    bottom:-1.5dvh;
-  }
   .echo-intro{
     padding-top:clamp(68px,9vh,95px);
   }
@@ -1277,7 +1278,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     </button>
   </div>
   <canvas class="echo-ondas" aria-hidden="true"></canvas>
-  <p class="echo-copy" lang="pt-BR">Me&shy;to&shy;do&shy;lo&shy;gia de ope&shy;ra&shy;ção ju&shy;rí&shy;di&shy;ca que re&shy;ú&shy;ne mé&shy;to&shy;dos e téc&shy;ni&shy;cas para im&shy;plan&shy;tar uma es&shy;tru&shy;tu&shy;ra de tra&shy;ba&shy;lho des&shy;de a ba&shy;se, de&shy;fi&shy;nin&shy;do o que, co&shy;mo, quan&shy;do e por quem ca&shy;da ati&shy;vi&shy;da&shy;de de&shy;ve ser re&shy;a&shy;li&shy;za&shy;da, bem co&shy;mo os ma&shy;te&shy;ri&shy;ais ne&shy;ces&shy;sá&shy;rios para tan&shy;to.</p>
+  <p class="echo-copy" lang="pt-BR">Me&shy;to&shy;do&shy;lo&shy;gia de ope&shy;ra&shy;ção ju&shy;rí&shy;di&shy;ca que re&shy;ú&shy;ne mé&shy;to&shy;dos, téc&shy;ni&shy;cas e ma&shy;te&shy;ri&shy;ais para im&shy;plan&shy;tar uma es&shy;tru&shy;tu&shy;ra de tra&shy;ba&shy;lho des&shy;de a ba&shy;se, de&shy;fi&shy;nin&shy;do o que, co&shy;mo, quan&shy;do e por quem ca&shy;da ati&shy;vi&shy;da&shy;de de&shy;ve ser re&shy;a&shy;li&shy;za&shy;da.</p>
 
   <h1 class="echo-word" aria-label="echo">
     <svg class="echo-wordmark" viewBox="0 230.218741 1440 354.859375" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
@@ -1607,13 +1608,19 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
    Cada emissão é um trem de eco (a frente e 1 ou 2 réplicas mais fracas, a distâncias fixas,
    na mesma velocidade); a irregularidade mora no intervalo entre trens e numa oscilação leve
    de velocidade. Na parede o trem bate em cascata.
+   Escala: cada frente nasce enorme (3,4× a altura de chegada, maior que a própria hero, com
+   as pontas cortadas pelas bordas e escondidas atrás da palavra) e encolhe pelo caminho,
+   rápido no início e devagar perto do fim, até chegar menor que o bloco que a recebe:
+   o som difuso do entorno condensado numa estrutura.
    Unidades de desenho: px de uma tela 1920 de largura, escaladas por z. */
 (() => {
   const calmo = matchMedia('(prefers-reduced-motion: reduce)');
-  const MEDIA = 2.1;   // s entre trens, em média (1,4 s a 2,8 s entre vizinhos)
-  const VEL = 78;      // u/s médio; cada trem 0,88× a 1,12× e oscila ±12% no caminho
-  const ALTURA = 300;  // altura da frente (±8% por trem)
-  const CURVA = 66;    // profundidade da meia-lua (±10% por trem)
+  const MEDIA = 1.5;   // s entre trens, em média (1,0 s a 2,0 s entre vizinhos)
+  const VEL = 135;     // u/s médio; cada trem 0,88× a 1,12× e oscila ±12% no caminho
+  const ALTURA = 300;  // altura de referência da frente (±8% por trem)
+  const CURVA = 66;    // profundidade de referência da meia-lua (±10% por trem)
+  const NASCE = 3.4, CHEGA = .62; // tamanho na origem e na parede, em relação à referência
+  const tamanho = (p, parede) => CHEGA + (NASCE - CHEGA) * (1 - Math.min(1, Math.max(0, p / parede))) ** 1.6;
   const ECOS = [[0, 1], [26, .5], [50, .24]]; // [atrás da frente, intensidade relativa]
   const PEDACOS = 28;
   const liso = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
@@ -1651,30 +1658,33 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     }
     cx.setTransform(1, 0, 0, 1, 0, 0);
     cx.clearRect(0, 0, cv.width, cv.height);
-    // geometria lida do DOM: topo do "h" = topo da palavra; escala pela largura e pelo campo livre
+    // geometria lida do DOM: topo do "h" = topo da palavra; escala pela largura, como a palavra
+    // (as frentes nascem maiores que a hero de propósito: bordas e palavra cortam as pontas)
     const topoH = palavra.getBoundingClientRect().top - cv.getBoundingClientRect().top;
-    const z = Math.min(W / 1920, topoH / 561);
+    const z = W / 1920;
     if (z <= 0) return;
     const parede = texto.offsetLeft / z - 28;
     if (parede < 240) return; // celular: o bloco ocupa a largura toda, sem campo para as ondas
     const yAlvo = (texto.offsetTop + texto.offsetHeight / 2) / z, CAMPO = topoH * .55 / z;
     cx.setTransform(res * z, 0, 0, res * z, 0, 0);
     cx.lineCap = 'butt';
-    const vida = (parede + CURVA * 1.1 + 110) / (VEL * .88 * .88);
+    const vida = (parede + CURVA * 1.1 * CHEGA + 110) / (VEL * .88 * .88);
     for (let n = Math.floor((t - vida) / MEDIA) - 1; n <= Math.floor(t / MEDIA) + 1; n++) {
       const T = trem(n), tau = t - T.t0;
       if (tau < 0) continue;
       const k = .12 * T.v / T.w; // velocidade v·(1 + .12·cos): sempre para a frente
       const lider = T.v * tau + k * (Math.sin(T.w * tau + T.f) - Math.sin(T.f));
+      const gL = tamanho(lider, parede); // as réplicas guardam a distância na escala da frente
       for (let e = 0; e < T.ecos; e++) {
         const [atras, forca] = ECOS[e];
-        const p = lider - atras;
-        if (p <= 0 || p > parede + T.curva + 60) continue;
+        const p = lider - atras * gL;
+        const g = tamanho(p, parede), curva = T.curva * g, alto = T.h * g;
+        if (p <= 0 || p > parede + curva + 60) continue;
         const conv = liso(0, 1, p / parede);
         const yc = CAMPO + T.dy * (1 - conv) + (yAlvo - CAMPO) * conv;
-        const base = .22 * forca * liso(0, 220, p);
+        const base = .22 * forca * liso(0, 260, p);
         if (base < .004) continue;
-        const arco = s => p - T.curva * (1 - Math.sqrt(Math.max(0, 1 - s * s)));
+        const arco = s => p - curva * (1 - Math.sqrt(Math.max(0, 1 - s * s)));
         for (let j = 0; j < PEDACOS; j++) {
           const meio = (j + .5) / PEDACOS * 2 - 1;
           const choque = liso(parede, parede + 50, arco(meio));
@@ -1682,12 +1692,12 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
           if (alfa < .004) continue;
           const meia = (1 - .92 * choque) / PEDACOS;
           cx.strokeStyle = `rgba(44,44,44,${Math.min(alfa, .6)})`;
-          cx.lineWidth = (.45 + 1.55 * Math.sqrt(1 - meio * meio)) * (1 + choque);
+          cx.lineWidth = (.45 + 1.55 * Math.sqrt(1 - meio * meio)) * Math.sqrt(g) * (1 + choque);
           cx.beginPath();
           for (let q = 0; q <= 3; q++) {
             const s = meio - meia + 2 * meia * q / 3;
             const x = Math.min(arco(s), parede);
-            const y = yc + s * T.h / 2;
+            const y = yc + s * alto / 2;
             q ? cx.lineTo(x, y) : cx.moveTo(x, y);
           }
           cx.stroke();
