@@ -211,8 +211,9 @@ a:hover{color:#2C2C2C}
 /* =========================================================
    HERO
    A abertura ocupa 100dvh completos. A seção seguinte começa
-   fora do viewport inicial. Apenas a palavra vaza 3dvh além da
-   fronteira, aparecendo quando a rolagem começa.
+   fora do viewport inicial. Apenas a palavra vaza além da fronteira
+   (3.2vw, proporcional ao próprio tamanho), cortada na base e
+   emendando na seção escura seguinte.
    ========================================================= */
 .echo-hero{
   height:100vh;
@@ -224,33 +225,37 @@ a:hover{color:#2C2C2C}
   z-index:2;
 }
 
+/* Bloco descritivo acima do "h": da haste do "h" até a margem direita (o "o" sangra pela
+   direita junto com a palavra). Haste = −6.55vw de sangria + 739.73 u × 113.1vw/1440 = 51.55vw.
+   Justificado; corpo em vw (15.5px em 1920) para quebrar igual em toda largura: maior vão ≈1.1× o espaço. */
 .echo-copy{
   position:absolute;
-  top:36%;
-  right:clamp(18px,2.1vw,34px);
+  /* preso ao topo do "h", não à altura da tela: no app-shell do ARCO a moldura é mais baixa
+     que larga e o "h" (27.87vw de palavra − 3.2vw de sangria) subiria sobre o bloco.
+     4.8em = 3 linhas; 3.4vw de folga; nunca acima de 72px do topo. */
+  top:max(72px,calc(100% - 27.87vw + 3.2vw - 3.4vw - 4.8em));
+  left:51.55vw;
+  right:.73vw;
   z-index:4;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:3px;
-  text-align:right;
-  transform:translateY(-50%);
-}
-.echo-copy p{
   margin:0;
-  font-family:var(--mono);
-  font-size:9px;
-  line-height:1.25;
-  font-weight:500;
-  letter-spacing:.095em;
+  font:400 max(11px,.807vw)/1.6 var(--mono);
+  hyphens:manual; /* hifenização marcada no texto (&shy;): o hyphens:auto não tem dicionário pt em todo navegador */
+  letter-spacing:.08em;
   text-transform:uppercase;
-  white-space:nowrap;
+  text-align:justify;
+  text-wrap:pretty;
+  color:#2C2C2C;
 }
+.echo-copy::selection{background:var(--ink);color:var(--amber)}
+
+/* Ondas: eco que chega do abstrato (esquerda) e bate numa parede antes do bloco.
+   Camada sob o texto e a palavra, sem eventos de ponteiro. */
+.echo-ondas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
 
 .echo-word{
   position:absolute;
   left:50%;
-  bottom:-1.5dvh;
+  bottom:-3.2vw;
   z-index:5;
   transform:translateX(-50%);
   margin:0;
@@ -525,19 +530,13 @@ a:hover{color:#2C2C2C}
   .legal-ops-pill{width:144px;min-height:34px;padding:0 18px}
   .legal-ops-note{right:10px;top:10px;width:calc(100% - 20px);padding:20px}
 }
+/* abaixo de 1100px a haste do "h" deixa o bloco estreito demais para justificar sem vãos:
+   ele ocupa a largura toda (sem campo, as ondas não são desenhadas) */
+@media(max-width:1100px){
+  .echo-copy{top:22%;left:14px;right:14px;font-size:12px}
+}
 @media(max-width:720px){
-  .echo-copy{
-    top:36%;
-    right:14px;
-    gap:2px;
-  }
-  .echo-copy p{
-    font-size:9px;
-    letter-spacing:.085em;
-  }
-  .echo-word{
-    bottom:-1.5dvh;
-  }
+  .echo-copy{font-size:11px}
   .echo-intro{
     padding-top:clamp(68px,9vh,95px);
   }
@@ -1279,10 +1278,8 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       <span class="legal-ops-pill__arrow" aria-hidden="true">→</span>
     </button>
   </div>
-  <div class="echo-copy">
-    <p>From what was heard to what remains.</p>
-    <p>Scattered practices into structure, memory, and procedure.</p>
-  </div>
+  <canvas class="echo-ondas" aria-hidden="true"></canvas>
+  <p class="echo-copy" lang="pt-BR">A le&shy;gal op&shy;er&shy;a&shy;tions meth&shy;od&shy;ol&shy;o&shy;gy that brings to&shy;geth&shy;er meth&shy;ods, tech&shy;niques and ma&shy;te&shy;ri&shy;als to set up a work struc&shy;ture from the ground up, de&shy;fin&shy;ing what, how, when and by whom each ac&shy;tiv&shy;i&shy;ty should be car&shy;ried out.</p>
 
   <h1 class="echo-word" aria-label="echo">
     <svg class="echo-wordmark" viewBox="0 230.218741 1440 354.859375" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
@@ -1296,8 +1293,11 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <g transform="translate(716.826293, 578.249991)">
           <path d="M 22.90625 0 L 22.90625 -348.03125 L 112.109375 -348.03125 L 112.109375 -180.359375 L 103.34375 -194 C 110.8125 -207 119.988281 -218.289062 130.875 -227.875 C 141.757812 -237.457031 154.835938 -244.765625 170.109375 -249.796875 C 185.390625 -254.835938 202.941406 -257.359375 222.765625 -257.359375 C 247.128906 -257.359375 267.675781 -252.644531 284.40625 -243.21875 C 301.144531 -233.800781 313.898438 -220.238281 322.671875 -202.53125 C 331.453125 -184.820312 335.84375 -163.457031 335.84375 -138.4375 L 335.84375 0 L 246.640625 0 L 246.640625 -119.90625 C 246.640625 -142.007812 241.765625 -159.394531 232.015625 -172.0625 C 222.265625 -184.738281 206.179688 -191.078125 183.765625 -191.078125 C 169.140625 -191.078125 156.460938 -188.070312 145.734375 -182.0625 C 135.015625 -176.050781 126.726562 -167.597656 120.875 -156.703125 C 115.03125 -145.816406 112.109375 -133.066406 112.109375 -118.453125 L 112.109375 0 Z"/>
         </g>
-        <!-- o "o" de echo é a marca do ECHO, na altura do glifo original -->
-        <g transform="translate(1082.101 320.891) scale(0.208679)"><clipPath id="echo-o-clip"><ellipse cx="833" cy="633" rx="833" ry="633"/></clipPath><g clip-path="url(#echo-o-clip)"><ellipse cx="833.0" cy="633.0" rx="833.0" ry="633.0" fill="#2C2C2C"/><ellipse cx="1045.8" cy="633.0" rx="987.8" ry="755.9" fill="#FFB627"/><ellipse cx="1057.2" cy="633.0" rx="915.9" ry="696.4" fill="#2C2C2C"/><ellipse cx="1142.3" cy="633.0" rx="917.6" ry="696.9" fill="#FFB627"/><ellipse cx="1141.3" cy="633.0" rx="833.3" ry="633.3" fill="#2C2C2C"/><ellipse cx="833.5" cy="633.0" rx="416.5" ry="316.5" fill="#FFB627"/></g></g>
+        <!-- o "o" de echo é a marca do ECHO, na altura do glifo original. As meias-luas vazadas
+             são ondas viradas para "(": o que ecoou depois. Mesmas elipses de antes, agora como
+             máscara: uma elipse escura com vazados reais (mostram o fundo). A pilha pintada
+             deixava fio escuro na borda de cada camada recortada. -->
+        <g transform="translate(1082.101 320.891) scale(0.208679)"><mask id="echo-o-vazado" maskUnits="userSpaceOnUse" x="-10" y="-10" width="1686" height="1286"><ellipse cx="833.0" cy="633.0" rx="833.0" ry="633.0" fill="#fff"/><ellipse cx="1045.8" cy="633.0" rx="987.8" ry="755.9" fill="#000"/><ellipse cx="1057.2" cy="633.0" rx="915.9" ry="696.4" fill="#fff"/><ellipse cx="1142.3" cy="633.0" rx="917.6" ry="696.9" fill="#000"/><ellipse cx="1141.3" cy="633.0" rx="833.3" ry="633.3" fill="#fff"/><ellipse cx="833.5" cy="633.0" rx="416.5" ry="316.5" fill="#000"/></mask><ellipse cx="833" cy="633" rx="833" ry="633" fill="#2C2C2C" mask="url(#echo-o-vazado)"/></g>
       </g>
     </svg>
   </h1>
@@ -1596,6 +1596,132 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </section>
 
 </x-dc>
+
+<script>
+/* ONDAS DA HERO — os ecos de diferentes gabinetes convergem para uma estrutura.
+   Frentes ")" no mesmo desenho das meias-luas do "o" (grossas no centro, finas nas pontas),
+   mas viradas para o lado oposto: saem do abstrato (esquerda) e vão até o bloco, o ponto final
+   que recebe os ecos. O "o" mantém seu lado "(": é o que ecoou depois, a metodologia
+   transmitida ao final ("Rodou por outros 30 dias. Mas ecoou: foi transmitido ao gabinete
+   que nos sucedeu.").
+   A parede fica 28 u antes do texto: o centro bate primeiro, a frente achata reta contra ela
+   e o impacto corre até as pontas, acendendo e desfazendo cada trecho em pó.
+   Cada emissão é um trem de eco (a frente e 1 ou 2 réplicas mais fracas, a distâncias fixas,
+   na mesma velocidade); a irregularidade mora no intervalo entre trens e numa oscilação leve
+   de velocidade. Na parede o trem bate em cascata.
+   Escala: cada frente nasce enorme (3,4× a altura de chegada, maior que a própria hero, com
+   as pontas cortadas pelas bordas e escondidas atrás da palavra) e encolhe pelo caminho,
+   rápido no início e devagar perto do fim, até chegar menor que o bloco que a recebe:
+   o som difuso do entorno condensado numa estrutura.
+   Unidades de desenho: px de uma tela 1920 de largura, escaladas por z. */
+(() => {
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)');
+  const MEDIA = 1.5;   // s entre trens, em média (1,0 s a 2,0 s entre vizinhos)
+  const VEL = 135;     // u/s médio; cada trem 0,88× a 1,12× e oscila ±12% no caminho
+  const ALTURA = 300;  // altura de referência da frente (±8% por trem)
+  const CURVA = 66;    // profundidade de referência da meia-lua (±10% por trem)
+  const NASCE = 3.4, CHEGA = .62; // tamanho na origem e na parede, em relação à referência
+  const tamanho = (p, parede) => CHEGA + (NASCE - CHEGA) * (1 - Math.min(1, Math.max(0, p / parede))) ** 1.6;
+  const ECOS = [[0, 1], [26, .5], [50, .24]]; // [atrás da frente, intensidade relativa]
+  const PEDACOS = 28;
+  const liso = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+  const ruido = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
+  const trem = n => ({
+    t0: (n + (ruido(n + 19) - .5) * .7) * MEDIA,
+    v: VEL * (.88 + .24 * ruido(n + 11)),
+    w: .8 + .6 * ruido(n + 23),
+    f: ruido(n + 29) * 6.283,
+    curva: CURVA * (.9 + .2 * ruido(n + 31)),
+    h: ALTURA * (.92 + .16 * ruido(n)),
+    dy: (ruido(n + 7) - .5) * 80,
+    ecos: ruido(n + 41) < .45 ? 2 : 3,
+  });
+
+  // a hero é montada pelo x-dc depois deste script: os elementos são buscados sob demanda
+  let cv, cx, texto, palavra, W = 0, H = 0, res = 1;
+  const pegar = () => {
+    if (cv && cv.isConnected) return true;
+    cv = document.querySelector('.echo-ondas');
+    texto = document.querySelector('.echo-copy');
+    palavra = document.querySelector('.echo-wordmark');
+    if (!cv || !texto || !palavra) return false;
+    cx = cv.getContext('2d'); W = 0;
+    visto.observe(cv);
+    return true;
+  };
+
+  function desenhar(t) {
+    if (!pegar()) return;
+    const w = cv.clientWidth, h = cv.clientHeight;
+    if (w !== W || h !== H) {
+      W = w; H = h; res = Math.min(2, devicePixelRatio || 1);
+      cv.width = Math.round(W * res); cv.height = Math.round(H * res);
+    }
+    cx.setTransform(1, 0, 0, 1, 0, 0);
+    cx.clearRect(0, 0, cv.width, cv.height);
+    // geometria lida do DOM: topo do "h" = topo da palavra; escala pela largura, como a palavra
+    // (as frentes nascem maiores que a hero de propósito: bordas e palavra cortam as pontas)
+    const topoH = palavra.getBoundingClientRect().top - cv.getBoundingClientRect().top;
+    const z = W / 1920;
+    if (z <= 0) return;
+    const parede = texto.offsetLeft / z - 28;
+    if (parede < 240) return; // celular: o bloco ocupa a largura toda, sem campo para as ondas
+    const yAlvo = (texto.offsetTop + texto.offsetHeight / 2) / z, CAMPO = topoH * .55 / z;
+    cx.setTransform(res * z, 0, 0, res * z, 0, 0);
+    cx.lineCap = 'butt';
+    const vida = (parede + CURVA * 1.1 * CHEGA + 110) / (VEL * .88 * .88);
+    for (let n = Math.floor((t - vida) / MEDIA) - 1; n <= Math.floor(t / MEDIA) + 1; n++) {
+      const T = trem(n), tau = t - T.t0;
+      if (tau < 0) continue;
+      const k = .12 * T.v / T.w; // velocidade v·(1 + .12·cos): sempre para a frente
+      const lider = T.v * tau + k * (Math.sin(T.w * tau + T.f) - Math.sin(T.f));
+      const gL = tamanho(lider, parede); // as réplicas guardam a distância na escala da frente
+      for (let e = 0; e < T.ecos; e++) {
+        const [atras, forca] = ECOS[e];
+        const p = lider - atras * gL;
+        const g = tamanho(p, parede), curva = T.curva * g, alto = T.h * g;
+        if (p <= 0 || p > parede + curva + 60) continue;
+        const conv = liso(0, 1, p / parede);
+        const yc = CAMPO + T.dy * (1 - conv) + (yAlvo - CAMPO) * conv;
+        const base = .22 * forca * liso(0, 260, p);
+        if (base < .004) continue;
+        const arco = s => p - curva * (1 - Math.sqrt(Math.max(0, 1 - s * s)));
+        for (let j = 0; j < PEDACOS; j++) {
+          const meio = (j + .5) / PEDACOS * 2 - 1;
+          const choque = liso(parede, parede + 50, arco(meio));
+          const alfa = base * (1 - choque) ** 1.4 * (1 + 2.6 * Math.sin(Math.PI * Math.min(1, choque * 2.5)));
+          if (alfa < .004) continue;
+          const meia = (1 - .92 * choque) / PEDACOS;
+          cx.strokeStyle = `rgba(44,44,44,${Math.min(alfa, .6)})`;
+          cx.lineWidth = (.45 + 1.55 * Math.sqrt(1 - meio * meio)) * Math.sqrt(g) * (1 + choque);
+          cx.beginPath();
+          for (let q = 0; q <= 3; q++) {
+            const s = meio - meia + 2 * meia * q / 3;
+            const x = Math.min(arco(s), parede);
+            const y = yc + s * alto / 2;
+            q ? cx.lineTo(x, y) : cx.moveTo(x, y);
+          }
+          cx.stroke();
+        }
+      }
+    }
+  }
+
+  // roda só com a hero na tela; com movimento reduzido fica um quadro fixo
+  let quadro = 0, naTela = true;
+  const visto = new IntersectionObserver(es => { naTela = es[0].isIntersecting; iniciar(); });
+  const rodar = ms => { desenhar(ms / 1000); quadro = requestAnimationFrame(rodar); };
+  const fixo = () => desenhar(7.3);
+  function iniciar() {
+    cancelAnimationFrame(quadro); quadro = 0;
+    if (calmo.matches) { if (!pegar()) quadro = requestAnimationFrame(iniciar); else fixo(); return; }
+    if (naTela) quadro = requestAnimationFrame(rodar);
+  }
+  addEventListener('resize', () => { if (calmo.matches) fixo(); });
+  calmo.addEventListener('change', iniciar);
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(iniciar);
+})();
+</script>
 
 <div class="echo-preview" id="echo-preview" role="dialog" aria-modal="true" aria-labelledby="echo-preview-title" hidden>
   <div class="echo-preview__bar">
