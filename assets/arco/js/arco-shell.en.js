@@ -556,7 +556,7 @@
     footer.className = 'arco-unified-footer';
     footer.setAttribute('aria-label','ARCO closing');
     footer.innerHTML = `
-      <p class="arco-unified-footer__privacy">Visits measured by Google&nbsp;Analytics</p>
+      <p class="arco-unified-footer__privacy"><span>Traffic tracked</span> <i aria-hidden="true">|</i> <span>Google&nbsp;Analytics</span></p>
       <p class="arco-unified-footer__seal">ARCO © <time datetime="2026">2026</time></p>
       <button class="arco-unified-footer__method" type="button" aria-label="Open DATA — Base &amp; Method">
         <span>BASE &amp; METHOD:</span><strong>DATA</strong>
@@ -624,6 +624,8 @@
 @media(max-width:560px){
   .arco-unified-footer__seal{font-size:.52rem}
   .arco-unified-footer__privacy{max-width:calc(50% - 3.4rem);font-size:.4rem;letter-spacing:.05em}
+  .arco-unified-footer__privacy i{display:none}
+  .arco-unified-footer__privacy span{display:block}
   .arco-unified-footer__method span{display:none}
   .arco-unified-footer__method strong::before{content:"BASE & METHOD: ";font-family:"Azeret Mono",ui-monospace,monospace;font-size:.46rem;font-weight:500;letter-spacing:.06em;color:rgba(252,252,252,.58)}
 }
