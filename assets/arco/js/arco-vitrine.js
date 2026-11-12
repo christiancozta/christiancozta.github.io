@@ -12,7 +12,7 @@
   const SYSTEMS = ["data", "echo", "atrio"];
   const clamp = n => Math.max(0, Math.min(1, n));
   const ease = n => { const t = clamp(n); return t * t * (3 - 2 * t); };
-  let stopped = false, chosen = "", index = 0, phase = "initial", elapsed = 0;
+  let stopped = false, chosen = "", index = 0, phase = "initial", elapsed = 0, idle = false, viewportIndex = -1;
   let frame = 0, previous = 0, hovering = false, focused = false;
   const surfaces = [];
 
@@ -53,7 +53,7 @@
       const baseline = y + logoHeight;
       art = `<rect width="1000" height="${h}" fill="#4A90E2"/><rect y="${baseline}" width="1000" height="${h}" fill="#FCFCFC"/>`;
       // The reflected lettering stretches away from the shared baseline.
-      art += `<g transform="translate(${x} ${baseline}) matrix(1 0 .28 -2.5 0 ${logoHeight * 2.5})" filter="url(#arx-data-ink-data)">${img("data", 0, 0, logoWidth, logoHeight)}</g>`;
+      art += `<g transform="translate(${x} ${baseline * 1.55}) matrix(1 0 .08 -.55 0 0)" opacity=".4" filter="url(#arx-data-ink-data)">${img("data", 0, 0, logoWidth, logoHeight)}</g>`;
       art += img("data", x, y, logoWidth, logoHeight);
       mask = Array.from({length:16}, (_, n) => `<rect data-bar="${n}" x="${n * 62.5}" y="${h}" width="63" height="0" fill="white"/>`).join("");
     } else if (sys === "echo"){
@@ -156,12 +156,28 @@
       const r = rail.getBoundingClientRect();
       if (r.width >= innerWidth * .8 && r.top <= top) top = Math.max(top, r.bottom);
     }
-    return cols.every(col => {
+    const visible = cols.map((col, i) => {
       const r = col.getBoundingClientRect();
-      return r.width > 0 && r.height > 0 && r.top >= top - .5 && r.bottom <= bottom + .5 && r.left >= -.5 && r.right <= innerWidth + .5;
-    });
+      return r.width > 0 && r.height > 0 && r.top >= top - .5 && r.bottom <= bottom + .5 && r.left >= -.5 && r.right <= innerWidth + .5 ? i : -1;
+    }).filter(i => i >= 0);
+    if (visible.length === cols.length){ viewportIndex = -1; return true; }
+    // On a narrow, vertically stacked layout, reveal the card the reader has
+    // brought fully into view. Never scroll the page or animate an unseen card.
+    if (innerWidth <= 640 && visible.length){
+      const candidate = visible.reduce((best, i) => {
+        const r = cols[i].getBoundingClientRect(), center = (top + bottom) / 2;
+        return Math.abs((r.top + r.bottom) / 2 - center) < Math.abs((cols[best].getBoundingClientRect().top + cols[best].getBoundingClientRect().bottom) / 2 - center) ? i : best;
+      }, visible[0]);
+      if (candidate !== viewportIndex){
+        viewportIndex = candidate; index = candidate; phase = "initial"; elapsed = 0; idle = false;
+        root.dataset.showcase = "CLEAN"; clear();
+      }
+      return !idle;
+    }
+    viewportIndex = -1;
+    return false;
   }
-  const canRun = () => !stopped && !motion.matches && !document.hidden && !hovering && !focused && fullyVisible();
+  const canRun = () => !stopped && !idle && !motion.matches && !document.hidden && !hovering && !focused && fullyVisible();
   function next(){
     elapsed = 0;
     if (phase === "initial" || phase === "interval" || phase === "cycle"){
@@ -170,6 +186,7 @@
       phase = "hold"; root.dataset.showcase = "AUTO";
     } else if (phase === "hold") phase = "retract";
     else {
+      if (innerWidth <= 640 && viewportIndex >= 0){ idle = true; root.dataset.showcase = "CLEAN"; return; }
       index = (index + 1) % cols.length;
       phase = index ? "interval" : "cycle";
       root.dataset.showcase = "AUTO";
