@@ -1834,6 +1834,9 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 }
 .arx[data-state="formed"] .arx-tech path.is-tl,
 .arx.is-drawn .arx-tech path.is-tl{ opacity:1; }
+/* com um sistema aberto, o bloco escolhido vai para o início e a cronologia
+   deixa de valer: as setas somem e voltam ao recolher */
+.arx:not([data-sel=""]) .arx-tech path.is-tl{ opacity:0; transition:opacity 420ms var(--arx-ease); }
 /* a seta saiu do canto dos blocos: virou o marco da linha do tempo */
 .arx-col__plus{ display:none; }
 

@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const URL = process.env.ARCO_URL || 'http://localhost:8000/arco.html';
 const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
-const SHOW = 6840, XF = 760;
+const SHOW = 5400, XF = 700;
 
 (async () => {
   const browser = await chromium.launch({executablePath, headless:true, args:['--no-sandbox']});

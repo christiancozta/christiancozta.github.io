@@ -25,6 +25,17 @@
    na célula Movimento. Os selos mantêm as próprias cores. */
 .arx[data-showcase] .arx-col[data-exhibiting="atrio"] .arx-col__txt,
 .arx[data-showcase] .arx-mov[data-exhibiting="atrio"] p{ color:#000000!important; }
+/* a tinta muda no mesmo tempo da troca cruzada, sem salto */
+.arx[data-showcase] .arx-col__txt,
+.arx[data-showcase] .arx-mov p{ transition:color 700ms var(--arx-ease), opacity 180ms var(--arx-ease); }
+/* o selo do sistema em exibição ganha um fio de papel: não some no campo da
+   própria cor; fora isso, é o mesmo selo do bloco parado */
+.arx[data-showcase] .arx-col[data-exhibiting="data"] .b-data,
+.arx[data-showcase] .arx-col[data-exhibiting="echo"] .b-echo,
+.arx[data-showcase] .arx-col[data-exhibiting="atrio"] .b-atrio,
+.arx[data-showcase] .arx-mov[data-exhibiting="data"] .b-data,
+.arx[data-showcase] .arx-mov[data-exhibiting="echo"] .b-echo,
+.arx[data-showcase] .arx-mov[data-exhibiting="atrio"] .b-atrio{ box-shadow:0 0 0 1.5px #FCFCFC; }
 /* Sob o cursor, quem responde é a vitrine: sem o bloco de cor cheia do arco
    formado. */
 .arx[data-showcase][data-sel=""] .arx-col.is-preview{
@@ -32,10 +43,25 @@
 }
 .arx[data-showcase][data-sel=""] .arx-col.is-preview .arx-col__txt{ color:var(--arx-text); }
 /* O nome do sistema em exibição volta à coroa, na cor do sistema e
-   transparente, como no hover do repouso: na ordem e sob o cursor. */
-.arx[data-showcase][data-sel=""][data-exhibit="data"] .arx-name [data-sys="data"],
-.arx[data-showcase][data-sel=""][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.26; transform:translate(-50%, 0); }
-.arx[data-showcase][data-sel=""][data-exhibit="echo"] .arx-name [data-sys="echo"]{ opacity:.55; transform:translate(-50%, 0); }
+   transparente, sobre o trecho do bloco ativo; na troca, desliza de um terço
+   ao outro no tempo da troca cruzada. A opacidade de cada cor dá o mesmo
+   contraste (cerca de 1,35:1) sobre o trecho já tingido — o amarelo, mais
+   claro, pede mais. Sem trecho de coroa (celular, blocos de baixo), não há nome. */
+.arx[data-showcase][data-sel=""] .arx-name span{
+  left:var(--vit-name-x, 50%);
+  font-size:calc(1em * var(--vit-name-k, 1));
+  transition:opacity 380ms var(--arx-ease), transform 520ms var(--arx-spring),
+    left 700ms cubic-bezier(.22, 1, .36, 1), font-size 700ms cubic-bezier(.22, 1, .36, 1);
+}
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="data"] .arx-name [data-sys="data"]{ opacity:.35; transform:translate(-50%, 0); }
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="echo"] .arx-name [data-sys="echo"]{ opacity:.74; transform:translate(-50%, 0); }
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.29; transform:translate(-50%, 0); }
+/* o hover do repouso não acende um nome fora do trecho */
+.arx[data-showcase][data-sel=""]:not([data-exhibit-crown]) .arx-name span{ opacity:0; }
+/* pista de interação no desktop: o título do bloco se sublinha no hover */
+@media (hover:hover){
+  .arx[data-showcase] .arx-col:hover .arx-col__mov{ text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.2em; }
+}
 /* Selecionado, o bloco mantém a animação no lugar do fundo claro do arco;
    a coroa, essa sim, fica plena na cor do sistema. */
 .arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ background-color:transparent; order:-1; }

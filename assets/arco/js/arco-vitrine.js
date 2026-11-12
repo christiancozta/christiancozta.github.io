@@ -20,8 +20,8 @@
   const cols = [...group.querySelectorAll(".arx-col")];
   const home = root.closest(".view");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  const SHOW = 6840;                                           // tempo de cada sistema na ordem
-  const XF = 760;                                              // troca cruzada entre blocos
+  const SHOW = 5400;                                           // tempo de cada sistema na ordem
+  const XF = 700;                                              // troca cruzada entre blocos
   const TINT = .24;                                            // cor do sistema sobre o papel
   const SYSTEMS = ["data", "echo", "atrio"];
   const clamp = n => Math.max(0, Math.min(1, n));
@@ -81,7 +81,7 @@
      A aresta graduada atravessa o campo da esquerda para a direita. Uma
      passagem leva o dia à noite (o branco vira azul atrás dela); a seguinte
      devolve o dia; e assim alterna enquanto a vitrine roda. */
-  const PASS = 2400, SWEEP = .82;
+  const PASS = SHOW / 3, SWEEP = .82;   // três passagens inteiras por exibição
   const glide = n => { const t = clamp(n); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   function ruler(mt){
     const k = Math.floor(mt / PASS), x = glide((mt - k * PASS) / PASS / SWEEP);
@@ -120,14 +120,10 @@
     P:2.6 + 2.4 * ruido(i + 7), lam:3.4 + 2.8 * ruido(i + 9), a:.5 + .25 * ruido(i + 13)
   }));
   const shown = el => el && el.getClientRects().length;
-  function echoGrid(s, F){
+  // blocos de texto em coordenadas do campo: título e parágrafo do bloco; com
+  // o sistema aberto, também o texto do Movimento
+  function textBlocks(s){
     const txt = s.col.querySelector(".arx-col__txt");
-    const cs = getComputedStyle(txt);
-    s.ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-    const adv = s.ctx.measureText("M").width + (parseFloat(cs.letterSpacing) || 0);
-    const passo = 2 * adv, linha = parseFloat(cs.lineHeight) || adv * 2.4;
-    // blocos que absorvem a agitação, em coordenadas do campo: título e
-    // parágrafo do bloco; com o sistema aberto, também o texto do Movimento
     const c = s.col.getBoundingClientRect();
     const rel = (r, ox, oy) => [r.left - ox, r.top - oy, r.right - ox, r.bottom - oy];
     const hd = s.col.querySelector(".arx-col__head").getBoundingClientRect();
@@ -141,6 +137,16 @@
         blocks.push([r[0], r[1] + s.h, r[2], r[3] + s.h]);
       });
     }
+    return blocks;
+  }
+  function echoGrid(s, F){
+    const txt = s.col.querySelector(".arx-col__txt");
+    const cs = getComputedStyle(txt);
+    s.ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const adv = s.ctx.measureText("M").width + (parseFloat(cs.letterSpacing) || 0);
+    const passo = 2 * adv, linha = parseFloat(cs.lineHeight) || adv * 2.4;
+    const c = s.col.getBoundingClientRect();
+    const blocks = textBlocks(s);
     const L = blocks[0][0], T = shown(txt) ? txt.getBoundingClientRect().top - c.top : blocks[0][1];
     const pts = [];
     for (let j = Math.floor((F.top - T) / linha); T + j * linha < F.bottom + linha; j++){
@@ -155,11 +161,15 @@
     }
     return {passo, linha, top:F.top, bottom:F.bottom, pts:new Float32Array(pts)};
   }
-  const DROP = 1.7;    // segundos, em média, entre gotas
-  function echoPulses(g, W, t, life){
+  // gotas ao acaso, mas com intervalo entre .9 e 1.6 s: nunca há campo parado
+  const DROP = 1.25, JITTER = .35;
+  const T0 = 3;        // relógio do campo no início de cada exibição
+  function echoPulses(g, W, t, life, h){
     const list = [], H = g.bottom - g.top;
+    // a primeira gota cai logo na entrada, no meio do bloco
+    if (t - (T0 + .05) >= 0 && t - (T0 + .05) <= life) list.push({x:W / 2, y:h * .5, t0:T0 + .05, a:.42, lam:3.8, sig:3.2});
     for (let k = Math.floor((t - life) / DROP) - 1; k <= Math.floor(t / DROP) + 1; k++){
-      const t0 = (k + (ruido(k * 7 + 1) - .5) * .7) * DROP, age = t - t0;
+      const t0 = k * DROP + (ruido(k * 7 + 1) - .5) * JITTER, age = t - t0;
       if (age < 0 || age > life) continue;
       list.push({x:(.06 + .88 * ruido(k * 13 + 2)) * W, y:g.top + (.06 + .88 * ruido(k * 19 + 3)) * H, t0,
         a:.38 + .18 * ruido(k * 23 + 4), lam:3.6 + ruido(k * 29 + 5), sig:3.2});
@@ -176,7 +186,7 @@
   function echoField(s, F, t){
     const key = `${F.top}|${F.bottom}|${s.w}`;
     if (!s.grid || s.gridKey !== key){ s.grid = echoGrid(s, F); s.gridKey = key; }
-    const g = s.grid, ps = echoPulses(g, s.w, t, (s.w / g.passo + 40) / VEL);
+    const g = s.grid, ps = echoPulses(g, s.w, t, (s.w / g.passo + 40) / VEL, s.h);
     const set = Array.from({length:16}, () => []);
     const half = g.linha * .14;
     for (let i = 0; i < g.pts.length; i += 4){
@@ -234,6 +244,17 @@
     }
     ctx.fillStyle = "rgba(252,252,252,.38)"; ctx.fill(paper);
     ctx.fillStyle = "rgba(44,44,44,.12)"; ctx.fill(ink);
+    // atrás do texto o xadrez cede metade: a legibilidade não fica só com o preto
+    const key = `${s.w}|${s.h}|${H}`;
+    if (s.blocksKey !== key){ s.blocks = textBlocks(s); s.blocksKey = key; }
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-out";
+    for (const [l, t, r, b] of s.blocks) for (let n = 0; n < 4; n++){
+      const e = 10 - n * 3;          // borda em degraus, sem corte seco
+      ctx.fillStyle = "rgba(0,0,0,.16)";
+      ctx.fillRect(l - e, t - e, r - l + 2 * e, b - t + 2 * e);
+    }
+    ctx.restore();
   }
 
   /* ---------- medida e pintura ---------- */
@@ -253,12 +274,50 @@
       s.color = getComputedStyle(s.col).getPropertyValue("--c").trim() || "#2C2C2C";
       s.grid = null;
       fit(s.canvas, s.w, s.h);
+      s.blocksKey = "";
       if (s.mov){
         const m = s.mov.layer.getBoundingClientRect();   // inclui a borda de cima da célula
         s.mov.w = m.width; s.mov.h = m.height;
         s.movOn = root.dataset.sel === s.sys && m.height > 0;
         fit(s.mov.canvas, s.mov.w, s.mov.h);
       }
+    });
+    fitNames();
+  }
+  /* o nome cabe no trecho: no máximo 82% da largura do bloco e inteiro sob a
+     curva do arco, que é baixa nas pontas. Escala k ≤ 1 por sistema. */
+  const names = Object.fromEntries(SYSTEMS.map(sys => [sys, root.querySelector(`.arx-name [data-sys="${sys}"]`)]));
+  const extra = root.querySelector(".arx-arc__extra");
+  function fitNames(){
+    if (!extra || !extra.getTotalLength) return;
+    const vb = extra.ownerSVGElement.viewBox.baseVal, sx = skyW / vb.width, sy = skyH / vb.height;
+    const len = extra.getTotalLength(), pts = [];
+    for (let i = 0; i <= 120; i++){ const p = extra.getPointAtLength(len * i / 120); pts.push([p.x * sx, skyH - p.y * sy]); }
+    const rise = x => {   // altura do arco sobre a base em x (px da coroa)
+      for (let i = 1; i < pts.length; i++) if (pts[i][0] >= x){
+        const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+        return y0 + (y1 - y0) * ((x - x0) / ((x1 - x0) || 1));
+      }
+      return 0;
+    };
+    const box = root.querySelector(".arx-name");
+    const bottom = box ? parseFloat(getComputedStyle(box).bottom) || 0 : 0;
+    // mede cada nome no tamanho base, sem a escala do sistema em exibição
+    const was = root.style.getPropertyValue("--vit-name-k");
+    root.style.setProperty("--vit-name-k", "1");
+    const base = Object.fromEntries(SYSTEMS.map(sys => [sys, names[sys] ? [names[sys].offsetWidth, names[sys].offsetHeight] : [0, 0]]));
+    if (was) root.style.setProperty("--vit-name-k", was); else root.style.removeProperty("--vit-name-k");
+    surfaces.forEach(s => {
+      const el = names[s.sys];
+      if (!el || !s.w) return;
+      const [w, h] = base[s.sys];
+      const cx = s.x + s.w / 2;
+      let k = Math.min(1, .82 * s.w / (w || 1));
+      for (; k > .3; k -= .02){
+        const half = k * w / 2, top = bottom + k * h + 6;
+        if (rise(cx - half) >= top && rise(cx + half) >= top) break;
+      }
+      s.nameK = k;
     });
   }
   function clipCrown(s){
@@ -272,16 +331,19 @@
   }
   // um plano (bloco, coroa ou célula) pinta o campo inteiro, recortado em R
   function region(ctx, s, F, mt, a, R, motif){
-    if (s.sys === "data") measureBand(ctx, s, ruler(mt), R.top, R.bottom, F.top, a);
-    else { ctx.globalAlpha = TINT * a; ctx.fillStyle = s.color; ctx.fillRect(0, R.top, s.w, R.bottom - R.top); }
+    if (s.sys === "data"){ measureBand(ctx, s, ruler(mt), R.top, R.bottom, F.top, a); return; }
+    ctx.save();
     ctx.globalAlpha = a;
     if (motif) motif(ctx, R);
-    ctx.globalAlpha = 1;
+    // a cor do sistema por baixo do desenho (o xadrez recorta a si, não a ela)
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.globalAlpha = TINT * a; ctx.fillStyle = s.color; ctx.fillRect(0, R.top, s.w, R.bottom - R.top);
+    ctx.restore();
   }
   // pinta o bloco e a célula (opacidade pela camada) e o trecho da coroa (alfa no plano único)
   function paint(s, mt, a){
     const F = extent(s);
-    const echo = s.sys === "echo" ? echoField(s, F, 3 + mt / 1000) : null;
+    const echo = s.sys === "echo" ? echoField(s, F, T0 + mt / 1000) : null;
     const motif = echo ? ctx => echo(ctx) : s.sys === "atrio" ? (ctx, R) => { if (R.top >= 0) floor(ctx, s, mt, F.bottom); } : null;
     const g = s.ctx;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -308,6 +370,7 @@
       if (mov){ delete mov.host.dataset.exhibiting; mov.layer.style.opacity = "0"; }
     });
     delete root.dataset.exhibit;
+    delete root.dataset.exhibitCrown;
     skyCtx.setTransform(1, 0, 0, 1, 0, 0);
     skyCtx.clearRect(0, 0, sky.width, sky.height);
   }
@@ -326,7 +389,14 @@
       if (s.movOn){ s.mov.host.dataset.exhibiting = s.sys; s.mov.layer.style.opacity = String(a); }
       paint(s, mt, a);
     }
-    root.dataset.exhibit = surfaces[cur].sys;
+    const c = surfaces[cur];
+    root.dataset.exhibit = c.sys;
+    // o nome na coroa fica sobre o trecho do bloco ativo; sem trecho, não aparece
+    if (c.under && !root.dataset.sel){
+      root.dataset.exhibitCrown = "";
+      root.style.setProperty("--vit-name-x", `${c.x + c.w / 2}px`);
+      root.style.setProperty("--vit-name-k", String(c.nameK || 1));
+    } else delete root.dataset.exhibitCrown;
   }
 
   /* ---------- quando roda ---------- */

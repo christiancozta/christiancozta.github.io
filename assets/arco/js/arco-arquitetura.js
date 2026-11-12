@@ -429,13 +429,13 @@
 
     /* LINHA DO TEMPO na base: um marco por movimento, no centro de cada vão.
        O marco é a seta que antes ficava no canto de cada bloco, agora sem
-       estado: só aponta o sentido do tempo, como a ponta da linha. */
+       estado: só aponta o sentido do tempo. */
     [0, 1, 2].forEach(i => {
       const cx = W * (i * 2 + 1) / 6;
       const node = techNode(`tl-${i}`, "path", `is-tl is-tl--${i}`, 1550 + i * 140);
       node.setAttribute("d", `M${(cx - 3.4).toFixed(1)} ${(H - 4.4).toFixed(1)}L${(cx + 4.2).toFixed(1)} ${H.toFixed(1)}L${(cx - 3.4).toFixed(1)} ${(H + 4.4).toFixed(1)}Z`);
     });
-    line("tl-ar", "is-tl-line", 1980, [[W - 10, H - 3.8], [W - 2, H], [W - 10, H + 3.8]]);
+    /* sem seta na ponta: as três setas já dão o sentido do tempo */
 
     ["ang-lt","ang-rt","ratio","scale"].forEach(key => keepAboveCurve(key, W, H));
     for (const key of techNodes.keys()) if (key.startsWith("hm-t")) keepAboveCurve(key, W, H);
