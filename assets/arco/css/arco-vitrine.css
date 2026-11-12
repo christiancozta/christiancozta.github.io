@@ -16,15 +16,41 @@
 .arx[data-showcase] .arx-col[data-exhibiting] .arx-col__mov,
 .arx[data-showcase] .arx-col[data-exhibiting] .arx-col__n{ color:#2C2C2C; }
 /* a curva interna do arco acompanha o sistema em exibição */
-.arx[data-showcase]:not([data-reading])[data-exhibit="data"] .arx-arc__intra{ stroke:var(--arx-data); }
-.arx[data-showcase]:not([data-reading])[data-exhibit="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
-.arx[data-showcase]:not([data-reading])[data-exhibit="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
-/* Hover e foco devolvem a leitura, sem avançar o relógio da vitrine. */
-.arx[data-showcase][data-reading] .arx-col .arx-vitrine,
-.arx[data-showcase][data-reading][data-exhibit] .arx-vitrine-coroa{ visibility:hidden; }
+.arx[data-showcase][data-sel=""][data-exhibit="data"] .arx-arc__intra{ stroke:var(--arx-data); }
+.arx[data-showcase][data-sel=""][data-exhibit="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
+.arx[data-showcase][data-sel=""][data-exhibit="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
+/* No bloco em animação, o selo do projeto perde a cor e vira texto comum;
+   o parágrafo de Tecnologia vai a preto pleno sobre o xadrez. */
+.arx[data-showcase][data-sel=""] .arx-col[data-exhibiting] .arx-col__txt :is(.b-data, .b-echo, .b-atrio){
+  background:none!important; color:inherit!important;
+  padding:0!important; margin:0!important; box-shadow:none!important;
+  font-weight:inherit;
+}
+.arx[data-showcase][data-sel=""] .arx-col[data-exhibiting="atrio"] .arx-col__txt{ color:#000000; }
+/* Sob o cursor, quem responde é a vitrine: sem o bloco de cor cheia do arco
+   formado e sem o nome do sistema na coroa. */
+.arx[data-showcase][data-sel=""] .arx-col.is-preview{
+  background-color:transparent; --arx-on:inherit; --arx-on-soft:inherit;
+}
+.arx[data-showcase][data-sel=""] .arx-col.is-preview .arx-col__txt{ color:var(--arx-text); }
+.arx[data-showcase][data-sel=""] .arx-col.is-preview[data-exhibiting="atrio"] .arx-col__txt{ color:#000000; }
+.arx[data-showcase][data-sel=""] .arx-name span{ opacity:0!important; }
+/* Selecionado, o bloco mantém a animação no lugar do fundo claro do arco;
+   a coroa, essa sim, fica plena na cor do sistema. */
+.arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ background-color:transparent; order:-1; }
+/* O bloco escolhido passa a ser o primeiro, logo acima da célula Movimento do
+   painel; sem divisória entre os dois, a animação ocupa ambos como um campo. */
+.arx[data-showcase] .arx-sum .arx-mov{ position:relative; isolation:isolate; }
+/* a camada cobre também a borda de cima da célula: a junta some */
+.arx[data-showcase] .arx-sum .arx-mov > .arx-vitrine{ top:calc(-1 * var(--arx-lw)); height:calc(100% + var(--arx-lw)); }
+.arx[data-showcase] .arx-sum .arx-mov > :not(.arx-vitrine){ position:relative; z-index:1; }
+.arx[data-showcase] .arx-sum .arx-mov[data-exhibiting] .arx-vitrine{ visibility:visible; }
+@media (min-width:641px){
+  .arx[data-showcase]:not([data-sel=""]) .arx-sum .arx-mov{ border-top-color:transparent; }
+}
 .arx[data-showcase] .arx-col:has(:focus-visible){ outline:2px solid #2C2C2C; outline-offset:-4px; }
 .arx[data-showcase] .arx-col.is-selected .arx-col__mov{ text-decoration:underline; text-underline-offset:.2em; }
-/* A entrada é estática; só uma escolha manual forma o arco. */
+/* Na vitrine as histórias não sobem: o texto já está no lugar quando o arco se forma. */
 .arx[data-showcase="CLEAN"] .arx-col__txt,
 .arx[data-showcase="AUTO"] .arx-col__txt,
 .arx[data-showcase="PREVIEW"] .arx-col__txt{ animation:none; }

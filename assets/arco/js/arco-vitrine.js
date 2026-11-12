@@ -5,8 +5,11 @@
      DATA  — uma régua passada sobre o campo: do dia para a noite e de volta;
      ECHO  — o campo de pressão, na entrelinha do próprio parágrafo;
      ATRIO — o xadrez em perspectiva, avançando a partir do horizonte.
-   O texto fica sempre por cima e legível. O relógio só corre com os blocos
-   inteiros à vista; a seleção continua pertencendo ao arco existente. */
+   O texto fica sempre por cima e legível. A vitrine começa assim que o arco
+   se forma e não para mais: roda em looping, em ordem, com troca cruzada.
+   Sob o cursor (ou com foco) o bloco segura a animação para si; no celular,
+   fica com o bloco mais visível. Com um sistema aberto no arco, a animação
+   segue no bloco selecionado; a diferença é a coroa, que o arco preenche. */
 (() => {
   "use strict";
   const root = document.querySelector(".arx[data-showcase]");
@@ -17,38 +20,45 @@
   const cols = [...group.querySelectorAll(".arx-col")];
   const home = root.closest(".view");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  const TIMING = Object.freeze({initial:2500, reveal:1500, hold:5000, retract:750, interval:2500, cycle:5000});
-  const SHOW = TIMING.reveal + TIMING.hold + TIMING.retract;   // uma passagem inteira por sistema
-  const FADE_IN = 900;
+  const SHOW = 7200;                                           // tempo de cada sistema na ordem
+  const XF = 800;                                              // troca cruzada entre blocos
   const TINT = .24;                                            // cor do sistema sobre o papel
   const SYSTEMS = ["data", "echo", "atrio"];
   const clamp = n => Math.max(0, Math.min(1, n));
   const ease = n => { const t = clamp(n); return t * t * (3 - 2 * t); };
   const liso = (a, b, x) => ease((x - a) / (b - a));
-  let stopped = false, chosen = "", index = 0, phase = "initial", elapsed = 0, idle = false, viewportIndex = -1;
-  let frame = 0, previous = 0, hovering = false, focused = false, dpr = 1;
+  let chosen = "", started = false, cur = 0, curT = 0, prev = -1, prevT = 0, xf = XF, pinned = -1;
+  let frame = 0, previous = 0, dpr = 1;
   const surfaces = [];
 
   const help = document.createElement("p");
   help.id = "arx-vitrine-help";
   help.className = "arx-sr";
-  help.textContent = "Ative uma vez para selecionar e expandir o projeto no arco. Ative novamente o mesmo bloco para abrir sua página.";
+  help.textContent = "Ative para selecionar e expandir o projeto no arco. Ative novamente o mesmo bloco para recolher.";
   group.append(help);
   const status = document.createElement("p");
   status.className = "arx-sr";
   status.setAttribute("role", "status");
   group.append(status);
 
-  cols.forEach((col, i) => {
-    const head = col.querySelector(".arx-col__head");
-    head.setAttribute("aria-describedby", help.id);
+  const makeLayer = host => {
     const layer = document.createElement("div");
     layer.className = "arx-vitrine";
     layer.setAttribute("aria-hidden", "true");
     const canvas = document.createElement("canvas");
     layer.append(canvas);
-    col.append(layer);
-    surfaces.push({col, layer, canvas, ctx:canvas.getContext("2d"), sys:SYSTEMS[i], w:0, h:0, x:0, y:0});
+    host.append(layer);
+    return {host, layer, canvas, ctx:canvas.getContext("2d"), w:0, h:0};
+  };
+  cols.forEach((col, i) => {
+    const head = col.querySelector(".arx-col__head");
+    head.setAttribute("aria-describedby", help.id);
+    const own = makeLayer(col);
+    // a célula "Movimento" do painel do mesmo sistema: com ele aberto, o campo
+    // desce do bloco para ela e as duas se animam como uma só
+    const cell = root.querySelector(`.arx-sum[data-sys="${SYSTEMS[i]}"] .arx-mov`);
+    surfaces.push({col, layer:own.layer, canvas:own.canvas, ctx:own.ctx, mov:cell ? makeLayer(cell) : null,
+      sys:SYSTEMS[i], w:0, h:0, x:0, y:0});
   });
   // a coroa: um único plano sob as linhas do arco, recortado pela curva
   const sky = document.createElement("canvas");
@@ -58,10 +68,19 @@
   const skyCtx = sky.getContext("2d");
   let skyW = 0, skyH = 0, arcD = "", arcPath = null;
 
+  /* O campo de cada sistema tem coordenadas próprias, com origem no canto do
+     bloco: acima de 0 fica o trecho da coroa (fora da seleção); abaixo da
+     altura do bloco, a célula "Movimento" (com o sistema aberto). Cada plano —
+     coroa, bloco, célula — pinta o mesmo campo, recortado no seu lugar. */
+  const extent = s => ({
+    top:s.under && !root.dataset.sel ? -s.y : 0,
+    bottom:s.h + (s.movOn ? s.mov.h : 0)
+  });
+
   /* ---------- DATA: a régua passada ----------
-     A aresta graduada atravessa o bloco e o trecho da coroa da esquerda para a
-     direita. Uma passagem leva o dia à noite (o branco vira azul atrás dela);
-     a seguinte devolve o dia; e assim alterna enquanto a vitrine roda. */
+     A aresta graduada atravessa o campo da esquerda para a direita. Uma
+     passagem leva o dia à noite (o branco vira azul atrás dela); a seguinte
+     devolve o dia; e assim alterna enquanto a vitrine roda. */
   const PASS = 2400, SWEEP = .82;
   const glide = n => { const t = clamp(n); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   function ruler(mt){
@@ -69,74 +88,96 @@
     return {x, night:k % 2 === 0};
   }
   // azul do lado já medido; a aresta com graduação voltada para o lado ainda por medir
-  function measureBand(ctx, s, r, top, bottom, ox, oy, tint){
+  function measureBand(ctx, s, r, top, bottom, origin, a){
     const X = r.x * s.w;
-    ctx.globalAlpha = tint; ctx.fillStyle = s.color;
-    if (r.night) ctx.fillRect(ox, oy + top, X, bottom - top);
-    else ctx.fillRect(ox + X, oy + top, s.w - X, bottom - top);
-    ctx.globalAlpha = 1;
-    if (r.x <= 0 || r.x >= 1) return;
+    ctx.globalAlpha = TINT * a; ctx.fillStyle = s.color;
+    if (r.night) ctx.fillRect(0, top, X, bottom - top);
+    else ctx.fillRect(X, top, s.w - X, bottom - top);
+    ctx.globalAlpha = a;
+    if (r.x <= 0 || r.x >= 1){ ctx.globalAlpha = 1; return; }
     ctx.strokeStyle = "rgba(44,44,44,.55)"; ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(ox + X, oy + top); ctx.lineTo(ox + X, oy + bottom);
-    const step = 6, from = Math.ceil((top - s.top0) / step);
-    for (let n = from; s.top0 + n * step <= bottom; n++){
-      const y = oy + s.top0 + n * step, l = n % 10 === 0 ? 11 : n % 5 === 0 ? 7 : 4;
-      ctx.moveTo(ox + X, y + .5); ctx.lineTo(ox + X + l, y + .5);
+    ctx.moveTo(X, top); ctx.lineTo(X, bottom);
+    const step = 6;
+    for (let n = Math.ceil((top - origin) / step); origin + n * step <= bottom; n++){
+      const y = origin + n * step, l = n % 10 === 0 ? 11 : n % 5 === 0 ? 7 : 4;
+      ctx.moveTo(X, y + .5); ctx.lineTo(X + l, y + .5);
     }
     ctx.stroke();
+    ctx.globalAlpha = 1;
   }
 
   /* ---------- ECHO: campo de pressão (algoritmo de echo.html) ----------
      Grade de traços no passo do parágrafo (2 caracteres × 1 entrelinha),
-     com os traços na entrelinha, entre as linhas de texto. Gabinetes à
-     esquerda da coluna — do lado do DATA — emitem pulsos longitudinais;
-     sobre o bloco de texto a agitação é amortecida, não apagada. */
+     com os traços na entrelinha, entre as linhas de texto. Gotas caem sozinhas
+     em pontos ao acaso do campo e abrem ondas como na água (na hero, é o toque
+     que as faz); ao fundo, gabinetes à esquerda — do lado do DATA — emitem
+     pulsos mais fracos. Sobre o texto a agitação é amortecida. */
   const VEL = 13, TAU = 6.2832;
   const ruido = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
   const GAB = [.08, .3, .5, .7, .92].map((fy, i) => ({
     fx:-6 - 16 * ruido(i + 3), fy:fy + (ruido(i + 5) - .5) * .12,
     P:2.6 + 2.4 * ruido(i + 7), lam:3.4 + 2.8 * ruido(i + 9), a:.5 + .25 * ruido(i + 13)
   }));
-  function echoGrid(s){
+  const shown = el => el && el.getClientRects().length;
+  function echoGrid(s, F){
     const txt = s.col.querySelector(".arx-col__txt");
     const cs = getComputedStyle(txt);
     s.ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     const adv = s.ctx.measureText("M").width + (parseFloat(cs.letterSpacing) || 0);
     const passo = 2 * adv, linha = parseFloat(cs.lineHeight) || adv * 2.4;
-    // o bloco que absorve a agitação vai do título ao fim do parágrafo
-    const c = s.col.getBoundingClientRect(), t = txt.getBoundingClientRect();
+    // blocos que absorvem a agitação, em coordenadas do campo: título e
+    // parágrafo do bloco; com o sistema aberto, também o texto do Movimento
+    const c = s.col.getBoundingClientRect();
+    const rel = (r, ox, oy) => [r.left - ox, r.top - oy, r.right - ox, r.bottom - oy];
     const hd = s.col.querySelector(".arx-col__head").getBoundingClientRect();
-    const L = t.left - c.left, T = t.top - c.top, R = t.right - c.left, B = t.bottom - c.top, HT = hd.top - c.top;
-    const top = s.under ? -s.y : 0;
+    const blocks = [];
+    if (shown(txt)){ const t = txt.getBoundingClientRect(); blocks.push([t.left - c.left, hd.top - c.top, t.right - c.left, t.bottom - c.top]); }
+    else blocks.push(rel(hd, c.left, c.top));
+    if (s.movOn){
+      const m = s.mov.layer.getBoundingClientRect();
+      s.mov.host.querySelectorAll("p").forEach(p => {
+        const r = rel(p.getBoundingClientRect(), m.left, m.top);
+        blocks.push([r[0], r[1] + s.h, r[2], r[3] + s.h]);
+      });
+    }
+    const L = blocks[0][0], T = shown(txt) ? txt.getBoundingClientRect().top - c.top : blocks[0][1];
     const pts = [];
-    for (let j = Math.floor((top - T) / linha); T + j * linha < s.h + linha; j++){
+    for (let j = Math.floor((F.top - T) / linha); T + j * linha < F.bottom + linha; j++){
       const y = T + j * linha;
       for (let i = Math.floor(-L / passo) - 1; L + passo / 2 + i * passo < s.w + passo; i++){
         const x = L + passo / 2 + i * passo;
-        const dx = Math.max(L - x, 0, x - R), dy = Math.max(HT - y, 0, y - B);
-        const m = .55 + .45 * liso(0, 6, Math.hypot(dx, dy) / passo);
+        let d = Infinity;
+        for (const [l, t, r, b] of blocks) d = Math.min(d, Math.hypot(Math.max(l - x, 0, x - r), Math.max(t - y, 0, y - b)));
+        const m = .55 + .45 * liso(0, 6, d / passo);
         pts.push(x, y, m, .1 + .1 * (1 - m));
       }
     }
-    return {passo, linha, top, pts:new Float32Array(pts)};
+    return {passo, linha, top:F.top, bottom:F.bottom, pts:new Float32Array(pts)};
   }
-  function echoPulses(g, H, t, life){
-    const list = [];
+  const DROP = 1.15;   // segundos, em média, entre gotas
+  function echoPulses(g, W, t, life){
+    const list = [], H = g.bottom - g.top;
+    for (let k = Math.floor((t - life) / DROP) - 1; k <= Math.floor(t / DROP) + 1; k++){
+      const t0 = (k + (ruido(k * 7 + 1) - .5) * .7) * DROP, age = t - t0;
+      if (age < 0 || age > life) continue;
+      list.push({x:(.06 + .88 * ruido(k * 13 + 2)) * W, y:g.top + (.06 + .88 * ruido(k * 19 + 3)) * H, t0,
+        a:.6 + .3 * ruido(k * 23 + 4), lam:3 + ruido(k * 29 + 5), sig:2.3});
+    }
     GAB.forEach((p, n) => {
       for (let k = Math.floor((t - life) / p.P) - 1; k <= Math.floor(t / p.P) + 1; k++){
         const t0 = (k + (ruido(n * 31 + k) - .5) * .6) * p.P, age = t - t0;
         if (age < 0 || age > life) continue;
-        list.push({x:p.fx * g.passo, y:g.top + p.fy * H, t0, a:p.a * (.75 + .5 * ruido(n * 17 + k)), lam:p.lam, sig:p.lam * .75});
+        list.push({x:p.fx * g.passo, y:g.top + p.fy * H, t0, a:.55 * p.a * (.75 + .5 * ruido(n * 17 + k)), lam:p.lam, sig:p.lam * .75});
       }
     });
     return list;
   }
-  const buckets = Array.from({length:16}, () => []);
-  function echoField(s, t){
-    const g = s.grid || (s.grid = echoGrid(s));
-    const H = s.h - g.top, ps = echoPulses(g, H, t, (s.w / g.passo + 40) / VEL);
-    const sets = [buckets.map(() => []), buckets.map(() => [])];   // [coluna, coroa]
+  function echoField(s, F, t){
+    const key = `${F.top}|${F.bottom}|${s.w}`;
+    if (!s.grid || s.gridKey !== key){ s.grid = echoGrid(s, F); s.gridKey = key; }
+    const g = s.grid, ps = echoPulses(g, s.w, t, (s.w / g.passo + 40) / VEL);
+    const set = Array.from({length:16}, () => []);
     const half = g.linha * .14;
     for (let i = 0; i < g.pts.length; i += 4){
       const x = g.pts[i], y = g.pts[i + 1], m = g.pts[i + 2];
@@ -154,27 +195,27 @@
       const alpha = Math.min(.62, Math.max(.03, g.pts[i + 3] - tension * 1.1));
       const px = x + dx * g.passo, py = y + dy * g.passo;
       const l = half * (1 + .8 * Math.min(1, Math.abs(tension)));
-      sets[py < 0 ? 1 : 0][Math.min(15, Math.round(alpha * 21))].push(px, py - l, py + l);
+      set[Math.min(15, Math.round(alpha * 21))].push(px, py - l, py + l);
     }
-    const stroke = (ctx, set, ox, oy) => {
+    return ctx => {
       ctx.lineWidth = Math.max(.75, g.passo * .05);
       ctx.lineCap = "butt";
       set.forEach((b, j) => {
         if (!b.length) return;
         ctx.strokeStyle = `rgba(44,44,44,${(j / 21).toFixed(3)})`;
         ctx.beginPath();
-        for (let i = 0; i < b.length; i += 3){ ctx.moveTo(ox + b[i], oy + b[i + 1]); ctx.lineTo(ox + b[i], oy + b[i + 2]); }
+        for (let i = 0; i < b.length; i += 3){ ctx.moveTo(b[i], b[i + 1]); ctx.lineTo(b[i], b[i + 2]); }
         ctx.stroke();
       });
     };
-    return {column:ctx => stroke(ctx, sets[0], 0, 0), crown:ctx => stroke(ctx, sets[1], s.x, s.y)};
   }
 
   /* ---------- ATRIO: o chão xadrez a partir do horizonte ----------
-     Ponto de fuga no centro da coluna, sobre a linha de base. As fileiras têm
-     passo constante em profundidade e avançam para quem olha, sem emenda. */
-  function floor(ctx, s, mt){
-    const W = s.w, H = s.h, cx = W / 2, half = .2 * W, S = .28;
+     Ponto de fuga no centro do bloco, sobre a linha de base. As fileiras têm
+     passo constante em profundidade e avançam para quem olha, sem emenda;
+     com o sistema aberto, o chão desce até o pé da célula Movimento. */
+  function floor(ctx, s, mt, H){
+    const W = s.w, cx = W / 2, half = .2 * W, S = .28;
     const run = mt / 1000 * .55, base = Math.floor(run), ph = run - base;
     const rows = [];
     for (let n = 0; n < 600; n++){
@@ -207,12 +248,17 @@
     surfaces.forEach(s => {
       const r = s.col.getBoundingClientRect();
       s.w = r.width; s.h = r.height; s.x = r.left - c.left; s.y = r.top - c.top;
-      // só a coluna rente à base do arco herda o trecho da coroa (no celular, a primeira)
+      // só o bloco rente à base do arco herda o trecho da coroa
       s.under = r.width > 0 && Math.abs(r.top - c.bottom) < 3;
       s.color = getComputedStyle(s.col).getPropertyValue("--c").trim() || "#2C2C2C";
       s.grid = null;
-      s.top0 = s.under ? -s.y : 0;   // a graduação começa no alto do campo inteiro
       fit(s.canvas, s.w, s.h);
+      if (s.mov){
+        const m = s.mov.layer.getBoundingClientRect();   // inclui a borda de cima da célula
+        s.mov.w = m.width; s.mov.h = m.height;
+        s.movOn = root.dataset.sel === s.sys && m.height > 0;
+        fit(s.mov.canvas, s.mov.w, s.mov.h);
+      }
     });
   }
   function clipCrown(s){
@@ -224,150 +270,195 @@
     skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     skyCtx.beginPath(); skyCtx.rect(s.x, 0, s.w, skyH); skyCtx.clip();
   }
-  function paint(s, mt){
-    const g = s.ctx, data = s.sys === "data", r = data ? ruler(mt) : null;
+  // um plano (bloco, coroa ou célula) pinta o campo inteiro, recortado em R
+  function region(ctx, s, F, mt, a, R, motif){
+    if (s.sys === "data") measureBand(ctx, s, ruler(mt), R.top, R.bottom, F.top, a);
+    else { ctx.globalAlpha = TINT * a; ctx.fillStyle = s.color; ctx.fillRect(0, R.top, s.w, R.bottom - R.top); }
+    ctx.globalAlpha = a;
+    if (motif) motif(ctx, R);
+    ctx.globalAlpha = 1;
+  }
+  // pinta o bloco e a célula (opacidade pela camada) e o trecho da coroa (alfa no plano único)
+  function paint(s, mt, a){
+    const F = extent(s);
+    const echo = s.sys === "echo" ? echoField(s, F, 3 + mt / 1000) : null;
+    const motif = echo ? ctx => echo(ctx) : s.sys === "atrio" ? (ctx, R) => { if (R.top >= 0) floor(ctx, s, mt, F.bottom); } : null;
+    const g = s.ctx;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, s.w, s.h);
-    if (data) measureBand(g, s, r, 0, s.h, 0, 0, TINT);
-    else { g.globalAlpha = TINT; g.fillStyle = s.color; g.fillRect(0, 0, s.w, s.h); g.globalAlpha = 1; }
-    skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    skyCtx.clearRect(0, 0, skyW, skyH);
-    const echo = s.sys === "echo" ? echoField(s, 3 + mt / 1000) : null;
-    if (s.under){
+    region(g, s, F, mt, 1, {top:0, bottom:s.h}, motif);
+    if (F.top < 0){
       skyCtx.save(); clipCrown(s);
-      if (data) measureBand(skyCtx, s, r, -s.y, 0, s.x, s.y, TINT);
-      else { skyCtx.globalAlpha = TINT; skyCtx.fillStyle = s.color; skyCtx.fillRect(s.x, 0, s.w, skyH); skyCtx.globalAlpha = 1; }
-      if (echo) echo.crown(skyCtx);
+      skyCtx.setTransform(dpr, 0, 0, dpr, dpr * s.x, dpr * s.y);
+      region(skyCtx, s, F, mt, a, {top:F.top, bottom:0}, motif);
       skyCtx.restore();
     }
-    if (echo) echo.column(g);
-    else if (!data) floor(g, s, mt);
+    if (s.movOn){
+      const m = s.mov.ctx;
+      m.setTransform(dpr, 0, 0, dpr, 0, 0);
+      m.clearRect(0, 0, s.mov.w, s.mov.h);
+      m.setTransform(dpr, 0, 0, dpr, 0, -dpr * s.h);
+      region(m, s, F, mt, 1, {top:s.h, bottom:F.bottom}, motif);
+    }
   }
 
   function clear(){
-    surfaces.forEach(({col, layer}) => { delete col.dataset.exhibiting; layer.style.opacity = "0"; });
+    surfaces.forEach(({col, layer, mov}) => {
+      delete col.dataset.exhibiting; layer.style.opacity = "0";
+      if (mov){ delete mov.host.dataset.exhibiting; mov.layer.style.opacity = "0"; }
+    });
     delete root.dataset.exhibit;
-    sky.style.opacity = "0";
+    skyCtx.setTransform(1, 0, 0, 1, 0, 0);
+    skyCtx.clearRect(0, 0, sky.width, sky.height);
   }
   function render(){
     clear();
-    if (stopped || !["reveal", "hold", "retract"].includes(phase)) return;
-    const surface = surfaces[index];
-    if (!surface.w || !surface.h) return;
-    const mt = phase === "reveal" ? elapsed : phase === "hold" ? TIMING.reveal + elapsed : TIMING.reveal + TIMING.hold + elapsed;
-    const opacity = phase === "reveal" ? ease(elapsed / FADE_IN) : phase === "retract" ? 1 - ease(elapsed / TIMING.retract) : 1;
-    surface.col.dataset.exhibiting = surface.sys;
-    root.dataset.exhibit = surface.sys;
-    surface.layer.style.opacity = String(opacity);
-    sky.style.opacity = surface.under ? String(opacity) : "0";
-    paint(surface, mt);
+    if (!started) return;
+    skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const k = ease(xf / XF);
+    const shown = [[cur, curT, prev === -1 ? 1 : k]];
+    if (prev >= 0 && k < 1) shown.unshift([prev, prevT, 1 - k]);
+    for (const [i, mt, a] of shown){
+      const s = surfaces[i];
+      if (!s.w || !s.h || a <= 0) continue;
+      s.col.dataset.exhibiting = s.sys;
+      s.layer.style.opacity = String(a);
+      if (s.movOn){ s.mov.host.dataset.exhibiting = s.sys; s.mov.layer.style.opacity = String(a); }
+      paint(s, mt, a);
+    }
+    root.dataset.exhibit = surfaces[cur].sys;
   }
-  function fullyVisible(){
-    if (home.dataset.active !== "true") return false;
-    const viewport = window.visualViewport;
-    let top = viewport?.offsetTop || 0;
-    const bottom = top + (viewport?.height || innerHeight);
+
+  /* ---------- quando roda ---------- */
+  const viewTop = () => {
+    let top = window.visualViewport?.offsetTop || 0;
     const rail = document.querySelector(".rail");
     if (rail && getComputedStyle(rail).position === "fixed"){
       const r = rail.getBoundingClientRect();
       if (r.width >= innerWidth * .8 && r.top <= top) top = Math.max(top, r.bottom);
     }
-    const visible = cols.map((col, i) => {
+    return top;
+  };
+  // fração visível de cada bloco; a vitrine roda enquanto algum estiver na tela
+  function seen(){
+    const top = viewTop(), bottom = (window.visualViewport?.offsetTop || 0) + (window.visualViewport?.height || innerHeight);
+    return cols.map(col => {
       const r = col.getBoundingClientRect();
-      return r.width > 0 && r.height > 0 && r.top >= top - .5 && r.bottom <= bottom + .5 && r.left >= -.5 && r.right <= innerWidth + .5 ? i : -1;
-    }).filter(i => i >= 0);
-    if (visible.length === cols.length){ viewportIndex = -1; return true; }
-    // On a narrow, vertically stacked layout, reveal the card the reader has
-    // brought fully into view. Never scroll the page or animate an unseen card.
-    if (innerWidth <= 640 && visible.length){
-      const candidate = visible.reduce((best, i) => {
-        const r = cols[i].getBoundingClientRect(), center = (top + bottom) / 2;
-        return Math.abs((r.top + r.bottom) / 2 - center) < Math.abs((cols[best].getBoundingClientRect().top + cols[best].getBoundingClientRect().bottom) / 2 - center) ? i : best;
-      }, visible[0]);
-      if (candidate !== viewportIndex){
-        viewportIndex = candidate; index = candidate; phase = "initial"; elapsed = 0; idle = false;
-        root.dataset.showcase = "CLEAN"; clear();
-      }
-      return !idle;
-    }
-    viewportIndex = -1;
-    return false;
+      if (!r.height || !r.width) return 0;
+      return Math.max(0, Math.min(r.bottom, bottom) - Math.max(r.top, top)) / r.height;
+    });
   }
-  const canRun = () => !stopped && !idle && !motion.matches && !document.hidden && !hovering && !focused && fullyVisible();
-  function next(){
-    elapsed = 0;
-    if (phase === "initial" || phase === "interval" || phase === "cycle"){
-      phase = "reveal"; root.dataset.showcase = "PREVIEW";
-    } else if (phase === "reveal"){
-      phase = "hold"; root.dataset.showcase = "AUTO";
-    } else if (phase === "hold") phase = "retract";
-    else {
-      if (innerWidth <= 640 && viewportIndex >= 0){ idle = true; root.dataset.showcase = "CLEAN"; return; }
-      index = (index + 1) % cols.length;
-      phase = index ? "interval" : "cycle";
-      root.dataset.showcase = "AUTO";
-    }
+  const formed = () => root.classList.contains("is-drawn") && ["formed", "rest"].includes(root.dataset.state);
+  const canRun = () => formed() && !motion.matches && !document.hidden &&
+    home.dataset.active === "true" && seen().some(v => v > 0);
+  const stacked = () => innerWidth <= 640;
+
+  function switchTo(i){
+    if (i === cur) return;
+    if (prev === -1 && xf < XF) { cur = i; curT = 0; return; }   // ainda entrando: troca direta
+    prev = cur; prevT = curT; cur = i; curT = 0; xf = 0;
   }
   function tick(now){
     frame = 0;
     if (!canRun()){ previous = 0; return; }
-    if (previous) elapsed += now - previous;
+    const dt = previous ? Math.min(250, now - previous) : 0;
     previous = now;
-    if (elapsed >= TIMING[phase]) next();
+    if (!started){ started = true; root.dataset.showcase = "AUTO"; prev = -1; xf = 0; curT = 0; }
+    // no celular a animação fica com o bloco mais visível; no desktop, com o
+    // bloco sob o cursor ou em foco; sem nenhum dos dois, segue a ordem
+    // com um sistema aberto, a animação fica no bloco dele
+    const sel = SYSTEMS.indexOf(root.dataset.sel || "");
+    let target = sel >= 0 ? sel : pinned;
+    if (target < 0 && stacked()){
+      const v = seen(); target = v.indexOf(Math.max(...v));
+    }
+    if (target >= 0) switchTo(target);
+    else if (curT >= SHOW) switchTo((cur + 1) % surfaces.length);
+    curT += dt; prevT += dt; xf = Math.min(XF, xf + dt);
     render();
     frame = requestAnimationFrame(tick);
   }
   function sync(){
-    root.toggleAttribute("data-reading", hovering || focused);
     if (!canRun()){
       cancelAnimationFrame(frame); frame = 0; previous = 0;
+      if (motion.matches) clear();
     } else if (!frame) frame = requestAnimationFrame(tick);
   }
+
+  /* ---------- seleção: a animação segue no bloco escolhido ---------- */
   function selectManually(sys){
-    stopped = true; chosen = sys;
+    chosen = sys;
     root.dataset.showcase = "SELECTED";
-    clear(); sync();
-    status.textContent = `${sys.toUpperCase()} selecionado. Ative o mesmo bloco novamente para abrir sua página.`;
+    sync();
+    status.textContent = `${sys.toUpperCase()} selecionado. Ative o mesmo bloco novamente para recolher.`;
   }
-  root.addEventListener("arx:activate", event => {
-    const {sys} = event.detail;
-    if (chosen === sys){
-      event.preventDefault();
-      root.dataset.showcase = "NAVIGATE";
-      location.assign(`${sys}.html`);
-    } else selectManually(sys);
-  });
   root.addEventListener("arx:manual", event => selectManually(event.detail.sys));
-  // Selections from other existing controls also end automatic playback.
+  /* a troca de ordem desliza: cada bloco parte de onde estava (FLIP) */
+  let lefts = cols.map(col => col.getBoundingClientRect().left), lastSel = root.dataset.sel || "";
+  const remember = () => { lefts = cols.map(col => col.getBoundingClientRect().left); };
+  function slide(){
+    const before = lefts;
+    remember();
+    if (motion.matches) return;
+    const dxs = cols.map((col, i) => before[i] - lefts[i]);
+    // o bloco que atravessa os outros vai por cima, com fundo de papel
+    const far = dxs.reduce((m, dx, i) => Math.abs(dx) > Math.abs(dxs[m]) ? i : m, 0);
+    cols.forEach((col, i) => {
+      const dx = dxs[i];
+      if (Math.abs(dx) < 1) return;
+      col.style.transition = "none";
+      col.style.transform = `translateX(${dx}px)`;
+      if (i === far){ col.style.backgroundColor = "#FCFCFC"; col.style.zIndex = "2"; }
+      col.getBoundingClientRect();
+      requestAnimationFrame(() => {
+        col.style.transition = "transform 640ms cubic-bezier(.22, 1, .36, 1)";
+        col.style.transform = "";
+        col.addEventListener("transitionend", () => {
+          col.style.transition = ""; col.style.backgroundColor = ""; col.style.zIndex = "";
+          measure();
+        }, {once:true});
+      });
+    });
+  }
   new MutationObserver(() => {
     const sys = root.dataset.sel;
+    if ((sys || "") !== lastSel){ lastSel = sys || ""; slide(); measure(); }
     if (sys && chosen !== sys) selectManually(sys);
-    else if (!sys && stopped) chosen = "";
+    else if (!sys && chosen){
+      // fechado o painel, a ordem recomeça pelo sistema que estava aberto
+      chosen = "";
+      curT = 0;
+      if (started) root.dataset.showcase = "AUTO";
+    }
     sync();
-  }).observe(root, {attributes:true, attributeFilter:["data-sel"]});
-  group.addEventListener("pointerenter", event => { if (event.pointerType !== "touch"){ hovering = true; sync(); } });
-  group.addEventListener("pointerleave", event => { if (event.pointerType !== "touch"){ hovering = false; sync(); } });
-  group.addEventListener("focusin", () => { focused = true; sync(); });
-  group.addEventListener("focusout", () => queueMicrotask(() => { focused = group.contains(document.activeElement); sync(); }));
+  }).observe(root, {attributes:true, attributeFilter:["data-sel", "data-state", "class"]});
+
+  // sob o cursor ou com foco, o bloco segura a animação para si
+  const release = () => { pinned = -1; curT = Math.min(curT, SHOW - 1500); };
+  cols.forEach((col, i) => {
+    col.addEventListener("pointerenter", event => { if (event.pointerType !== "touch") pinned = i; });
+    col.addEventListener("pointerleave", event => { if (event.pointerType !== "touch" && pinned === i) release(); });
+    col.addEventListener("focusin", () => { pinned = i; });
+    col.addEventListener("focusout", () => queueMicrotask(() => { if (!col.contains(document.activeElement) && pinned === i) release(); }));
+  });
+
   document.addEventListener("visibilitychange", sync);
   addEventListener("scroll", sync, {passive:true});
   window.visualViewport?.addEventListener("resize", sync);
   window.visualViewport?.addEventListener("scroll", sync);
-  const resize = () => { measure(); render(); sync(); };
+  const resize = () => { measure(); remember(); render(); sync(); };
   addEventListener("resize", resize, {passive:true});
   if ("ResizeObserver" in window){
     const observer = new ResizeObserver(resize);
     observer.observe(group); observer.observe(crown);
+    surfaces.forEach(s => s.mov && observer.observe(s.mov.host));
   }
   if ("IntersectionObserver" in window){
-    const observer = new IntersectionObserver(sync, {threshold:[0, 1]});
+    const observer = new IntersectionObserver(sync, {threshold:[0, .01, 1]});
     cols.forEach(col => observer.observe(col));
   }
   new MutationObserver(sync).observe(home, {attributes:true, attributeFilter:["data-active"]});
-  motion.addEventListener("change", () => {
-    if (motion.matches && !stopped){ phase = "initial"; elapsed = 0; index = 0; root.dataset.showcase = "CLEAN"; clear(); }
-    sync();
-  });
+  motion.addEventListener("change", () => { if (motion.matches) clear(); sync(); });
   document.fonts?.ready.then(resize);
   resize();
 })();

@@ -5,6 +5,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 const URL = process.env.ARCO_URL || 'http://localhost:8000/arco.html';
 const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
+const SHOW = 7200, XF = 800;
 
 (async () => {
   const browser = await chromium.launch({executablePath, headless:true, args:['--no-sandbox']});
@@ -23,142 +24,138 @@ const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
   }
   const state = page => page.locator('.arx').evaluate(el => ({
     mode:el.dataset.showcase, selected:el.dataset.sel, arch:el.dataset.state,
-    active:[...el.querySelectorAll('[data-exhibiting]')].map(col => col.dataset.sys)
+    active:[...el.querySelectorAll('.arx-col[data-exhibiting]')].map(col => col.dataset.sys)
   }));
-  const step = async (page, ms) => { await page.clock.runFor(40); await page.clock.fastForward(ms); await page.clock.runFor(40); };
+  const run = (page, ms) => page.clock.runFor(ms);
   const head = (page, sys) => page.locator(`.arx-col[data-sys="${sys}"] .arx-col__head`);
+  const layer = (page, sys) => page.locator(`.arx-col[data-sys="${sys}"] .arx-vitrine`);
   try {
     const page = await open();
-    assert.deepEqual(await state(page), {mode:'CLEAN', selected:'', arch:'rest', active:[]});
-    const bounds = await page.locator('.arx-cols').boundingBox();
-    const hero = await page.locator('.arx-hero').boundingBox();
-    await step(page, 2600);
-    assert.deepEqual((await state(page)).active, ['data']);
-    await step(page, 1600);
-    assert.equal((await state(page)).mode, 'AUTO');
-    assert.deepEqual(await page.locator('.arx-cols').boundingBox(), bounds);
-    assert.deepEqual(await page.locator('.arx-hero').boundingBox(), hero);
+    let s = await state(page);
+    assert.ok(['rest', 'tension'].includes(s.arch));
+    assert.deepEqual({mode:s.mode, selected:s.selected, active:s.active}, {mode:'CLEAN', selected:'', active:[]});
 
-    await head(page,'echo').hover();
-    assert.equal(await page.locator('.arx-vitrine').first().evaluate(el=>getComputedStyle(el).visibility), 'hidden');
-    await step(page, 20000);
-    assert.deepEqual((await state(page)).active, ['data']);
-    await page.mouse.move(0,0);
-    await step(page, 5100); // retract
-    await step(page, 800);  // interval
-    assert.deepEqual((await state(page)).active, []);
-    await step(page, 2600); // echo reveal
-    assert.deepEqual((await state(page)).active, ['echo']);
-    await step(page, 1600);
+    // The arc forms by itself with the stories in view; the showcase starts with it.
+    await run(page, 3500);
+    s = await state(page);
+    assert.equal(s.arch, 'formed');
+    assert.equal(s.mode, 'AUTO');
+    assert.deepEqual(s.active, ['data']);
 
-    await head(page,'data').focus();
-    await step(page, 20000);
+    // Looping, in order, with no empty interval.
+    await run(page, SHOW + XF + 100);
     assert.deepEqual((await state(page)).active, ['echo']);
-    await page.evaluate(() => document.activeElement.blur());
-
-    // Partial visibility freezes both the hold and the vector reveal clock.
-    await page.evaluate(() => scrollTo(0, document.querySelector('.arx-cols').offsetTop + 1500));
-    await step(page, 20000);
+    await run(page, SHOW / 2);
     assert.deepEqual((await state(page)).active, ['echo']);
-    await page.evaluate(() => scrollTo(0,0));
-    await step(page, 5100);
-    await step(page, 800);
-    await step(page, 2600);
+    await run(page, SHOW / 2 + XF + 100);
     assert.deepEqual((await state(page)).active, ['atrio']);
-    await step(page, 1600);
-    assert.deepEqual(await page.locator('.arx-cols').boundingBox(), bounds);
-    assert.deepEqual(await page.locator('.arx-hero').boundingBox(), hero);
+    await run(page, SHOW + XF + 100);
+    assert.deepEqual((await state(page)).active, ['data']);
 
-    // Exercise the real visibilitychange listener without relying on tab policy.
+    // Under the cursor the block keeps the animation, visible and running.
+    const echoBox = await page.locator('.arx-col[data-sys="echo"]').boundingBox();
+    await page.mouse.move(echoBox.x + echoBox.width / 2, echoBox.y + echoBox.height / 2);
+    await run(page, XF + 200);
+    assert.deepEqual((await state(page)).active, ['echo']);
+    assert.equal(await layer(page,'echo').evaluate(el => getComputedStyle(el).visibility), 'visible');
+    await run(page, 20000);
+    assert.deepEqual((await state(page)).active, ['echo']);
+    // Leaving resumes the order from the hovered block.
+    await page.mouse.move(0, 0);
+    await run(page, 1500 + XF + 200);
+    assert.deepEqual((await state(page)).active, ['atrio']);
+
+    // A hidden document freezes the clock.
     await page.evaluate(() => { Object.defineProperty(document,'hidden',{configurable:true,get:()=>true}); document.dispatchEvent(new Event('visibilitychange')); });
-    await step(page, 20000);
+    await run(page, 20000);
     assert.deepEqual((await state(page)).active, ['atrio']);
     await page.evaluate(() => { delete document.hidden; document.dispatchEvent(new Event('visibilitychange')); });
-    await step(page, 5100);
-    await step(page, 800);
-    assert.deepEqual((await state(page)).active, []);
-    await step(page, 4700);
-    assert.deepEqual((await state(page)).active, []);
-    await step(page, 400);
-    assert.deepEqual((await state(page)).active, ['data']);
 
     // Evidence tooltips keep their independent interaction.
-    await page.mouse.move(0,0);
     await page.locator('.arx-col [data-datum]').first().click();
     assert.equal((await state(page)).selected, '');
+
+    // Selected, the animation stays on the chosen block; the crown is the arc's.
     await head(page,'data').click();
-    await step(page, 1000);
+    await run(page, 1500);
+    s = await state(page);
     assert.equal(page.url(), URL);
-    assert.equal((await state(page)).selected, 'data');
-    assert.equal((await state(page)).mode, 'SELECTED');
-    await head(page,'echo').click();
-    await step(page, 1000);
-    assert.equal(page.url(), URL);
-    assert.equal((await state(page)).selected, 'echo');
-    await page.mouse.move(0,0);
+    assert.equal(s.selected, 'data');
+    assert.equal(s.mode, 'SELECTED');
+    assert.deepEqual(s.active, ['data']);
+    await head(page,'atrio').click();
+    await run(page, 1500);
+    s = await state(page);
+    assert.equal(s.selected, 'atrio');
+    await page.mouse.move(0, 0);
+    await run(page, 20000);
+    assert.deepEqual((await state(page)).active, ['atrio']);
+    // Closing the panel keeps the showcase going.
+    await head(page,'atrio').focus();
+    await page.keyboard.press('Escape');
+    await run(page, 1500);
     await page.evaluate(() => document.activeElement.blur());
-    await step(page, 60000);
-    assert.deepEqual((await state(page)).active, []);
+    s = await state(page);
+    assert.equal(s.selected, '');
+    assert.equal(s.mode, 'AUTO');
+    assert.ok(s.active.length >= 1);
+    // The chosen block becomes the first; a second click collapses it back.
+    const order = () => page.evaluate(() => [...document.querySelectorAll('.arx-col')]
+      .sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left).map(col => col.dataset.sys));
     await head(page,'echo').click();
-    await page.waitForURL('**/echo.html');
-    console.log('PASS desktop: clean entry, complete sequence, no layout shift, hover/visibility pauses, independent metrics, two clicks');
+    await run(page, 1500);
+    assert.deepEqual(await order(), ['echo', 'data', 'atrio']);
+    assert.deepEqual((await state(page)).active, ['echo']);
+    assert.equal(await page.locator('.arx-sum[data-sys="echo"] .arx-mov').getAttribute('data-exhibiting'), 'echo');
+    await head(page,'echo').click();
+    await run(page, 1500);
+    assert.equal(page.url(), URL);
+    assert.equal((await state(page)).selected, '');
+    assert.deepEqual(await order(), ['data', 'echo', 'atrio']);
+    console.log('PASS desktop: forms then starts, loops in order, holds under the cursor, pauses when hidden, stays on the selection, second click collapses');
     await page.close();
 
-    const rapid = await open({viewport:{width:1024,height:600}});
-    await step(rapid,20000);
-    assert.equal((await state(rapid)).mode,'CLEAN');
-    await rapid.evaluate(() => {
-      for (const sys of ['data','echo','atrio']) document.querySelector(`.arx-col[data-sys="${sys}"] .arx-col__head`).click();
-    });
-    await step(rapid,1000);
-    assert.equal((await state(rapid)).selected,'atrio');
-    await head(rapid,'atrio').focus();
-    await rapid.keyboard.press('Escape');
-    await step(rapid,1500);
-    await rapid.evaluate(() => document.activeElement.blur());
-    await rapid.setViewportSize({width:1440,height:1000});
-    await rapid.evaluate(() => scrollTo(0,0));
-    await step(rapid,60000);
-    assert.deepEqual((await state(rapid)).active,[]);
-    assert.equal((await state(rapid)).selected,'');
-    console.log('PASS partial viewport, rapid selection and no restart after closing a panel');
-    await rapid.close();
-
     const keyboard = await open({reducedMotion:'reduce'});
-    await step(keyboard,60000);
-    assert.equal((await state(keyboard)).mode,'CLEAN');
+    await run(keyboard, 60000);
+    assert.equal((await state(keyboard)).mode, 'CLEAN');
+    assert.deepEqual((await state(keyboard)).active, []);
     await head(keyboard,'atrio').focus();
     await keyboard.keyboard.press('Enter');
-    await step(keyboard,100);
-    assert.equal((await state(keyboard)).selected,'atrio');
-    assert.equal(keyboard.url(),URL);
-    assert.equal(await head(keyboard,'atrio').getAttribute('aria-pressed'),'true');
+    await run(keyboard, 100);
+    assert.equal((await state(keyboard)).selected, 'atrio');
+    assert.equal(keyboard.url(), URL);
+    assert.equal(await head(keyboard,'atrio').getAttribute('aria-pressed'), 'true');
     await keyboard.keyboard.press('Space');
-    await keyboard.waitForURL('**/atrio.html');
-    console.log('PASS keyboard and reduced motion: manual selection, second activation navigates');
+    await run(keyboard, 1000);
+    assert.equal((await state(keyboard)).selected, '');
+    assert.equal(keyboard.url(), URL);
+    console.log('PASS keyboard and reduced motion: no animation, manual selection, second activation collapses');
     await keyboard.close();
 
-    const mobile = await open({viewport:{width:390,height:600},isMobile:true,hasTouch:true,deviceScaleFactor:1});
-    await mobile.locator('.arx-cols').scrollIntoViewIfNeeded();
-    await step(mobile,6000);
-    assert.ok((await state(mobile)).active.length <= 1);
-    assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
+    const mobile = await open({viewport:{width:390,height:700}, isMobile:true, hasTouch:true, deviceScaleFactor:1});
+    await mobile.locator('.arx-col[data-sys="echo"]').evaluate(el => el.scrollIntoView({block:'center', behavior:'instant'}));
+    await run(mobile, 1000);
+    await run(mobile, 6000);
+    assert.deepEqual((await state(mobile)).active, ['echo']);
+    assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     await head(mobile,'data').tap();
-    await step(mobile,1000);
-    assert.equal((await state(mobile)).selected,'data');
-    assert.equal(mobile.url(),URL);
+    await run(mobile, 1000);
+    assert.equal((await state(mobile)).selected, 'data');
+    assert.equal(mobile.url(), URL);
     await head(mobile,'data').tap();
-    await mobile.waitForURL('**/data.html');
-    console.log('PASS mobile: viewport remains stable, two taps');
+    await run(mobile, 1000);
+    assert.equal((await state(mobile)).selected, '');
+    assert.equal(mobile.url(), URL);
+    console.log('PASS mobile: the most visible block animates, no horizontal scroll, second tap collapses');
     await mobile.close();
 
     const staticPage = await open({javaScriptEnabled:false});
-    assert.equal(await staticPage.locator('.arx-col__txt:visible').count(),3);
-    assert.equal(await staticPage.locator('.arx-vitrine').count(),0);
-    assert.equal(await staticPage.locator('.rail__link[data-view="data"]').isVisible(),true);
+    assert.equal(await staticPage.locator('.arx-col__txt:visible').count(), 3);
+    assert.equal(await staticPage.locator('.arx-vitrine').count(), 0);
+    assert.equal(await staticPage.locator('.rail__link[data-view="data"]').isVisible(), true);
     console.log('PASS without JavaScript: original trajectory content remains visible');
     await staticPage.close();
-    assert.deepEqual(errors,[]);
+    assert.deepEqual(errors, []);
     console.log('PASS no JavaScript errors on ARCO');
   } finally { await browser.close(); }
-})().catch(error=>{console.error(error);process.exitCode=1;});
+})().catch(error => { console.error(error); process.exitCode = 1; });

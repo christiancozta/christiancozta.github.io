@@ -502,7 +502,8 @@
      sistema (ver Partida). Depois de recolhida pelo visitante, a estrutura
      também não se refaz pela rolagem: só por escolha. */
   const showcase = root.hasAttribute("data-showcase");
-  let autoForm = !showcase;
+  /* com a vitrine, a formação automática também vale: é ela que dá a partida */
+  let autoForm = true;
   const finishFormation = () => {
     setState("formed");
     store.set(KEY_FORMED, "1");
@@ -635,13 +636,8 @@
     col.addEventListener("click", event => {
       if (event.target.closest('[data-datum], a, input, select, textarea, [role="link"]') ||
           (event.target.closest("button") && !head.contains(event.target))) return;
-      if (showcase){
-        const activation = new CustomEvent("arx:activate", {detail:{sys}, cancelable:true});
-        if (!root.dispatchEvent(activation)) return;
-        formAndSelect(sys);
-        return;
-      }
-      /* o campo já selecionado é um botão pressionado: clicar de novo recolhe */
+      /* o campo já selecionado é um botão pressionado: clicar de novo recolhe
+         (também com a vitrine; a página do projeto fica no "Explorar" do painel) */
       if (sys === selected && state === "formed"){ collapse({keep:col}); return; }
       formAndSelect(sys);
     });
