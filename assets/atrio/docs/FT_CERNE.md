@@ -2,7 +2,7 @@
 
 (A) dado bruto conferido; (B) declarado pelo autor.
 
-| **Função** | Audita o raciocínio de atos judiciais e devolve perguntas presas a trechos, sem julgar o ato. | **Versão** | 5.1.0. Data: [NÃO LOCALIZADO]. |
+| **Função** | Audita o raciocínio de atos judiciais e devolve perguntas presas a trechos, sem julgar o ato. | **Versão** | 5.1.0. Data: posterior a 12/10/2026, data exata não registrada. |
 |---|---|---|---|
 | **Entrada** | Decisão liminar, sentença, voto ou acórdão, de 40 a 250.000 caracteres. | **Saída** | Perguntas por trecho e relatório técnico. Cada dúvida termina como ACHADO ou AFASTADO. Rodada média de 12,2 min (A). |
 | **Arquitetura** | Formação das dúvidas → confronto independente → consolidação em perguntas. | **Governança** | 8 hard stops. Falha encerra a rodada sem relatório parcial. A decisão sobre o ato é humana. |
