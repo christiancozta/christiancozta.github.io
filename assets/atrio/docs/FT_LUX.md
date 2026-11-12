@@ -2,7 +2,7 @@
 
 (A) dado bruto conferido; (B) declarado pelo autor.
 
-| **Função** | Refina a forma de texto já decidido e protege dados conforme o destino, sem tocar no mérito. | **Versão** | 6.0.0. Data: [NÃO LOCALIZADO]. |
+| **Função** | Refina a forma de texto já decidido e protege dados conforme o destino, sem tocar no mérito. | **Versão** | 6.0.0. Data: 07/2026. |
 |---|---|---|---|
 | **Entrada** | Texto jurídico pronto e destino declarado, que por padrão é público. | **Saída** | Texto marcado, lista de alterações e versão limpa. |
 | **Arquitetura** | Proteção de dados → marcação dos trechos intocáveis → revisão → validação → entrega. | **Governança** | 12 hard stops. Diante deles, preserva o trecho original. Validação humana depois da entrega. |
