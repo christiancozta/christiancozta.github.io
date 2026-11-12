@@ -190,7 +190,27 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 #topo .dh-passos svg{display:block;width:var(--dh-pe);height:calc(var(--dh-pe) * .42);color:#FCFCFC;overflow:visible}
 #topo .dh-passos li:nth-child(odd) svg{transform:rotate(7deg)}
 #topo .dh-passos li:nth-child(even) svg{transform:scaleY(-1) rotate(7deg)}
-#topo .dh-desc{position:absolute;left:var(--dh-g);right:var(--dh-g);top:calc(var(--dh-g) * 1.2);margin:0;max-width:62ch;font:600 clamp(12px,1vw,15px)/1.6 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:#2C2C2C;text-wrap:pretty}
+/* topo da hero: descrição à esquerda, lastro (período e saídas) à direita.
+   A descrição vai da margem até a metade do D: --dh-dw = largura do D em em no eixo wdth em uso. */
+#topo{--dh-dw:.728;--dh-mini:10px}
+@media (max-width:1024px){#topo{--dh-dw:.549}}
+#topo .dh-topo{position:absolute;left:var(--dh-g);right:var(--dh-g);top:calc(var(--dh-g) * 1.2);display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+#topo .dh-desc{flex:none;width:max(220px,calc(50% - var(--dh-ww) / 2 + var(--dh-dw) * var(--dh-fs) / 2));margin:0;font:600 var(--dh-mini)/1.35 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;text-align:justify;hyphens:auto;color:#FCFCFC}
+#topo .dh-lastro{display:flex;flex-direction:column;align-items:flex-end;gap:10px;font:600 var(--dh-mini)/1.35 'Azeret Mono',ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#FCFCFC}
+#topo .dh-periodo{margin:0;text-align:right;white-space:nowrap}
+#topo .dh-periodo span{margin-right:.8em}
+#topo .dh-saidas{display:flex;gap:6px}
+#topo .dh-saidas a{display:flex;align-items:center;gap:9px;padding:7px 11px;background:#2C2C2C;color:#FCFCFC;font:inherit;letter-spacing:.12em;white-space:nowrap;transition:background .18s cubic-bezier(.32,.72,0,1),transform .18s cubic-bezier(.32,.72,0,1)}
+#topo .dh-saidas a span{font-size:1.1em}
+#topo .dh-saidas a:hover{background:#4A90E2;color:#FCFCFC}
+#topo .dh-saidas a:active{transform:translateY(1px)}
+#topo .dh-saidas a:focus-visible{outline:2px solid #FCFCFC;outline-offset:2px}
+/* celular: a metade do D fica rente à margem; a descrição ocupa a largura e o lastro desce para a direita */
+@media (max-width:640px){
+  #topo .dh-topo{flex-direction:column;align-items:stretch;gap:16px}
+  #topo .dh-desc{width:auto}
+  #topo .dh-lastro{align-self:flex-end}
+}
 @media (prefers-reduced-motion:reduce){#topo .dh-sombra{animation:none;transform:skewX(-8.0deg) perspective(1em) rotateX(-15.0deg) scaleY(-8.864)}#topo .dh-passos{animation:none;clip-path:none}}
 #rastro>div:first-of-type,#lastro>div:first-of-type{gap:clamp(10px,1.4vh,18px) clamp(20px,4vw,72px)!important;padding:clamp(24px,3.4vh,44px) clamp(20px,5vw,96px) clamp(20px,2.8vh,36px)!important}
 #rastro>div:first-of-type>p,#lastro>div:first-of-type>p{font-size:clamp(1rem,1.5vw,1.36rem)!important;line-height:1.16!important}
@@ -242,7 +262,16 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
       <feComposite in="d" in2="m" operator="in"></feComposite>
     </filter>
   </svg>
+  <div class="dh-topo">
   <p class="dh-desc">Jurimetria aplicada à experiência profissional, com rastro e lastro: de onde vem cada número e o que o sustenta.</p>
+  <div class="dh-lastro">
+    <p class="dh-periodo"><span>PERÍODO</span>28.11.25 — 05.05.26</p>
+    <div class="dh-saidas">
+      <a href="assets/data/lastro/jurimetria_derivada.csv" download>DADOS DERIVADOS<span aria-hidden="true">↓</span></a>
+      <a href="assets/data/lastro/jurimetria.sha256">HASH DA FONTE<span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+  </div>
   <div class="dh-chao" aria-hidden="true"></div>
   <span class="dh-sombra" aria-hidden="true">DATA</span>
   <h1 id="h-data" class="dh-word">DATA</h1>
