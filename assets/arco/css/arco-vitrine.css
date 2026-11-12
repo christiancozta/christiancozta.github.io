@@ -1,21 +1,37 @@
-/* A vitrine ocupa apenas a caixa existente; títulos continuam identificáveis. */
+/* Vitrine: a linha de base do arco é o horizonte das três heroes.
+   Coluna e trecho da coroa se preenchem por inteiro com a cor do sistema,
+   translúcida e sem gradiente; o texto fica sempre por cima, legível. */
 .arx[data-showcase] .arx-col{ overflow:hidden; isolation:isolate; }
-.arx-vitrine{
-  position:absolute; inset:0; width:100%; height:100%; z-index:1;
-  pointer-events:none; visibility:hidden;
+.arx[data-showcase] .arx-col > :not(.arx-vitrine){ position:relative; z-index:1; }
+.arx-vitrine,
+.arx-vitrine-coroa{
+  position:absolute; inset:0; z-index:0;
+  width:100%; height:100%;
+  pointer-events:none; visibility:hidden; opacity:0;
 }
-.arx-vitrine svg{ display:block; width:100%; height:100%; }
-.arx[data-showcase] .arx-col__head{ z-index:2; }
+.arx-vitrine canvas{ position:absolute; inset:0; display:block; width:100%; height:100%; }
+/* DATA: só a sombra das letras, a palavra não aparece. A base da sombra é a
+   linha do arco; o desenho é o mesmo do DATA, usado como máscara. */
+.arx-vitrine__sombra{
+  position:absolute;
+  transform-origin:50% 100%;
+  background:#2C2C2C; opacity:.26;
+  -webkit-mask:url("../showcase/data.svg") 0 0 / 100% 100% no-repeat;
+          mask:url("../showcase/data.svg") 0 0 / 100% 100% no-repeat;
+  will-change:transform;
+}
+.arx[data-showcase] .arx-col[data-exhibiting] .arx-vitrine,
+.arx[data-showcase][data-exhibit] .arx-vitrine-coroa{ visibility:visible; }
 .arx[data-showcase] .arx-col[data-exhibiting] .arx-col__head,
 .arx[data-showcase] .arx-col[data-exhibiting] .arx-col__mov,
 .arx[data-showcase] .arx-col[data-exhibiting] .arx-col__n{ color:#2C2C2C; }
-.arx[data-showcase] .arx-col[data-exhibiting] .arx-col__txt{
-  opacity:var(--story-opacity, 1);
-}
-.arx[data-showcase] .arx-col[data-exhibiting] .arx-vitrine{ visibility:visible; }
+/* a curva interna do arco acompanha o sistema em exibição */
+.arx[data-showcase]:not([data-reading])[data-exhibit="data"] .arx-arc__intra{ stroke:var(--arx-data); }
+.arx[data-showcase]:not([data-reading])[data-exhibit="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
+.arx[data-showcase]:not([data-reading])[data-exhibit="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
 /* Hover e foco devolvem a leitura, sem avançar o relógio da vitrine. */
-.arx[data-showcase][data-reading] .arx-col .arx-vitrine{ visibility:hidden; }
-.arx[data-showcase][data-reading] .arx-col .arx-col__txt{ opacity:1; }
+.arx[data-showcase][data-reading] .arx-col .arx-vitrine,
+.arx[data-showcase][data-reading][data-exhibit] .arx-vitrine-coroa{ visibility:hidden; }
 .arx[data-showcase] .arx-col:has(:focus-visible){ outline:2px solid #2C2C2C; outline-offset:-4px; }
 .arx[data-showcase] .arx-col.is-selected .arx-col__mov{ text-decoration:underline; text-underline-offset:.2em; }
 /* A entrada é estática; só uma escolha manual forma o arco. */
@@ -23,5 +39,6 @@
 .arx[data-showcase="AUTO"] .arx-col__txt,
 .arx[data-showcase="PREVIEW"] .arx-col__txt{ animation:none; }
 @media (prefers-reduced-motion:reduce){
-  .arx[data-showcase] .arx-vitrine{ display:none; }
+  .arx[data-showcase] .arx-vitrine,
+  .arx[data-showcase] .arx-vitrine-coroa{ display:none; }
 }
