@@ -20,11 +20,8 @@
 .arx[data-showcase][data-sel=""][data-exhibit="data"] .arx-arc__intra{ stroke:var(--arx-data); }
 .arx[data-showcase][data-sel=""][data-exhibit="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
 .arx[data-showcase][data-sel=""][data-exhibit="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
-/* Enquanto o ATRIO anima — na ordem, sob o cursor ou selecionado —, o texto
-   do movimento vai a preto pleno sobre o xadrez: no bloco e, aberto o painel,
-   na célula Movimento. Os selos mantêm as próprias cores. */
-.arx[data-showcase] .arx-col[data-exhibiting="atrio"] .arx-col__txt,
-.arx[data-showcase] .arx-mov[data-exhibiting="atrio"] p{ color:#000000!important; }
+/* Tecnologia mantém a tinta #2C2C2C sobre o xadrez: quem cede é a esteira,
+   em cinza (ver floor() em arco-vitrine.js). */
 /* a tinta muda no mesmo tempo da troca cruzada, sem salto */
 .arx[data-showcase] .arx-col__txt,
 .arx[data-showcase] .arx-mov p{ transition:color 700ms var(--arx-ease), opacity 180ms var(--arx-ease); }
@@ -44,18 +41,24 @@
 .arx[data-showcase][data-sel=""] .arx-col.is-preview .arx-col__txt{ color:var(--arx-text); }
 /* O nome do sistema em exibição volta à coroa, na cor do sistema e
    transparente, sobre o trecho do bloco ativo; na troca, desliza de um terço
-   ao outro no tempo da troca cruzada. A opacidade de cada cor dá o mesmo
-   contraste (cerca de 1,35:1) sobre o trecho já tingido — o amarelo, mais
-   claro, pede mais. Sem trecho de coroa (celular, blocos de baixo), não há nome. */
+   ao outro. Os três têm a mesma altura de letra e o mesmo peso visual: a
+   opacidade de cada um compensa a espessura do traço da sua fonte (medida na
+   massa de tinta sobre o trecho tingido), e nenhum se sobressai. Sem trecho
+   de coroa (celular, blocos de baixo), não há nome. */
+.arx[data-showcase][data-sel=""] .arx-name{ bottom:0; }
 .arx[data-showcase][data-sel=""] .arx-name span{
   left:var(--vit-name-x, 50%);
-  font-size:calc(1em * var(--vit-name-k, 1));
+  line-height:1;
   transition:opacity 380ms var(--arx-ease), transform 520ms var(--arx-spring),
-    left 700ms cubic-bezier(.22, 1, .36, 1), font-size 700ms cubic-bezier(.22, 1, .36, 1);
+    left 700ms cubic-bezier(.22, 1, .36, 1);
 }
-.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="data"] .arx-name [data-sys="data"]{ opacity:.35; transform:translate(-50%, 0); }
+/* mesma altura de letra para os três; a base encosta na linha do tempo */
+.arx[data-showcase][data-sel=""] .arx-name [data-sys="data"]{ font-size:var(--vit-fs-data); bottom:var(--vit-bottom-data); }
+.arx[data-showcase][data-sel=""] .arx-name [data-sys="echo"]{ font-size:var(--vit-fs-echo); bottom:var(--vit-bottom-echo); }
+.arx[data-showcase][data-sel=""] .arx-name [data-sys="atrio"]{ font-size:var(--vit-fs-atrio); bottom:var(--vit-bottom-atrio); }
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="data"] .arx-name [data-sys="data"]{ opacity:.33; transform:translate(-50%, 0); }
 .arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="echo"] .arx-name [data-sys="echo"]{ opacity:.74; transform:translate(-50%, 0); }
-.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.29; transform:translate(-50%, 0); }
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.37; transform:translate(-50%, 0); }
 /* o hover do repouso não acende um nome fora do trecho */
 .arx[data-showcase][data-sel=""]:not([data-exhibit-crown]) .arx-name span{ opacity:0; }
 /* pista de interação no desktop: o título do bloco se sublinha no hover */

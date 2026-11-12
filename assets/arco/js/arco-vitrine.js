@@ -242,19 +242,9 @@
         path.lineTo(cx + b * f1, y1); path.lineTo(cx + a * f1, y1); path.closePath();
       }
     }
+    // a esteira em cinza, não em preto: o texto em #2C2C2C se lê por cima
     ctx.fillStyle = "rgba(252,252,252,.38)"; ctx.fill(paper);
-    ctx.fillStyle = "rgba(44,44,44,.12)"; ctx.fill(ink);
-    // atrás do texto o xadrez cede metade: a legibilidade não fica só com o preto
-    const key = `${s.w}|${s.h}|${H}`;
-    if (s.blocksKey !== key){ s.blocks = textBlocks(s); s.blocksKey = key; }
-    ctx.save();
-    ctx.globalCompositeOperation = "destination-out";
-    for (const [l, t, r, b] of s.blocks) for (let n = 0; n < 4; n++){
-      const e = 10 - n * 3;          // borda em degraus, sem corte seco
-      ctx.fillStyle = "rgba(0,0,0,.16)";
-      ctx.fillRect(l - e, t - e, r - l + 2 * e, b - t + 2 * e);
-    }
-    ctx.restore();
+    ctx.fillStyle = "rgba(128,128,128,.12)"; ctx.fill(ink);
   }
 
   /* ---------- medida e pintura ---------- */
@@ -274,7 +264,6 @@
       s.color = getComputedStyle(s.col).getPropertyValue("--c").trim() || "#2C2C2C";
       s.grid = null;
       fit(s.canvas, s.w, s.h);
-      s.blocksKey = "";
       if (s.mov){
         const m = s.mov.layer.getBoundingClientRect();   // inclui a borda de cima da célula
         s.mov.w = m.width; s.mov.h = m.height;
@@ -284,41 +273,60 @@
     });
     fitNames();
   }
-  /* o nome cabe no trecho: no máximo 82% da largura do bloco e inteiro sob a
-     curva do arco, que é baixa nas pontas. Escala k ≤ 1 por sistema. */
+  /* Nomes na coroa: os três com a mesma altura de letra, a base encostada na
+     linha do tempo (1,5 px de respiro) e o mesmo tamanho para todos — o maior
+     em que nenhum toca a curva interna do arco (o D do DATA à esquerda, o O do
+     ATRIO à direita) nem passa de 86% do trecho. Cada fonte tem proporções
+     próprias, então a altura comum vira um corpo de fonte por sistema. */
   const names = Object.fromEntries(SYSTEMS.map(sys => [sys, root.querySelector(`.arx-name [data-sys="${sys}"]`)]));
-  const extra = root.querySelector(".arx-arc__extra");
+  const intra = root.querySelector(".arx-arc__intra");
+  const GAP = 1.5, CLEAR = 5;
+  function nameMetrics(){
+    const c = document.createElement("canvas").getContext("2d"), ref = 100, out = {};
+    for (const sys of SYSTEMS){
+      const el = names[sys];
+      if (!el) continue;
+      const cs = getComputedStyle(el);
+      c.font = `${cs.fontStyle} ${cs.fontWeight} ${ref}px ${cs.fontFamily}`;
+      if ("fontStretch" in c) c.fontStretch = parseFloat(cs.fontStretch) >= 125 ? "expanded" : "normal";
+      const m = c.measureText(el.textContent.trim());
+      out[sys] = {ink:m.actualBoundingBoxAscent / ref, inkD:m.actualBoundingBoxDescent / ref,
+        fA:m.fontBoundingBoxAscent / ref, fD:m.fontBoundingBoxDescent / ref,
+        w:(m.actualBoundingBoxLeft + m.actualBoundingBoxRight) / ref};
+    }
+    return out;
+  }
   function fitNames(){
-    if (!extra || !extra.getTotalLength) return;
-    const vb = extra.ownerSVGElement.viewBox.baseVal, sx = skyW / vb.width, sy = skyH / vb.height;
-    const len = extra.getTotalLength(), pts = [];
-    for (let i = 0; i <= 120; i++){ const p = extra.getPointAtLength(len * i / 120); pts.push([p.x * sx, skyH - p.y * sy]); }
-    const rise = x => {   // altura do arco sobre a base em x (px da coroa)
+    if (!intra || !intra.getTotalLength || !skyW) return;
+    const vb = intra.ownerSVGElement.viewBox.baseVal, sx = skyW / vb.width, sy = skyH / vb.height;
+    const len = intra.getTotalLength(), pts = [];
+    for (let i = 0; i <= 160; i++){ const p = intra.getPointAtLength(len * i / 160); pts.push([p.x * sx, skyH - p.y * sy]); }
+    const rise = x => {   // altura da curva interna sobre a base em x (px da coroa)
+      if (x <= pts[0][0]) return 0;
       for (let i = 1; i < pts.length; i++) if (pts[i][0] >= x){
         const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
         return y0 + (y1 - y0) * ((x - x0) / ((x1 - x0) || 1));
       }
       return 0;
     };
-    const box = root.querySelector(".arx-name");
-    const bottom = box ? parseFloat(getComputedStyle(box).bottom) || 0 : 0;
-    // mede cada nome no tamanho base, sem a escala do sistema em exibição
-    const was = root.style.getPropertyValue("--vit-name-k");
-    root.style.setProperty("--vit-name-k", "1");
-    const base = Object.fromEntries(SYSTEMS.map(sys => [sys, names[sys] ? [names[sys].offsetWidth, names[sys].offsetHeight] : [0, 0]]));
-    if (was) root.style.setProperty("--vit-name-k", was); else root.style.removeProperty("--vit-name-k");
-    surfaces.forEach(s => {
-      const el = names[s.sys];
-      if (!el || !s.w) return;
-      const [w, h] = base[s.sys];
-      const cx = s.x + s.w / 2;
-      let k = Math.min(1, .82 * s.w / (w || 1));
-      for (; k > .3; k -= .02){
-        const half = k * w / 2, top = bottom + k * h + 6;
-        if (rise(cx - half) >= top && rise(cx + half) >= top) break;
-      }
-      s.nameK = k;
+    const M = nameMetrics();
+    const fits = H => surfaces.every(s => {
+      const m = M[s.sys];
+      if (!m || !s.under || !s.w) return true;
+      const w = m.w * H / m.ink, cx = s.x + s.w / 2, top = GAP + H + CLEAR;
+      return w <= .86 * s.w && rise(cx - w / 2) >= top && rise(cx + w / 2) >= top;
     });
+    let H = skyH * .6;
+    while (H > 8 && !fits(H)) H -= .5;
+    for (const sys of SYSTEMS){
+      const m = M[sys];
+      if (!m) continue;
+      const fs = H / m.ink;
+      // line-height 1: a linha de base fica a (fs − (fA+fD)·fs)/2 + fD·fs do pé da caixa
+      const baseline = (fs - (m.fA + m.fD) * fs) / 2 + m.fD * fs;
+      root.style.setProperty(`--vit-fs-${sys}`, `${fs.toFixed(2)}px`);
+      root.style.setProperty(`--vit-bottom-${sys}`, `${(GAP + m.inkD * fs - baseline).toFixed(2)}px`);
+    }
   }
   function clipCrown(s){
     const d = field.getAttribute("d");
@@ -395,7 +403,6 @@
     if (c.under && !root.dataset.sel){
       root.dataset.exhibitCrown = "";
       root.style.setProperty("--vit-name-x", `${c.x + c.w / 2}px`);
-      root.style.setProperty("--vit-name-k", String(c.nameK || 1));
     } else delete root.dataset.exhibitCrown;
   }
 
