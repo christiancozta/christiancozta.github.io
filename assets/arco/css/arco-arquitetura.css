@@ -178,7 +178,7 @@
   font-family:var(--f-body); font-size:.84rem;
   color:var(--arx-text);
 }
-.arx-id__contacts a{
+.arx-id__contacts li > a{
   display:grid; grid-template-columns:5.6rem auto auto;
   justify-content:start; align-items:baseline; column-gap:.9rem;
   padding:.32rem 0;
@@ -1747,25 +1747,48 @@ html:not(.arx-js) .arx-sum{ display:grid; }
   padding-left:1.1rem;
   border-left:.5px solid rgba(44,44,44,.32);
 }
-.arx-id__contacts a{
+.arx-id__contacts li > a{
   grid-template-columns:4.1rem auto;
   column-gap:.75rem;
   padding:.16rem 0;
 }
-.arx-id__contacts li:nth-child(odd) a{ padding-top:.32rem; }
-.arx-id__contacts li:nth-child(even) a{ padding-bottom:.32rem; }
+.arx-id__contacts li:nth-child(odd) > a{ padding-top:.32rem; }
+.arx-id__contacts li:nth-child(even) > a{ padding-bottom:.32rem; }
+/* Currículo PT/EN: links independentes na mesma célula de contato.
+   Os links internos não devem herdar o grid de rótulo/valor. */
+.arx-id__contacts li:has(> .arx-id__k){
+  display:grid; grid-template-columns:4.1rem auto;
+  align-items:baseline; column-gap:.75rem;
+  padding:.32rem 0;
+}
+.arx-id__contacts li > .arx-id__v{
+  white-space:nowrap; text-decoration:none;
+}
+.arx-id__contacts li > .arx-id__v a{
+  display:inline; color:inherit; padding:0;
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-underline-offset:.22em;
+  text-decoration-color:rgba(44,44,44,.18);
+  transition:text-decoration-color 200ms var(--arx-ease);
+}
+.arx-id__contacts li > .arx-id__v a:hover,
+.arx-id__contacts li > .arx-id__v a:focus-visible{
+  text-decoration-color:var(--arx-ink);
+}
 /* desktop estreito: abaixo de 1040px, o rótulo sobe sobre o valor */
 @media (min-width:901px) and (max-width:1180px){
   .arx-id__contacts{ column-gap:1.75rem; }
 }
 @media (min-width:901px) and (max-width:1040px){
-  .arx-id__contacts a{ grid-template-columns:auto; row-gap:.05rem; }
+  .arx-id__contacts li > a,
+  .arx-id__contacts li:has(> .arx-id__k){ grid-template-columns:auto; row-gap:.05rem; }
 }
 /* celular: rótulo sobre o valor; a coluna do e-mail fica com a sobra */
 @media (max-width:560px){
   .arx-id__contacts{ column-gap:1.5rem; grid-template-columns:auto minmax(0, 1fr); }
   .arx-id__contacts li{ padding-left:.8rem; }
-  .arx-id__contacts a{ grid-template-columns:auto; row-gap:.1rem; }
+  .arx-id__contacts li > a,
+  .arx-id__contacts li:has(> .arx-id__k){ grid-template-columns:auto; row-gap:.1rem; }
 }
 /* desktop: reserva de repouso 16px menor (mais ar entre parágrafo e arco do que antes);
    ao formar, a coroa ocupa o que faltar e o conteúdo abaixo desce suave. */
