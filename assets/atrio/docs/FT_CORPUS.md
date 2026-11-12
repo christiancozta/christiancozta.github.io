@@ -9,4 +9,6 @@
 | **Privacidade** | Pseudonimização reversível. A reidentificação só é possível pelo cofre. | **Testes** | 37 no código (A): 26 na API e 11 na biblioteca de detecção. Resultado de execução não salvo. |
 | **Stack** | Python, OCR local (Tesseract) e cofre cifrado. | **IA utilizada** | Nenhum modelo generativo no fluxo. Detecção por regras, com reconhecimento de nomes opcional (spaCy). |
 
+*Origem da base.* O corpus de 115.114 julgados veio de um coletor próprio em Python, com Selenium e BeautifulSoup sobre o portal de jurisprudência, depois migrado para a API pública do DataJud (B).
+
 *Autoria.* Arquitetura, regras jurídicas, metodologia e critérios de governança: Christian da Costa. Implementação de código (API e scripts): produzida com apoio intensivo de ferramentas de IA, sob especificação e revisão do autor.
