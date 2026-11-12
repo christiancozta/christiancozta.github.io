@@ -556,6 +556,7 @@
     footer.className = 'arco-unified-footer';
     footer.setAttribute('aria-label','ARCO closing');
     footer.innerHTML = `
+      <p class="arco-unified-footer__privacy">Visits measured by Google&nbsp;Analytics</p>
       <p class="arco-unified-footer__seal">ARCO © <time datetime="2026">2026</time></p>
       <button class="arco-unified-footer__method" type="button" aria-label="Open DATA — Base &amp; Method">
         <span>BASE &amp; METHOD:</span><strong>DATA</strong>
@@ -584,6 +585,15 @@
   letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
   color:#FCFCFC!important;text-align:center;
 }
+.arco-unified-footer__privacy{
+  position:absolute;left:clamp(18px,2.1vw,34px);top:50%;transform:translateY(-50%);
+  max-width:calc(50% - 5rem);
+  margin:0;padding:0;
+  font-family:"Azeret Mono",ui-monospace,monospace;
+  font-size:.5rem;font-weight:500;line-height:1.45;
+  letter-spacing:.08em;text-transform:uppercase;text-align:left;
+  color:rgba(252,252,252,.42)!important;
+}
 .arco-unified-footer__method{
   position:absolute;right:clamp(18px,2.1vw,34px);top:50%;transform:translateY(-50%);
   display:flex;align-items:baseline;justify-content:flex-end;gap:.5rem;
@@ -606,12 +616,14 @@
 .arco-unified-footer__method:focus-visible{outline:2px solid #4A90E2;outline-offset:3px}
 @media(max-width:1000px){
   .arco-unified-footer__seal{left:50%}
+  .arco-unified-footer__privacy{left:max(1rem,env(safe-area-inset-left,0px));font-size:clamp(.42rem,1.7vw,.5rem)}
   .arco-unified-footer__method{right:max(1rem,env(safe-area-inset-right,0px));gap:.32rem}
   .arco-unified-footer__method span{font-size:clamp(.46rem,1.9vw,.54rem)}
   .arco-unified-footer__method strong{font-size:clamp(.64rem,2.5vw,.72rem)}
 }
 @media(max-width:560px){
   .arco-unified-footer__seal{font-size:.52rem}
+  .arco-unified-footer__privacy{max-width:calc(50% - 3.4rem);font-size:.4rem;letter-spacing:.05em}
   .arco-unified-footer__method span{display:none}
   .arco-unified-footer__method strong::before{content:"BASE & METHOD: ";font-family:"Azeret Mono",ui-monospace,monospace;font-size:.46rem;font-weight:500;letter-spacing:.06em;color:rgba(252,252,252,.58)}
 }
