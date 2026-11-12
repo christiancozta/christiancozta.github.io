@@ -4,7 +4,9 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 
 ## Arquivos
 
-- `jurimetria_derivada.csv`: agregados mínimos da 2ª Turma Recursal necessários para conferir série mensal, universos, denominadores, teste adversarial, testes de robustez, tempos médios publicados e o indicador individual do autor, sem linhas processuais ou benchmark de terceiros.
+- `jurimetria_derivada.csv`: agregados mínimos da 2ª Turma Recursal necessários para conferir série mensal, universos, denominadores, teste adversarial, testes de robustez, tempos médios publicados e o indicador individual do autor e a parcela mensal fora do teto de 30 dias, sem linhas processuais nem dados individuais de terceiros.
+- `exec_fiscais_res547_derivada.csv`: frente de revisão de execuções fiscais (03.07.2024 a 04.09.2024) sob a Resolução CNJ 547/2024: carteira triada, encaminhamentos à extinção, saneáveis identificados e taxa de saneamento, com o SHA-256 da planilha de origem; sem números de processo nem nomes.
+- `exec_fiscais_res547_derivada.sha256`: SHA-256 do derivado das execuções fiscais.
 - `jurimetria.sha256`: SHA-256 da base original usada nos cálculos. O hash registra a integridade dos bytes da fonte; não prova, por si só, a fidelidade da extração ao sistema de origem.
 - `ementario_publico.xlsx`: 2.758 ementas; somente estrutura de classificação.
 - `acervo_publico.xlsx`: 1.192 registros; somente ID sequencial, classe, agrupador e núcleo.
@@ -27,6 +29,8 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | abril sem entrantes = 60,11%, diferença de −0,28 p.p. | agregada | `jurimetria_derivada.csv` |
 | 0 de 6 servidores presentes nas duas pontas recuaram | agregada | `jurimetria_derivada.csv` |
 | 13,2 d / 6,9 d / 10,1 d de fila média publicada | agregada | `jurimetria_derivada.csv` |
+| fora do teto de 30 dias: 36,5% (jan) → 6,7% (abr), −29,8 p.p.; −5,0 p.p. de fev a abr | derivada | `jurimetria_derivada.csv` |
+| 600 saneados em 1.543 triados = 38,9% (256 encaminhados à extinção + 344 saneáveis identificados) | derivada | `exec_fiscais_res547_derivada.csv` |
 | 153 / 258 = 59,30% do autor | derivada | `jurimetria_derivada.csv` |
 | 2.758 ementas catalogadas | direta | `ementario_publico.xlsx` |
 | 1.192 registros triados | direta | `acervo_publico.xlsx` |
