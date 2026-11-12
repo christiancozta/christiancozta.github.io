@@ -61,6 +61,22 @@
 .arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.37; transform:translate(-50%, 0); }
 /* o hover do repouso não acende um nome fora do trecho */
 .arx[data-showcase][data-sel=""]:not([data-exhibit-crown]) .arx-name span{ opacity:0; }
+/* a seta da linha do tempo sob o nome visível cede o lugar a ele; as outras
+   continuam (os blocos, fora da seleção, estão na ordem do tempo) */
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="data"] .arx-tech path.is-tl--0,
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="echo"] .arx-tech path.is-tl--1,
+.arx[data-showcase][data-sel=""][data-exhibit-crown][data-exhibit="atrio"] .arx-tech path.is-tl--2{
+  opacity:0; transition:opacity 380ms var(--arx-ease);
+}
+/* no celular os blocos se empilham: setas de colunas lado a lado não têm a
+   que corresponder */
+@media (max-width:640px){
+  .arx[data-showcase] .arx-tech path.is-tl{ display:none; }
+}
+/* enquanto o bloco escolhido desliza para o início, o campo da célula
+   Movimento espera; chega com ele */
+.arx[data-showcase] .arx-sum .arx-mov > .arx-vitrine{ transition:opacity 360ms var(--arx-ease); }
+.arx[data-showcase][data-sliding] .arx-sum .arx-mov > .arx-vitrine{ opacity:0!important; }
 /* pista de interação no desktop: o título do bloco se sublinha no hover */
 @media (hover:hover){
   .arx[data-showcase] .arx-col:hover .arx-col__mov{ text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.2em; }

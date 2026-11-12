@@ -490,6 +490,11 @@
     remember();
     if (motion.matches) return;
     const dxs = cols.map((col, i) => before[i] - lefts[i]);
+    if (dxs.some(dx => Math.abs(dx) >= 1)){
+      root.dataset.sliding = "";
+      clearTimeout(slide.timer);
+      slide.timer = setTimeout(() => { delete root.dataset.sliding; }, 640);
+    }
     // o bloco que atravessa os outros vai por cima, com fundo de papel
     const far = dxs.reduce((m, dx, i) => Math.abs(dx) > Math.abs(dxs[m]) ? i : m, 0);
     cols.forEach((col, i) => {
