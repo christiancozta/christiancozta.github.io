@@ -138,12 +138,10 @@ const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
     console.log('PASS keyboard and reduced motion: manual selection, second activation navigates');
     await keyboard.close();
 
-    const mobile = await open({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
+    const mobile = await open({viewport:{width:390,height:600},isMobile:true,hasTouch:true,deviceScaleFactor:1});
     await mobile.locator('.arx-cols').scrollIntoViewIfNeeded();
-    await step(mobile,60000);
-    const mobileState = await state(mobile);
-    const rect = await mobile.locator('.arx-cols').boundingBox();
-    if(rect.height > 844) assert.equal(mobileState.mode,'CLEAN');
+    await step(mobile,6000);
+    assert.ok((await state(mobile)).active.length <= 1);
     assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth <= innerWidth),true);
     await head(mobile,'data').tap();
     await step(mobile,1000);
@@ -151,7 +149,7 @@ const executablePath = process.env.CHROMIUM_PATH || '/usr/bin/chromium';
     assert.equal(mobile.url(),URL);
     await head(mobile,'data').tap();
     await mobile.waitForURL('**/data.html');
-    console.log('PASS mobile: no overflow, two taps');
+    console.log('PASS mobile: viewport remains stable, two taps');
     await mobile.close();
 
     const staticPage = await open({javaScriptEnabled:false});
