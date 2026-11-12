@@ -449,14 +449,22 @@ if(!copy)return;
 lastVersionTrigger=trigger;trigger.setAttribute("aria-expanded","true");
 const linhas=(copy.historico||[]).slice();
 const atual=linhas.at(-1);
-versionTitle.textContent=copy.title;
-versionCurrent.textContent=atual?("Versão corrente "+atual.v+" — "+atual.d):"";
-const itensHistorico=(trigger.dataset.versionOf==="cerne"?linhas:linhas.slice(0,-1)).reverse();
-versionList.replaceChildren(...itensHistorico.map(item=>{
-const li=document.createElement("li");
-const marca=document.createElement("b");marca.textContent="v. "+item.v+" ("+item.d+")";
-const texto=document.createElement("span");texto.textContent=item.t;
-li.append(marca,texto);return li;}));
+/* Nome em Science Gothic com a segunda letra em terracota, como na hero. */
+const nome=String(copy.title||"");
+versionTitle.replaceChildren(document.createTextNode(nome.slice(0,1)),Object.assign(document.createElement("span"),{className:"version-note__acento",textContent:nome.slice(1,2)}),document.createTextNode(nome.slice(2)));
+versionTitle.setAttribute("aria-label",nome);
+versionCurrent.textContent=atual?("Versão corrente "+atual.v+", "+atual.d):"";
+/* Linha do tempo, da corrente para a mais antiga: número em Clash, data em mono, uma frase por linha. */
+const itensHistorico=linhas.slice().reverse();
+versionList.replaceChildren(...itensHistorico.map((item,indice)=>{
+const li=document.createElement("li");li.className="version-note__item"+(indice===0?" version-note__item--atual":"");
+const marca=document.createElement("div");marca.className="version-note__marca";
+const numero=document.createElement("b");numero.textContent=item.v;
+const data=document.createElement("time");data.textContent=item.d;
+marca.append(numero,data);
+const pontos=document.createElement("ul");pontos.className="version-note__pontos";
+String(item.t||"").split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9])/).forEach(frase=>{const ponto=document.createElement("li");ponto.textContent=frase;pontos.append(ponto);});
+li.append(marca,pontos);return li;}));
 versionList.hidden=itensHistorico.length===0;
 versionNote.hidden=false;document.body.classList.add("sample-dialog-open");
 versionNote.scrollTop=0;requestAnimationFrame(()=>versionNote.focus({preventScroll:true}));
