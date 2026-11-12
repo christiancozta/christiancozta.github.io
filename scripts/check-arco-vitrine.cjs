@@ -41,6 +41,13 @@ const SHOW = 6840, XF = 760;
     assert.equal(s.arch, 'formed');
     assert.equal(s.mode, 'AUTO');
     assert.deepEqual(s.active, ['data']);
+    // The crown slice above the block is filled too (the crown plane is visible and painted).
+    assert.equal(await page.locator('.arx-vitrine-coroa').evaluate(el => getComputedStyle(el).opacity), '1');
+    assert.ok(await page.locator('.arx-vitrine-coroa').evaluate(el => {
+      const d = el.getContext('2d').getImageData(0, 0, el.width, el.height).data;
+      for (let i = 3; i < d.length; i += 4) if (d[i] > 0) return true;
+      return false;
+    }));
 
     // Looping, in order, with no empty interval.
     await run(page, SHOW + XF + 100);
