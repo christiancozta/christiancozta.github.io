@@ -71,7 +71,7 @@ typography:
     lineHeight: 1
     letterSpacing: "0.04em"
   assinatura:
-    fontFamily: "'ARCO Restart Ginger', 'Instrument Sans', sans-serif"
+    fontFamily: "'Archivo', 'Instrument Sans', sans-serif"
     fontSize: "21px"
     fontWeight: 600
     lineHeight: 1.05
@@ -175,7 +175,7 @@ O mundo tem um material, o papel #FCFCFC, e uma luz, o âmbar #FFB627. A tinta e
 - Âmbar como luz única, em marca-texto, faixa de coluna e batuta.
 - Notação musical verdadeira: pautas de cinco linhas, barras de compasso, barra dupla final, pausas, semínimas, semibreves ligadas, chaves e colchetes de naipe, marcas de ensaio, indicações *tacet* e *ad lib.*
 - A notação informa: cada nota corresponde a uma regra escrita.
-- Bodoni Moda para o que é título ou nome; Instrument Sans para o texto; Shantell Sans 300 para o texto dos passos, como anotação à mão sobre a partitura; JetBrains Mono para indicações, códigos, o subtítulo e o prendedor; Restart Ginger só na assinatura do autor, como no ARCO.
+- Bodoni Moda para o que é título ou nome; Instrument Sans para o texto; Shantell Sans 300 para o texto dos passos, como anotação à mão sobre a partitura; JetBrains Mono para indicações, códigos, o subtítulo e o prendedor; Archivo só na assinatura do autor, como no ARCO.
 - Pílulas para comandos; cantos retos no resto.
 
 ## Colors
@@ -211,7 +211,7 @@ A paleta é fechada. Tudo o que não é tinta, papel ou âmbar é mistura deles.
 **Texto:** Instrument Sans.
 **Texto dos passos:** Shantell Sans 300, a mão do regente anotando cada compasso.
 **Indicações e códigos:** JetBrains Mono, caixa alta espaçada nas indicações e no prendedor.
-**Assinatura:** ARCO Restart Ginger 600, só no nome do autor, no pé da página (a mesma face e o mesmo símbolo do ARCO).
+**Assinatura:** Archivo 800, só no nome do autor, no pé da página (a mesma face e o mesmo símbolo do ARCO).
 
 ### Hierarchy
 - **Título** (Bodoni 900, 64px, 1, +0,08em): PLAY, centrado no alto da folha.
@@ -239,7 +239,7 @@ A página é uma folha sobre a base: bordas de tinta nas laterais (clamp(12px, 3
 - **Selo seco do som:** à esquerda, centrado sob o prendedor, logo abaixo das hastes (146px do topo da folha), descendo até a casa em branco do cabeçalho dos compassos; sempre 10% maior que o carimbo da busca, na mesma cor do papel. Só o relevo o revela (luz branca no alto à esquerda, sombra embaixo à direita): anel, filete, "OUVIR OS COMPASSOS · PLAY · ECHO ·" em volta e a nota ao centro. No hover o relevo se aprofunda; ao clicar, e enquanto o som estiver ligado, fica afundado (luz e sombra invertidas). No celular, à esquerda, entre o subtítulo e os compassos.
 - **Folha de rosto:** o título PLAY e o subtítulo, centrados. A folha de rosto tem altura mínima para que o selo da busca caiba entre o fim das hastes do prendedor e o cabeçalho dos compassos.
 - **Sistema:** cada linha é uma grade de quatro colunas: chave (26px), nomes (clamp(150px, 15vw, 232px)), pauta (o resto) e "ver | baixar" (118px). O cabeçalho deixa em branco a casa à esquerda (sem rótulo) e, sobre cada compasso, traz a marca de ensaio com o passo numa linha ("I IDENTIFICAÇÃO") e, na linha de baixo, o texto que o continua ("para classe, objeto, rito e questões relevantes."). Texto em Shantell Sans 300 11,5px, justificado e hifenizado (hífen discreto na fonte, para não depender do dicionário do navegador), com margem pequena à esquerda e um pouco maior à direita, dentro da área de hover do compasso.
-- **Pé:** sobre fio, a epígrafe "Harmonia é coordenação de diferenças." em Bodoni itálico à esquerda e, à direita, a assinatura: símbolo âmbar de 36px ao lado do nome em Restart Ginger e de "LAW | OPS | TECH | AI" em indicação, levando ao ARCO. Até 980px, os dois se empilham ao centro.
+- **Pé:** sobre fio, a epígrafe "Harmonia é coordenação de diferenças." em Bodoni itálico à esquerda e, à direita, a assinatura: símbolo âmbar de 36px ao lado do nome em Archivo e de "LAW | OPS | TECH | AI" em indicação, levando ao ARCO. Até 980px, os dois se empilham ao centro.
 - **Naipes, nesta ordem:** Intro (colchete: Índice e Arquitetura, legenda "Abertura", e Memória de Integração, legenda "Registro", as únicas *ad lib.*; as legendas são as categorias que os próprios PDFs declaram), Coleção (chaveta de piano: Notas Introdutórias em I, que acolhe; Mapa Temático em I, que classifica a matéria; Afinação Processual sustentada de I a II, ligada, triagem e depois verificação; e o Guia de Estilo, sustentado de IV até a coda; as notas dos volumes seguem o que cada um declara na capa), Governança (colchete: Regras de Aplicação em pedal nos cinco compassos e Critérios Operacionais na coda, emendando no Guia de Estilo que fecha a Coleção) e Ferramenta (colchete: Calendário Jurídico em II, Fundamentos e Ementário em III, Templates em IV).
 - **Parte:** outra folha pousada sobre a partitura, à direita, com a base de tinta em volta (recuada da borda, do topo e do pé), fibra, luz rasante e sombra; min(1040px, 92vw), com cabeçalho (rótulo "Naipe | Material" e pílula "Voltar à partitura") e corpo rolável. Documentos levam o trilho "Nesta folha" (210px) acima de 1180px.
 
@@ -312,5 +312,5 @@ Diálogo de papel com fio âmbar no topo, consulta em Bodoni itálico 24px, filt
 - **Não repita** um material em duas pautas: o Guia de Estilo vive na Coleção.
 - **Não use** segunda cor de destaque ou #FFFFFF; o escuro é só a base em volta da folha e o palco do leitor.
 - **Não use** ponto médio como separador.
-- **Não troque** Restart Ginger por outra face na assinatura, nem preencha o miolo do símbolo.
+- **Não troque** a Archivo por outra face na assinatura, nem preencha o miolo do símbolo.
 - **Não carregue** Fundamentos e Ementário na abertura da página: cada base desce só quando a ferramenta é aberta ou a busca global a consulta.
