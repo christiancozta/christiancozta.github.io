@@ -428,20 +428,13 @@
 
     sketch(W, H, apex, wide, roomLeft, roomRight);
 
-    /* LINHA DO TEMPO na base: um marco por movimento, no centro de cada vão,
-       em três estados (aberto, em curso, cheio), e o sentido do tempo na ponta */
+    /* LINHA DO TEMPO na base: um marco por movimento, no centro de cada vão.
+       O marco é a seta que antes ficava no canto de cada bloco, agora sem
+       estado: só aponta o sentido do tempo, como a ponta da linha. */
     [0, 1, 2].forEach(i => {
       const cx = W * (i * 2 + 1) / 6;
-      const node = techNode(`tl-${i}`, "circle", `is-tl is-tl--${i}`, 1550 + i * 140);
-      node.setAttribute("cx", cx.toFixed(1));
-      node.setAttribute("cy", H.toFixed(1));
-      node.setAttribute("r", i === 2 ? "3.8" : "4.2");
-      if (i === 1){
-        const dot = techNode("tl-1d", "circle", "is-tl is-tl--dot", 1690);
-        dot.setAttribute("cx", cx.toFixed(1));
-        dot.setAttribute("cy", H.toFixed(1));
-        dot.setAttribute("r", "1.6");
-      }
+      const node = techNode(`tl-${i}`, "path", `is-tl is-tl--${i}`, 1550 + i * 140);
+      node.setAttribute("d", `M${(cx - 3.4).toFixed(1)} ${(H - 4.4).toFixed(1)}L${(cx + 4.2).toFixed(1)} ${H.toFixed(1)}L${(cx - 3.4).toFixed(1)} ${(H + 4.4).toFixed(1)}Z`);
     });
     line("tl-ar", "is-tl-line", 1980, [[W - 10, H - 3.8], [W - 2, H], [W - 10, H + 3.8]]);
 

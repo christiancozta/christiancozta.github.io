@@ -1820,26 +1820,22 @@ html:not(.arx-js) .arx-sum{ display:grid; }
 #repertorio .arx-lex .lex__sg{ text-transform:none; }
 
 /* ===================== LINHA DO TEMPO NA BASE ===================== */
-/* três marcos, um por movimento: aberto, em curso, cheio */
-.arx-tech circle.is-tl{
-  fill:#FCFCFC; stroke:#2C2C2C; stroke-width:1.2px;
+/* três marcos iguais, um por movimento: a seta, sem estado, no sentido do tempo */
+.arx-tech path.is-tl{
+  fill:#2C2C2C; stroke:none;
+  stroke-dasharray:none; stroke-dashoffset:0;
   opacity:0;
-  transition:opacity var(--arx-back) var(--arx-ease), fill 420ms var(--arx-ease), stroke 420ms var(--arx-ease);
+  transition:opacity var(--arx-back) var(--arx-ease);
 }
-.arx-tech circle.is-tl--dot{ fill:#2C2C2C; stroke:none; }
-.arx-tech circle.is-tl--2{ fill:#2C2C2C; }
 .arx-tech path.is-tl-line{ stroke:#2C2C2C; stroke-width:1.1px; }
-.arx[data-state="forming"] .arx-tech circle.is-tl{
+.arx[data-state="forming"] .arx-tech path.is-tl{
   opacity:1;
   transition:opacity 700ms var(--arx-ease) var(--d, 1500ms);
 }
-.arx[data-state="formed"] .arx-tech circle.is-tl,
-.arx.is-drawn .arx-tech circle.is-tl{ opacity:1; }
-/* o marco do movimento aberto ganha a cor do sistema */
-.arx[data-sel="data"] .arx-tech .is-tl--0{ stroke:var(--arx-data); fill:var(--arx-data); }
-.arx[data-sel="echo"] .arx-tech .is-tl--1{ stroke:#C98A00; }
-.arx[data-sel="echo"] .arx-tech .is-tl--dot{ fill:#C98A00; }
-.arx[data-sel="atrio"] .arx-tech .is-tl--2{ stroke:var(--arx-atrio); fill:var(--arx-atrio); }
+.arx[data-state="formed"] .arx-tech path.is-tl,
+.arx.is-drawn .arx-tech path.is-tl{ opacity:1; }
+/* a seta saiu do canto dos blocos: virou o marco da linha do tempo */
+.arx-col__plus{ display:none; }
 
 /* ===================== FRONTEIRA ===================== */
 /* Não é cartão: é a linha onde o portfólio termina. Um corte hachurado, como

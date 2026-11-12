@@ -21,8 +21,8 @@
   const cols = [...group.querySelectorAll(".arx-col")];
   const home = root.closest(".view");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
-  const SHOW = 7200;                                           // tempo de cada sistema na ordem
-  const XF = 800;                                              // troca cruzada entre blocos
+  const SHOW = 6840;                                           // tempo de cada sistema na ordem
+  const XF = 760;                                              // troca cruzada entre blocos
   const TINT = .24;                                            // cor do sistema sobre o papel
   const SYSTEMS = ["data", "echo", "atrio"];
   const clamp = n => Math.max(0, Math.min(1, n));
@@ -114,7 +114,7 @@
      em pontos ao acaso do campo e abrem ondas como na água (na hero, é o toque
      que as faz); ao fundo, gabinetes à esquerda — do lado do DATA — emitem
      pulsos mais fracos. Sobre o texto a agitação é amortecida. */
-  const VEL = 13, TAU = 6.2832;
+  const VEL = 9, TAU = 6.2832;      // mais lento que na hero: a vitrine é fundo
   const ruido = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
   const GAB = [.08, .3, .5, .7, .92].map((fy, i) => ({
     fx:-6 - 16 * ruido(i + 3), fy:fy + (ruido(i + 5) - .5) * .12,
@@ -156,20 +156,20 @@
     }
     return {passo, linha, top:F.top, bottom:F.bottom, pts:new Float32Array(pts)};
   }
-  const DROP = 1.15;   // segundos, em média, entre gotas
+  const DROP = 1.7;    // segundos, em média, entre gotas
   function echoPulses(g, W, t, life){
     const list = [], H = g.bottom - g.top;
     for (let k = Math.floor((t - life) / DROP) - 1; k <= Math.floor(t / DROP) + 1; k++){
       const t0 = (k + (ruido(k * 7 + 1) - .5) * .7) * DROP, age = t - t0;
       if (age < 0 || age > life) continue;
       list.push({x:(.06 + .88 * ruido(k * 13 + 2)) * W, y:g.top + (.06 + .88 * ruido(k * 19 + 3)) * H, t0,
-        a:.6 + .3 * ruido(k * 23 + 4), lam:3 + ruido(k * 29 + 5), sig:2.3});
+        a:.38 + .18 * ruido(k * 23 + 4), lam:3.6 + ruido(k * 29 + 5), sig:3.2});
     }
     GAB.forEach((p, n) => {
       for (let k = Math.floor((t - life) / p.P) - 1; k <= Math.floor(t / p.P) + 1; k++){
         const t0 = (k + (ruido(n * 31 + k) - .5) * .6) * p.P, age = t - t0;
         if (age < 0 || age > life) continue;
-        list.push({x:p.fx * g.passo, y:g.top + p.fy * H, t0, a:.55 * p.a * (.75 + .5 * ruido(n * 17 + k)), lam:p.lam, sig:p.lam * .75});
+        list.push({x:p.fx * g.passo, y:g.top + p.fy * H, t0, a:.4 * p.a * (.75 + .5 * ruido(n * 17 + k)), lam:p.lam, sig:p.lam * .75});
       }
     });
     return list;
@@ -193,9 +193,9 @@
         tension += ag * (k * cs - 2 * u / (p.sig * p.sig) * sn);
         dx += ag * sn * rx / rr; dy += ag * sn * ry / rr;
       }
-      const alpha = Math.min(.62, Math.max(.03, g.pts[i + 3] - tension * 1.1));
+      const alpha = Math.min(.42, Math.max(.04, g.pts[i + 3] - tension * .75));
       const px = x + dx * g.passo, py = y + dy * g.passo;
-      const l = half * (1 + .8 * Math.min(1, Math.abs(tension)));
+      const l = half * (1 + .5 * Math.min(1, Math.abs(tension)));
       set[Math.min(15, Math.round(alpha * 21))].push(px, py - l, py + l);
     }
     return ctx => {

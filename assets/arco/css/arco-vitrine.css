@@ -19,22 +19,22 @@
 .arx[data-showcase][data-sel=""][data-exhibit="data"] .arx-arc__intra{ stroke:var(--arx-data); }
 .arx[data-showcase][data-sel=""][data-exhibit="echo"] .arx-arc__intra{ stroke:var(--arx-echo); }
 .arx[data-showcase][data-sel=""][data-exhibit="atrio"] .arx-arc__intra{ stroke:var(--arx-atrio); }
-/* No bloco em animação, o selo do projeto perde a cor e vira texto comum;
-   o parágrafo de Tecnologia vai a preto pleno sobre o xadrez. */
-.arx[data-showcase][data-sel=""] .arx-col[data-exhibiting] .arx-col__txt :is(.b-data, .b-echo, .b-atrio){
-  background:none!important; color:inherit!important;
-  padding:0!important; margin:0!important; box-shadow:none!important;
-  font-weight:inherit;
-}
-.arx[data-showcase][data-sel=""] .arx-col[data-exhibiting="atrio"] .arx-col__txt{ color:#000000; }
+/* Enquanto o ATRIO anima — na ordem, sob o cursor ou selecionado —, o texto
+   do movimento vai a preto pleno sobre o xadrez: no bloco e, aberto o painel,
+   na célula Movimento. Os selos mantêm as próprias cores. */
+.arx[data-showcase] .arx-col[data-exhibiting="atrio"] .arx-col__txt,
+.arx[data-showcase] .arx-mov[data-exhibiting="atrio"] p{ color:#000000!important; }
 /* Sob o cursor, quem responde é a vitrine: sem o bloco de cor cheia do arco
-   formado e sem o nome do sistema na coroa. */
+   formado. */
 .arx[data-showcase][data-sel=""] .arx-col.is-preview{
   background-color:transparent; --arx-on:inherit; --arx-on-soft:inherit;
 }
 .arx[data-showcase][data-sel=""] .arx-col.is-preview .arx-col__txt{ color:var(--arx-text); }
-.arx[data-showcase][data-sel=""] .arx-col.is-preview[data-exhibiting="atrio"] .arx-col__txt{ color:#000000; }
-.arx[data-showcase][data-sel=""] .arx-name span{ opacity:0!important; }
+/* O nome do sistema em exibição volta à coroa, na cor do sistema e
+   transparente, como no hover do repouso: na ordem e sob o cursor. */
+.arx[data-showcase][data-sel=""][data-exhibit="data"] .arx-name [data-sys="data"],
+.arx[data-showcase][data-sel=""][data-exhibit="atrio"] .arx-name [data-sys="atrio"]{ opacity:.26; transform:translate(-50%, 0); }
+.arx[data-showcase][data-sel=""][data-exhibit="echo"] .arx-name [data-sys="echo"]{ opacity:.55; transform:translate(-50%, 0); }
 /* Selecionado, o bloco mantém a animação no lugar do fundo claro do arco;
    a coroa, essa sim, fica plena na cor do sistema. */
 .arx[data-showcase]:not([data-sel=""]) .arx-col.is-selected{ background-color:transparent; order:-1; }
