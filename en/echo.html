@@ -248,8 +248,8 @@ a:hover{color:#2C2C2C}
 }
 .echo-copy::selection{background:var(--ink);color:var(--amber)}
 
-/* Ondas: eco que chega do abstrato (esquerda) e bate numa parede antes do bloco.
-   Camada sob o texto e a palavra, sem eventos de ponteiro. */
+/* Campo de pressão: grade de traços no passo do bloco, deslocada por ecos que chegam da
+   esquerda e absorvidos junto ao texto. Camada sob o texto e a palavra; o ponteiro é lido na hero. */
 .echo-ondas{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
 
 .echo-word{
@@ -1279,7 +1279,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
     </button>
   </div>
   <canvas class="echo-ondas" aria-hidden="true"></canvas>
-  <p class="echo-copy" lang="pt-BR">A le&shy;gal op&shy;er&shy;a&shy;tions meth&shy;od&shy;ol&shy;o&shy;gy that brings to&shy;geth&shy;er meth&shy;ods, tech&shy;niques and ma&shy;te&shy;ri&shy;als to set up a work struc&shy;ture from the ground up, de&shy;fin&shy;ing what, how, when and by whom each ac&shy;tiv&shy;i&shy;ty should be car&shy;ried out.</p>
+  <p class="echo-copy" lang="pt-BR">A meth&shy;od&shy;ol&shy;o&shy;gy that brings to&shy;geth&shy;er tech&shy;niques and ma&shy;te&shy;ri&shy;als to set up a le&shy;gal op&shy;er&shy;a&shy;tion from the ground up, de&shy;fin&shy;ing what, how, when and by whom each ac&shy;tiv&shy;i&shy;ty should be car&shy;ried out.</p>
 
   <h1 class="echo-word" aria-label="echo">
     <svg class="echo-wordmark" viewBox="0 230.218741 1440 354.859375" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
@@ -1598,120 +1598,167 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </x-dc>
 
 <script>
-/* ONDAS DA HERO — os ecos de diferentes gabinetes convergem para uma estrutura.
-   Frentes ")" no mesmo desenho das meias-luas do "o" (grossas no centro, finas nas pontas),
-   mas viradas para o lado oposto: saem do abstrato (esquerda) e vão até o bloco, o ponto final
-   que recebe os ecos. O "o" mantém seu lado "(": é o que ecoou depois, a metodologia
-   transmitida ao final ("Rodou por outros 30 dias. Mas ecoou: foi transmitido ao gabinete
-   que nos sucedeu.").
-   A parede fica 28 u antes do texto: o centro bate primeiro, a frente achata reta contra ela
-   e o impacto corre até as pontas, acendendo e desfazendo cada trecho em pó.
-   Cada emissão é um trem de eco (a frente e 1 ou 2 réplicas mais fracas, a distâncias fixas,
-   na mesma velocidade); a irregularidade mora no intervalo entre trens e numa oscilação leve
-   de velocidade. Na parede o trem bate em cascata.
-   Escala: cada frente nasce enorme (3,4× a altura de chegada, maior que a própria hero, com
-   as pontas cortadas pelas bordas e escondidas atrás da palavra) e encolhe pelo caminho,
-   rápido no início e devagar perto do fim, até chegar menor que o bloco que a recebe:
-   o som difuso do entorno condensado numa estrutura.
-   Unidades de desenho: px de uma tela 1920 de largura, escaladas por z. */
+/* CAMPO DE PRESSÃO DA HERO — os ecos de diferentes gabinetes convergem para uma estrutura.
+   Som não é linha: é matéria empurrada. O lado esquerdo da hero é uma grade de traços finos
+   no próprio passo do bloco (2 caracteres de largura × 1 entrelinha de altura, linhas alinhadas
+   às linhas do texto), como se o bloco continuasse em matéria bruta. Cinco gabinetes fora da
+   tela, à esquerda, emitem pulsos, cada um no seu ritmo e no seu timbre (comprimento de onda);
+   a onda é longitudinal: os traços não desenham a frente, são deslocados por ela. Onde a
+   pressão comprime, eles se aglomeram e escurecem; onde rarefaz, somem. As frentes de vários
+   gabinetes se cruzam e interferem.
+   Perto do bloco o campo é absorvido: a agitação morre e a grade fica parada, nítida e alinhada
+   às linhas do texto. O ruído de fora chega como estrutura.
+   O ponteiro é mais um gabinete: mover sobre o campo emite ecos leves; clicar, um mais forte.
+   Unidades: "passo" = largura de 2 caracteres do bloco; tudo escala com a fonte (em vw). */
 (() => {
   const calmo = matchMedia('(prefers-reduced-motion: reduce)');
-  const MEDIA = 1.5;   // s entre trens, em média (1,0 s a 2,0 s entre vizinhos)
-  const VEL = 135;     // u/s médio; cada trem 0,88× a 1,12× e oscila ±12% no caminho
-  const ALTURA = 300;  // altura de referência da frente (±8% por trem)
-  const CURVA = 66;    // profundidade de referência da meia-lua (±10% por trem)
-  const NASCE = 3.4, CHEGA = .62; // tamanho na origem e na parede, em relação à referência
-  const tamanho = (p, parede) => CHEGA + (NASCE - CHEGA) * (1 - Math.min(1, Math.max(0, p / parede))) ** 1.6;
-  const ECOS = [[0, 1], [26, .5], [50, .24]]; // [atrás da frente, intensidade relativa]
-  const PEDACOS = 28;
-  const liso = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
   const ruido = n => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
-  const trem = n => ({
-    t0: (n + (ruido(n + 19) - .5) * .7) * MEDIA,
-    v: VEL * (.88 + .24 * ruido(n + 11)),
-    w: .8 + .6 * ruido(n + 23),
-    f: ruido(n + 29) * 6.283,
-    curva: CURVA * (.9 + .2 * ruido(n + 31)),
-    h: ALTURA * (.92 + .16 * ruido(n)),
-    dy: (ruido(n + 7) - .5) * 80,
-    ecos: ruido(n + 41) < .45 ? 2 : 3,
-  });
+  const liso = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
+  const VEL = 13;      // passos/s
+  const TAU = 6.2832;
+  // gabinetes: posição (x em passos à esquerda da borda, y em fração da altura), período, timbre e força
+  const GAB = [.08, .3, .5, .7, .92].map((fy, i) => ({
+    fx: -6 - 16 * ruido(i + 3),
+    fy: fy + (ruido(i + 5) - .5) * .12,
+    P: 2.6 + 2.4 * ruido(i + 7),
+    lam: 3.4 + 2.8 * ruido(i + 9),
+    a: .5 + .25 * ruido(i + 13),
+  }));
 
-  // a hero é montada pelo x-dc depois deste script: os elementos são buscados sob demanda
-  let cv, cx, texto, palavra, W = 0, H = 0, res = 1;
+  let cv, cx, texto, heroi, W = 0, H = 0, res = 1, chave = '', agora = 0;
+  let passo = 20, linha = 24, desk = true, borda = 0, fundo = 0;
+  let gx, gy, gm, gb, n = 0;
+  const toques = [];
+
   const pegar = () => {
     if (cv && cv.isConnected) return true;
     cv = document.querySelector('.echo-ondas');
     texto = document.querySelector('.echo-copy');
-    palavra = document.querySelector('.echo-wordmark');
-    if (!cv || !texto || !palavra) return false;
-    cx = cv.getContext('2d'); W = 0;
+    if (!cv || !texto) return false;
+    cx = cv.getContext('2d'); W = 0; chave = '';
+    heroi = cv.parentElement;
+    heroi.addEventListener('pointermove', mover, { passive: true });
+    heroi.addEventListener('pointerdown', tocar, { passive: true });
     visto.observe(cv);
     return true;
   };
 
+  // grade de repouso, refeita quando muda tamanho ou posição do bloco
+  function montar() {
+    const cs = getComputedStyle(texto);
+    cx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    const adv = cx.measureText('M').width + (parseFloat(cs.letterSpacing) || 0);
+    passo = 2 * adv;
+    linha = parseFloat(cs.lineHeight) || adv * 2.4;
+    const L = texto.offsetLeft, T = texto.offsetTop, R = L + texto.offsetWidth, B = T + texto.offsetHeight;
+    desk = L > W * .3;            // celular: bloco na largura toda, campo abaixo dele
+    borda = L - passo; fundo = B + linha;
+    const xs = [], ys = [];
+    if (desk) for (let x = L - 2 * passo; x > -passo; x -= passo) xs.push(x);
+    else for (let x = L + passo / 2; x < W; x += passo) xs.push(x);
+    for (let j = Math.floor(-T / linha) - 1; ; j++) {
+      const y = T + linha / 2 + j * linha;
+      if (y > H + linha) break;
+      if (y > -linha && (desk || y > fundo)) ys.push(y);
+    }
+    n = xs.length * ys.length;
+    gx = new Float32Array(n); gy = new Float32Array(n); gm = new Float32Array(n); gb = new Float32Array(n);
+    let k = 0;
+    for (const y of ys) for (const x of xs) {
+      const dx = Math.max(L - x, 0, x - R), dy = Math.max(T - y, 0, y - B);
+      const d = Math.hypot(dx, dy) / passo;
+      const m = liso(1.5, 17, d);           // absorção: parada junto ao bloco
+      gx[k] = x; gy[k] = y; gm[k] = m; gb[k] = .1 + .1 * (1 - m); k++;
+    }
+  }
+
+  const vida = () => (W / passo + 40) / VEL;
+
+  function pulsos(t) {
+    const lista = [], v = vida();
+    GAB.forEach((g, s) => {
+      for (let k = Math.floor((t - v) / g.P) - 1; k <= Math.floor(t / g.P) + 1; k++) {
+        const t0 = (k + (ruido(s * 31 + k) - .5) * .6) * g.P, idade = t - t0;
+        if (idade < 0 || idade > v) continue;
+        lista.push({ x: g.fx * passo, y: g.fy * H, t0, a: g.a * (.75 + .5 * ruido(s * 17 + k)), lam: g.lam, sig: g.lam * .75 });
+      }
+    });
+    for (let i = toques.length - 1; i >= 0; i--) {
+      const p = toques[i];
+      if (t - p.t0 > v || t < p.t0 - 1) toques.splice(i, 1); else lista.push(p);
+    }
+    return lista;
+  }
+
+  const baldes = Array.from({ length: 16 }, () => []);
+
   function desenhar(t) {
     if (!pegar()) return;
+    agora = t;
     const w = cv.clientWidth, h = cv.clientHeight;
     if (w !== W || h !== H) {
       W = w; H = h; res = Math.min(2, devicePixelRatio || 1);
       cv.width = Math.round(W * res); cv.height = Math.round(H * res);
     }
-    cx.setTransform(1, 0, 0, 1, 0, 0);
-    cx.clearRect(0, 0, cv.width, cv.height);
-    // geometria lida do DOM: topo do "h" = topo da palavra; escala pela largura, como a palavra
-    // (as frentes nascem maiores que a hero de propósito: bordas e palavra cortam as pontas)
-    const topoH = palavra.getBoundingClientRect().top - cv.getBoundingClientRect().top;
-    const z = W / 1920;
-    if (z <= 0) return;
-    const parede = texto.offsetLeft / z - 28;
-    if (parede < 240) return; // celular: o bloco ocupa a largura toda, sem campo para as ondas
-    const yAlvo = (texto.offsetTop + texto.offsetHeight / 2) / z, CAMPO = topoH * .55 / z;
-    cx.setTransform(res * z, 0, 0, res * z, 0, 0);
-    cx.lineCap = 'butt';
-    const vida = (parede + CURVA * 1.1 * CHEGA + 110) / (VEL * .88 * .88);
-    for (let n = Math.floor((t - vida) / MEDIA) - 1; n <= Math.floor(t / MEDIA) + 1; n++) {
-      const T = trem(n), tau = t - T.t0;
-      if (tau < 0) continue;
-      const k = .12 * T.v / T.w; // velocidade v·(1 + .12·cos): sempre para a frente
-      const lider = T.v * tau + k * (Math.sin(T.w * tau + T.f) - Math.sin(T.f));
-      const gL = tamanho(lider, parede); // as réplicas guardam a distância na escala da frente
-      for (let e = 0; e < T.ecos; e++) {
-        const [atras, forca] = ECOS[e];
-        const p = lider - atras * gL;
-        const g = tamanho(p, parede), curva = T.curva * g, alto = T.h * g;
-        if (p <= 0 || p > parede + curva + 60) continue;
-        const conv = liso(0, 1, p / parede);
-        const yc = CAMPO + T.dy * (1 - conv) + (yAlvo - CAMPO) * conv;
-        const base = .22 * forca * liso(0, 260, p);
-        if (base < .004) continue;
-        const arco = s => p - curva * (1 - Math.sqrt(Math.max(0, 1 - s * s)));
-        for (let j = 0; j < PEDACOS; j++) {
-          const meio = (j + .5) / PEDACOS * 2 - 1;
-          const choque = liso(parede, parede + 50, arco(meio));
-          const alfa = base * (1 - choque) ** 1.4 * (1 + 2.6 * Math.sin(Math.PI * Math.min(1, choque * 2.5)));
-          if (alfa < .004) continue;
-          const meia = (1 - .92 * choque) / PEDACOS;
-          cx.strokeStyle = `rgba(44,44,44,${Math.min(alfa, .6)})`;
-          cx.lineWidth = (.45 + 1.55 * Math.sqrt(1 - meio * meio)) * Math.sqrt(g) * (1 + choque);
-          cx.beginPath();
-          for (let q = 0; q <= 3; q++) {
-            const s = meio - meia + 2 * meia * q / 3;
-            const x = Math.min(arco(s), parede);
-            const y = yc + s * alto / 2;
-            q ? cx.lineTo(x, y) : cx.moveTo(x, y);
-          }
-          cx.stroke();
-        }
+    const ch = [W, H, texto.offsetLeft, texto.offsetTop, texto.offsetHeight].join();
+    if (ch !== chave) { chave = ch; montar(); }
+    cx.setTransform(res, 0, 0, res, 0, 0);
+    cx.clearRect(0, 0, W, H);
+    const ps = pulsos(t);
+    for (const b of baldes) b.length = 0;
+    const meio = linha * .19;
+    for (let i = 0; i < n; i++) {
+      const x = gx[i], y = gy[i], m = gm[i];
+      let dx = 0, dy = 0, tensao = 0;
+      if (m > .001) for (const p of ps) {
+        const rx = x - p.x, ry = y - p.y, rr = Math.hypot(rx, ry), r = rr / passo;
+        const u = r - VEL * (t - p.t0);
+        if (u > 2.6 * p.sig || u < -2.6 * p.sig) continue;
+        const q = u / p.sig, e = Math.exp(-q * q), k = TAU / p.lam;
+        const ag = p.a * Math.sqrt(20 / (20 + r)) * m * e;
+        const sn = Math.sin(k * u), cs = Math.cos(k * u);
+        const d = ag * sn;
+        tensao += ag * (k * cs - 2 * u / (p.sig * p.sig) * sn);
+        dx += d * rx / rr; dy += d * ry / rr;
       }
+      const alfa = Math.min(.72, Math.max(.02, gb[i] - tensao * 1.1));
+      const px = x + dx * passo, py = y + dy * passo;
+      const l = meio * (1 + .8 * Math.min(1, Math.abs(tensao)));
+      baldes[Math.min(15, Math.round(alfa * 21))].push(px, py - l, py + l);
     }
+    cx.lineWidth = Math.max(.75, passo * .05);
+    cx.lineCap = 'butt';
+    baldes.forEach((b, j) => {
+      if (!b.length) return;
+      cx.strokeStyle = `rgba(44,44,44,${(j / 21).toFixed(3)})`;
+      cx.beginPath();
+      for (let i = 0; i < b.length; i += 3) { cx.moveTo(b[i], b[i + 1]); cx.lineTo(b[i], b[i + 2]); }
+      cx.stroke();
+    });
+  }
+
+  // o ponteiro como mais um gabinete
+  let ultimo = 0, ux = -1e9, uy = -1e9;
+  const ponto = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  const noCampo = (x, y) => desk ? x < borda : y > fundo;
+  function mover(e) {
+    if (calmo.matches || !cv) return;
+    const [x, y] = ponto(e);
+    if (!noCampo(x, y) || agora - ultimo < .14 || Math.hypot(x - ux, y - uy) < 2 * passo) return;
+    ultimo = agora; ux = x; uy = y;
+    if (toques.length < 14) toques.push({ x, y, t0: agora, a: .32, lam: 2.6, sig: 1.9 });
+  }
+  function tocar(e) {
+    if (calmo.matches || !cv) return;
+    const [x, y] = ponto(e);
+    if (noCampo(x, y)) toques.push({ x, y, t0: agora, a: .85, lam: 4, sig: 3.4 });
   }
 
   // roda só com a hero na tela; com movimento reduzido fica um quadro fixo
   let quadro = 0, naTela = true;
   const visto = new IntersectionObserver(es => { naTela = es[0].isIntersecting; iniciar(); });
   const rodar = ms => { desenhar(ms / 1000); quadro = requestAnimationFrame(rodar); };
-  const fixo = () => desenhar(7.3);
+  const fixo = () => desenhar(6.2);
   function iniciar() {
     cancelAnimationFrame(quadro); quadro = 0;
     if (calmo.matches) { if (!pegar()) quadro = requestAnimationFrame(iniciar); else fixo(); return; }
