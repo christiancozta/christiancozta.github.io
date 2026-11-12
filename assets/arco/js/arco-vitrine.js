@@ -2,7 +2,7 @@
    Em revezamento, da esquerda para a direita, a coluna em exibição e o trecho
    da coroa logo acima dela se preenchem por inteiro com a cor do sistema,
    translúcida, sem gradiente, e recebem o chão animado da hero, sem letreiro:
-     DATA  — a sombra das letras em meia-lua, sem as letras que a projetam;
+     DATA  — uma régua passada sobre o campo: do dia para a noite e de volta;
      ECHO  — o campo de pressão, na entrelinha do próprio parágrafo;
      ATRIO — o xadrez em perspectiva, avançando a partir do horizonte.
    O texto fica sempre por cima e legível. O relógio só corre com os blocos
@@ -47,14 +47,8 @@
     layer.setAttribute("aria-hidden", "true");
     const canvas = document.createElement("canvas");
     layer.append(canvas);
-    let shadow = null;
-    if (SYSTEMS[i] === "data"){
-      shadow = document.createElement("div");
-      shadow.className = "arx-vitrine__sombra";
-      layer.append(shadow);
-    }
     col.append(layer);
-    surfaces.push({col, layer, canvas, ctx:canvas.getContext("2d"), shadow, sys:SYSTEMS[i], w:0, h:0, x:0, y:0});
+    surfaces.push({col, layer, canvas, ctx:canvas.getContext("2d"), sys:SYSTEMS[i], w:0, h:0, x:0, y:0});
   });
   // a coroa: um único plano sob as linhas do arco, recortado pela curva
   const sky = document.createElement("canvas");
@@ -64,17 +58,33 @@
   const skyCtx = sky.getContext("2d");
   let skyW = 0, skyH = 0, arcD = "", arcPath = null;
 
-  /* ---------- DATA: o sol em meia-lua (mesmos quadros de data.html) ----------
-     [porcentagem, skewX, rotateX, scaleY]; a passagem começa e termina com a
-     sombra de comprimento zero, então cabe inteira na exibição, sem corte. */
-  const SOL = [[0,-70,-1.1,0],[2.083,-65.3,-1.1,-0.264],[4.167,-60.7,-1.3,-0.573],[6.25,-56.1,-1.8,-0.911],[8.333,-51.6,-2.5,-1.271],[10.417,-47.3,-3.4,-1.649],[12.5,-43,-4.5,-2.05],[14.583,-39,-5.6,-2.478],[16.667,-35.1,-6.9,-2.939],[18.75,-31.4,-8.2,-3.438],[20.833,-27.9,-9.4,-3.981],[22.917,-24.7,-10.6,-4.568],[25,-21.6,-11.7,-5.202],[27.083,-18.8,-12.6,-5.872],[29.167,-16.3,-13.3,-6.554],[31.25,-13.9,-13.9,-7.218],[33.333,-11.8,-14.4,-7.839],[35.417,-9.8,-14.8,-8.392],[37.5,-8,-15,-8.864],[39.583,-6.4,-15.2,-9.248],[41.667,-5,-15.4,-9.546],[43.75,-3.6,-15.5,-9.766],[45.833,-2.4,-15.6,-9.914],[47.917,-1.2,-15.6,-10],[50,0,-15.6,-10.028],[52.083,1.2,-15.6,-10],[54.167,2.4,-15.6,-9.914],[56.25,3.6,-15.5,-9.766],[58.333,5,-15.4,-9.546],[60.417,6.4,-15.2,-9.248],[62.5,8,-15,-8.864],[64.583,9.8,-14.8,-8.392],[66.667,11.8,-14.4,-7.839],[68.75,13.9,-13.9,-7.218],[70.833,16.3,-13.3,-6.554],[72.917,18.8,-12.6,-5.872],[75,21.6,-11.7,-5.202],[77.083,24.7,-10.6,-4.562],[79.167,27.9,-9.5,-3.928],[81.25,31.4,-8.5,-3.317],[83.333,35.1,-7.4,-2.751],[85.417,39,-6.2,-2.238],[87.5,43,-5.2,-1.78],[89.583,47.3,-4.1,-1.373],[91.667,51.6,-3.2,-1.012],[93.75,56.1,-2.4,-0.694],[95.833,60.7,-1.8,-0.417],[97.917,65.3,-1.6,-0.184],[100,70,-1.6,0]];
-  function sun(p){
-    const x = clamp(p) * 100;
-    let i = 1;
-    while (i < SOL.length - 1 && SOL[i][0] < x) i++;
-    const a = SOL[i - 1], b = SOL[i], t = (x - a[0]) / (b[0] - a[0]);
-    const v = j => a[j] + (b[j] - a[j]) * t;
-    return `skewX(${v(1).toFixed(2)}deg) perspective(1em) rotateX(${v(2).toFixed(2)}deg) scaleY(${v(3).toFixed(3)})`;
+  /* ---------- DATA: a régua passada ----------
+     A aresta graduada atravessa o bloco e o trecho da coroa da esquerda para a
+     direita. Uma passagem leva o dia à noite (o branco vira azul atrás dela);
+     a seguinte devolve o dia; e assim alterna enquanto a vitrine roda. */
+  const PASS = 2400, SWEEP = .82;
+  const glide = n => { const t = clamp(n); return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function ruler(mt){
+    const k = Math.floor(mt / PASS), x = glide((mt - k * PASS) / PASS / SWEEP);
+    return {x, night:k % 2 === 0};
+  }
+  // azul do lado já medido; a aresta com graduação voltada para o lado ainda por medir
+  function measureBand(ctx, s, r, top, bottom, ox, oy, tint){
+    const X = r.x * s.w;
+    ctx.globalAlpha = tint; ctx.fillStyle = s.color;
+    if (r.night) ctx.fillRect(ox, oy + top, X, bottom - top);
+    else ctx.fillRect(ox + X, oy + top, s.w - X, bottom - top);
+    ctx.globalAlpha = 1;
+    if (r.x <= 0 || r.x >= 1) return;
+    ctx.strokeStyle = "rgba(44,44,44,.55)"; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(ox + X, oy + top); ctx.lineTo(ox + X, oy + bottom);
+    const step = 6, from = Math.ceil((top - s.top0) / step);
+    for (let n = from; s.top0 + n * step <= bottom; n++){
+      const y = oy + s.top0 + n * step, l = n % 10 === 0 ? 11 : n % 5 === 0 ? 7 : 4;
+      ctx.moveTo(ox + X, y + .5); ctx.lineTo(ox + X + l, y + .5);
+    }
+    ctx.stroke();
   }
 
   /* ---------- ECHO: campo de pressão (algoritmo de echo.html) ----------
@@ -201,13 +211,8 @@
       s.under = r.width > 0 && Math.abs(r.top - c.bottom) < 3;
       s.color = getComputedStyle(s.col).getPropertyValue("--c").trim() || "#2C2C2C";
       s.grid = null;
+      s.top0 = s.under ? -s.y : 0;   // a graduação começa no alto do campo inteiro
       fit(s.canvas, s.w, s.h);
-      if (s.shadow){
-        // a palavra ausente ocupa quase toda a largura da coluna, para a sombra
-        // chegar ao pé do bloco; a base fica na linha do arco
-        const wd = s.w * .9;
-        Object.assign(s.shadow.style, {width:`${wd}px`, height:`${wd * .28}px`, left:`${(s.w - wd) / 2}px`, top:`${-wd * .28}px`, fontSize:`${wd * .369}px`});
-      }
     });
   }
   function clipCrown(s){
@@ -220,22 +225,23 @@
     skyCtx.beginPath(); skyCtx.rect(s.x, 0, s.w, skyH); skyCtx.clip();
   }
   function paint(s, mt){
-    const g = s.ctx;
+    const g = s.ctx, data = s.sys === "data", r = data ? ruler(mt) : null;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, s.w, s.h);
-    g.globalAlpha = TINT; g.fillStyle = s.color; g.fillRect(0, 0, s.w, s.h); g.globalAlpha = 1;
+    if (data) measureBand(g, s, r, 0, s.h, 0, 0, TINT);
+    else { g.globalAlpha = TINT; g.fillStyle = s.color; g.fillRect(0, 0, s.w, s.h); g.globalAlpha = 1; }
     skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
     skyCtx.clearRect(0, 0, skyW, skyH);
     const echo = s.sys === "echo" ? echoField(s, 3 + mt / 1000) : null;
     if (s.under){
       skyCtx.save(); clipCrown(s);
-      skyCtx.globalAlpha = TINT; skyCtx.fillStyle = s.color; skyCtx.fillRect(s.x, 0, s.w, skyH); skyCtx.globalAlpha = 1;
+      if (data) measureBand(skyCtx, s, r, -s.y, 0, s.x, s.y, TINT);
+      else { skyCtx.globalAlpha = TINT; skyCtx.fillStyle = s.color; skyCtx.fillRect(s.x, 0, s.w, skyH); skyCtx.globalAlpha = 1; }
       if (echo) echo.crown(skyCtx);
       skyCtx.restore();
     }
-    if (s.shadow) s.shadow.style.transform = sun(mt / SHOW);
-    else if (echo) echo.column(g);
-    else floor(g, s, mt);
+    if (echo) echo.column(g);
+    else if (!data) floor(g, s, mt);
   }
 
   function clear(){
