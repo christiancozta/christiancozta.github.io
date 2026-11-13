@@ -338,25 +338,34 @@ $('#marcas').addEventListener('focusout', (e) => { if (regencia) return; if (!e.
    convertidos em cifra na tonalidade da seção. */
 const MUSICAS = [
   /* refrão, Si bemol mixolídio */
-  { nome: 'Bargain', autor: 'The Who', bpm: 133, tempos: 4, fim: 'Bb', acordes: ['Gb', 'Ab', 'Eb', 'Eb(add9)', 'Bb', 'Bb11', 'Gb', 'Db', 'Ab', 'Eb', 'Bb11', 'Bb'] },
+  { nome: 'Bargain', autor: 'The Who', bpm: 133, tempos: 4, fim: 'Bb', trecho: ['Gb', 'Ab', 'Eb', 'Eb(add9)', 'Bb', 'Bb11', 'Bb'], acordes: ['Gb', 'Ab', 'Eb', 'Eb(add9)', 'Bb', 'Bb11', 'Gb', 'Db', 'Ab', 'Eb', 'Bb11', 'Bb'] },
   /* verso, Ré maior */
-  { nome: 'Dreaming', autor: 'Blondie', bpm: 162, tempos: 4, fim: 'D', acordes: ['D', 'G', 'D', 'G', 'D', 'A', 'Em', 'G', 'A', 'D', 'G', 'D', 'G'] },
+  { nome: 'Dreaming', autor: 'Blondie', bpm: 162, tempos: 4, fim: 'D', trecho: ['D', 'G', 'D', 'G', 'D', 'A', 'Em', 'G', 'D'], acordes: ['D', 'G', 'D', 'G', 'D', 'A', 'Em', 'G', 'A', 'D', 'G', 'D', 'G'] },
   /* refrão, Lá bemol maior */
-  { nome: 'Viva La Vida', autor: 'Coldplay', bpm: 138, tempos: 4, fim: 'Ab', acordes: ['Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7(add11)', 'Ab/C', 'Fm11', 'Dbmaj7', 'Eb7', 'Abmaj9', 'Fm'] },
+  { nome: 'Viva La Vida', autor: 'Coldplay', bpm: 138, tempos: 4, fim: 'Ab', trecho: ['Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7sus4', 'Ab'], acordes: ['Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7(add11)', 'Ab/C', 'Fm11', 'Dbmaj7', 'Eb7', 'Abmaj9', 'Fm'] },
   /* refrão (primeiro ciclo), Si bemol maior */
-  { nome: 'Life On Mars?', autor: 'David Bowie', bpm: 120, tempos: 4, fim: 'Bb', acordes: ['Bb', 'Eb', 'Gm7', 'Gbaug', 'F', 'Fm', 'E', 'Eb', 'Dm', 'Cm7', 'Ebmaj7/D', 'Ebmmaj7'] },
+  { nome: 'Life On Mars?', autor: 'David Bowie', bpm: 120, tempos: 4, fim: 'Bb', trecho: ['Bb', 'Eb', 'Gm7', 'Gbaug', 'F', 'Fm', 'Bb'], acordes: ['Bb', 'Eb', 'Gm7', 'Gbaug', 'F', 'Fm', 'E', 'Eb', 'Dm', 'Cm7', 'Ebmaj7/D', 'Ebmmaj7'] },
   /* refrão (ciclo e final), Fá maior */
-  { nome: 'Weekend Wars', autor: 'MGMT', bpm: 77, tempos: 4, fim: 'Dm', acordes: ['A/Db', 'Dm', 'C/E', 'F', 'A', 'Bb', 'Gm', 'Am', 'Bb', 'G7/B', 'C', 'C7/Bb', 'Am7', 'A7/Db'] },
+  { nome: 'Weekend Wars', autor: 'MGMT', bpm: 77, tempos: 4, fim: 'Dm', trecho: ['A/Db', 'Dm', 'C/E', 'F', 'Dm'], acordes: ['A/Db', 'Dm', 'C/E', 'F', 'A', 'Bb', 'Gm', 'Am', 'Bb', 'G7/B', 'C', 'C7/Bb', 'Am7', 'A7/Db'] },
   /* refrão, Si maior */
-  { nome: 'Blue Ridge Mountains', autor: 'Fleet Foxes', bpm: 98, tempos: 4, fim: 'B6', acordes: ['E', 'F#', 'E', 'B', 'E6', 'F#', 'E6', 'B6'] },
+  { nome: 'Blue Ridge Mountains', autor: 'Fleet Foxes', bpm: 98, tempos: 4, fim: 'B6', trecho: ['E', 'F#', 'E', 'B', 'E6', 'B6'], acordes: ['E', 'F#', 'E', 'B', 'E6', 'F#', 'E6', 'B6'] },
   /* refrão, Dó sustenido menor */
-  { nome: 'Cloudbusting', autor: 'Kate Bush', bpm: 113, tempos: 4, fim: 'C#m7', acordes: ['C#m7', 'B', 'A(add9)', 'B', 'C#m7', 'B(add9)', 'A(add9)', 'B', 'C#m7', 'B', 'F#m(add9)/A', 'A(add9)', 'B'] },
+  { nome: 'Cloudbusting', autor: 'Kate Bush', bpm: 113, tempos: 4, fim: 'C#m7', trecho: ['C#m7', 'B', 'A(add9)', 'B', 'C#m7', 'C#m7'], acordes: ['C#m7', 'B', 'A(add9)', 'B', 'C#m7', 'B(add9)', 'A(add9)', 'B', 'C#m7', 'B', 'F#m(add9)/A', 'A(add9)', 'B'] },
   /* verso e refrão, Dó sustenido menor, em 6 */
-  { nome: 'Nude', autor: 'Radiohead', bpm: 128, tempos: 6, fim: 'C#m7', acordes: ['A(add9)', 'C#m7', 'A(add9)', 'Emaj7/G#', 'G#m7', 'A(add9)', 'G#m7', 'A(add9)', 'C#m7', 'A(add9)'] },
+  { nome: 'Nude', autor: 'Radiohead', bpm: 128, tempos: 6, fim: 'C#m7', trecho: ['A(add9)', 'C#m7', 'A(add9)', 'Emaj7/G#', 'C#m7'], acordes: ['A(add9)', 'C#m7', 'A(add9)', 'Emaj7/G#', 'G#m7', 'A(add9)', 'G#m7', 'A(add9)', 'C#m7', 'A(add9)'] },
   /* refrão, Sol maior (repousa no vi) */
-  { nome: 'Your Protector', autor: 'Fleet Foxes', bpm: 100, tempos: 4, fim: 'Em', acordes: ['C', 'G', 'D', 'Em', 'A', 'G', 'D', 'Em'] }
+  { nome: 'Your Protector', autor: 'Fleet Foxes', bpm: 100, tempos: 4, fim: 'Em', trecho: ['C', 'G', 'D', 'Em', 'A', 'G'], acordes: ['C', 'G', 'D', 'Em', 'A', 'G', 'D', 'Em'] }
 ];
 let musica = Math.floor(Math.random() * MUSICAS.length);
+
+/* Cada assinatura ocupa no máximo duas passagens pelas cinco colunas e 15 segundos.
+   Os trechos são escolhidos individualmente para terminar num repouso harmônico.
+   A margem final reserva espaço para a cauda e a ambiência; não se corta um acorde. */
+const MAX_COMPASSOS = 10;
+const MAX_SEGUNDOS = 15;
+const SUSTENTO_FINAL = 1.35;
+const SOLTURA_FINAL = 0.35;
+const MARGEM_AMBIENCIA = 0.65;
 
 /* Cifra → alturas. Qualidades por ordem de comprimento, para "m7b5" não ser lido como "m". */
 const PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -415,16 +424,33 @@ function grave(c) {
 }
 /* A música em compassos já vozeados: [{grave, alto}], com o repouso no fim. */
 function compassos(mu) {
-  const cs = mu.acordes.slice();
-  const fim = mu.fim || mu.acordes[0];
-  if (cs[cs.length - 1] !== fim) cs.push(fim);
+  const cs = (mu.trecho || mu.acordes).slice(0, MAX_COMPASSOS);
+  const B = barraDe(mu);
+  while (cs.length > 1 && (cs.length - 1) * B + SUSTENTO_FINAL + SOLTURA_FINAL + MARGEM_AMBIENCIA > MAX_SEGUNDOS) cs.pop();
   let antes = null;
-  return cs.map((s) => { const c = cifra(s); const alto = vozes(c, antes); antes = alto; return { grave: grave(c), alto }; });
+  return cs.map((s) => {
+    const c = cifra(s);
+    const alto = vozes(c, antes);
+    antes = alto;
+    return { grave: grave(c), alto };
+  });
 }
 const barraDe = (mu) => Math.min(3, Math.max(1.3, ((mu.tempos || 4) * 60) / (mu.bpm || 120)));
 
 const SELO = $('#b-som');
 let actx = null; let saida = null; let eco = null; let onda = null; let somOn = false; let regencia = null;
+let estadoSom = 'repouso'; // repouso → tocando → pausa → fim
+let pedidoSom = 0;
+function mostraSelo(estado) {
+  estadoSom = estado;
+  somOn = estado === 'tocando';
+  const nomes = { repouso: 'Ouvir os compassos', tocando: 'Pausar os compassos', pausa: 'Retomar os compassos', fim: 'Ouvir a próxima música' };
+  SELO.dataset.som = estado;
+  SELO.setAttribute('aria-pressed', String(estado === 'tocando'));
+  SELO.setAttribute('aria-label', nomes[estado]);
+  SELO.title = nomes[estado];
+}
+mostraSelo('repouso');
 const soando = new Set();
 const hz = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
 function ligaSom() {
@@ -485,8 +511,8 @@ function solta(tau) {
 const ROLA = 0.022;   /* arpejo do ataque: breve, para o acorde cair junto com o tempo */
 const CAUDA = 0.14;   /* soltura entre acordes na regência */
 function soaCompasso(cp, t, B, rege, fermata, tempos) {
-  const d = rege ? (fermata ? B * 2.6 : B - 0.03) : 1.3;
-  const c = rege && !fermata ? CAUDA : 1.1;
+  const d = rege ? (fermata ? SUSTENTO_FINAL : B - 0.03) : 1.3;
+  const c = rege ? (fermata ? SOLTURA_FINAL : CAUDA) : 1.1;
   cp.grave.forEach((n, i) => nota(n, t + i * 0.008, d, i ? 0.1 : 0.15, c));
   const a = cp.alto;
   a.forEach((n, i) => nota(n, t + 0.012 + i * ROLA, d - 0.012 - i * ROLA, i === a.length - 1 ? 0.12 : 0.08, c));
@@ -510,75 +536,105 @@ function acorde(m) {
   clearTimeout(retomada); retomada = setTimeout(() => { if (somOn && !regencia && !document.hidden) rege(); }, 2600);
 }
 let retomada = 0;
-/* Regência: a música inteira em tempo e, enquanto o som estiver ligado, de novo 2s depois do fim (fermata
-   incluída), com a batuta. O que se vê segue o que se ouve: um laço de quadros lê o relógio do áudio,
-   descontada a latência de saída (em fones sem fio passa de 0,15s), e no instante em que o acorde soa
-   acende o compasso, pulsa o selo e lança a batuta; os cinco compassos da partitura recomeçam em I
-   quando a música é mais longa. */
-const PAUSA = 2;
+/* Regência da miniatura: até dez compassos, até quinze segundos, sem loop.
+   A Web Audio API é suspensa para uma pausa verdadeira: a retomada preserva
+   o ponto exato, inclusive o acorde e a batuta. Ao final, o selo oferece a próxima. */
 function rege() {
-  if (!somOn) return;
+  if (!somOn || !actx || actx.state !== 'running') return;
   clearTimeout(retomada);
   paraRegencia(); solta(0.05);
   const mu = MUSICAS[musica];
   regencia = { mu, cs: compassos(mu), B: barraDe(mu), raf: 0, k: -1 };
-  ciclo(actx.currentTime + 0.15);
+  const r = regencia, t0 = actx.currentTime + 0.15;
+  r.cs.forEach((cp, k) => soaCompasso(cp, t0 + k * r.B, r.B, true, k === r.cs.length - 1, mu.tempos));
+  r.t0 = t0;
+  r.fim = t0 + (r.cs.length - 1) * r.B + SUSTENTO_FINAL + SOLTURA_FINAL;
   SELO.classList.add('toca');
-  regencia.raf = requestAnimationFrame(acompanha);
-}
-function ciclo(t0) {
-  const r = regencia; const n = r.cs.length;
-  r.cs.forEach((cp, k) => soaCompasso(cp, t0 + k * r.B, r.B, true, k === n - 1, r.mu.tempos));
-  r.t0 = t0; r.k = -1;
-  r.fim = t0 + (n - 1) * r.B + r.B * 2.6;
-  r.proximo = r.fim + PAUSA;
+  r.raf = requestAnimationFrame(acompanha);
 }
 function acompanha() {
-  const r = regencia; if (!r) return;
+  const r = regencia;
+  if (!r || estadoSom !== 'tocando') return;
   const ouvido = actx.currentTime - (actx.outputLatency || actx.baseLatency || 0);
-  const n = r.cs.length;
+  if (ouvido >= r.fim) {
+    paraRegencia();
+    mostraSelo('fim');
+    return;
+  }
   const k = Math.floor((ouvido - r.t0) / r.B);
-  if (ouvido >= r.t0 && k < n && k !== r.k) {
+  if (ouvido >= r.t0 && k >= 0 && k < r.cs.length && k !== r.k) {
     r.k = k; const col = (k % 5) + 1; mAtual = col; acende(col); pulsa();
-    if (k % 5 === 0) gesto(r.B * Math.min(5, n - k), true, Math.min(5, n - k));
-  } else if (ouvido >= r.fim && r.k !== n) { r.k = n; mAtual = 0; acende(0); }
-  if (actx.currentTime >= r.proximo - 0.25) ciclo(r.proximo);
+    if (k % 5 === 0) gesto(r.B * Math.min(5, r.cs.length - k), true, Math.min(5, r.cs.length - k));
+  }
   r.raf = requestAnimationFrame(acompanha);
 }
 function pulsa() { SELO.classList.remove('bate'); void SELO.offsetWidth; SELO.classList.add('bate'); }
-/* manter: quem interrompe já acendeu o seu compasso; não apagar. */
 function paraRegencia(manter) {
   if (!regencia) return;
   cancelAnimationFrame(regencia.raf); regencia = null;
-  SELO.classList.remove('toca');
+  SELO.classList.remove('toca', 'bate');
   BAT.classList.remove('vai', 'rege');
   if (!manter) { mAtual = 0; acende(0); }
 }
 function desligaSom() {
-  somOn = false; $('#b-som').setAttribute('aria-pressed', 'false');
-  clearTimeout(retomada); paraRegencia(); solta(0.12);
+  pedidoSom++;
+  mostraSelo('repouso');
+  clearTimeout(retomada);
+  paraRegencia();
+  solta(0.12);
 }
-$('#b-som').addEventListener('click', (e) => {
-  if (somOn) { desligaSom(); return; }
-  if (!ligaSom()) return;
-  somOn = true; e.currentTarget.setAttribute('aria-pressed', 'true');
-  if (actx.state === 'running') rege();
-  else actx.resume().then(rege, () => { desligaSom(); toast('O navegador não liberou o som.'); });
+function pausaSom() {
+  if (estadoSom !== 'tocando') return;
+  pedidoSom++;
+  clearTimeout(retomada);
+  if (regencia) { cancelAnimationFrame(regencia.raf); regencia.raf = 0; }
+  mostraSelo('pausa');
+  SELO.classList.remove('toca', 'bate');
+  if (actx && actx.state === 'running') actx.suspend().catch(() => {});
+}
+function retomaSom() {
+  if (estadoSom !== 'pausa' || !actx) return;
+  const pedido = ++pedidoSom;
+  actx.resume().then(() => {
+    if (pedido !== pedidoSom || estadoSom !== 'pausa' || document.hidden) return;
+    mostraSelo('tocando');
+    if (regencia) { SELO.classList.add('toca'); regencia.raf = requestAnimationFrame(acompanha); }
+    else rege(); // se uma prévia manual havia interrompido o andamento
+  }, () => { desligaSom(); toast('O navegador não liberou o som.'); });
+}
+function iniciaSom() {
+  if (!ligaSom()) { toast('Áudio indisponível neste navegador.'); return; }
+  const pedido = ++pedidoSom;
+  const inicia = () => {
+    if (pedido !== pedidoSom || document.hidden) return;
+    mostraSelo('tocando');
+    rege();
+  };
+  if (actx.state === 'running') inicia();
+  else actx.resume().then(inicia, () => { desligaSom(); toast('O navegador não liberou o som.'); });
+}
+SELO.addEventListener('click', () => {
+  if (estadoSom === 'tocando') { pausaSom(); return; }
+  if (estadoSom === 'pausa') { retomaSom(); return; }
+  if (estadoSom === 'fim') musica = (musica + 1) % MUSICAS.length;
+  iniciaSom();
 });
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { clearTimeout(retomada); paraRegencia(); solta(0.05); } else if (somOn && actx && !regencia) rege();
+document.addEventListener('visibilitychange', () => { if (document.hidden) pausaSom(); });
+/* O shell do ARCO oculta o iframe ao mudar de módulo sem disparar visibilitychange. */
+window.addEventListener('message', (e) => {
+  if (e.origin !== location.origin || e.source !== window.parent) return;
+  if (e.data?.type === 'ARCO_VIEW_ACTIVE' && e.data.active === false) pausaSom();
 });
 
-/* A dobra da folha, no alto à direita, troca a música. Sem marca nem rótulo visível. */
+/* A dobra da folha continua sendo um segredo: alterna o repertório sem UI adicional. */
 const dobra = document.createElement('button');
 dobra.type = 'button'; dobra.className = 'dobra'; dobra.tabIndex = -1; dobra.setAttribute('aria-label', 'Trocar a música');
 $('.a4').appendChild(dobra);
 dobra.addEventListener('click', () => {
-  if (MUSICAS.length < 2) { toast('Só há uma música.'); return; }
   musica = (musica + 1) % MUSICAS.length;
   const mu = MUSICAS[musica];
   toast('Música: ' + mu.nome + (mu.autor ? ', ' + mu.autor : ''));
-  if (somOn) rege();
+  if (estadoSom !== 'repouso') iniciaSom();
 });
 
 /* A batuta: um gesto da primeira à última barra. Abre a página, volta de tempos em tempos enquanto a

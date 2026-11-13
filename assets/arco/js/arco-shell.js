@@ -71,6 +71,13 @@
     if (!VIEWS.includes(view)) view = "home";
     const current = views.find(v => v.dataset.active === "true");
     if (current && current.dataset.view !== view) document.documentElement.classList.add("view-swap");
+    /* Ao sair do PLAY, pausar a partitura; ocultar o iframe não emite visibilitychange. */
+    if (current?.dataset.view === "play" && view !== "play") {
+      const playFrame = current.querySelector("iframe");
+      if (playFrame && playFrame.getAttribute("src") !== "about:blank") {
+        try { playFrame.contentWindow?.postMessage({ type: "ARCO_VIEW_ACTIVE", active: false }, location.origin); } catch {}
+      }
+    }
     views.forEach(v => v.dataset.active = String(v.dataset.view === view));
     railLinks.forEach(l => l.setAttribute("aria-current", String(l.dataset.view === view)));
 

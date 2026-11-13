@@ -472,7 +472,14 @@ input, textarea { caret-color: var(--tinta); }
 .selo .s-fio { fill: none; stroke: currentColor; stroke-width: 1.3; }
 .selo .s-txt { fill: currentColor; font: 800 11.5px var(--mono); }
 .selo .s-ic { fill: none; stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
-.selo .s-ic ellipse { fill: currentColor; }
+/* Glifos discretos gravados no relevo: um único controle, sem player visível. */
+.selo .s-ic--play, .selo .s-ic--pause, .selo .s-ic--next { opacity: 0; transition: opacity .18s ease; }
+.selo[data-som="repouso"] .s-ic--play,
+.selo[data-som="pausa"] .s-ic--play,
+.selo[data-som="tocando"] .s-ic--pause,
+.selo[data-som="fim"] .s-ic--next { opacity: 1; }
+.selo .s-ic--pause { stroke-linecap: square; }
+.selo .s-ic--next { stroke-linejoin: round; }
 .selo:hover { filter: drop-shadow(-1.5px -1.5px 0 #fff) drop-shadow(2px 2.6px 1.1px rgba(44, 44, 44, .38)) drop-shadow(4px 7px 10px rgba(44, 44, 44, .13)); }
 .selo:active { transform: scale(.985); }
 /* Som ligado: o selo fica afundado (luz e sombra invertidas) enquanto toca. */
@@ -481,7 +488,7 @@ input, textarea { caret-color: var(--tinta); }
 /* Tocando: o selo gira devagar, como um disco, e pulsa a cada acorde, em qualquer tela (a luz do relevo fica
    parada, porque a sombra é do botão e só o desenho gira). */
 @media (prefers-reduced-motion: no-preference) {
-  .selo.toca svg { animation: gira 16s linear infinite; }
+  .selo.toca .s-disco { transform-box: view-box; transform-origin: center; animation: gira 16s linear infinite; }
   .selo.bate { animation: bate .36s var(--mola); }
 }
 @keyframes gira { to { transform: rotate(360deg); } }

@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=JetBrains+Mono:wght@400;500;700;800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Shantell+Sans:wght@300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/play/play.css?v=20261113g">
+<link rel="stylesheet" href="assets/play/play.css?v=20261113-player1">
 <link rel="icon" href="assets/play/favicon.svg" type="image/svg+xml">
 </head>
 <body class="partitura">
@@ -78,14 +78,18 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
     </button>
   </div>
   <!-- Som: selo seco, em relevo no próprio papel, sob o prendedor. -->
-  <button class="selo so-b" type="button" id="b-som" aria-pressed="false" aria-label="Ouvir os compassos" title="Ouvir os compassos">
+  <button class="selo so-b" type="button" id="b-som" data-som="repouso" aria-pressed="false" aria-label="Ouvir os compassos" title="Ouvir os compassos">
     <svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">
       <defs><path id="selo-arco" d="M80 80m-57 0a57 57 0 1 1 114 0a57 57 0 1 1-114 0"/></defs>
-      <circle class="s-anel" cx="80" cy="80" r="75"/>
-      <circle class="s-fio" cx="80" cy="80" r="69.5"/>
-      <text class="s-txt"><textPath href="#selo-arco" textLength="355" lengthAdjust="spacing">OUVIR OS COMPASSOS · PLAY · ECHO ·</textPath></text>
-      <circle class="s-fio" cx="80" cy="80" r="46"/>
-      <g class="s-ic" transform="translate(47.5 47) scale(2.95)"><path d="M8.5 17.5V5.5l10-2.5v12"/><path d="M8.5 9l10-2.5"/><ellipse cx="6.2" cy="17.6" rx="2.6" ry="2" transform="rotate(-20 6.2 17.6)" fill="currentColor" stroke="none"/><ellipse cx="16.2" cy="15.1" rx="2.6" ry="2" transform="rotate(-20 16.2 15.1)" fill="currentColor" stroke="none"/></g>
+      <g class="s-disco">
+        <circle class="s-anel" cx="80" cy="80" r="75"/>
+        <circle class="s-fio" cx="80" cy="80" r="69.5"/>
+        <text class="s-txt"><textPath href="#selo-arco" textLength="355" lengthAdjust="spacing">OUVIR OS COMPASSOS · PLAY · ECHO ·</textPath></text>
+        <circle class="s-fio" cx="80" cy="80" r="46"/>
+      </g>
+      <g class="s-ic s-ic--play"><path d="M67 56 L108 80 L67 104 Z"/></g>
+      <g class="s-ic s-ic--pause"><path d="M65 57 V103 M94 57 V103" stroke-width="8"/></g>
+      <g class="s-ic s-ic--next"><path d="M55 60 L83 80 L55 100 Z M85 60 L113 80 L85 100 Z"/></g>
     </svg>
   </button>
 <div class="pag">
@@ -253,6 +257,6 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
 <div class="sr" id="anuncio" role="status" aria-live="polite"></div>
 
 <script src="assets/play/play-dados.js"></script>
-<script src="assets/play/play.js?v=20261113g"></script>
+<script src="assets/play/play.js?v=20261113-player1"></script>
 </body>
 </html>
