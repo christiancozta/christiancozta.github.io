@@ -102,13 +102,13 @@ footer a:hover{color:#2C2C2C!important}
 #rastro div[style*="minmax(300px, 1fr)"] div[style*="height: 22px"]{height:var(--data-unit)!important;margin-top:calc(var(--data-unit)*1.5)!important;background-image:repeating-linear-gradient(to right,rgba(252,252,252,.5) 0 1px,transparent 1px var(--data-unit))!important}
 @media(min-width:1000px){#rastro div[style*="minmax(300px, 1fr)"]>div:first-child div[style*="height: 22px"]{width:calc(var(--data-unit)*26.4)!important}#rastro div[style*="minmax(300px, 1fr)"]>div:last-child div[style*="height: 22px"]{width:calc(var(--data-unit)*13.8)!important}}
 @media(max-width:999px){#escala-fila{display:none!important}}
-:root{--data-display:'Anybody',system-ui,sans-serif;--data-titulo:'Jura',ui-monospace,monospace;--data-corpo:'Cause','Commissioner',system-ui,sans-serif;--data-micro:'Azeret Mono',ui-monospace,monospace;--data-numero:'Jura',ui-monospace,monospace;--data-elo:'Commissioner',system-ui,sans-serif;--dt-rotulo:94px}
+:root{--data-display:'Anybody',system-ui,sans-serif;--data-titulo:'Cause','Commissioner',system-ui,sans-serif;--data-corpo:'Cause','Commissioner',system-ui,sans-serif;--data-micro:'Azeret Mono',ui-monospace,monospace;--data-numero:'Jura',ui-monospace,monospace;--data-elo:'Commissioner',system-ui,sans-serif;--dt-rotulo:94px}
 body{font-family:var(--data-corpo)!important;font-weight:500!important}
 [style*="Azeret Mono"]{font-family:var(--data-micro)!important}
 [style*="tabular-nums"]{font-family:var(--data-numero)!important;font-weight:700!important}
 [style*="tabular-nums"][style*="letter-spacing: -"],[style*="tabular-nums"][style*="letter-spacing:-"]{letter-spacing:-.025em!important}
-[style*="font-weight: 300"],[style*="font-weight:300"]{font-family:var(--data-titulo)!important;font-weight:700!important;letter-spacing:-.02em!important}
-#lastro [style*="font-size: clamp(1.05rem, 1.7vw, 1.3rem)"],#lastro [style*="font-size:clamp(1.05rem,1.7vw,1.3rem)"]{font-family:var(--data-titulo)!important;font-weight:700!important;letter-spacing:-.015em!important}
+[style*="font-weight: 300"],[style*="font-weight:300"]{font-family:var(--data-titulo)!important;font-weight:600!important;letter-spacing:-.015em!important}
+#lastro [style*="font-size: clamp(1.05rem, 1.7vw, 1.3rem)"],#lastro [style*="font-size:clamp(1.05rem,1.7vw,1.3rem)"]{font-family:var(--data-titulo)!important;font-weight:600!important;letter-spacing:-.015em!important}
 /* DATA_HERO_SOL_20261112 · hero: o sol em meia-lua.
    DATA (itálico, papel) de pé num horizonte a 75% da altura; o chão é papel.
    A sombra (tinta) brota da base já longa, desce em meia-lua e se recolhe na base, à direita:
@@ -232,7 +232,7 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 /* origem: a primeira seção depois da capa */
 .dp-origem{padding:clamp(48px,7vh,96px) var(--data-gx) clamp(56px,8vh,104px);border-top:1px solid #2C2C2C}
 .dp-k{margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86}
-.dp-t{margin:18px 0 0;font-family:var(--data-titulo);font-weight:700;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.04em;color:#2C2C2C;text-wrap:balance}
+.dp-t{margin:18px 0 0;font-family:var(--data-titulo);font-weight:600;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.08;letter-spacing:-.025em;color:#2C2C2C;text-wrap:balance}
 .dp-p{margin:18px 0 0;max-width:62ch;font-size:15px;line-height:1.6;color:#3D3D3A;text-wrap:pretty}
 .dp-p + .dp-p{margin-top:14px}
 .dp-formula{margin:18px 0 0;padding:16px 20px;border:1px solid #2C2C2C;background:#FCFCFC;font:600 clamp(14px,1.33vw,17px)/1.3 'Azeret Mono',ui-monospace,monospace;letter-spacing:.01em;color:#4A90E2}
@@ -241,7 +241,61 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
 .dp-tgl:hover{color:#4A90E2}
 .dp-tgl span{font-size:16px}
 /* fecho */
-.dp-coda{margin:clamp(28px,4vh,44px) 0 0;font-weight:300;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.12;letter-spacing:-.03em;color:#2C2C2C;text-wrap:balance}
+.dp-coda{margin:clamp(28px,4vh,44px) 0 0;font-family:var(--data-titulo);font-weight:600;font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.12;letter-spacing:-.02em;color:#2C2C2C;text-wrap:balance}
+
+/* DATA · matriz trans-sistemas: hierarquia sem soma de universos */
+.dx-chain{--dx-ink:#2C2C2C;--dx-rule:#DEDEDA;--dx-mute:#666661;margin-top:clamp(64px,9vh,112px);color:var(--dx-ink)}
+.dx-chain *{box-sizing:border-box}
+.dx-chain__top{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(270px,.88fr);column-gap:clamp(32px,6vw,100px);align-items:end;padding:25px 0 31px;border-top:1px solid var(--dx-ink)}
+.dx-chain__eyebrow{margin:0 0 16px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.15em;color:#72726C;text-transform:uppercase}
+.dx-chain__title{margin:0;font:600 clamp(28px,3.9vw,52px)/1.06 'Cause','Commissioner',system-ui,sans-serif;letter-spacing:-.035em;text-wrap:balance}
+.dx-chain__abstract{margin:0;max-width:53ch;font:500 clamp(13px,1.14vw,15px)/1.62 'Cause','Commissioner',system-ui,sans-serif;color:#555550;text-wrap:pretty}
+.dx-chain__rule{display:block;margin-top:16px;font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.09em;color:#777772}
+.dx-ul{text-decoration-line:underline;text-decoration-color:var(--dx-a,#4A90E2);text-decoration-thickness:2px;text-underline-offset:.19em;text-decoration-skip-ink:auto}
+.dx-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));border-top:1px solid var(--dx-rule);border-left:1px solid var(--dx-rule)}
+.dx-card{--dx-a:#4A90E2;position:relative;display:flex;flex-direction:column;grid-column:span 6;min-width:0;min-height:385px;padding:clamp(22px,3vw,42px);border-right:1px solid var(--dx-rule);border-bottom:1px solid var(--dx-rule);background:#FCFCFC}
+.dx-card::before{content:"";position:absolute;top:-1px;left:clamp(22px,3vw,42px);height:3px;width:clamp(42px,5.3vw,76px);background:var(--dx-a)}
+.dx-card--echo{--dx-a:#FFB627}
+.dx-card--atrio,.dx-card--corpus{--dx-a:#D94F2D}
+.dx-card--cerne{--dx-a:#D94F2D;grid-column:span 12;min-height:0}
+.dx-card__head{display:flex;align-items:start;justify-content:space-between;gap:16px}
+.dx-card__order{margin:0 0 15px;font:500 9px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.15em;color:#777772}
+.dx-card__name{margin:0;font:900 clamp(1.35rem,2.18vw,2rem)/.95 'Anybody',system-ui,sans-serif;font-stretch:125%;letter-spacing:-.025em}
+.dx-card__name .dx-cerne-e{color:#D94F2D}
+.dx-card__scope{margin:3px 0 0;max-width:18ch;font:500 9px/1.5 'Azeret Mono',ui-monospace,monospace;letter-spacing:.065em;text-transform:uppercase;text-align:right;color:#777772}
+.dx-primary{margin-top:clamp(28px,4.2vw,52px)}
+.dx-primary__label{margin:0 0 8px;font:600 10px/1.45 'Azeret Mono',ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#73736E}
+.dx-value{display:block;margin:0;width:max-content;max-width:100%;font:700 clamp(3rem,5.1vw,4.8rem)/.92 'Jura',ui-monospace,monospace;letter-spacing:-.055em;font-variant-numeric:tabular-nums;color:#2C2C2C;white-space:nowrap}
+.dx-primary__desc{margin:10px 0 0;font:600 clamp(14px,1.28vw,17px)/1.35 'Cause','Commissioner',system-ui,sans-serif;letter-spacing:-.012em;color:#393935}
+.dx-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;margin-top:clamp(26px,3vw,38px)}
+.dx-metrics--three{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.dx-metric{min-width:0;padding-top:11px;border-top:1px solid #D8D8D4}
+.dx-metric__value{display:block;max-width:100%;margin:0;font:700 clamp(1.58rem,2.8vw,2.35rem)/1.05 'Jura',ui-monospace,monospace;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:#2C2C2C;white-space:nowrap}
+.dx-metric__value--text{font:600 clamp(1.22rem,2vw,1.75rem)/1.05 'Cause','Commissioner',system-ui,sans-serif;letter-spacing:-.02em}
+.dx-metric__label{display:block;margin:7px 0 0;font:500 12px/1.4 'Cause','Commissioner',system-ui,sans-serif;color:#565651;text-wrap:pretty}
+.dx-card__note{margin:clamp(20px,2.5vw,32px) 0 0;max-width:65ch;font:500 12px/1.55 'Cause','Commissioner',system-ui,sans-serif;color:#6B6B66;text-wrap:pretty}
+.dx-card__note strong{font-weight:700;color:#2C2C2C}
+.dx-card__foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;margin-top:auto;padding-top:clamp(26px,4vw,44px)}
+.dx-link{display:inline-flex;align-items:center;gap:7px;width:max-content;max-width:100%;padding:0 0 5px;border-bottom:2px solid var(--dx-a);font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#2C2C2C;text-decoration:none;transition:color .18s ease,border-color .18s ease}
+.dx-link:hover{color:#666661}
+.dx-link:focus-visible,[data-datum].dx-value:focus-visible,[data-datum].dx-metric__value:focus-visible{outline:2px solid var(--dx-a);outline-offset:4px}
+.dx-link--secondary{border-color:#A5A5A0;color:#60605B}
+.dx-card--cerne .dx-card__head{padding-bottom:2px}
+.dx-cerne-layout{display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.17fr);gap:clamp(32px,6vw,90px);margin-top:26px}
+.dx-cerne-layout .dx-primary{margin-top:0}
+.dx-cerne-layout .dx-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 30px;margin-top:0;padding-left:clamp(22px,3vw,42px);border-left:1px solid var(--dx-rule)}
+.dx-value--unit{display:flex;align-items:baseline;gap:13px;white-space:nowrap}
+.dx-value--unit>span:first-child{font:700 clamp(3.7rem,7vw,7rem)/.9 'Jura',ui-monospace,monospace;letter-spacing:-.065em}
+.dx-value--unit>span:last-child{font:600 11px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.12em;color:#555550}
+.dx-card--cerne .dx-primary__desc{max-width:38ch;font-weight:500;font-size:13px;line-height:1.5;color:#62625D}
+.dx-proof{margin-top:clamp(24px,4vw,46px);padding-top:18px;border-top:1px solid var(--dx-rule)}
+.dx-proof__label{margin:0 0 10px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.13em;color:#676762}
+.dx-proof [data-datum]{display:block;max-width:92ch;margin:0;font:500 13px/1.63 'Cause','Commissioner',system-ui,sans-serif;color:#565651;text-wrap:pretty}
+.dx-proof [data-datum] span{font-weight:700;color:#2C2C2C;text-decoration:underline;text-decoration-color:var(--dx-a);text-underline-offset:3px;text-decoration-thickness:1.5px}
+@media(max-width:900px){.dx-chain__top{grid-template-columns:1fr;row-gap:18px}.dx-chain__abstract{max-width:72ch}.dx-card{grid-column:span 12;min-height:0}.dx-cerne-layout{grid-template-columns:1fr;gap:26px}.dx-cerne-layout .dx-metrics{padding-left:0;border-left:0}}
+@media(max-width:560px){.dx-chain__top{padding-top:20px;padding-bottom:24px}.dx-card{padding:25px 20px 29px}.dx-card::before{left:20px}.dx-card__scope{font-size:8px}.dx-metrics--three{grid-template-columns:repeat(2,minmax(0,1fr))}.dx-metric__value{font-size:1.75rem}.dx-cerne-layout .dx-metrics{gap:20px 16px}.dx-chain__title{font-size:clamp(27px,8vw,36px)}}
+@media(prefers-reduced-motion:reduce){.dx-link{transition:none}}
+
 </style>
 </helmet>
 <section id="topo" aria-labelledby="h-data">
@@ -368,15 +422,123 @@ body{font-family:var(--data-corpo)!important;font-weight:500!important}
     <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:14px 40px;margin-top:26px;padding-top:18px;border-top:1px solid #E2E2E0"><p style="margin:0;font:500 11.5px/1.6 'Azeret Mono',ui-monospace,monospace;color:#6E6E6A">Composite of the two flows: <span style="color:#2C2C2C;font-weight:600">10.1 days</span> — published only as a reference, not as an indicator.</p><p style="margin:0;font:400 11.5px/1.6 'Azeret Mono',ui-monospace,monospace;color:#8A8A86">Median and P90 pending extraction</p></div>
     </div></div>
 
-    <p style="margin:clamp(56px,8vh,104px) 0 0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.2em;color:#8A8A86">CHAIN | FIVE BASES THAT DO NOT ADD UP</p>
-    <p style="margin:14px 0 0;max-width:72ch;font-size:13.5px;line-height:1.6;color:#6E6E6A">The tax enforcement operation predates the systems and enters here as the foundation. ECHO, ATRIO, CORPUS, and CERNE belong to their own populations and periods; the values document a chain of work, not a cumulative sum.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:0;margin-top:22px;border-top:1px solid #2C2C2C">
-      <div style="padding:26px 28px 30px 0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.25rem;letter-spacing:-.01em;color:#4A90E2">FOUNDATION</p><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">TAX ENFORCEMENT</p></div><div style="margin-top:24px;padding-bottom:14px;border-bottom:1px solid #E2E2E0"><p tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-calculo="256 + 344 = 600" data-fundamento="256 referred for dismissal under CNJ Resolution 547/2024 + 344 identified as already clearable" data-recorte="Portfolio reviewed from 3 Jul 2024 to 4 Sep 2024" data-limite="Referral for dismissal does not, by itself, amount to final closure. Conservative floor: only unequivocal clean-up signals." style="margin:0;font:700 clamp(2.4rem,4.5vw,3.6rem)/.84 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.06em;font-variant-numeric:tabular-nums;color:#4A90E2">600</p><p style="margin:12px 0 0;font-size:13.5px;line-height:1.45;color:#3D3D3A">cases cleaned up</p></div><div style="display:grid;gap:12px;margin-top:14px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-fundamento="tax enforcement cases reviewed in the front; 101 handled directly by the author" data-recorte="3 Jul 2024 to 4 Sep 2024" style="font:600 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#4A90E2">1,543</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">cases triaged</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-calculo="600 ÷ 1,543" data-fundamento="600 cases cleaned up out of 1,543 screened" data-recorte="same portfolio" style="font:600 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:#4A90E2">38.9%</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">of the screened portfolio</span></div></div><p style="margin:16px 0 0;font-size:13.5px;line-height:1.55;color:#6E6E6A"><span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">256</span> referred for dismissal under CNJ Resolution 547/2024 + <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">344</span> identified as already clearable.</p><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #4A90E2;padding-bottom:3px">PUBLIC DERIVATIVE ↗</a></div>
-      <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#FFB627;color:#2C2C2C;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.25rem;line-height:1;letter-spacing:-.01em">ECHO</span></p><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">4TH PANEL</p></div><div style="display:grid;gap:13px;margin-top:24px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="acervo_publico.xlsx" data-fundamento="1,192 anonymized public records" data-recorte="Operation, 4th Panel" style="display:inline-block;background:#FFB627;color:#2C2C2C;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">1,192</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">cases triaged</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="mapa_tematico_publico.pdf" data-calculo="1 − 10/102" data-fundamento="102 source subjects, 92 categories removed" data-recorte="Operational taxonomy" style="display:inline-block;background:#FFB627;color:#2C2C2C;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">90.2%</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">category reduction</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="precedentes_publico.xlsx" data-fundamento="483 with a settled thesis" data-recorte="Thematic dashboard" style="display:inline-block;background:#FFB627;color:#2C2C2C;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">631</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">precedent topics</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="ementario_publico.xlsx" data-fundamento="absolute count" data-recorte="Full collection" style="display:inline-block;background:#FFB627;color:#2C2C2C;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">2,758</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">headnotes cataloged</span></div></div><a href="../assets/data/lastro/README.md" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #FFB627;padding-bottom:3px">PUBLIC GROUNDING ↗</a></div>
-      <div style="padding:26px 28px 30px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.25rem;line-height:1;letter-spacing:-.01em">ATRIO</span></p><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">2ND PANEL</p></div><div style="display:grid;gap:13px;margin-top:24px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="33 declared HTTP operations" data-recorte="Routes in api.py" style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">31</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">API routes</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="absolute count" data-recorte="Local suite, 26 Aug 2026" style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">188</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">automated tests</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em">LOCAL</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">run</span></div></div><a href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #D94F2D;padding-bottom:3px">ATRIO-API REPOSITORY ↗</a></div>
-      <div style="padding:26px 0 30px 28px;border-left:1px solid #E2E2E0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.25rem;line-height:1;letter-spacing:-.01em">CORPUS</span></p><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">GOVERNED BASE</p></div><p tabindex="0" role="note" data-datum data-fonte="diagnostico_corpus_publico.md" data-fundamento="count after identification and deduplication" data-recorte="Published operational scope" style="margin:24px 0 0"><span style="display:inline-block;background:#D94F2D;color:#FCFCFC;padding:.10em .22em .13em;font:700 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">115,114</span></p><p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Unique case records, after identification and deduplication. It measures the scale of the base, not decision quality.</p></div>
-      <div style="grid-column:1/-1;display:flex;flex-wrap:wrap;gap:22px 28px;align-items:flex-start;padding:28px 0 32px;border-top:1px solid #2C2C2C"><div style="flex:1 1 245px;min-width:0"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px"><p style="margin:0"><span style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.12em .34em .14em;font-family:'Anybody',system-ui,sans-serif;font-weight:900;font-stretch:125%;font-size:1.25rem;line-height:1;letter-spacing:-.01em">C<span style="color:#E2644A">E</span>RNE</span></p><p style="margin:0;font:500 10px/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.16em;color:#8A8A86">TJPR + STJ</p></div><p tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="mean of duracao_min across the 17 rounds; median of 11.1 min" data-recorte="17 rounds reproduced in the demonstration, one per ruling, TJPR and STJ, 12 to 19 Oct 2026" data-fundamento="RODADA_CONCLUIDA minus RODADA_INICIADA, events recorded by the system" data-limite="Machine time, not human time. It depends on the models’ infrastructure." style="margin:24px 0 0"><span style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.10em .22em .13em;font:700 clamp(2.4rem,4.6vw,3.6rem)/.85 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.05em;font-variant-numeric:tabular-nums">12.2</span><span style="margin-left:.4em;font:700 1.1rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:.08em;color:#2C2C2C">MIN</span></p><p style="margin:14px 0 0;font-size:13.5px;line-height:1.55;color:#3D3D3A">Mean per ruling, from text input to questions; the median is 11.1 min. Time follows the number of doubts, not the length of the ruling.</p></div><div style="flex:2 1 460px;min-width:0;padding-top:clamp(0px,4vw,52px)"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px 28px"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="mean over 218 doubts; median of 35.3 s" data-recorte="same scope" data-fundamento="from the start of screening to the recorded decision on the doubt" data-limite="Each doubt is argued for, contested, and decided before it becomes a question." style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">37.6 s</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">screening per doubt</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of questions; 218 doubts formed, 11 dismissed" data-recorte="same scope" data-fundamento="doubts upheld on the same point are consolidated into one question" data-limite="A count of questions, not of hits." style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">67</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">questions across 17 rulings</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of concluida_na_primeira; 22 rounds started, 4 declared failures" data-recorte="same scope" data-fundamento="a technical failure ends the whole round, with no partial report" data-limite="Three provider failures (120 s timeout) and one cancellation." style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">15/17</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">completed on the 1st attempt</span></div><div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #E2E2E0"><span tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="7 on the corrected point + 2 on another corroborated point" data-recorte="12 rulings in the test, out of 18 selected" data-fundamento="granted motions for clarification as an external reference" data-limite="Exploratory selection, checked by the author. Not a precision rate." style="display:inline-block;background:#2C2C2C;color:#FCFCFC;padding:.10em .24em .13em;font:700 1.75rem/1 'Azeret Mono',ui-monospace,monospace;letter-spacing:-.04em;font-variant-numeric:tabular-nums">9/12</span><span style="font-size:13.5px;text-align:right;color:#3D3D3A">with a point open to a motion for clarification</span></div></div></div><div style="flex:1 1 245px;min-width:0;padding-top:clamp(0px,4vw,52px)"><p tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of coverage across the 12 test rulings = 2.15" data-recorte="12 rulings in the test" data-fundamento="share of paragraphs with a question in each ruling" data-limite="Assumes the defect sits in a single paragraph; with three paragraphs, the expected value rises to 5.0." style="margin:0;font-size:13.5px;line-height:1.55;color:#6E6E6A">Questions scattered at random over the same paragraphs would hit <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">2.2</span> of the 12 corrected points. CERNE hit <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">7</span> (<span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">58.33%</span>), plus <span style="font-family:'Azeret Mono',ui-monospace,monospace;font-weight:600;color:#2C2C2C">2</span> on another corroborated point.</p><a href="../assets/data/lastro/metricas_cerne_publica.md" style="display:inline-block;margin-top:22px;font:600 10px/1.4 'Azeret Mono',ui-monospace,monospace;letter-spacing:.14em;border-bottom:1px solid #2C2C2C;padding-bottom:3px">PUBLIC GROUNDING ↗</a></div></div>
-    </div>
+
+    <section class="dx-chain" aria-labelledby="dx-chain-title">
+      <header class="dx-chain__top">
+        <div>
+          <p class="dx-chain__eyebrow">CADEIA DE EVIDÊNCIAS / 05 BASES</p>
+          <h3 id="dx-chain-title" class="dx-chain__title">Uma cadeia.<br><span class="dx-ul" style="--dx-a:#4A90E2">Universos distintos.</span></h3>
+        </div>
+        <div>
+          <p class="dx-chain__abstract">A operação de execuções fiscais antecede os sistemas. ECHO documenta o método; ATRIO e CORPUS, a arquitetura e a base; CERNE, a auditoria. Cada frente tem fonte, período e denominador próprios.</p>
+          <span class="dx-chain__rule">LEITURA TRANSVERSAL · VALORES NÃO ADITIVOS</span>
+        </div>
+      </header>
+      <div class="dx-grid">
+        <article class="dx-card dx-card--fundacao" aria-labelledby="dx-fundacao">
+          <header class="dx-card__head">
+            <div><p class="dx-card__order">01 / 05 · OPERAÇÃO</p><h4 id="dx-fundacao" class="dx-card__name">FOUNDATION</h4></div>
+            <p class="dx-card__scope">EXECUÇÕES FISCAIS<br>1º GRAU</p>
+          </header>
+          <div class="dx-primary">
+            <p class="dx-primary__label">SANEAMENTO DA CARTEIRA</p>
+            <p class="dx-value" tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-calculo="256 + 344 = 600" data-fundamento="256 referred for dismissal under CNJ Resolution 547/2024 + 344 identified as already clearable" data-recorte="Portfolio reviewed from 3 Jul 2024 to 4 Sep 2024" data-limite="Referral for dismissal does not, by itself, amount to final closure. Conservative floor: only unequivocal clean-up signals.">600</p>
+            <p class="dx-primary__desc">processos <span class="dx-ul">saneados</span></p>
+          </div>
+          <div class="dx-metrics">
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-fundamento="tax enforcement cases reviewed in the front; 101 handled directly by the author" data-recorte="3 Jul 2024 to 4 Sep 2024">1,543</span><span class="dx-metric__label">processos <span class="dx-ul">triados</span></span></div>
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="exec_fiscais_res547_derivada.csv" data-calculo="600 ÷ 1,543" data-fundamento="600 cases cleaned up out of 1,543 screened" data-recorte="same portfolio">38.9%</span><span class="dx-metric__label">of the screened portfolio</span></div>
+          </div>
+          <p class="dx-card__note"><strong>256</strong> encaminhados à extinção pela Resolução CNJ 547/2024; <strong>344</strong> identificados como já saneáveis. Encaminhamento não equivale à baixa definitiva.</p>
+          <footer class="dx-card__foot">
+            <a class="dx-link" href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">Consultar derivado <span aria-hidden="true">↗</span></a>
+          </footer>
+        </article>
+        <article class="dx-card dx-card--echo" aria-labelledby="dx-echo">
+          <header class="dx-card__head">
+            <div><p class="dx-card__order">02 / 05 · MÉTODO</p><h4 id="dx-echo" class="dx-card__name">ECHO</h4></div>
+            <p class="dx-card__scope">OPERAÇÃO JURÍDICA<br>4ª TURMA</p>
+          </header>
+          <div class="dx-primary">
+            <p class="dx-primary__label">ENTRADA E CLASSIFICAÇÃO</p>
+            <span class="dx-value" tabindex="0" role="note" data-datum data-fonte="acervo_publico.xlsx" data-fundamento="1,192 anonymized public records" data-recorte="Operation, 4th Panel">1,192</span>
+            <p class="dx-primary__desc">processos <span class="dx-ul">triados</span></p>
+          </div>
+          <div class="dx-metrics dx-metrics--three">
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="mapa_tematico_publico.pdf" data-calculo="1 − 10/102" data-fundamento="102 source subjects, 92 categories removed" data-recorte="Operational taxonomy">90.2%</span><span class="dx-metric__label"><span class="dx-ul">redução</span> categorial</span></div>
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="precedentes_publico.xlsx" data-fundamento="483 with a settled thesis" data-recorte="Thematic dashboard">631</span><span class="dx-metric__label">precedent topics</span></div>
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="ementario_publico.xlsx" data-fundamento="absolute count" data-recorte="Full collection">2,758</span><span class="dx-metric__label">headnotes cataloged</span></div>
+          </div>
+          <footer class="dx-card__foot">
+            <a class="dx-link" href="../assets/data/lastro/README.md">Consultar lastro <span aria-hidden="true">↗</span></a>
+            <a class="dx-link dx-link--secondary" href="echo.html">Abrir ECHO <span aria-hidden="true">↗</span></a>
+          </footer>
+        </article>
+        <article class="dx-card dx-card--atrio" aria-labelledby="dx-atrio">
+          <header class="dx-card__head">
+            <div><p class="dx-card__order">03 / 05 · ARQUITETURA</p><h4 id="dx-atrio" class="dx-card__name">ATRIO</h4></div>
+            <p class="dx-card__scope">IA JURÍDICA<br>2ª TURMA</p>
+          </header>
+          <div class="dx-primary">
+            <p class="dx-primary__label">ESTRUTURA DA API</p>
+            <span class="dx-value" tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="33 declared HTTP operations" data-recorte="Routes in api.py">31</span>
+            <p class="dx-primary__desc"><span class="dx-ul">rotas</span> de API</p>
+          </div>
+          <div class="dx-metrics">
+            <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="operacao_atrio_publica.md" data-fundamento="absolute count" data-recorte="Local suite, 26 Aug 2026">188</span><span class="dx-metric__label">automated tests</span></div>
+            <div class="dx-metric"><span class="dx-metric__value dx-metric__value--text">LOCAL</span><span class="dx-metric__label">ambiente de execução</span></div>
+          </div>
+          <footer class="dx-card__foot">
+            <a class="dx-link" href="../assets/data/lastro/operacao_atrio_publica.md">Consultar lastro <span aria-hidden="true">↗</span></a>
+            <a class="dx-link dx-link--secondary" href="atrio.html">Abrir ATRIO <span aria-hidden="true">↗</span></a>
+            <a class="dx-link dx-link--secondary" href="https://github.com/christiancozta/atrio-api" target="_blank" rel="noopener">API no GitHub <span aria-hidden="true">↗</span></a>
+          </footer>
+        </article>
+        <article class="dx-card dx-card--corpus" aria-labelledby="dx-corpus">
+          <header class="dx-card__head">
+            <div><p class="dx-card__order">04 / 05 · BASE</p><h4 id="dx-corpus" class="dx-card__name">CORPUS</h4></div>
+            <p class="dx-card__scope">MEMÓRIA OPERACIONAL<br>BASE GOVERNADA</p>
+          </header>
+          <div class="dx-primary">
+            <p class="dx-primary__label">RECORTE PROCESSUAL</p>
+            <p class="dx-value" tabindex="0" role="note" data-datum data-fonte="diagnostico_corpus_publico.md" data-fundamento="count after identification and deduplication" data-recorte="Published operational scope"><span>115,114</span></p>
+            <p class="dx-primary__desc">registros processuais <span class="dx-ul">únicos</span></p>
+          </div>
+          <p class="dx-card__note">Após identificação e deduplicação. O número demonstra escala da base, <strong>não qualidade decisória</strong>.</p>
+          <footer class="dx-card__foot">
+            <a class="dx-link" href="../assets/data/lastro/diagnostico_corpus_publico.md">Consultar lastro <span aria-hidden="true">↗</span></a>
+            <a class="dx-link dx-link--secondary" href="atrio.html#arquitetura">Ver no ATRIO <span aria-hidden="true">↗</span></a>
+          </footer>
+        </article>
+        <article class="dx-card dx-card--cerne" aria-labelledby="dx-cerne">
+          <header class="dx-card__head">
+            <div><p class="dx-card__order">05 / 05 · AUDITORIA</p><h4 id="dx-cerne" class="dx-card__name">C<span class="dx-cerne-e">E</span>RNE</h4></div>
+            <p class="dx-card__scope">TESTES EM ATOS<br>TJPR + STJ</p>
+          </header>
+          <div class="dx-cerne-layout">
+            <div class="dx-primary">
+              <p class="dx-primary__label">TEMPO MÉDIO POR ATO</p>
+              <p class="dx-value dx-value--unit" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="mean of duracao_min across the 17 rounds; median of 11.1 min" data-recorte="17 rounds reproduced in the demonstration, one per ruling, TJPR and STJ, 12 to 19 Oct 2026" data-fundamento="RODADA_CONCLUIDA minus RODADA_INICIADA, events recorded by the system" data-limite="Machine time, not human time. It depends on the models’ infrastructure."><span>12.2</span><span>MIN</span></p>
+              <p class="dx-primary__desc">Da entrada do texto às perguntas. Mediana de 11,1 min. Tempo de máquina, condicionado à infraestrutura dos modelos.</p>
+            </div>
+            <div class="dx-metrics">
+              <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="mean over 218 doubts; median of 35.3 s" data-recorte="same scope" data-fundamento="from the start of screening to the recorded decision on the doubt" data-limite="Each doubt is argued for, contested, and decided before it becomes a question.">37.6 s</span><span class="dx-metric__label"><span class="dx-ul">crivo</span> por dúvida</span></div>
+              <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of questions; 218 doubts formed, 11 dismissed" data-recorte="same scope" data-fundamento="doubts upheld on the same point are consolidated into one question" data-limite="A count of questions, not of hits.">67</span><span class="dx-metric__label">questions across 17 rulings</span></div>
+              <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of concluida_na_primeira; 22 rounds started, 4 declared failures" data-recorte="same scope" data-fundamento="a technical failure ends the whole round, with no partial report" data-limite="Three provider failures (120 s timeout) and one cancellation.">15/17</span><span class="dx-metric__label">completed on the 1st attempt</span></div>
+              <div class="dx-metric"><span class="dx-metric__value" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="7 on the corrected point + 2 on another corroborated point" data-recorte="12 rulings in the test, out of 18 selected" data-fundamento="granted motions for clarification as an external reference" data-limite="Exploratory selection, checked by the author. Not a precision rate.">9/12</span><span class="dx-metric__label">with a point open to a motion for clarification</span></div>
+            </div>
+          </div>
+          <div class="dx-proof">
+            <p class="dx-proof__label">REFERÊNCIA EXTERNA / TESTE EXPLORATÓRIO</p>
+            <p class="dx-proof__text" tabindex="0" role="note" data-datum data-fonte="cerne_rodadas_derivada.csv" data-calculo="sum of coverage across the 12 test rulings = 2.15" data-recorte="12 rulings in the test" data-fundamento="share of paragraphs with a question in each ruling" data-limite="Assumes the defect sits in a single paragraph; with three paragraphs, the expected value rises to 5.0.">Perguntas espalhadas ao acaso pelos mesmos parágrafos acertariam <span>2,2</span> dos 12 pontos corrigidos. O CERNE acertou <span>7</span> (<span>58,33%</span>), e mais <span>2</span> em outro ponto corroborado.</p>
+          </div>
+          <footer class="dx-card__foot">
+            <a class="dx-link" href="../assets/data/lastro/metricas_cerne_publica.md">Consultar lastro <span aria-hidden="true">↗</span></a>
+            <a class="dx-link dx-link--secondary" href="cerne.html">Abrir CERNE <span aria-hidden="true">↗</span></a>
+          </footer>
+        </article>
+      </div>
+    </section>
   </div>
 
   <div style="background:#4A90E2;color:#FCFCFC;padding:clamp(44px,6vh,80px) clamp(20px,5vw,96px) clamp(52px,7vh,92px)">

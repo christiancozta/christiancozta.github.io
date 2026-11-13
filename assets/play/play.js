@@ -583,6 +583,27 @@ const retomaRonda = () => { if (!rondaT) rondaT = setTimeout(ronda, 9000); };
   sv.insertBefore(g, defs ? defs.nextSibling : sv.firstChild);
 })();
 
+/* O selo termina na altura da última linha do texto de II ("quando necessário"), em qualquer tela:
+   a posição desse texto muda com a altura da janela (os respiros da folha de rosto são em vh), por isso
+   é medida, não fixada. Pode subir até invadir o aro do prendedor, que fica por cima. No celular, o
+   selo volta à posição do CSS, sob o subtítulo. */
+const SELO = $('#b-som'); const A4 = $('.a4');
+function alinhaSelo() {
+  if (!SELO || !A4) return;
+  if (MQS.matches) { A4.style.removeProperty('--selo-y'); document.documentElement.classList.remove('selo-alinhado'); return; }
+  const mx = $('#marcas button[data-m="2"] .mx'); if (!mx) return;
+  const rg = document.createRange(); rg.selectNodeContents(mx);
+  const rs = rg.getClientRects(); if (!rs.length) return;
+  const cs = getComputedStyle(mx); const fs = parseFloat(cs.fontSize) || 11.5; const lh = parseFloat(cs.lineHeight) || fs * 1.5;
+  /* base do texto (sem a sobra da entrelinha) e base do anel (r 75 num quadro de 160) */
+  const fim = rs[rs.length - 1].bottom - (lh - fs) / 2 - A4.getBoundingClientRect().top;
+  const alt = SELO.offsetHeight;
+  A4.style.setProperty('--selo-y', Math.max(64, Math.round(fim - (alt * 155) / 160)) + 'px');
+  document.documentElement.classList.add('selo-alinhado');
+}
+let seloRaf = 0;
+window.addEventListener('resize', () => { cancelAnimationFrame(seloRaf); seloRaf = requestAnimationFrame(alinhaSelo); });
+
 /* =====================================================================
    A PARTE: folha que se abre sobre a partitura
    Documentos, fichas de PDF e ferramentas abrem no mesmo painel, à direita;
@@ -1671,6 +1692,8 @@ document.addEventListener('keydown', (e) => {
 montaPartitura();
 desenha();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha);
+alinhaSelo();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(alinhaSelo);
 let largSis = 0;
 if ('ResizeObserver' in window) new ResizeObserver(() => { if (SIS.clientWidth !== largSis) { largSis = SIS.clientWidth; desenha(); } }).observe(SIS);
 else window.addEventListener('resize', desenha);
