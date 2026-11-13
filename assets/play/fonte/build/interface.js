@@ -615,24 +615,6 @@ const retomaRonda = () => { if (!rondaT) rondaT = setTimeout(ronda, 9000); };
   sv.insertBefore(g, defs ? defs.nextSibling : sv.firstChild);
 })();
 
-/* O carimbo da busca fica à esquerda, centrado sob o prendedor, e termina na altura da última linha do texto
-   de II ("quando necessário"), em qualquer tela: a posição desse texto muda com a altura da janela (os respiros
-   da folha de rosto são em vh), por isso é medida, não fixada. Pode subir até invadir o aro do prendedor, que
-   fica por cima. No celular, o carimbo volta à posição do CSS, na faixa acima do título. */
-const CARIMBO = $('.carimbos'); const A4 = $('.a4');
-function alinhaCarimbo() {
-  if (!CARIMBO || !A4) return;
-  if (MQS.matches) { A4.style.removeProperty('--carimbo-y'); return; }
-  const mx = $('#marcas button[data-m="2"] .mx'); if (!mx) return;
-  const rg = document.createRange(); rg.selectNodeContents(mx);
-  const rs = rg.getClientRects(); if (!rs.length) return;
-  const cs = getComputedStyle(mx); const fs = parseFloat(cs.fontSize) || 11.5; const lh = parseFloat(cs.lineHeight) || fs * 1.5;
-  /* base do texto (sem a sobra da entrelinha) e base do anel (r 74 e traço de 5 num quadro de 160) */
-  const fim = rs[rs.length - 1].bottom - (lh - fs) / 2 - A4.getBoundingClientRect().top;
-  A4.style.setProperty('--carimbo-y', Math.max(56, Math.round(fim - (CARIMBO.offsetHeight * 156.5) / 160)) + 'px');
-}
-let carimboRaf = 0;
-window.addEventListener('resize', () => { cancelAnimationFrame(carimboRaf); carimboRaf = requestAnimationFrame(alinhaCarimbo); });
 
 /* =====================================================================
    A PARTE: folha que se abre sobre a partitura
@@ -1722,8 +1704,6 @@ document.addEventListener('keydown', (e) => {
 montaPartitura();
 desenha();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha);
-alinhaCarimbo();
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(alinhaCarimbo);
 let largSis = 0;
 if ('ResizeObserver' in window) new ResizeObserver(() => { if (SIS.clientWidth !== largSis) { largSis = SIS.clientWidth; desenha(); } }).observe(SIS);
 else window.addEventListener('resize', desenha);

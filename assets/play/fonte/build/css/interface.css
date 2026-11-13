@@ -37,7 +37,7 @@
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
-  --selo: calc(var(--carimbo) * 1.45);   /* selo seco do som: bem maior que o carimbo da busca, para ganhar presença sem tinta */
+  --selo: calc(var(--carimbo) * 1.2);    /* selo seco do som: 20% maior que o carimbo da busca, ao lado dele */
   --carimbo: clamp(104px, 9.4vw, 140px); /* carimbo da busca, no porte de um carimbo real sobre a folha */
   --selo-topo: clamp(28px, 3.4vw, 52px); /* selo seco no alto à direita, espelhando o prendedor */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
@@ -104,9 +104,8 @@ input, textarea { caret-color: var(--tinta); }
 
 /* Carimbo da busca: redondo, de cartório (anel grosso, filete, texto em volta, lupa ao centro), em tinta,
    levemente torto como quem carimbou à mão; no porte do selo seco, para equilibrar a folha. */
-/* Busca: carimbo de tinta à esquerda, centrado sob o prendedor; a base do anel termina na altura de
-   "quando necessário" (o topo, --carimbo-y, é medido pela página; invade o aro do prendedor, que fica por cima). */
-.carimbos { position: absolute; z-index: 2; top: var(--carimbo-y, 150px); left: calc(clamp(20px, 5vw, 92px) + 66px - var(--carimbo) / 2); display: flex; gap: 10px; }
+/* Busca: carimbo de tinta no alto à direita, à esquerda do selo seco, os dois centrados na mesma altura. */
+.carimbos { position: absolute; z-index: 2; top: calc(var(--selo-topo) + (var(--selo) - var(--carimbo)) / 2); right: calc(clamp(20px, 5vw, 92px) + 14px + var(--selo) + 18px); display: flex; gap: 10px; }
 .carimbo { --r: -6deg; width: var(--carimbo); height: var(--carimbo); padding: 0; border: 0; background: none; color: var(--tinta); opacity: .62; cursor: pointer; transform: rotate(var(--r)); transition: opacity .4s var(--mola), transform .35s var(--mola); }
 .carimbo svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .carimbo .c-anel { fill: none; stroke: currentColor; stroke-width: 5; }
@@ -142,6 +141,8 @@ input, textarea { caret-color: var(--tinta); }
 /* Som: selo seco. Mesma cor do papel; só o relevo o revela (luz no alto à esquerda, sombra embaixo à direita).
    Fica no alto à direita, espelhando o prendedor; a folha de rosto cresce só o necessário para ele caber. */
 .rosto { min-height: calc(var(--selo-topo) + var(--selo) + 10px); }
+/* Telas médias: carimbo e selo não cabem ao lado do título; o título desce para baixo deles. */
+@media (max-width: 880px) { .rosto { padding-top: calc(var(--selo-topo) + var(--selo) + 14px); } }
 .selo {
   position: absolute; z-index: 2; top: var(--selo-topo); right: calc(clamp(20px, 5vw, 92px) + 14px);
   width: var(--selo); height: var(--selo); padding: 0; border: 0; border-radius: 50%; background: none; color: var(--papel); cursor: pointer;
@@ -700,9 +701,9 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .gav-txt { padding-right: 0; }
   .clipe { top: -8px; left: 14px; transform: rotate(-2.4deg) scale(.62); transform-origin: 0 0; }
   .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
-  /* Celular: prendedor, carimbo e selo numa faixa só, acima do título, que vem logo abaixo. */
+  /* Celular: prendedor à esquerda; carimbo e selo lado a lado à direita, na mesma faixa, acima do título. */
   :root { --carimbo: 78px; --selo-topo: 16px; }
-  .carimbos { top: 34px; left: 108px; }
+  .carimbos { right: calc(var(--orelha) + 8px + var(--selo) + 12px); }
   .selo { right: calc(var(--orelha) + 8px); }
   .rosto { padding: calc(var(--selo-topo) + var(--selo) + 14px) 0 0; min-height: 0; }
   .sistema[data-m="1"] .pauta-s .fx[data-mf="1"], .sistema[data-m="2"] .pauta-s .fx[data-mf="2"], .sistema[data-m="3"] .pauta-s .fx[data-mf="3"],
