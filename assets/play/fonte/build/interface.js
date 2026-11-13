@@ -330,10 +330,29 @@ $('#marcas').addEventListener('focusout', (e) => { if (regencia) return; if (!e.
    a progressão fecha no acorde de partida, com fermata. Com o som ligado, passar
    por um compasso (ou tocá-lo no cabeçalho) faz soar só o acorde daquele compasso.
    ===================================================================== */
-/* Cada música: nome, autoria, andamento (bpm, compasso de 4 tempos) e acordes em cifra
-   (C, Am, F#m7, Bb/D, Gsus4, Cmaj7, E7, Bdim…). "fim" é o acorde de repouso; sem ele, a primeira. */
+/* Cada música: nome, autoria, andamento (bpm), tempos por compasso e acordes em cifra (C, Am, F#m7,
+   Bb/D, Gsus4, Cmaj7, E7, A6(add9), B(add9,add11)…), um por compasso; "fim" é o acorde de repouso.
+   Cifras extraídas das análises do TheoryTab (Hooktheory): tom, modo, andamento e graus de cada seção,
+   convertidos em cifra na tonalidade da seção. */
 const MUSICAS = [
-  { nome: 'Partitura do PLAY', autor: 'Playbook ECHO', bpm: 126, acordes: ['C', 'Am', 'C', 'Csus4', 'C'] }
+  /* refrão, Si bemol mixolídio */
+  { nome: 'Bargain', autor: 'The Who', bpm: 133, tempos: 4, fim: 'Bb', acordes: ['Gb', 'Ab', 'Eb', 'Eb(add9)', 'Bb', 'Bb11', 'Gb', 'Db', 'Ab', 'Eb', 'Bb11', 'Bb'] },
+  /* verso, Ré maior */
+  { nome: 'Dreaming', autor: 'Blondie', bpm: 162, tempos: 4, fim: 'D', acordes: ['D', 'G', 'D', 'G', 'D', 'A', 'Em', 'G', 'A', 'D', 'G', 'D', 'G'] },
+  /* refrão, Lá bemol maior */
+  { nome: 'Viva La Vida', autor: 'Coldplay', bpm: 138, tempos: 4, fim: 'Ab', acordes: ['Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7sus4', 'Ab', 'Fm11', 'Dbmaj7', 'Eb7(add11)', 'Ab/C', 'Fm11', 'Dbmaj7', 'Eb7', 'Abmaj9', 'Fm'] },
+  /* refrão (primeiro ciclo), Si bemol maior */
+  { nome: 'Life On Mars?', autor: 'David Bowie', bpm: 120, tempos: 4, fim: 'Bb', acordes: ['Bb', 'Eb', 'Gm7', 'Gbaug', 'F', 'Fm', 'E', 'Eb', 'Dm', 'Cm7', 'Ebmaj7/D', 'Ebmmaj7'] },
+  /* refrão (ciclo e final), Fá maior */
+  { nome: 'Weekend Wars', autor: 'MGMT', bpm: 77, tempos: 4, fim: 'Dm', acordes: ['A/Db', 'Dm', 'C/E', 'F', 'A', 'Bb', 'Gm', 'Am', 'Bb', 'G7/B', 'C', 'C7/Bb', 'Am7', 'A7/Db'] },
+  /* refrão, Si maior */
+  { nome: 'Blue Ridge Mountains', autor: 'Fleet Foxes', bpm: 98, tempos: 4, fim: 'B6', acordes: ['E', 'F#', 'E', 'B', 'E6', 'F#', 'E6', 'B6'] },
+  /* refrão, Dó sustenido menor */
+  { nome: 'Cloudbusting', autor: 'Kate Bush', bpm: 113, tempos: 4, fim: 'C#m7', acordes: ['C#m7', 'B', 'A(add9)', 'B', 'C#m7', 'B(add9)', 'A(add9)', 'B', 'C#m7', 'B', 'F#m(add9)/A', 'A(add9)', 'B'] },
+  /* verso e refrão, Dó sustenido menor, em 6 */
+  { nome: 'Nude', autor: 'Radiohead', bpm: 128, tempos: 6, fim: 'C#m7', acordes: ['A(add9)', 'C#m7', 'A(add9)', 'Emaj7/G#', 'G#m7', 'A(add9)', 'G#m7', 'A(add9)', 'C#m7', 'A(add9)'] },
+  /* refrão, Sol maior (repousa no vi) */
+  { nome: 'Your Protector', autor: 'Fleet Foxes', bpm: 100, tempos: 4, fim: 'Em', acordes: ['C', 'G', 'D', 'Em', 'A', 'G', 'D', 'Em'] }
 ];
 let musica = Math.floor(Math.random() * MUSICAS.length);
 
@@ -346,21 +365,31 @@ const QUAL = [
   ['m9', [0, 3, 7, 10, 14]], ['m7', [0, 3, 7, 10]], ['m6', [0, 3, 7, 9]], ['7b9', [0, 4, 10, 13]], ['7#9', [0, 4, 10, 15]],
   ['dim', [0, 3, 6]], ['aug', [0, 4, 8]], ['sus', [0, 5, 7]], ['maj', [0, 4, 7]], ['min', [0, 3, 7]], ['M7', [0, 4, 7, 11]],
   ['13', [0, 4, 10, 14, 21]], ['11', [0, 7, 10, 14, 17]], ['9', [0, 4, 7, 10, 14]], ['7', [0, 4, 7, 10]], ['6', [0, 4, 7, 9]],
-  ['5', [0, 7]], ['ø', [0, 3, 6, 10]], ['°', [0, 3, 6]], ['+', [0, 4, 8]], ['m', [0, 3, 7]], ['', [0, 4, 7]]
+  ['maj7#5', [0, 4, 8, 11]], ['7#5', [0, 4, 8, 10]], ['5', [0, 7]], ['ø', [0, 3, 6, 10]], ['°', [0, 3, 6]], ['+', [0, 4, 8]], ['m', [0, 3, 7]], ['', [0, 4, 7]]
 ];
+const EXT = { add2: 2, add4: 5, add6: 9, add9: 14, add11: 17, add13: 21, add7: 10, addmaj7: 11, b9: 13, '#9': 15, '#11': 18, b13: 20 };
 const pcDe = (l, a) => (PC[l] + (a === '#' || a === '♯' ? 1 : a === 'b' || a === '♭' ? -1 : 0) + 12) % 12;
 function cifra(s) {
   const m = /^([A-G])([#b♯♭]?)(.*?)(?:\/([A-G])([#b♯♭]?))?$/.exec(String(s).trim());
   if (!m) return { raiz: 0, iv: [0, 4, 7], baixo: 0 };
   const raiz = pcDe(m[1], m[2]);
-  const q = QUAL.find(([nm]) => nm === m[3]) || QUAL.find(([nm]) => nm && m[3].startsWith(nm)) || QUAL[QUAL.length - 1];
-  return { raiz, iv: q[1], baixo: m[4] ? pcDe(m[4], m[5]) : raiz };
+  /* Extensões entre parênteses: "A6(add9)", "B(add9,add11)". */
+  const ext = [];
+  const nq = m[3].replace(/\(([^)]*)\)/g, (_, x) => { ext.push(...x.split(/[,\s]+/).filter(Boolean)); return ''; });
+  const q = QUAL.find(([nm]) => nm === nq) || QUAL.find(([nm]) => nm && nq.startsWith(nm)) || QUAL[QUAL.length - 1];
+  const iv = q[1].concat(ext.map((e) => EXT[e]).filter((x) => x != null));
+  return { raiz, iv, baixo: m[4] ? pcDe(m[4], m[5]) : raiz };
 }
-/* Vozes de cima (Mi4 a Sol5): no máximo quatro classes de altura (sem a quinta quando sobra);
+/* Vozes de cima (Mi4 a Lá5): no máximo quatro classes de altura, pela ordem do que define o acorde
+   (fundamental, terça ou suspensão, sétima, sexta e extensões; a quinta justa por último);
    entre as inversões possíveis, a que menos se move a partir do acorde anterior. */
 function vozes(c, antes) {
-  let pcs = Array.from(new Set(c.iv.map((i) => (c.raiz + i) % 12))).sort((a, b) => (a - c.raiz + 12) % 12 - (b - c.raiz + 12) % 12);
-  if (pcs.length > 4) pcs = pcs.filter((p) => p !== (c.raiz + 7) % 12).slice(0, 4);
+  const rel = (p) => (p - c.raiz + 12) % 12;
+  let pcs = Array.from(new Set(c.iv.map((i) => (c.raiz + i) % 12)));
+  const terca = pcs.some((p) => rel(p) === 3 || rel(p) === 4);
+  const PRIO = { 0: 0, 3: 1, 4: 1, 10: 2, 11: 2, 6: 3, 8: 3, 9: 3, 2: terca ? 4 : 1, 5: terca ? 5 : 1, 1: 4, 7: 9 };
+  if (pcs.length > 4) pcs = pcs.sort((a, b) => PRIO[rel(a)] - PRIO[rel(b)]).slice(0, 4);
+  pcs.sort((a, b) => rel(a) - rel(b));
   let melhor = null; let custo = Infinity;
   for (let r = 0; r < pcs.length; r++) {
     for (let base = 62; base <= 72; base++) {
@@ -369,7 +398,8 @@ function vozes(c, antes) {
       for (let k = 1; k < pcs.length; k++) { let n = v[k - 1] + 1; while (n % 12 !== pcs[(r + k) % pcs.length]) n++; v.push(n); }
       if (v[v.length - 1] > 81) continue;
       const media = v.reduce((a, b) => a + b, 0) / v.length;
-      const c1 = antes ? v.reduce((a, n) => a + Math.min(...antes.map((p) => Math.abs(p - n))), 0) + Math.abs(media - antes.reduce((a, b) => a + b, 0) / antes.length) : Math.abs(media - 69);
+      /* movimento a partir do acorde anterior, com atração para o centro (Lá4), para as vozes não derivarem */
+      const c1 = (antes ? v.reduce((a, n) => a + Math.min(...antes.map((p) => Math.abs(p - n))), 0) : 0) + Math.abs(media - 68) * (antes ? 0.6 : 1);
       if (c1 < custo) { custo = c1; melhor = v; }
     }
   }
@@ -389,7 +419,7 @@ function compassos(mu) {
   let antes = null;
   return cs.map((s) => { const c = cifra(s); const alto = vozes(c, antes); antes = alto; return { grave: grave(c), alto }; });
 }
-const barraDe = (mu) => Math.min(2.6, Math.max(1.3, 240 / (mu.bpm || 120)));
+const barraDe = (mu) => Math.min(3, Math.max(1.3, ((mu.tempos || 4) * 60) / (mu.bpm || 120)));
 
 let actx = null; let saida = null; let eco = null; let onda = null; let somOn = false; let regencia = null;
 const soando = new Set();
@@ -445,14 +475,15 @@ function solta(tau) {
   soando.clear();
 }
 /* Um compasso: no primeiro tempo, o grave e o acorde num arpejo breve de baixo para cima (a voz mais
-   aguda canta um pouco mais); nos tempos seguintes, o acorde quebrado, leve. Só o acorde, fora da regência. */
-function soaCompasso(cp, t, B, rege, fermata) {
+   aguda canta um pouco mais); nos tempos seguintes (3 em 4, 5 em 6), o acorde quebrado, leve. Só o acorde, fora da regência. */
+function soaCompasso(cp, t, B, rege, fermata, tempos) {
   const d = B + (fermata ? B * 1.6 : 0);
   cp.grave.forEach((n, i) => nota(n, t + i * 0.012, rege ? d : 1.3, i ? 0.1 : 0.15));
   const a = cp.alto;
   a.forEach((n, i) => nota(n, t + 0.05 + i * 0.06, rege ? d : 1.3, i === a.length - 1 ? 0.12 : 0.08));
   if (!rege || fermata) return;
-  [1, 2, 3].forEach((k) => nota(a[(k - 1) % a.length], t + (k * B) / 4, B / 2, 0.055));
+  const tt = tempos || 4;
+  for (let k = 1; k < tt; k++) nota(a[(k - 1) % a.length], t + (k * B) / tt, (2 * B) / tt, 0.055);
 }
 let ultimoAcorde = { m: 0, t: 0 };
 function acorde(m) {
@@ -474,7 +505,7 @@ function rege() {
   paraRegencia(); solta(0.05);
   const mu = MUSICAS[musica]; const cs = compassos(mu); const B = barraDe(mu); const n = cs.length;
   const t0 = actx.currentTime + 0.15;
-  cs.forEach((cp, k) => soaCompasso(cp, t0 + k * B, B, true, k === n - 1));
+  cs.forEach((cp, k) => soaCompasso(cp, t0 + k * B, B, true, k === n - 1, mu.tempos));
   const ms = (s) => Math.max(0, (t0 - actx.currentTime + s) * 1000);
   regencia = { timers: [] };
   cs.forEach((cp, k) => {
