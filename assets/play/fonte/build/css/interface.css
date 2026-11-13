@@ -40,7 +40,7 @@
   --selo: calc(var(--carimbo) * 1.45);   /* selo seco do som: bem maior que o carimbo da busca, para ganhar presença sem tinta */
   --selo-mergulho: 96px;                /* quanto o selo desce na casa em branco do cabeçalho dos compassos */
   --carimbo: clamp(104px, 9.4vw, 140px); /* carimbo da busca, no porte de um carimbo real sobre a folha */
-  --selo-y: 146px;                      /* logo abaixo das hastes do prendedor */
+  --selo-y: 122px;                      /* sobe até invadir de leve o aro do prendedor, que fica por cima */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
   --fibra: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .094 0 0 0 0 .094 0 0 0 0 .094 .07 0 0 0 -.024'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
   --verge: repeating-linear-gradient(0deg, rgba(44, 44, 44, .008) 0 1px, transparent 1px 4px);
@@ -136,7 +136,9 @@ input, textarea { caret-color: var(--tinta); }
 .rosto { padding: clamp(56px, 9vh, 96px) 0 clamp(40px, 7vh, 76px); text-align: center; }
 .rosto h1 { margin-right: -.08em; font: 900 64px/1 var(--serif); letter-spacing: .08em; }
 /* Subtítulo no corpo exato dos títulos dos compassos, em JetBrains 700; o autor à direita, como crédito de compositor. */
-.rosto-sub { margin: 18px -.06em 0 0; font: 700 9.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
+.rosto-sub { margin: 18px auto 0; font: 700 9.5px/1.7 var(--mono); white-space: nowrap; letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
+/* Só em telas estreitas, onde a linha única não cabe, o subtítulo quebra em duas linhas equilibradas. */
+@media (max-width: 480px) { .rosto-sub { max-width: 46ch; white-space: normal; text-wrap: balance; } }
 /* Som: selo seco. Mesma cor do papel; só o relevo o revela (luz no alto à esquerda, sombra embaixo à direita).
    Fica à esquerda, logo abaixo das hastes do prendedor (que terminam a ~133px do topo da folha), e desce
    até a casa em branco do cabeçalho dos compassos; a folha de rosto cresce só o necessário para isso. */
@@ -158,6 +160,17 @@ input, textarea { caret-color: var(--tinta); }
 /* Som ligado: o selo fica afundado (luz e sombra invertidas) enquanto toca. */
 .selo:active, .selo[aria-pressed="true"] { filter: drop-shadow(1.4px 1.4px 0 #fff) drop-shadow(-1.6px -2px .9px rgba(44, 44, 44, .34)); }
 .selo:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 6px; }
+/* Contorno: um risco de grafite de ~0,5px, por baixo do desenho em papel (cada traço 0,84 unidade mais largo,
+   ~0,42 de cada lado). O selo continua papel marcado; o risco só o distingue do fundo. */
+.selo .s-contorno { color: rgba(44, 44, 44, .38); }
+.selo .s-contorno .s-anel { stroke-width: 4.24; }
+.selo .s-contorno .s-fio { stroke-width: 2.14; }
+.selo .s-contorno .s-txt { stroke: currentColor; stroke-width: .84; stroke-linejoin: round; }
+.selo .s-contorno .s-ic { stroke-width: 2.585; }
+.selo .s-contorno .s-ic ellipse { stroke: currentColor; stroke-width: .285; }
+/* Dobra do alto à direita: um botão sem marca nem cursor próprio, sobre a orelha (troca a música). */
+.dobra { position: absolute; z-index: 4; top: 0; right: 0; width: calc(var(--orelha) + 10px); height: calc(var(--orelha) + 10px); padding: 0; border: 0; background: none; cursor: default; -webkit-tap-highlight-color: transparent; }
+.dobra:focus { outline: none; }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
 .pt button { border: 0; background: none; padding: 4px 0; font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }

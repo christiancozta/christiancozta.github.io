@@ -300,15 +300,18 @@ function marcaCompasso(m) {
   if (m) acorde(m);
 }
 SIS.addEventListener('pointermove', (e) => {
-  if (MQS.matches || e.pointerType !== 'mouse' || regencia) return;
-  if (e.target.closest('.gaveta')) { marcaCompasso(0); SIS.classList.remove('foco-voz'); $$('.voz.quente', SIS).forEach((el) => el.classList.remove('quente')); return; }
-  const x = e.clientX - SIS.getBoundingClientRect().left - sg.x;
-  marcaCompasso(x < 0 || x > sg.mw * 5 ? 0 : Math.min(5, Math.floor(x / sg.mw) + 1));
+  if (MQS.matches || e.pointerType !== 'mouse') return;
+  if (e.target.closest('.gaveta')) { if (!regencia) marcaCompasso(0); SIS.classList.remove('foco-voz'); $$('.voz.quente', SIS).forEach((el) => el.classList.remove('quente')); return; }
+  /* Durante a regência, a coluna segue a música; o realce da voz sob o cursor continua. */
+  if (!regencia) {
+    const x = e.clientX - SIS.getBoundingClientRect().left - sg.x;
+    marcaCompasso(x < 0 || x > sg.mw * 5 ? 0 : Math.min(5, Math.floor(x / sg.mw) + 1));
+  }
   const voz = e.target.closest('.voz');
   SIS.classList.toggle('foco-voz', !!voz);
   $$('.voz', SIS).forEach((el) => el.classList.toggle('quente', el === voz));
 });
-SIS.addEventListener('pointerleave', () => { if (regencia) return; marcaCompasso(0); SIS.classList.remove('foco-voz'); });
+SIS.addEventListener('pointerleave', () => { SIS.classList.remove('foco-voz'); $$('.voz.quente', SIS).forEach((el) => el.classList.remove('quente')); if (!regencia) marcaCompasso(0); });
 SIS.addEventListener('click', (e) => {
   const mb = e.target.closest('#marcas button'); if (mb) { mAtual = 0; marcaCompasso(+mb.dataset.m); return; }
   if (e.target.closest('[data-fecha-gav]')) { saiGaveta(); return; }
@@ -319,16 +322,80 @@ SIS.addEventListener('click', (e) => {
 $('#marcas').addEventListener('focusin', (e) => { const b = e.target.closest('button'); if (b) marcaCompasso(+b.dataset.m); });
 $('#marcas').addEventListener('focusout', (e) => { if (regencia) return; if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('#marcas')) marcaCompasso(0); });
 
-/* Som: sintetizado no navegador, desligado até o primeiro toque.
-   A partitura é realizada como um coral em Dó: o selo rege os cinco compassos em tempo, com a batuta;
-   passar por um compasso (ou tocá-lo no cabeçalho) faz soar só ele. As notas são as das pautas; as
-   ligaduras sustentam sem novo ataque; o contínuo abaixo realiza a harmonia descrita em NOTA
-   (I Dó, II Lá menor, III Dó, IV suspensão sobre Dó, coda em Dó com fermata). */
-const BARRA = 1.9;
-const CONTINUO = { 1: ['C3', 'G3'], 2: ['A2', 'E3'], 3: ['C3', 'G3'], 4: ['C3', 'G3'], 5: ['C2', 'C3', 'G3'] };
-const freq = (n) => 440 * Math.pow(2, ((+n[1] - 4) * 12 + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[n[0]] - 9) / 12);
+/* =====================================================================
+   SOM
+   Sintetizado no navegador, desligado até o primeiro toque no selo seco.
+   O que toca é uma música: uma progressão de acordes em cifra, com andamento.
+   Uma é sorteada a cada visita; a dobra da folha (alto à direita) troca para a próxima.
+   O selo rege a progressão em tempo: cada acorde é um compasso, a coluna acende
+   no compasso correspondente (de I a V, recomeçando em I) e a batuta atravessa junto;
+   a progressão fecha no acorde de partida, com fermata. Com o som ligado, passar
+   por um compasso (ou tocá-lo no cabeçalho) faz soar só o acorde daquele compasso.
+   ===================================================================== */
+/* Cada música: nome, autoria, andamento (bpm, compasso de 4 tempos) e acordes em cifra
+   (C, Am, F#m7, Bb/D, Gsus4, Cmaj7, E7, Bdim…). "fim" é o acorde de repouso; sem ele, a primeira. */
+const MUSICAS = [
+  { nome: 'PLAY score', autor: 'Playbook ECHO', bpm: 126, acordes: ['C', 'Am', 'C', 'Csus4', 'C'] }
+];
+let musica = Math.floor(Math.random() * MUSICAS.length);
+
+/* Cifra → alturas. Qualidades por ordem de comprimento, para "m7b5" não ser lido como "m". */
+const PC = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const QUAL = [
+  ['m(maj7)', [0, 3, 7, 11]], ['mmaj7', [0, 3, 7, 11]], ['maj13', [0, 4, 11, 14, 21]], ['maj9', [0, 4, 7, 11, 14]], ['maj7', [0, 4, 7, 11]],
+  ['m7b5', [0, 3, 6, 10]], ['dim7', [0, 3, 6, 9]], ['7sus4', [0, 5, 7, 10]], ['madd9', [0, 3, 7, 14]], ['add9', [0, 4, 7, 14]],
+  ['add2', [0, 2, 4, 7]], ['sus2', [0, 2, 7]], ['sus4', [0, 5, 7]], ['m11', [0, 3, 10, 14, 17]], ['m13', [0, 3, 10, 14, 21]],
+  ['m9', [0, 3, 7, 10, 14]], ['m7', [0, 3, 7, 10]], ['m6', [0, 3, 7, 9]], ['7b9', [0, 4, 10, 13]], ['7#9', [0, 4, 10, 15]],
+  ['dim', [0, 3, 6]], ['aug', [0, 4, 8]], ['sus', [0, 5, 7]], ['maj', [0, 4, 7]], ['min', [0, 3, 7]], ['M7', [0, 4, 7, 11]],
+  ['13', [0, 4, 10, 14, 21]], ['11', [0, 7, 10, 14, 17]], ['9', [0, 4, 7, 10, 14]], ['7', [0, 4, 7, 10]], ['6', [0, 4, 7, 9]],
+  ['5', [0, 7]], ['ø', [0, 3, 6, 10]], ['°', [0, 3, 6]], ['+', [0, 4, 8]], ['m', [0, 3, 7]], ['', [0, 4, 7]]
+];
+const pcDe = (l, a) => (PC[l] + (a === '#' || a === '♯' ? 1 : a === 'b' || a === '♭' ? -1 : 0) + 12) % 12;
+function cifra(s) {
+  const m = /^([A-G])([#b♯♭]?)(.*?)(?:\/([A-G])([#b♯♭]?))?$/.exec(String(s).trim());
+  if (!m) return { raiz: 0, iv: [0, 4, 7], baixo: 0 };
+  const raiz = pcDe(m[1], m[2]);
+  const q = QUAL.find(([nm]) => nm === m[3]) || QUAL.find(([nm]) => nm && m[3].startsWith(nm)) || QUAL[QUAL.length - 1];
+  return { raiz, iv: q[1], baixo: m[4] ? pcDe(m[4], m[5]) : raiz };
+}
+/* Vozes de cima (Mi4 a Sol5): no máximo quatro classes de altura (sem a quinta quando sobra);
+   entre as inversões possíveis, a que menos se move a partir do acorde anterior. */
+function vozes(c, antes) {
+  let pcs = Array.from(new Set(c.iv.map((i) => (c.raiz + i) % 12))).sort((a, b) => (a - c.raiz + 12) % 12 - (b - c.raiz + 12) % 12);
+  if (pcs.length > 4) pcs = pcs.filter((p) => p !== (c.raiz + 7) % 12).slice(0, 4);
+  let melhor = null; let custo = Infinity;
+  for (let r = 0; r < pcs.length; r++) {
+    for (let base = 62; base <= 72; base++) {
+      if (base % 12 !== pcs[r]) continue;
+      const v = [base];
+      for (let k = 1; k < pcs.length; k++) { let n = v[k - 1] + 1; while (n % 12 !== pcs[(r + k) % pcs.length]) n++; v.push(n); }
+      if (v[v.length - 1] > 81) continue;
+      const media = v.reduce((a, b) => a + b, 0) / v.length;
+      const c1 = antes ? v.reduce((a, n) => a + Math.min(...antes.map((p) => Math.abs(p - n))), 0) + Math.abs(media - antes.reduce((a, b) => a + b, 0) / antes.length) : Math.abs(media - 69);
+      if (c1 < custo) { custo = c1; melhor = v; }
+    }
+  }
+  return melhor || pcs.map((p) => 60 + p);
+}
+/* Grave: o baixo da cifra entre Mi2 e Ré#3, com a quinta acima; sem quinta (ou no baixo invertido), a oitava abaixo. */
+function grave(c) {
+  let b = 36 + c.baixo; if (b < 40) b += 12;
+  if (c.baixo === c.raiz && c.iv.includes(7)) return [b, b + 7];
+  return b - 12 >= 36 ? [b - 12, b] : [b, b + 12];
+}
+/* A música em compassos já vozeados: [{grave, alto}], com o repouso no fim. */
+function compassos(mu) {
+  const cs = mu.acordes.slice();
+  const fim = mu.fim || mu.acordes[0];
+  if (cs[cs.length - 1] !== fim) cs.push(fim);
+  let antes = null;
+  return cs.map((s) => { const c = cifra(s); const alto = vozes(c, antes); antes = alto; return { grave: grave(c), alto }; });
+}
+const barraDe = (mu) => Math.min(2.6, Math.max(1.3, 240 / (mu.bpm || 120)));
+
 let actx = null; let saida = null; let eco = null; let onda = null; let somOn = false; let regencia = null;
 const soando = new Set();
+const hz = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
 function ligaSom() {
   if (actx) { if (actx.state !== 'running') actx.resume().catch(() => {}); return true; }
   const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
@@ -348,27 +415,26 @@ function ligaSom() {
   const conv = actx.createConvolver(); conv.buffer = ir;
   eco = actx.createGain(); eco.gain.value = 0.28; eco.connect(conv); conv.connect(comp);
   /* Timbre de teclado macio (entre piano elétrico e celesta): fundamental forte, poucos harmônicos. */
-  const re = new Float32Array([0, 0, 0, 0, 0, 0, 0, 0]);
   const im = new Float32Array([0, 1, 0.38, 0.16, 0.09, 0.045, 0.025, 0.012]);
-  onda = actx.createPeriodicWave(re, im);
+  onda = actx.createPeriodicWave(new Float32Array(im.length), im);
   return true;
 }
 /* Uma nota: ataque rápido, queda até um sustento baixo e soltura com cauda; o filtro escurece com o tempo. */
-function nota(n, t, dur, vel) {
-  const f = freq(n);
+function nota(midi, t, dur, vel) {
+  const f = hz(midi);
   const o = actx.createOscillator(); o.setPeriodicWave(onda); o.frequency.value = f;
   const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 0.5;
   lp.frequency.setValueAtTime(Math.min(9000, f * 9), t); lp.frequency.exponentialRampToValueAtTime(Math.max(600, f * 2), t + Math.min(1.4, dur));
   const g = actx.createGain();
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.014);
-  g.gain.exponentialRampToValueAtTime(vel * 0.4, t + 0.45);
+  g.gain.exponentialRampToValueAtTime(vel * 0.4, t + Math.min(0.45, dur * 0.5));
   g.gain.exponentialRampToValueAtTime(vel * 0.14, t + Math.max(0.5, dur));
-  g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 1.1);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.5, dur) + 1.1);
   o.connect(lp); lp.connect(g); g.connect(saida); g.connect(eco);
-  o.start(t); o.stop(t + dur + 1.2);
+  o.start(t); o.stop(t + Math.max(0.5, dur) + 1.2);
   const v = { g, o }; soando.add(v); o.onended = () => soando.delete(v);
 }
-/* Silencia o que estiver soando, com uma soltura curta (sem estalo). */
+/* Silencia o que estiver soando ou agendado, com uma soltura curta (sem estalo). */
 function solta(tau) {
   if (!actx) return;
   const t = actx.currentTime;
@@ -380,72 +446,112 @@ function solta(tau) {
   });
   soando.clear();
 }
-/* As notas das pautas no compasso m, do grave ao agudo. Na regência, a nota ligada não volta a soar
-   no compasso seguinte: segue sustentada desde o ataque. */
-function notasDe(m, rege) {
-  const out = [];
-  NAIPES.forEach((g) => g.vozes.forEach((v) => (v.notas || []).forEach((n) => {
-    if (n[0] !== m) return;
-    let barras = 1;
-    if (v.liga) { if (rege && m === v.liga[1]) return; if (rege && m === v.liga[0]) barras = v.liga[1] - v.liga[0] + 1; }
-    if (!out.some((o) => o.n === NOTA[n[1]])) out.push({ n: NOTA[n[1]], barras, fim: m + barras - 1 });
-  })));
-  return out.sort((a, b) => freq(a.n) - freq(b.n));
+/* Um compasso: no primeiro tempo, o grave e o acorde num arpejo breve de baixo para cima (a voz mais
+   aguda canta um pouco mais); nos tempos seguintes, o acorde quebrado, leve. Só o acorde, fora da regência. */
+function soaCompasso(cp, t, B, rege, fermata) {
+  const d = B + (fermata ? B * 1.6 : 0);
+  cp.grave.forEach((n, i) => nota(n, t + i * 0.012, rege ? d : 1.3, i ? 0.1 : 0.15));
+  const a = cp.alto;
+  a.forEach((n, i) => nota(n, t + 0.05 + i * 0.06, rege ? d : 1.3, i === a.length - 1 ? 0.12 : 0.08));
+  if (!rege || fermata) return;
+  [1, 2, 3].forEach((k) => nota(a[(k - 1) % a.length], t + (k * B) / 4, B / 2, 0.055));
 }
-/* Um compasso: o contínuo no tempo, as vozes num arpejo breve de baixo para cima; a mais aguda canta um pouco mais. */
-function soaCompasso(m, t, rege) {
-  const fermata = (fim) => (rege && fim === 5 ? BARRA * 1.6 : 0);
-  CONTINUO[m].forEach((n, i) => nota(n, t + i * 0.012, (rege ? BARRA : 1.3) + fermata(m), i ? 0.11 : 0.15));
-  const alto = notasDe(m, rege);
-  alto.forEach((x, i) => nota(x.n, t + 0.05 + i * 0.065, (rege ? BARRA * x.barras : 1.3) + fermata(x.fim), i === alto.length - 1 ? 0.13 : 0.085));
-}
+let ultimoAcorde = { m: 0, t: 0 };
 function acorde(m) {
   if (!somOn || !actx) return;
-  if (regencia) paraRegencia();
+  /* foco e clique no mesmo cabeçalho chegam juntos: soa uma vez só. */
+  const agora = performance.now();
+  if (ultimoAcorde.m === m && agora - ultimoAcorde.t < 350) return;
+  ultimoAcorde = { m, t: agora };
+  if (regencia) paraRegencia(true);
   if (actx.state !== 'running') actx.resume().catch(() => {});
   solta(0.07);
-  soaCompasso(m, actx.currentTime + 0.02, false);
+  const mu = MUSICAS[musica]; const cs = compassos(mu);
+  soaCompasso(cs[(m - 1) % cs.length], actx.currentTime + 0.02, barraDe(mu), false);
 }
-/* Regência: os cinco compassos em tempo; a coluna acende em cada um e a batuta atravessa a partitura junto. */
+/* Regência: a progressão inteira em tempo; a coluna acende em cada compasso e a batuta atravessa
+   a partitura a cada cinco compassos (ou só os que restam, no fim). */
 function rege() {
+  if (!somOn) return;
   paraRegencia(); solta(0.05);
+  const mu = MUSICAS[musica]; const cs = compassos(mu); const B = barraDe(mu); const n = cs.length;
   const t0 = actx.currentTime + 0.15;
-  regencia = { timers: [] };
-  for (let m = 1; m <= 5; m++) soaCompasso(m, t0 + (m - 1) * BARRA, true);
+  cs.forEach((cp, k) => soaCompasso(cp, t0 + k * B, B, true, k === n - 1));
   const ms = (s) => Math.max(0, (t0 - actx.currentTime + s) * 1000);
-  for (let m = 1; m <= 5; m++) regencia.timers.push(setTimeout(() => { mAtual = m; acende(m); }, ms((m - 1) * BARRA)));
-  regencia.timers.push(setTimeout(() => gesto(BARRA * 5, true), ms(0)));
-  regencia.timers.push(setTimeout(() => { regencia = null; mAtual = 0; acende(0); }, ms(BARRA * 5 + BARRA * 1.2)));
+  regencia = { timers: [] };
+  cs.forEach((cp, k) => {
+    const col = (k % 5) + 1;
+    regencia.timers.push(setTimeout(() => { mAtual = col; acende(col); }, ms(k * B)));
+    if (k % 5 === 0) regencia.timers.push(setTimeout(() => gesto(B * Math.min(5, n - k), true, Math.min(5, n - k)), ms(k * B)));
+  });
+  regencia.timers.push(setTimeout(() => { regencia = null; mAtual = 0; acende(0); }, ms((n - 1) * B + B * 2.6)));
 }
-function paraRegencia() {
+/* manter: quem interrompe já acendeu o seu compasso; não apagar. */
+function paraRegencia(manter) {
   if (!regencia) return;
   regencia.timers.forEach(clearTimeout); regencia = null;
-  BAT.classList.remove('vai', 'rege'); mAtual = 0; acende(0);
+  BAT.classList.remove('vai', 'rege');
+  if (!manter) { mAtual = 0; acende(0); }
+}
+function desligaSom() {
+  somOn = false; $('#b-som').setAttribute('aria-pressed', 'false');
+  paraRegencia(); solta(0.12);
 }
 $('#b-som').addEventListener('click', (e) => {
-  const b = e.currentTarget;
-  somOn = !somOn;
-  if (somOn && !ligaSom()) somOn = false;
-  b.setAttribute('aria-pressed', String(somOn));
-  if (!somOn) { paraRegencia(); solta(0.12); return; }
-  if (actx.state === 'running') rege(); else actx.resume().then(rege, rege);
+  if (somOn) { desligaSom(); return; }
+  if (!ligaSom()) return;
+  somOn = true; e.currentTarget.setAttribute('aria-pressed', 'true');
+  if (actx.state === 'running') rege();
+  else actx.resume().then(rege, () => { desligaSom(); toast('The browser did not allow sound.'); });
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) { paraRegencia(); solta(0.05); } });
 
+/* A dobra da folha, no alto à direita, troca a música. Sem marca nem rótulo visível. */
+const dobra = document.createElement('button');
+dobra.type = 'button'; dobra.className = 'dobra'; dobra.tabIndex = -1; dobra.setAttribute('aria-label', 'Change the song');
+$('.a4').appendChild(dobra);
+dobra.addEventListener('click', () => {
+  if (MUSICAS.length < 2) { toast('There is only one song.'); return; }
+  musica = (musica + 1) % MUSICAS.length;
+  const mu = MUSICAS[musica];
+  toast('Song: ' + mu.nome + (mu.autor ? ', ' + mu.autor : ''));
+  if (somOn) rege();
+});
+
 /* A batuta: um gesto da primeira à última barra. Abre a página, volta de tempos em tempos enquanto a
    partitura está à vista e ninguém a percorre, e rege em tempo quando o som toca. */
-function gesto(dur, emTempo) {
+function gesto(dur, emTempo, ate) {
   if (RM.matches || MQS.matches || !sg.mw) return;
-  BAT.style.setProperty('--a', sg.x + 'px'); BAT.style.setProperty('--b', (sg.x + sg.mw * 5) + 'px');
+  BAT.style.setProperty('--a', sg.x + 'px'); BAT.style.setProperty('--b', (sg.x + sg.mw * (ate || 5)) + 'px');
   BAT.style.setProperty('--dur', (dur || 3.4) + 's');
   BAT.classList.remove('vai', 'rege'); void BAT.offsetWidth; BAT.classList.add(emTempo ? 'rege' : 'vai');
 }
+/* À vista: ao menos 35% da tela (ou do próprio sistema, se for menor) ocupados pela partitura. */
 let sisVisivel = true;
-if ('IntersectionObserver' in window) new IntersectionObserver((es) => { sisVisivel = es[es.length - 1].isIntersecting; }, { threshold: 0.35 }).observe(SIS);
-function ronda() {
-  if (!document.hidden && sisVisivel && !regencia && !mAtual && !gavAberta && !PARTE.classList.contains('on')) gesto();
-  setTimeout(ronda, 9000);
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver((es) => {
+    const e = es[es.length - 1];
+    sisVisivel = e.intersectionRect.height >= Math.min(e.boundingClientRect.height, innerHeight) * 0.35;
+  }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] }).observe(SIS);
 }
+let rondaT = 0;
+function ronda() {
+  clearTimeout(rondaT); rondaT = 0;
+  if (RM.matches || MQS.matches) return;
+  if (!document.hidden && sisVisivel && !regencia && !mAtual && !gavAberta && !PARTE.classList.contains('on')) gesto();
+  rondaT = setTimeout(ronda, 9000);
+}
+const retomaRonda = () => { if (!rondaT) rondaT = setTimeout(ronda, 9000); };
+[RM, MQS].forEach((q) => (q.addEventListener ? q.addEventListener('change', retomaRonda) : q.addListener(retomaRonda)));
+
+/* Selo seco: um contorno de grafite, levíssimo, por baixo do desenho em papel, para o relevo se distinguir. */
+(() => {
+  const sv = $('#b-som svg'); if (!sv) return;
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', 's-contorno');
+  Array.from(sv.children).filter((el) => el.tagName.toLowerCase() !== 'defs').forEach((el) => g.appendChild(el.cloneNode(true)));
+  const defs = sv.querySelector('defs');
+  sv.insertBefore(g, defs ? defs.nextSibling : sv.firstChild);
+})();
 
 /* =====================================================================
    A PARTE: folha que se abre sobre a partitura
@@ -1543,5 +1649,5 @@ gstat('fundamentos', `${N.fun} records in ${N.funCat} categories`);
 gstat('ementario', `${N.eme.toLocaleString('en-US')} records, ${N.emeEsc.toLocaleString('en-US')} within the Guide’s scope`);
 window.addEventListener('hashchange', route);
 route();
-setTimeout(() => { gesto(); setTimeout(ronda, 9000); }, 900);
+setTimeout(() => { gesto(); retomaRonda(); }, 900);
 })();
