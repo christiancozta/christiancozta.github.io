@@ -259,6 +259,7 @@ function desenha() {
   const mw = W / 5;
   svgs.forEach((s) => {
     const v = VOZ[s.dataset.v]; let o = '';
+    for (let i = 0; i < 5; i++) o += `<rect class="fx" data-mf="${i + 1}" x="${i * mw}" y="3" width="${mw}" height="30"/>`;
     [8, 13, 18, 23, 28].forEach((y) => { o += `<line class="l" x1="0" x2="${W}" y1="${y}" y2="${y}"/>`; });
     for (let i = 0; i < 5; i++) o += `<line class="bar" x1="${i * mw + 0.5}" x2="${i * mw + 0.5}" y1="8" y2="28"/>`;
     o += `<line class="fim" x1="${W - 5}" x2="${W - 5}" y1="8" y2="28" stroke-width="1"/><line class="fim" x1="${W - 1.5}" x2="${W - 1.5}" y1="8" y2="28" stroke-width="3"/>`;
@@ -422,6 +423,7 @@ function compassos(mu) {
 }
 const barraDe = (mu) => Math.min(3, Math.max(1.3, ((mu.tempos || 4) * 60) / (mu.bpm || 120)));
 
+const SELO = $('#b-som');
 let actx = null; let saida = null; let eco = null; let onda = null; let somOn = false; let regencia = null;
 const soando = new Set();
 const hz = (midi) => 440 * Math.pow(2, (midi - 69) / 12);
@@ -448,8 +450,11 @@ function ligaSom() {
   onda = actx.createPeriodicWave(new Float32Array(im.length), im);
   return true;
 }
-/* Uma nota: ataque rápido, queda até um sustento baixo e soltura com cauda; o filtro escurece com o tempo. */
-function nota(midi, t, dur, vel) {
+/* Uma nota: ataque rápido, queda até um sustento baixo e soltura (cauda) a partir do fim; o filtro escurece
+   com o tempo. Na regência a cauda é curta: o acorde cede lugar ao seguinte no tempo exato, e só a sala o prolonga. */
+function nota(midi, t, dur, vel, cauda) {
+  const c = cauda == null ? 1.1 : cauda;
+  const fim = t + Math.max(0.16, dur);
   const f = hz(midi);
   const o = actx.createOscillator(); o.setPeriodicWave(onda); o.frequency.value = f;
   const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 0.5;
@@ -457,10 +462,10 @@ function nota(midi, t, dur, vel) {
   const g = actx.createGain();
   g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vel, t + 0.014);
   g.gain.exponentialRampToValueAtTime(vel * 0.4, t + Math.min(0.45, dur * 0.5));
-  g.gain.exponentialRampToValueAtTime(vel * 0.14, t + Math.max(0.5, dur));
-  g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(0.5, dur) + 1.1);
+  g.gain.exponentialRampToValueAtTime(vel * 0.14, fim);
+  g.gain.exponentialRampToValueAtTime(0.0001, fim + c);
   o.connect(lp); lp.connect(g); g.connect(saida); g.connect(eco);
-  o.start(t); o.stop(t + Math.max(0.5, dur) + 1.2);
+  o.start(t); o.stop(fim + c + 0.05);
   const v = { g, o }; soando.add(v); o.onended = () => soando.delete(v);
 }
 /* Silencia o que estiver soando ou agendado, com uma soltura curta (sem estalo). */
@@ -477,14 +482,17 @@ function solta(tau) {
 }
 /* Um compasso: no primeiro tempo, o grave e o acorde num arpejo breve de baixo para cima (a voz mais
    aguda canta um pouco mais); nos tempos seguintes (3 em 4, 5 em 6), o acorde quebrado, leve. Só o acorde, fora da regência. */
+const ROLA = 0.022;   /* arpejo do ataque: breve, para o acorde cair junto com o tempo */
+const CAUDA = 0.14;   /* soltura entre acordes na regência */
 function soaCompasso(cp, t, B, rege, fermata, tempos) {
-  const d = B + (fermata ? B * 1.6 : 0);
-  cp.grave.forEach((n, i) => nota(n, t + i * 0.012, rege ? d : 1.3, i ? 0.1 : 0.15));
+  const d = rege ? (fermata ? B * 2.6 : B - 0.03) : 1.3;
+  const c = rege && !fermata ? CAUDA : 1.1;
+  cp.grave.forEach((n, i) => nota(n, t + i * 0.008, d, i ? 0.1 : 0.15, c));
   const a = cp.alto;
-  a.forEach((n, i) => nota(n, t + 0.05 + i * 0.06, rege ? d : 1.3, i === a.length - 1 ? 0.12 : 0.08));
+  a.forEach((n, i) => nota(n, t + 0.012 + i * ROLA, d - 0.012 - i * ROLA, i === a.length - 1 ? 0.12 : 0.08, c));
   if (!rege || fermata) return;
   const tt = tempos || 4;
-  for (let k = 1; k < tt; k++) nota(a[(k - 1) % a.length], t + (k * B) / tt, (2 * B) / tt, 0.055);
+  for (let k = 1; k < tt; k++) { const tk = t + (k * B) / tt; nota(a[(k - 1) % a.length], tk, Math.min((2 * B) / tt, t + B - 0.03 - tk), 0.055, CAUDA); }
 }
 let ultimoAcorde = { m: 0, t: 0 };
 function acorde(m) {
@@ -498,34 +506,57 @@ function acorde(m) {
   solta(0.07);
   const mu = MUSICAS[musica]; const cs = compassos(mu);
   soaCompasso(cs[(m - 1) % cs.length], actx.currentTime + 0.02, barraDe(mu), false);
+  /* passado o último acorde tocado à mão, a música volta do começo */
+  clearTimeout(retomada); retomada = setTimeout(() => { if (somOn && !regencia && !document.hidden) rege(); }, 2600);
 }
-/* Regência: a progressão inteira em tempo; a coluna acende em cada compasso e a batuta atravessa
-   a partitura a cada cinco compassos (ou só os que restam, no fim). */
+let retomada = 0;
+/* Regência: a música inteira em tempo e, enquanto o som estiver ligado, de novo 2s depois do fim (fermata
+   incluída), com a batuta. O que se vê segue o que se ouve: um laço de quadros lê o relógio do áudio,
+   descontada a latência de saída (em fones sem fio passa de 0,15s), e no instante em que o acorde soa
+   acende o compasso, pulsa o selo e lança a batuta; os cinco compassos da partitura recomeçam em I
+   quando a música é mais longa. */
+const PAUSA = 2;
 function rege() {
   if (!somOn) return;
+  clearTimeout(retomada);
   paraRegencia(); solta(0.05);
-  const mu = MUSICAS[musica]; const cs = compassos(mu); const B = barraDe(mu); const n = cs.length;
-  const t0 = actx.currentTime + 0.15;
-  cs.forEach((cp, k) => soaCompasso(cp, t0 + k * B, B, true, k === n - 1, mu.tempos));
-  const ms = (s) => Math.max(0, (t0 - actx.currentTime + s) * 1000);
-  regencia = { timers: [] };
-  cs.forEach((cp, k) => {
-    const col = (k % 5) + 1;
-    regencia.timers.push(setTimeout(() => { mAtual = col; acende(col); }, ms(k * B)));
-    if (k % 5 === 0) regencia.timers.push(setTimeout(() => gesto(B * Math.min(5, n - k), true, Math.min(5, n - k)), ms(k * B)));
-  });
-  regencia.timers.push(setTimeout(() => { regencia = null; mAtual = 0; acende(0); }, ms((n - 1) * B + B * 2.6)));
+  const mu = MUSICAS[musica];
+  regencia = { mu, cs: compassos(mu), B: barraDe(mu), raf: 0, k: -1 };
+  ciclo(actx.currentTime + 0.15);
+  SELO.classList.add('toca');
+  regencia.raf = requestAnimationFrame(acompanha);
 }
+function ciclo(t0) {
+  const r = regencia; const n = r.cs.length;
+  r.cs.forEach((cp, k) => soaCompasso(cp, t0 + k * r.B, r.B, true, k === n - 1, r.mu.tempos));
+  r.t0 = t0; r.k = -1;
+  r.fim = t0 + (n - 1) * r.B + r.B * 2.6;
+  r.proximo = r.fim + PAUSA;
+}
+function acompanha() {
+  const r = regencia; if (!r) return;
+  const ouvido = actx.currentTime - (actx.outputLatency || actx.baseLatency || 0);
+  const n = r.cs.length;
+  const k = Math.floor((ouvido - r.t0) / r.B);
+  if (ouvido >= r.t0 && k < n && k !== r.k) {
+    r.k = k; const col = (k % 5) + 1; mAtual = col; acende(col); pulsa();
+    if (k % 5 === 0) gesto(r.B * Math.min(5, n - k), true, Math.min(5, n - k));
+  } else if (ouvido >= r.fim && r.k !== n) { r.k = n; mAtual = 0; acende(0); }
+  if (actx.currentTime >= r.proximo - 0.25) ciclo(r.proximo);
+  r.raf = requestAnimationFrame(acompanha);
+}
+function pulsa() { SELO.classList.remove('bate'); void SELO.offsetWidth; SELO.classList.add('bate'); }
 /* manter: quem interrompe já acendeu o seu compasso; não apagar. */
 function paraRegencia(manter) {
   if (!regencia) return;
-  regencia.timers.forEach(clearTimeout); regencia = null;
+  cancelAnimationFrame(regencia.raf); regencia = null;
+  SELO.classList.remove('toca');
   BAT.classList.remove('vai', 'rege');
   if (!manter) { mAtual = 0; acende(0); }
 }
 function desligaSom() {
   somOn = false; $('#b-som').setAttribute('aria-pressed', 'false');
-  paraRegencia(); solta(0.12);
+  clearTimeout(retomada); paraRegencia(); solta(0.12);
 }
 $('#b-som').addEventListener('click', (e) => {
   if (somOn) { desligaSom(); return; }
@@ -534,7 +565,9 @@ $('#b-som').addEventListener('click', (e) => {
   if (actx.state === 'running') rege();
   else actx.resume().then(rege, () => { desligaSom(); toast('O navegador não liberou o som.'); });
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden) { paraRegencia(); solta(0.05); } });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { clearTimeout(retomada); paraRegencia(); solta(0.05); } else if (somOn && actx && !regencia) rege();
+});
 
 /* A dobra da folha, no alto à direita, troca a música. Sem marca nem rótulo visível. */
 const dobra = document.createElement('button');
@@ -583,26 +616,24 @@ const retomaRonda = () => { if (!rondaT) rondaT = setTimeout(ronda, 9000); };
   sv.insertBefore(g, defs ? defs.nextSibling : sv.firstChild);
 })();
 
-/* O selo termina na altura da última linha do texto de II ("quando necessário"), em qualquer tela:
-   a posição desse texto muda com a altura da janela (os respiros da folha de rosto são em vh), por isso
-   é medida, não fixada. Pode subir até invadir o aro do prendedor, que fica por cima. No celular, o
-   selo volta à posição do CSS, sob o subtítulo. */
-const SELO = $('#b-som'); const A4 = $('.a4');
-function alinhaSelo() {
-  if (!SELO || !A4) return;
-  if (MQS.matches) { A4.style.removeProperty('--selo-y'); document.documentElement.classList.remove('selo-alinhado'); return; }
+/* O carimbo da busca fica à esquerda, centrado sob o prendedor, e termina na altura da última linha do texto
+   de II ("quando necessário"), em qualquer tela: a posição desse texto muda com a altura da janela (os respiros
+   da folha de rosto são em vh), por isso é medida, não fixada. Pode subir até invadir o aro do prendedor, que
+   fica por cima. No celular, o carimbo volta à posição do CSS, na faixa acima do título. */
+const CARIMBO = $('.carimbos'); const A4 = $('.a4');
+function alinhaCarimbo() {
+  if (!CARIMBO || !A4) return;
+  if (MQS.matches) { A4.style.removeProperty('--carimbo-y'); return; }
   const mx = $('#marcas button[data-m="2"] .mx'); if (!mx) return;
   const rg = document.createRange(); rg.selectNodeContents(mx);
   const rs = rg.getClientRects(); if (!rs.length) return;
   const cs = getComputedStyle(mx); const fs = parseFloat(cs.fontSize) || 11.5; const lh = parseFloat(cs.lineHeight) || fs * 1.5;
-  /* base do texto (sem a sobra da entrelinha) e base do anel (r 75 num quadro de 160) */
+  /* base do texto (sem a sobra da entrelinha) e base do anel (r 74 e traço de 5 num quadro de 160) */
   const fim = rs[rs.length - 1].bottom - (lh - fs) / 2 - A4.getBoundingClientRect().top;
-  const alt = SELO.offsetHeight;
-  A4.style.setProperty('--selo-y', Math.max(64, Math.round(fim - (alt * 155) / 160)) + 'px');
-  document.documentElement.classList.add('selo-alinhado');
+  A4.style.setProperty('--carimbo-y', Math.max(56, Math.round(fim - (CARIMBO.offsetHeight * 156.5) / 160)) + 'px');
 }
-let seloRaf = 0;
-window.addEventListener('resize', () => { cancelAnimationFrame(seloRaf); seloRaf = requestAnimationFrame(alinhaSelo); });
+let carimboRaf = 0;
+window.addEventListener('resize', () => { cancelAnimationFrame(carimboRaf); carimboRaf = requestAnimationFrame(alinhaCarimbo); });
 
 /* =====================================================================
    A PARTE: folha que se abre sobre a partitura
@@ -1692,8 +1723,8 @@ document.addEventListener('keydown', (e) => {
 montaPartitura();
 desenha();
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(desenha);
-alinhaSelo();
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(alinhaSelo);
+alinhaCarimbo();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(alinhaCarimbo);
 let largSis = 0;
 if ('ResizeObserver' in window) new ResizeObserver(() => { if (SIS.clientWidth !== largSis) { largSis = SIS.clientWidth; desenha(); } }).observe(SIS);
 else window.addEventListener('resize', desenha);
