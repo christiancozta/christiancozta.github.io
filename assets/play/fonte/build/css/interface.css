@@ -37,8 +37,8 @@
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
   --topo-h: clamp(10px, 2.2vw, 34px);   /* base no topo e no pé, um pouco mais fina que as laterais */
   --orelha: clamp(22px, 2.6vw, 38px);   /* canto dobrado */
-  --selo: calc(var(--carimbo) * 1.1);    /* selo seco do som: 10% maior que o carimbo da busca */
-  --selo-mergulho: 64px;                /* quanto o selo desce na casa em branco do cabeçalho dos compassos */
+  --selo: calc(var(--carimbo) * 1.45);   /* selo seco do som: bem maior que o carimbo da busca, para ganhar presença sem tinta */
+  --selo-mergulho: 96px;                /* quanto o selo desce na casa em branco do cabeçalho dos compassos */
   --carimbo: clamp(104px, 9.4vw, 140px); /* carimbo da busca, no porte de um carimbo real sobre a folha */
   --selo-y: 146px;                      /* logo abaixo das hastes do prendedor */
   /* fibra do papel: ruído fractal quase invisível, comum à folha, ao encarte da gaveta e à parte */
@@ -144,19 +144,19 @@ input, textarea { caret-color: var(--tinta); }
 .selo {
   position: absolute; z-index: 2; left: calc(clamp(20px, 5vw, 92px) + 66px - var(--selo) / 2); top: var(--selo-y);
   width: var(--selo); height: var(--selo); padding: 0; border: 0; border-radius: 50%; background: none; color: var(--papel); cursor: pointer;
-  filter: drop-shadow(-1.2px -1.2px 0 rgba(255, 255, 255, .95)) drop-shadow(1.3px 1.7px .9px rgba(44, 44, 44, .2)) drop-shadow(2px 3.5px 5px rgba(44, 44, 44, .07));
+  filter: drop-shadow(-1.4px -1.4px 0 #fff) drop-shadow(1.5px 2px .9px rgba(44, 44, 44, .3)) drop-shadow(3px 5px 8px rgba(44, 44, 44, .1));
   transition: filter .5s var(--mola), transform .35s var(--mola);
 }
 .selo svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .selo .s-anel { fill: none; stroke: currentColor; stroke-width: 3.4; }
 .selo .s-fio { fill: none; stroke: currentColor; stroke-width: 1.3; }
-.selo .s-txt { fill: currentColor; font: 700 11px var(--mono); }
-.selo .s-ic { fill: none; stroke: currentColor; stroke-width: 2.7; stroke-linecap: round; stroke-linejoin: round; }
+.selo .s-txt { fill: currentColor; font: 800 11.5px var(--mono); }
+.selo .s-ic { fill: none; stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
 .selo .s-ic ellipse { fill: currentColor; }
-.selo:hover { filter: drop-shadow(-1.2px -1.2px 0 #fff) drop-shadow(1.6px 2.1px 1px rgba(44, 44, 44, .26)) drop-shadow(2.5px 4.5px 6px rgba(44, 44, 44, .09)); }
+.selo:hover { filter: drop-shadow(-1.5px -1.5px 0 #fff) drop-shadow(2px 2.6px 1.1px rgba(44, 44, 44, .38)) drop-shadow(4px 7px 10px rgba(44, 44, 44, .13)); }
 .selo:active { transform: scale(.985); }
 /* Som ligado: o selo fica afundado (luz e sombra invertidas) enquanto toca. */
-.selo:active, .selo[aria-pressed="true"] { filter: drop-shadow(1.2px 1.2px 0 rgba(255, 255, 255, .95)) drop-shadow(-1.3px -1.6px .8px rgba(44, 44, 44, .24)); }
+.selo:active, .selo[aria-pressed="true"] { filter: drop-shadow(1.4px 1.4px 0 #fff) drop-shadow(-1.6px -2px .9px rgba(44, 44, 44, .34)); }
 .selo:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 6px; }
 .pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
@@ -220,7 +220,10 @@ input, textarea { caret-color: var(--tinta); }
 .coluna { position: absolute; top: 0; bottom: 0; left: 0; width: 0; pointer-events: none; background: var(--ambar-luz); opacity: 0; transition: transform .6s var(--mola), width .6s var(--mola), opacity .4s var(--mola); }
 .sistema[data-m] .coluna { opacity: 1; }
 .batuta { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: var(--ambar); box-shadow: 0 0 0 .5px rgba(156, 116, 38, .35); pointer-events: none; opacity: 0; }
-.batuta.vai { animation: varre 3.4s cubic-bezier(.45, .05, .3, 1) forwards; }
+.batuta.vai { animation: varre var(--dur, 3.4s) cubic-bezier(.45, .05, .3, 1) forwards; }
+/* Regência: com som, a batuta atravessa os cinco compassos em tempo, junto com a música. */
+.batuta.rege { animation: rege var(--dur, 9.5s) linear forwards; }
+@keyframes rege { 0% { transform: translateX(var(--a)); opacity: 0; } 2% { opacity: 1; } 97% { opacity: 1; } 100% { transform: translateX(var(--b)); opacity: 0; } }
 @keyframes varre { 0% { transform: translateX(var(--a)); opacity: 0; } 6% { opacity: 1; } 86% { opacity: 1; } 100% { transform: translateX(var(--b)); opacity: 0; } }
 
 /* Gaveta dos volumes 01 a 03: desce sob a pauta, empurra o resto e alinha com o início da pauta. */
