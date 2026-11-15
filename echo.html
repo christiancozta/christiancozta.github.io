@@ -604,9 +604,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 @media(max-width:719px){.echo-trace{display:none}}
 
-/* ACERVO — a viola da gamba em pé, em gravura.
-   Texto e etapas ao lado da voluta; os rótulos descem pelo braço, um por traste;
-   do outro lado, o PLAY e a ficha. Papel com grão, tinta com falhas de prensa. */
+/* ACERVO — a bateria de escola de samba, em formação longitudinal e traço de giz.
+   Texto e etapas no alto, correndo sobre a coluna; os rótulos descem ao lado dela, um por naipe;
+   do outro lado, o PLAY e a ficha. Papel com grão, tinta com falhas de giz. */
 #acervo{position:relative;background-image:url(assets/echo/acervo/grao.png?v=20261105);background-size:300px 300px}
 .acervo-palco{
   --topo:clamp(48px,5vw,80px);
@@ -616,63 +616,68 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   gap:clamp(28px,3.4vw,56px);
   align-items:start;
 }
-.acervo-cab__txt{display:flex;flex-direction:column;gap:30px;min-width:0;position:relative;z-index:2}
+/* o texto corre sobre a coluna até a borda dos surdos; a bateria desce logo abaixo dele */
+.acervo-cab__txt{grid-column:1 / 3;grid-row:1;display:flex;flex-direction:column;gap:30px;min-width:0;position:relative;z-index:2;padding-right:17px}
 .acervo-titulo{margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4.4vw,4rem);line-height:.98;letter-spacing:-.045em}
 .acervo-titulo span{display:inline-block;margin-right:.5em;color:#FFB627;-webkit-text-stroke:1px #2C2C2C}
 .acervo-lead{margin:20px 0 0;font-size:clamp(15px,1.3vw,16.5px);line-height:1.55;text-wrap:pretty}
-.acervo-lado{min-width:0;align-self:stretch;display:flex;flex-direction:column;gap:clamp(40px,4vw,60px)}
+.acervo-lado{grid-column:3;grid-row:1;min-width:0;align-self:stretch;display:flex;flex-direction:column;gap:clamp(40px,4vw,60px)}
 .acervo-lado .play-folha{flex:none}
 
-/* o instrumento */
-.gamba{--s:1;position:relative;width:360px;height:1080px;justify-self:center}
-.gamba__palco{position:absolute;left:0;top:0;width:360px;height:1080px;transform-origin:0 0;transform:scale(var(--s))}
-.gamba__gravura{
-  position:absolute;inset:0;width:360px;height:1080px;max-width:none;
-  -webkit-mask-image:linear-gradient(180deg,#000 84%,transparent 99%);
-  mask-image:linear-gradient(180deg,#000 84%,transparent 99%);
-  pointer-events:none;user-select:none;
-}
-.gamba__camada{position:absolute;inset:0}
-.gamba__traste{position:absolute;left:130px;width:100px;border-radius:4px;cursor:pointer;transition:background .4s var(--mola)}
-.gamba__traste:hover{background:rgba(255,182,39,.36)}
-.gamba__eixo{position:absolute;width:0;transform-origin:0 0;pointer-events:none}
-.gamba__soa{position:absolute;left:-1.7px;top:0;width:3.4px;height:100%;border-radius:2px;background:#FFB627;mix-blend-mode:multiply}
-.gamba__fuso{position:absolute;left:-8px;top:0;width:16px;height:100%;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(44,44,44,.8);transform:scaleX(0)}
-.gamba__eixo--solta .gamba__fuso{box-shadow:inset 0 0 0 1px rgba(44,44,44,.45)}
-.gamba__fuso.vibra{animation:gamba-vibra 1.9s cubic-bezier(.2,.7,.2,1) both}
-@keyframes gamba-vibra{
-  0%{transform:scaleX(1)}8%{transform:scaleX(-.82)}16%{transform:scaleX(.66)}24%{transform:scaleX(-.52)}33%{transform:scaleX(.4)}
-  43%{transform:scaleX(-.29)}55%{transform:scaleX(.19)}69%{transform:scaleX(-.11)}85%{transform:scaleX(.05)}100%{transform:scaleX(0)}
-}
-.gamba__dedo{position:absolute;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;border-radius:50%;background:#FFB627;box-shadow:0 0 0 1.7px #2C2C2C;pointer-events:none;animation:gamba-dedo .5s var(--mola) both}
-@keyframes gamba-dedo{from{transform:scale(.2);opacity:0}to{transform:none;opacity:1}}
+/* a bateria: o desenho é feito em 288 x 864 e ampliado 1,25x; --s reduz tudo em telas estreitas */
+.bateria{--s:1;grid-column:2;grid-row:1;position:relative;width:360px;height:1080px;justify-self:center}
+.bateria__palco{position:absolute;left:0;top:0;width:360px;height:1080px;transform-origin:0 0;transform:scale(var(--s))}
+.bateria__desenho{position:absolute;left:0;top:0;width:288px;height:864px;transform:scale(1.25);transform-origin:0 0;pointer-events:none;transition:opacity .3s}
+.bateria.is-espera .bateria__desenho{opacity:0}
+.bateria__filtro{position:absolute;left:0;top:0}
+.bateria__naipe{position:absolute;left:0;top:0;width:288px;height:864px;transition:opacity .5s var(--mola)}
+.bateria__naipe[data-estado="apagado"]{opacity:.34}
+.bateria__inst,.bateria__baq,.bateria__onda{position:absolute}
+.bateria__baq{left:0;top:0}
+.bateria__inst svg{position:absolute;left:0;top:0;overflow:visible}
+.bateria__onda{opacity:0;mix-blend-mode:multiply}
+.bateria__onda svg{position:static;display:block}
+.bateria__onda path{fill:none;stroke:#FFB627;stroke-width:1.9;stroke-linecap:round}
+.bt-fundo{fill:#F6F3EC}
+.bt-cabeca{fill:#FBFAF6}
+.bt-sombra{fill:none;stroke:#1C1C1C;stroke-width:.75;stroke-opacity:.8;stroke-linecap:round}
+.bt-tinta{fill:none;stroke:#1C1C1C;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.bt-baq{fill:none;stroke:#1C1C1C;stroke-width:1.2;stroke-linecap:round}
+/* o naipe escolhido recebe faixas de marca-texto, que entram da esquerda */
+.bateria__lavado{position:absolute;left:0;top:0;overflow:visible;mix-blend-mode:multiply;opacity:0;clip-path:inset(0 100% 0 0);transition:clip-path .7s var(--mola),opacity .4s var(--mola)}
+.bateria__lavado path{fill:#FFB627;fill-opacity:.82}
+.bateria__naipe[data-estado="sel"] .bateria__lavado{opacity:1;clip-path:inset(0 0 0 0)}
+.bateria__naipe[data-estado="aceso"] .bateria__lavado{opacity:.55;clip-path:inset(0 0 0 0)}
+.bateria__naipe.is-perto:not([data-estado="sel"]) .bateria__lavado{opacity:.32;clip-path:inset(0 0 0 0)}
+.bateria__alvos{position:absolute;inset:0}
+.bateria__alvo{position:absolute;cursor:pointer;border-radius:8px}
 
-/* os rótulos: um por traste, todos partindo da mesma margem; o traste pontilhado sai do fim de cada título
-   e segue até o braço, então o comprimento dele é o que o título deixa livre */
-.gamba__rotulos{position:absolute;top:0;left:-126px;width:270px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
-.gamba__rotulos > li{position:absolute;left:0;width:var(--ate,260px);height:0;display:flex;align-items:center}
-.gamba__rotulos > li::after{content:"";flex:1;min-width:10px;border-top:1.5px dotted rgba(44,44,44,.72);transition:opacity .45s var(--mola)}
-.gamba__rotulos > li:has(.gamba__rotulo:is([data-estado="sel"],[data-estado="aceso"]))::after{border-top:1.5px solid #2C2C2C}
-.gamba__rotulos > li:has(.gamba__rotulo[data-estado="apagado"])::after{opacity:.28}
-.gamba__rotulo{
+/* os rótulos: um por naipe, todos partindo da mesma margem; o fio pontilhado sai do fim de cada título
+   e segue até a borda da coluna */
+.bateria__rotulos{position:absolute;top:0;left:-212px;width:300px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
+.bateria__rotulos > li{position:absolute;left:0;width:var(--ate,260px);height:0;display:flex;align-items:center}
+.bateria__rotulos > li::after{content:"";flex:1;min-width:10px;border-top:1.5px dotted rgba(44,44,44,.72);transition:opacity .45s var(--mola)}
+.bateria__rotulos > li:has(.bateria__rotulo:is([data-estado="sel"],[data-estado="aceso"]))::after{border-top:1.5px solid #2C2C2C}
+.bateria__rotulos > li:has(.bateria__rotulo[data-estado="apagado"])::after{opacity:.28}
+.bateria__rotulo{
   pointer-events:auto;
   flex:none;display:flex;align-items:center;justify-content:flex-start;gap:10px;
   height:28px;margin-top:-14px;padding:0 6px 0 0;border:0;background:transparent;color:#2C2C2C;cursor:pointer;text-align:left;
   transition:opacity .45s var(--mola);
 }
-.gamba__tt{position:relative;z-index:0;padding:5px 9px;font:600 15px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em;white-space:nowrap}
-.gamba__tt::before{
+.bateria__tt{position:relative;z-index:0;padding:5px 9px;font:600 15px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em;white-space:nowrap}
+.bateria__tt::before{
   content:"";position:absolute;z-index:-1;inset:-3px -10px -3px -12px;
   background:url(assets/echo/acervo/traco.png) center/100% 100% no-repeat;
   opacity:0;transform:scaleX(.35);transform-origin:0 50%;
   transition:opacity .35s var(--mola),transform .6s var(--mola);
 }
-.gamba__rotulo:hover .gamba__tt::before,.gamba__rotulo.is-perto .gamba__tt::before{opacity:.45;transform:none}
-.gamba__rotulo[data-estado="sel"] .gamba__tt::before,.gamba__rotulo[data-estado="aceso"] .gamba__tt::before{opacity:1;transform:none}
-.gamba__rotulo[data-estado="apagado"]{opacity:.36}
-.gamba__nm{min-width:22px;font:italic 400 21px/1 'IM Fell English',Georgia,serif;text-align:left}
-.gamba__rotulo[data-fundador="1"] .gamba__nm::after{content:"★";margin-left:2px;font:normal 400 10px/1 var(--body);vertical-align:.7em;color:#FFB627;-webkit-text-stroke:.5px #2C2C2C}
-.gamba__rotulo:focus-visible{outline:2px solid #2C2C2C;outline-offset:3px;border-radius:4px}
+.bateria__rotulo:hover .bateria__tt::before,.bateria__rotulo.is-perto .bateria__tt::before{opacity:.45;transform:none}
+.bateria__rotulo[data-estado="sel"] .bateria__tt::before,.bateria__rotulo[data-estado="aceso"] .bateria__tt::before{opacity:1;transform:none}
+.bateria__rotulo[data-estado="apagado"]{opacity:.36}
+.bateria__nm{min-width:22px;font:italic 400 21px/1 'IM Fell English',Georgia,serif;text-align:left}
+.bateria__rotulo[data-fundador="1"] .bateria__nm::after{content:"★";margin-left:2px;font:normal 400 10px/1 var(--body);vertical-align:.7em;color:#FFB627;-webkit-text-stroke:.5px #2C2C2C}
+.bateria__rotulo:focus-visible{outline:2px solid #2C2C2C;outline-offset:3px;border-radius:4px}
 
 /* FICHA DO ACERVO
    uma folha âmbar (fundadores) ou escura, com moldura riscada à mão e grão;
@@ -758,7 +763,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   letter-spacing:-.045em;
   text-wrap:balance;
 }
-.ficha__cordas{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0;font:500 9.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.ficha__etapas{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0;font:500 9.5px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
 .ficha__marcas{display:flex;gap:4px;align-items:flex-end}
 .ficha__marcas i{display:block;width:2px;height:14px;background:var(--fio)}
 .ficha__marcas i[data-c="1"]{width:2.5px;background:var(--tinta)}
@@ -875,19 +880,21 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .echo-livro__status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(44,44,44,.6);pointer-events:none}
 .echo-livro__status:empty{display:none}
 
-/* telas estreitas: o braço menor, os rótulos à direita, a ficha presa na base da tela */
+/* telas estreitas: a coluna menor, os rótulos à direita, a ficha presa na base da tela */
 @media(max-width:1099px){
   .acervo-palco{grid-template-columns:minmax(0,1fr);gap:28px}
   .acervo-lado{display:contents}
   .acervo-lado .play-folha{order:-1;justify-self:start;margin-bottom:12px}
-  .acervo-cab__txt{order:0}
-  .gamba{--s:.8;order:1;width:min(100%,580px);height:864px;justify-self:center}
-  .gamba__rotulos{right:0;left:calc(254px * .8);width:auto}
-  .gamba__rotulos > li{right:auto;left:0;width:auto}
-  .gamba__rotulos > li::after,.gamba__rotulos > li::before{display:none}
-  .gamba__rotulo{flex-direction:row-reverse;justify-content:flex-end;text-align:left;padding:0 0 0 2px;gap:8px}
-  .gamba__nm{text-align:right}
-  .gamba__tt::before{transform-origin:0 50%}
+  .acervo-cab__txt,.bateria,.acervo-lado{grid-column:auto;grid-row:auto}
+  .acervo-cab__txt{order:0;padding-right:0}
+  .bateria{--s:.8;order:1;width:min(100%,580px);height:864px;justify-self:center}
+  .bateria__palco{left:calc(-17px * .8)}
+  .bateria__rotulos{right:0;left:calc(336px * .8);width:auto}
+  .bateria__rotulos > li{right:auto;left:0;width:auto}
+  .bateria__rotulos > li::after,.bateria__rotulos > li::before{display:none}
+  .bateria__rotulo{flex-direction:row-reverse;justify-content:flex-end;text-align:left;padding:0 0 0 2px;gap:8px}
+  .bateria__nm{text-align:right}
+  .bateria__tt::before{transform-origin:0 50%}
   #acervo-ficha{
     order:2;position:sticky;top:auto;bottom:10px;z-index:5;width:min(100%,580px);justify-self:center;box-sizing:border-box;
     display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:start;
@@ -909,11 +916,14 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 @media(max-width:600px){
   /* sem a coluna do rótulo, o ruído cabe numa linha */
   .ficha__nota{grid-template-columns:minmax(0,1fr);gap:2px}
-  .gamba{--s:.62;width:100%;height:670px}
-  .gamba__rotulos{left:calc(254px * .62)}
-  .gamba__tt{font-size:14px;padding:4px 7px}
-  .gamba__nm{min-width:18px;font-size:19px}
-  .gamba__rotulo{height:26px;margin-top:-13px}
+  .bateria{--s:.62;width:100%;height:670px}
+  .bateria__palco{left:calc(-17px * .62)}
+  .bateria__rotulos{left:calc(336px * .62)}
+  .bateria__rotulos > li{right:0}
+  .bateria__rotulo{flex:0 1 auto;min-width:0}
+  .bateria__tt{min-width:0;font-size:12.5px;padding:3px 6px;white-space:normal;line-height:1.1}
+  .bateria__nm{min-width:16px;font-size:17px}
+  .bateria__rotulo{height:22px;margin-top:-11px}
 }
 @media(max-width:360px){
   #acervo-ficha{padding-left:18px;padding-right:18px}
@@ -922,7 +932,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .ficha__nota{font-size:12px!important}
 }
 @media(prefers-reduced-motion:reduce){
-  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.gamba__tt::before,.gamba__dedo{transition:none;animation:none}
+  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.bateria__tt::before,.bateria__lavado,.bateria__naipe{transition:none;animation:none}
   .echo-livro__folha--esq,.echo-livro__folha--dir,.echo-livro__bar,.echo-livro__inteira,.echo-livro__lombada,.echo-livro__vela{transition:none}
 }
 
@@ -1222,16 +1232,16 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .ec-nota{margin-top:clamp(36px,4.4vw,60px);padding-top:clamp(24px,2.8vw,36px);border-top:1px solid #2e2e2e}
 
 /* ===== SOM DAS CORDAS (cabeçalho dos percursos) ===== */
-.cordas-cab{display:flex;align-items:center}
-.cordas-som{flex:none;display:inline-flex;align-items:center;gap:8px;height:26px;padding:0 3px 0 12px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(44,44,44,.3);color:#2C2C2C;font:500 8.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .5s cubic-bezier(.32,.72,0,1),color .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1),transform .3s cubic-bezier(.32,.72,0,1)}
-.cordas-som i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(44,44,44,.08);transition:transform .5s cubic-bezier(.32,.72,0,1),background .5s cubic-bezier(.32,.72,0,1)}
-.cordas-som svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.cordas-som:hover{box-shadow:inset 0 0 0 1px #2C2C2C}
-.cordas-som:hover i{transform:translate(1px,-1px) scale(1.06)}
-.cordas-som:active{transform:scale(.98)}
-.cordas-som[aria-pressed="true"]{background:#2C2C2C;color:#F2EFE9;box-shadow:none}
-.cordas-som[aria-pressed="true"] i{background:#FFB627;color:#2C2C2C}
-.cordas-som:focus-visible{outline:1.5px solid #2C2C2C;outline-offset:2px}
+.som-cab{display:flex;align-items:center}
+.bateria-som{flex:none;display:inline-flex;align-items:center;gap:8px;height:26px;padding:0 3px 0 12px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(44,44,44,.3);color:#2C2C2C;font:500 8.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .5s cubic-bezier(.32,.72,0,1),color .5s cubic-bezier(.32,.72,0,1),box-shadow .5s cubic-bezier(.32,.72,0,1),transform .3s cubic-bezier(.32,.72,0,1)}
+.bateria-som i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:rgba(44,44,44,.08);transition:transform .5s cubic-bezier(.32,.72,0,1),background .5s cubic-bezier(.32,.72,0,1)}
+.bateria-som svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.bateria-som:hover{box-shadow:inset 0 0 0 1px #2C2C2C}
+.bateria-som:hover i{transform:translate(1px,-1px) scale(1.06)}
+.bateria-som:active{transform:scale(.98)}
+.bateria-som[aria-pressed="true"]{background:#2C2C2C;color:#F2EFE9;box-shadow:none}
+.bateria-som[aria-pressed="true"] i{background:#FFB627;color:#2C2C2C}
+.bateria-som:focus-visible{outline:1.5px solid #2C2C2C;outline-offset:2px}
 /* ===== ajustes: bloco escuro, problema, percursos e miniatura ===== */
 .ec-escuro .ec-k,.ec-escuro .ec-sk{color:rgba(252,252,252,.6)}
 .ec-escuro h2,.ec-escuro .ec-t,.ec-escuro .ec-st{color:#FFB627}
@@ -1263,7 +1273,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .ficha__nota{font-size:13.5px}
 .ficha__nota b{font-size:9px}
 .ficha__cta{font-size:13px}
-.cordas-som{font-size:9px}
+.bateria-som{font-size:9px}
 .echo-metric__reading{font-size:12px}
 </style>
 </helmet>
@@ -1392,7 +1402,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <p class="acervo-lead">O método não se organiza como uma coleção de documentos independentes. Cada material responde a um ruído específico, mas todos compartilham critérios e retornam à mesma cadeia operacional.</p>
       </div>
       <div class="acervo-percursos" role="group" aria-labelledby="acervo-percursos-k">
-        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Etapas</p><div id="cordas-cab" class="cordas-cab"></div></div>
+        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Etapas</p><div id="som-cab" class="som-cab"></div></div>
         <div class="acervo-percursos__grade">
         <sc-for list="{{ etapas }}" as="p" hint-placeholder-count="6">
           <span>
@@ -1408,14 +1418,14 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
       </div>
     </div>
 
-    <div class="gamba" id="acervo-gamba">
-      <div class="gamba__palco">
-        <img class="gamba__gravura" src="assets/echo/acervo/gamba.png?v=20261105" width="360" height="1080" alt="Viola da gamba em pé, em gravura: voluta, cravelhas e o braço com catorze trastes, um para cada material do acervo." decoding="async">
-        <div class="gamba__camada" aria-hidden="true"></div>
+    <div class="bateria" id="acervo-bateria">
+      <div class="bateria__palco">
+        <div class="bateria__desenho" role="img" aria-label="Bateria de escola de samba em formação longitudinal, em esboço a giz: catorze naipes sucessivos, dos surdos de primeira aos reco-recos, um para cada material do acervo, com quantidade proporcional à presença de cada instrumento."></div>
+        <div class="bateria__alvos" aria-hidden="true"></div>
       </div>
-      <ol class="gamba__rotulos">
+      <ol class="bateria__rotulos">
         <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
-          <li><button type="button" class="gamba__rotulo" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" data-estado="{{ m.estado }}" data-fundador="{{ m.fundadorTxt }}" aria-label="{{ m.rotulo }}"><span class="gamba__tt">{{ m.titulo }}</span><span class="gamba__nm">{{ m.nn }}</span></button></li>
+          <li><button type="button" class="bateria__rotulo" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" data-estado="{{ m.estado }}" data-fundador="{{ m.fundadorTxt }}" aria-label="{{ m.rotulo }}"><span class="bateria__tt">{{ m.titulo }}</span><span class="bateria__nm">{{ m.nn }}</span></button></li>
         </sc-for>
       </ol>
     </div>
@@ -1468,7 +1478,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <div class="ficha__cab">
           <div class="ficha__dados">
             <p class="ficha__meta">{{ ficha.meta }}</p>
-            <p class="ficha__cordas"><span class="ficha__marcas" aria-hidden="true"><sc-for list="{{ ficha.marcas }}" as="k" hint-placeholder-count="6"><i data-c="{{ k.c }}"></i></sc-for></span><span>{{ ficha.trecho }}</span></p>
+            <p class="ficha__etapas"><span class="ficha__marcas" aria-hidden="true"><sc-for list="{{ ficha.marcas }}" as="k" hint-placeholder-count="6"><i data-c="{{ k.c }}"></i></sc-for></span><span>{{ ficha.trecho }}</span></p>
           </div>
           <h3 class="ficha__titulo">{{ ficha.titulo }}</h3>
         </div>
@@ -1789,189 +1799,715 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 </div>
 
 <script>
-/* VIOLA DA GAMBA DO ACERVO — o braço em pé, em gravura.
-   Cada traste é um material: tocar o nome ou o próprio traste pressiona, logo acima dele,
-   as cordas das etapas que o material percorre; essas cordas soam do traste até a caixa.
-   As etapas não ganham rótulo no instrumento: aparecem por extenso só na ficha.
-   A geometria segue a gravura (360 x 1080): pestana, trastes, ponto de pressão e caixa.
-   O som é opcional. */
-window.EcoGamba = (function () {
+/* BATERIA DO ACERVO — formação longitudinal de escola de samba, por naipes sucessivos.
+   Catorze naipes, do mais grave ao mais leve, um para cada material do acervo, em quantidade
+   proporcional (10·8·7·4·14·18·12·7·15·5·5·5·5·5). A coluna é justificada: todo naipe ocupa a
+   mesma largura; dentro dele as fileiras inclinam de leve, e nas juntas um tipo se mistura ao
+   seguinte. O desenho é procedural, em traço rabiscado; o giz vem de um filtro de ruído.
+   Tocar um naipe (o nome ou o próprio desenho) faz o naipe tocar o seu padrão, em 2/4.
+   Passar sobre uma etapa faz tocar juntos os naipes que ela ilumina. O som usa gravações
+   reais (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md) e começa no primeiro gesto. */
+window.EcoBateria = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var NUT = 340, CAIXA = 985;
-  var TRASTES = [396.0, 450.2, 502.5, 553.2, 602.1, 649.5, 695.3, 739.5, 782.3, 823.8, 863.8, 902.5, 939.9, 976.1];
-  var DEDOS = [381.0, 435.2, 487.5, 538.2, 587.1, 634.5, 680.3, 724.5, 767.3, 808.9, 849.4, 888.6, 926.4, 963.1];
-  function vao(y) { return 9 + 4 * (y - NUT) / 740; }
-  function cx(i, y) { return 180 + (i - 2.5) * vao(y); }
-  function braco(y) { return 37 + 16 * (y - NUT) / 740; }
+  var PASSO = 105, CICLO = PASSO * 16;          /* semicolcheia (~143 bpm) e ciclo de dois compassos */
+  var ESC = 1.25, LARG = 288, ALT = 864;        /* desenho em 288 x 864, ampliado para 360 x 1080 */
+  var INICIO = -212;                            /* margem comum dos rótulos, em px da coluna */
+  var SOM_DIR = 'assets/echo/acervo/som/';
 
-  var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
-  /* afinação da gamba (cordas soltas, da grave à aguda) e uma nota por material */
-  var SOLTAS = ['D3', 'G3', 'C4', 'E4', 'A4', 'D5'];
-  var NOTAS = { m1: 'C4', m2: 'D4', m5: 'E4', m4: 'F4', m3: 'G4', m6: 'A4', m7: 'B4', m8: 'C5', m9: 'D5', m10: 'E5', m11: 'F5', m12: 'G5', m13: 'A5', m14: 'B5' };
-  var ctx = null, somOn = false;
-  function freq(n) { var i = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[n[0]] + (n[1] === '#' ? 1 : 0); return 440 * Math.pow(2, ((+n.slice(-1) - 4) * 12 + i - 9) / 12); }
-  function som(n, vol) {
-    if (!somOn || !ctx || !n) return;
-    var t = ctx.currentTime, g = ctx.createGain(), f = freq(n);
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.15, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.8);
-    [[1, 'sawtooth', .18], [1, 'triangle', 1], [2, 'sine', .28], [3, 'sine', .09]].forEach(function (h) {
-      var o = ctx.createOscillator(), og = ctx.createGain(); o.type = h[1]; o.frequency.value = f * h[0]; og.gain.value = h[2];
-      o.connect(og); og.connect(g); o.start(t); o.stop(t + 2.9);
-    });
-    g.connect(ctx.destination);
+  var NAIPES = [
+    { nome: 'Surdos de primeira', tipo: 'surdo', filas: [5, 5], d: 43, passoY: 31, p: [.35,0,0,0,1,0,0,0,.35,0,0,0,1,0,0,0] },
+    { nome: 'Surdos de segunda', tipo: 'surdo', filas: [4, 4], d: 40.5, passoY: 29, p: [1,0,0,0,.3,0,0,0,1,0,0,0,.3,0,0,0] },
+    { nome: 'Surdos de terceira', tipo: 'surdo', filas: [4, 3], d: 38, passoY: 27.5, p: [0,0,.7,0,1,0,.6,.8,0,0,.7,0,1,.6,0,.7] },
+    { nome: 'Repiques-mor', tipo: 'repmor', filas: [4], d: 34, passoY: 0, p: [1,0,0,.8,0,0,.8,0,.6,0,.6,.8,0,.6,.8,0] },
+    { nome: 'Repiniques', tipo: 'repinique', filas: [5, 5, 4], d: 26, passoY: 21, p: [.8,0,.5,.8,0,.5,.8,0,.8,0,.5,.8,0,.5,.8,0] },
+    { nome: 'Caixas', tipo: 'caixa', filas: [6, 6, 6], d: 23, passoY: 14.5, p: [1,.4,.6,1,.4,.6,1,.6,1,.4,.6,1,.4,.6,1,.6] },
+    { nome: 'Taróis', tipo: 'tarol', filas: [6, 6], d: 23, passoY: 13, p: [.9,.5,.5,.7,.9,.5,.5,.7,.9,.5,.5,.7,.9,.5,.5,.7] },
+    { nome: 'Cuícas', tipo: 'cuica', filas: [4, 3], d: 22, passoY: 19, p: [0,0,1,0,0,.7,1,0,0,0,1,0,.7,0,1,.6] },
+    { nome: 'Tamborins', tipo: 'tamborim', filas: [5, 5, 5], d: 16, passoY: 11.5, p: [1,0,.7,0,.7,1,0,.7,0,.7,1,0,.7,0,.7,0] },
+    { nome: 'Chocalhos', tipo: 'chocalho', filas: [5], d: 32, passoY: 0, p: [.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1] },
+    { nome: 'Agogôs', tipo: 'agogo', filas: [5], d: 30, passoY: 0, p: [1,0,.7,.7,0,1,.7,0,1,0,.7,.7,0,.7,1,0] },
+    { nome: 'Ganzás', tipo: 'ganza', filas: [5], d: 32, passoY: 0, p: [.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1] },
+    { nome: 'Pandeiros', tipo: 'pandeiro', filas: [5], d: 28, passoY: 0, p: [1,.4,.7,.8,1,.4,.7,.8,1,.4,.7,.8,1,.4,.7,.8] },
+    { nome: 'Reco-recos', tipo: 'reco', filas: [5], d: 32, passoY: 0, p: [0,.8,0,.8,0,.8,0,1,0,.8,0,.8,0,.8,0,1] }
+  ];
+
+  /* ---------- lápis: traços com tremor de mão ---------- */
+  function R(seed) {
+    var s = (Math.imul(seed | 0, 2654435761) >>> 0) || 1;
+    return function () { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
   }
-  function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+  function f(v) { return Math.round(v * 10) / 10; }
+  function Lapis(r) {
+    function w(a) { return (r() - .5) * 2 * a; }
+    return {
+      w: w,
+      linha: function (x1, y1, x2, y2, j, n) {
+        j = j == null ? .45 : j; n = n || 2;
+        var dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, s = '';
+        for (var p = 0; p < n; p++) {
+          var o0 = r() * .8, o1 = r() * .8;
+          var sx = x1 - ux * o0 + w(j), sy = y1 - uy * o0 + w(j), ex = x2 + ux * o1 + w(j), ey = y2 + uy * o1 + w(j);
+          var b = w(Math.min(1.1, L * .025));
+          s += 'M' + f(sx) + ' ' + f(sy) + 'Q' + f((sx + ex) / 2 - uy * b) + ' ' + f((sy + ey) / 2 + ux * b) + ' ' + f(ex) + ' ' + f(ey);
+        }
+        return s;
+      },
+      arco: function (cx, cy, rx, ry, a0, a1, o) {
+        o = o || {};
+        var n = o.n || 1, j = o.j == null ? .3 : o.j, rot = o.rot || 0, cs = Math.cos(rot), sn = Math.sin(rot), amp = o.amp == null ? .03 : o.amp;
+        var cheio = Math.abs(a1 - a0) > 6.2, s = '';
+        for (var p = 0; p < n; p++) {
+          var ph = r() * 6.28, ph2 = r() * 6.28, s0 = a0, s1 = a1;
+          if (cheio) { s0 = r() * 6.28; s1 = s0 + 6.28 + .15 + r() * .3; } else { s0 += w(.05); s1 += w(.05); }
+          var steps = Math.max(8, Math.ceil(Math.abs(s1 - s0) * (rx + ry) / 5)), ox = w(j), oy = w(j);
+          for (var i = 0; i <= steps; i++) {
+            var t = s0 + (s1 - s0) * i / steps, k = 1 + amp * (.6 * Math.sin(2 * t + ph) + .4 * Math.sin(3 * t + ph2));
+            var x = Math.cos(t) * rx * k, y = Math.sin(t) * ry * k;
+            s += (i ? 'L' : 'M') + f(cx + ox + x * cs - y * sn) + ' ' + f(cy + oy + x * sn + y * cs);
+          }
+        }
+        return s;
+      }
+    };
+  }
+  function elipse(cx, cy, rx, ry) { return 'M' + f(cx - rx) + ' ' + f(cy) + 'A' + f(rx) + ' ' + f(ry) + ' 0 1 0 ' + f(cx + rx) + ' ' + f(cy) + 'A' + f(rx) + ' ' + f(ry) + ' 0 1 0 ' + f(cx - rx) + ' ' + f(cy) + 'Z'; }
+  function cilindro(rx, ry, h) { return 'M' + f(-rx) + ' 0L' + f(-rx) + ' ' + f(h) + 'A' + f(rx) + ' ' + f(ry) + ' 0 0 0 ' + f(rx) + ' ' + f(h) + 'L' + f(rx) + ' 0A' + f(rx) + ' ' + f(ry) + ' 0 0 0 ' + f(-rx) + ' 0Z'; }
+  function poli(pts) { return 'M' + pts.map(function (p) { return f(p[0]) + ' ' + f(p[1]); }).join('L') + 'Z'; }
 
-  var o = null;
+  /* sombra de contato: rabiscos curtos sob a peça, puxados para a direita */
+  function chao(L, g, x0, x1, y) {
+    for (var i = 0; i < 3; i++) g.hach.push(L.linha(x0 + L.w(2) + i * 2, y + i * 1.1, x1 + L.w(2) - i, y + i * 1.1 + L.w(.4), .25, 1));
+  }
 
-  function rotulos() { return [].slice.call(o.raiz.querySelectorAll('.gamba__rotulo')); }
+  /* tambor em pé: pele, aros, fuste, tirantes e sombreado */
+  function tambor(L, g, o) {
+    var rx = o.rx, ry = o.ry, h = o.h, PI = Math.PI, b = o.banda == null ? Math.min(2.6, h * .22) : o.banda, x, c;
+    g.fundo.push(cilindro(rx, ry, h));
+    g.cabeca.push(elipse(0, 0, rx, ry));
+    g.tinta.push(L.arco(0, 0, rx, ry, 0, 7, { n: 2 }));
+    g.tinta.push(L.arco(0, 0, rx + 1.1, ry + .9, .15, PI - .15, { j: .2 }));
+    g.tinta.push(L.linha(-rx, .4, -rx, h, .3, 2), L.linha(rx, .4, rx, h, .3, 2));
+    g.tinta.push(L.arco(0, h, rx, ry, 0, PI, { n: 2 }));
+    if (b > .7) {
+      g.tinta.push(L.arco(0, b, rx, ry, .08, PI - .08, { j: .15 }));
+      g.tinta.push(L.arco(0, h - b, rx, ry, .08, PI - .08, { j: .15 }));
+    }
+    var n = o.hastes || 0;
+    for (var i = 0; i < n; i++) {
+      var a = PI * (i + .5) / n, sy = ry * Math.sin(a), y0, y1;
+      x = rx * Math.cos(a); y0 = b + sy + .5; y1 = h - b + sy - .5;
+      if (y1 - y0 < 1.5) continue;
+      g.tinta.push(L.linha(x, y0, x, y1, .18, 1));
+      if (o.lugs) {
+        var ym = (y0 + y1) / 2, q = o.lugs;
+        g.tinta.push(L.linha(x - q, ym - q * 1.4, x + q, ym - q * 1.4, .12, 1) + L.linha(x - q, ym + q * 1.4, x + q, ym + q * 1.4, .12, 1) + L.linha(x + q, ym - q * 1.4, x + q, ym + q * 1.4, .12, 1));
+      }
+    }
+    for (x = rx * .38; x < rx - .5; x += Math.max(.75, 2.3 - 1.6 * x / rx) + L.w(.2)) {
+      c = ry * Math.sqrt(Math.max(0, 1 - (x / rx) * (x / rx)));
+      if (h - 2 * b + 0 > 1) g.hach.push(L.linha(x, b + c + .8, x - .9, h - b + c - .6, .15, 1));
+    }
+    for (x = -rx + .6; x < -rx * .84; x += 1.3) {
+      c = ry * Math.sqrt(Math.max(0, 1 - (x / rx) * (x / rx)));
+      if (h - 2 * b > 2) g.hach.push(L.linha(x, b + c + 1, x + .3, h - b + c - 1, .12, 1));
+    }
+    chao(L, g, -rx * .7, rx * 1.08, h + ry + 1.6);
+  }
+
+  /* tubo deitado ou inclinado: tampa visível em A, meia elipse em B */
+  function tubo(L, g, A, B, r0, r1, o) {
+    o = o || {};
+    var dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+    var th = Math.atan2(uy, ux), e = .38, H = Math.PI / 2, i;
+    function pt(C, r, a) { return [C.x + Math.cos(a) * r * e * ux + Math.sin(a) * r * nx, C.y + Math.cos(a) * r * e * uy + Math.sin(a) * r * ny]; }
+    var pts = [], cap = [];
+    for (i = 0; i <= 10; i++) pts.push(pt(B, r1, -H + Math.PI * i / 10));
+    for (i = 0; i <= 10; i++) pts.push(pt(A, r0, H + Math.PI * i / 10));
+    g.fundo.push(poli(pts));
+    for (i = 0; i < 24; i++) cap.push(pt(A, r0, Math.PI * 2 * i / 24));
+    g.cabeca.push(poli(cap));
+    g.tinta.push(L.arco(A.x, A.y, r0 * e, r0, 0, 7, { rot: th, n: 2, j: .15 }));
+    var a1 = pt(A, r0, -H), b1 = pt(B, r1, -H), a2 = pt(A, r0, H), b2 = pt(B, r1, H);
+    g.tinta.push(L.linha(a1[0], a1[1], b1[0], b1[1], .25, 2), L.linha(a2[0], a2[1], b2[0], b2[1], .25, 2));
+    g.tinta.push(L.arco(B.x, B.y, r1 * e, r1, -H, H, { rot: th, n: 2, j: .15 }));
+    (o.aneis || []).forEach(function (t) {
+      var r = r0 + (r1 - r0) * t;
+      g.tinta.push(L.arco(A.x + dx * t, A.y + dy * t, r * e, r, -H, H, { rot: th, j: .1, amp: .02 }));
+    });
+    (o.hastes || []).forEach(function (q) {
+      g.tinta.push(L.linha(A.x + ux * 2.5 + nx * q * r0, A.y + uy * 2.5 + ny * q * r0, B.x - ux * 2 + nx * q * r1, B.y - uy * 2 + ny * q * r1, .15, 1));
+    });
+    var sg = ny >= 0 ? 1 : -1;
+    for (var q = .5; q < .95; q += .15) {
+      g.hach.push(L.linha(A.x + ux * (r0 * e + 1) + nx * sg * q * r0, A.y + uy * (r0 * e + 1) + ny * sg * q * r0, B.x + nx * sg * q * r1, B.y + ny * sg * q * r1, .15, 1));
+    }
+    return { th: th, nx: nx, ny: ny };
+  }
+
+  /* baqueta: o pivô fica na mão, a ponta repousa logo acima da pele */
+  function baqueta(L, P, T, tipo, j) {
+    var dx = T.x - P.x, dy = T.y - P.y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+    var e = tipo === 'maceta' ? .95 : .55;
+    var fundo = [poli([[P.x + nx * e, P.y + ny * e], [T.x + nx * e, T.y + ny * e], [T.x - nx * e, T.y - ny * e], [P.x - nx * e, P.y - ny * e]])];
+    var tinta = [L.linha(P.x + nx * e, P.y + ny * e, T.x + nx * e, T.y + ny * e, .15, 1), L.linha(P.x - nx * e, P.y - ny * e, T.x - nx * e, T.y - ny * e, .15, 1)];
+    if (tipo === 'maceta') { fundo.push(elipse(T.x, T.y, 3.7, 3.2)); tinta.push(L.arco(T.x, T.y, 3.7, 3.2, 0, 7, { n: 2, j: .15 })); }
+    else tinta.push(L.arco(T.x, T.y, 1.15, 1.05, 0, 7, { j: .08 }));
+    return { fundo: fundo.join(''), tinta: tinta.join(''), P: P, s: T.x < P.x ? 1 : -1, j: j || 0, mov: 'gira' };
+  }
+
+  /* uma peça de cada naipe, em coordenadas locais (0,0 = centro da pele ou da peça) */
+  var TAMBORES = {
+    surdo: { ry: .23, h: .95, hastes: 6, lugs: .9 },
+    repmor: { ry: .24, h: .9, hastes: 7, lugs: .8 },
+    repinique: { ry: .25, h: .95, hastes: 6, lugs: .6 },
+    caixa: { ry: .26, h: .48, hastes: 8, lugs: .75, banda: 1.6 },
+    tarol: { ry: .26, h: .32, hastes: 8, lugs: .55, banda: 1.2 },
+    tamborim: { ry: .3, h: .24, hastes: 0, banda: .8 },
+    pandeiro: { ry: .3, h: .17, hastes: 0, banda: 0 }
+  };
+  function peca(tipo, d, L) {
+    var g = { tinta: [], hach: [], fundo: [], cabeca: [] }, baqs = [], PI = Math.PI;
+    var up, down, half, onda, mov = 'pele', T = TAMBORES[tipo], i, A, B, c, s, r;
+    if (T) {
+      var rx = d / 2, ry = d * T.ry, h = d * T.h;
+      tambor(L, g, { rx: rx, ry: ry, h: h, hastes: T.hastes, lugs: T.lugs, banda: T.banda });
+      half = rx + 6; down = h + ry + 5; onda = { cx: 0, cy: 0, rx: rx + 1.5, ry: ry + 1.2, rot: 0 };
+      if (tipo === 'surdo') { baqs.push(baqueta(L, { x: rx + 5, y: -ry - 15 }, { x: rx * .12, y: -ry * .15 - 2.6 }, 'maceta')); up = ry + 19; }
+      if (tipo === 'repmor') {
+        g.tinta.push(L.arco(-rx - 1.6, h * .38, 2.4, 3.8, PI / 2, PI * 1.5, { j: .12 }), L.arco(rx + 1.6, h * .38, 2.4, 3.8, -PI / 2, PI / 2, { j: .12 }));
+        baqs.push(baqueta(L, { x: rx + 7, y: -ry - 12 }, { x: -rx * .2, y: -ry * .2 - 2 }, 'ponta')); up = ry + 14;
+      }
+      if (tipo === 'repinique') { baqs.push(baqueta(L, { x: rx + 6, y: -ry - 11 }, { x: -rx * .15, y: -ry * .2 - 1.8 }, 'ponta')); up = ry + 13; }
+      if (tipo === 'caixa' || tipo === 'tarol') {
+        baqs.push(baqueta(L, { x: -rx - 4, y: -ry - 9 }, { x: rx * .22, y: -1.8 }, 'ponta', 0));
+        baqs.push(baqueta(L, { x: rx + 4, y: -ry - 9 }, { x: -rx * .22, y: -1.8 }, 'ponta', 1));
+        up = ry + 11;
+      }
+      if (tipo === 'tamborim') {
+        for (i = 0; i < 4; i++) { var at = PI * (i + .5) / 4; g.tinta.push(L.arco(rx * Math.cos(at), ry * Math.sin(at) + h / 2, .45, .45, 0, 7, { j: .05 })); }
+        baqs.push(baqueta(L, { x: rx + 5, y: -ry - 8 }, { x: -rx * .2, y: -1.4 }, 'ponta')); up = ry + 10;
+      }
+      if (tipo === 'pandeiro') {
+        for (i = 0; i < 5; i++) {
+          var ap = PI * (i + .5) / 5, xp = rx * Math.cos(ap), syp = ry * Math.sin(ap);
+          g.tinta.push(L.linha(xp - 1.7, syp + .9, xp - 1.7, syp + 3.9, .08, 1) + L.linha(xp + 1.7, syp + .9, xp + 1.7, syp + 3.9, .08, 1));
+          g.fundo.push(elipse(xp, syp + 2.4, 1.6, .95));
+          g.tinta.push(L.arco(xp, syp + 2.4, 1.6, .95, 0, 7, { j: .05 }));
+        }
+        up = ry + 3;
+      }
+    } else if (tipo === 'cuica') {
+      r = d / 2; c = Math.cos(.42) * 15; s = Math.sin(.42) * 15; A = { x: -c, y: -s }; B = { x: c, y: s };
+      tubo(L, g, A, B, r, r, { aneis: [.08, .92], hastes: [-.6, .05, .62] });
+      g.tinta.push(L.arco(-c * .1, -s * .1 - r - 1, 5, 2.4, PI, PI * 2, { j: .12 }));
+      onda = { cx: A.x, cy: A.y, rx: r * .38 + 1.6, ry: r + 1.6, rot: .42 };
+      up = s + r + 4; down = s + r + 6; half = c + r * .45 + 3;
+      chao(L, g, -c * .5, c + 6, s + r * .9 + 2);
+    } else if (tipo === 'ganza') {
+      r = 5.5; c = Math.cos(-.22) * 17; s = Math.sin(-.22) * 17; A = { x: -c, y: -s }; B = { x: c, y: s };
+      var tg = tubo(L, g, A, B, r, r, { aneis: [.1, .9] });
+      for (i = 0; i < 16; i++) {
+        var tt = .5 + L.w(.34), qq = L.w(.8);
+        g.hach.push('M' + f(A.x + (B.x - A.x) * tt + tg.nx * qq * r) + ' ' + f(A.y + (B.y - A.y) * tt + tg.ny * qq * r) + 'l.6 .25');
+      }
+      onda = { cx: 0, cy: 0, rx: 21, ry: 9.5, rot: -.22 }; mov = 'agita';
+      up = Math.abs(s) + r + 3; down = Math.abs(s) + r + 6; half = c + 4;
+      chao(L, g, -c * .6, c + 4, Math.abs(s) + r + 1.5);
+    } else if (tipo === 'reco') {
+      r = 4.8; c = Math.cos(.1) * 18; s = Math.sin(.1) * 18; A = { x: -c, y: -s }; B = { x: c, y: s };
+      var aneis = [];
+      for (var t = .12; t < .9; t += 2.1 / 36) aneis.push(t);
+      tubo(L, g, A, B, r, r, { aneis: aneis });
+      var raspa = baqueta(L, { x: 15, y: -r - 9 }, { x: -12, y: -r - 4.2 }, 'ponta');
+      raspa.mov = 'raspa'; baqs.push(raspa);
+      onda = { cx: 0, cy: 0, rx: 22, ry: 8, rot: .1 };
+      up = r + 12; down = s + r + 6; half = c + 4;
+      chao(L, g, -c * .6, c + 4, s + r + 1.5);
+    } else if (tipo === 'agogo') {
+      var N1 = { x: -13, y: -4.5 }, M1 = { x: 12, y: -7 }, N2 = { x: -11, y: 5.5 }, M2 = { x: 9, y: 4.6 };
+      var t1 = tubo(L, g, M1, N1, 6.2, 1.8, { aneis: [.45] });
+      tubo(L, g, M2, N2, 5.2, 1.6, { aneis: [.45] });
+      for (i = -2; i <= 2; i++) g.hach.push(L.linha(M1.x - 1, M1.y + i * 1.6, M1.x + 1.2, M1.y + i * 1.6 - .4, .1, 1));
+      g.tinta.push(L.linha(N1.x, N1.y, N1.x - 3, N1.y + 1, .1, 1));
+      g.tinta.push('M' + f(N1.x) + ' ' + f(N1.y) + 'Q' + f(-23 + L.w(.6)) + ' ' + f(1 + L.w(.6)) + ' ' + f(N2.x) + ' ' + f(N2.y));
+      g.tinta.push('M' + f(N1.x + .4) + ' ' + f(N1.y + .3) + 'Q' + f(-22.3 + L.w(.6)) + ' ' + f(1.2 + L.w(.6)) + ' ' + f(N2.x + .3) + ' ' + f(N2.y - .2));
+      baqs.push(baqueta(L, { x: 16, y: -21 }, { x: 3, y: -12.6 }, 'ponta'));
+      onda = { cx: M1.x, cy: M1.y, rx: 6.2 * .38 + 1.6, ry: 7.8, rot: t1.th };
+      up = 24; down = 14; half = 20;
+      chao(L, g, -10, 16, 11.5);
+    } else if (tipo === 'chocalho') {
+      var hw = d / 2, hh = 7, k = 1.6;
+      var lx = function (y) { return -hw - k * y / hh; }, rxx = function (y) { return hw - k * y / hh; };
+      var TL = [lx(-hh), -hh], TR = [rxx(-hh), -hh], BR = [rxx(hh), hh], BL = [lx(hh), hh];
+      g.fundo.push(poli([TL, TR, BR, BL]));
+      g.tinta.push(L.linha(TL[0], TL[1], TR[0], TR[1], .25, 2), L.linha(BL[0], BL[1], BR[0], BR[1], .25, 2), L.linha(TL[0], TL[1], BL[0], BL[1], .25, 2), L.linha(TR[0], TR[1], BR[0], BR[1], .25, 2));
+      g.tinta.push(L.linha(lx(-hh + 1.5), -hh + 1.5, rxx(-hh + 1.5), -hh + 1.5, .15, 1), L.linha(lx(hh - 1.5), hh - 1.5, rxx(hh - 1.5), hh - 1.5, .15, 1));
+      [-2.3, 2.3].forEach(function (y) {
+        g.tinta.push(L.linha(lx(y) + 1, y, rxx(y) - 1, y, .12, 1));
+        var a = lx(y) + 1.5, z = rxx(y) - 1.5;
+        for (var m = 0; m < 5; m++) {
+          var xm = a + (m + .5) * (z - a) / 5;
+          g.fundo.push(elipse(xm, y - .5, 2.3, 1.35), elipse(xm + .3, y + .5, 2.3, 1.35));
+          g.tinta.push(L.arco(xm, y - .5, 2.3, 1.35, 0, 7, { j: .06 }), L.arco(xm + .3, y + .5, 2.3, 1.35, .2, PI - .2, { j: .06 }));
+        }
+      });
+      g.tinta.push(L.linha(lx(0), -1.4, lx(0) - 6, -1.4, .12, 1) + L.linha(lx(0), 1.4, lx(0) - 6, 1.4, .12, 1) + L.linha(lx(0) - 6, -1.4, lx(0) - 6, 1.4, .1, 1));
+      g.tinta.push(L.linha(rxx(0), -1.4, rxx(0) + 6, -1.4, .12, 1) + L.linha(rxx(0), 1.4, rxx(0) + 6, 1.4, .12, 1) + L.linha(rxx(0) + 6, -1.4, rxx(0) + 6, 1.4, .1, 1));
+      for (var xh = BL[0] + 4; xh < BR[0] - 1; xh += 2.2) g.hach.push(L.linha(xh, hh - 1.2, xh - 1.2, hh + .2, .08, 1));
+      onda = { cx: 0, cy: 0, rx: hw + 7, ry: hh + 4, rot: 0 }; mov = 'agita';
+      up = hh + 3; down = hh + 6; half = hw + 8;
+      chao(L, g, -hw * .6, hw + 5, hh + 2);
+    }
+    return { g: g, baqs: baqs, up: up, down: down, half: half, onda: onda, mov: mov };
+  }
+
+  /* faixas de marca-texto sobre um naipe: bordas rasgadas, sobreposição que escurece */
+  function lavado(L, x0, x1, y0, y1) {
+    var s = '';
+    for (var y = y0 + 6; y < y1; y += 11) {
+      var a = x0 + L.w(6), b = x1 + L.w(7), hh = 8 + L.w(1.5), top = [], bot = [];
+      for (var x = a; x <= b; x += 8) { top.push([x, y - hh + L.w(1.6)]); bot.push([x, y + hh + L.w(1.6)]); }
+      s += poli([[a - 5, y + L.w(2)]].concat(top, [[b + 4, y + L.w(3)]], bot.reverse()));
+    }
+    return s;
+  }
+
+  /* ---------- a formação, justificada ---------- */
+  var FORMACAO = null;
+  function formacao() {
+    if (FORMACAO) return FORMACAO;
+    var PAD_T = 14, PAD_B = 10, BORDA = 16;
+    var medidas = NAIPES.map(function (N) {
+      var m = peca(N.tipo, N.d, Lapis(R(1)));
+      return { up: m.up, down: m.down, hb: m.half - 6, linhas: (N.filas.length - 1) * N.passoY };
+    });
+    var fixo = 0, linhas = 0;
+    medidas.forEach(function (m) { fixo += m.up + m.down; linhas += m.linhas; });
+    var livre = ALT - PAD_T - PAD_B - fixo;
+    var abre = Math.min(1.6, Math.max(1, (livre + 6 * (NAIPES.length - 1)) / linhas));
+    var junta = Math.min(0, (livre - abre * linhas) / (NAIPES.length - 1));
+    var topo = PAD_T;
+    FORMACAO = NAIPES.map(function (N, k) {
+      var M = medidas[k], itens = [], alt = M.up + M.down + M.linhas * abre, Jn = Lapis(R(k * 97 + 13));
+      var idx = 0, minX = 1e9, maxX = -1e9;
+      N.filas.forEach(function (c, r) {
+        var inclina = Jn.w(2.8), dyFila = Jn.w(1.6);
+        var recuo = r % 2 && c > 1 ? .5 * (LARG - 2 * BORDA - 2 * M.hb) / (c - 1) : 0;
+        var x0 = BORDA + M.hb + recuo * (.6 + Jn.w(.3)), x1 = LARG - BORDA - M.hb - recuo * (.6 + Jn.w(.3));
+        var passo = c > 1 ? (x1 - x0) / (c - 1) : 0;
+        for (var i = 0; i < c; i++, idx++) {
+          var seed = 1009 * (k + 1) + 37 * idx + 5, J = Lapis(R(seed + 777));
+          var pc = peca(N.tipo, N.d * (1 + J.w(.035)), Lapis(R(seed)));
+          var t = c > 1 ? i / (c - 1) : .5, borda = !recuo && (i === 0 || i === c - 1);
+          var x = (c > 1 ? x0 + i * passo : LARG / 2) + (borda ? J.w(.8) : J.w(Math.min(6, passo * .14)));
+          var y = topo + M.up + r * N.passoY * abre + dyFila + inclina * (t - .5) * 2 + J.w(1.8);
+          var ax = pc.half + 14, ay = pc.up + 6;
+          minX = Math.min(minX, x - pc.half + 4); maxX = Math.max(maxX, x + pc.half - 4);
+          itens.push({ k: k, i: idx, x: x, y: y, ax: ax, ay: ay, w: 2 * ax, h: pc.up + pc.down + 12, pc: pc, seed: seed });
+        }
+      });
+      var n = { k: k, itens: itens, topo: topo, alt: alt, minX: minX, maxX: maxX, lavado: lavado(Lapis(R(k + 4242)), minX - 8, maxX + 8, topo + 2, topo + alt - 2) };
+      topo += alt + junta;
+      return n;
+    });
+    /* rótulos: no meio do naipe, afastados o bastante para não se tocarem (33 px na tela) */
+    var MIN = 33 / ESC, ys = FORMACAO.map(function (n) { return n.topo + n.alt / 2 + 3; });
+    for (var it = 0; it < 6; it++) {
+      for (var a = 1; a < ys.length; a++) if (ys[a] - ys[a - 1] < MIN) { var m = (ys[a] + ys[a - 1]) / 2; ys[a - 1] = m - MIN / 2; ys[a] = m + MIN / 2; }
+    }
+    FORMACAO.forEach(function (n, k) { n.rotuloY = ys[k]; });
+    return FORMACAO;
+  }
+
+  /* ---------- o desenho na página ---------- */
+  function svgItem(it) {
+    var pc = it.pc, vb = '0 0 ' + f(it.w) + ' ' + f(it.h), tr = 'translate(' + f(it.ax) + ' ' + f(it.ay) + ')';
+    var S = 2 * Math.max(pc.onda.rx, pc.onda.ry) + 10;
+    var onda = Lapis(R(it.seed + 3)).arco(S / 2, S / 2, pc.onda.rx, pc.onda.ry, 0, 7, { rot: pc.onda.rot, j: .2 });
+    var h = '<div class="bateria__inst" data-k="' + it.k + '" data-i="' + it.i + '" data-mov="' + pc.mov + '" style="left:' + f(it.x - it.ax) + 'px;top:' + f(it.y - it.ay) + 'px;width:' + f(it.w) + 'px;height:' + f(it.h) + 'px;transform-origin:' + f(it.ax) + 'px ' + f(it.ay + pc.down - 5) + 'px">';
+    h += '<svg width="' + f(it.w) + '" height="' + f(it.h) + '" viewBox="' + vb + '" aria-hidden="true" focusable="false"><g transform="' + tr + '">';
+    h += '<path class="bt-fundo" d="' + pc.g.fundo.join('') + '"/><path class="bt-cabeca" d="' + pc.g.cabeca.join('') + '"/>';
+    h += '<g filter="url(#bt-giz)"><path class="bt-sombra" d="' + (pc.g.hach.join('') || 'M0 0') + '"/><path class="bt-tinta" d="' + pc.g.tinta.join('') + '"/></g></g></svg>';
+    h += '<div class="bateria__onda" style="left:' + f(it.ax + pc.onda.cx - S / 2) + 'px;top:' + f(it.ay + pc.onda.cy - S / 2) + 'px;width:' + f(S) + 'px;height:' + f(S) + 'px"><svg width="' + f(S) + '" height="' + f(S) + '" aria-hidden="true" focusable="false"><path d="' + onda + '"/></svg></div>';
+    pc.baqs.forEach(function (b) {
+      h += '<div class="bateria__baq" data-s="' + b.s + '" data-j="' + b.j + '" data-mov="' + b.mov + '" style="width:' + f(it.w) + 'px;height:' + f(it.h) + 'px;transform-origin:' + f(it.ax + b.P.x) + 'px ' + f(it.ay + b.P.y) + 'px">';
+      h += '<svg width="' + f(it.w) + '" height="' + f(it.h) + '" viewBox="' + vb + '" aria-hidden="true" focusable="false"><g transform="' + tr + '"><path class="bt-fundo" d="' + b.fundo + '"/><path class="bt-baq" filter="url(#bt-giz)" d="' + b.tinta + '"/></g></svg></div>';
+    });
+    return h + '</div>';
+  }
+
+  function desenha(camada) {
+    var html = '<svg class="bateria__filtro" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="bt-giz" x="-15%" y="-15%" width="130%" height="130%">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="7" result="ruido"/>' +
+      '<feColorMatrix in="ruido" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.9 1.74" result="falha"/>' +
+      '<feComposite in="SourceGraphic" in2="falha" operator="in" result="giz"/>' +
+      '<feTurbulence type="fractalNoise" baseFrequency=".07" numOctaves="1" seed="3" result="tremor"/>' +
+      '<feDisplacementMap in="giz" in2="tremor" scale="1.3" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>';
+    formacao().forEach(function (n) {
+      html += '<div class="bateria__naipe" data-k="' + n.k + '">';
+      n.itens.forEach(function (it) { html += svgItem(it); });
+      html += '<svg class="bateria__lavado" width="' + LARG + '" height="' + ALT + '" viewBox="0 0 ' + LARG + ' ' + ALT + '" aria-hidden="true" focusable="false"><path d="' + n.lavado + '"/></svg></div>';
+    });
+    camada.innerHTML = html;
+  }
+
+  /* ---------- o toque: quadros de animação a partir do padrão ---------- */
+  function eventos(evts, base) {
+    evts = evts.filter(function (e) { return e[0] >= 0 && e[0] <= 1; }).sort(function (a, b) { return a[0] - b[0]; });
+    var out = [];
+    evts.forEach(function (e) {
+      var fr = Object.assign({ offset: e[0] }, e[1]);
+      if (out.length && e[0] - out[out.length - 1].offset < .0009) out[out.length - 1] = fr; else out.push(fr);
+    });
+    if (!out.length || out[0].offset > 0) out.unshift(Object.assign({ offset: 0 }, base));
+    if (out[out.length - 1].offset < 1) out.push(Object.assign({ offset: 1 }, base));
+    return out;
+  }
+  function golpes(P) {
+    var hs = [];
+    P.forEach(function (v, s) { if (v) hs.push({ o: s / P.length, v: v, s: s }); });
+    hs.forEach(function (h, i) { var nx = hs[(i + 1) % hs.length]; h.ate = ((nx.o - h.o + 1) % 1) || 1; });
+    return hs;
+  }
+  var QUADROS = {};
+  function quadros(k) {
+    if (QUADROS[k]) return QUADROS[k];
+    var N = NAIPES[k], hs = golpes(N.p), corpo = { pele: [], agita: [] }, onda = [], gira = [[], []], raspa = [];
+    hs.forEach(function (h, n) {
+      var v = h.v, o = h.o;
+      corpo.pele.push([o, { transform: 'none' }], [o + .012, { transform: 'translateY(' + f(.9 * v) + 'px) scale(' + (1 + .012 * v).toFixed(3) + ',' + (1 - .035 * v).toFixed(3) + ')' }], [o + .05, { transform: 'none' }]);
+      corpo.agita.push([o, { transform: 'none' }], [o + .012, { transform: 'translate(' + f(1.7 * v) + 'px,-.3px) rotate(' + f(2.2 * v) + 'deg)' }], [o + .03, { transform: 'translate(' + f(-1.1 * v) + 'px,0) rotate(' + f(-1.3 * v) + 'deg)' }], [o + .055, { transform: 'none' }]);
+      onda.push([o, { opacity: 0, transform: 'scale(.82)' }], [o + .006, { opacity: .3 + .65 * v, transform: 'scale(.9)' }], [o + Math.min(.13, h.ate - .004), { opacity: 0, transform: 'scale(' + (1.35 + .5 * v).toFixed(2) + ')' }]);
+      var ang = (N.tipo === 'surdo' ? 17 : 13) * Math.max(.5, v);
+      [0, 1].forEach(function (j) {
+        if (n % 2 !== j && N.tipo !== 'surdo' && (N.tipo === 'caixa' || N.tipo === 'tarol')) return;
+        gira[j].push([o - .034, { transform: 'rotate(0deg)' }], [o - .02, { transform: 'rotate(' + f(ang) + 'deg)' }], [o, { transform: 'rotate(-2.2deg)' }], [o + .028, { transform: 'rotate(0deg)' }]);
+      });
+      var dir = n % 2 ? 1 : -1;
+      raspa.push([o, { transform: 'translateX(' + (-dir * 2.6) + 'px)' }], [o + .055, { transform: 'translateX(' + (dir * 2.6) + 'px)' }]);
+    });
+    return (QUADROS[k] = {
+      pele: eventos(corpo.pele, { transform: 'none' }), agita: eventos(corpo.agita, { transform: 'none' }),
+      onda: eventos(onda, { opacity: 0, transform: 'scale(.82)' }),
+      gira: [eventos(gira[0], { transform: 'rotate(0deg)' }), eventos(gira[1], { transform: 'rotate(0deg)' })],
+      raspa: eventos(raspa, { transform: 'translateX(0px)' })
+    });
+  }
+  /* a baqueta gira para o lado da sua mão: o sinal vem de data-s */
+  function comSinal(fr, s) {
+    if (s > 0) return fr;
+    return fr.map(function (q) { var c = Object.assign({}, q); c.transform = c.transform.replace(/rotate\((-?[\d.]+)deg\)/, function (m, a) { return 'rotate(' + (-a) + 'deg)'; }); return c; });
+  }
+
+  /* ---------- o som: gravações reais, disparadas no compasso ---------- */
+  var ARQUIVOS = ['surdo', 'surdo-abafado', 'repique', 'caixa', 'caixa-fraca', 'tarol', 'tarol-fraco', 'cuica-atrito', 'tamborim', 'chocalho', 'agogo-agudo', 'agogo-grave', 'ganza-ida', 'ganza-volta', 'pandeiro-grave', 'pandeiro-platinela', 'reco', 'reco-longo'];
+  var ctx = null, saida = null, buf = {}, carregando = null, somOn = true;
+  try { somOn = localStorage.getItem('eco-bateria-som') !== '0'; } catch (e) {}
+  function audio() {
+    if (ctx) return ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try { ctx = new AC(); } catch (e) { return null; }
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -14; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .2;
+    saida = ctx.createGain(); saida.gain.value = .9;
+    saida.connect(comp); comp.connect(ctx.destination);
+    return ctx;
+  }
+  function carrega() {
+    if (carregando || !audio()) return carregando;
+    carregando = Promise.all(ARQUIVOS.map(function (n) {
+      return fetch(SOM_DIR + n + '.mp3').then(function (r) { return r.arrayBuffer(); }).then(function (a) {
+        return new Promise(function (ok) { ctx.decodeAudioData(a, function (b) { buf[n] = b; ok(); }, function () { ok(); }); });
+      }).catch(function () {});
+    }));
+    return carregando;
+  }
+  /* pronto: contexto destravado e gravações decodificadas */
+  function pronto() {
+    if (!audio()) return Promise.reject();
+    return Promise.all([ctx.state === 'running' ? null : ctx.resume(), carrega()]);
+  }
+  function destrava() { if (audio()) pronto().catch(function () {}); }
+  function amostra(nome, quando, ganho, taxa, bus, dur) {
+    var b = buf[nome]; if (!b) return;
+    var s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = b; s.playbackRate.value = taxa || 1;
+    g.gain.setValueAtTime(ganho, quando);
+    if (dur) { g.gain.setValueAtTime(ganho, quando + dur * .6); g.gain.exponentialRampToValueAtTime(.0001, quando + dur); }
+    s.connect(g); g.connect(bus); s.start(quando); if (dur) s.stop(quando + dur + .02);
+  }
+  /* a cuíca: o atrito gravado na pele, somado ao gemido que sobe ou desce */
+  function cuica(quando, v, sobe, bus) {
+    var o = ctx.createOscillator(), o2 = ctx.createOscillator(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    var f0 = sobe ? 420 : 760, f1 = sobe ? 780 : 430;
+    o.type = 'triangle'; o2.type = 'sine';
+    o.frequency.setValueAtTime(f0, quando); o.frequency.exponentialRampToValueAtTime(f1, quando + .13);
+    o2.frequency.setValueAtTime(f0 * 2, quando); o2.frequency.exponentialRampToValueAtTime(f1 * 2, quando + .13);
+    bp.type = 'bandpass'; bp.frequency.value = 900; bp.Q.value = 1.4;
+    g.gain.setValueAtTime(.0001, quando); g.gain.exponentialRampToValueAtTime(.32 * v, quando + .015); g.gain.exponentialRampToValueAtTime(.0001, quando + .24);
+    o.connect(bp); o2.connect(bp); bp.connect(g); g.connect(bus);
+    o.start(quando); o2.start(quando); o.stop(quando + .26); o2.stop(quando + .26);
+    amostra('cuica-atrito', quando, .18 * v, sobe ? 3.4 : 3, bus, .22);
+  }
+  var AFINA = [1.3, 1.48, 1.72];
+  function voz(k, v, s, n, quando, bus) {
+    var N = NAIPES[k], q = N.filas.reduce(function (a, b) { return a + b; }, 0) >= 7;
+    function dobra(nome, g, taxa, dur) {   /* naipe numeroso: uma segunda mão, um pouco atrás */
+      amostra(nome, quando, g, taxa, bus, dur);
+      if (q) amostra(nome, quando + .009 + (n % 3) * .004, g * .55, taxa * .985, bus, dur);
+    }
+    switch (N.tipo) {
+      case 'surdo': if (v < .5) dobra('surdo-abafado', .5, AFINA[k], .26); else dobra('surdo', .62 * v, AFINA[k], 1.2); break;
+      case 'repmor': dobra('repique', .5 * v, 1.0); break;
+      case 'repinique': dobra('repique', .38 * v, 1.28); break;
+      case 'caixa': dobra(v >= .8 ? 'caixa' : 'caixa-fraca', (v >= .8 ? .3 : .16) * v + .04, 1); break;
+      case 'tarol': dobra(v >= .8 ? 'tarol' : 'tarol-fraco', (v >= .8 ? .2 : .14) * v + .03, 1.1); break;
+      case 'cuica': cuica(quando, v, n % 2 === 0, bus); break;
+      case 'tamborim': dobra('tamborim', .32 * v, 1.38); break;
+      case 'chocalho': amostra('chocalho', quando, .16 + .12 * v, n % 2 ? 1.04 : .98, bus, .3); break;
+      case 'agogo': amostra(s % 4 === 0 || s % 4 === 3 ? 'agogo-agudo' : 'agogo-grave', quando, .26 * v + .06, 1, bus); break;
+      case 'ganza': amostra(n % 2 ? 'ganza-volta' : 'ganza-ida', quando, .14 + .14 * v, 1, bus); break;
+      case 'pandeiro':
+        if (v >= .9) amostra('pandeiro-grave', quando, .32, 1, bus);
+        amostra('pandeiro-platinela', quando, .1 + .14 * v, 1.02, bus); break;
+      case 'reco': amostra(v >= 1 ? 'reco-longo' : 'reco', quando, .26 * v, 1, bus, v >= 1 ? .3 : .18); break;
+    }
+  }
+
+  /* ---------- sessões: um conjunto de naipes tocando junto ---------- */
+  var o = null, sessao = null;
+  function inst(k) { return [].slice.call(o.camada.querySelectorAll('.bateria__inst[data-k="' + k + '"]')); }
+  function para() {
+    if (!sessao) return;
+    var s = sessao; sessao = null;
+    s.anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+    clearInterval(s.relogio);
+    if (s.bus && ctx) { var t = ctx.currentTime; s.bus.gain.cancelScheduledValues(t); s.bus.gain.setValueAtTime(s.bus.gain.value, t); s.bus.gain.linearRampToValueAtTime(0, t + .09); setTimeout(function () { try { s.bus.disconnect(); } catch (e) {} }, 200); }
+    o.raiz.classList.remove('is-tocando');
+  }
+  /* ks: naipes; ciclos: quantos ciclos de dois compassos (Infinity enquanto durar o gesto) */
+  function toca(ks, ciclos, origem) {
+    para();
+    if (!ks.length) return;
+    var s = { ks: ks, anims: [], origem: origem || '', bus: null, relogio: 0 };
+    sessao = s;
+    o.raiz.classList.add('is-tocando');
+    var atraso = 60;
+    if (!reduz) ks.forEach(function (k) {
+      var Q = quadros(k), J = R(k * 131 + 7);
+      inst(k).forEach(function (el, i) {
+        if (typeof el.animate !== 'function') return;
+        var opt = { duration: CICLO, iterations: ciclos, delay: atraso + Math.round(J() * 10) };
+        s.anims.push(el.animate(el.dataset.mov === 'agita' ? Q.agita : Q.pele, opt));
+        var on = el.querySelector('.bateria__onda');
+        if (on) s.anims.push(on.animate(Q.onda, opt));
+        [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
+          var fr = b.dataset.mov === 'raspa' ? Q.raspa : comSinal(Q.gira[+b.dataset.j || 0], +b.dataset.s);
+          s.anims.push(b.animate(fr, opt));
+        });
+      });
+    });
+    var inicio = performance.now() + atraso, total = ciclos === Infinity ? Infinity : ciclos * 16;
+    /* o som entra no compasso da imagem, mesmo que o contexto destrave alguns quadros depois */
+    var liga = function () {
+      if (sessao !== s || !somOn || !ctx || ctx.state !== 'running') return;
+      s.bus = ctx.createGain(); s.bus.gain.value = 1; s.bus.connect(saida);
+      var t0 = ctx.currentTime + (inicio - performance.now()) / 1000, prox = 0;
+      if (t0 < ctx.currentTime + .02) prox = Math.ceil((ctx.currentTime + .02 - t0) / (PASSO / 1000));
+      var agenda = function () {
+        if (sessao !== s) return;
+        var ate = ctx.currentTime + .35;
+        while (prox < total && t0 + prox * PASSO / 1000 < ate) {
+          var st = prox % 16, quando = t0 + prox * PASSO / 1000;
+          ks.forEach(function (k) {
+            var v = NAIPES[k].p[st];
+            if (v) voz(k, v, st, prox, quando, s.bus);
+          });
+          prox++;
+        }
+        if (prox >= total) clearInterval(s.relogio);
+      };
+      agenda(); s.relogio = setInterval(agenda, 90);
+    };
+    if (somOn && ctx) pronto().then(liga, function () {});
+    if (ciclos !== Infinity) setTimeout(function () { if (sessao === s) { sessao = null; o.raiz.classList.remove('is-tocando'); } }, ciclos * CICLO + atraso + 400);
+  }
+
+  /* ---------- a entrada: o desenho se faz, a bateria entra em três levas ---------- */
+  function entra() {
+    if (reduz || o.entrou) return;
+    o.entrou = true;
+    o.raiz.classList.remove('is-espera');
+    var C = CICLO, T0 = 3300;
+    [].slice.call(o.camada.querySelectorAll('.bateria__inst')).forEach(function (el) {
+      if (typeof el.animate !== 'function') return;
+      var k = +el.dataset.k, i = +el.dataset.i, ent = 180 + k * 150 + i * 22;
+      var tinta = el.querySelector('.bt-tinta');
+      if (tinta) {
+        tinta.setAttribute('pathLength', '1'); tinta.style.strokeDasharray = '1';
+        tinta.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 1150, delay: ent, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'both' });
+      }
+      [].slice.call(el.querySelectorAll('.bt-fundo,.bt-cabeca,.bt-sombra')).forEach(function (p) {
+        p.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: ent + 420, easing: 'ease-out', fill: 'backwards' });
+      });
+      [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
+        b.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: ent + 900, fill: 'backwards' });
+      });
+      /* esquenta: surdos por três ciclos, depois repiques, caixas e taróis, por fim o miúdo; todos terminam juntos */
+      var leva = k < 3 ? 0 : k < 7 ? 1 : 2, Q = quadros(k), opt = { duration: C, iterations: 3 - leva, delay: T0 + leva * C };
+      el.animate(el.dataset.mov === 'agita' ? Q.agita : Q.pele, opt);
+      var on = el.querySelector('.bateria__onda');
+      if (on) on.animate(Q.onda, opt);
+      [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
+        b.animate(b.dataset.mov === 'raspa' ? Q.raspa : comSinal(Q.gira[+b.dataset.j || 0], +b.dataset.s), opt);
+      });
+    });
+  }
+
+  /* ---------- rótulos, estados e gestos ---------- */
+  function rotulos() { return [].slice.call(o.raiz.querySelectorAll('.bateria__rotulo')); }
   function escala() { var s = parseFloat(getComputedStyle(o.raiz).getPropertyValue('--s')); return s > 0 ? s : 1; }
-
-  /* rótulos na altura do ponto de pressão; cada linha vai da margem comum até a borda do braço naquele traste.
-     O braço desce se o texto ao lado crescer. */
-  var INICIO = -126; /* margem comum dos rótulos, em px da gravura: igual ao left do .gamba__rotulos */
   function posiciona() {
-    var s = escala();
-    [].slice.call(o.raiz.querySelectorAll('.gamba__rotulos > li')).forEach(function (li, k) {
-      if (k >= DEDOS.length) return;
-      li.style.top = (DEDOS[k] * s).toFixed(1) + 'px';
-      li.style.setProperty('--ate', (180 - braco(DEDOS[k]) - INICIO).toFixed(1) + 'px');
+    var s = escala(), F = formacao();
+    [].slice.call(o.raiz.querySelectorAll('.bateria__rotulos > li')).forEach(function (li, k) {
+      var n = F[k]; if (!n) return;
+      li.style.top = (n.rotuloY * ESC * s).toFixed(1) + 'px';
+      li.style.setProperty('--ate', (n.minX * ESC - 8 - INICIO).toFixed(1) + 'px');
     });
     o.raiz.style.marginTop = '';
     if (s === 1 && o.txt) {
-      var falta = o.txt.getBoundingClientRect().bottom - o.raiz.getBoundingClientRect().top + 30 - DEDOS[0];
+      var topo = o.raiz.getBoundingClientRect().top, falta = 0;
+      var cab = o.txt.getBoundingClientRect().bottom - topo + 30 - F[0].rotuloY * ESC;
+      var lead = o.lead ? o.lead.getBoundingClientRect().bottom - topo + 26 - F[0].topo * ESC : 0;
+      falta = Math.max(cab, lead);
       if (falta > 0) o.raiz.style.marginTop = Math.ceil(falta) + 'px';
     }
   }
-
-  function vibra(fuso, atraso) {
-    if (reduz) return;
-    fuso.classList.remove('vibra');
-    void fuso.offsetWidth;
-    fuso.style.animationDelay = (atraso || 0) + 'ms';
-    fuso.classList.add('vibra');
+  function etapaDe(btn) {
+    var bs = [].slice.call(document.querySelectorAll('#acervo .acervo-etapa'));
+    return bs.indexOf(btn);
+  }
+  function naipesDaEtapa(i) {
+    var ks = [];
+    o.materiais.forEach(function (m, k) { if (m.etapas[0] <= i && i <= m.etapas[1]) ks.push(k); });
+    return ks;
+  }
+  function perto(ks) {
+    [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n) { n.classList.toggle('is-perto', ks.indexOf(+n.dataset.k) >= 0); });
+    rotulos().forEach(function (r, k) { r.classList.toggle('is-perto', ks.indexOf(k) >= 0); });
   }
 
-  /* uma corda soando entre y0 e y1 */
-  function corda(i, y0, y1, fantasma) {
-    var x0 = cx(i, y0), x1 = cx(i, y1), h = y1 - y0;
-    var eixo = el('div', 'gamba__eixo' + (fantasma ? ' gamba__eixo--solta' : ''));
-    eixo.style.left = x0.toFixed(1) + 'px';
-    eixo.style.top = y0.toFixed(1) + 'px';
-    eixo.style.height = Math.hypot(h, x1 - x0).toFixed(1) + 'px';
-    eixo.style.transform = 'rotate(' + (-Math.atan2(x1 - x0, h) * 180 / Math.PI).toFixed(3) + 'deg)';
-    if (!fantasma) eixo.appendChild(el('i', 'gamba__soa'));
-    var fuso = el('i', 'gamba__fuso');
-    eixo.appendChild(fuso);
-    o.camada.appendChild(eixo);
-    return fuso;
-  }
-
-  function desenha(acesos) {
-    [].slice.call(o.camada.querySelectorAll('.gamba__eixo:not(.gamba__eixo--solta), .gamba__dedo')).forEach(function (n) { n.remove(); });
-    var n = 0;
-    acesos.forEach(function (k) {
-      var m = o.materiais[k]; if (!m) return;
-      var y0 = DEDOS[k];
-      for (var i = m.etapas[0]; i <= m.etapas[1]; i++) {
-        vibra(corda(i, y0, CAIXA), n * 40);
-        var d = el('i', 'gamba__dedo');
-        d.style.left = cx(i, y0).toFixed(1) + 'px';
-        d.style.top = y0 + 'px';
-        d.style.animationDelay = (n * 40) + 'ms';
-        o.camada.appendChild(d);
-        n++;
-      }
-    });
-  }
-
-  /* lê o estado que a página já renderizou nos rótulos e redesenha só quando ele muda */
   function atualiza() {
     if (!o) return;
     posiciona();
-    var acesos = [];
-    rotulos().forEach(function (r, k) {
-      var e = r.getAttribute('data-estado');
-      if (e === 'sel' || e === 'aceso') acesos.push(k);
-    });
+    var acesos = [], estados = rotulos().map(function (r) { return r.getAttribute('data-estado') || ''; });
+    [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n, k) { n.setAttribute('data-estado', estados[k] || ''); });
+    estados.forEach(function (e, k) { if (e === 'sel' || e === 'aceso') acesos.push(k); });
     var assinatura = acesos.join(',');
     if (assinatura === o.assinatura) return;
+    var antes = o.assinatura;
     o.assinatura = assinatura;
-    desenha(acesos);
+    if (antes == null) return;                       /* o primeiro estado só se desenha */
+    if (sessao && sessao.origem === 'etapa') return; /* a etapa sob o ponteiro já toca esse conjunto */
+    o.ultimoToque = Date.now();
+    toca(acesos, 2, 'estado');
   }
 
-  /* quando o braço entra na tela, uma passada de arco pelas seis cordas soltas */
-  function arpejo() {
-    if (reduz) return;
-    for (var i = 0; i < 6; i++) {
-      (function (i) {
-        var fuso = corda(i, NUT, CAIXA, true);
-        vibra(fuso, 160 + i * 110);
-        setTimeout(function () { if (fuso.parentNode) fuso.parentNode.remove(); }, 2600 + i * 110);
-      })(i);
-    }
-  }
-
+  var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
   function monta(raiz, cab, materiais) {
     if (!raiz) return;
     if (o && o.raiz === raiz && raiz.isConnected) { atualiza(); return; }
-    o = { raiz: raiz, materiais: materiais, camada: raiz.querySelector('.gamba__camada'), txt: document.querySelector('#acervo .acervo-percursos__cab'), assinatura: null };
-    if (!o.camada) { o = null; return; }
+    var camada = raiz.querySelector('.bateria__desenho');
+    if (!camada) return;
+    o = { raiz: raiz, materiais: materiais, camada: camada, txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), assinatura: null, entrou: false, ultimoToque: 0 };
+    desenha(camada);
 
-    /* trastes: a área entre um traste e o anterior também aciona o material */
-    materiais.forEach(function (m, k) {
-      if (k >= TRASTES.length) return;
-      var b = el('span', 'gamba__traste');
-      var topo = k ? TRASTES[k - 1] + 4 : NUT + 2;
-      b.style.top = topo + 'px';
-      b.style.height = (TRASTES[k] - topo - 1) + 'px';
+    /* áreas de toque sobre cada naipe: acionam o rótulo correspondente */
+    var alvos = raiz.querySelector('.bateria__alvos');
+    formacao().forEach(function (n, k) {
+      var b = document.createElement('span');
+      b.className = 'bateria__alvo';
+      b.style.left = ((n.minX - 4) * ESC).toFixed(1) + 'px'; b.style.top = (n.topo * ESC).toFixed(1) + 'px';
+      b.style.width = ((n.maxX - n.minX + 8) * ESC).toFixed(1) + 'px'; b.style.height = (n.alt * ESC).toFixed(1) + 'px';
       b.addEventListener('click', function () { var r = rotulos()[k]; if (r) r.click(); });
-      b.addEventListener('pointerenter', function () { var r = rotulos()[k]; if (r) r.classList.add('is-perto'); });
-      b.addEventListener('pointerleave', function () { var r = rotulos()[k]; if (r) r.classList.remove('is-perto'); });
-      o.camada.appendChild(b);
+      b.addEventListener('pointerenter', function () { perto([k]); });
+      b.addEventListener('pointerleave', function () { perto([]); });
+      alvos.appendChild(b);
     });
 
-    /* cabeçalho dos percursos: o som das cordas */
-    if (cab && !cab.querySelector('.cordas-som')) {
-      var somB = el('button', 'cordas-som');
-      somB.type = 'button'; somB.innerHTML = 'som<i>' + ICONE + '</i>';
-      somB.setAttribute('aria-pressed', 'false'); somB.setAttribute('aria-label', 'Som das cordas');
+    /* o som: ligado por padrão, mas só começa no primeiro gesto da pessoa na página */
+    if (cab && !cab.querySelector('.bateria-som')) {
+      var somB = document.createElement('button');
+      somB.type = 'button'; somB.className = 'bateria-som'; somB.innerHTML = 'som<i>' + ICONE + '</i>';
+      somB.setAttribute('aria-pressed', String(somOn)); somB.setAttribute('aria-label', 'Som da bateria');
       somB.addEventListener('click', function () {
         somOn = !somOn; somB.setAttribute('aria-pressed', String(somOn));
-        if (somOn && !ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { ctx = null; } }
-        if (ctx && ctx.state === 'suspended') ctx.resume();
-        if (somOn) SOLTAS.forEach(function (n, i) { setTimeout(function () { som(n, .1); }, i * 90); });
+        try { localStorage.setItem('eco-bateria-som', somOn ? '1' : '0'); } catch (e) {}
+        if (!somOn) { para(); return; }
+        destrava();
+        (carregando || Promise.resolve()).then(function () { toca([3], 1, 'som'); });
       });
       cab.innerHTML = ''; cab.appendChild(somB);
     }
+    var gesto = function () {
+      document.removeEventListener('pointerdown', gesto, true); document.removeEventListener('keydown', gesto, true);
+      if (!somOn || !audio()) return;
+      pronto().then(function () { if (sessao && sessao.origem === 'etapa' && !sessao.bus) toca(sessao.ks, Infinity, 'etapa'); }, function () {});
+    };
+    document.addEventListener('pointerdown', gesto, true);
+    document.addEventListener('keydown', gesto, true);
 
-    /* o toque num rótulo (ou traste) faz soar a nota do material e as cordas que ele pressiona */
+    /* o toque num rótulo (ou no naipe) faz o naipe tocar; repetir o mesmo naipe também */
     raiz.addEventListener('click', function (e) {
-      var r = e.target.closest && e.target.closest('.gamba__rotulo');
+      var r = e.target.closest && e.target.closest('.bateria__rotulo');
       if (!r) return;
-      var k = rotulos().indexOf(r), m = materiais[k];
-      if (!m) return;
-      som(NOTAS[m.id]);
-      for (var i = m.etapas[0]; i <= m.etapas[1]; i++) (function (i, j) { setTimeout(function () { som(SOLTAS[i], .05); }, 60 + j * 45); })(i, i - m.etapas[0]);
+      var k = rotulos().indexOf(r), quando = Date.now();
+      if (somOn) destrava();
+      setTimeout(function () { if (o.ultimoToque < quando && (!sessao || sessao.origem !== 'etapa')) toca([k], 2, 'rotulo'); }, 70);
     });
+
+    /* as etapas: passar o ponteiro (ou o foco) faz tocar juntos os naipes que ela ilumina */
+    var grade = document.querySelector('#acervo .acervo-percursos__grade');
+    if (grade && !grade.dataset.bateria) {
+      grade.dataset.bateria = '1';
+      var sobre = null;
+      var entraEtapa = function (btn) {
+        if (!btn || btn === sobre) return;
+        sobre = btn;
+        var ks = naipesDaEtapa(etapaDe(btn));
+        perto(ks);
+        toca(ks, Infinity, 'etapa');
+      };
+      var saiEtapa = function () {
+        if (!sobre) return;
+        sobre = null; perto([]);
+        if (sessao && sessao.origem === 'etapa') para();
+      };
+      grade.addEventListener('pointerover', function (e) { if (e.pointerType === 'touch') return; entraEtapa(e.target.closest('.acervo-etapa')); });
+      grade.addEventListener('pointerout', function (e) { var alvo = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.acervo-etapa'); if (alvo === sobre) return; if (alvo) entraEtapa(alvo); else saiEtapa(); });
+      grade.addEventListener('focusin', function (e) { entraEtapa(e.target.closest('.acervo-etapa')); });
+      grade.addEventListener('focusout', function (e) { if (!grade.contains(e.relatedTarget)) saiEtapa(); });
+    }
 
     var pend = 0;
     function agenda() { if (pend) return; pend = requestAnimationFrame(function () { pend = 0; if (o) posiciona(); }); }
-    if (window.ResizeObserver) { var ro = new ResizeObserver(agenda); ro.observe(raiz.parentElement); if (o.txt) ro.observe(o.txt); }
+    if (window.ResizeObserver) { var ro = new ResizeObserver(agenda); ro.observe(raiz.parentElement); if (o.txt) ro.observe(o.txt); if (o.lead) ro.observe(o.lead); }
     else window.addEventListener('resize', agenda);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(agenda);
 
-    if (window.IntersectionObserver) {
+    if (window.IntersectionObserver && !reduz && typeof camada.animate === 'function') {
+      raiz.classList.add('is-espera');
       var io = new IntersectionObserver(function (es) {
         if (!es.some(function (e) { return e.isIntersecting; })) return;
-        io.disconnect(); arpejo();
-      }, { threshold: 0.3 });
+        io.disconnect(); entra();
+      }, { threshold: 0.15 });
       io.observe(raiz);
     }
     atualiza();
   }
 
-  return { monta: monta, atualiza: atualiza };
+  return { monta: monta, atualiza: atualiza, formacao: formacao };
 })();
 </script>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
@@ -2002,7 +2538,7 @@ class Component extends DCLogic {
   componentDidMount() {
     this._prevState = { ...this.state };
     this._montaOnda();
-    if (!window.EcoGamba) window.addEventListener('load', () => this._montaOnda(), { once: true });
+    if (!window.EcoBateria) window.addEventListener('load', () => this._montaOnda(), { once: true });
     this._fired = false;
     if (typeof IntersectionObserver === 'function') {
       this._io = new IntersectionObserver((entries) => {
@@ -2051,17 +2587,17 @@ class Component extends DCLogic {
   }
 
   _montaOnda() {
-    const gamba = document.getElementById('acervo-gamba');
-    if (gamba && window.EcoGamba) window.EcoGamba.monta(gamba, document.getElementById('cordas-cab'), MATERIAIS);
+    const bateria = document.getElementById('acervo-bateria');
+    if (bateria && window.EcoBateria) window.EcoBateria.monta(bateria, document.getElementById('som-cab'), MATERIAIS);
   }
 
   _abreNoAcervo(id) {
     this.setState({ sel: id, etapa: null });
     // duas voltas de quadro: a ficha já traz o material escolhido quando a rolagem é medida
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      // o traste escolhido entra na tela; a ficha acompanha (fixa ao lado ou presa na base)
-      const gamba = document.getElementById('acervo-gamba');
-      const item = gamba && gamba.querySelector('.gamba__rotulo[aria-pressed="true"]');
+      // o naipe escolhido entra na tela; a ficha acompanha (fixa ao lado ou presa na base)
+      const bateria = document.getElementById('acervo-bateria');
+      const item = bateria && bateria.querySelector('.bateria__rotulo[aria-pressed="true"]');
       if (!item) return;
       const y = item.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35;
       const reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2095,7 +2631,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const { sel, etapa } = this.state;
-    // um material pertence a toda etapa que suas cordas percorrem
+    // um material pertence a toda etapa que percorre; seu naipe toca nelas
     const naEtapa = (x, i) => i !== null && x.etapas[0] <= i && i <= x.etapas[1];
 
     const materiais = MATERIAIS.map((m, i) => {
@@ -2149,7 +2685,7 @@ class Component extends DCLogic {
       temPlay: !!m.play,
       play: m.play || ''
     };
-    // as cordas que o material pressiona: as etapas da cadeia, só na ficha
+    // as etapas da cadeia que o material percorre, só na ficha
     ficha.trecho = m.etapas[0] === m.etapas[1] ? ETAPAS[m.etapas[0]] : ETAPAS[m.etapas[0]] + ' → ' + ETAPAS[m.etapas[1]];
     ficha.marcas = ETAPAS.map((_, i) => ({ c: m.etapas[0] <= i && i <= m.etapas[1] ? '1' : '' }));
     ficha.temPrevia = previa.length > 0;
