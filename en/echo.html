@@ -652,41 +652,35 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .bt-sombra{fill:none;stroke:#1C1C1C;stroke-width:.75;stroke-opacity:.8;stroke-linecap:round}
 .bt-tinta{fill:none;stroke:#1C1C1C;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
 .bt-baq{fill:none;stroke:#1C1C1C;stroke-width:1.2;stroke-linecap:round}
-/* o ponteiro sobre o naipe, o rótulo ou a etapa: faixas de marca-texto, que entram da esquerda */
+/* o naipe escolhido: o bloco de cor em faixas de marca-texto, que entram da esquerda */
 .bateria__lavado{position:absolute;left:0;top:0;overflow:visible;mix-blend-mode:multiply;opacity:0;clip-path:inset(0 100% 0 0);transition:clip-path .7s var(--mola),opacity .4s var(--mola)}
 .bateria__lavado path{fill:#FFB627;fill-opacity:.82}
-.bateria__naipe.is-perto .bateria__lavado{opacity:.9;clip-path:inset(0 0 0 0)}
-/* os fios: pontilhados em repouso; firmes quando o naipe está marcado, sob o ponteiro ou tocando */
-.bateria__fios{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:1}
-.bateria__fio{fill:none;stroke:rgba(44,44,44,.62);stroke-width:1.3;stroke-dasharray:.5 3.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .4s,opacity .4s}
-.bateria__fio.is-marcado,.bateria__fio.is-perto,.bateria__fio.is-ativo{stroke:#2C2C2C;stroke-dasharray:none}
-.bateria__fio.is-ativo{stroke-width:1.5}
-.bateria__fio.is-apagado:not(.is-ativo){opacity:.28}
-.bateria.is-espera .bateria__fios{opacity:0}
+.bateria__naipe[data-estado="sel"] .bateria__lavado{opacity:.9;clip-path:inset(0 0 0 0)}
 .bateria__alvos{position:absolute;inset:0}
 .bateria__alvo{position:absolute;cursor:pointer;border-radius:8px}
 
-/* os rótulos: um por naipe, todos partindo da mesma margem e com o mesmo espaço entre si;
-   o fio sai do fim de cada título e se dobra até o seu naipe */
-.bateria__rotulos{position:absolute;top:0;left:-212px;width:300px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
-.bateria__rotulos > li{position:absolute;left:0;height:0;display:flex;align-items:center}
+/* o menu dos materiais: compacto, nome e número, ao lado da coluna; acompanha a rolagem.
+   O ponteiro pinta o nome; o clique deixa o nome pintado e o bloco de cor sobre o naipe */
+.bateria__menu{position:absolute;top:0;bottom:0;left:-232px;width:226px;pointer-events:none}
+.bateria__rotulos{position:sticky;top:28px;margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.bateria__rotulos > li{display:flex}
 .bateria__rotulo{
   pointer-events:auto;
-  flex:none;display:flex;align-items:center;justify-content:flex-start;gap:10px;
-  height:28px;margin-top:-14px;padding:0 6px 0 0;border:0;background:transparent;color:#2C2C2C;cursor:pointer;text-align:left;
+  display:flex;align-items:center;gap:4px;
+  height:26px;padding:0 4px 0 0;border:0;background:transparent;color:#2C2C2C;cursor:pointer;text-align:left;
   transition:opacity .45s var(--mola);
 }
-.bateria__tt{position:relative;z-index:0;padding:5px 9px;font:600 15px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em;white-space:nowrap}
+.bateria__tt{position:relative;z-index:0;padding:4px 8px;font:600 14.5px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em;white-space:nowrap}
 .bateria__tt::before{
   content:"";position:absolute;z-index:-1;inset:-3px -10px -3px -12px;
   background:url(../assets/echo/acervo/traco.png) center/100% 100% no-repeat;
   opacity:0;transform:scaleX(.35);transform-origin:0 50%;
   transition:opacity .35s var(--mola),transform .6s var(--mola);
 }
-.bateria__rotulo:hover .bateria__tt::before,.bateria__rotulo.is-perto .bateria__tt::before{opacity:.45;transform:none}
+.bateria__rotulo:hover .bateria__tt::before,.bateria__rotulo.is-perto .bateria__tt::before{opacity:.6;transform:none}
 .bateria__rotulo[data-estado="sel"] .bateria__tt::before,.bateria__rotulo[data-estado="aceso"] .bateria__tt::before{opacity:1;transform:none}
 .bateria__rotulo[data-estado="apagado"]{opacity:.36}
-.bateria__nm{min-width:22px;font:italic 400 21px/1 'IM Fell English',Georgia,serif;text-align:left}
+.bateria__nm{font:italic 400 18px/1 'IM Fell English',Georgia,serif;text-align:left;white-space:nowrap}
 .bateria__rotulo[data-fundador="1"] .bateria__nm::after{content:"★";margin-left:2px;font:normal 400 10px/1 var(--body);vertical-align:.7em;color:#FFB627;-webkit-text-stroke:.5px #2C2C2C}
 .bateria__rotulo:focus-visible{outline:2px solid #2C2C2C;outline-offset:3px;border-radius:4px}
 
@@ -900,10 +894,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .acervo-cab__txt{order:0;padding-right:0}
   .bateria{--s:.8;order:1;width:min(100%,580px);height:864px;justify-self:center}
   .bateria__palco{left:calc(-17px * .8)}
-  .bateria__rotulos{right:0;left:calc(336px * .8);width:auto}
-  .bateria__rotulos > li{right:auto;left:0}
-  .bateria__rotulo{flex-direction:row-reverse;justify-content:flex-end;text-align:left;padding:0 0 0 2px;gap:8px}
-  .bateria__nm{text-align:right}
+  .bateria__menu{right:0;left:calc(336px * .8);width:auto}
   .bateria__tt::before{transform-origin:0 50%}
   #acervo-ficha{
     order:2;position:sticky;top:auto;bottom:10px;z-index:5;width:min(100%,580px);justify-self:center;box-sizing:border-box;
@@ -928,12 +919,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .ficha__nota{grid-template-columns:minmax(0,1fr);gap:2px}
   .bateria{--s:.62;width:100%;height:670px}
   .bateria__palco{left:calc(-17px * .62)}
-  .bateria__rotulos{left:calc(336px * .62)}
-  .bateria__rotulos > li{right:0}
-  .bateria__rotulo{flex:0 1 auto;min-width:0}
+  .bateria__menu{left:calc(336px * .62)}
+  .bateria__rotulos{top:12px;gap:2px}
+  .bateria__rotulo{flex:0 1 auto;min-width:0;height:auto;min-height:22px}
   .bateria__tt{min-width:0;font-size:12.5px;padding:3px 6px;white-space:normal;line-height:1.1}
-  .bateria__nm{min-width:16px;font-size:17px}
-  .bateria__rotulo{height:22px;margin-top:-11px}
+  .bateria__nm{min-width:18px;font-size:15px}
 }
 @media(max-width:360px){
   #acervo-ficha{padding-left:18px;padding-right:18px}
@@ -942,7 +932,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .ficha__nota{font-size:12px!important}
 }
 @media(prefers-reduced-motion:reduce){
-  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.bateria__tt::before,.bateria__lavado,.bateria__naipe,.bt-fundo,.bt-cabeca,.bateria__fio{transition:none;animation:none}
+  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.bateria__tt::before,.bateria__lavado,.bateria__naipe,.bt-fundo,.bt-cabeca{transition:none;animation:none}
   .echo-livro__folha--esq,.echo-livro__folha--dir,.echo-livro__bar,.echo-livro__inteira,.echo-livro__lombada,.echo-livro__vela{transition:none}
 }
 
@@ -1261,9 +1251,11 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 .ec-t--sub{margin:0;font-size:clamp(1.5rem,3.4vw,2.6rem);line-height:1.08;text-wrap:pretty}
 .ec-cond{margin-top:0}
 .acervo-percursos{width:fit-content;max-width:100%}
-.acervo-percursos__cab{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}
+.acervo-percursos__cab{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .acervo-percursos__cab .acervo-percursos__k{margin:0}
-.acervo-percursos__grade{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+/* as etapas: uma linha só, no topo da bateria, alinhada à borda dos surdos */
+.acervo-percursos__grade{display:flex;flex-wrap:nowrap;align-items:center;align-self:flex-end;gap:6px}
+@media(max-width:1099px){.acervo-percursos__grade{flex-wrap:wrap;align-self:flex-start}}
 .acervo-etapa{display:inline-flex;align-items:center;gap:7px;cursor:pointer;border-radius:999px;padding:5px 12px;border:1px solid rgba(44,44,44,.35);background:transparent;color:#2C2C2C;font:600 9.5px/1.2 'Commissioner',system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;transition:border-color .45s cubic-bezier(.32,.72,0,1),background .45s cubic-bezier(.32,.72,0,1),transform .45s cubic-bezier(.32,.72,0,1)}
 .acervo-etapa:hover{border-color:#2C2C2C;background:rgba(44,44,44,.06)}
 .acervo-etapa[aria-pressed="true"]{border-color:#2C2C2C;background:#2C2C2C;color:#F2EFE9}
@@ -1411,9 +1403,7 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <h2 class="acervo-titulo"><span>02</span>Collection</h2>
         <p class="acervo-lead">The method is not organized as a collection of independent documents. Each material answers a specific noise, but all share criteria and return to the same operational chain.</p>
       </div>
-      <div class="acervo-percursos" role="group" aria-labelledby="acervo-percursos-k">
-        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Stages</p><div id="som-cab" class="som-cab"></div></div>
-        <div class="acervo-percursos__grade">
+      <div class="acervo-percursos__grade" role="group" aria-labelledby="acervo-percursos-k">
         <sc-for list="{{ etapas }}" as="p" hint-placeholder-count="6">
           <span>
             <sc-if value="{{ p.on }}" hint-placeholder-val="{{ false }}">
@@ -1424,7 +1414,9 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
             </sc-if>
           </span>
         </sc-for>
-        </div>
+      </div>
+      <div class="acervo-percursos">
+        <div class="acervo-percursos__cab"><p class="acervo-percursos__k" id="acervo-percursos-k">Stages</p><div id="som-cab" class="som-cab"></div></div>
       </div>
     </div>
 
@@ -1433,12 +1425,13 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
         <div class="bateria__desenho" role="img" aria-label="Samba school percussion section in longitudinal formation, sketched in chalk: fourteen successive sections, from the lead surdos to the shakers, one for each material in the collection, each sized in proportion to its instrument's presence."></div>
         <div class="bateria__alvos" aria-hidden="true"></div>
       </div>
-      <svg class="bateria__fios" aria-hidden="true" focusable="false"></svg>
-      <ol class="bateria__rotulos">
-        <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
-          <li><button type="button" class="bateria__rotulo" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" data-estado="{{ m.estado }}" data-fundador="{{ m.fundadorTxt }}" aria-label="{{ m.rotulo }}"><span class="bateria__tt">{{ m.titulo }}</span><span class="bateria__nm">{{ m.nn }}</span></button></li>
-        </sc-for>
-      </ol>
+      <div class="bateria__menu">
+        <ol class="bateria__rotulos">
+          <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
+            <li><button type="button" class="bateria__rotulo" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" data-estado="{{ m.estado }}" data-fundador="{{ m.fundadorTxt }}" aria-label="{{ m.rotulo }}"><span class="bateria__tt">{{ m.titulo }}</span><span class="bateria__nm">{{ m.nn }}</span></button></li>
+          </sc-for>
+        </ol>
+      </div>
     </div>
 
     <div class="acervo-lado">
@@ -1816,18 +1809,18 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
    (surdos, repiniques, caixas, atabaques, taróis) para que uma seção se distinga da outra; os
    menores dividem a faixa em duas colunas (agogôs e xequerês, ganzás e reco-recos); os chocalhos
    fecham a coluna numa linha só. Desenho procedural em traço rabiscado, giz por filtro de ruído.
-   Cada rótulo se liga ao seu naipe por um fio curvo, que vibra quando o naipe toca, cada tipo
-   a seu modo. Os rótulos guardam o mesmo espaço entre si; o fio se dobra até encontrar o naipe.
-   Só o clique toca: clicar num naipe (ou no rótulo) faz o naipe tocar por quatro ciclos; clicar
+   Ao lado, o menu compacto dos materiais acompanha a rolagem.
+   Só o clique toca: clicar num naipe (ou no item do menu) faz o naipe tocar por dez ciclos; clicar
    de novo enquanto soa faz parar. Os naipes não se atropelam: quem entra espera o próximo tempo
    e se junta a quem já toca, na mesma grade. Ligar uma etapa faz entrar os naipes que ela reúne.
-   O ponteiro sobre um naipe, um rótulo ou uma etapa só acende a mancha, em silêncio.
+   O ponteiro sobre um naipe, um item ou uma etapa só pinta o nome no menu, em silêncio;
+   o clique deixa o bloco de cor sobre o naipe e pinta o interior das peças.
    O som usa gravações reais (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md). */
 window.EcoBateria = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var PASSO = 140, CICLO = PASSO * 16, CICLOS = 4; /* semicolcheia (~107 bpm), ciclo de dois compassos, quatro ciclos por toque */
+  var PASSO = 107, CICLO = PASSO * 16, CICLOS = 10; /* semicolcheia (~140 bpm), ciclo de dois compassos, dez ciclos por toque */
   var ESC = 1.25, LARG = 288, ALT = 864;        /* desenho em 288 x 864, ampliado para 360 x 1080 */
-  var INICIO = -212;                            /* margem comum dos rótulos, em px da coluna */
+  var MENU = 232;                               /* largura máxima do menu à esquerda da coluna */
   var SOM_DIR = '../assets/echo/acervo/som/';
 
   /* lado: 0 ou 1 quando o naipe divide a faixa com o seguinte (só os menores) */
@@ -2260,15 +2253,19 @@ window.EcoBateria = (function () {
     var N = NAIPES[k], chave = k + '-' + (N.pi ? i : 0);
     if (QUADROS[chave]) return QUADROS[chave];
     var hs = golpes(padrao(k, i)), pele = [], agita = [], onda = [], gira = [[], []], raspa = [];
+    /* tempos do gesto, em ms: o surdo ergue a maceta cedo, afunda e volta devagar; os demais são secos */
+    var T = N.tipo === 'surdo' ? { ergue: 240, alto: 110, golpe: 45, volta: 380, assenta: 140, onda: 760, ang: 15 }
+                               : { ergue: 58, alto: 28, golpe: 20, volta: 115, assenta: 34, onda: 330, ang: 13 };
+    var q = function (ms) { return ms / CICLO; };
     hs.forEach(function (h, n) {
       var v = h.v, o = h.o;
-      pele.push([o, { transform: 'none' }], [o + .012, { transform: 'translateY(' + f(1.1 * v) + 'px) scale(' + (1 + .014 * v).toFixed(3) + ',' + (1 - .04 * v).toFixed(3) + ')' }], [o + .055, { transform: 'none' }]);
+      pele.push([o, { transform: 'none' }], [o + q(T.golpe), { transform: 'translateY(' + f(1.1 * v) + 'px) scale(' + (1 + .014 * v).toFixed(3) + ',' + (1 - .04 * v).toFixed(3) + ')' }], [o + q(T.volta), { transform: 'none' }]);
       agita.push([o, { transform: 'none' }], [o + .014, { transform: 'translate(' + f(1.8 * v) + 'px,-.3px) rotate(' + f(2.4 * v) + 'deg)' }], [o + .034, { transform: 'translate(' + f(-1.2 * v) + 'px,0) rotate(' + f(-1.4 * v) + 'deg)' }], [o + .058, { transform: 'none' }]);
-      onda.push([o, { opacity: 0, transform: 'scale(.82)' }], [o + .006, { opacity: .3 + .65 * v, transform: 'scale(.9)' }], [o + Math.min(.16, h.ate - .004), { opacity: 0, transform: 'scale(' + (1.35 + .5 * v).toFixed(2) + ')' }]);
-      var ang = (N.tipo === 'surdo' ? 17 : 13) * Math.max(.5, v);
+      onda.push([o, { opacity: 0, transform: 'scale(.82)' }], [o + .006, { opacity: .3 + .65 * v, transform: 'scale(.9)' }], [o + Math.min(q(T.onda), h.ate - .004), { opacity: 0, transform: 'scale(' + (1.35 + .5 * v).toFixed(2) + ')' }]);
+      var ang = T.ang * Math.max(.5, v);
       [0, 1].forEach(function (j) {
         if ((N.tipo === 'caixa' || N.tipo === 'tarol') && n % 2 !== j) return;
-        gira[j].push([o - .03, { transform: 'rotate(0deg)' }], [o - .016, { transform: 'rotate(' + f(ang) + 'deg)' }], [o, { transform: 'rotate(-2.2deg)' }], [o + .026, { transform: 'rotate(0deg)' }]);
+        gira[j].push([o - q(T.ergue), { transform: 'rotate(0deg)' }], [o - q(T.alto), { transform: 'rotate(' + f(ang) + 'deg)' }], [o, { transform: 'rotate(-2.2deg)' }], [o + q(T.assenta), { transform: 'rotate(0deg)' }]);
       });
       var dir = n % 2 ? 1 : -1;
       raspa.push([o, { transform: 'translateX(' + (-dir * 2.6) + 'px)' }], [o + .05, { transform: 'translateX(' + (dir * 2.6) + 'px)' }]);
@@ -2380,7 +2377,7 @@ window.EcoBateria = (function () {
   }
 
   /* ---------- a grade: naipes entram no próximo tempo e se juntam a quem já toca ---------- */
-  var o = null, grade = null, ativos = {}, relogio = 0, quadro = 0;
+  var o = null, grade = null, ativos = {}, relogio = 0;
   function nAtivos() { return Object.keys(ativos).length; }
   function inst(k) { return [].slice.call(o.camada.querySelectorAll('.bateria__inst[data-k="' + k + '"]')); }
   function marca() {
@@ -2388,7 +2385,6 @@ window.EcoBateria = (function () {
     NAIPES.forEach(function (_, k) {
       var on = !!ativos[k], n = o.camada.querySelector('.bateria__naipe[data-k="' + k + '"]');
       if (n) n.classList.toggle('is-ativo', on);
-      if (FIOS[k]) FIOS[k].el.classList.toggle('is-ativo', on);
       var r = rotulos()[k]; if (r) r.classList.toggle('is-tocando', on);
     });
   }
@@ -2405,7 +2401,6 @@ window.EcoBateria = (function () {
     });
     a.fim = setTimeout(function () { termina(k); }, comeca - t + c * CICLO + 500);
     if (somOn && audio()) pronto().then(function () { if (!relogio) { relogio = setInterval(agenda, 80); } agenda(); }, function () {});
-    if (!quadro && !reduz) quadro = requestAnimationFrame(vibra);
     marca();
   }
   function solta(a) {
@@ -2440,70 +2435,6 @@ window.EcoBateria = (function () {
     });
   }
 
-  /* ---------- os fios: do rótulo ao naipe, curvos; vibram quando o naipe toca ---------- */
-  var FIOS = {};
-  var VIBRA = {
-    surdo: { f: 2.2, a: 9, tau: 460 }, repinique: { f: 11, a: 3, tau: 170 }, caixa: { f: 13, a: 2.6, tau: 150 },
-    tarol: { f: 15, a: 2.2, tau: 130 }, atabaque: { f: 4, a: 6.5, tau: 340 }, cuica: { f: 3, a: 5, tau: 280, glide: 1 },
-    tamborim: { f: 16, a: 2.4, tau: 100 }, agogo: { f: 7, a: 3.6, tau: 380 }, xequere: { a: 2.6, tau: 160, jitter: 1 },
-    ganza: { a: 2.2, tau: 120, jitter: 1 }, reco: { f: 18, a: 3, tau: 180, serra: 1 }, pandeiro: { f: 9, a: 3, tau: 220 },
-    chocalho: { a: 2.4, tau: 130, jitter: 1 }
-  };
-  function desenhaFio(k, d1, d2) {
-    var q = FIOS[k]; if (!q) return;
-    q.el.setAttribute('d', 'M' + f(q.p0[0]) + ' ' + f(q.p0[1]) + 'C' + f(q.c1[0]) + ' ' + f(q.c1[1] + d1) + ' ' + f(q.c2[0]) + ' ' + f(q.c2[1] + d2) + ' ' + f(q.t[0]) + ' ' + f(q.t[1]) + q.resto);
-    q.mexido = !!(d1 || d2);
-  }
-  function fios() {
-    var svg = o.fios, F = formacao(), bts = rotulos(), s = escala();
-    var palco = o.raiz.querySelector('.bateria__palco'), pl = parseFloat(getComputedStyle(palco).left) || 0;
-    var rr = o.raiz.getBoundingClientRect();
-    var X = function (x) { return pl + x * ESC * s; }, Y = function (y) { return y * ESC * s; };
-    F.forEach(function (n, k) {
-      var b = bts[k], q = FIOS[k]; if (!b || !q) return;
-      var br = b.getBoundingClientRect(), ly = (br.top + br.bottom) / 2 - rr.top;
-      var direita = br.left - rr.left > X(LARG / 2);              /* em telas estreitas os rótulos ficam à direita */
-      var p0 = direita ? [br.left - rr.left - 4, ly] : [br.right - rr.left + 4, ly];
-      var cy = Y(n.cy), sg = direita ? -1 : 1, t, resto = '';
-      var outro = n.par ? F[n.par[0] === k ? n.par[1] : n.par[0]] : null;
-      var atras = outro && ((direita && NAIPES[k].lado === 0) || (!direita && NAIPES[k].lado === 1));
-      if (!atras) t = [direita ? X(n.maxX) + 4 : X(n.minX) - 4, cy];
-      else {
-        /* o naipe de trás: o fio contorna o vizinho pelo alto da faixa e desce pela viela */
-        var lane = Y(n.faixaTopo) + 2, g = X(LARG / 2), alvo = direita ? X(n.maxX) + 3 : X(n.minX) - 3;
-        t = [direita ? X(outro.maxX) + 3 : X(outro.minX) - 3, lane];
-        resto = 'L' + f(g - 6 * sg) + ' ' + f(lane) + 'Q' + f(g) + ' ' + f(lane) + ' ' + f(g) + ' ' + f(lane + 6) +
-          'L' + f(g) + ' ' + f(cy - 6) + 'Q' + f(g) + ' ' + f(cy) + ' ' + f(g + 6 * sg) + ' ' + f(cy) + 'L' + f(alvo) + ' ' + f(cy);
-      }
-      var dx = t[0] - p0[0];
-      /* sai do rótulo na horizontal, faz a curva no meio do vão e chega ao naipe também na horizontal */
-      q.p0 = p0; q.t = t; q.resto = resto; q.c1 = [p0[0] + dx * .5, p0[1]]; q.c2 = [t[0] - dx * .5, t[1]];
-      desenhaFio(k, 0, 0);
-    });
-  }
-  function vibra() {
-    quadro = 0;
-    var t = performance.now(), algum = false;
-    Object.keys(ativos).forEach(function (kk) {
-      var a = ativos[kk], k = +kk, N = NAIPES[k], V = VIBRA[N.tipo];
-      algum = true;
-      if (!FIOS[k] || !grade) return;
-      var sa = (t - grade.t0) / PASSO, si = Math.floor(sa), amp = 0, dt = 0;
-      if (sa >= a.s0) for (var b = 0; b < 16; b++) {
-        var st = si - b; if (st < a.s0) break;
-        var v = N.p[((st % 16) + 16) % 16];
-        if (v) { dt = t - (grade.t0 + st * PASSO); amp = V.a * v * Math.exp(-dt / V.tau); break; }
-      }
-      var d1, d2;
-      if (V.jitter) { d1 = amp * (Math.random() * 2 - 1); d2 = amp * (Math.random() * 2 - 1); }
-      else if (V.serra) { var ph = (dt / 1000 * V.f) % 1; d1 = amp * (ph * 2 - 1); d2 = -d1 * .6; }
-      else { var w = 2 * Math.PI * (V.glide ? V.f * (1 + dt / 250) : V.f) * dt / 1000; d1 = amp * Math.sin(w); d2 = -amp * .7 * Math.sin(w + .6); }
-      desenhaFio(k, d1, d2);
-    });
-    Object.keys(FIOS).forEach(function (kk) { if (!ativos[kk] && FIOS[kk].mexido) desenhaFio(+kk, 0, 0); });
-    if (algum) quadro = requestAnimationFrame(vibra);
-  }
-
   /* ---------- a entrada: o desenho se faz devagar, a bateria esquenta e para ---------- */
   function entra() {
     if (reduz || o.entrou) return;
@@ -2534,31 +2465,23 @@ window.EcoBateria = (function () {
   function rotulos() { return [].slice.call(o.raiz.querySelectorAll('.bateria__rotulo')); }
   function escala() { var s = parseFloat(getComputedStyle(o.raiz).getPropertyValue('--s')); return s > 0 ? s : 1; }
   function posiciona() {
-    var s = escala(), F = formacao(), ult = F.length - 1;
-    var c0 = F[0].cy, cN = F[ult].cy;
-    /* os rótulos guardam o mesmo espaço entre si; o fio se dobra até o naipe */
-    [].slice.call(o.raiz.querySelectorAll('.bateria__rotulos > li')).forEach(function (li, k) {
-      if (k > ult) return;
-      li.style.top = ((c0 + k * (cN - c0) / ult) * ESC * s).toFixed(1) + 'px';
-    });
+    var s = escala(), F = formacao();
+    var menu = o.raiz.querySelector('.bateria__menu');
     o.raiz.style.marginTop = '';
-    var lista = o.raiz.querySelector('.bateria__rotulos');
-    if (lista) lista.style.left = '';
-    if (s === 1 && o.txt) {
-      /* no desktop, os rótulos recuam o quanto der (até 300 px) para o fio ter onde se curvar,
-         sem invadir a coluna das etapas */
-      var grade = document.querySelector('#acervo .acervo-percursos__grade');
-      if (lista && grade) {
-        var folga = o.raiz.getBoundingClientRect().left - grade.getBoundingClientRect().right - 28;
-        lista.style.left = (-Math.round(Math.max(-INICIO, Math.min(300, folga)))) + 'px';
+    if (menu) menu.style.left = '';
+    if (s === 1) {
+      /* no desktop, o menu ocupa o vão à esquerda da coluna, sem invadir a coluna das etapas */
+      var bloco = document.querySelector('#acervo .acervo-percursos');
+      if (menu && bloco) {
+        var folga = o.raiz.getBoundingClientRect().left - bloco.getBoundingClientRect().right - 24;
+        menu.style.left = (-Math.round(Math.max(150, Math.min(MENU, folga)))) + 'px';
       }
-      var topo = o.raiz.getBoundingClientRect().top;
-      var cab = o.txt.getBoundingClientRect().bottom - topo + 30 - c0 * ESC;
-      var lead = o.lead ? o.lead.getBoundingClientRect().bottom - topo + 26 - F[0].topo * ESC : 0;
-      var falta = Math.max(cab, lead);
-      if (falta > 0) o.raiz.style.marginTop = Math.ceil(falta) + 'px';
+      /* a coluna começa abaixo do texto de abertura e da linha das etapas, que correm sobre ela */
+      if (o.lead) {
+        var falta = o.lead.getBoundingClientRect().bottom - o.raiz.getBoundingClientRect().top + 18 - F[0].topo * ESC;
+        if (falta > 0) o.raiz.style.marginTop = Math.ceil(falta) + 'px';
+      }
     }
-    fios();
   }
   function etapaDe(btn) { return [].slice.call(document.querySelectorAll('#acervo .acervo-etapa')).indexOf(btn); }
   function naipesDaEtapa(i) {
@@ -2566,21 +2489,15 @@ window.EcoBateria = (function () {
     o.materiais.forEach(function (m, k) { if (m.etapas[0] <= i && i <= m.etapas[1]) ks.push(k); });
     return ks;
   }
+  /* o ponteiro só pinta o nome no menu */
   function perto(ks) {
-    [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n) { n.classList.toggle('is-perto', ks.indexOf(+n.dataset.k) >= 0); });
     rotulos().forEach(function (r, k) { r.classList.toggle('is-perto', ks.indexOf(k) >= 0); });
-    Object.keys(FIOS).forEach(function (k) { FIOS[k].el.classList.toggle('is-perto', ks.indexOf(+k) >= 0); });
   }
   function atualiza() {
     if (!o) return;
     posiciona();
     var estados = rotulos().map(function (r) { return r.getAttribute('data-estado') || ''; });
     [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n, k) { n.setAttribute('data-estado', estados[k] || ''); });
-    Object.keys(FIOS).forEach(function (k) {
-      var e = estados[k] || '';
-      FIOS[k].el.classList.toggle('is-marcado', e === 'sel' || e === 'aceso');
-      FIOS[k].el.classList.toggle('is-apagado', e === 'apagado');
-    });
   }
 
   var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
@@ -2589,16 +2506,10 @@ window.EcoBateria = (function () {
     if (o && o.raiz === raiz && raiz.isConnected) { atualiza(); return; }
     var camada = raiz.querySelector('.bateria__desenho');
     if (!camada) return;
-    o = { raiz: raiz, materiais: materiais, camada: camada, fios: raiz.querySelector('.bateria__fios'), txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), entrou: false };
+    o = { raiz: raiz, materiais: materiais, camada: camada, txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-percursos__grade') || document.querySelector('#acervo .acervo-lead'), entrou: false };
     desenha(camada);
-    FIOS = {};
-    NAIPES.forEach(function (_, k) {
-      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      p.setAttribute('class', 'bateria__fio'); p.setAttribute('data-k', k);
-      o.fios.appendChild(p); FIOS[k] = { el: p, p0: [0, 0], c1: [0, 0], c2: [0, 0], t: [0, 0], resto: '' };
-    });
 
-    /* áreas de toque sobre cada naipe: acionam o rótulo; o ponteiro só acende a mancha */
+    /* áreas de toque sobre cada naipe: acionam o item do menu; o ponteiro só pinta o nome */
     var alvos = raiz.querySelector('.bateria__alvos');
     formacao().forEach(function (n, k) {
       var b = document.createElement('span');
@@ -2628,7 +2539,7 @@ window.EcoBateria = (function () {
       cab.innerHTML = ''; cab.appendChild(somB);
     }
 
-    /* clicar num rótulo (ou no naipe) faz o naipe tocar; clicar de novo enquanto soa faz parar */
+    /* clicar num item (ou no naipe) faz o naipe tocar; clicar de novo enquanto soa faz parar */
     raiz.addEventListener('click', function (e) {
       var r = e.target.closest && e.target.closest('.bateria__rotulo');
       if (!r) return;
@@ -2637,7 +2548,7 @@ window.EcoBateria = (function () {
     });
 
     /* as etapas: ligar faz entrar os naipes que ela reúne; desligar os silencia.
-       O ponteiro (ou o foco) sobre a etapa só acende esses naipes. */
+       O ponteiro (ou o foco) sobre a etapa só pinta os nomes desses naipes no menu. */
     var grade_ = document.querySelector('#acervo .acervo-percursos__grade');
     if (grade_ && !grade_.dataset.bateria) {
       grade_.dataset.bateria = '1';
@@ -2659,7 +2570,7 @@ window.EcoBateria = (function () {
 
     var pend = 0;
     function agendaPos() { if (pend) return; pend = requestAnimationFrame(function () { pend = 0; if (o) posiciona(); }); }
-    if (window.ResizeObserver) { var ro = new ResizeObserver(agendaPos); ro.observe(raiz.parentElement); if (o.txt) ro.observe(o.txt); if (o.lead) ro.observe(o.lead); }
+    if (window.ResizeObserver) { var ro = new ResizeObserver(agendaPos); ro.observe(raiz.parentElement); if (o.lead) ro.observe(o.lead); }
     else window.addEventListener('resize', agendaPos);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(agendaPos);
 
