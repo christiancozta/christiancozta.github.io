@@ -618,6 +618,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 }
 /* o texto corre sobre a coluna até a borda dos surdos; a bateria desce logo abaixo dele */
 .acervo-cab__txt{grid-column:1 / 3;grid-row:1;display:flex;flex-direction:column;gap:30px;min-width:0;position:relative;z-index:2;padding-right:17px}
+/* a caixa do texto cobre o alto da coluna: só o texto e as etapas recebem o ponteiro */
+.acervo-cab__txt{pointer-events:none}
+.acervo-cab__txt > *{pointer-events:auto}
 .acervo-titulo{margin:0;font-family:'Schibsted Grotesk',sans-serif;font-weight:700;font-size:clamp(2.2rem,4.4vw,4rem);line-height:.98;letter-spacing:-.045em}
 .acervo-titulo span{display:inline-block;margin-right:.5em;color:#FFB627;-webkit-text-stroke:1px #2C2C2C}
 .acervo-lead{margin:20px 0 0;font-size:clamp(15px,1.3vw,16.5px);line-height:1.55;text-wrap:pretty}
@@ -1804,9 +1807,10 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
    proporcional (10·8·7·4·14·18·12·7·15·5·5·5·5·5). A coluna é justificada: todo naipe ocupa a
    mesma largura; dentro dele as fileiras inclinam de leve, e nas juntas um tipo se mistura ao
    seguinte. O desenho é procedural, em traço rabiscado; o giz vem de um filtro de ruído.
-   Tocar um naipe (o nome ou o próprio desenho) faz o naipe tocar o seu padrão, em 2/4.
-   Passar sobre uma etapa faz tocar juntos os naipes que ela ilumina. O som usa gravações
-   reais (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md) e começa no primeiro gesto. */
+   Só o clique toca: clicar num naipe (o nome ou o próprio desenho) faz o naipe tocar o seu
+   padrão, em 2/4; ligar uma etapa faz tocar juntos os naipes que ela reúne. Passar o ponteiro
+   apenas acende, em silêncio, o que o clique faria tocar. O som usa gravações reais
+   (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md). */
 window.EcoBateria = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   var PASSO = 105, CICLO = PASSO * 16;          /* semicolcheia (~143 bpm) e ciclo de dois compassos */
@@ -2286,7 +2290,7 @@ window.EcoBateria = (function () {
     if (s.bus && ctx) { var t = ctx.currentTime; s.bus.gain.cancelScheduledValues(t); s.bus.gain.setValueAtTime(s.bus.gain.value, t); s.bus.gain.linearRampToValueAtTime(0, t + .09); setTimeout(function () { try { s.bus.disconnect(); } catch (e) {} }, 200); }
     o.raiz.classList.remove('is-tocando');
   }
-  /* ks: naipes; ciclos: quantos ciclos de dois compassos (Infinity enquanto durar o gesto) */
+  /* ks: naipes; ciclos: quantos ciclos de dois compassos */
   function toca(ks, ciclos, origem) {
     para();
     if (!ks.length) return;
@@ -2308,7 +2312,7 @@ window.EcoBateria = (function () {
         });
       });
     });
-    var inicio = performance.now() + atraso, total = ciclos === Infinity ? Infinity : ciclos * 16;
+    var inicio = performance.now() + atraso, total = ciclos * 16;
     /* o som entra no compasso da imagem, mesmo que o contexto destrave alguns quadros depois */
     var liga = function () {
       if (sessao !== s || !somOn || !ctx || ctx.state !== 'running') return;
@@ -2331,7 +2335,7 @@ window.EcoBateria = (function () {
       agenda(); s.relogio = setInterval(agenda, 90);
     };
     if (somOn && ctx) pronto().then(liga, function () {});
-    if (ciclos !== Infinity) setTimeout(function () { if (sessao === s) { sessao = null; o.raiz.classList.remove('is-tocando'); } }, ciclos * CICLO + atraso + 400);
+    setTimeout(function () { if (sessao === s) { sessao = null; o.raiz.classList.remove('is-tocando'); } }, ciclos * CICLO + atraso + 400);
   }
 
   /* ---------- a entrada: o desenho se faz, a bateria entra em três levas ---------- */
@@ -2404,14 +2408,7 @@ window.EcoBateria = (function () {
     var acesos = [], estados = rotulos().map(function (r) { return r.getAttribute('data-estado') || ''; });
     [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n, k) { n.setAttribute('data-estado', estados[k] || ''); });
     estados.forEach(function (e, k) { if (e === 'sel' || e === 'aceso') acesos.push(k); });
-    var assinatura = acesos.join(',');
-    if (assinatura === o.assinatura) return;
-    var antes = o.assinatura;
-    o.assinatura = assinatura;
-    if (antes == null) return;                       /* o primeiro estado só se desenha */
-    if (sessao && sessao.origem === 'etapa') return; /* a etapa sob o ponteiro já toca esse conjunto */
-    o.ultimoToque = Date.now();
-    toca(acesos, 2, 'estado');
+    o.assinatura = acesos.join(',');                 /* o estado só se desenha; quem toca é o clique */
   }
 
   var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
@@ -2420,7 +2417,7 @@ window.EcoBateria = (function () {
     if (o && o.raiz === raiz && raiz.isConnected) { atualiza(); return; }
     var camada = raiz.querySelector('.bateria__desenho');
     if (!camada) return;
-    o = { raiz: raiz, materiais: materiais, camada: camada, txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), assinatura: null, entrou: false, ultimoToque: 0 };
+    o = { raiz: raiz, materiais: materiais, camada: camada, txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), assinatura: null, entrou: false };
     desenha(camada);
 
     /* áreas de toque sobre cada naipe: acionam o rótulo correspondente */
@@ -2450,39 +2447,35 @@ window.EcoBateria = (function () {
       });
       cab.innerHTML = ''; cab.appendChild(somB);
     }
-    var gesto = function () {
-      document.removeEventListener('pointerdown', gesto, true); document.removeEventListener('keydown', gesto, true);
-      if (!somOn || !audio()) return;
-      pronto().then(function () { if (sessao && sessao.origem === 'etapa' && !sessao.bus) toca(sessao.ks, Infinity, 'etapa'); }, function () {});
-    };
-    document.addEventListener('pointerdown', gesto, true);
-    document.addEventListener('keydown', gesto, true);
-
-    /* o toque num rótulo (ou no naipe) faz o naipe tocar; repetir o mesmo naipe também */
+    /* clicar num rótulo (ou no naipe) faz o naipe tocar; clicar de novo repete */
     raiz.addEventListener('click', function (e) {
       var r = e.target.closest && e.target.closest('.bateria__rotulo');
       if (!r) return;
-      var k = rotulos().indexOf(r), quando = Date.now();
       if (somOn) destrava();
-      setTimeout(function () { if (o.ultimoToque < quando && (!sessao || sessao.origem !== 'etapa')) toca([k], 2, 'rotulo'); }, 70);
+      toca([rotulos().indexOf(r)], 2, 'rotulo');
     });
 
-    /* as etapas: passar o ponteiro (ou o foco) faz tocar juntos os naipes que ela ilumina */
+    /* as etapas: ligar uma etapa faz tocar juntos os naipes que ela reúne; desligar silencia.
+       O ponteiro (ou o foco) sobre a etapa só acende esses naipes, sem som nem movimento. */
     var grade = document.querySelector('#acervo .acervo-percursos__grade');
     if (grade && !grade.dataset.bateria) {
       grade.dataset.bateria = '1';
       var sobre = null;
+      grade.addEventListener('click', function (e) {
+        var btn = e.target.closest('.acervo-etapa');
+        if (!btn) return;
+        if (btn.getAttribute('aria-pressed') === 'true') { para(); return; }   /* estava ligada: desliga */
+        if (somOn) destrava();
+        toca(naipesDaEtapa(etapaDe(btn)), 2, 'etapa');
+      }, true);
       var entraEtapa = function (btn) {
         if (!btn || btn === sobre) return;
         sobre = btn;
-        var ks = naipesDaEtapa(etapaDe(btn));
-        perto(ks);
-        toca(ks, Infinity, 'etapa');
+        perto(naipesDaEtapa(etapaDe(btn)));
       };
       var saiEtapa = function () {
         if (!sobre) return;
         sobre = null; perto([]);
-        if (sessao && sessao.origem === 'etapa') para();
       };
       grade.addEventListener('pointerover', function (e) { if (e.pointerType === 'touch') return; entraEtapa(e.target.closest('.acervo-etapa')); });
       grade.addEventListener('pointerout', function (e) { var alvo = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.acervo-etapa'); if (alvo === sobre) return; if (alvo) entraEtapa(alvo); else saiEtapa(); });
