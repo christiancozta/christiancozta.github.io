@@ -641,27 +641,34 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
 .bateria__onda{opacity:0;mix-blend-mode:multiply}
 .bateria__onda svg{position:static;display:block}
 .bateria__onda path{fill:none;stroke:#FFB627;stroke-width:1.9;stroke-linecap:round}
-.bt-fundo{fill:#F6F3EC}
-.bt-cabeca{fill:#FBFAF6}
+.bt-fundo{fill:#F6F3EC;transition:fill .6s var(--mola)}
+.bt-cabeca{fill:#FBFAF6;transition:fill .6s var(--mola)}
+/* selecionado: o traço segue preto e o interior das peças ganha o âmbar; aceso pela etapa, um âmbar claro */
+.bateria__naipe[data-estado="sel"] .bateria__inst > svg .bt-fundo{fill:#FFB627}
+.bateria__naipe[data-estado="sel"] .bateria__inst > svg .bt-cabeca{fill:#FFCB5E}
+.bateria__naipe[data-estado="aceso"] .bateria__inst > svg .bt-fundo{fill:#FFDA90}
+.bateria__naipe[data-estado="aceso"] .bateria__inst > svg .bt-cabeca{fill:#FFE8BA}
 .bt-sombra{fill:none;stroke:#1C1C1C;stroke-width:.75;stroke-opacity:.8;stroke-linecap:round}
 .bt-tinta{fill:none;stroke:#1C1C1C;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
 .bt-baq{fill:none;stroke:#1C1C1C;stroke-width:1.2;stroke-linecap:round}
-/* o naipe escolhido recebe faixas de marca-texto, que entram da esquerda */
+/* o ponteiro sobre o naipe, o rótulo ou a etapa: faixas de marca-texto, que entram da esquerda */
 .bateria__lavado{position:absolute;left:0;top:0;overflow:visible;mix-blend-mode:multiply;opacity:0;clip-path:inset(0 100% 0 0);transition:clip-path .7s var(--mola),opacity .4s var(--mola)}
 .bateria__lavado path{fill:#FFB627;fill-opacity:.82}
-.bateria__naipe[data-estado="sel"] .bateria__lavado{opacity:1;clip-path:inset(0 0 0 0)}
-.bateria__naipe[data-estado="aceso"] .bateria__lavado{opacity:.55;clip-path:inset(0 0 0 0)}
-.bateria__naipe.is-perto:not([data-estado="sel"]) .bateria__lavado{opacity:.32;clip-path:inset(0 0 0 0)}
+.bateria__naipe.is-perto .bateria__lavado{opacity:.9;clip-path:inset(0 0 0 0)}
+/* os fios: pontilhados em repouso; firmes quando o naipe está marcado, sob o ponteiro ou tocando */
+.bateria__fios{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:1}
+.bateria__fio{fill:none;stroke:rgba(44,44,44,.62);stroke-width:1.3;stroke-dasharray:.5 3.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .4s,opacity .4s}
+.bateria__fio.is-marcado,.bateria__fio.is-perto,.bateria__fio.is-ativo{stroke:#2C2C2C;stroke-dasharray:none}
+.bateria__fio.is-ativo{stroke-width:1.5}
+.bateria__fio.is-apagado:not(.is-ativo){opacity:.28}
+.bateria.is-espera .bateria__fios{opacity:0}
 .bateria__alvos{position:absolute;inset:0}
 .bateria__alvo{position:absolute;cursor:pointer;border-radius:8px}
 
-/* os rótulos: um por naipe, todos partindo da mesma margem; o fio pontilhado sai do fim de cada título
-   e segue até a borda da coluna */
+/* os rótulos: um por naipe, todos partindo da mesma margem e com o mesmo espaço entre si;
+   o fio sai do fim de cada título e se dobra até o seu naipe */
 .bateria__rotulos{position:absolute;top:0;left:-212px;width:300px;height:100%;margin:0;padding:0;list-style:none;pointer-events:none}
-.bateria__rotulos > li{position:absolute;left:0;width:var(--ate,260px);height:0;display:flex;align-items:center}
-.bateria__rotulos > li::after{content:"";flex:1;min-width:10px;border-top:1.5px dotted rgba(44,44,44,.72);transition:opacity .45s var(--mola)}
-.bateria__rotulos > li:has(.bateria__rotulo:is([data-estado="sel"],[data-estado="aceso"]))::after{border-top:1.5px solid #2C2C2C}
-.bateria__rotulos > li:has(.bateria__rotulo[data-estado="apagado"])::after{opacity:.28}
+.bateria__rotulos > li{position:absolute;left:0;height:0;display:flex;align-items:center}
 .bateria__rotulo{
   pointer-events:auto;
   flex:none;display:flex;align-items:center;justify-content:flex-start;gap:10px;
@@ -893,8 +900,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .bateria{--s:.8;order:1;width:min(100%,580px);height:864px;justify-self:center}
   .bateria__palco{left:calc(-17px * .8)}
   .bateria__rotulos{right:0;left:calc(336px * .8);width:auto}
-  .bateria__rotulos > li{right:auto;left:0;width:auto}
-  .bateria__rotulos > li::after,.bateria__rotulos > li::before{display:none}
+  .bateria__rotulos > li{right:auto;left:0}
   .bateria__rotulo{flex-direction:row-reverse;justify-content:flex-end;text-align:left;padding:0 0 0 2px;gap:8px}
   .bateria__nm{text-align:right}
   .bateria__tt::before{transform-origin:0 50%}
@@ -935,7 +941,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0}
   .ficha__nota{font-size:12px!important}
 }
 @media(prefers-reduced-motion:reduce){
-  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.bateria__tt::before,.bateria__lavado,.bateria__naipe{transition:none;animation:none}
+  .ficha__folha,.ficha__cta,.ficha__cta i,.ficha__lupa,.bateria__tt::before,.bateria__lavado,.bateria__naipe,.bt-fundo,.bt-cabeca,.bateria__fio{transition:none;animation:none}
   .echo-livro__folha--esq,.echo-livro__folha--dir,.echo-livro__bar,.echo-livro__inteira,.echo-livro__lombada,.echo-livro__vela{transition:none}
 }
 
@@ -1423,9 +1429,10 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
     <div class="bateria" id="acervo-bateria">
       <div class="bateria__palco">
-        <div class="bateria__desenho" role="img" aria-label="Bateria de escola de samba em formação longitudinal, em esboço a giz: catorze naipes sucessivos, dos surdos de primeira aos reco-recos, um para cada material do acervo, com quantidade proporcional à presença de cada instrumento."></div>
+        <div class="bateria__desenho" role="img" aria-label="Bateria de escola de samba em formação longitudinal, em esboço a giz: catorze naipes sucessivos, dos surdos de primeira aos chocalhos, um para cada material do acervo, com quantidade proporcional à presença de cada instrumento."></div>
         <div class="bateria__alvos" aria-hidden="true"></div>
       </div>
+      <svg class="bateria__fios" aria-hidden="true" focusable="false"></svg>
       <ol class="bateria__rotulos">
         <sc-for list="{{ materiais }}" as="m" hint-placeholder-count="14">
           <li><button type="button" class="bateria__rotulo" onClick="{{ m.select }}" aria-pressed="{{ m.selecionado }}" data-estado="{{ m.estado }}" data-fundador="{{ m.fundadorTxt }}" aria-label="{{ m.rotulo }}"><span class="bateria__tt">{{ m.titulo }}</span><span class="bateria__nm">{{ m.nn }}</span></button></li>
@@ -1803,37 +1810,47 @@ body [data-datum]:focus-visible{outline:2px solid #2e71ff;outline-offset:4px}
 
 <script>
 /* BATERIA DO ACERVO — formação longitudinal de escola de samba, por naipes sucessivos.
-   Catorze naipes, do mais grave ao mais leve, um para cada material do acervo, em quantidade
-   proporcional (10·8·7·4·14·18·12·7·15·5·5·5·5·5). A coluna é justificada: todo naipe ocupa a
-   mesma largura; dentro dele as fileiras inclinam de leve, e nas juntas um tipo se mistura ao
-   seguinte. O desenho é procedural, em traço rabiscado; o giz vem de um filtro de ruído.
-   Só o clique toca: clicar num naipe (o nome ou o próprio desenho) faz o naipe tocar o seu
-   padrão, em 2/4; ligar uma etapa faz tocar juntos os naipes que ela reúne. Passar o ponteiro
-   apenas acende, em silêncio, o que o clique faria tocar. O som usa gravações reais
-   (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md). */
+   Catorze naipes, um para cada material do acervo, em quantidade proporcional. A coluna é única
+   e justificada: toda seção ocupa a mesma largura. Os naipes graves e médios se intercalam
+   (surdos, repiniques, caixas, atabaques, taróis) para que uma seção se distinga da outra; os
+   menores dividem a faixa em duas colunas (agogôs e xequerês, ganzás e reco-recos); os chocalhos
+   fecham a coluna numa linha só. Desenho procedural em traço rabiscado, giz por filtro de ruído.
+   Cada rótulo se liga ao seu naipe por um fio curvo, que vibra quando o naipe toca, cada tipo
+   a seu modo. Os rótulos guardam o mesmo espaço entre si; o fio se dobra até encontrar o naipe.
+   Só o clique toca: clicar num naipe (ou no rótulo) faz o naipe tocar por quatro ciclos; clicar
+   de novo enquanto soa faz parar. Os naipes não se atropelam: quem entra espera o próximo tempo
+   e se junta a quem já toca, na mesma grade. Ligar uma etapa faz entrar os naipes que ela reúne.
+   O ponteiro sobre um naipe, um rótulo ou uma etapa só acende a mancha, em silêncio.
+   O som usa gravações reais (VCSL, CC0; ver assets/echo/acervo/som/CREDITOS.md). */
 window.EcoBateria = (function () {
   var reduz = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var PASSO = 105, CICLO = PASSO * 16;          /* semicolcheia (~143 bpm) e ciclo de dois compassos */
+  var PASSO = 140, CICLO = PASSO * 16, CICLOS = 4; /* semicolcheia (~107 bpm), ciclo de dois compassos, quatro ciclos por toque */
   var ESC = 1.25, LARG = 288, ALT = 864;        /* desenho em 288 x 864, ampliado para 360 x 1080 */
   var INICIO = -212;                            /* margem comum dos rótulos, em px da coluna */
   var SOM_DIR = 'assets/echo/acervo/som/';
 
+  /* lado: 0 ou 1 quando o naipe divide a faixa com o seguinte (só os menores) */
   var NAIPES = [
-    { nome: 'Surdos de primeira', tipo: 'surdo', filas: [5, 5], d: 43, passoY: 31, p: [.35,0,0,0,1,0,0,0,.35,0,0,0,1,0,0,0] },
-    { nome: 'Surdos de segunda', tipo: 'surdo', filas: [4, 4], d: 40.5, passoY: 29, p: [1,0,0,0,.3,0,0,0,1,0,0,0,.3,0,0,0] },
-    { nome: 'Surdos de terceira', tipo: 'surdo', filas: [4, 3], d: 38, passoY: 27.5, p: [0,0,.7,0,1,0,.6,.8,0,0,.7,0,1,.6,0,.7] },
-    { nome: 'Repiques-mor', tipo: 'repmor', filas: [4], d: 34, passoY: 0, p: [1,0,0,.8,0,0,.8,0,.6,0,.6,.8,0,.6,.8,0] },
+    { nome: 'Surdos de primeira', tipo: 'surdo', filas: [5, 5], d: 43, passoY: 31, afina: 1.3, p: [.35,0,0,0,1,0,0,0,.35,0,0,0,1,0,0,0] },
     { nome: 'Repiniques', tipo: 'repinique', filas: [5, 5, 4], d: 26, passoY: 21, p: [.8,0,.5,.8,0,.5,.8,0,.8,0,.5,.8,0,.5,.8,0] },
+    { nome: 'Surdos de segunda', tipo: 'surdo', filas: [4, 4], d: 40.5, passoY: 29, afina: 1.48, p: [1,0,0,0,.3,0,0,0,1,0,0,0,.3,0,0,0] },
     { nome: 'Caixas', tipo: 'caixa', filas: [6, 6, 6], d: 23, passoY: 14.5, p: [1,.4,.6,1,.4,.6,1,.6,1,.4,.6,1,.4,.6,1,.6] },
+    { nome: 'Atabaques', tipo: 'atabaque', filas: [3], d: 27, passoY: 0, tam: [1, .9, .8],
+      pi: [[1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0], [0,0,.6,0,.7,0,0,0,.6,0,0,0,.7,0,0,0], [0,0,0,.5,0,0,0,.6,0,0,0,.5,0,0,.6,.5]] },
     { nome: 'Taróis', tipo: 'tarol', filas: [6, 6], d: 23, passoY: 13, p: [.9,.5,.5,.7,.9,.5,.5,.7,.9,.5,.5,.7,.9,.5,.5,.7] },
     { nome: 'Cuícas', tipo: 'cuica', filas: [4, 3], d: 22, passoY: 19, p: [0,0,1,0,0,.7,1,0,0,0,1,0,.7,0,1,.6] },
     { nome: 'Tamborins', tipo: 'tamborim', filas: [5, 5, 5], d: 16, passoY: 11.5, p: [1,0,.7,0,.7,1,0,.7,0,.7,1,0,.7,0,.7,0] },
-    { nome: 'Chocalhos', tipo: 'chocalho', filas: [5], d: 32, passoY: 0, p: [.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1] },
-    { nome: 'Agogôs', tipo: 'agogo', filas: [5], d: 30, passoY: 0, p: [1,0,.7,.7,0,1,.7,0,1,0,.7,.7,0,.7,1,0] },
-    { nome: 'Ganzás', tipo: 'ganza', filas: [5], d: 32, passoY: 0, p: [.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1] },
+    { nome: 'Agogôs', tipo: 'agogo', filas: [3, 2], d: 30, passoY: 24, lado: 0, p: [1,0,.7,.7,0,1,.7,0,1,0,.7,.7,0,.7,1,0] },
+    { nome: 'Xequerês', tipo: 'xequere', filas: [2], d: 30, passoY: 0, lado: 1, p: [.8,0,.5,1,.8,0,.5,1,.8,0,.5,1,.8,0,.5,1] },
+    { nome: 'Ganzás', tipo: 'ganza', filas: [3, 2], d: 32, passoY: 19, lado: 0, p: [.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1,.6,.4,.4,1] },
+    { nome: 'Reco-recos', tipo: 'reco', filas: [3, 2], d: 32, passoY: 19, lado: 1, p: [0,.8,0,.8,0,.8,0,1,0,.8,0,.8,0,.8,0,1] },
     { nome: 'Pandeiros', tipo: 'pandeiro', filas: [5], d: 28, passoY: 0, p: [1,.4,.7,.8,1,.4,.7,.8,1,.4,.7,.8,1,.4,.7,.8] },
-    { nome: 'Reco-recos', tipo: 'reco', filas: [5], d: 32, passoY: 0, p: [0,.8,0,.8,0,.8,0,1,0,.8,0,.8,0,.8,0,1] }
+    { nome: 'Chocalhos', tipo: 'chocalho', filas: [5], d: 32, passoY: 0, p: [.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1,.5,.8,.5,1] }
   ];
+  /* o padrão do naipe soma os padrões de cada peça, quando as peças tocam partes distintas */
+  NAIPES.forEach(function (N) {
+    if (N.pi) N.p = N.pi[0].map(function (_, s) { return Math.max.apply(null, N.pi.map(function (q) { return q[s]; })); });
+  });
 
   /* ---------- lápis: traços com tremor de mão ---------- */
   function R(seed) {
@@ -1854,6 +1871,13 @@ window.EcoBateria = (function () {
           var b = w(Math.min(1.1, L * .025));
           s += 'M' + f(sx) + ' ' + f(sy) + 'Q' + f((sx + ex) / 2 - uy * b) + ' ' + f((sy + ey) / 2 + ux * b) + ' ' + f(ex) + ' ' + f(ey);
         }
+        return s;
+      },
+      /* linha quebrada que passa por vários pontos, com tremor em cada um */
+      curva: function (pts, j, n) {
+        j = j == null ? .3 : j; n = n || 1;
+        var s = '';
+        for (var p = 0; p < n; p++) pts.forEach(function (q, i) { s += (i ? 'L' : 'M') + f(q[0] + w(j)) + ' ' + f(q[1] + w(j)); });
         return s;
       },
       arco: function (cx, cy, rx, ry, a0, a1, o) {
@@ -1962,7 +1986,6 @@ window.EcoBateria = (function () {
   /* uma peça de cada naipe, em coordenadas locais (0,0 = centro da pele ou da peça) */
   var TAMBORES = {
     surdo: { ry: .23, h: .95, hastes: 6, lugs: .9 },
-    repmor: { ry: .24, h: .9, hastes: 7, lugs: .8 },
     repinique: { ry: .25, h: .95, hastes: 6, lugs: .6 },
     caixa: { ry: .26, h: .48, hastes: 8, lugs: .75, banda: 1.6 },
     tarol: { ry: .26, h: .32, hastes: 8, lugs: .55, banda: 1.2 },
@@ -1977,10 +2000,6 @@ window.EcoBateria = (function () {
       tambor(L, g, { rx: rx, ry: ry, h: h, hastes: T.hastes, lugs: T.lugs, banda: T.banda });
       half = rx + 6; down = h + ry + 5; onda = { cx: 0, cy: 0, rx: rx + 1.5, ry: ry + 1.2, rot: 0 };
       if (tipo === 'surdo') { baqs.push(baqueta(L, { x: rx + 5, y: -ry - 15 }, { x: rx * .12, y: -ry * .15 - 2.6 }, 'maceta')); up = ry + 19; }
-      if (tipo === 'repmor') {
-        g.tinta.push(L.arco(-rx - 1.6, h * .38, 2.4, 3.8, PI / 2, PI * 1.5, { j: .12 }), L.arco(rx + 1.6, h * .38, 2.4, 3.8, -PI / 2, PI / 2, { j: .12 }));
-        baqs.push(baqueta(L, { x: rx + 7, y: -ry - 12 }, { x: -rx * .2, y: -ry * .2 - 2 }, 'ponta')); up = ry + 14;
-      }
       if (tipo === 'repinique') { baqs.push(baqueta(L, { x: rx + 6, y: -ry - 11 }, { x: -rx * .15, y: -ry * .2 - 1.8 }, 'ponta')); up = ry + 13; }
       if (tipo === 'caixa' || tipo === 'tarol') {
         baqs.push(baqueta(L, { x: -rx - 4, y: -ry - 9 }, { x: rx * .22, y: -1.8 }, 'ponta', 0));
@@ -2000,6 +2019,62 @@ window.EcoBateria = (function () {
         }
         up = ry + 3;
       }
+    } else if (tipo === 'atabaque') {
+      /* atabaque: fuste alto de aduelas, bojudo no terço de cima; cordas em zigue-zague descem
+         do aro até o anel das cunhas; tocado com as mãos */
+      var ra = d / 2, rya = d * .24, ha = d * 3.05;
+      var raio = function (y) { var u = y / ha; return ra * (1 + .1 * Math.sin(Math.PI * u * .85)) * (1 - .24 * Math.pow(u, 1.5)); };
+      var esq = [], dir = [], yy;
+      for (yy = 0; yy <= ha + .01; yy += ha / 10) { esq.push([-raio(yy), yy]); dir.push([raio(yy), yy]); }
+      var rb = raio(ha), ryb = rya * rb / ra, fundoA = esq.slice(), arcoB = [];
+      for (i = 0; i <= 10; i++) { var tb = PI - PI * i / 10; arcoB.push([rb * Math.cos(tb), ha + ryb * Math.sin(tb)]); }
+      g.fundo.push(poli(fundoA.concat(arcoB, dir.slice().reverse(), [[ra, 0]])));
+      g.cabeca.push(elipse(0, 0, ra, rya));
+      g.tinta.push(L.arco(0, 0, ra, rya, 0, 7, { n: 2 }), L.arco(0, 0, ra + 1.2, rya + 1, .12, PI - .12, { j: .18 }));
+      g.tinta.push(L.curva(esq, .3, 2), L.curva(dir, .3, 2), L.arco(0, ha, rb, ryb, 0, PI, { n: 2 }));
+      /* anel das cunhas e cordas */
+      var ya = ha * .46, rr = raio(ya), ryr = rya * rr / ra, N = 7, zig = [];
+      g.tinta.push(L.arco(0, ya, rr, ryr, .05, PI - .05, { j: .15 }), L.arco(0, ya + 2.2, rr, ryr, .08, PI - .08, { j: .12 }));
+      for (i = 0; i <= N * 2; i++) {
+        var az = PI * (.04 + .92 * i / (N * 2)), cima = i % 2 === 0;
+        var yz = cima ? 2.4 + rya * Math.sin(az) : ya + ryr * Math.sin(az);
+        zig.push([(cima ? ra : rr) * Math.cos(az), yz]);
+        if (!cima) g.tinta.push(L.linha(rr * Math.cos(az) - 1, yz + 2.6, rr * Math.cos(az) + 1, yz + 2.6, .08, 1) + L.linha(rr * Math.cos(az) - 1, yz + 2.6, rr * Math.cos(az) - .7, yz + 6.5, .08, 1) + L.linha(rr * Math.cos(az) + 1, yz + 2.6, rr * Math.cos(az) + .7, yz + 6.5, .08, 1));
+      }
+      g.tinta.push(L.curva(zig, .12, 1));
+      /* aduelas e sombreado */
+      [-.62, -.22, .2, .58].forEach(function (q) {
+        var pts = [];
+        for (var y2 = ya + 8; y2 <= ha - 1; y2 += (ha - ya) / 6) pts.push([q * raio(y2), y2 + ryb * Math.sqrt(1 - q * q) * (y2 / ha)]);
+        g.hach.push(L.curva(pts, .12, 1));
+      });
+      for (var qx = .45; qx < .97; qx += .09) {
+        var ps = [];
+        for (var y3 = 3; y3 <= ha; y3 += ha / 6) ps.push([qx * raio(y3), y3 + rya * Math.sqrt(1 - qx * qx)]);
+        g.hach.push(L.curva(ps, .1, 1));
+      }
+      chao(L, g, -rb * .8, rb * 1.2, ha + ryb + 1.6);
+      onda = { cx: 0, cy: 0, rx: ra + 1.6, ry: rya + 1.3, rot: 0 };
+      up = rya + 5; down = ha + ryb + 5; half = ra * 1.1 + 6;
+    } else if (tipo === 'xequere') {
+      /* xequerê: cabaça redonda de gargalo curto, envolta numa rede de contas; borla embaixo */
+      var R = d / 2, cy = 5, top = cy - R * .97;
+      g.fundo.push(elipse(0, cy, R, R * .97));
+      g.fundo.push(poli([[-3.6, top + 1.5], [-4.4, top - 8], [4.4, top - 8], [3.6, top + 1.5]]));
+      g.cabeca.push(elipse(0, top - 8, 5.2, 1.9));
+      g.tinta.push(L.arco(0, cy, R, R * .97, 0, 7, { n: 2 }));
+      g.tinta.push(L.linha(-3.6, top + 1.5, -4.4, top - 8, .15, 2), L.linha(3.6, top + 1.5, 4.4, top - 8, .15, 2), L.arco(0, top - 8, 5.2, 1.9, 0, 7, { n: 2, j: .1 }));
+      g.tinta.push(L.arco(0, top + .5, 7.5, 2.4, .1, PI - .1, { j: .12 }));
+      for (var lin = 0, yb = -R * .72; yb < R * .86; yb += 3.7, lin++) {
+        var wb = Math.sqrt(Math.max(0, R * R - yb * yb)) * .9;
+        for (var xb = -wb + (lin % 2 ? 1.9 : 0); xb <= wb; xb += 3.8) g.tinta.push(L.arco(xb, cy + yb, .95, .9, 0, 7, { j: .05 }));
+      }
+      [-.55, 0, .55].forEach(function (q) { g.hach.push(L.arco(0, cy, R * Math.abs(q) + .01, R * .97, q < 0 ? PI / 2 : -PI / 2, q < 0 ? PI * 1.5 : PI / 2, { j: .1 })); });
+      for (var x4 = R * .35; x4 < R * .95; x4 += 1.6) { var c4 = Math.sqrt(R * R - x4 * x4) * .9; g.hach.push(L.linha(x4, cy - c4 * .2, x4 - .6, cy + c4, .1, 1)); }
+      for (i = -2; i <= 2; i++) g.tinta.push(L.linha(0, cy + R * .97, i * 1.6, cy + R * .97 + 6, .1, 1));
+      chao(L, g, -R * .6, R + 4, cy + R + 8);
+      onda = { cx: 0, cy: cy, rx: R + 3, ry: R + 3, rot: 0 }; mov = 'agita';
+      up = R + 6; down = cy + R + 11; half = R + 4;
     } else if (tipo === 'cuica') {
       r = d / 2; c = Math.cos(.42) * 15; s = Math.sin(.42) * 15; A = { x: -c, y: -s }; B = { x: c, y: s };
       tubo(L, g, A, B, r, r, { aneis: [.08, .92], hastes: [-.6, .05, .62] });
@@ -2076,51 +2151,57 @@ window.EcoBateria = (function () {
     return s;
   }
 
-  /* ---------- a formação, justificada ---------- */
+  /* ---------- a formação: coluna única, justificada, por seções ---------- */
   var FORMACAO = null;
   function formacao() {
     if (FORMACAO) return FORMACAO;
-    var PAD_T = 14, PAD_B = 10, BORDA = 16;
-    var medidas = NAIPES.map(function (N) {
+    var PAD_T = 14, PAD_B = 8, BORDA = 16, VIELA = 8;
+    /* seções: um naipe, ou dois dos menores lado a lado */
+    var secoes = [];
+    NAIPES.forEach(function (N, k) { if (N.lado === 1) secoes[secoes.length - 1].push(k); else secoes.push([k]); });
+    var med = NAIPES.map(function (N) {
       var m = peca(N.tipo, N.d, Lapis(R(1)));
       return { up: m.up, down: m.down, hb: m.half - 6, linhas: (N.filas.length - 1) * N.passoY };
     });
+    function maior(sec) { return sec.reduce(function (a, b) { return med[a].up + med[a].down + med[a].linhas >= med[b].up + med[b].down + med[b].linhas ? a : b; }); }
     var fixo = 0, linhas = 0;
-    medidas.forEach(function (m) { fixo += m.up + m.down; linhas += m.linhas; });
-    var livre = ALT - PAD_T - PAD_B - fixo;
-    var abre = Math.min(1.6, Math.max(1, (livre + 6 * (NAIPES.length - 1)) / linhas));
-    var junta = Math.min(0, (livre - abre * linhas) / (NAIPES.length - 1));
-    var topo = PAD_T;
-    FORMACAO = NAIPES.map(function (N, k) {
-      var M = medidas[k], itens = [], alt = M.up + M.down + M.linhas * abre, Jn = Lapis(R(k * 97 + 13));
-      var idx = 0, minX = 1e9, maxX = -1e9;
-      N.filas.forEach(function (c, r) {
-        var inclina = Jn.w(2.8), dyFila = Jn.w(1.6);
-        var recuo = r % 2 && c > 1 ? .5 * (LARG - 2 * BORDA - 2 * M.hb) / (c - 1) : 0;
-        var x0 = BORDA + M.hb + recuo * (.6 + Jn.w(.3)), x1 = LARG - BORDA - M.hb - recuo * (.6 + Jn.w(.3));
-        var passo = c > 1 ? (x1 - x0) / (c - 1) : 0;
-        for (var i = 0; i < c; i++, idx++) {
-          var seed = 1009 * (k + 1) + 37 * idx + 5, J = Lapis(R(seed + 777));
-          var pc = peca(N.tipo, N.d * (1 + J.w(.035)), Lapis(R(seed)));
-          var t = c > 1 ? i / (c - 1) : .5, borda = !recuo && (i === 0 || i === c - 1);
-          var x = (c > 1 ? x0 + i * passo : LARG / 2) + (borda ? J.w(.8) : J.w(Math.min(6, passo * .14)));
-          var y = topo + M.up + r * N.passoY * abre + dyFila + inclina * (t - .5) * 2 + J.w(1.8);
-          var ax = pc.half + 14, ay = pc.up + 6;
-          minX = Math.min(minX, x - pc.half + 4); maxX = Math.max(maxX, x + pc.half - 4);
-          itens.push({ k: k, i: idx, x: x, y: y, ax: ax, ay: ay, w: 2 * ax, h: pc.up + pc.down + 12, pc: pc, seed: seed });
-        }
+    secoes.forEach(function (sec) { var m = med[maior(sec)]; fixo += m.up + m.down; linhas += m.linhas; });
+    var n = secoes.length, livre = ALT - PAD_T - PAD_B - fixo;
+    var abre = Math.min(1.6, Math.max(1, (livre + 6 * (n - 1)) / linhas));
+    var junta = Math.max(-10, Math.min(8, (livre - abre * linhas) / (n - 1)));
+    var topo = PAD_T, F = [];
+    secoes.forEach(function (sec, si) {
+      var alt = Math.max.apply(null, sec.map(function (k) { var m = med[k]; return m.up + m.down + m.linhas * abre; }));
+      sec.forEach(function (k) {
+        var N = NAIPES[k], M = med[k], a = M.up + M.down + M.linhas * abre, t0 = topo + (alt - a) / 2;
+        var xa = BORDA, xb = LARG - BORDA;
+        if (sec.length > 1) { if (N.lado === 1) xa = LARG / 2 + VIELA / 2; else xb = LARG / 2 - VIELA / 2; }
+        var Jn = Lapis(R(k * 97 + 13)), itens = [], idx = 0, minX = 1e9, maxX = -1e9;
+        N.filas.forEach(function (c, r) {
+          var inclina = Jn.w(sec.length > 1 ? 1.6 : 2.8), dyFila = Jn.w(1.6);
+          var recuo = r % 2 && c > 1 ? .5 * (xb - xa - 2 * M.hb) / (c - 1) : 0;
+          var x0 = xa + M.hb + recuo * (.6 + Jn.w(.3)), x1 = xb - M.hb - recuo * (.6 + Jn.w(.3));
+          var passo = c > 1 ? (x1 - x0) / (c - 1) : 0;
+          for (var i = 0; i < c; i++, idx++) {
+            var seed = 1009 * (k + 1) + 37 * idx + 5, J = Lapis(R(seed + 777));
+            var esc = (N.tam ? N.tam[idx] : 1) * (1 + J.w(.035));
+            var pc = peca(N.tipo, N.d * esc, Lapis(R(seed)));
+            var t = c > 1 ? i / (c - 1) : .5, borda = !recuo && (i === 0 || i === c - 1);
+            var x = (c > 1 ? x0 + i * passo : (xa + xb) / 2) + (borda ? J.w(.8) : J.w(Math.min(6, passo * .14)));
+            var y = t0 + M.up + r * N.passoY * abre + dyFila + inclina * (t - .5) * 2 + J.w(1.8);
+            if (N.tam) y += M.down - pc.down;               /* atabaques de alturas distintas pisam o mesmo chão */
+            var ax = pc.half + 14, ay = pc.up + 6;
+            minX = Math.min(minX, x - pc.half + 4); maxX = Math.max(maxX, x + pc.half - 4);
+            itens.push({ k: k, i: idx, x: x, y: y, ax: ax, ay: ay, w: 2 * ax, h: pc.up + pc.down + 12, pc: pc, seed: seed });
+          }
+        });
+        F[k] = { k: k, secao: si, par: sec.length > 1 ? sec : null, itens: itens, topo: t0, alt: a, faixaTopo: topo, minX: minX, maxX: maxX, cy: t0 + a / 2 + 3,
+          lavado: lavado(Lapis(R(k + 4242)), minX - 8, maxX + 8, t0 + 2, t0 + a - 2) };
       });
-      var n = { k: k, itens: itens, topo: topo, alt: alt, minX: minX, maxX: maxX, lavado: lavado(Lapis(R(k + 4242)), minX - 8, maxX + 8, topo + 2, topo + alt - 2) };
       topo += alt + junta;
-      return n;
     });
-    /* rótulos: no meio do naipe, afastados o bastante para não se tocarem (33 px na tela) */
-    var MIN = 33 / ESC, ys = FORMACAO.map(function (n) { return n.topo + n.alt / 2 + 3; });
-    for (var it = 0; it < 6; it++) {
-      for (var a = 1; a < ys.length; a++) if (ys[a] - ys[a - 1] < MIN) { var m = (ys[a] + ys[a - 1]) / 2; ys[a - 1] = m - MIN / 2; ys[a] = m + MIN / 2; }
-    }
-    FORMACAO.forEach(function (n, k) { n.rotuloY = ys[k]; });
-    return FORMACAO;
+    FORMACAO = F;
+    return F;
   }
 
   /* ---------- o desenho na página ---------- */
@@ -2139,7 +2220,6 @@ window.EcoBateria = (function () {
     });
     return h + '</div>';
   }
-
   function desenha(camada) {
     var html = '<svg class="bateria__filtro" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="bt-giz" x="-15%" y="-15%" width="130%" height="130%">' +
       '<feTurbulence type="fractalNoise" baseFrequency="1.15" numOctaves="2" seed="7" result="ruido"/>' +
@@ -2155,7 +2235,7 @@ window.EcoBateria = (function () {
     camada.innerHTML = html;
   }
 
-  /* ---------- o toque: quadros de animação a partir do padrão ---------- */
+  /* ---------- quadros de animação a partir do padrão ---------- */
   function eventos(evts, base) {
     evts = evts.filter(function (e) { return e[0] >= 0 && e[0] <= 1; }).sort(function (a, b) { return a[0] - b[0]; });
     var out = [];
@@ -2173,38 +2253,51 @@ window.EcoBateria = (function () {
     hs.forEach(function (h, i) { var nx = hs[(i + 1) % hs.length]; h.ate = ((nx.o - h.o + 1) % 1) || 1; });
     return hs;
   }
+  function padrao(k, i) { var N = NAIPES[k]; return N.pi ? N.pi[i] || N.p : N.p; }
   var QUADROS = {};
-  function quadros(k) {
-    if (QUADROS[k]) return QUADROS[k];
-    var N = NAIPES[k], hs = golpes(N.p), corpo = { pele: [], agita: [] }, onda = [], gira = [[], []], raspa = [];
+  function quadros(k, i) {
+    var N = NAIPES[k], chave = k + '-' + (N.pi ? i : 0);
+    if (QUADROS[chave]) return QUADROS[chave];
+    var hs = golpes(padrao(k, i)), pele = [], agita = [], onda = [], gira = [[], []], raspa = [];
     hs.forEach(function (h, n) {
       var v = h.v, o = h.o;
-      corpo.pele.push([o, { transform: 'none' }], [o + .012, { transform: 'translateY(' + f(.9 * v) + 'px) scale(' + (1 + .012 * v).toFixed(3) + ',' + (1 - .035 * v).toFixed(3) + ')' }], [o + .05, { transform: 'none' }]);
-      corpo.agita.push([o, { transform: 'none' }], [o + .012, { transform: 'translate(' + f(1.7 * v) + 'px,-.3px) rotate(' + f(2.2 * v) + 'deg)' }], [o + .03, { transform: 'translate(' + f(-1.1 * v) + 'px,0) rotate(' + f(-1.3 * v) + 'deg)' }], [o + .055, { transform: 'none' }]);
-      onda.push([o, { opacity: 0, transform: 'scale(.82)' }], [o + .006, { opacity: .3 + .65 * v, transform: 'scale(.9)' }], [o + Math.min(.13, h.ate - .004), { opacity: 0, transform: 'scale(' + (1.35 + .5 * v).toFixed(2) + ')' }]);
+      pele.push([o, { transform: 'none' }], [o + .012, { transform: 'translateY(' + f(1.1 * v) + 'px) scale(' + (1 + .014 * v).toFixed(3) + ',' + (1 - .04 * v).toFixed(3) + ')' }], [o + .055, { transform: 'none' }]);
+      agita.push([o, { transform: 'none' }], [o + .014, { transform: 'translate(' + f(1.8 * v) + 'px,-.3px) rotate(' + f(2.4 * v) + 'deg)' }], [o + .034, { transform: 'translate(' + f(-1.2 * v) + 'px,0) rotate(' + f(-1.4 * v) + 'deg)' }], [o + .058, { transform: 'none' }]);
+      onda.push([o, { opacity: 0, transform: 'scale(.82)' }], [o + .006, { opacity: .3 + .65 * v, transform: 'scale(.9)' }], [o + Math.min(.16, h.ate - .004), { opacity: 0, transform: 'scale(' + (1.35 + .5 * v).toFixed(2) + ')' }]);
       var ang = (N.tipo === 'surdo' ? 17 : 13) * Math.max(.5, v);
       [0, 1].forEach(function (j) {
-        if (n % 2 !== j && N.tipo !== 'surdo' && (N.tipo === 'caixa' || N.tipo === 'tarol')) return;
-        gira[j].push([o - .034, { transform: 'rotate(0deg)' }], [o - .02, { transform: 'rotate(' + f(ang) + 'deg)' }], [o, { transform: 'rotate(-2.2deg)' }], [o + .028, { transform: 'rotate(0deg)' }]);
+        if ((N.tipo === 'caixa' || N.tipo === 'tarol') && n % 2 !== j) return;
+        gira[j].push([o - .03, { transform: 'rotate(0deg)' }], [o - .016, { transform: 'rotate(' + f(ang) + 'deg)' }], [o, { transform: 'rotate(-2.2deg)' }], [o + .026, { transform: 'rotate(0deg)' }]);
       });
       var dir = n % 2 ? 1 : -1;
-      raspa.push([o, { transform: 'translateX(' + (-dir * 2.6) + 'px)' }], [o + .055, { transform: 'translateX(' + (dir * 2.6) + 'px)' }]);
+      raspa.push([o, { transform: 'translateX(' + (-dir * 2.6) + 'px)' }], [o + .05, { transform: 'translateX(' + (dir * 2.6) + 'px)' }]);
     });
-    return (QUADROS[k] = {
-      pele: eventos(corpo.pele, { transform: 'none' }), agita: eventos(corpo.agita, { transform: 'none' }),
+    return (QUADROS[chave] = {
+      pele: eventos(pele, { transform: 'none' }), agita: eventos(agita, { transform: 'none' }),
       onda: eventos(onda, { opacity: 0, transform: 'scale(.82)' }),
       gira: [eventos(gira[0], { transform: 'rotate(0deg)' }), eventos(gira[1], { transform: 'rotate(0deg)' })],
       raspa: eventos(raspa, { transform: 'translateX(0px)' })
     });
   }
-  /* a baqueta gira para o lado da sua mão: o sinal vem de data-s */
   function comSinal(fr, s) {
     if (s > 0) return fr;
     return fr.map(function (q) { var c = Object.assign({}, q); c.transform = c.transform.replace(/rotate\((-?[\d.]+)deg\)/, function (m, a) { return 'rotate(' + (-a) + 'deg)'; }); return c; });
   }
+  /* aplica a um instrumento as animações do seu padrão; devolve as animações criadas */
+  function anima(el, k, opt) {
+    var out = [], i = +el.dataset.i, Q = quadros(k, i);
+    if (typeof el.animate !== 'function') return out;
+    out.push(el.animate(el.dataset.mov === 'agita' ? Q.agita : Q.pele, opt));
+    var on = el.querySelector('.bateria__onda');
+    if (on) out.push(on.animate(Q.onda, opt));
+    [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
+      out.push(b.animate(b.dataset.mov === 'raspa' ? Q.raspa : comSinal(Q.gira[+b.dataset.j || 0], +b.dataset.s), opt));
+    });
+    return out;
+  }
 
-  /* ---------- o som: gravações reais, disparadas no compasso ---------- */
-  var ARQUIVOS = ['surdo', 'surdo-abafado', 'repique', 'caixa', 'caixa-fraca', 'tarol', 'tarol-fraco', 'cuica-atrito', 'tamborim', 'chocalho', 'agogo-agudo', 'agogo-grave', 'ganza-ida', 'ganza-volta', 'pandeiro-grave', 'pandeiro-platinela', 'reco', 'reco-longo'];
+  /* ---------- o som: gravações reais, disparadas na grade ---------- */
+  var ARQUIVOS = ['surdo', 'surdo-abafado', 'repique', 'caixa', 'caixa-fraca', 'tarol', 'tarol-fraco', 'cuica-atrito', 'tamborim', 'chocalho', 'agogo-agudo', 'agogo-grave', 'ganza-ida', 'ganza-volta', 'pandeiro-grave', 'pandeiro-platinela', 'reco', 'reco-longo', 'atabaque-rum', 'atabaque-rumpi', 'atabaque-le', 'xequere', 'xequere-giro'];
   var ctx = null, saida = null, buf = {}, carregando = null, somOn = true;
   try { somOn = localStorage.getItem('eco-bateria-som') !== '0'; } catch (e) {}
   function audio() {
@@ -2213,8 +2306,8 @@ window.EcoBateria = (function () {
     if (!AC) return null;
     try { ctx = new AC(); } catch (e) { return null; }
     var comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -14; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .2;
-    saida = ctx.createGain(); saida.gain.value = .9;
+    comp.threshold.value = -14; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .25;
+    saida = ctx.createGain(); saida.gain.value = .85;
     saida.connect(comp); comp.connect(ctx.destination);
     return ctx;
   }
@@ -2222,17 +2315,18 @@ window.EcoBateria = (function () {
     if (carregando || !audio()) return carregando;
     carregando = Promise.all(ARQUIVOS.map(function (n) {
       return fetch(SOM_DIR + n + '.mp3').then(function (r) { return r.arrayBuffer(); }).then(function (a) {
-        return new Promise(function (ok) { ctx.decodeAudioData(a, function (b) { buf[n] = b; ok(); }, function () { ok(); }); });
+        return new Promise(function (ok) {
+          var pr = ctx.decodeAudioData(a, function (b) { buf[n] = b; ok(); }, function () { ok(); });
+          if (pr && pr.catch) pr.catch(function () { ok(); });   /* gravação ausente ou ilegível: o naipe só fica mudo */
+        });
       }).catch(function () {});
     }));
     return carregando;
   }
-  /* pronto: contexto destravado e gravações decodificadas */
   function pronto() {
     if (!audio()) return Promise.reject();
     return Promise.all([ctx.state === 'running' ? null : ctx.resume(), carrega()]);
   }
-  function destrava() { if (audio()) pronto().catch(function () {}); }
   function amostra(nome, quando, ganho, taxa, bus, dur) {
     var b = buf[nome]; if (!b) return;
     var s = ctx.createBufferSource(), g = ctx.createGain();
@@ -2243,129 +2337,195 @@ window.EcoBateria = (function () {
   }
   /* a cuíca: o atrito gravado na pele, somado ao gemido que sobe ou desce */
   function cuica(quando, v, sobe, bus) {
-    var o = ctx.createOscillator(), o2 = ctx.createOscillator(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
     var f0 = sobe ? 420 : 760, f1 = sobe ? 780 : 430;
-    o.type = 'triangle'; o2.type = 'sine';
-    o.frequency.setValueAtTime(f0, quando); o.frequency.exponentialRampToValueAtTime(f1, quando + .13);
-    o2.frequency.setValueAtTime(f0 * 2, quando); o2.frequency.exponentialRampToValueAtTime(f1 * 2, quando + .13);
+    o1.type = 'triangle'; o2.type = 'sine';
+    o1.frequency.setValueAtTime(f0, quando); o1.frequency.exponentialRampToValueAtTime(f1, quando + .16);
+    o2.frequency.setValueAtTime(f0 * 2, quando); o2.frequency.exponentialRampToValueAtTime(f1 * 2, quando + .16);
     bp.type = 'bandpass'; bp.frequency.value = 900; bp.Q.value = 1.4;
-    g.gain.setValueAtTime(.0001, quando); g.gain.exponentialRampToValueAtTime(.32 * v, quando + .015); g.gain.exponentialRampToValueAtTime(.0001, quando + .24);
-    o.connect(bp); o2.connect(bp); bp.connect(g); g.connect(bus);
-    o.start(quando); o2.start(quando); o.stop(quando + .26); o2.stop(quando + .26);
-    amostra('cuica-atrito', quando, .18 * v, sobe ? 3.4 : 3, bus, .22);
+    g.gain.setValueAtTime(.0001, quando); g.gain.exponentialRampToValueAtTime(.3 * v, quando + .02); g.gain.exponentialRampToValueAtTime(.0001, quando + .3);
+    o1.connect(bp); o2.connect(bp); bp.connect(g); g.connect(bus);
+    o1.start(quando); o2.start(quando); o1.stop(quando + .32); o2.stop(quando + .32);
+    amostra('cuica-atrito', quando, .18 * v, sobe ? 3.4 : 3, bus, .26);
   }
-  var AFINA = [1.3, 1.48, 1.72];
-  function voz(k, v, s, n, quando, bus) {
-    var N = NAIPES[k], q = N.filas.reduce(function (a, b) { return a + b; }, 0) >= 7;
+  function voz(k, v, s, n, quando, bus, item) {
+    var N = NAIPES[k], muitos = N.filas.reduce(function (a, b) { return a + b; }, 0) >= 7;
     function dobra(nome, g, taxa, dur) {   /* naipe numeroso: uma segunda mão, um pouco atrás */
       amostra(nome, quando, g, taxa, bus, dur);
-      if (q) amostra(nome, quando + .009 + (n % 3) * .004, g * .55, taxa * .985, bus, dur);
+      if (muitos) amostra(nome, quando + .009 + (n % 3) * .004, g * .55, taxa * .985, bus, dur);
     }
     switch (N.tipo) {
-      case 'surdo': if (v < .5) dobra('surdo-abafado', .5, AFINA[k], .26); else dobra('surdo', .62 * v, AFINA[k], 1.2); break;
-      case 'repmor': dobra('repique', .5 * v, 1.0); break;
+      case 'surdo': if (v < .5) dobra('surdo-abafado', .5, N.afina, .3); else dobra('surdo', .62 * v, N.afina, 1.4); break;
       case 'repinique': dobra('repique', .38 * v, 1.28); break;
       case 'caixa': dobra(v >= .8 ? 'caixa' : 'caixa-fraca', (v >= .8 ? .3 : .16) * v + .04, 1); break;
       case 'tarol': dobra(v >= .8 ? 'tarol' : 'tarol-fraco', (v >= .8 ? .2 : .14) * v + .03, 1.1); break;
+      case 'atabaque': amostra(['atabaque-rum', 'atabaque-rumpi', 'atabaque-le'][item || 0], quando, .5 * v + .05, 1, bus); break;
       case 'cuica': cuica(quando, v, n % 2 === 0, bus); break;
       case 'tamborim': dobra('tamborim', .32 * v, 1.38); break;
-      case 'chocalho': amostra('chocalho', quando, .16 + .12 * v, n % 2 ? 1.04 : .98, bus, .3); break;
+      case 'chocalho': amostra('chocalho', quando, .16 + .12 * v, n % 2 ? 1.04 : .98, bus, .32); break;
       case 'agogo': amostra(s % 4 === 0 || s % 4 === 3 ? 'agogo-agudo' : 'agogo-grave', quando, .26 * v + .06, 1, bus); break;
+      case 'xequere': amostra(v >= .9 ? 'xequere-giro' : 'xequere', quando, v >= .9 ? .3 : .22 * v + .06, 1, bus, v >= .9 ? .34 : .22); break;
       case 'ganza': amostra(n % 2 ? 'ganza-volta' : 'ganza-ida', quando, .14 + .14 * v, 1, bus); break;
       case 'pandeiro':
         if (v >= .9) amostra('pandeiro-grave', quando, .32, 1, bus);
         amostra('pandeiro-platinela', quando, .1 + .14 * v, 1.02, bus); break;
-      case 'reco': amostra(v >= 1 ? 'reco-longo' : 'reco', quando, .26 * v, 1, bus, v >= 1 ? .3 : .18); break;
+      case 'reco': amostra(v >= 1 ? 'reco-longo' : 'reco', quando, .26 * v, 1, bus, v >= 1 ? .34 : .2); break;
     }
   }
+  function golpe(k, st, n, quando, bus) {
+    var N = NAIPES[k];
+    if (N.pi) N.pi.forEach(function (q, i) { if (q[st]) voz(k, q[st], st, n, quando, bus, i); });
+    else if (N.p[st]) voz(k, N.p[st], st, n, quando, bus, 0);
+  }
 
-  /* ---------- sessões: um conjunto de naipes tocando junto ---------- */
-  var o = null, sessao = null;
+  /* ---------- a grade: naipes entram no próximo tempo e se juntam a quem já toca ---------- */
+  var o = null, grade = null, ativos = {}, relogio = 0, quadro = 0;
+  function nAtivos() { return Object.keys(ativos).length; }
   function inst(k) { return [].slice.call(o.camada.querySelectorAll('.bateria__inst[data-k="' + k + '"]')); }
-  function para() {
-    if (!sessao) return;
-    var s = sessao; sessao = null;
-    s.anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
-    clearInterval(s.relogio);
-    if (s.bus && ctx) { var t = ctx.currentTime; s.bus.gain.cancelScheduledValues(t); s.bus.gain.setValueAtTime(s.bus.gain.value, t); s.bus.gain.linearRampToValueAtTime(0, t + .09); setTimeout(function () { try { s.bus.disconnect(); } catch (e) {} }, 200); }
-    o.raiz.classList.remove('is-tocando');
-  }
-  /* ks: naipes; ciclos: quantos ciclos de dois compassos */
-  function toca(ks, ciclos, origem) {
-    para();
-    if (!ks.length) return;
-    var s = { ks: ks, anims: [], origem: origem || '', bus: null, relogio: 0 };
-    sessao = s;
-    o.raiz.classList.add('is-tocando');
-    var atraso = 60;
-    if (!reduz) ks.forEach(function (k) {
-      var Q = quadros(k), J = R(k * 131 + 7);
-      inst(k).forEach(function (el, i) {
-        if (typeof el.animate !== 'function') return;
-        var opt = { duration: CICLO, iterations: ciclos, delay: atraso + Math.round(J() * 10) };
-        s.anims.push(el.animate(el.dataset.mov === 'agita' ? Q.agita : Q.pele, opt));
-        var on = el.querySelector('.bateria__onda');
-        if (on) s.anims.push(on.animate(Q.onda, opt));
-        [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
-          var fr = b.dataset.mov === 'raspa' ? Q.raspa : comSinal(Q.gira[+b.dataset.j || 0], +b.dataset.s);
-          s.anims.push(b.animate(fr, opt));
-        });
-      });
+  function marca() {
+    o.raiz.classList.toggle('is-tocando', nAtivos() > 0);
+    NAIPES.forEach(function (_, k) {
+      var on = !!ativos[k], n = o.camada.querySelector('.bateria__naipe[data-k="' + k + '"]');
+      if (n) n.classList.toggle('is-ativo', on);
+      if (FIOS[k]) FIOS[k].el.classList.toggle('is-ativo', on);
+      var r = rotulos()[k]; if (r) r.classList.toggle('is-tocando', on);
     });
-    var inicio = performance.now() + atraso, total = ciclos * 16;
-    /* o som entra no compasso da imagem, mesmo que o contexto destrave alguns quadros depois */
-    var liga = function () {
-      if (sessao !== s || !somOn || !ctx || ctx.state !== 'running') return;
-      s.bus = ctx.createGain(); s.bus.gain.value = 1; s.bus.connect(saida);
-      var t0 = ctx.currentTime + (inicio - performance.now()) / 1000, prox = 0;
-      if (t0 < ctx.currentTime + .02) prox = Math.ceil((ctx.currentTime + .02 - t0) / (PASSO / 1000));
-      var agenda = function () {
-        if (sessao !== s) return;
-        var ate = ctx.currentTime + .35;
-        while (prox < total && t0 + prox * PASSO / 1000 < ate) {
-          var st = prox % 16, quando = t0 + prox * PASSO / 1000;
-          ks.forEach(function (k) {
-            var v = NAIPES[k].p[st];
-            if (v) voz(k, v, st, prox, quando, s.bus);
-          });
-          prox++;
-        }
-        if (prox >= total) clearInterval(s.relogio);
-      };
-      agenda(); s.relogio = setInterval(agenda, 90);
-    };
-    if (somOn && ctx) pronto().then(liga, function () {});
-    setTimeout(function () { if (sessao === s) { sessao = null; o.raiz.classList.remove('is-tocando'); } }, ciclos * CICLO + atraso + 400);
+  }
+  function inicia(k, ciclos) {
+    if (ativos[k] || !NAIPES[k]) return;
+    var t = performance.now(), c = ciclos || CICLOS;
+    if (!grade || !nAtivos()) grade = { t0: t + 90 };
+    var s0 = Math.max(0, Math.ceil(((t + 80) - grade.t0) / PASSO / 4) * 4);
+    var a = ativos[k] = { s0: s0, s1: s0 + c * 16, prox: s0, anims: [], bus: null, fim: 0 };
+    var comeca = grade.t0 + s0 * PASSO;
+    if (!reduz) inst(k).forEach(function (el) {
+      var J = R(k * 131 + (+el.dataset.i) * 7);
+      a.anims = a.anims.concat(anima(el, k, { duration: CICLO, iterations: c, iterationStart: (s0 % 16) / 16, delay: comeca - t + Math.round(J() * 12) }));
+    });
+    a.fim = setTimeout(function () { termina(k); }, comeca - t + c * CICLO + 500);
+    if (somOn && audio()) pronto().then(function () { if (!relogio) { relogio = setInterval(agenda, 80); } agenda(); }, function () {});
+    if (!quadro && !reduz) quadro = requestAnimationFrame(vibra);
+    marca();
+  }
+  function solta(a) {
+    if (a.bus && ctx) { var t = ctx.currentTime, b = a.bus; b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0, t + .12); setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 300); }
+  }
+  function para(k) {
+    var a = ativos[k]; if (!a) return;
+    a.anims.forEach(function (x) { try { x.cancel(); } catch (e) {} });
+    clearTimeout(a.fim); solta(a); delete ativos[k]; marca();
+  }
+  function termina(k) {
+    var a = ativos[k]; if (!a) return;
+    clearTimeout(a.fim); delete ativos[k];
+    var b = a.bus; if (b) setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 2500);
+    marca();
+  }
+  function paraTudo() { Object.keys(ativos).forEach(function (k) { para(+k); }); }
+  function agenda() {
+    if (!nAtivos()) { clearInterval(relogio); relogio = 0; return; }
+    if (!somOn || !ctx || ctx.state !== 'running') return;
+    var tp = performance.now(), ta = ctx.currentTime;
+    Object.keys(ativos).forEach(function (kk) {
+      var a = ativos[kk], k = +kk;
+      if (!a.bus) { a.bus = ctx.createGain(); a.bus.connect(saida); }
+      while (a.prox < a.s1) {
+        var tq = grade.t0 + a.prox * PASSO;
+        if (tq > tp + 350) break;
+        var quando = ta + (tq - tp) / 1000;
+        if (quando >= ta - .01) golpe(k, a.prox % 16, a.prox, Math.max(quando, ta), a.bus);
+        a.prox++;
+      }
+    });
   }
 
-  /* ---------- a entrada: o desenho se faz, a bateria entra em três levas ---------- */
+  /* ---------- os fios: do rótulo ao naipe, curvos; vibram quando o naipe toca ---------- */
+  var FIOS = {};
+  var VIBRA = {
+    surdo: { f: 2.2, a: 9, tau: 460 }, repinique: { f: 11, a: 3, tau: 170 }, caixa: { f: 13, a: 2.6, tau: 150 },
+    tarol: { f: 15, a: 2.2, tau: 130 }, atabaque: { f: 4, a: 6.5, tau: 340 }, cuica: { f: 3, a: 5, tau: 280, glide: 1 },
+    tamborim: { f: 16, a: 2.4, tau: 100 }, agogo: { f: 7, a: 3.6, tau: 380 }, xequere: { a: 2.6, tau: 160, jitter: 1 },
+    ganza: { a: 2.2, tau: 120, jitter: 1 }, reco: { f: 18, a: 3, tau: 180, serra: 1 }, pandeiro: { f: 9, a: 3, tau: 220 },
+    chocalho: { a: 2.4, tau: 130, jitter: 1 }
+  };
+  function desenhaFio(k, d1, d2) {
+    var q = FIOS[k]; if (!q) return;
+    q.el.setAttribute('d', 'M' + f(q.p0[0]) + ' ' + f(q.p0[1]) + 'C' + f(q.c1[0]) + ' ' + f(q.c1[1] + d1) + ' ' + f(q.c2[0]) + ' ' + f(q.c2[1] + d2) + ' ' + f(q.t[0]) + ' ' + f(q.t[1]) + q.resto);
+    q.mexido = !!(d1 || d2);
+  }
+  function fios() {
+    var svg = o.fios, F = formacao(), bts = rotulos(), s = escala();
+    var palco = o.raiz.querySelector('.bateria__palco'), pl = parseFloat(getComputedStyle(palco).left) || 0;
+    var rr = o.raiz.getBoundingClientRect();
+    var X = function (x) { return pl + x * ESC * s; }, Y = function (y) { return y * ESC * s; };
+    F.forEach(function (n, k) {
+      var b = bts[k], q = FIOS[k]; if (!b || !q) return;
+      var br = b.getBoundingClientRect(), ly = (br.top + br.bottom) / 2 - rr.top;
+      var direita = br.left - rr.left > X(LARG / 2);              /* em telas estreitas os rótulos ficam à direita */
+      var p0 = direita ? [br.left - rr.left - 4, ly] : [br.right - rr.left + 4, ly];
+      var cy = Y(n.cy), sg = direita ? -1 : 1, t, resto = '';
+      var outro = n.par ? F[n.par[0] === k ? n.par[1] : n.par[0]] : null;
+      var atras = outro && ((direita && NAIPES[k].lado === 0) || (!direita && NAIPES[k].lado === 1));
+      if (!atras) t = [direita ? X(n.maxX) + 4 : X(n.minX) - 4, cy];
+      else {
+        /* o naipe de trás: o fio contorna o vizinho pelo alto da faixa e desce pela viela */
+        var lane = Y(n.faixaTopo) + 2, g = X(LARG / 2), alvo = direita ? X(n.maxX) + 3 : X(n.minX) - 3;
+        t = [direita ? X(outro.maxX) + 3 : X(outro.minX) - 3, lane];
+        resto = 'L' + f(g - 6 * sg) + ' ' + f(lane) + 'Q' + f(g) + ' ' + f(lane) + ' ' + f(g) + ' ' + f(lane + 6) +
+          'L' + f(g) + ' ' + f(cy - 6) + 'Q' + f(g) + ' ' + f(cy) + ' ' + f(g + 6 * sg) + ' ' + f(cy) + 'L' + f(alvo) + ' ' + f(cy);
+      }
+      var dx = t[0] - p0[0];
+      /* sai do rótulo na horizontal, faz a curva no meio do vão e chega ao naipe também na horizontal */
+      q.p0 = p0; q.t = t; q.resto = resto; q.c1 = [p0[0] + dx * .5, p0[1]]; q.c2 = [t[0] - dx * .5, t[1]];
+      desenhaFio(k, 0, 0);
+    });
+  }
+  function vibra() {
+    quadro = 0;
+    var t = performance.now(), algum = false;
+    Object.keys(ativos).forEach(function (kk) {
+      var a = ativos[kk], k = +kk, N = NAIPES[k], V = VIBRA[N.tipo];
+      algum = true;
+      if (!FIOS[k] || !grade) return;
+      var sa = (t - grade.t0) / PASSO, si = Math.floor(sa), amp = 0, dt = 0;
+      if (sa >= a.s0) for (var b = 0; b < 16; b++) {
+        var st = si - b; if (st < a.s0) break;
+        var v = N.p[((st % 16) + 16) % 16];
+        if (v) { dt = t - (grade.t0 + st * PASSO); amp = V.a * v * Math.exp(-dt / V.tau); break; }
+      }
+      var d1, d2;
+      if (V.jitter) { d1 = amp * (Math.random() * 2 - 1); d2 = amp * (Math.random() * 2 - 1); }
+      else if (V.serra) { var ph = (dt / 1000 * V.f) % 1; d1 = amp * (ph * 2 - 1); d2 = -d1 * .6; }
+      else { var w = 2 * Math.PI * (V.glide ? V.f * (1 + dt / 250) : V.f) * dt / 1000; d1 = amp * Math.sin(w); d2 = -amp * .7 * Math.sin(w + .6); }
+      desenhaFio(k, d1, d2);
+    });
+    Object.keys(FIOS).forEach(function (kk) { if (!ativos[kk] && FIOS[kk].mexido) desenhaFio(+kk, 0, 0); });
+    if (algum) quadro = requestAnimationFrame(vibra);
+  }
+
+  /* ---------- a entrada: o desenho se faz devagar, a bateria esquenta e para ---------- */
   function entra() {
     if (reduz || o.entrou) return;
     o.entrou = true;
     o.raiz.classList.remove('is-espera');
-    var C = CICLO, T0 = 3300;
+    var F = formacao(), C = CICLO, T0 = 5400;
     [].slice.call(o.camada.querySelectorAll('.bateria__inst')).forEach(function (el) {
       if (typeof el.animate !== 'function') return;
-      var k = +el.dataset.k, i = +el.dataset.i, ent = 180 + k * 150 + i * 22;
+      var k = +el.dataset.k, i = +el.dataset.i, sec = F[k].secao, ent = 260 + sec * 230 + i * 30;
       var tinta = el.querySelector('.bt-tinta');
       if (tinta) {
         tinta.setAttribute('pathLength', '1'); tinta.style.strokeDasharray = '1';
-        tinta.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 1150, delay: ent, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'both' });
+        tinta.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 1800, delay: ent, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'both' });
       }
       [].slice.call(el.querySelectorAll('.bt-fundo,.bt-cabeca,.bt-sombra')).forEach(function (p) {
-        p.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: ent + 420, easing: 'ease-out', fill: 'backwards' });
+        p.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: ent + 700, easing: 'ease-out', fill: 'backwards' });
       });
       [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
-        b.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: ent + 900, fill: 'backwards' });
+        b.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 700, delay: ent + 1300, fill: 'backwards' });
       });
-      /* esquenta: surdos por três ciclos, depois repiques, caixas e taróis, por fim o miúdo; todos terminam juntos */
-      var leva = k < 3 ? 0 : k < 7 ? 1 : 2, Q = quadros(k), opt = { duration: C, iterations: 3 - leva, delay: T0 + leva * C };
-      el.animate(el.dataset.mov === 'agita' ? Q.agita : Q.pele, opt);
-      var on = el.querySelector('.bateria__onda');
-      if (on) on.animate(Q.onda, opt);
-      [].slice.call(el.querySelectorAll('.bateria__baq')).forEach(function (b) {
-        b.animate(b.dataset.mov === 'raspa' ? Q.raspa : comSinal(Q.gira[+b.dataset.j || 0], +b.dataset.s), opt);
-      });
+      /* esquenta: as seções de cima por dois ciclos, as do meio por um, as de baixo pelo último compasso */
+      var leva = sec < 3 ? 0 : sec < 7 ? 1 : 2;
+      anima(el, k, [{ duration: C, iterations: 2, delay: T0 }, { duration: C, iterations: 1, delay: T0 + C }, { duration: C, iterations: .5, iterationStart: .5, delay: T0 + C * 1.5 }][leva]);
     });
   }
 
@@ -2373,25 +2533,33 @@ window.EcoBateria = (function () {
   function rotulos() { return [].slice.call(o.raiz.querySelectorAll('.bateria__rotulo')); }
   function escala() { var s = parseFloat(getComputedStyle(o.raiz).getPropertyValue('--s')); return s > 0 ? s : 1; }
   function posiciona() {
-    var s = escala(), F = formacao();
+    var s = escala(), F = formacao(), ult = F.length - 1;
+    var c0 = F[0].cy, cN = F[ult].cy;
+    /* os rótulos guardam o mesmo espaço entre si; o fio se dobra até o naipe */
     [].slice.call(o.raiz.querySelectorAll('.bateria__rotulos > li')).forEach(function (li, k) {
-      var n = F[k]; if (!n) return;
-      li.style.top = (n.rotuloY * ESC * s).toFixed(1) + 'px';
-      li.style.setProperty('--ate', (n.minX * ESC - 8 - INICIO).toFixed(1) + 'px');
+      if (k > ult) return;
+      li.style.top = ((c0 + k * (cN - c0) / ult) * ESC * s).toFixed(1) + 'px';
     });
     o.raiz.style.marginTop = '';
+    var lista = o.raiz.querySelector('.bateria__rotulos');
+    if (lista) lista.style.left = '';
     if (s === 1 && o.txt) {
-      var topo = o.raiz.getBoundingClientRect().top, falta = 0;
-      var cab = o.txt.getBoundingClientRect().bottom - topo + 30 - F[0].rotuloY * ESC;
+      /* no desktop, os rótulos recuam o quanto der (até 300 px) para o fio ter onde se curvar,
+         sem invadir a coluna das etapas */
+      var grade = document.querySelector('#acervo .acervo-percursos__grade');
+      if (lista && grade) {
+        var folga = o.raiz.getBoundingClientRect().left - grade.getBoundingClientRect().right - 28;
+        lista.style.left = (-Math.round(Math.max(-INICIO, Math.min(300, folga)))) + 'px';
+      }
+      var topo = o.raiz.getBoundingClientRect().top;
+      var cab = o.txt.getBoundingClientRect().bottom - topo + 30 - c0 * ESC;
       var lead = o.lead ? o.lead.getBoundingClientRect().bottom - topo + 26 - F[0].topo * ESC : 0;
-      falta = Math.max(cab, lead);
+      var falta = Math.max(cab, lead);
       if (falta > 0) o.raiz.style.marginTop = Math.ceil(falta) + 'px';
     }
+    fios();
   }
-  function etapaDe(btn) {
-    var bs = [].slice.call(document.querySelectorAll('#acervo .acervo-etapa'));
-    return bs.indexOf(btn);
-  }
+  function etapaDe(btn) { return [].slice.call(document.querySelectorAll('#acervo .acervo-etapa')).indexOf(btn); }
   function naipesDaEtapa(i) {
     var ks = [];
     o.materiais.forEach(function (m, k) { if (m.etapas[0] <= i && i <= m.etapas[1]) ks.push(k); });
@@ -2400,15 +2568,18 @@ window.EcoBateria = (function () {
   function perto(ks) {
     [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n) { n.classList.toggle('is-perto', ks.indexOf(+n.dataset.k) >= 0); });
     rotulos().forEach(function (r, k) { r.classList.toggle('is-perto', ks.indexOf(k) >= 0); });
+    Object.keys(FIOS).forEach(function (k) { FIOS[k].el.classList.toggle('is-perto', ks.indexOf(+k) >= 0); });
   }
-
   function atualiza() {
     if (!o) return;
     posiciona();
-    var acesos = [], estados = rotulos().map(function (r) { return r.getAttribute('data-estado') || ''; });
+    var estados = rotulos().map(function (r) { return r.getAttribute('data-estado') || ''; });
     [].slice.call(o.camada.querySelectorAll('.bateria__naipe')).forEach(function (n, k) { n.setAttribute('data-estado', estados[k] || ''); });
-    estados.forEach(function (e, k) { if (e === 'sel' || e === 'aceso') acesos.push(k); });
-    o.assinatura = acesos.join(',');                 /* o estado só se desenha; quem toca é o clique */
+    Object.keys(FIOS).forEach(function (k) {
+      var e = estados[k] || '';
+      FIOS[k].el.classList.toggle('is-marcado', e === 'sel' || e === 'aceso');
+      FIOS[k].el.classList.toggle('is-apagado', e === 'apagado');
+    });
   }
 
   var ICONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg>';
@@ -2417,10 +2588,16 @@ window.EcoBateria = (function () {
     if (o && o.raiz === raiz && raiz.isConnected) { atualiza(); return; }
     var camada = raiz.querySelector('.bateria__desenho');
     if (!camada) return;
-    o = { raiz: raiz, materiais: materiais, camada: camada, txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), assinatura: null, entrou: false };
+    o = { raiz: raiz, materiais: materiais, camada: camada, fios: raiz.querySelector('.bateria__fios'), txt: document.querySelector('#acervo .acervo-percursos__cab'), lead: document.querySelector('#acervo .acervo-lead'), entrou: false };
     desenha(camada);
+    FIOS = {};
+    NAIPES.forEach(function (_, k) {
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('class', 'bateria__fio'); p.setAttribute('data-k', k);
+      o.fios.appendChild(p); FIOS[k] = { el: p, p0: [0, 0], c1: [0, 0], c2: [0, 0], t: [0, 0], resto: '' };
+    });
 
-    /* áreas de toque sobre cada naipe: acionam o rótulo correspondente */
+    /* áreas de toque sobre cada naipe: acionam o rótulo; o ponteiro só acende a mancha */
     var alvos = raiz.querySelector('.bateria__alvos');
     formacao().forEach(function (n, k) {
       var b = document.createElement('span');
@@ -2432,8 +2609,10 @@ window.EcoBateria = (function () {
       b.addEventListener('pointerleave', function () { perto([]); });
       alvos.appendChild(b);
     });
+    raiz.addEventListener('pointerover', function (e) { var r = e.target.closest && e.target.closest('.bateria__rotulo'); if (r) perto([rotulos().indexOf(r)]); });
+    raiz.addEventListener('pointerout', function (e) { var r = e.target.closest && e.target.closest('.bateria__rotulo'); if (r && !(e.relatedTarget && r.contains(e.relatedTarget))) perto([]); });
 
-    /* o som: ligado por padrão, mas só começa no primeiro gesto da pessoa na página */
+    /* o som: ligado por padrão; começa no primeiro clique que toca */
     if (cab && !cab.querySelector('.bateria-som')) {
       var somB = document.createElement('button');
       somB.type = 'button'; somB.className = 'bateria-som'; somB.innerHTML = 'som<i>' + ICONE + '</i>';
@@ -2441,53 +2620,47 @@ window.EcoBateria = (function () {
       somB.addEventListener('click', function () {
         somOn = !somOn; somB.setAttribute('aria-pressed', String(somOn));
         try { localStorage.setItem('eco-bateria-som', somOn ? '1' : '0'); } catch (e) {}
-        if (!somOn) { para(); return; }
-        destrava();
-        (carregando || Promise.resolve()).then(function () { toca([3], 1, 'som'); });
+        if (!somOn) { paraTudo(); return; }
+        if (!nAtivos()) inicia(1, 1);
+        else if (audio()) pronto().then(function () { if (!relogio) relogio = setInterval(agenda, 80); }, function () {});
       });
       cab.innerHTML = ''; cab.appendChild(somB);
     }
-    /* clicar num rótulo (ou no naipe) faz o naipe tocar; clicar de novo repete */
+
+    /* clicar num rótulo (ou no naipe) faz o naipe tocar; clicar de novo enquanto soa faz parar */
     raiz.addEventListener('click', function (e) {
       var r = e.target.closest && e.target.closest('.bateria__rotulo');
       if (!r) return;
-      if (somOn) destrava();
-      toca([rotulos().indexOf(r)], 2, 'rotulo');
+      var k = rotulos().indexOf(r);
+      if (ativos[k]) para(k); else inicia(k);
     });
 
-    /* as etapas: ligar uma etapa faz tocar juntos os naipes que ela reúne; desligar silencia.
-       O ponteiro (ou o foco) sobre a etapa só acende esses naipes, sem som nem movimento. */
-    var grade = document.querySelector('#acervo .acervo-percursos__grade');
-    if (grade && !grade.dataset.bateria) {
-      grade.dataset.bateria = '1';
+    /* as etapas: ligar faz entrar os naipes que ela reúne; desligar os silencia.
+       O ponteiro (ou o foco) sobre a etapa só acende esses naipes. */
+    var grade_ = document.querySelector('#acervo .acervo-percursos__grade');
+    if (grade_ && !grade_.dataset.bateria) {
+      grade_.dataset.bateria = '1';
       var sobre = null;
-      grade.addEventListener('click', function (e) {
+      grade_.addEventListener('click', function (e) {
         var btn = e.target.closest('.acervo-etapa');
         if (!btn) return;
-        if (btn.getAttribute('aria-pressed') === 'true') { para(); return; }   /* estava ligada: desliga */
-        if (somOn) destrava();
-        toca(naipesDaEtapa(etapaDe(btn)), 2, 'etapa');
+        var ks = naipesDaEtapa(etapaDe(btn));
+        if (btn.getAttribute('aria-pressed') === 'true') ks.forEach(para);
+        else ks.forEach(function (k) { inicia(k); });
       }, true);
-      var entraEtapa = function (btn) {
-        if (!btn || btn === sobre) return;
-        sobre = btn;
-        perto(naipesDaEtapa(etapaDe(btn)));
-      };
-      var saiEtapa = function () {
-        if (!sobre) return;
-        sobre = null; perto([]);
-      };
-      grade.addEventListener('pointerover', function (e) { if (e.pointerType === 'touch') return; entraEtapa(e.target.closest('.acervo-etapa')); });
-      grade.addEventListener('pointerout', function (e) { var alvo = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.acervo-etapa'); if (alvo === sobre) return; if (alvo) entraEtapa(alvo); else saiEtapa(); });
-      grade.addEventListener('focusin', function (e) { entraEtapa(e.target.closest('.acervo-etapa')); });
-      grade.addEventListener('focusout', function (e) { if (!grade.contains(e.relatedTarget)) saiEtapa(); });
+      var entraEtapa = function (btn) { if (!btn || btn === sobre) return; sobre = btn; perto(naipesDaEtapa(etapaDe(btn))); };
+      var saiEtapa = function () { if (!sobre) return; sobre = null; perto([]); };
+      grade_.addEventListener('pointerover', function (e) { if (e.pointerType === 'touch') return; entraEtapa(e.target.closest('.acervo-etapa')); });
+      grade_.addEventListener('pointerout', function (e) { var alvo = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.acervo-etapa'); if (alvo === sobre) return; if (alvo) entraEtapa(alvo); else saiEtapa(); });
+      grade_.addEventListener('focusin', function (e) { entraEtapa(e.target.closest('.acervo-etapa')); });
+      grade_.addEventListener('focusout', function (e) { if (!grade_.contains(e.relatedTarget)) saiEtapa(); });
     }
 
     var pend = 0;
-    function agenda() { if (pend) return; pend = requestAnimationFrame(function () { pend = 0; if (o) posiciona(); }); }
-    if (window.ResizeObserver) { var ro = new ResizeObserver(agenda); ro.observe(raiz.parentElement); if (o.txt) ro.observe(o.txt); if (o.lead) ro.observe(o.lead); }
-    else window.addEventListener('resize', agenda);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(agenda);
+    function agendaPos() { if (pend) return; pend = requestAnimationFrame(function () { pend = 0; if (o) posiciona(); }); }
+    if (window.ResizeObserver) { var ro = new ResizeObserver(agendaPos); ro.observe(raiz.parentElement); if (o.txt) ro.observe(o.txt); if (o.lead) ro.observe(o.lead); }
+    else window.addEventListener('resize', agendaPos);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(agendaPos);
 
     if (window.IntersectionObserver && !reduz && typeof camada.animate === 'function') {
       raiz.classList.add('is-espera');
