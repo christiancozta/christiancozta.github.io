@@ -2,7 +2,7 @@
    ARCO — do arco tensionado ao arco arquitetônico
    --------------------------------------------------------------------------
    repouso → tensão → formação → interação (pré-seleção, seleção, alternância).
-   A seleção não altera URL nem favicon. Só "Abrir DATA/ECHO/ATRIO/PLAY/CERNE"
+   A seleção não altera URL nem favicon. Só "Abrir DATA/ECHO/ATRIO/PLAY/TROIA"
    navega, pelo mesmo roteador do cordão (histórico, âncora e favicon).
    ========================================================================== */
 (() => {
@@ -989,7 +989,7 @@
 
   function isHomeAnchor(hash){
     const id = (hash || "").slice(1);
-    if (!id || ["home","echo","play","atrio","cerne","data"].includes(id)) return false;
+    if (!id || ["home","echo","play","atrio","troia","cerne","data"].includes(id)) return false;
     let target = null;
     try { target = document.getElementById(decodeURIComponent(id)); } catch {}
     return Boolean(target && homeView && homeView.contains(target));

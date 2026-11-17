@@ -449,9 +449,11 @@ if(!copy)return;
 lastVersionTrigger=trigger;trigger.setAttribute("aria-expanded","true");
 const linhas=(copy.historico||[]).slice();
 const atual=linhas.at(-1);
-/* Nome em Science Gothic com a segunda letra em terracota, como na hero. */
+/* Nome em Science Gothic: o R acompanha o raciocínio nas três marcas. */
 const nome=String(copy.title||"");
-versionTitle.replaceChildren(document.createTextNode(nome.slice(0,1)),Object.assign(document.createElement("span"),{className:"version-note__acento",textContent:nome.slice(1,2)}),document.createTextNode(nome.slice(2)));
+const accentIndex=nome.indexOf("R");
+if(accentIndex<0)versionTitle.textContent=nome;
+else versionTitle.replaceChildren(document.createTextNode(nome.slice(0,accentIndex)),Object.assign(document.createElement("span"),{className:"version-note__acento",textContent:"R"}),document.createTextNode(nome.slice(accentIndex+1)));
 versionTitle.setAttribute("aria-label",nome);
 versionCurrent.textContent=atual?("Versão corrente "+atual.v+", "+atual.d):"";
 /* Linha do tempo, da corrente para a mais antiga: número em Clash, data em mono, uma frase por linha. */
