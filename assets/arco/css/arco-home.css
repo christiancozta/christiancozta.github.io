@@ -313,6 +313,34 @@
   font-family:var(--f-micro); font-size:.6rem; letter-spacing:.02em;
 }
 .hm-ev__src::before{ content:"↳ "; color:var(--soft); }
+/* cálculo, fonte e limite sob demanda (arco-home.js): o verso cobre as
+   figuras dentro do quadro da unidade; sem JS, nada disso existe e as notas
+   ficam no lugar */
+.hm-ev.has-verso{ position:relative; }
+.hm-ev__tg{
+  justify-self:start; margin:calc(var(--u) * .5) 0 0; padding:2px 0;
+  background:none; border:0; border-bottom:1px solid rgba(44,44,44,.3); border-radius:0;
+  font-family:var(--f-micro); font-size:.56rem; font-weight:600; line-height:1.3;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--soft); cursor:pointer;
+}
+.hm-ev__tg::after{ content:"+"; margin-left:.45em; letter-spacing:0; }
+.hm-ev__tg[aria-expanded="true"]{ color:var(--ink); border-bottom-color:var(--ink); }
+.hm-ev__tg[aria-expanded="true"]::after{ content:"−"; }
+.hm-ev__tg:hover,
+.hm-ev__tg:focus-visible{ color:var(--ink); border-bottom-color:var(--ink); }
+.hm-ev__verso{
+  position:absolute; left:0; right:0; bottom:0; top:var(--verso-top, 0);
+  display:flex; flex-direction:column; gap:calc(var(--u) * 1.5);
+  padding:calc(var(--u) * 1.25) var(--g) calc(var(--u) * 3);
+  background:var(--paper); border-top:1px solid rgba(44,44,44,.12);
+  overflow:auto; overscroll-behavior:contain;
+}
+.hm-ev__verso[hidden]{ display:none; }
+.hm-ev__verso dl{ margin:0; display:grid; gap:calc(var(--u) * .4); }
+.hm-ev__verso dt{ margin:calc(var(--u) * .6) 0 0; font-family:var(--f-body); font-size:.78rem; line-height:1.35; font-weight:500; }
+.hm-ev__verso dt:first-child{ margin-top:0; }
+.hm-ev__verso dt b{ font-family:var(--f-display); font-weight:800; letter-spacing:-.02em; }
+.hm-ev__verso dd{ margin:0; }
 .hm-neq{ list-style:none; margin:0; padding:0; border-top:1px solid rgba(44,44,44,.12); }
 .hm-neq li{
   display:grid; grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr); gap:var(--u);
@@ -531,6 +559,11 @@
   .hm-piece{ flex-direction:column; justify-content:center; gap:4px; padding:var(--u); }
 
   .hm-ev{ margin:0; padding-bottom:calc(var(--u) * 4); }
+  .hm-ev__tg{
+    display:inline-flex; align-items:center; min-height:44px; padding:0; border-bottom:0;
+    text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.35em;
+  }
+  .hm-ev__verso{ position:static; padding:calc(var(--u) * 1.25) 0 0; overflow:visible; }
   .hm-corr__h{ display:none; }
   .hm-corr__r{ grid-template-columns:1fr auto; row-gap:var(--u); }
   .hm-corr__t{ grid-column:1 / -1; }
