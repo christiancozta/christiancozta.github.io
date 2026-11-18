@@ -5,7 +5,7 @@
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 
-const VERBETES = 45;
+const VERBETES = 48;
 
 function check(file) {
   const html = readFileSync(new URL(`../${file}`, import.meta.url), "utf8");

@@ -108,14 +108,8 @@
 <script src="../assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="../assets/arco/js/arco-shell.en.js?v=20261117-troia-r" defer></script>
 <script src="../assets/arco/js/arco-rail-final.js?v=20260929-atrio-architecture-anchor" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-arquitetura.css?v=20261112-dez">
-<script src="../assets/arco/js/arco-arquitetura.en.js?v=20261117-troia-r" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-vitrine.css?v=20261112-setas">
-<script src="../assets/arco/js/arco-vitrine.en.js?v=20261112-setas" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-modulos.css?v=20261117-troia">
-<link rel="stylesheet" href="../assets/atrio/css/atrio-documentacao.css?v=20261105">
-<script src="../assets/arco/js/arco-modulos.js?v=20261106-c" defer></script>
-<script src="../assets/atrio/js/atrio-documentacao.en.js?v=20261106-c" defer></script>
+<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261118">
+<script src="../assets/arco/js/arco-home.en.js?v=20261118" defer></script>
 </head>
 <body>
 
@@ -135,14 +129,6 @@
       <div class="rail__nav">
         <button class="rail__link" type="button" data-view="home" aria-current="true">Path</button>
 
-        <button class="rail__link rail__link--data" type="button" data-view="data">DATA</button>
-        <div class="rail__sec" data-sec="data" data-on="false">
-          <div>
-            <button class="rail__seclink" type="button" data-child="data" data-target="rastro">TRACE</button>
-            <button class="rail__seclink" type="button" data-child="data" data-target="lastro">GROUNDING</button>
-          </div>
-        </div>
-
         <button class="rail__link" type="button" data-view="echo">ECHO</button>
         <div class="rail__sec" data-sec="echo" data-on="false">
           <div>
@@ -155,7 +141,8 @@
 
         <button class="rail__link" type="button" data-view="atrio">ATRIO</button>
         <button class="rail__link rail__link--child" type="button" data-view="troia">TROIA</button>
-        <button class="rail__link" type="button" data-anchor="repertorio">From term to proof</button>
+        <button class="rail__link" type="button" data-anchor="rastro">Trace</button>
+        <button class="rail__link" type="button" data-anchor="lastro">Grounding</button>
       </div>
     </div>
 
@@ -174,380 +161,342 @@
 
   <main class="stage" id="stage" tabindex="-1">
 
-    <!-- ===================== HOME: a voz da mãe ===================== -->
-    <section class="view" data-view="home" data-active="true" aria-label="Origin — the arc">
-      <div class="home">
-        <!-- ===== ARCO ARQUITETÔNICO — repouso, formação e interação =====
-             Identidade → Trajetória → Sistemas. A Cartografia segue abaixo.
-             Estados em .arx[data-state]: rest | tension | forming | formed.
-             Mecânica em assets/arco/js/arco-arquitetura.js; desenho em
-             assets/arco/css/arco-arquitetura.css. -->
-        <div class="arx" data-showcase="CLEAN" id="arco-arquitetura" data-state="formed" data-sel="" data-preview="">
-          <script>
-            /* Antes da primeira pintura. Sem JS, a estrutura nasce formada.
-               Com JS, cada entrada no percurso nasce em repouso; o estado
-               arquitetônico só é recuperado no retorno (voltar/avançar ou
-               vindo de uma página completa de DATA, ECHO, PLAY, ATRIO, CERNE). */
-            (function(){
-              var el = document.getElementById("arco-arquitetura");
-              var formed = false, back = false, fromSystem = false;
-              try { formed = sessionStorage.getItem("arco:arx:formed") === "1"; } catch (e) {}
-              try {
-                var nav = performance.getEntriesByType("navigation")[0];
-                back = !!nav && nav.type === "back_forward";
-              } catch (e) {}
-              try {
-                var ref = new URL(document.referrer);
-                fromSystem = ref.origin === location.origin &&
-                  /\/(data|echo|play|atrio|atrio-dentro|troia|cerne)\.html$/.test(ref.pathname);
-              } catch (e) {}
-              if (!(formed && (back || fromSystem))) el.setAttribute("data-state", "rest");
-              document.documentElement.classList.add("arx-js");
-            })();
-          </script>
+    <!-- ===================== HOME =====================
+         Seis painéis sobre a matriz de 8: autoria, três obras, rastro e lastro.
+         Desenho em assets/arco/css/arco-home.css; retícula, ajuste tipográfico,
+         navegação interna e índice em assets/arco/js/arco-home.js. -->
+    <section class="view" data-view="home" data-active="true" aria-label="Path">
+      <div class="hm" id="hm">
 
-          <!-- 01 — REPOUSO: identidade à esquerda, itinerário à direita -->
-          <header class="arx-hero">
-            <div class="arco-lang" aria-label="Language"><span aria-current="page">EN</span><i class="arco-lang__sep" aria-hidden="true">|</i><a href="../arco.html" hreflang="pt-BR" lang="pt-BR">PT</a></div>
-
-            <section class="arx-id" aria-labelledby="bio-name">
-              <div class="arx-id__head">
-                <!-- kit v1.2, matriz 06: monólito 1:1 cortado pelo oxê triangulado. -->
-                <svg class="arx-id__mark" viewBox="0 0 120 120" role="img" aria-label="Christian da Costa’s personal mark">
-                  <path fill="currentColor" fill-rule="evenodd" d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"></path>
-                </svg>
-                <div>
-                  <h1 class="arx-id__name" id="bio-name">Christian da Costa</h1>
-                  <p class="arx-id__tag">Legal&nbsp;Engineering <i aria-hidden="true">|</i> Legal&nbsp;Operations <i aria-hidden="true">|</i> AI&nbsp;Governance&nbsp;&amp;&nbsp;Evaluation <i aria-hidden="true">|</i> Legal&nbsp;Analytics</p>
-                </div>
-              </div>
-              <div class="arx-id__row">
-                <div class="arx-id__about">
-                <p class="arx-id__summary">Lawyer and Master of Laws (LL.M.). Nearly a decade spanning private practice and the public sector, including more than five years leading legal operations in the Judiciary. While leading a judge’s chambers, I ran legal operations at the point where they either hold or collapse: high volume.</p>
-                <ul class="arx-id__contacts" aria-label="Contacts">
-                  <li><span class="arx-id__k">CV</span><span class="arx-id__v"><a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="CV in Portuguese">PT</a> <span aria-hidden="true">|</span> <a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="CV in English">EN</a></span></li>
-                  <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener"><span class="arx-id__k">LinkedIn</span><span class="arx-id__v">in/christiandcosta</span></a></li>
-                  <li><a href="mailto:christiandscosta@gmail.com"><span class="arx-id__k">Email</span><span class="arx-id__v">christiandscosta@gmail.com</span></a></li>
-                  <li><a href="https://wa.me/5541991521304" target="_blank" rel="noopener"><span class="arx-id__k">WhatsApp</span><span class="arx-id__v">+55 41 99152-1304</span></a></li>
-                </ul>
-                <p class="arx-itin__tese"><span aria-hidden="true">— </span>Before delegating the legal function, one must govern its reasoning.</p>
-                </div>
-              <aside class="arx-itin" aria-label="Itinerary">
-                <p class="arx-itin__txt">
-                  <span><strong>Legal Engineering</strong> is</span>
-                  <span>turning legal problems</span>
-                  <span>into methods, processes and systems.</span>
-                </p>
-                <p class="arx-itin__le">Two projects and what measures them, within a single narrative arc.</p>
-                <p class="arx-itin__le arx-itin__le--lista"><a class="b-data" href="#data" data-arx-open="data">DATA</a>, jurimetrics, in <strong>Legal Analytics</strong>;<br> <a class="b-echo" href="#echo" data-arx-open="echo">ECHO</a>, the method, in <strong>Legal Operations</strong>;<br> <a class="b-atrio" href="#atrio" data-arx-open="atrio">ATRIO</a>, the architecture, in <strong>AI Governance&nbsp;&amp;&nbsp;Evaluation</strong>.</p>
-                <p class="arx-itin__le">Each project has its own page. On the arc, click to open its panel.</p>
-              </aside>
-              </div>
-            </section>
-          </header>
-
-          <!-- 02 a 06 — O ARCO: coroa (curva + base), três colunas, sumário -->
-          <section class="arx-arch" aria-labelledby="arx-arch-t">
-            <h2 class="arx-sr" id="arx-arch-t">Trajectory — three movements, three systems</h2>
-
-            <!-- COROA: da curva à base, só o nome do sistema.
-                 Pré-seleção = nome transparente; seleção = nome pleno. -->
-            <div class="arx-crown" aria-hidden="true">
-              <svg class="arx-arc" viewBox="0 0 1000 238" preserveAspectRatio="none" focusable="false">
-                <path class="arx-arc__field" d="M0,238 C180,18.70 820,18.70 1000,238 Z"></path>
-                <path class="arx-arc__extra" vector-effect="non-scaling-stroke" d="M0,238 C180,18.70 820,18.70 1000,238"></path>
-                <path class="arx-arc__intra" vector-effect="non-scaling-stroke" d="M0,238 C205,73.95 795,73.95 1000,238"></path>
-                <line class="arx-arc__base" vector-effect="non-scaling-stroke" x1="0" y1="238" x2="1000" y2="238"></line>
-              </svg>
-              <!-- grafismo técnico: caixa de limites, cotas e anotações (montado em JS) -->
-              <svg class="arx-tech" focusable="false"></svg>
-              <p class="arx-name">
-                <span data-sys="data">DATA</span>
-                <span data-sys="echo">echo</span>
-                <span data-sys="atrio">ATRIO</span>
-              </p>
-            </div>
-
-            <!-- QUADRO: laterais, base e duas divisórias fecham as três colunas.
-                 Na seleção, o quadro inteiro recebe a cor do sistema. -->
-            <div class="arx-frame">
-              <div class="arx-cols" role="group" aria-label="Movements of the trajectory — select a system">
-                <div class="arx-col" data-sys="data">
-                  <button class="arx-col__head" type="button" aria-pressed="false" aria-controls="arx-summary">
-                    <span class="arx-col__n"><time datetime="2021-01">01/2021</time> – <time datetime="2025-09">09/2025</time></span>
-                    <span class="arx-col__mov">Management</span><span class="arx-col__plus" aria-hidden="true">▶︎</span>
-                    <span class="arx-sr"> — DATA</span>
-                  </button>
-                  <p class="arx-col__txt" lang="pt-BR">The first movement took place in first-instance chambers, in a high-volume operation. The intake of <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Joint Judicial Decree No. 508/2023 | TJPR" data-numerator="36,000 cases listed in the Annex" data-denominator="4 phases of 3 months | 7 groups of judicial districts" data-period="Núcleo de Justiça 4.0 | from 27 Jul 2023">36,000</span> tax enforcement cases required making the caseload legible: triage, compliance checks and resuming each case where it had stopped, without letting the portfolio pile up. The procedure was replicated in another unit, with a new chambers team trained in it. Volume began to be read. That is where <span class="b-data">DATA</span> would come from.</p>
-                </div>
-                <div class="arx-col" data-sys="echo">
-                  <button class="arx-col__head" type="button" aria-pressed="false" aria-controls="arx-summary">
-                    <span class="arx-col__n"><time datetime="2025-09">09/2025</time> – <time datetime="2025-11">11/2025</time></span>
-                    <span class="arx-col__mov">Method</span><span class="arx-col__plus" aria-hidden="true">▶︎</span>
-                    <span class="arx-sr"> — ECHO</span>
-                  </button>
-                  <p class="arx-col__txt" lang="pt-BR">The second movement matured with the shift from managing volume to conducting the decision flow. In 30 days, I developed <span class="b-echo">ECHO</span>, a Legal Ops methodology for operating appellate chambers: workflows, taxonomy, manuals. Predefined triage and routing for <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/data/lastro/acervo_publico.xlsx" data-denominator="1,192 anonymized records" data-period="Appellate flow | triaged caseload" data-detail="data.html › ECHO">1,192</span> cases. It ran for another 30 days. But it echoed: it was handed over to the chambers that succeeded us.</p>
-                </div>
-                <div class="arx-col" data-sys="atrio">
-                  <button class="arx-col__head" type="button" aria-pressed="false" aria-controls="arx-summary">
-                    <span class="arx-col__n"><time datetime="2025-11">11/2025</time> – <time datetime="2026-05">05/2026</time></span>
-                    <span class="arx-col__mov">Technology</span><span class="arx-col__plus" aria-hidden="true">▶︎</span>
-                    <span class="arx-sr"> — ATRIO</span>
-                  </button>
-                  <p class="arx-col__txt" lang="pt-BR">The third movement arose when reasoning, on meeting artificial intelligence, tried to accelerate ahead of method. In response, I designed <span class="b-atrio">ATRIO</span>, a legal AI architecture: governance, audit, data protection. Implemented as the operation’s finalization rate rose by <span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="60.39% − 44.21% | opinions ÷ orders issued × 100" data-denominator="2nd Appellate Panel team | full series" data-period="Dec 2025 – Apr 2026 | five full months">16.18 pp</span> in five months. AI does not replace the decision: it operates on a governed path.</p>
-                </div>
-              </div>
-
-              <!-- PAINEL: sumário executivo do sistema selecionado -->
-              <div class="arx-summary" id="arx-summary">
-                <div class="arx-summary__in">
-
-                <!-- ================= DATA ================= -->
-                <article class="arx-sum" data-sys="data" aria-labelledby="arx-sum-t-data">
-                  <section class="arx-cell arx-mov" style="--w:4">
-                    <h4 class="arx-k">Movement</h4>
-                    <p lang="pt-BR">The first movement took place in first-instance chambers, in a high-volume operation. The intake of <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="Joint Judicial Decree No. 508/2023 | TJPR" data-numerator="36,000 cases listed in the Annex" data-denominator="4 phases of 3 months | 7 groups of judicial districts" data-period="Núcleo de Justiça 4.0 | from 27 Jul 2023">36,000</span> tax enforcement cases required making the caseload legible: triage, compliance checks and resuming each case where it had stopped, without letting the portfolio pile up. The procedure was replicated in another unit, with a new chambers team trained in it. Volume began to be read. That is where <button class="b-data" type="button" data-arx-comp="data" aria-controls="arx-summary">DATA</button> would come from.</p>
-                  </section>
-                  <header class="arx-cell arx-lede" style="--w:8">
-                    <span class="arx-plate arx-plate--lede"><img src="../assets/data/brand/favicon.svg?v=20261014" alt="" width="48" height="48" decoding="async"></span>
-                    <h3 class="arx-lede__t" id="arx-sum-t-data"><span class="arx-sr">DATA — </span>Legal Analytics</h3>
-                    <p class="arx-lede__sub"><b>DATA</b> – Jurimetrics and KPI management</p>
-                    <div class="arx-lede__story"><p>Ability to interpret information, identify patterns, and produce knowledge applicable to decision-making.</p></div>
-                    <a class="arx-open" href="#data" data-arx-open="data">Explore DATA <span aria-hidden="true">→</span></a>
-                    <div class="arx-comps">
-                      <ul class="arx-comps__list">
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-jurimetria">Jurimetrics and KPI management</button>
-                          <div class="arx-pop arx-pop--data" id="arx-pop-comp-jurimetria" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Original mechanism</p><h4 class="arx-pop__t">Jurimetrics and KPI management</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanism</dt><dd><ul class="arx-pop__mecs" lang="en"><li>KPI &amp; Performance Management</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>The operation measures volume but cannot distinguish performance, capacity, progress, and the effects of interventions.</dd></div>
-                              <div><dt>In DATA</dt><dd>Reconstruction and analysis of indicators, definition of populations, comparison of periods, robustness tests, and documentation of verifiable evidence.</dd></div>
-                            </dl>
-                            <p class="arx-pop__note">The indicators were put to operational use in ECHO; DATA retrospectively systematizes their measurement and interpretive limits.</p>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-jurimetria" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </header>
-                  <div class="arx-cell arx-mae" style="--w:5">
-                    <strong class="arx-mae__n">+16.18</strong>
-                    <p class="arx-mae__t"><b>percentage points</b> in the finalization rate of the 2nd Appellate Panel team: from 44.21% (Dec 2025) to 60.39% (Apr 2026), over five full months. Temporal association, with no isolated causality.</p>
-                  </div>
-                  <div class="arx-cell arx-res arx-res--pair" style="--w:7"><div class="arx-fig"><strong class="arx-res__n">13.2</strong><span class="arx-res__t"><b>days</b> of average queue time until the opinion</span></div><div class="arx-fig"><strong class="arx-res__n">6.9</strong><span class="arx-res__t"><b>days</b> of average queue time for other orders</span></div><span class="arx-res__note">Queue time is not working time.</span></div>
-                  <section class="arx-cell arx-text arx-rate" style="--w:7">
-                    <h4 class="arx-k">Finalization rate</h4>
-                    <p class="arx-formula">Finalization = opinions ÷ orders issued × 100</p>
-                    <p>The share of orders converted into opinions. An original indicator that, aligned with the CNJ’s KPI-based management (Ordinance No. 471/2025, art. 10, XI), measures the share of opinions in the total orders actually issued, distinguishing final output from intermediate output.</p>
-                  </section>
-                  <section class="arx-cell arx-text arx-hook" style="--w:5">
-                    <h4 class="arx-k">Trace and grounding</h4>
-                    <p>Every number with a trace of where it comes from and a grounding for what it allows us to claim.</p>
-                    <a class="arx-open arx-open--module" href="#data" data-arx-open="data">See trace and grounding <span aria-hidden="true">→</span></a>
-                  </section>
-                </article>
-
-                <!-- ================= ECHO ================= -->
-                <article class="arx-sum" data-sys="echo" aria-labelledby="arx-sum-t-echo">
-                  <section class="arx-cell arx-mov" style="--w:4">
-                    <h4 class="arx-k">Movement</h4>
-                    <p lang="pt-BR">The second movement matured with the shift from managing volume to conducting the decision flow. In 30 days, I developed <button class="b-echo" type="button" data-arx-comp="echo" aria-controls="arx-summary">ECHO</button>, a Legal Ops methodology for operating appellate chambers: workflows, taxonomy, manuals. Predefined triage and routing for <span tabindex="0" role="note" data-datum data-regime="lastro" data-source="assets/data/lastro/acervo_publico.xlsx" data-denominator="1,192 anonymized records" data-period="Appellate flow | triaged caseload" data-detail="data.html › ECHO">1,192</span> cases. It ran for another 30 days. But it echoed: it was handed over to the chambers that succeeded us.</p>
-                  </section>
-                  <header class="arx-cell arx-lede" style="--w:8">
-                    <span class="arx-plate arx-plate--lede"><img src="../assets/echo/brand/echo-symbol-clean.svg" alt="" width="48" height="48" decoding="async"></span>
-                    <h3 class="arx-lede__t" id="arx-sum-t-echo"><span class="arx-sr">ECHO — </span>Legal Operations</h3>
-                    <p class="arx-lede__sub"><b>ECHO</b> – Process engineering and knowledge management</p>
-                    <div class="arx-lede__story"><p>Ability to structure processes, organize resources, and establish reproducible routines.</p></div>
-                    <a class="arx-open" href="#echo" data-arx-open="echo">Explore ECHO <span aria-hidden="true">→</span></a>
-                    <div class="arx-comps">
-                      <ul class="arx-comps__list">
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-conhecimento">Knowledge management</button>
-                          <div class="arx-pop arx-pop--echo" id="arx-pop-comp-conhecimento" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 2 mechanisms</p><h4 class="arx-pop__t">Knowledge management</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Knowledge Capture &amp; Documentation</li><li>Knowledge Management &amp; Transfer</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Legal and operational knowledge remains scattered or depends on people’s memory, hindering its retrieval and transfer.</dd></div>
-                              <div><dt>In ECHO</dt><dd>Capture of practices, criteria, and recurring patterns, converted into manuals, records, and reusable repertoires for reference and knowledge transfer.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-conhecimento" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-processos">Process engineering</button>
-                          <div class="arx-pop arx-pop--echo" id="arx-pop-comp-processos" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 2 mechanisms</p><h4 class="arx-pop__t">Process engineering</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Process Mapping &amp; Workflow Design</li><li>SOP &amp; Playbook Design</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Steps, responsibilities, and bottlenecks are not organized into a common flow; execution depends on repeated instructions and improvised decisions.</dd></div>
-                              <div><dt>In ECHO</dt><dd>Mapping of the appellate operation, definition of roles, sequences, handoff criteria, and reusable procedures. PLAY embodies part of these instruments in an operational interface.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-processos" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-informacao">Information architecture</button>
-                          <div class="arx-pop arx-pop--echo" id="arx-pop-comp-informacao" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 2 mechanisms</p><h4 class="arx-pop__t">Information architecture</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Metadata, Taxonomy &amp; Information Architecture</li><li>Content Governance &amp; Controlled Language</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>The information exists, but its classification, location, and reuse are hindered by the lack of common structures and conventions.</dd></div>
-                              <div><dt>In ECHO</dt><dd>Building of taxonomies, hierarchies, indexing criteria, and language standards, organizing the caseload and making information retrievable and consistent.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-informacao" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </header>
-                  <div class="arx-cell arx-mae" style="--w:6">
-                    <strong class="arx-mae__n">90.2%</strong>
-                    <p class="arx-mae__t"><b>reduction in classification complexity</b>: 102 subjects consolidated into 10 categories, across three thematic clusters.</p>
-                  </div>
-                  <div class="arx-cell arx-res" style="--w:6"><strong class="arx-res__n">2,758</strong><span class="arx-res__t"><b>headnote templates</b> cataloged in the Headnote Index.</span></div>
-                  <section class="arx-cell arx-text arx-hook arx-hook--play" style="--w:12">
-                    <div class="arx-play" id="arx-play-anchor">
-                      <div class="arx-head">
-                        <span class="arx-plate arx-head__icon"><img src="../assets/play/favicon.svg" alt="" width="40" height="40" decoding="async"></span>
-                        <p class="arx-head__t arx-play__t"><b>PLAY</b> — The method as a score</p>
-                      </div>
-                      <ul class="arx-tools">
-                        <li><b>Legal Grounds.</b> Search across 107 legal grounds by topic or trigger, with requirements and limits of application.</li>
-                        <li><b>Headnote Index.</b> Lookup of 2,758 records by subject, code, or base text.</li>
-                        <li><b>Legal Calendar.</b> Civil deadline counting in business days, with holidays, suspensions, and exclusions.</li>
-                        <li><b>Draft Builder.</b> Composition of opinions from six templates and conditional blocks.</li>
-                        <li><b>Integrated Search.</b> Cross-search of documents, legal grounds, Headnote Index, and templates.</li>
-                      </ul>
-                      <a class="arx-open arx-open--module" href="#play" data-arx-open="play">Open PLAY <span aria-hidden="true">→</span></a>
-                    </div>
-                  </section>
-                </article>
-
-                <!-- ================= ATRIO ================= -->
-                <article class="arx-sum" data-sys="atrio" aria-labelledby="arx-sum-t-atrio">
-                  <section class="arx-cell arx-mov" style="--w:4">
-                    <h4 class="arx-k">Movement</h4>
-                    <p lang="pt-BR">The third movement arose when reasoning, on meeting artificial intelligence, tried to accelerate ahead of method. In response, I designed <button class="b-atrio" type="button" data-arx-comp="atrio" aria-controls="arx-summary">ATRIO</button>, a legal AI architecture: governance, audit, data protection. Implemented as the operation’s finalization rate rose by <span tabindex="0" role="note" data-datum data-regime="derivacao" data-source="60.39% − 44.21% | opinions ÷ orders issued × 100" data-denominator="2nd Appellate Panel team | full series" data-period="Dec 2025 – Apr 2026 | five full months">16.18 pp</span> in five months. AI does not replace the decision: it operates on a governed path.</p>
-                  </section>
-                  <header class="arx-cell arx-lede" style="--w:8">
-                    <span class="arx-plate arx-plate--lede"><img src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="48" height="48" decoding="async"></span>
-                    <h3 class="arx-lede__t" id="arx-sum-t-atrio"><span class="arx-sr">ATRIO — </span>AI Governance &amp; Evaluation</h3>
-                    <p class="arx-lede__sub"><b>ATRIO</b> – Architecture for Legal Reasoning Governance</p>
-                    <div class="arx-lede__story"><p>Ability to design and implement technical solutions to legal and operational problems, with a local API in Python (FastAPI) and PostgreSQL.</p></div>
-                    <a class="arx-open" href="#atrio" data-arx-open="atrio">Explore ATRIO <span aria-hidden="true">→</span></a>
-                    <div class="arx-comps">
-                      <ul class="arx-comps__list">
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-dados">Data and corpus engineering</button>
-                          <div class="arx-pop" id="arx-pop-comp-dados" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 3 mechanisms | ATRIO</p><h4 class="arx-pop__t">Data and corpus engineering</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Data Ingestion &amp; API Integration</li><li>Data Quality &amp; Normalization</li><li>Information Extraction &amp; Enrichment</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Scattered, duplicated, or unstructured documents hinder the building of a reliable base for processing and use by AI.</dd></div>
-                              <div><dt>In ATRIO</dt><dd>Document acquisition, API integration, incremental persistence, deduplication, normalization, and enrichment of legal information for governed use by ATRIO.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-dados" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-orquestracao">Decision orchestration</button>
-                          <div class="arx-pop" id="arx-pop-comp-orquestracao" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 3 mechanisms | ATRIO / RATIO</p><h4 class="arx-pop__t">Decision orchestration</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Systems Orchestration &amp; Business Rules</li><li>Decision Workflow Engineering</li><li>Human-in-the-Loop &amp; Quality Gates</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Components and stages of legal production can advance without common handoff criteria, defined controls, or human validation.</dd></div>
-                              <div><dt>In ATRIO</dt><dd>Modular integration through executable rules, a state machine, phased decision paths, and blocking controls at critical transitions, preserving the operator’s accountability.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-orquestracao" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-adversarial">Adversarial evaluation</button>
-                          <div class="arx-pop" id="arx-pop-comp-adversarial" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Preserves 1 mechanism | TROIA</p><h4 class="arx-pop__t">Adversarial evaluation</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanism</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Adversarial Evaluation</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Seemingly consistent formulations can hide weaknesses that a confirmation-oriented review fails to identify.</dd></div>
-                              <div><dt>In ATRIO</dt><dd>TROIA submits legal doubts to confrontation through independent arguments, with structured evaluation criteria, questions linked to the passages analyzed, and a record of dismissed doubts.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-adversarial" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-privacidade">Privacy and traceability</button>
-                          <div class="arx-pop" id="arx-pop-comp-privacidade" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Consolidates 2 mechanisms | ATRIO / RATIO / TROIA</p><h4 class="arx-pop__t">Privacy and traceability</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanisms</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Privacy by Design &amp; Pseudonymization</li><li>Traceability &amp; Auditability</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Personal data may circulate without adequate protection, while sources, transformations, and interventions can no longer be reconstructed.</dd></div>
-                              <div><dt>In ATRIO</dt><dd>Protection of information at input and output, controlled pseudonymization, and preservation of the records needed to reconstruct the documentary and decision path.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-privacidade" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                        <li><button class="arx-comp" type="button" popovertarget="arx-pop-comp-geracao">Controlled text generation</button>
-                          <div class="arx-pop" id="arx-pop-comp-geracao" popover>
-                            <header class="arx-pop__head"><div><p class="arx-pop__k">Preserves 1 mechanism | ATRIO</p><h4 class="arx-pop__t">Controlled text generation</h4></div></header>
-                            <dl class="arx-pop__dl">
-                              <div><dt>Mechanism</dt><dd><ul class="arx-pop__mecs" lang="en"><li>Controlled Generation</li></ul></dd></div>
-                              <div><dt>Problem</dt><dd>Refining a text can introduce undue changes to previously validated legal content.</dd></div>
-                              <div><dt>In ATRIO</dt><dd>Application of language rules, structure, and intervention limits, distinguishing formal refinement from any silent change to the merits.</dd></div>
-                            </dl>
-                            <button class="arx-pop__x" type="button" popovertarget="arx-pop-comp-geracao" popovertargetaction="hide" aria-label="Close">×</button>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </header>
-                  <div class="arx-cell arx-res" style="--w:4"><strong class="arx-res__n">115,114</strong><span class="arx-res__t"><b>rulings</b>: unique case records, normalized and deduplicated in ATRIO.</span></div>
-                  <div class="arx-cell arx-res" style="--w:4"><strong class="arx-res__n">32</strong><span class="arx-res__t"><b>versions</b> before reclassification, between March and October 2026.</span></div>
-                  <div class="arx-cell arx-res" style="--w:4"><strong class="arx-res__n">3</strong><span class="arx-res__t"><b>marks</b> in a single grammar, between architecture and chess.</span></div>
-                  <section class="arx-cell arx-modules" style="--w:12" aria-label="ATRIO components">
-                    <button class="arx-mod arx-mod--atrio" type="button" id="arx-mod-btn-atrio" data-arx-module="atrio" aria-expanded="true" aria-controls="arx-mod-atrio"><img class="arx-mod__sym" src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="64" height="64" loading="lazy"><span class="arx-mod__id"><span class="arx-mod__name">AT<em>R</em>IO</span><span class="arx-mod__role">Orchestration, memory and data</span><span class="arx-mod__ver">v.1.0.0</span></span><span class="arx-mod__fn">Orchestrates RATIO and TROIA, keeps the documentary memory, and protects the data; releases documents after an identified human decision.</span><span class="arx-mod__stat"><strong class="arx-res__n">3 + 3</strong><span class="arx-mod__lab">human stops and blocking states</span></span></button>
-                    <button class="arx-mod arx-mod--room" type="button" id="arx-mod-btn-ratio" data-arx-module="ratio" aria-expanded="true" aria-controls="arx-mod-ratio"><img class="arx-mod__sym" src="../assets/atrio/brand/ratio-rainha.svg?v=20261117-troia" alt="" width="64" height="64" loading="lazy"><span class="arx-mod__id"><span class="arx-mod__name"><em>R</em>ATIO</span><span class="arx-mod__role">Governed drafting</span><span class="arx-mod__ver">v.1.0.0</span></span><span class="arx-mod__stat"><strong class="arx-res__n">18</strong><span class="arx-mod__lab">hard stops, at minimum</span></span></button>
-                    <button class="arx-mod arx-mod--room" type="button" id="arx-mod-btn-cerne" data-arx-module="cerne" aria-expanded="true" aria-controls="arx-mod-cerne"><img class="arx-mod__sym" src="../assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="64" height="64" loading="lazy"><span class="arx-mod__id"><span class="arx-mod__name">T<em>R</em>OIA</span><span class="arx-mod__role">Confrontation</span><span class="arx-mod__ver">v.1.0.0</span></span><span class="arx-mod__stat"><strong class="arx-res__n">8</strong><span class="arx-mod__lab">hard stops; failure yields no partial report</span></span></button>
-                    <div class="arx-sheet" id="arx-mod-atrio" role="region" aria-labelledby="arx-mod-btn-atrio"><dl class="arx-sheet__facts"><div class="arx-sheet__f"><dt>Input</dt><dd>TXT, DOCX, or PDF, with local OCR; internal, external, or public destination.</dd></div><div class="arx-sheet__f"><dt>Output</dt><dd>Released document, text protected according to its destination, traceable events and versions; base of 115,114 rulings [<i class="raw" lang="en">raw</i>].</dd></div><div class="arx-sheet__f"><dt>Architecture</dt><dd>Intake (hash, OCR, confidentiality, pseudonymization, vault) → RATIO → TROIA → finishing and output protection → check → release; 31 routes, 33 operations [<i class="raw" lang="en">raw</i>].</dd></div><div class="arx-sheet__f"><dt>Governance</dt><dd>3 human stops, 3 blocking states; 6 interruptions at intake, 12 hard stops at output; rejects out-of-order commands.</dd></div><div class="arx-sheet__f"><dt>Privacy</dt><dd>Input: reversible pseudonymization (AES-256-GCM); public output: irreversible anonymization.</dd></div><div class="arx-sheet__f"><dt>Tests</dt><dd>188 passed on 26 Aug 2026; no raw record of the run.</dd></div><div class="arx-sheet__f"><dt>Stack</dt><dd>Python, FastAPI, PostgreSQL, Docker, OpenAPI 3.1, Tesseract, and an encrypted vault.</dd></div><div class="arx-sheet__f"><dt>AI used</dt><dd>Local Ollama; rules and optional spaCy for names; developed with Claude Code and Codex.</dd></div></dl><nav class="arx-sheet__links" aria-label="ATRIO documentation"><a class="arx-open" href="../assets/atrio/docs/FT_ATRIO.md" data-technical-sheet="atrio">Technical sheet <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="../assets/atrio/docs/ATRIO_Manual_Oficial_PUBLICO.txt" target="_blank" rel="noopener">Public manual <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="atrio.html?module=atrio&amp;panel=history#arquitetura">Evolution <span aria-hidden="true">→</span></a></nav></div>
-                    <div class="arx-sheet" id="arx-mod-ratio" role="region" aria-labelledby="arx-mod-btn-ratio"><p class="arx-sheet__fn">Produces draft decisions in phases, with progress authorized by an operator.</p><dl class="arx-sheet__facts"><div class="arx-sheet__f"><dt>Input</dt><dd>Document, case file, and track: small-claims appeal, motion for clarification, or writ of mandamus.</dd></div><div class="arx-sheet__f"><dt>Output</dt><dd>Traceable draft, status, and pending items; phases validated, blocked, or invalidated.</dd></div><div class="arx-sheet__f"><dt>Architecture</dt><dd>3 tracks, 18 phases: appeal (6), motions (5), writ (7).</dd></div><div class="arx-sheet__f"><dt>Governance</dt><dd>8 gates, at least 18 hard stops, and 9 human validations.</dd></div><div class="arx-sheet__f"><dt>Privacy</dt><dd>Handles no personal data; receives documents pseudonymized by ATRIO.</dd></div><div class="arx-sheet__f"><dt>Tests</dt><dd>72 in the code [<i class="raw" lang="en">raw</i>]; run results not saved.</dd></div><div class="arx-sheet__f"><dt>Stack</dt><dd>Instructions and knowledge files; Python API.</dd></div><div class="arx-sheet__f"><dt>AI used</dt><dd>Claude Projects and a custom GPT; local Ollama in the API.</dd></div></dl><nav class="arx-sheet__links" aria-label="RATIO documentation"><a class="arx-open" href="../assets/atrio/docs/FT_RATIO.md" data-technical-sheet="ratio">Technical sheet <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="../assets/atrio/docs/RATIO_Manual_Oficial_PUBLICO.txt" target="_blank" rel="noopener">Public manual <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="atrio.html?module=ratio&amp;panel=history#arquitetura">Evolution <span aria-hidden="true">→</span></a></nav></div>
-                    <div class="arx-sheet" id="arx-mod-cerne" role="region" aria-labelledby="arx-mod-btn-cerne"><p class="arx-sheet__fn">Submits judicial reasoning to confrontation, through questions linked to passages.</p><dl class="arx-sheet__facts"><div class="arx-sheet__f"><dt>Input</dt><dd>Injunction, judgment, opinion, or appellate decision (40 to 250,000 characters).</dd></div><div class="arx-sheet__f"><dt>Output</dt><dd>Questions and report; doubts labeled ACHADO (found) or AFASTADO (dismissed). Historical average: 12.2 min in CERNE 5.0.0 [<i class="raw" lang="en">raw</i>].</dd></div><div class="arx-sheet__f"><dt>Architecture</dt><dd>Doubts → independent confrontation → consolidated questions.</dd></div><div class="arx-sheet__f"><dt>Governance</dt><dd>8 hard stops; failure without a partial report; human decision.</dd></div><div class="arx-sheet__f"><dt>Privacy</dt><dd>No built-in protection; use restricted to public or fictitious rulings.</dd></div><div class="arx-sheet__f"><dt>Tests</dt><dd>110 in the code [<i class="raw" lang="en">raw</i>]; run results not saved.</dd></div><div class="arx-sheet__f"><dt>Stack</dt><dd>Python, FastAPI, and SQLite.</dd></div><div class="arx-sheet__f"><dt>AI used</dt><dd>Gemini, OpenAI, OpenRouter, Groq, Mistral, and ExpLabs APIs; distinct model families optional.</dd></div></dl><nav class="arx-sheet__links" aria-label="TROIA documentation"><a class="arx-open" href="../assets/atrio/docs/FT_CERNE.md" data-technical-sheet="cerne">Technical sheet <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="../assets/atrio/docs/CERNE_Manual_Oficial_PUBLICO.txt" target="_blank" rel="noopener">Public manual <span aria-hidden="true">→</span></a><a class="arx-open arx-open--ghost" href="atrio.html?module=cerne&amp;panel=history#arquitetura">Evolution <span aria-hidden="true">→</span></a></nav></div>
-                  </section>
-                </article>
-
-                </div>
-              </div>
-              <span class="arx-frame__foot" aria-hidden="true"></span>
-            </div>
-          </section>
-        </div>
-
-        <!-- ===== REPERTÓRIO — o dicionário de competências, dentro da home ===== -->
-        <!-- ===== CORRESPONDÊNCIAS — a tradução das dez competências em linguagem de mercado ===== -->
-        <section id="repertorio" aria-labelledby="h-repertorio">
-          <div class="eq__open" data-reveal="" style="--i:1">
-            <div class="eq__intro">
-              <h2 class="eq__title" id="h-repertorio">From term to proof</h2>
-              <p class="eq__lead">The vocabulary the market uses to name legal operations, entry by entry, each linked to the competencies that demonstrate it in DATA, ECHO, or ATRIO. Whoever searches by name finds the proof.</p>
-            </div>
-            <ul class="eq__comps" aria-label="Competencies">
-              <li><span class="lex__k lex__k--data" role="button" tabindex="0" data-arx-comp="data">KPI and performance management</span></li>
-              <li><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo">Knowledge management</span></li>
-              <li><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo">Process mapping and design</span></li>
-              <li><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo">Content governance and controlled language</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Data and corpus engineering</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Decision orchestration</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Adversarial evaluation</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Privacy by Design</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Traceability</span></li>
-              <li><span class="lex__k lex__k--atrio" role="button" tabindex="0" data-arx-comp="atrio">Controlled text generation</span></li>
+        <!-- 01 — AUTORIA -->
+        <section class="hm-panel hm-autoria" id="autoria" aria-labelledby="bio-name">
+          <p class="hm-idx" aria-hidden="true">01</p>
+          <p class="hm-kick">Authorship</p>
+          <h1 class="hm-name" id="bio-name" data-fit><span class="hm-fit">Christian da Costa</span></h1>
+          <p class="hm-lines"><span>Legal Engineering</span> <i aria-hidden="true">|</i> <span>Legal Operations</span> <i aria-hidden="true">|</i> <span>Law Firm Legal Operations</span> <i aria-hidden="true">|</i> <span>AI Governance &amp; Evaluation</span></p>
+          <div class="hm-autor">
+            <p class="hm-summary">Lawyer and Master of Laws (LL.M.). Nearly a decade spanning private practice and the public sector, including more than five years leading legal operations in the Judiciary. While leading a judge’s chambers, I ran legal operations at the point where they either hold or collapse: high volume.</p>
+            <ul class="hm-contacts" aria-label="Contacts">
+              <li><span class="hm-k">CV</span><span class="hm-v"><a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="CV in Portuguese">PT</a> <span aria-hidden="true">|</span> <a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="CV in English">EN</a></span></li>
+              <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener"><span class="hm-k">LinkedIn</span><span class="hm-v">in/christiandcosta</span></a></li>
+              <li><a href="mailto:christiandscosta@gmail.com"><span class="hm-k">Email</span><span class="hm-v">christiandscosta@gmail.com</span></a></li>
+              <li><a href="https://wa.me/5541991521304" target="_blank" rel="noopener"><span class="hm-k">WhatsApp</span><span class="hm-v">+55 41 99152-1304</span></a></li>
             </ul>
           </div>
-          <!-- Busca e filtro por projeto: recortam o dicionário; a ordem alfabética permanece -->
-          <div class="lexf" data-reveal="" style="--i:2" hidden>
-            <label class="lexf__q"><span class="arx-sr">Search entries</span><input class="lexf__i" type="search" placeholder="Search term, translation, or competency" autocomplete="off" spellcheck="false" aria-controls="eq-dicionario"></label>
-            <div class="lexf__g" role="group" aria-label="Filter by project" aria-controls="eq-dicionario">
-              <button class="lexf__b lexf__b--todos" type="button" data-lexf="" aria-pressed="true"><span class="lexf__n">All</span><span class="lexf__c"></span></button>
-              <button class="lexf__b lexf__b--data" type="button" data-lexf="data" aria-pressed="false"><span class="lexf__n">DATA</span><span class="lexf__c"></span></button>
-              <button class="lexf__b lexf__b--echo" type="button" data-lexf="echo" aria-pressed="false"><span class="lexf__n">ECHO</span><span class="lexf__c"></span></button>
-              <button class="lexf__b lexf__b--atrio" type="button" data-lexf="atrio" aria-pressed="false"><span class="lexf__n">ATRIO</span><span class="lexf__c"></span></button>
-              <button class="lexf__b lexf__b--transversal" type="button" data-lexf="transversal" aria-pressed="false"><span class="lexf__n">Cross-cutting</span><span class="lexf__c"></span></button>
-            </div>
-            <p class="arx-sr" id="lexf-status" aria-live="polite"></p>
+          <p class="hm-tese" data-fit><span class="hm-fit"><span aria-hidden="true">— </span>Before delegating the legal function,</span><br><span class="hm-fit">one must govern its reasoning.</span></p>
+        </section>
+
+        <!-- 02 — LEGAL OPERATIONS / ECHO: imagem à esquerda, narrativa à direita -->
+        <section class="hm-panel hm-proj hm-proj--echo" id="legal-operations" aria-labelledby="t-echo">
+          <p class="hm-idx" aria-hidden="true">02</p>
+          <p class="hm-kick">ECHO</p>
+          <h2 class="hm-title" id="t-echo" data-fit="titulo"><span class="hm-fit">legal operations</span></h2>
+          <figure class="hm-nv hm-nv--echo" aria-hidden="true">
+            <svg class="hm-nv__svg" viewBox="0 0 720 600" preserveAspectRatio="xMaxYMid slice" focusable="false">
+              <g class="hm-art">
+              <g class="hm-echo__staff" stroke="#2C2C2C" stroke-width="1.5"><line x1="-2400" y1="180" x2="480" y2="180"/><line x1="-2400" y1="240" x2="480" y2="240"/><line x1="-2400" y1="300" x2="480" y2="300"/><line x1="-2400" y1="360" x2="480" y2="360"/><line x1="-2400" y1="420" x2="480" y2="420"/></g>
+              <g class="hm-echo__waves" fill="none" stroke="#FFB627" stroke-width="3"><path d="M384,420 A150 150 0 0 0 384,180" opacity="0.78"/><path d="M288,420 A150 150 0 0 0 288,180" opacity="0.5"/><path d="M192,420 A150 150 0 0 0 192,180" opacity="0.28"/><path d="M96,420 A150 150 0 0 0 96,180" opacity="0.14"/></g>
+              <path fill="#FFB627" d="M480,180H720V420H480A150 150 0 0 0 480,180Z"/>
+              <g fill="#2C2C2C"><circle cx="568.5" cy="270" r="17.5"/><circle cx="568.5" cy="330" r="17.5"/><rect x="600" y="180" width="15" height="240"/><rect x="630" y="180" width="90" height="240"/></g>
+              </g>
+            </svg>
+          </figure>
+          <div class="hm-narr" lang="pt-BR">
+            <p>The first movement took place in first-instance chambers, when I began coordinating a legal operation whose high volume, combined with an intake of 36,000 cases, required making the caseload legible without letting the portfolio pile up. The procedure was replicated in another unit, with the training of a new chambers team.</p>
+            <p>In the move to the appellate level, the first diagnosis was silence. There was a caseload, there were deadlines, there was a panel. There was no established procedure. The only standard available was the first-instance one, and it did not come up along with us.</p>
+            <p>That absence made the problem clear: there was no common practice yet. It remained to define how a case came in, how it was classified, how it was assigned and how it was written, with no tradition to draw on and no one inside who could answer.</p>
+            <p>In 30 days, I developed ECHO, a Legal Ops methodology for operating appellate chambers: workflows, taxonomy, manuals.</p>
+            <p>It ran for another 30 days. But it echoed: it was handed on to the chambers team that succeeded us.</p>
           </div>
-          <p class="lexf__vazio" hidden>No entries in this selection. <button class="lexf__limpa" type="button">Clear search and filter</button></p>
-          <div class="lex arx-lex" id="eq-dicionario" data-reveal="" style="--i:2">
+          <a class="hm-sig hm-sig--echo" href="#echo" data-hm-view="echo">
+            <img class="hm-sig__mark" src="../assets/arco/showcase/echo.svg" alt="" width="144" height="36" decoding="async">
+            <span class="hm-sig__go">Explore ECHO <span aria-hidden="true">→</span></span>
+          </a>
+        </section>
+
+        <!-- 03 — LEGAL ENGINEERING / ATRIO: disposição invertida -->
+        <section class="hm-panel hm-proj hm-proj--atrio" id="legal-engineering" aria-labelledby="t-atrio">
+          <p class="hm-idx" aria-hidden="true">03</p>
+          <p class="hm-kick">ATRIO</p>
+          <h2 class="hm-title" id="t-atrio" data-fit="titulo"><span class="hm-fit">legal engineering</span></h2>
+          <figure class="hm-nv hm-nv--atrio" aria-hidden="true">
+            <svg class="hm-nv__svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMax slice" focusable="false">
+              <path class="hm-runway__light" fill="#FAFAFA" d="M300,366L846,791.9L-246,791.9Z"/>
+              <path class="hm-runway__dark" fill="#1C1C1C" d="M0,600L75,600L145.3,526.9L93.8,526.9ZM150,600L225,600L248.4,526.9L196.9,526.9ZM300,600L375,600L351.6,526.9L300,526.9ZM450,600L525,600L454.7,526.9L403.1,526.9ZM145.3,526.9L196.9,526.9L221.4,488.6L182.1,488.6ZM248.4,526.9L300,526.9L300,488.6L260.7,488.6ZM351.6,526.9L403.1,526.9L378.6,488.6L339.3,488.6ZM454.7,526.9L506.2,526.9L457.1,488.6L417.9,488.6ZM142.9,488.6L182.1,488.6L204.8,465L173.1,465ZM221.4,488.6L260.7,488.6L268.3,465L236.5,465ZM300,488.6L339.3,488.6L331.7,465L300,465ZM378.6,488.6L417.9,488.6L395.2,465L363.5,465ZM204.8,465L236.5,465L246.8,449L220.2,449ZM268.3,465L300,465L300,449L273.4,449ZM331.7,465L363.5,465L353.2,449L326.6,449ZM395.2,465L426.9,465L406.5,449L379.8,449ZM193.5,449L220.2,449L231.2,437.5L208.3,437.5ZM246.8,449L273.4,449L277.1,437.5L254.2,437.5ZM300,449L326.6,449L322.9,437.5L300,437.5ZM353.2,449L379.8,449L368.8,437.5L345.8,437.5ZM231.2,437.5L254.2,437.5L259.8,428.8L239.6,428.8ZM277.1,437.5L300,437.5L300,428.8L279.9,428.8ZM322.9,437.5L345.8,437.5L340.2,428.8L320.1,428.8ZM368.8,437.5L391.7,437.5L380.5,428.8L360.4,428.8ZM219.5,428.8L239.6,428.8L246.2,422L228.3,422ZM259.8,428.8L279.9,428.8L282.1,422L264.1,422ZM300,428.8L320.1,428.8L317.9,422L300,422ZM340.2,428.8L360.4,428.8L353.8,422L335.9,422ZM246.2,422L264.1,422L267.6,416.5L251.5,416.5ZM282.1,422L300,422L300,416.5L283.8,416.5ZM317.9,422L335.9,422L332.4,416.5L316.2,416.5ZM353.8,422L371.7,422L364.7,416.5L348.5,416.5ZM235.3,416.5L251.5,416.5L255.8,412L241.1,412ZM267.6,416.5L283.8,416.5L285.3,412L270.5,412ZM300,416.5L316.2,416.5L314.7,412L300,412ZM332.4,416.5L348.5,416.5L344.2,412L329.5,412ZM255.8,412L270.5,412L273,408.2L259.4,408.2ZM285.3,412L300,412L300,408.2L286.5,408.2ZM314.7,412L329.5,412L327,408.2L313.5,408.2ZM344.2,412L358.9,412L354.1,408.2L340.6,408.2ZM245.9,408.2L259.4,408.2L262.5,405L250,405ZM273,408.2L286.5,408.2L287.5,405L275,405ZM300,408.2L313.5,408.2L312.5,405L300,405ZM327,408.2L340.6,408.2L337.5,405L325,405ZM262.5,405L275,405L276.8,402.3L265.1,402.3ZM287.5,405L300,405L300,402.3L288.4,402.3ZM312.5,405L325,405L323.2,402.3L311.6,402.3ZM337.5,405L350,405L346.5,402.3L334.9,402.3ZM253.5,402.3L265.1,402.3L267.4,399.9L256.6,399.9ZM276.8,402.3L288.4,402.3L289.1,399.9L278.3,399.9ZM300,402.3L311.6,402.3L310.9,399.9L300,399.9ZM323.2,402.3L334.9,402.3L332.6,399.9L321.7,399.9ZM267.4,399.9L278.3,399.9L279.6,397.8L269.4,397.8ZM289.1,399.9L300,399.9L300,397.8L289.8,397.8ZM310.9,399.9L321.7,399.9L320.4,397.8L310.2,397.8ZM332.6,399.9L343.4,399.9L340.7,397.8L330.6,397.8ZM259.3,397.8L269.4,397.8L271.2,395.9L261.6,395.9ZM279.6,397.8L289.8,397.8L290.4,395.9L280.8,395.9ZM300,397.8L310.2,397.8L309.6,395.9L300,395.9ZM320.4,397.8L330.6,397.8L328.8,395.9L319.2,395.9ZM271.2,395.9L280.8,395.9L281.9,394.3L272.8,394.3ZM290.4,395.9L300,395.9L300,394.3L290.9,394.3ZM309.6,395.9L319.2,395.9L318.1,394.3L309.1,394.3ZM328.8,395.9L338.4,395.9L336.3,394.3L327.2,394.3ZM263.7,394.3L272.8,394.3L274.2,392.8L265.6,392.8ZM281.9,394.3L290.9,394.3L291.4,392.8L282.8,392.8ZM300,394.3L309.1,394.3L308.6,392.8L300,392.8ZM318.1,394.3L327.2,394.3L325.8,392.8L317.2,392.8ZM274.2,392.8L282.8,392.8L283.7,391.5L275.5,391.5ZM291.4,392.8L300,392.8L300,391.5L291.8,391.5ZM308.6,392.8L317.2,392.8L316.3,391.5L308.2,391.5ZM325.8,392.8L334.4,392.8L332.7,391.5L324.5,391.5ZM267.3,391.5L275.5,391.5L276.7,390.3L268.9,390.3ZM283.7,391.5L291.8,391.5L292.2,390.3L284.4,390.3ZM300,391.5L308.2,391.5L307.8,390.3L300,390.3ZM316.3,391.5L324.5,391.5L323.3,390.3L315.6,390.3ZM276.7,390.3L284.4,390.3L285.1,389.2L277.7,389.2ZM292.2,390.3L300,390.3L300,389.2L292.6,389.2ZM307.8,390.3L315.6,390.3L314.9,389.2L307.4,389.2ZM323.3,390.3L331.1,390.3L329.7,389.2L322.3,389.2ZM270.3,389.2L277.7,389.2L278.7,388.2L271.6,388.2ZM285.1,389.2L292.6,389.2L292.9,388.2L285.8,388.2ZM300,389.2L307.4,389.2L307.1,388.2L300,388.2ZM314.9,389.2L322.3,389.2L321.3,388.2L314.2,388.2ZM278.7,388.2L285.8,388.2L286.4,387.3L279.5,387.3ZM292.9,388.2L300,388.2L300,387.3L293.2,387.3ZM307.1,388.2L314.2,388.2L313.6,387.3L306.8,387.3ZM321.3,388.2L328.4,388.2L327.3,387.3L320.5,387.3ZM272.7,387.3L279.5,387.3L280.4,386.4L273.8,386.4ZM286.4,387.3L293.2,387.3L293.5,386.4L286.9,386.4ZM300,387.3L306.8,387.3L306.5,386.4L300,386.4ZM313.6,387.3L320.5,387.3L319.6,386.4L313.1,386.4ZM280.4,386.4L286.9,386.4L287.4,385.6L281.1,385.6ZM293.5,386.4L300,386.4L300,385.6L293.7,385.6ZM306.5,386.4L313.1,386.4L312.6,385.6L306.3,385.6ZM319.6,386.4L326.2,386.4L325.2,385.6L318.9,385.6ZM274.8,385.6L281.1,385.6L281.8,384.9L275.7,384.9ZM287.4,385.6L293.7,385.6L293.9,384.9L287.9,384.9ZM300,385.6L306.3,385.6L306.1,384.9L300,384.9ZM312.6,385.6L318.9,385.6L318.2,384.9L312.1,384.9ZM281.8,384.9L287.9,384.9L288.3,384.3L282.4,384.3ZM293.9,384.9L300,384.9L300,384.3L294.1,384.3ZM306.1,384.9L312.1,384.9L311.7,384.3L305.9,384.3ZM318.2,384.9L324.3,384.9L323.4,384.3L317.6,384.3ZM276.6,384.3L282.4,384.3L283,383.6L277.4,383.6ZM288.3,384.3L294.1,384.3L294.3,383.6L288.7,383.6ZM300,384.3L305.9,384.3L305.7,383.6L300,383.6ZM311.7,384.3L317.6,384.3L317,383.6L311.3,383.6ZM283,383.6L288.7,383.6L289.1,383L283.6,383ZM294.3,383.6L300,383.6L300,383L294.5,383ZM305.7,383.6L311.3,383.6L310.9,383L305.5,383ZM317,383.6L322.6,383.6L321.9,383L316.4,383ZM278.1,383L283.6,383L284.1,382.5L278.8,382.5ZM289.1,383L294.5,383L294.7,382.5L289.4,382.5ZM300,383L305.5,383L305.3,382.5L300,382.5ZM310.9,383L316.4,383L315.9,382.5L310.6,382.5ZM284.1,382.5L289.4,382.5L289.8,382L284.6,382ZM294.7,382.5L300,382.5L300,382L294.9,382ZM305.3,382.5L310.6,382.5L310.2,382L305.1,382ZM315.9,382.5L321.2,382.5L320.5,382L315.4,382ZM279.5,382L284.6,382L285.1,381.5L280.1,381.5ZM289.8,382L294.9,382L295,381.5L290.1,381.5ZM300,382L305.1,382L305,381.5L300,381.5ZM310.2,382L315.4,382L314.9,381.5L309.9,381.5ZM285.1,381.5L290.1,381.5L290.4,381.1L285.5,381.1ZM295,381.5L300,381.5L300,381.1L295.2,381.1ZM305,381.5L309.9,381.5L309.6,381.1L304.8,381.1ZM314.9,381.5L319.9,381.5L319.3,381.1L314.5,381.1ZM280.7,381.1L285.5,381.1L285.9,380.6L281.2,380.6ZM290.4,381.1L295.2,381.1L295.3,380.6L290.6,380.6ZM300,381.1L304.8,381.1L304.7,380.6L300,380.6ZM309.6,381.1L314.5,381.1L314.1,380.6L309.4,380.6ZM285.9,380.6L290.6,380.6L290.9,380.2L286.3,380.2ZM295.3,380.6L300,380.6L300,380.2L295.4,380.2ZM304.7,380.6L309.4,380.6L309.1,380.2L304.6,380.2ZM314.1,380.6L318.8,380.6L318.2,380.2L313.7,380.2ZM281.8,380.2L286.3,380.2L286.7,379.8L282.3,379.8ZM290.9,380.2L295.4,380.2L295.6,379.8L291.1,379.8ZM300,380.2L304.6,380.2L304.4,379.8L300,379.8ZM309.1,380.2L313.7,380.2L313.3,379.8L308.9,379.8ZM286.7,379.8L291.1,379.8L291.4,379.5L287,379.5ZM295.6,379.8L300,379.8L300,379.5L295.7,379.5ZM304.4,379.8L308.9,379.8L308.6,379.5L304.3,379.5ZM313.3,379.8L317.7,379.8L317.3,379.5L313,379.5Z"/>
+              <text class="hm-atrio__mark" x="150" y="336" textLength="300" lengthAdjust="spacing"><tspan>AT</tspan><tspan class="hm-atrio__r">R</tspan><tspan>IO</tspan></text>
+            </svg>
+          </figure>
+          <div class="hm-narr" lang="pt-BR">
+            <p>While a new working methodology was being rolled out, a sudden shift in the indicators revealed that output was accelerating out of step with method, as the stream of corrections showed.</p>
+            <p>That asymmetry made it clear that artificial intelligence could not be treated merely as a drafting tool. Once inside the legal workflow, it changed how documents were read, how hypotheses were formulated, how legal grounds were organized, and how the text was finished.</p>
+            <p>In response, I designed ATRIO: an architecture for governing AI-mediated legal reasoning, spanning memory, formulation, confrontation and data protection.</p>
+            <p>AI does not replace the decision: it operates along a governed path.</p>
+          </div>
+          <nav class="hm-sig hm-sig--atrio" aria-label="Integrated architecture: ATRIO, RATIO and TROIA">
+            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="atrio"><img src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">AT<em>R</em>IO</span></button>
+            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="ratio"><img src="../assets/atrio/brand/ratio-rainha.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n"><em>R</em>ATIO</span></button>
+            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="cerne"><img src="../assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">T<em>R</em>OIA</span></button>
+          </nav>
+        </section>
+
+        <!-- 04 — AI GOVERNANCE & EVALUATION / CERNE: espaços reservados.
+             Narrativa, accent e direção visual em desenvolvimento; nada aqui é
+             conteúdo definitivo nem herda resultados das versões ligadas a TROIA. -->
+        <section class="hm-panel hm-proj hm-proj--cerne" id="ai-governance" aria-labelledby="t-cerne">
+          <p class="hm-idx" aria-hidden="true">04</p>
+          <p class="hm-kick">CERNE</p>
+          <h2 class="hm-title" id="t-cerne" data-fit="titulo"><span class="hm-fit">ai governance &amp; evaluation</span></h2>
+          <figure class="hm-nv hm-nv--reserva">
+            <svg class="hm-nv__svg" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+              <line x1="0" y1="0" x2="100" y2="100" vector-effect="non-scaling-stroke"/>
+              <line x1="100" y1="0" x2="0" y2="100" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <figcaption class="hm-reserva">Non-verbal communication in development</figcaption>
+          </figure>
+          <div class="hm-narr hm-narr--reserva">
+            <p class="hm-narr__lede">An autonomous device for the critical governance of AI-mediated legal reasoning.</p>
+            <p class="hm-reserva">Narrative in development</p>
+          </div>
+        </section>
+
+        <!-- 05 — RASTRO: as evidências, cada uma com sua atribuição histórica -->
+        <section class="hm-panel hm-rastro" id="rastro" aria-labelledby="t-rastro">
+          <p class="hm-idx" aria-hidden="true">05</p>
+          <p class="hm-kick">Jurimetrics</p>
+          <h2 class="hm-title" id="t-rastro" data-fit="titulo"><span class="hm-fit">trace</span></h2>
+          <p class="hm-lede">Every number with a trace of where it comes from and a grounding for what it allows us to claim.</p>
+
+          <article class="hm-ev" aria-labelledby="ev-1">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-1">Tax enforcement<span class="hm-ev__u">First instance</span></h3>
+              <p class="hm-ev__s">Portfolio clean-up · 3 Jul 2024 to 4 Sep 2024</p>
+            </header>
+            <div class="hm-fig hm-fig--lead">
+              <p class="hm-fig__v">600</p>
+              <p class="hm-fig__l">cases cleaned up</p>
+              <p class="hm-fig__m">256 referred for dismissal under CNJ Resolution 547/2024 + 344 identified as already clearable</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">1,543</p>
+              <p class="hm-fig__l">cases triaged</p>
+              <p class="hm-fig__m">tax enforcement cases reviewed in the front; 101 handled directly by the author</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">38.9%</p>
+              <p class="hm-fig__l">of the screened portfolio</p>
+              <p class="hm-fig__m">600 ÷ 1,543</p>
+            </div>
+            <p class="hm-ev__lim">Referral for dismissal does not, by itself, amount to final closure. Conservative floor: only unequivocal clean-up signals.</p>
+            <p class="hm-ev__src"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></p>
+          </article>
+
+          <article class="hm-ev" aria-labelledby="ev-2">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-2">ECHO<span class="hm-ev__u">4th Appellate Panel</span></h3>
+              <p class="hm-ev__s">Intake and classification · Operation, 4th Panel</p>
+            </header>
+            <div class="hm-fig hm-fig--lead">
+              <p class="hm-fig__v">1,192</p>
+              <p class="hm-fig__l">cases triaged</p>
+              <p class="hm-fig__m">1,192 anonymized public records · <a href="../assets/data/lastro/acervo_publico.xlsx">acervo_publico.xlsx</a></p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">90.2%</p>
+              <p class="hm-fig__l">category reduction</p>
+              <p class="hm-fig__m">1 − 10/102; 102 source subjects, 92 categories removed · <a href="../assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">2,758</p>
+              <p class="hm-fig__l">headnotes cataloged</p>
+              <p class="hm-fig__m">Full collection · <a href="../assets/data/lastro/ementario_publico.xlsx">ementario_publico.xlsx</a></p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">631</p>
+              <p class="hm-fig__l">precedent topics</p>
+              <p class="hm-fig__m">483 with a settled thesis · <a href="../assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></p>
+            </div>
+          </article>
+
+          <article class="hm-ev" aria-labelledby="ev-3">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-3">Finalization rate<span class="hm-ev__u">2nd Appellate Panel</span></h3>
+              <p class="hm-ev__s">Finalization = opinions ÷ orders issued × 100 · 28 Nov 2025 to 5 May 2026</p>
+            </header>
+            <div class="hm-fig hm-fig--lead">
+              <p class="hm-fig__v">51.05%</p>
+              <p class="hm-fig__l">Published finalization</p>
+              <p class="hm-fig__m">899 opinions ÷ 1,761 orders issued</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">+16.18 pp</p>
+              <p class="hm-fig__l">Range of the full-month series</p>
+              <p class="hm-fig__m">60.39 − 44.21 · Dec 2025 – Apr 2026 | five full months</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">13.2 <small>and</small> 6.9 d</p>
+              <p class="hm-fig__l">Average queue until the opinion and for other orders</p>
+              <p class="hm-fig__m">Data Despacho − Data Envio</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">−29.8 pp</p>
+              <p class="hm-fig__l">Beyond the 30-day ceiling, Jan to Apr 2026</p>
+              <p class="hm-fig__m">36.5% (119 of 326) → 6.7% (27 of 402)</p>
+            </div>
+            <p class="hm-ev__lim">The finalization curve coincides with the adoption of the system, and coincidence is not proof. There is no individual record of use, two staff members joined the payroll in March, and April had a seasonal task force.</p>
+            <p class="hm-ev__src"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></p>
+          </article>
+
+          <article class="hm-ev" aria-labelledby="ev-4">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-4">ATRIO<span class="hm-ev__u">CORPUS</span></h3>
+              <p class="hm-ev__s">API structure and case scope</p>
+            </header>
+            <div class="hm-fig hm-fig--lead">
+              <p class="hm-fig__v">115,114</p>
+              <p class="hm-fig__l">Unique case records</p>
+              <p class="hm-fig__m"><a href="../assets/data/lastro/diagnostico_corpus_publico.md">diagnostico_corpus_publico.md</a></p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">31</p>
+              <p class="hm-fig__l">/v1 routes</p>
+              <p class="hm-fig__m">33 declared HTTP operations</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">188</p>
+              <p class="hm-fig__l">Automated tests</p>
+              <p class="hm-fig__m">Local suite, 26 Aug 2026</p>
+            </div>
+            <p class="hm-ev__lim">After identification and deduplication. The number shows the scale of the base, <strong>not decision quality</strong>.</p>
+            <p class="hm-ev__src"><a href="../assets/data/lastro/operacao_atrio_publica.md">operacao_atrio_publica.md</a></p>
+          </article>
+
+          <article class="hm-ev" aria-labelledby="ev-5">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-5">TROIA<span class="hm-ev__u">Tests on rulings, TJPR + STJ</span></h3>
+              <p class="hm-ev__s">17 rounds reproduced in the demonstration, one per ruling, TJPR and STJ, 12 to 19 Oct 2026 · under the former name, CERNE 5.0.0</p>
+            </header>
+            <div class="hm-fig hm-fig--lead">
+              <p class="hm-fig__v">12.2 min</p>
+              <p class="hm-fig__l">Mean round time per ruling</p>
+              <p class="hm-fig__m">mean of duracao_min across the 17 rounds; median of 11.1 min</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">67</p>
+              <p class="hm-fig__l">questions across 17 rulings</p>
+              <p class="hm-fig__m">sum of questions; 218 doubts formed, 11 dismissed</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">15 of 17</p>
+              <p class="hm-fig__l">Rulings completed on the first attempt</p>
+              <p class="hm-fig__m">sum of concluida_na_primeira; 22 rounds started, 4 declared failures</p>
+            </div>
+            <div class="hm-fig">
+              <p class="hm-fig__v">9 of 12</p>
+              <p class="hm-fig__l">Rulings with a question on a point open to a motion for clarification</p>
+              <p class="hm-fig__m">7 on the corrected point + 2 on another corroborated point</p>
+            </div>
+            <p class="hm-ev__lim">Exploratory selection, checked by the author. Not a precision rate.</p>
+            <p class="hm-ev__src"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></p>
+          </article>
+
+          <article class="hm-ev hm-ev--lim" aria-labelledby="ev-6">
+            <header class="hm-ev__h">
+              <h3 class="hm-ev__t" id="ev-6">Limits of interpretation</h3>
+            </header>
+            <ul class="hm-neq">
+              <li><span>Volume</span><i aria-label="is not the same as">≠</i><span>Performance</span></li>
+              <li><span>Percentage</span><i aria-label="is not the same as">≠</i><span>Percentage point</span></li>
+              <li><span>Queue</span><i aria-label="is not the same as">≠</i><span>Working time</span></li>
+              <li><span>Association</span><i aria-label="is not the same as">≠</i><span>Causality</span></li>
+              <li><span>Edge month</span><i aria-label="is not the same as">≠</i><span>Full month</span></li>
+              <li><span>Absence of proof</span><i aria-label="is not the same as">≠</i><span>Falsity</span></li>
+            </ul>
+            <p class="hm-ev__lim">My own project in a professional context, not official TJPR material. The original base was extracted from an internal system and contains third-party data; it is not part of the current public artifacts. Only aggregated derivatives and the source integrity hash are made available.</p>
+            <ul class="hm-ev__links">
+              <li><a href="../assets/data/lastro/README.md">Public grounding <span aria-hidden="true">↗</span></a></li>
+              <li><a href="../assets/data/lastro/jurimetria.sha256">SHA-256 hash <span aria-hidden="true">↗</span></a></li>
+              <li><a href="#data" data-view="data" data-hm-view="data">Base &amp; method <span aria-hidden="true">→</span></a></li>
+            </ul>
+          </article>
+        </section>
+
+        <!-- 06 — LASTRO: do termo à prova -->
+        <section class="hm-panel hm-lastro" id="lastro" aria-labelledby="t-lastro">
+          <p class="hm-idx" aria-hidden="true">06</p>
+          <p class="hm-kick">From term to proof</p>
+          <h2 class="hm-title" id="t-lastro" data-fit="titulo"><span class="hm-fit">grounding</span></h2>
+          <p class="hm-lede">The vocabulary the market uses to name legal operations, entry by entry, each linked to the competencies that demonstrate it in Trace, ECHO, or ATRIO. Whoever searches by name finds the proof.</p>
+
+          <div class="hm-corr">
+            <p class="hm-corr__h" aria-hidden="true"><span>Demonstrated competency</span><span>Proof</span><span>Market terms</span></p>
+            <ol class="hm-corr__l" aria-label="Competencies">
+              <li class="hm-corr__r hm-corr__r--data">
+                <p class="hm-corr__c">KPI and performance management</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--data" href="#rastro" data-hm-go>Trace</a></p>
+                <p class="hm-corr__t"><a href="#pro-03" data-hm-term>Business Process Management</a>, <a href="#pro-09" data-hm-term><span class="lex__sg">KPI</span> Management</a>, <a href="#pro-05" data-hm-term>Process Improvement</a>, <a href="#pro-11" data-hm-term><span class="lex__sg">SLA</span> &amp; Aging</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--echo">
+                <p class="hm-corr__c">Knowledge management</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--echo" href="#legal-operations" data-hm-go>ECHO</a></p>
+                <p class="hm-corr__t"><a href="#pro-07" data-hm-term>Change Management</a>, <a href="#con-06" data-hm-term>Documentation</a>, <a href="#con-01" data-hm-term>Knowledge Capture</a>, <a href="#con-02" data-hm-term>Knowledge Management</a>, <a href="#con-03" data-hm-term>Knowledge Transfer</a>, <a href="#con-07" data-hm-term>Onboarding &amp; Training</a>, <a href="#pro-10" data-hm-term>Stakeholder Management</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--echo">
+                <p class="hm-corr__c">Process mapping and design</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--echo" href="#legal-operations" data-hm-go>ECHO</a></p>
+                <p class="hm-corr__t"><a href="#pro-03" data-hm-term>Business Process Management</a>, <a href="#pro-07" data-hm-term>Change Management</a>, <a href="#prd-01" data-hm-term>Document Automation</a>, <a href="#con-03" data-hm-term>Knowledge Transfer</a>, <a href="#des-01" data-hm-term>Legal Design</a>, <a href="#pro-08" data-hm-term>Process Governance</a>, <a href="#pro-05" data-hm-term>Process Improvement</a>, <a href="#pro-01" data-hm-term>Process Mapping</a>, <a href="#pro-02" data-hm-term>Process Standardization</a>, <a href="#prd-04" data-hm-term>Product Thinking</a>, <a href="#pro-06" data-hm-term>Root Cause Analysis</a>, <a href="#pro-10" data-hm-term>Stakeholder Management</a>, <a href="#con-04" data-hm-term>Standard Operating Procedures</a>, <a href="#pro-04" data-hm-term>Workflow Design</a>, <a href="#pro-12" data-hm-term>Workload Balancing</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--echo">
+                <p class="hm-corr__c">Content governance and controlled language</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--echo" href="#legal-operations" data-hm-go>ECHO</a></p>
+                <p class="hm-corr__t"><a href="#des-01" data-hm-term>Legal Design</a>, <a href="#con-05" data-hm-term>Style Guide</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Data and corpus engineering</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#iax-09" data-hm-term>Context Engineering</a>, <a href="#dad-01" data-hm-term>Corpus Engineering</a>, <a href="#dad-03" data-hm-term>Data Governance</a>, <a href="#dad-02" data-hm-term>Data Quality</a>, <a href="#dad-07" data-hm-term>Information Architecture</a>, <a href="#dad-05" data-hm-term>Information Extraction</a>, <a href="#dad-04" data-hm-term>Metadata Management</a>, <a href="#dad-06" data-hm-term>Taxonomy</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Decision orchestration</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#iax-01" data-hm-term><span class="lex__sg">AI</span> Governance</a>, <a href="#iax-02" data-hm-term><span class="lex__sg">AI</span> Risk Management</a>, <a href="#arq-04" data-hm-term>Business Rules</a>, <a href="#iax-09" data-hm-term>Context Engineering</a>, <a href="#arq-03" data-hm-term>Decision Support System</a>, <a href="#prd-01" data-hm-term>Document Automation</a>, <a href="#iax-04" data-hm-term>Human in the Loop</a>, <a href="#prd-02" data-hm-term>Legal Engineering</a>, <a href="#arq-01" data-hm-term>Modular Architecture</a>, <a href="#arq-02" data-hm-term>Orchestration</a>, <a href="#pro-08" data-hm-term>Process Governance</a>, <a href="#pro-05" data-hm-term>Process Improvement</a>, <a href="#prd-04" data-hm-term>Product Thinking</a>, <a href="#iax-08" data-hm-term>Prompt Engineering</a>, <a href="#iax-05" data-hm-term>Quality Gates</a>, <a href="#arq-05" data-hm-term>Requirements Management</a>, <a href="#iax-12" data-hm-term>Risk Assessment</a>, <a href="#pro-10" data-hm-term>Stakeholder Management</a>, <a href="#pro-04" data-hm-term>Workflow Design</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Adversarial evaluation</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#iax-06" data-hm-term>Adversarial Review</a>, <a href="#iax-02" data-hm-term><span class="lex__sg">AI</span> Risk Management</a>, <a href="#arq-03" data-hm-term>Decision Support System</a>, <a href="#prd-02" data-hm-term>Legal Engineering</a>, <a href="#iax-07" data-hm-term><span class="lex__sg">LLM</span> &amp; Output Evaluation</a>, <a href="#iax-08" data-hm-term>Prompt Engineering</a>, <a href="#iax-12" data-hm-term>Risk Assessment</a>, <a href="#pro-06" data-hm-term>Root Cause Analysis</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Privacy by Design</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#iax-01" data-hm-term><span class="lex__sg">AI</span> Governance</a>, <a href="#iax-02" data-hm-term><span class="lex__sg">AI</span> Risk Management</a>, <a href="#iax-09" data-hm-term>Context Engineering</a>, <a href="#dad-03" data-hm-term>Data Governance</a>, <a href="#prd-02" data-hm-term>Legal Engineering</a>, <a href="#iax-03" data-hm-term>Privacy by Design</a>, <a href="#iax-12" data-hm-term>Risk Assessment</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Traceability</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#iax-01" data-hm-term><span class="lex__sg">AI</span> Governance</a>, <a href="#iax-02" data-hm-term><span class="lex__sg">AI</span> Risk Management</a>, <a href="#dad-03" data-hm-term>Data Governance</a>, <a href="#arq-03" data-hm-term>Decision Support System</a>, <a href="#prd-02" data-hm-term>Legal Engineering</a>, <a href="#iax-10" data-hm-term>Process Explainability</a>, <a href="#iax-12" data-hm-term>Risk Assessment</a>, <a href="#iax-11" data-hm-term>Traceability</a>.</p>
+              </li>
+              <li class="hm-corr__r hm-corr__r--atrio">
+                <p class="hm-corr__c">Controlled text generation</p>
+                <p class="hm-corr__p"><a class="hm-tag hm-tag--atrio" href="#legal-engineering" data-hm-go>ATRIO</a></p>
+                <p class="hm-corr__t"><a href="#arq-03" data-hm-term>Decision Support System</a>, <a href="#prd-01" data-hm-term>Document Automation</a>, <a href="#des-01" data-hm-term>Legal Design</a>, <a href="#prd-02" data-hm-term>Legal Engineering</a>, <a href="#iax-08" data-hm-term>Prompt Engineering</a>, <a href="#con-05" data-hm-term>Style Guide</a>.</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="hm-index" id="repertorio">
+            <div class="lexf" hidden>
+              <label class="lexf__q"><span class="arx-sr">Search entries</span><input class="lexf__i" type="search" placeholder="Search term, translation, or competency" autocomplete="off" spellcheck="false" aria-controls="eq-dicionario"></label>
+              <div class="lexf__g" role="group" aria-label="Filter by project" aria-controls="eq-dicionario">
+                <button class="lexf__b lexf__b--todos" type="button" data-lexf="" aria-pressed="true"><span class="lexf__n">All</span><span class="lexf__c"></span></button>
+                <button class="lexf__b lexf__b--data" type="button" data-lexf="data" aria-pressed="false"><span class="lexf__n">Trace</span><span class="lexf__c"></span></button>
+                <button class="lexf__b lexf__b--echo" type="button" data-lexf="echo" aria-pressed="false"><span class="lexf__n">ECHO</span><span class="lexf__c"></span></button>
+                <button class="lexf__b lexf__b--atrio" type="button" data-lexf="atrio" aria-pressed="false"><span class="lexf__n">ATRIO</span><span class="lexf__c"></span></button>
+                <button class="lexf__b lexf__b--transversal" type="button" data-lexf="transversal" aria-pressed="false"><span class="lexf__n">Cross-cutting</span><span class="lexf__c"></span></button>
+              </div>
+              <p class="arx-sr" id="lexf-status" aria-live="polite"></p>
+            </div>
+            <p class="lexf__vazio" hidden>No entries in this selection. <button class="lexf__limpa" type="button">Clear search and filter</button></p>
+            <div class="lex hm-lex" id="eq-dicionario">
 
                 <h4 class="lex__l">A</h4>
                 <p class="lex__e" data-proj="atrio" id="iax-06" tabindex="-1">
@@ -779,10 +728,10 @@
                   <span class="lex__s lex__s--comp"><span class="lex__k lex__k--echo" role="button" tabindex="0" data-arx-comp="echo">Process mapping and design</span>.</span> <span class="lex__v"><abbr class="lex__ab" title="also known as">aka</abbr> Workload Distribution; Capacity Planning.</span>
                 </p>
 
+            </div>
           </div>
-          <!-- Fronteira: o limite declarado. Não é um cartão: é a linha onde o portfólio termina. -->
-          <section class="arx-front2" aria-labelledby="eq-fronteira" data-reveal="" style="--i:3">
-            <div class="front__cut" aria-hidden="true"></div>
+
+          <section class="hm-front" aria-labelledby="eq-fronteira">
             <div class="front__grid">
               <header class="front__head">
                 <h3 class="front__k" id="eq-fronteira">Boundary</h3>
@@ -813,7 +762,6 @@
             </div>
           </section>
         </section>
-
 
       </div>
     </section>

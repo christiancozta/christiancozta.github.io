@@ -1,0 +1,564 @@
+/* ==========================================================================
+   ARCO — home
+   --------------------------------------------------------------------------
+   Seis painéis sucessivos sobre a matriz modular de 8, com a retícula
+   aparente do ATRIO: oito macrocolunas e fileiras derivadas da viewport.
+
+     --cell   largura da macrocoluna = palco / 8
+     --row    fileira = (viewport − cordão) / 8, nunca abaixo de 64px
+     --u      unidade de 8px para folgas internas
+
+   Cada painel tem 8 colunas e, no mínimo, 8 fileiras: a viewport é a
+   referência da composição, não uma altura fixa. Quando o texto pede mais,
+   a fileira cresce até o múltiplo seguinte de --row (arco-home.js), e a
+   retícula do fundo continua coincidindo com as divisões reais do grid.
+   As colunas 1 e 8 são margens; a composição vive entre 2 e 7.
+   ========================================================================== */
+
+.hm{
+  --u:8px;
+  --g:calc(var(--u) * 2);
+  --row:max(64px, calc((100dvh - var(--rail-h, 58px)) / 8));
+  --paper:#FCFCFC;
+  --ink:#2C2C2C;
+  --grid:rgba(44,44,44,.07);
+  --rule:rgba(44,44,44,.2);
+  --soft:rgba(44,44,44,.66);
+  --echo:#FFB627;
+  --echo-paper:#F2EFE9;
+  --atrio:#D94F2D;
+  background:var(--paper);
+  color:var(--ink);
+}
+.arx-sr{
+  position:absolute!important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* ---------- painel e retícula ---------- */
+.hm-panel{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(8, minmax(0, 1fr));
+  grid-template-rows:repeat(8, minmax(var(--row), auto));
+  grid-auto-rows:minmax(var(--row), auto);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size:calc(100% / 8) var(--row);
+  background-position:0 0;
+  border-top:1px solid var(--rule);
+  scroll-margin-top:var(--rail-h, 0px);
+}
+.hm-panel:first-child{ border-top:0; }
+.hm-rastro::after,
+.hm-lastro::after{ content:""; grid-column:1 / -1; height:var(--row); }
+.hm-panel > *{ min-width:0; margin:0; }
+
+.hm-idx,
+.hm-kick{
+  grid-row:1; align-self:start;
+  padding:var(--g);
+  font-family:var(--f-micro); font-size:.62rem; font-weight:600; line-height:1.3;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--soft);
+}
+.hm-idx{ grid-column:1; font-variant-numeric:tabular-nums; }
+.hm-kick{ grid-column:2 / 5; color:var(--ink); }
+
+/* títulos: um único corpo para os cinco, ajustado ao mais longo (2 a 7) */
+.hm-title{
+  grid-column:2 / 8; grid-row:2; align-self:end;
+  padding:0 var(--g) calc(var(--u) * 1.5);
+  font-family:var(--f-display); font-weight:800;
+  font-size:4.6vw; line-height:.9; letter-spacing:-.045em;
+  text-transform:lowercase; color:var(--ink);
+}
+.hm-fit{ display:inline-block; white-space:nowrap; }
+
+.hm-lede{
+  grid-column:5 / 8; grid-row:2; align-self:end;
+  padding:0 var(--g) calc(var(--u) * 2);
+  font-family:var(--f-body); font-size:.9rem; line-height:1.5; color:var(--ink);
+  text-align:justify; -webkit-hyphens:auto; hyphens:auto;
+}
+
+/* ==========================================================================
+   01 — AUTORIA
+   ========================================================================== */
+.hm-name{
+  grid-column:2 / 8; grid-row:2 / 4; align-self:end;
+  padding:0 var(--g);
+  font-family:var(--f-display); font-weight:800;
+  font-size:8.4vw; line-height:.82; letter-spacing:-.05em; color:var(--ink);
+}
+/* as quatro frentes: uma linha justificada na largura exata do nome */
+.hm-lines{
+  grid-column:2 / 8; grid-row:4; align-self:start;
+  display:flex; justify-content:space-between; align-items:baseline; gap:var(--u);
+  padding:calc(var(--u) * 2.5) var(--g) 0;
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(.8rem, 1.32vw, 1.4rem); line-height:1.2; letter-spacing:-.012em;
+}
+.hm-lines span{ white-space:nowrap; }
+.hm-lines i{ font-style:normal; font-weight:400; color:rgba(44,44,44,.32); }
+
+/* bloco autoral (2 a 4) e tese em contraponto (5 a 7), ambos pousados na base */
+.hm-autor{
+  grid-column:2 / 5; grid-row:6 / 9; align-self:end;
+  display:grid; gap:calc(var(--u) * 3);
+  padding:var(--g) var(--g) calc(var(--u) * 3);
+}
+.hm-summary{
+  margin:0;
+  font-family:var(--f-body); font-size:.92rem; line-height:1.5;
+  text-align:justify; text-justify:inter-word; -webkit-hyphens:auto; hyphens:auto;
+}
+.hm-contacts{
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--u) * 1.25) var(--g);
+  border-top:1px solid var(--rule); padding-top:calc(var(--u) * 1.5);
+}
+.hm-contacts li{ min-width:0; }
+.hm-contacts li > a,
+.hm-contacts li{ display:flex; flex-direction:column; gap:2px; color:inherit; text-decoration:none; }
+.hm-k{
+  font-family:var(--f-micro); font-size:.58rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--soft);
+}
+.hm-v{
+  font-family:var(--f-body); font-size:.84rem; line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.hm-v a{ color:inherit; }
+.hm-contacts a .hm-v,
+.hm-v a{
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-underline-offset:.22em; text-decoration-color:rgba(44,44,44,.22);
+  transition:text-decoration-color var(--fast) var(--ease);
+}
+.hm-contacts a:hover .hm-v,
+.hm-contacts a:focus-visible .hm-v,
+.hm-v a:hover,
+.hm-v a:focus-visible{ text-decoration-color:var(--ink); }
+
+.hm-tese{
+  grid-column:5 / 8; grid-row:6 / 9; align-self:end;
+  padding:var(--g) var(--g) calc(var(--u) * 3);
+  font-family:var(--f-display); font-weight:300; font-style:italic;
+  font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
+  text-align:left;
+}
+
+/* ==========================================================================
+   02 a 04 — OBRAS: dois campos equivalentes (2–4 | 5–7), assinatura na base
+   ========================================================================== */
+.hm-nv{
+  grid-column:2 / 5; grid-row:3 / 8;
+  position:relative; overflow:hidden; margin:0;
+  /* pousa exatamente sobre as linhas da retícula */
+  margin:0 0 0 1px;
+}
+.hm-nv__svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.hm-narr{
+  grid-column:5 / 8; grid-row:3 / 8; align-self:start;
+  padding:var(--g) var(--g) var(--g) calc(var(--g) * 1.5);
+  columns:2; column-gap:calc(var(--g) * 1.5);
+  font-family:var(--f-body); font-size:.9rem; line-height:1.52; color:var(--ink);
+  text-align:justify; text-justify:inter-word;
+  -webkit-hyphens:auto; hyphens:auto; hyphenate-limit-chars:6 3 3;
+}
+.hm-narr p{ margin:0 0 .75em; break-inside:avoid-column; }
+.hm-narr p:last-child{ margin-bottom:0; }
+.hm-sig{
+  grid-column:2 / 5; grid-row:8; align-self:stretch;
+  margin:0 0 0 1px;
+}
+
+/* ECHO: a pauta, o ritornelo e seus ecos, sobre o papel do ECHO */
+.hm-nv--echo{ background:var(--echo-paper); }
+.hm-sig--echo{
+  display:flex; align-items:center; justify-content:space-between; gap:var(--g);
+  padding:0 var(--g);
+  color:var(--ink); text-decoration:none;
+}
+.hm-sig__mark{ display:block; height:clamp(22px, 2.2vw, 34px); width:auto; }
+.hm-sig__go{
+  font-family:var(--f-micro); font-size:.66rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase;
+  padding:.4rem 0; border-bottom:2px solid var(--echo);
+  transition:border-color var(--fast) var(--ease);
+}
+.hm-sig--echo:hover .hm-sig__go,
+.hm-sig--echo:focus-visible .hm-sig__go{ border-bottom-color:var(--ink); }
+.hm-sig:focus-visible{ outline:2px solid var(--ink); outline-offset:-2px; }
+
+/* ATRIO: campos invertidos; mesmas medidas, mesmos alinhamentos externos */
+.hm-proj--atrio .hm-nv{ grid-column:5 / 8; background:var(--atrio); }
+.hm-proj--atrio .hm-narr{ grid-column:2 / 5; padding:var(--g) calc(var(--g) * 1.5) var(--g) var(--g); }
+.hm-proj--atrio .hm-sig{ grid-column:5 / 8; }
+.hm-atrio__mark{
+  font-family:"Science Gothic", var(--f-display); font-weight:650; font-size:80px;
+  fill:#2A2529;
+}
+.hm-atrio__r{ fill:#FCFCFC; }
+/* a assinatura: três peças, uma por macrocoluna, levam à arquitetura */
+.hm-sig--atrio{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.hm-piece{
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  display:flex; align-items:center; gap:calc(var(--u) * 1.25);
+  min-width:0; padding:0 var(--g); margin:0;
+  border:0; border-left:1px solid transparent; background:none; color:var(--ink);
+  transition:background-color var(--fast) var(--ease);
+}
+.hm-piece img{ display:block; width:clamp(28px, 2.6vw, 40px); height:auto; flex:none; }
+.hm-piece__n{
+  font-family:"Science Gothic", var(--f-display); font-weight:650;
+  font-size:clamp(.78rem, 1.05vw, 1rem); letter-spacing:.02em; white-space:nowrap;
+}
+.hm-piece__n em{ font-style:normal; color:var(--atrio); }
+.hm-piece:hover,
+.hm-piece:focus-visible{ background:rgba(217,79,45,.08); }
+.hm-piece:focus-visible{ outline:2px solid var(--atrio); outline-offset:-2px; }
+
+/* CERNE: espaços reservados — a moldura de imagem e as linhas de texto */
+.hm-nv--reserva{ border:1px solid var(--rule); margin:0; }
+.hm-nv--reserva line{ stroke:rgba(44,44,44,.16); stroke-width:1; }
+.hm-reserva{
+  font-family:var(--f-micro); font-size:.58rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--soft);
+}
+.hm-nv--reserva .hm-reserva{
+  position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
+  max-width:80%; padding:.35rem .6rem; background:var(--paper); text-align:center;
+}
+.hm-narr--reserva{ columns:auto; }
+.hm-narr__lede{
+  margin:0 0 calc(var(--u) * 3)!important; -webkit-hyphens:manual; hyphens:manual;
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(1rem, 1.5vw, 1.45rem); line-height:1.2; letter-spacing:-.018em;
+  text-align:left;
+}
+/* linhas pautadas no ritmo do texto: o lugar da narrativa, sem conteúdo */
+.hm-narr--reserva .hm-reserva{
+  margin:0;
+  padding-top:calc(1.52em * 9);
+  background-image:repeating-linear-gradient(to bottom, transparent 0 calc(1.52rem - 1px), rgba(44,44,44,.14) calc(1.52rem - 1px) 1.52rem);
+  background-size:100% calc(1.52rem * 8); background-repeat:no-repeat;
+}
+
+/* ==========================================================================
+   05 — RASTRO: seis unidades equivalentes, três por faixa, duas colunas cada
+   ========================================================================== */
+.hm-ev{
+  display:flex; flex-direction:column; gap:calc(var(--u) * 2);
+  padding:var(--g) var(--g) calc(var(--u) * 3);
+  border-top:1px solid var(--ink);
+  margin:0 0 0 1px;
+}
+/* painéis de leitura longa: cada faixa ocupa uma única fileira, que cresce
+   até o múltiplo seguinte de --row; nada de fileiras vazias herdadas */
+.hm-rastro,
+.hm-lastro{ grid-template-rows:repeat(2, minmax(var(--row), auto)); }
+.hm-rastro .hm-ev:nth-of-type(1){ grid-column:2 / 4; grid-row:3; }
+.hm-rastro .hm-ev:nth-of-type(2){ grid-column:4 / 6; grid-row:3; }
+.hm-rastro .hm-ev:nth-of-type(3){ grid-column:6 / 8; grid-row:3; }
+.hm-rastro .hm-ev:nth-of-type(4){ grid-column:2 / 4; grid-row:4; }
+.hm-rastro .hm-ev:nth-of-type(5){ grid-column:4 / 6; grid-row:4; }
+.hm-rastro .hm-ev:nth-of-type(6){ grid-column:6 / 8; grid-row:4; }
+
+.hm-ev__h{ display:grid; gap:calc(var(--u) * .5); }
+.hm-ev__t{
+  margin:0; display:flex; justify-content:space-between; align-items:baseline; gap:var(--u);
+  font-family:var(--f-display); font-weight:800; font-size:1.06rem; line-height:1.15;
+  letter-spacing:-.02em;
+}
+.hm-ev__u{
+  font-family:var(--f-micro); font-size:.56rem; font-weight:600; line-height:1.3;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--soft); text-align:right;
+}
+.hm-ev__s{
+  margin:0; font-family:var(--f-micro); font-size:.6rem; line-height:1.5;
+  letter-spacing:.02em; color:var(--soft);
+}
+.hm-fig{
+  display:grid; grid-template-columns:minmax(0, 1fr); gap:2px;
+  padding-top:calc(var(--u) * 1.25); border-top:1px solid rgba(44,44,44,.12);
+}
+.hm-fig__v{
+  margin:0; font-family:var(--f-display); font-weight:800;
+  font-size:1.3rem; line-height:1.05; letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+}
+.hm-fig__v small{ font-size:.6em; font-weight:400; letter-spacing:0; }
+.hm-fig--lead .hm-fig__v{ font-size:clamp(2rem, 3.3vw, 3.4rem); letter-spacing:-.05em; line-height:.95; }
+.hm-fig__l{ margin:0; font-family:var(--f-body); font-size:.84rem; line-height:1.35; font-weight:500; }
+.hm-fig__m{
+  margin:0; font-family:var(--f-micro); font-size:.58rem; line-height:1.55;
+  letter-spacing:.01em; color:var(--soft); overflow-wrap:anywhere;
+}
+.hm-ev a{
+  color:inherit;
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.2em;
+  text-decoration-color:rgba(44,44,44,.3);
+}
+.hm-ev a:hover,
+.hm-ev a:focus-visible{ color:var(--ink); text-decoration-color:var(--ink); }
+.hm-ev__lim{
+  margin:0; font-family:var(--f-body); font-style:italic; font-size:.78rem; line-height:1.45;
+  color:var(--soft);
+}
+.hm-ev__src{
+  margin:0;
+  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.02em;
+}
+.hm-ev__src::before{ content:"↳ "; color:var(--soft); }
+.hm-neq{ list-style:none; margin:0; padding:0; border-top:1px solid rgba(44,44,44,.12); }
+.hm-neq li{
+  display:grid; grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr); gap:var(--u);
+  align-items:baseline; padding:calc(var(--u) * .9) 0;
+  border-bottom:1px solid rgba(44,44,44,.12);
+  font-family:var(--f-micro); font-size:.6rem; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.hm-neq li span:last-child{ text-align:right; }
+.hm-neq i{ font-style:normal; font-weight:400; font-size:.9rem; letter-spacing:0; }
+.hm-ev__links{
+  list-style:none; margin:auto 0 0; padding:0;
+  display:grid; gap:calc(var(--u) * .75);
+  font-family:var(--f-micro); font-size:.62rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+
+/* ==========================================================================
+   06 — LASTRO: correspondências, índice e fronteira
+   ========================================================================== */
+.hm-corr{ grid-column:2 / 8; grid-row:3; align-self:start; padding:var(--g) 0 0; }
+.hm-corr__h,
+.hm-corr__r{
+  display:grid;
+  grid-template-columns:2fr 1fr 3fr;  /* 2 | 1 | 3 macrocolunas */
+}
+.hm-corr__h{
+  margin:0 0 var(--u);
+  font-family:var(--f-micro); font-size:.56rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--soft);
+}
+.hm-corr__h span{ padding:0 var(--g); }
+.hm-corr__l{ list-style:none; margin:0; padding:0; counter-reset:corr; border-top:1px solid var(--ink); }
+.hm-corr__r{
+  counter-increment:corr; align-items:baseline;
+  padding:calc(var(--u) * 1.25) 0;
+  border-bottom:1px solid rgba(44,44,44,.14);
+}
+.hm-corr__r > p{ margin:0; padding:0 var(--g); min-width:0; }
+.hm-corr__c{
+  font-family:var(--f-display); font-weight:700; font-size:1rem; line-height:1.25;
+  letter-spacing:-.015em;
+}
+.hm-corr__c::before{
+  content:counter(corr, decimal-leading-zero);
+  display:inline-block; width:2.2em;
+  font-family:var(--f-micro); font-size:.58rem; font-weight:600; letter-spacing:.1em;
+  color:var(--soft); vertical-align:.15em;
+}
+.hm-corr__t{
+  font-family:var(--f-body); font-size:.82rem; line-height:1.55; color:var(--soft);
+}
+.hm-corr__t a{
+  color:var(--ink); text-decoration:none;
+  background-image:linear-gradient(currentColor, currentColor);
+  background-size:0 1px; background-repeat:no-repeat; background-position:0 100%;
+  transition:background-size var(--fast) var(--ease);
+}
+.hm-corr__t a:hover,
+.hm-corr__t a:focus-visible{ background-size:100% 1px; }
+.hm-tag{
+  display:inline-block; padding:.18em .5em .14em;
+  font-family:var(--f-micro); font-size:.6rem; font-weight:600; line-height:1.3;
+  letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+  border:1px solid var(--ink); color:var(--ink);
+}
+.hm-tag--echo{ background:var(--echo); border-color:var(--echo); color:#000; }
+.hm-tag--atrio{ background:var(--atrio); border-color:var(--atrio); color:#FCFCFC; }
+.hm-tag:hover,
+.hm-tag:focus-visible{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
+
+/* índice: busca, filtro e o dicionário em três colunas de duas macrocolunas */
+.hm-index{ grid-column:2 / 8; grid-row:4; align-self:start; padding:var(--g) 0 calc(var(--u) * 4); scroll-margin-top:var(--rail-h, 0px); }
+.hm-index .lexf{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--u) var(--g); padding:0 var(--g); }
+.hm-index .lexf[hidden],
+.hm-index .lexf__vazio[hidden],
+.hm-lex [hidden]{ display:none!important; }
+.lexf__q{ flex:1 1 15rem; max-width:24rem; }
+.lexf__i{
+  appearance:none; -webkit-appearance:none; width:100%;
+  min-height:2.25rem; padding:0 .1rem;
+  border:0; border-bottom:1px solid rgba(44,44,44,.32); border-radius:0; background:transparent;
+  font-family:var(--f-body); font-size:.86rem; color:var(--ink); caret-color:var(--ink);
+}
+.lexf__i::placeholder{ color:var(--soft); }
+.lexf__i:focus{ outline:none; border-bottom-color:var(--ink); box-shadow:0 1px 0 var(--ink); }
+.lexf__g{ display:flex; flex-wrap:wrap; gap:calc(var(--u) * .5); margin-left:auto; }
+.lexf__b{
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.45em;
+  min-height:2.25rem; padding:0 .75rem;
+  border:1px solid rgba(44,44,44,.2); border-radius:0; background:transparent;
+  font-family:var(--f-micro); font-size:.6rem; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+}
+.lexf__b:hover{ border-color:var(--ink); }
+.lexf__b[aria-pressed="true"]{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
+.lexf__b:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+.lexf__c{ font-weight:400; opacity:.72; font-variant-numeric:tabular-nums; }
+.lexf__vazio{ margin:var(--g) 0 0; padding:0 var(--g); font-size:.86rem; }
+.lexf__limpa{
+  appearance:none; border:0; background:none; padding:0; cursor:pointer;
+  font:inherit; color:var(--ink); text-decoration:underline; text-underline-offset:.2em;
+}
+
+.hm-lex{
+  margin-top:calc(var(--u) * 3); padding:0; background:none;
+  columns:3; column-gap:0; column-rule:1px solid var(--grid);
+  font-family:var(--f-body); font-size:.82rem; line-height:1.48;
+}
+.hm-lex .lex__l{
+  margin:var(--g) 0 calc(var(--u) * .5); padding:0 var(--g);
+  break-after:avoid;
+  font-family:var(--f-display); font-weight:800; font-size:1.2rem; line-height:1;
+  text-transform:lowercase; letter-spacing:-.03em;
+}
+.hm-lex .lex__l:first-child{ margin-top:0; }
+.hm-lex .lex__e{
+  margin:0 0 calc(var(--u) * 1.25); padding:0 var(--g) 0 calc(var(--g) + 12px);
+  break-inside:avoid;
+  text-align:justify; -webkit-hyphens:auto; hyphens:auto; overflow-wrap:anywhere;
+  scroll-margin-top:calc(var(--rail-h, 0px) + var(--row));
+}
+.hm-lex .lex__s{ white-space:normal; }
+.hm-lex .lex__e:focus{ outline:none; }
+.hm-lex .lex__e:focus .lex__t,
+.hm-lex .lex__e.is-target .lex__t{ background:rgba(44,44,44,.09); box-shadow:0 0 0 2px rgba(44,44,44,.09); }
+.lex__s--comp{ display:inline; }
+.lex__k{
+  cursor:pointer;
+  text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:.2em;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+.lex__k--data{ text-decoration-color:var(--ink); }
+.lex__k--echo{ text-decoration-color:var(--echo); }
+.lex__k--atrio{ text-decoration-color:var(--atrio); }
+.lex__k:hover,
+.lex__k:focus-visible{ text-decoration-thickness:3px; }
+.lex__k:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+
+/* Fronteira: o limite declarado, na tinta cheia que o ARCO reserva a ela */
+.hm-front{
+  grid-column:2 / 8; grid-row:5; align-self:start;
+  display:grid; grid-template-columns:2fr 4fr;
+  margin:0;
+  background:var(--ink); color:var(--paper);
+}
+.hm-front .front__grid{ display:contents; }
+.hm-front .front__head,
+.hm-front .front__body{ padding:calc(var(--u) * 3) var(--g); }
+.hm-front .front__k{
+  margin:0 0 var(--u);
+  font-family:var(--f-micro); font-size:.62rem; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:rgba(252,252,252,.66);
+}
+.hm-front .front__t{
+  margin:0; font-family:var(--f-display); font-weight:300; font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.4rem); line-height:1.25; letter-spacing:-.015em;
+}
+.hm-front .front__lead{ margin:0 0 var(--g); font-size:.88rem; line-height:1.55; }
+.hm-front .front__list{ margin:0; display:grid; grid-template-columns:1fr 1fr; gap:var(--g); }
+.hm-front .front__row dt{
+  font-family:var(--f-micro); font-size:.6rem; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+}
+.hm-front .front__row dt span{
+  display:block; margin-top:2px; letter-spacing:.04em; text-transform:none;
+  font-weight:400; color:rgba(252,252,252,.66);
+}
+.hm-front .front__row dd{ margin:var(--u) 0 0; }
+.hm-front .front__row ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 6px; }
+.hm-front .front__row li{
+  padding:.15em .5em; border:1px solid rgba(252,252,252,.3);
+  font-family:var(--f-micro); font-size:.6rem; letter-spacing:.04em;
+}
+
+/* ==========================================================================
+   INTERMEDIÁRIO — a narrativa perde a segunda coluna antes de ficar estreita
+   ========================================================================== */
+@media (max-width:1180px){
+  .hm-narr{ columns:1; }
+  .hm-lex{ columns:2; }
+}
+
+/* ==========================================================================
+   MOBILE — quatro macrocolunas; os blocos descem na ordem semântica
+   ========================================================================== */
+@media (max-width:900px){
+  .hm{ --row:56px; }
+  .hm-panel{
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    grid-template-rows:none;
+    background-size:calc(100% / 4) var(--row);
+  }
+  .hm-panel > *{ grid-column:1 / -1!important; grid-row:auto!important; }
+  .hm-panel > .hm-idx{ grid-column:1 / 2!important; grid-row:1!important; }
+  .hm-panel > .hm-kick{ grid-column:2 / -1!important; grid-row:1!important; }
+
+  .hm-title{ font-size:11vw; padding-top:var(--g); }
+  .hm-lede{ padding-top:var(--u); }
+  .hm-name{ font-size:13vw; padding-top:var(--g); }
+  .hm-lines{
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--u) var(--g);
+    font-size:.92rem; white-space:normal;
+  }
+  .hm-lines i{ display:none; }
+  .hm-lines span{ white-space:normal; }
+  .hm-autor{ padding-top:calc(var(--u) * 3); }
+  .hm-tese{ font-size:5.4vw; padding-top:var(--u); padding-bottom:calc(var(--u) * 4); }
+
+  .hm-nv{ min-height:calc(var(--row) * 6); margin:0; }
+  .hm-narr,
+  .hm-proj--atrio .hm-narr{ columns:1; padding:calc(var(--u) * 3) var(--g); }
+  .hm-sig{ min-height:var(--row); margin:0; }
+  .hm-sig--atrio{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .hm-piece{ flex-direction:column; justify-content:center; gap:4px; padding:var(--u); }
+
+  .hm-ev{ margin:0; padding-bottom:calc(var(--u) * 4); }
+  .hm-corr__h{ display:none; }
+  .hm-corr__r{ grid-template-columns:1fr auto; row-gap:var(--u); }
+  .hm-corr__t{ grid-column:1 / -1; }
+  .hm-lex{ columns:1; }
+  .hm-index .lexf__q{ flex-basis:100%; max-width:none; }
+  .hm-index .lexf__g{ margin-left:0; }
+  .lexf__i,
+  .lexf__b{ min-height:44px; }
+  .hm-front{ grid-template-columns:1fr; margin-bottom:calc(var(--row) * 2); }
+  .hm-front .front__list{ grid-template-columns:1fr; }
+
+  /* índice no celular: termo e tradução; o resto abre ao toque */
+  .hm-lex .lex__e[data-open]{
+    position:relative; margin:0; min-height:44px;
+    padding:.66rem 2rem .66rem var(--g); text-indent:0;
+    border-top:1px solid rgba(44,44,44,.1); cursor:pointer; text-align:left;
+  }
+  .hm-lex .lex__l + .lex__e[data-open]{ border-top:0; }
+  .hm-lex .lex__e[data-open="false"] :is(.lex__c, .lex__s, .lex__v){ display:none; }
+  .hm-lex .lex__e[data-open]::after{
+    content:""; position:absolute; right:var(--g); top:1.05rem;
+    width:.42rem; height:.42rem;
+    border-right:1.5px solid var(--soft); border-bottom:1.5px solid var(--soft);
+    transform:rotate(45deg);
+  }
+  .hm-lex .lex__e[data-open="true"]::after{ transform:translateY(.2rem) rotate(-135deg); }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hm *{ transition:none!important; }
+}

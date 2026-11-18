@@ -7,7 +7,7 @@
    3) leituras conceituais (diálogos) e tooltip de lastro dos dados;
    4) indicador de progresso de rolagem;
    5) rodapé comum e barra estrutural dos filhos.
-   O arco (repouso, formação, seleção) vive em arco-arquitetura.js.
+   A composição da home (retícula, painéis, índice) vive em arco-home.js.
    ========================================================================== */
 (() => {
   "use strict";
@@ -540,7 +540,7 @@
 
   const FOOTER_H = 84;
   const homeView = document.querySelector('.view[data-view="home"]');
-  const dataTrigger = document.querySelector('.rail__link--data[data-view="data"]');
+  const dataTrigger = document.querySelector('a[data-view="data"], button[data-view="data"]');
   const stage = document.querySelector('.stage');
   const childStates = new WeakMap();
   const childProgressInk = {

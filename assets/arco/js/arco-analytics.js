@@ -7,7 +7,6 @@
   if (location.hostname !== "christiancozta.github.io") return;
 
   const MODULES = new Set(["data", "echo", "atrio"]);
-  const root = document.getElementById("arco-arquitetura");
 
   const track = (eventName, module, interactionSource) => {
     if (!MODULES.has(module) || typeof window.gtag !== "function") return;
@@ -27,39 +26,17 @@
     track("arco_anchor_entry", incomingHash, "url_hash");
   }
 
-  if (!root) return;
-
-  /* A arquitetura já emite arx:manual quando há uma seleção humana.
-     Confirmamos a escolha pela mudança efetiva do módulo selecionado:
-     a restauração da sessão e o recolhimento não geram o evento. */
-  let intendedSelection = null;
-  root.addEventListener("arx:manual", event => {
-    const module = event.detail?.sys;
-    intendedSelection = MODULES.has(module) ? module : null;
-  });
-
-  const selectionObserver = new MutationObserver(() => {
-    if (!intendedSelection || root.dataset.sel !== intendedSelection) return;
-    const module = intendedSelection;
-    intendedSelection = null;
-    track("arco_module_select", module, "arco");
-  });
-  selectionObserver.observe(root, {
-    attributes: true,
-    attributeFilter: ["data-sel"]
-  });
-
+  /* A home não tem mais o arco: o painel de cada obra abre o sistema pela
+     assinatura (data-hm-view), e o cordão continua sendo a outra porta. */
   /* CTA e navegação lateral são portas diferentes para o mesmo sistema.
      O clique sintético no cordão, feito pelo CTA, não é contabilizado de novo. */
   document.addEventListener("click", event => {
     const target = event.target;
     if (!(target instanceof Element)) return;
 
-    const openLink = target.closest("[data-arx-open]");
-    if (openLink && root.contains(openLink)){
-      const module = openLink.dataset.arxOpen;
-      const source = openLink.closest(".arx-sum") ? "panel" : "narrative";
-      track("arco_module_open", module, source);
+    const openLink = target.closest("[data-hm-view]");
+    if (openLink){
+      track("arco_module_open", openLink.dataset.hmView, "panel");
       return;
     }
 
