@@ -50,9 +50,9 @@
   --bg: var(--paper);
 
   /* Fontes — o mesmo tripé da família (display; corpo; micro) */
-  --f-display:"Archivo", system-ui, sans-serif;
-  --f-body:   "Instrument Sans", "Commissioner", system-ui, sans-serif;
-  --f-micro:  "Azeret Mono", ui-monospace, monospace;
+  --f-display:"Cabinet Grotesk", "Schibsted Grotesk", system-ui, sans-serif;
+  --f-body:   "Schibsted Grotesk", system-ui, sans-serif;
+  --f-micro:  "Martian Mono", ui-monospace, monospace;
 
   /* Cordão (rail) */
   --rail-w: 0px;    /* o cordão é faixa de topo em toda largura: não há coluna */
@@ -849,7 +849,7 @@ body{
 .grp__x{
   margin-left:auto;
   display:inline-block; width:1em; text-align:center; flex:none;
-  font-family:"Azeret Mono","Segoe UI Symbol",ui-monospace,monospace;
+  font-family:"Martian Mono","Segoe UI Symbol",ui-monospace,monospace;
   font-size:1rem; line-height:1; color:var(--ink-70);
   transition:color var(--fast) var(--ease);
 }
@@ -959,7 +959,7 @@ body{
 .t-plus{ font-family:var(--f-micro); font-size:.62rem; color:var(--ink-62); }
 .mec__x, .pain__x{
   display:inline-block; width:1em; text-align:center; flex:none;
-  font-family:"Azeret Mono","Segoe UI Symbol",ui-monospace,monospace;
+  font-family:"Martian Mono","Segoe UI Symbol",ui-monospace,monospace;
   font-size:1rem; line-height:1.35; color:var(--ink-70);
   transition:color var(--fast) var(--ease);
 }
@@ -2292,7 +2292,13 @@ body{
 .rail .rail__link[data-view="echo"],
 .rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
-.rail .rail__link[data-view="troia"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
+.rail .rail__link[data-view="troia"],
+.rail .rail__link[data-child="atrio"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
+/* CERNE: accent ainda em aberto; a caixa é papel com tinta */
+.rail .rail__link[data-proj="cerne"]{ --tone:var(--paper); --tone-ink:var(--ink); }
+/* TROIA fica no cordão, inativo por ora: presente, sem caixa nem clique */
+.rail .rail__link--off{ cursor:default; pointer-events:none; color:var(--pp-58); opacity:.55; }
+.rail .rail__nav .rail__link--off::after{ display:none; }
 
 .rail{ --nav-gap:2.1rem; }
 /* RASTRO e LASTRO saem do cordão: DATA é uma entrada só */
@@ -2315,9 +2321,9 @@ body{
 }
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover){ color:var(--tone-ink); }
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover)::after{ opacity:1; }
-/* a passagem entre projetos: ▶ pequeno e discreto no vão antes de ECHO e de
-   ATRIO (DATA ▶ ECHO—PLAY ▶ ATRIO—TROIA). U+FE0E evita o emoji no iOS. */
-.rail .rail__nav > :is([data-view="echo"],[data-view="atrio"])::before{
+/* a passagem entre projetos: ▶ pequeno e discreto no vão antes de ATRIO e de
+   CERNE (ECHO ▶ ATRIO—RATIO—TROIA ▶ CERNE). U+FE0E evita o emoji no iOS. */
+.rail .rail__nav > :is([data-view="atrio"],[data-proj="cerne"])::before{
   content:"\25B6\FE0E"; position:absolute; top:50%; right:100%; z-index:-2;
   width:var(--nav-gap); transform:translateY(-50%);
   font-family:var(--f-body); font-size:.42rem; line-height:1; letter-spacing:0;
@@ -2331,11 +2337,11 @@ body{
 /* a corrente: com mãe ou filho na caixa, o fio e o par ficam na cor do
    território — o mesmo projeto, dito duas vezes */
 .rail .rail__nav:has(> :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) > :is([data-view="echo"],[data-view="play"]):not(:hover):not([aria-current="true"]),
-.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) > :is([data-view="atrio"],[data-view="troia"]):not(:hover):not([aria-current="true"]){
+.rail .rail__nav:has(> :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) > :is([data-view="atrio"],[data-child="atrio"]):not(:hover):not([aria-current="true"]){
   color:var(--tone);
 }
 .rail .rail__nav:has(> :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) > [data-view="play"]::before,
-.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) > [data-view="troia"]::before{
+.rail .rail__nav:has(> :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) > .rail__link--child:is([data-child="atrio"],.rail__link--off)::before{
   background:var(--tone);
 }
 /* foco sobre a faixa preta: o contorno precisa ser papel — inclusive na seta,
@@ -2360,13 +2366,10 @@ body{
   /* a legenda responde ao projeto sob o ponteiro; o filho fala pela mãe.
      Em repouso, volta a ser o portfólio. A altura não muda: o fio não pula. */
   .rail__kicker::before{ font-size:.52rem; letter-spacing:.12em; }
-  .rail:has(.rail__nav > :is([data-view="data"],[data-view="echo"],[data-view="play"],[data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker{ font-size:0; }
-  .rail:has(.rail__nav > [data-view="data"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Data Analytics"; }
-  .rail:has(.rail__nav > :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
-  .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
-  html[lang="en"] .rail:has(.rail__nav > [data-view="data"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Data Analytics"; }
-  html[lang="en"] .rail:has(.rail__nav > :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
-  html[lang="en"] .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
+  .rail:has(.rail__nav > :is([data-view="echo"],[data-view="atrio"],[data-child="atrio"],[data-proj="cerne"]):is(:hover,:focus-visible)) .rail__kicker{ font-size:0; }
+  .rail:has(.rail__nav > [data-view="echo"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
+  .rail:has(.rail__nav > :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Engineering"; }
+  .rail:has(.rail__nav > [data-proj="cerne"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Governance & Evaluation"; }
   .rail__index{ justify-self:center; }
   .rail__end{
     display:flex; justify-self:end; align-items:center; justify-content:flex-end;
@@ -2402,8 +2405,8 @@ body{
   .rail .rail__link{ font-size:clamp(.66rem,2.8vw,.74rem) !important; letter-spacing:.05em; }
   .rail .rail__nav .rail__link::after{ left:-.32rem; right:-.32rem; }
   /* o ▶ precisa de ar fora da caixa do item ativo */
-  .rail .rail__nav > :is([data-view="echo"],[data-view="atrio"]){ margin-left:.55rem; }
-  .rail .rail__nav > :is([data-view="echo"],[data-view="atrio"])::before{ width:calc(var(--nav-gap) + .55rem); font-size:.36rem; }
+  .rail .rail__nav > :is([data-view="atrio"],[data-proj="cerne"]){ margin-left:.55rem; }
+  .rail .rail__nav > :is([data-view="atrio"],[data-proj="cerne"])::before{ width:calc(var(--nav-gap) + .55rem); font-size:.36rem; }
 }
 
 /* Celular, numa view filha: o idioma desce para a faixa da página inteira,

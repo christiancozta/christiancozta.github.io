@@ -3,7 +3,7 @@
    ARCO — home
    --------------------------------------------------------------------------
    1) ajuste tipográfico: nome, tese e títulos ocupam a largura exata do bloco;
-   2) retícula: cada fileira do painel cresce até o múltiplo seguinte de --row;
+   2) retícula: fileiras em múltiplos de --row, painel em quadrados inteiros;
    3) navegação interna: painéis, competências e verbetes, sem hover;
    4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
    5) Rastro: cálculo, fonte e limite de cada unidade sob demanda.
@@ -57,7 +57,13 @@
     const r = rowPx();
     const tracks = getComputedStyle(panel).gridTemplateRows.split(/\s+/).map(parseFloat).filter(n => n > 0);
     if (!tracks.length) return;
-    panel.style.gridTemplateRows = tracks.map(t => Math.max(1, Math.ceil((t - 1) / r)) * r + "px").join(" ");
+    const units = tracks.map(t => Math.max(1, Math.ceil((t - 1) / r)));
+    /* o painel fecha num número inteiro de quadrados: no desktop a fileira é
+       meio quadrado, então o total de fileiras precisa ser par */
+    const perCell = stacked.matches ? 1 : 2;
+    const sum = units.reduce((a, b) => a + b, 0);
+    if (sum % perCell) units[units.length - 1] += perCell - (sum % perCell);
+    panel.style.gridTemplateRows = units.map(u => u * r + "px").join(" ");
   }
   const snapAll = () => panels.forEach(snap);
 

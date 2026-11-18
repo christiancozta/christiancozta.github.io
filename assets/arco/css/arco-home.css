@@ -1,24 +1,26 @@
 /* ==========================================================================
    ARCO — home
    --------------------------------------------------------------------------
-   Seis painéis sucessivos sobre a matriz modular de 8, com a retícula
-   aparente do ATRIO: oito macrocolunas e fileiras derivadas da viewport.
+   Seis painéis sucessivos sobre a matriz modular de 8.
 
-     --cell   largura da macrocoluna = palco / 8
-     --row    fileira = (viewport − cordão) / 8, nunca abaixo de 64px
+     --cell   lado do quadrado = largura da tela / 8
+     --row    fileira de composição = meio quadrado (no celular, um quadrado)
      --u      unidade de 8px para folgas internas
 
-   Cada painel tem 8 colunas e, no mínimo, 8 fileiras: a viewport é a
-   referência da composição, não uma altura fixa. Quando o texto pede mais,
-   a fileira cresce até o múltiplo seguinte de --row (arco-home.js), e a
-   retícula do fundo continua coincidindo com as divisões reais do grid.
+   A retícula visível é canônica: só quadrados, oito pela largura da tela,
+   contínuos de cima a baixo da home. Textos e elementos podem terminar em
+   qualquer ponto; o que se vê é sempre o quadrado. A grade de composição
+   (8 colunas, fileiras de meio quadrado) fica invisível por baixo, e cada
+   painel fecha num número inteiro de quadrados (arco-home.js), para que o
+   filete entre painéis pouse numa linha da retícula.
    As colunas 1 e 8 são margens; a composição vive entre 2 e 7.
    ========================================================================== */
 
 .hm{
   --u:8px;
   --g:calc(var(--u) * 2);
-  --row:max(64px, calc((100dvh - var(--rail-h, 58px)) / 8));
+  --cell:calc((100vw - var(--sbw, 0px)) / 8);
+  --row:calc(var(--cell) / 2);
   --paper:#FCFCFC;
   --ink:#2C2C2C;
   --grid:rgba(44,44,44,.07);
@@ -27,7 +29,12 @@
   --echo:#FFB627;
   --echo-paper:#F2EFE9;
   --atrio:#D94F2D;
-  background:var(--paper);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size:var(--cell) var(--cell);
+  background-position:0 0;
   color:var(--ink);
 }
 .arx-sr{
@@ -42,16 +49,11 @@
   grid-template-columns:repeat(8, minmax(0, 1fr));
   grid-template-rows:repeat(8, minmax(var(--row), auto));
   grid-auto-rows:minmax(var(--row), auto);
-  background-color:var(--paper);
-  background-image:
-    linear-gradient(to right, var(--grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size:calc(100% / 8) var(--row);
-  background-position:0 0;
-  border-top:1px solid var(--rule);
+  background:none;
+  box-shadow:inset 0 1px 0 var(--rule); /* filete sem somar altura: a borda desalinharia a retícula */
   scroll-margin-top:var(--rail-h, 0px);
 }
-.hm-panel:first-child{ border-top:0; }
+.hm-panel:first-child{ box-shadow:none; }
 .hm-rastro::after,
 .hm-lastro::after{ content:""; grid-column:1 / -1; height:var(--row); }
 .hm-panel > *{ min-width:0; margin:0; }
@@ -145,7 +147,7 @@
 .hm-tese{
   grid-column:5 / 8; grid-row:6 / 9; align-self:end;
   padding:var(--g) var(--g) calc(var(--u) * 3);
-  font-family:var(--f-display); font-weight:300; font-style:italic;
+  font-family:var(--f-body); font-weight:400; font-style:italic;
   font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
   text-align:left;
 }
@@ -497,7 +499,7 @@
   letter-spacing:.16em; text-transform:uppercase; color:rgba(252,252,252,.66);
 }
 .hm-front .front__t{
-  margin:0; font-family:var(--f-display); font-weight:300; font-style:italic;
+  margin:0; font-family:var(--f-body); font-weight:400; font-style:italic;
   font-size:clamp(1.05rem, 1.5vw, 1.4rem); line-height:1.25; letter-spacing:-.015em;
 }
 .hm-front .front__lead{ margin:0 0 var(--g); font-size:.88rem; line-height:1.55; }
@@ -529,11 +531,10 @@
    MOBILE — quatro macrocolunas; os blocos descem na ordem semântica
    ========================================================================== */
 @media (max-width:900px){
-  .hm{ --row:56px; }
+  .hm{ --row:var(--cell); }
   .hm-panel{
     grid-template-columns:repeat(4, minmax(0, 1fr));
     grid-template-rows:none;
-    background-size:calc(100% / 4) var(--row);
   }
   .hm-panel > *{ grid-column:1 / -1!important; grid-row:auto!important; }
   .hm-panel > .hm-idx{ grid-column:1 / 2!important; grid-row:1!important; }

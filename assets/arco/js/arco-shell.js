@@ -566,10 +566,10 @@
   function footerMarkup(){
     const footer = document.createElement('footer');
     footer.className = 'arco-unified-footer';
-    footer.setAttribute('aria-label','Encerramento do ARCO');
+    footer.setAttribute('aria-label','Encerramento do portfólio');
     footer.innerHTML = `
       <p class="arco-unified-footer__privacy"><span>Tráfego rastreado</span> <i aria-hidden="true">|</i> <span>Google&nbsp;Analytics</span></p>
-      <p class="arco-unified-footer__seal">ARCO © <time datetime="2026">2026</time></p>
+      <p class="arco-unified-footer__seal">daCosta © <time datetime="2026">2026</time></p>
       <button class="arco-unified-footer__method" type="button" aria-label="Abrir DATA — Base e Método">
         <span>BASE E MÉTODO:</span><strong>DATA</strong>
       </button>`;
@@ -592,16 +592,16 @@
 .arco-unified-footer__seal{
   position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   margin:0;padding:0;
-  font-family:"Azeret Mono",ui-monospace,monospace;
+  font-family:"Martian Mono","Azeret Mono",ui-monospace,monospace;
   font-size:.58rem;font-weight:500;line-height:1.3;
-  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+  letter-spacing:.08em;text-transform:none;white-space:nowrap;
   color:#FCFCFC!important;text-align:center;
 }
 .arco-unified-footer__privacy{
   position:absolute;left:clamp(18px,2.1vw,34px);top:50%;transform:translateY(-50%);
   max-width:calc(50% - 5rem);
   margin:0;padding:0;
-  font-family:"Azeret Mono",ui-monospace,monospace;
+  font-family:"Martian Mono","Azeret Mono",ui-monospace,monospace;
   font-size:.5rem;font-weight:500;line-height:1.45;
   letter-spacing:.08em;text-transform:uppercase;text-align:left;
   color:rgba(252,252,252,.42)!important;
@@ -614,12 +614,12 @@
   text-align:right;cursor:pointer;color:#FCFCFC;
 }
 .arco-unified-footer__method span{
-  font-family:"Azeret Mono",ui-monospace,monospace;
+  font-family:"Martian Mono","Azeret Mono",ui-monospace,monospace;
   font-size:.56rem;font-weight:500;line-height:1.3;
   letter-spacing:.08em;text-transform:uppercase;color:rgba(252,252,252,.58);white-space:nowrap;
 }
 .arco-unified-footer__method strong{
-  font-family:"Commissioner",system-ui,sans-serif;
+  font-family:"Schibsted Grotesk","Commissioner",system-ui,sans-serif;
   font-size:.74rem;font-weight:600;line-height:1;
   letter-spacing:-.008em;color:#4A90E2;white-space:nowrap;
 }
@@ -639,7 +639,7 @@
   .arco-unified-footer__privacy i{display:none}
   .arco-unified-footer__privacy span{display:block}
   .arco-unified-footer__method span{display:none}
-  .arco-unified-footer__method strong::before{content:"BASE E MÉTODO: ";font-family:"Azeret Mono",ui-monospace,monospace;font-size:.46rem;font-weight:500;letter-spacing:.06em;color:rgba(252,252,252,.58)}
+  .arco-unified-footer__method strong::before{content:"BASE E MÉTODO: ";font-family:"Martian Mono","Azeret Mono",ui-monospace,monospace;font-size:.46rem;font-weight:500;letter-spacing:.06em;color:rgba(252,252,252,.58)}
 }
 ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!important}' : ''}
 `;

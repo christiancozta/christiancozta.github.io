@@ -4,7 +4,7 @@
 
   const trigger = document.querySelector('.rail__link[data-view="atrio"]');
   const moduleTriggers = [...document.querySelectorAll(
-    '.rail__modlink[data-child="atrio"][data-target="arquitetura"][data-module]'
+    '[data-child="atrio"][data-target="arquitetura"][data-module]'
   )];
   const frame = document.querySelector('.view[data-view="atrio"] iframe.child__frame');
   if (!trigger || !frame) return;
