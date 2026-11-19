@@ -11,7 +11,7 @@
    ========================================================================== */
 (() => {
   "use strict";
-  const VIEWS = ["home","echo","play","atrio","troia","data"];
+  const VIEWS = ["home","echo","play","atrio","cerne","data"];
   const views = [...document.querySelectorAll(".view")];
   const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
   const childLinks = [...document.querySelectorAll(".rail__seclink[data-child]")];
@@ -68,7 +68,6 @@
 
   /* ---- Casca: cordão → palco ---- */
   function show(view, {push = true} = {}){
-    if (view === "cerne") view = "troia";
     if (!VIEWS.includes(view)) view = "home";
     const current = views.find(v => v.dataset.active === "true");
     if (current && current.dataset.view !== view) document.documentElement.classList.add("view-swap");
@@ -227,12 +226,7 @@
      o roteador tratava a âncora como view inválida, caía na home e o
      scrollTo(0,0) engolia o salto que o navegador ia dar. */
   function route(){
-    let h = location.hash.slice(1);
-    // Links antigos continuam abrindo a auditoria, agora denominada TROIA.
-    if (h === "cerne"){
-      h = "troia";
-      history.replaceState({view:h}, "", location.pathname + location.search + "#" + h);
-    }
+    const h = location.hash.slice(1);
     if (!h || VIEWS.includes(h)) return show(h || "home", {push:false});
     show("home", {push:false});
     const target = document.getElementById(h);
@@ -547,7 +541,7 @@
     echo:'#2C2C2C',
     play:'#FFB627',
     atrio:'#D94F2D',
-    troia:'#D94F2D',
+    cerne:'#D94F2D',
     data:'#4A90E2'
   };
 
@@ -694,7 +688,7 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
         if (!win || !doc?.documentElement || !doc.body) return;
 
         const view = frame.closest('.view')?.dataset.view;
-        if (!view || !['echo','play','atrio','troia','data'].includes(view)) return;
+        if (!view || !['echo','play','atrio','cerne','data'].includes(view)) return;
 
         doc.documentElement.dataset.arcoEmbedded = 'true';
         installStyle(doc,true);
