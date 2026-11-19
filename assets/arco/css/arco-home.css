@@ -293,34 +293,21 @@
 .hm-ix{ width:100%; border-collapse:collapse; background:#FCFCFC; }
 /* colunas fixas: a tabela não muda de desenho ao abrir ou fechar um local */
 .hm-ix{ table-layout:fixed; }
-.hm-ix__c1{ width:16%; }
-.hm-ix__c2{ width:40%; }
-.hm-ix__c3{ width:12%; }
+.hm-ix__c1{ width:14%; }
+.hm-ix__c2{ width:36%; }
+.hm-ix__c3{ width:10%; }
+.hm-ix__c4{ width:11%; }
 .hm-ix__v,
 .hm-ix__s,
 .hm-fin__t,
 .hm-fin__n,
 .hm-fila__ax{ font-variant-numeric:tabular-nums; }
-/* a legenda geral fica para leitores de tela; a visível desce para cada
-   local, logo abaixo do título, e só aparece com o resto das linhas */
-.hm-ix thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
-.hm-ix thead th,
-.hm-ix__leg th{
-  padding:var(--u) var(--u) var(--u) 0; text-align:left; border-bottom:1px solid rgba(44,44,44,.2);
+/* uma só tabela, um só cabeçalho, preso sob o cordão */
+.hm-ix thead th{
+  position:sticky; top:var(--rail-h, 54px); z-index:1; background:#FCFCFC;
+  padding:var(--u) var(--u) var(--u) 0; text-align:left; border-bottom:1px solid #2C2C2C;
   font-family:var(--f-micro); font-size:.56rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
   color:rgba(44,44,44,.6);
-}
-.hm-ix__leg th:nth-child(1){ width:16%; }
-.hm-ix__leg th:nth-child(2){ width:40%; }
-.hm-ix__leg th:nth-child(3){ width:12%; }
-.hm-ix__g th{
-  padding:calc(var(--u) * 5) 0 calc(var(--u) * 1.25); text-align:left; border-bottom:1.5px solid #2C2C2C;
-  font-family:var(--f-display); font-size:calc(1rem + 2pt); font-weight:800; line-height:1.1; letter-spacing:-.015em;
-}
-.hm-ix tbody:first-of-type .hm-ix__g th{ padding-top:calc(var(--u) * 2); }
-.hm-ix__g small{
-  margin-left:.75em; font-family:var(--f-micro); font-size:.58rem; font-weight:500; line-height:1;
-  letter-spacing:.08em; color:rgba(44,44,44,.6); white-space:nowrap; vertical-align:.12em;
 }
 .hm-ix td{
   padding:calc(var(--u) * 1.1) var(--u) calc(var(--u) * 1.1) 0; vertical-align:baseline;
@@ -328,6 +315,7 @@
 }
 .hm-ix__v{ font-family:var(--f-display); font-size:1.12rem; font-weight:800; letter-spacing:-.015em; white-space:nowrap; }
 .hm-ix__o{ font-family:var(--f-body); font-size:.84rem; line-height:1.35; }
+.hm-ix__l{ font-family:var(--f-micro); font-size:.58rem; font-weight:600; letter-spacing:.06em; white-space:nowrap; }
 .hm-ix__t span{
   display:inline-block; padding:2px 6px; border:1px solid #2C2C2C;
   font-family:var(--f-micro); font-size:.5rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
@@ -338,26 +326,12 @@
 .hm-ix__s a:hover,
 .hm-ix__s a:focus-visible{ color:#2C2C2C; text-decoration-color:#2C2C2C; }
 .hm-ix__calc{ color:#2C2C2C; }
-/* linhas que alimentam os cartões: o accent do projeto pinta a linha inteira */
-.hm-ix tr.is-echo td{ background:#FFB627; color:#2C2C2C; border-bottom-color:rgba(44,44,44,.18); }
-.hm-ix tr.is-atrio td{ background:#D94F2D; color:#FCFCFC; border-bottom-color:rgba(252,252,252,.28); }
-.hm-ix tr.is-echo td:first-child,
-.hm-ix tr.is-atrio td:first-child,
-.hm-ix__ph td:first-child{ padding-left:var(--u); }
-.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__s,
-.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__calc,
-.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__s a{ color:inherit; text-decoration-color:currentColor; }
-.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__t span{ border-color:currentColor; }
-.hm-ix tr.is-echo[data-tipo="derivada"] .hm-ix__t span{ background:#2C2C2C; color:#FFB627; }
-.hm-ix tr.is-atrio[data-tipo="derivada"] .hm-ix__t span{ background:#FCFCFC; color:#D94F2D; }
-/* CERNE: lugar reservado, em inversão cromática */
-.hm-ix__ph td{ background:#2C2C2C; color:#FCFCFC; border-bottom-color:#2C2C2C; }
 
-/* estado inicial: título do local, linhas dos cartões e as neutras
-   indispensáveis; as reticências abrem a legenda e o resto do local */
-.hm-rastro.is-tabbed .hm-ix tbody:not(.is-open) .is-extra{ display:none; }
+/* estado inicial: parte dos indicadores de cada local; uma só linha de
+   reticências, ao fim da tabela, revela todos os demais */
+.hm-rastro.is-tabbed .hm-ix:not(.is-open) .is-extra{ display:none; }
 .hm-rastro:not(.is-tabbed) .hm-ix__more{ display:none; }
-.hm-ix__more td{ padding:0; border-bottom:1px solid rgba(44,44,44,.12); }
+.hm-ix__more td{ padding:0; border-bottom:0; }
 .hm-ix__more button{
   appearance:none; -webkit-appearance:none; display:flex; align-items:center; width:100%; min-height:52px;
   margin:0; padding:var(--u) 0; border:0; border-radius:0; background:none; color:#2C2C2C; cursor:pointer;
@@ -367,13 +341,21 @@
 .hm-ix__dots path,
 .hm-ix__up path{ fill:none; stroke:#2C2C2C; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
 .hm-ix__up,
-.hm-ix tbody.is-open .hm-ix__dots{ display:none; }
-.hm-ix tbody.is-open .hm-ix__up{ display:block; }
+.hm-ix.is-open .hm-ix__dots{ display:none; }
+.hm-ix.is-open .hm-ix__up{ display:block; }
 .hm-ix__more button:hover .hm-ix__dots,
 .hm-ix__more button:focus-visible .hm-ix__dots{ transform:translateX(4px); }
 .hm-ix__more button:hover .hm-ix__up,
 .hm-ix__more button:focus-visible .hm-ix__up{ transform:translateY(-3px); }
 .hm-ix__more button:focus-visible{ outline:2px solid #2C2C2C; outline-offset:-2px; }
+
+.hm-ix__locais{
+  list-style:none; margin:0; padding:calc(var(--u) * 1.5) 0 0; border-top:1px solid #2C2C2C;
+  display:grid; grid-template-columns:max-content max-content max-content; gap:4px var(--g);
+  font-family:var(--f-micro); font-size:.54rem; line-height:1.5; letter-spacing:.04em; color:rgba(44,44,44,.7);
+}
+.hm-ix__locais li{ display:contents; }
+.hm-ix__locais b{ font-weight:600; color:#2C2C2C; }
 
 /* a tag de leitura deixa opaco o que não é dela */
 .hm-ix[data-tag="direta"] tr[data-tipo="derivada"] td,
@@ -672,22 +654,19 @@
   .hm-rx{ padding-left:var(--g); padding-right:var(--g); }
   .hm-tabs [role="tab"]{ flex:1 1 0; padding:0 var(--u); }
   .hm-ix thead{ display:none; }
+  .hm-ix colgroup{ display:none; }
   .hm-ix, .hm-ix tbody{ display:block; }
   .hm-ix tr{
     display:grid; grid-template-columns:minmax(5.5rem, auto) minmax(0, 1fr); column-gap:var(--g); row-gap:4px;
     padding:var(--u) 0; border-bottom:1px solid rgba(44,44,44,.12);
   }
   .hm-ix td{ padding:0; border:0; }
-  .hm-ix__v{ grid-row:1 / 4; }
-  .hm-ix__g{ display:block!important; }
-  .hm-ix__more{ display:block!important; padding:0!important; }
+  .hm-ix__v{ grid-row:1 / 5; }
+  .hm-ix__more{ display:block!important; padding:0!important; border-bottom:0!important; }
   .hm-ix__more td{ display:block; }
-  .hm-ix__leg{ display:none!important; }
   .hm-rastro:not(.is-tabbed) .hm-ix__more{ display:none!important; }
-  .hm-ix tr.is-echo, .hm-ix tr.is-atrio, .hm-ix__ph{ padding-left:var(--u); padding-right:var(--u); }
-  .hm-ix tr.is-echo{ background:#FFB627; } .hm-ix tr.is-atrio{ background:#D94F2D; } .hm-ix__ph{ background:#2C2C2C; }
-  .hm-ix tr.is-echo td:first-child, .hm-ix tr.is-atrio td:first-child, .hm-ix__ph td:first-child{ padding-left:0; }
-  .hm-ix__g th{ display:block; }
+  .hm-ix__locais{ grid-template-columns:max-content minmax(0, 1fr); }
+  .hm-ix__locais span:last-child{ grid-column:2; }
   #rx-fin, #rx-fila, .hm-rx__foot{ grid-template-columns:minmax(0, 1fr); row-gap:calc(var(--u) * 3); }
   .hm-pane__txt, .hm-fin, .hm-fila, .hm-rx__foot p, .hm-rx__links{ grid-column:1 / -1; }
   .hm-fin__cols{ height:calc(var(--row) * 6); gap:6px; }
