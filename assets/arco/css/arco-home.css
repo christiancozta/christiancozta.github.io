@@ -250,9 +250,9 @@
 }
 
 /* ==========================================================================
-   05 — RASTRO: o índice aberto de todos os números dos projetos, com as
-   leituras da finalização e da fila. Só tinta #2C2C2C e papel #FCFCFC; o
-   resto é opacidade da tinta.
+   05 — RASTRO: o índice aberto, por local de atuação, com as leituras da
+   finalização e da fila. Tinta #2C2C2C e papel #FCFCFC; os accents dos
+   projetos só pintam as linhas que alimentam os cartões das aplicações.
    ========================================================================== */
 .hm-rastro,
 .hm-lastro{ grid-template-rows:repeat(2, minmax(var(--row), auto)); }
@@ -292,21 +292,24 @@
 .hm-ix__tag[aria-pressed="true"]{ color:#2C2C2C; border-bottom-color:#2C2C2C; }
 .hm-ix__tag:hover{ color:#2C2C2C; }
 
-.hm-ix{ width:100%; border-collapse:collapse; }
+.hm-ix{ width:100%; border-collapse:collapse; background:#FCFCFC; }
 .hm-ix__v,
 .hm-ix__s,
 .hm-fin__t,
 .hm-fin__n,
 .hm-fila__ax{ font-variant-numeric:tabular-nums; }
-.hm-ix thead th{
-  position:sticky; top:var(--rail-h, 54px); z-index:1; background:#FCFCFC;
-  padding:var(--u) var(--u) var(--u) 0; text-align:left; border-bottom:1px solid #2C2C2C;
+/* a legenda geral fica para leitores de tela; a visível desce para cada
+   local, logo abaixo do título, e só aparece com o resto das linhas */
+.hm-ix thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.hm-ix thead th,
+.hm-ix__leg th{
+  padding:var(--u) var(--u) var(--u) 0; text-align:left; border-bottom:1px solid rgba(44,44,44,.2);
   font-family:var(--f-micro); font-size:.56rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
   color:rgba(44,44,44,.6);
 }
-.hm-ix thead th:nth-child(1){ width:16%; }
-.hm-ix thead th:nth-child(2){ width:40%; }
-.hm-ix thead th:nth-child(3){ width:12%; }
+.hm-ix__leg th:nth-child(1){ width:16%; }
+.hm-ix__leg th:nth-child(2){ width:40%; }
+.hm-ix__leg th:nth-child(3){ width:12%; }
 .hm-ix__g th{
   padding:calc(var(--u) * 3) 0 var(--u); text-align:left; border-bottom:1px solid #2C2C2C;
   font-family:var(--f-display); font-size:1rem; font-weight:800; letter-spacing:-.01em;
@@ -331,6 +334,36 @@
 .hm-ix__s a:hover,
 .hm-ix__s a:focus-visible{ color:#2C2C2C; text-decoration-color:#2C2C2C; }
 .hm-ix__calc{ color:#2C2C2C; }
+/* linhas que alimentam os cartões: o accent do projeto pinta a linha inteira */
+.hm-ix tr.is-echo td{ background:#FFB627; color:#2C2C2C; border-bottom-color:rgba(44,44,44,.18); }
+.hm-ix tr.is-atrio td{ background:#D94F2D; color:#FCFCFC; border-bottom-color:rgba(252,252,252,.28); }
+.hm-ix tr.is-echo td:first-child,
+.hm-ix tr.is-atrio td:first-child,
+.hm-ix__ph td:first-child{ padding-left:var(--u); }
+.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__s,
+.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__calc,
+.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__s a{ color:inherit; text-decoration-color:currentColor; }
+.hm-ix tr:is(.is-echo, .is-atrio) .hm-ix__t span{ border-color:currentColor; }
+.hm-ix tr.is-echo[data-tipo="derivada"] .hm-ix__t span{ background:#2C2C2C; color:#FFB627; }
+.hm-ix tr.is-atrio[data-tipo="derivada"] .hm-ix__t span{ background:#FCFCFC; color:#D94F2D; }
+/* CERNE: lugar reservado, em inversão cromática */
+.hm-ix__ph td{ background:#2C2C2C; color:#FCFCFC; border-bottom-color:#2C2C2C; }
+
+/* estado inicial: título do local, linhas dos cartões e as neutras
+   indispensáveis; as reticências abrem a legenda e o resto do local */
+.hm-rastro.is-tabbed .hm-ix tbody:not(.is-open) .is-extra{ display:none; }
+.hm-rastro:not(.is-tabbed) .hm-ix__more{ display:none; }
+.hm-ix__more td{ padding:0; border-bottom:1px solid rgba(44,44,44,.12); }
+.hm-ix__more button{
+  appearance:none; -webkit-appearance:none; display:flex; align-items:center; width:100%; min-height:56px;
+  margin:0; padding:var(--u) 0; border:0; border-radius:0; background:none; color:#2C2C2C; cursor:pointer;
+}
+.hm-ix__dots{ display:block; width:150px; height:auto; overflow:visible; transition:transform .2s ease; }
+.hm-ix__dots path{ fill:none; stroke:#2C2C2C; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
+.hm-ix__more button:hover .hm-ix__dots,
+.hm-ix__more button:focus-visible .hm-ix__dots{ transform:translateX(4px); }
+.hm-ix__more button:focus-visible{ outline:2px solid #2C2C2C; outline-offset:-2px; }
+
 /* a tag de leitura deixa opaco o que não é dela */
 .hm-ix[data-tag="direta"] tr[data-tipo="derivada"] td,
 .hm-ix[data-tag="derivada"] tr[data-tipo="direta"] td{ opacity:.18; }
@@ -637,6 +670,13 @@
   .hm-ix td{ padding:0; border:0; }
   .hm-ix__v{ grid-row:1 / 4; }
   .hm-ix__g{ display:block!important; }
+  .hm-ix__more{ display:block!important; padding:0!important; }
+  .hm-ix__more td{ display:block; }
+  .hm-ix__leg{ display:none!important; }
+  .hm-rastro:not(.is-tabbed) .hm-ix__more{ display:none!important; }
+  .hm-ix tr.is-echo, .hm-ix tr.is-atrio, .hm-ix__ph{ padding-left:var(--u); padding-right:var(--u); }
+  .hm-ix tr.is-echo{ background:#FFB627; } .hm-ix tr.is-atrio{ background:#D94F2D; } .hm-ix__ph{ background:#2C2C2C; }
+  .hm-ix tr.is-echo td:first-child, .hm-ix tr.is-atrio td:first-child, .hm-ix__ph td:first-child{ padding-left:0; }
   .hm-ix__g th{ display:block; }
   #rx-fin, #rx-fila, .hm-rx__foot{ grid-template-columns:minmax(0, 1fr); row-gap:calc(var(--u) * 3); }
   .hm-pane__txt, .hm-fin, .hm-fila, .hm-rx__foot p, .hm-rx__links{ grid-column:1 / -1; }
