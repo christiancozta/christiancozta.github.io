@@ -251,12 +251,12 @@
     let fs = h / cap;
     neq.style.setProperty("--neq-fs", fs + "px");
     const fit = titulo.querySelector(".hm-fit") || titulo;
-    const x0 = fit.getBoundingClientRect().right - pr.left + c * .3;
+    const x0 = fit.getBoundingClientRect().right - pr.left + c * .22;
     const limite = c * 8 - c * .12;
     let larg = itens.map(li => li.getBoundingClientRect().width);
     let passo = c * .32;
     larg.forEach((w, i) => { if (i) passo = Math.min(passo, (limite - x0 - w) / i); });
-    const minimo = c * .1;
+    const minimo = c * .05;
     if (passo < minimo){
       const k = Math.min(1, ...larg.map((w, i) => (limite - x0 - i * minimo) / w));
       fs *= k;
