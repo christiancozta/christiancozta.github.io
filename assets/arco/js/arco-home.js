@@ -100,9 +100,14 @@
     /* reticências: abrem a legenda e o resto do local, e voltam a fechar */
     rastro.querySelectorAll(".hm-ix__more button").forEach(b => b.addEventListener("click", () => {
       const corpo = b.closest("tbody");
+      const linha = b.closest("tr");
       const aberto = !corpo.classList.contains("is-open");
       corpo.classList.toggle("is-open", aberto);
       b.setAttribute("aria-expanded", String(aberto));
+      /* aberto, a linha desce para o fim do local e vira flecha; fechado,
+         volta para logo abaixo dos itens visíveis */
+      if (aberto) corpo.appendChild(linha);
+      else corpo.insertBefore(linha, corpo.querySelector("tr.is-extra:not(.hm-ix__leg)"));
       snap(rastro);
     }));
     const tabela = rastro.querySelector(".hm-ix");
