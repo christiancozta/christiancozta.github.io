@@ -2304,11 +2304,16 @@ body{
 /* RASTRO e LASTRO saem do cordão: DATA é uma entrada só */
 .rail .rail__sec{ display:none !important; }
 .rail .rail__nav{ flex-wrap:nowrap; align-items:center; gap:0 var(--nav-gap); }
+/* o corpo dos projetos desce 1px; a caixa não: a linha guarda a altura do
+   corpo antigo e a folga lateral devolve a largura que o texto perdeu
+   (cerca de meio px por em de palavra, ~1,75px de cada lado) */
 .rail .rail__link{
-  font-family:var(--f-body); font-size:.8rem !important; font-weight:600;
-  line-height:1.2; letter-spacing:.07em;
+  --nav-fs:.8rem;
+  font-family:var(--f-body); font-size:calc(var(--nav-fs) - 1px) !important; font-weight:600;
+  line-height:calc(var(--nav-fs) * 1.2); letter-spacing:.07em;
   padding:.45rem 0; color:var(--pp-72);
 }
+.rail .rail__nav .rail__link{ padding-inline:1.75px; }
 .rail .rail__link[aria-current="true"]{ font-weight:600; color:var(--paper); }
 .rail .rail__link--child{ padding-left:0; margin-left:0; }
 /* caixas e fios moram no mesmo plano do índice: a caixa (-1) cobre a ponta
@@ -2413,7 +2418,7 @@ body{
   .rail{ --nav-gap:clamp(.8rem,3.4vw,1.05rem); gap:1rem; padding:.85rem var(--pad); }
   .rail__title{ font-size:.6rem; }
   .rail .rail__nav{ justify-content:flex-end; }
-  .rail .rail__link{ font-size:clamp(.66rem,2.8vw,.74rem) !important; letter-spacing:.05em; }
+  .rail .rail__link{ --nav-fs:clamp(.66rem,2.8vw,.74rem); letter-spacing:.05em; }
   .rail .rail__nav .rail__link::after{ left:-.32rem; right:-.32rem; }
   /* o ▶ precisa de ar fora da caixa do item ativo */
   .rail .rail__nav > :is([data-view="atrio"],[data-proj="cerne"]){ margin-left:.55rem; }
