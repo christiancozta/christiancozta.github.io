@@ -5,7 +5,7 @@
    2) retícula: fileiras em múltiplos de --row, painel em quadrados inteiros;
    3) navegação interna: painéis, competências e verbetes, sem hover;
    4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
-   5) Rastro: cálculo, fonte e limite de cada unidade sob demanda.
+   5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice.
    A casca (cordão, views, histórico) continua em arco-shell.js.
    ========================================================================== */
 (() => {
@@ -66,63 +66,44 @@
   }
   const snapAll = () => panels.forEach(snap);
 
-  /* ---------- Rastro: cálculo, fonte e limite sob demanda ----------
-     Os mecanismos de cada indicador existem e são recuperáveis, mas não ficam
-     expostos o tempo todo. Sem JS, tudo fica à vista no próprio lugar. Com JS,
-     notas de cálculo, limite e fonte passam a um verso que se abre dentro do
-     quadro da unidade, por cima das figuras: a fileira não cresce e nada sai
-     da grade. No celular, onde as unidades já descem em fluxo, o verso entra
-     abaixo das figuras. A unidade "Limites de interpretação" fica inteira. */
-  const versos = [];
-  home.querySelectorAll(".hm-rastro .hm-ev:not(.hm-ev--lim)").forEach((ev, i) => {
-    const head = ev.querySelector(".hm-ev__h");
-    const notes = [...ev.querySelectorAll(".hm-fig")].filter(f => f.querySelector(".hm-fig__m"));
-    const tail = [...ev.querySelectorAll(".hm-ev__lim, .hm-ev__src")];
-    if (!head || (!notes.length && !tail.length)) return;
-    const verso = document.createElement("div");
-    verso.className = "hm-ev__verso";
-    verso.id = `hm-verso-${i + 1}`;
-    verso.hidden = true;
-    if (notes.length){
-      const dl = document.createElement("dl");
-      notes.forEach(f => {
-        const dt = document.createElement("dt");
-        const v = document.createElement("b");
-        v.textContent = f.querySelector(".hm-fig__v")?.textContent.replace(/\s+/g, " ").trim() || "";
-        dt.append(v, " ", f.querySelector(".hm-fig__l")?.textContent.trim() || "");
-        const dd = document.createElement("dd");
-        dd.append(f.querySelector(".hm-fig__m"));
-        dl.append(dt, dd);
+  /* ---------- Rastro: abas de leitura e tags do índice ----------
+     Sem JS, índice, finalização e fila descem em sequência e o índice fica
+     inteiro. Com JS, as três partes viram abas (setas trocam de aba) e as
+     tags deixam opaco, no índice, o que não é da leitura escolhida. */
+  const rastro = home.querySelector(".hm-rastro");
+  if (rastro){
+    const tabs = [...rastro.querySelectorAll('[role="tab"]')];
+    const panes = tabs.map(t => document.getElementById(t.getAttribute("aria-controls")));
+    if (tabs.length && panes.every(Boolean)){
+      rastro.classList.add("is-tabbed");
+      const pick = (i, focus) => {
+        tabs.forEach((t, k) => {
+          const on = k === i;
+          t.setAttribute("aria-selected", String(on));
+          t.tabIndex = on ? 0 : -1;
+          panes[k].hidden = !on;
+        });
+        if (focus) tabs[i].focus();
+        snap(rastro);
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener("click", () => pick(i));
+        t.addEventListener("keydown", e => {
+          const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+          if (!d) return;
+          e.preventDefault();
+          pick((i + d + tabs.length) % tabs.length, true);
+        });
       });
-      verso.append(dl);
+      pick(0);
     }
-    verso.append(...tail);
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "hm-ev__tg";
-    toggle.textContent = "Cálculo, fonte e limite";
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-controls", verso.id);
-    head.append(toggle);
-    ev.append(verso);
-    ev.classList.add("has-verso");
-    toggle.addEventListener("click", () => {
-      const open = verso.hidden;
-      verso.hidden = !open;
-      toggle.setAttribute("aria-expanded", String(open));
-      ev.classList.toggle("is-verso", open);
-      if (open) placeVerso(ev);
-      /* no celular o verso entra no fluxo: a fileira se refaz */
-      if (stacked.matches) snap(ev.closest(".hm-panel"));
-    });
-    versos.push(ev);
-  });
-  /* o verso começa logo abaixo do cabeçalho da unidade */
-  function placeVerso(ev){
-    const head = ev.querySelector(".hm-ev__h");
-    ev.style.setProperty("--verso-top", (head.offsetTop + head.offsetHeight) + "px");
+    const tabela = rastro.querySelector(".hm-ix");
+    const tags = [...rastro.querySelectorAll(".hm-ix__tag")];
+    tags.forEach(b => b.addEventListener("click", () => {
+      tags.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+      if (tabela) tabela.dataset.tag = b.dataset.tag;
+    }));
   }
-  const placeVersos = () => versos.forEach(placeVerso);
 
   /* ---------- figuras presas à retícula ----------
      ECHO: a pauta do símbolo (24 unidades) ocupa exatamente duas fileiras; a
@@ -189,7 +170,6 @@
     fit();
     snapAll();
     lockFigures();
-    placeVersos();
   }
   const schedule = () => { if (!raf) raf = requestAnimationFrame(() => layout()); };
   addEventListener("resize", schedule, {passive:true});

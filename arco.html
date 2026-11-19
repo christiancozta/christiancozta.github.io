@@ -106,8 +106,8 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261118-kit" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261118-kit">
-<script src="assets/arco/js/arco-home.js?v=20261118-kit" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261118-rastro">
+<script src="assets/arco/js/arco-home.js?v=20261118-rastro" defer></script>
 </head>
 <body>
 
@@ -265,165 +265,205 @@
           </div>
         </section>
 
-        <!-- 05 — RASTRO: as evidências, cada uma com sua atribuição histórica -->
+        <!-- 05 — RASTRO: índice aberto de todos os números dos projetos, com as
+             leituras da finalização e da fila. Sem JS, as três partes ficam à
+             vista em sequência; com JS, viram abas. -->
         <section class="hm-panel hm-rastro" id="rastro" aria-labelledby="t-rastro">
           <p class="hm-idx" aria-hidden="true">05</p>
           <p class="hm-kick">Jurimetria</p>
           <h2 class="hm-title" id="t-rastro" data-fit="titulo"><span class="hm-fit">rastro</span></h2>
           <p class="hm-lede">Cada número com rastro de onde vem e lastro do que permite afirmar.</p>
 
-          <article class="hm-ev" aria-labelledby="ev-1">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-1">Execuções fiscais<span class="hm-ev__u">1º grau</span></h3>
-              <p class="hm-ev__s">Saneamento da carteira; 03.07.2024 a 04.09.2024</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">600</p>
-              <p class="hm-fig__l">processos saneados</p>
-              <p class="hm-fig__m">256 encaminhados à extinção pela Resolução CNJ 547/2024 + 344 identificados como já saneáveis</p>
+          <div class="hm-rx">
+            <div class="hm-tabs" role="tablist" aria-label="Leituras do rastro">
+              <button type="button" role="tab" id="rx-tab-ix" aria-controls="rx-ix" aria-selected="true">Índice</button>
+              <button type="button" role="tab" id="rx-tab-fin" aria-controls="rx-fin" aria-selected="false" tabindex="-1">Finalização</button>
+              <button type="button" role="tab" id="rx-tab-fila" aria-controls="rx-fila" aria-selected="false" tabindex="-1">Fila</button>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">1.543</p>
-              <p class="hm-fig__l">processos triados</p>
-              <p class="hm-fig__m">execuções fiscais revisadas na frente; 101 sob atuação direta do autor</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">38,9%</p>
-              <p class="hm-fig__l">da carteira triada</p>
-              <p class="hm-fig__m">600 ÷ 1.543</p>
-            </div>
-            <p class="hm-ev__lim">Encaminhar à extinção não equivale, por si só, à baixa definitiva. Piso conservador: só sinais inequívocos de saneamento.</p>
-            <p class="hm-ev__src"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-2">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-2">ECHO<span class="hm-ev__u">4ª Turma Recursal</span></h3>
-              <p class="hm-ev__s">Entrada e classificação; Operação, 4ª Turma</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">1.192</p>
-              <p class="hm-fig__l">processos triados</p>
-              <p class="hm-fig__m">1.192 registros públicos anonimizados; <a href="assets/data/lastro/acervo_publico.xlsx">acervo_publico.xlsx</a></p>
+            <div class="hm-pane" id="rx-ix" role="tabpanel" aria-labelledby="rx-tab-ix">
+              <div class="hm-ix__bar">
+                <p class="hm-ix__n">65 figuras</p>
+                <div class="hm-ix__tags" role="group" aria-label="Leitura por tipo">
+                  <button type="button" class="hm-ix__tag" data-tag="todas" aria-pressed="true">Todas</button>
+                  <button type="button" class="hm-ix__tag" data-tag="direta" aria-pressed="false">Diretas <small>38</small></button>
+                  <button type="button" class="hm-ix__tag" data-tag="derivada" aria-pressed="false">Derivadas <small>27</small></button>
+                </div>
+              </div>
+              <table class="hm-ix" data-tag="todas">
+                <caption class="arx-sr">Índice de rastro: cada número dos projetos, o que mede, o tipo e a fonte ou o cálculo</caption>
+                <thead>
+                  <tr><th scope="col">Figura</th><th scope="col">O que mede</th><th scope="col">Tipo</th><th scope="col">Fonte ou cálculo</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>Execuções fiscais</span> <small>1º grau; saneamento da carteira, 03.07.2024 a 04.09.2024</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">600</td><td class="hm-ix__o">Processos saneados</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">256</td><td class="hm-ix__o">Encaminhados à extinção, Res. CNJ 547/2024</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">344</td><td class="hm-ix__o">Identificados como já saneáveis</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1.543</td><td class="hm-ix__o">Processos triados</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">101</td><td class="hm-ix__o">Triados sob atuação direta do autor</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">38,9%</td><td class="hm-ix__o">Parcela saneada da carteira triada</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">600 ÷ 1.543</span></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>ECHO</span> <small>4ª Turma Recursal; entrada e classificação</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1.192</td><td class="hm-ix__o">Processos triados</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/acervo_publico.xlsx">acervo_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">102</td><td class="hm-ix__o">Assuntos de origem</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">10</td><td class="hm-ix__o">Localizadores</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">92</td><td class="hm-ix__o">Categorias suprimidas</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">102 − 10</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">90,2%</td><td class="hm-ix__o">Redução categorial</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">1 − 10 ÷ 102</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">2.758</td><td class="hm-ix__o">Ementas catalogadas</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/ementario_publico.xlsx">ementario_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">631</td><td class="hm-ix__o">Temas de precedentes</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">483</td><td class="hm-ix__o">Temas com tese firmada</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">76,5%</td><td class="hm-ix__o">Proporção com tese firmada</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">483 ÷ 631</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">245</td><td class="hm-ix__o">Códigos de assunto</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>2ª Turma Recursal</span> <small>taxa de finalização; 28.11.2025 a 05.05.2026</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1.896</td><td class="hm-ix__o">Registros atribuídos</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">135</td><td class="hm-ix__o">Registros sem despacho</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1.761</td><td class="hm-ix__o">Despachos proferidos</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">899</td><td class="hm-ix__o">Votos publicados</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">862</td><td class="hm-ix__o">Despachos sem voto</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">51,05%</td><td class="hm-ix__o">Finalização publicada</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">899 ÷ 1.761</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">51,49%</td><td class="hm-ix__o">Finalização, recorte integral</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">881 ÷ 1.711</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">47,42%</td><td class="hm-ix__o">Finalização sobre o bruto, descartada</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">899 ÷ 1.896</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">+16,18 p.p.</td><td class="hm-ix__o">Amplitude da série integral</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">60,39 − 44,21</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">60,11%</td><td class="hm-ix__o">Finalização de abril sem entrantes</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">0 de 6</td><td class="hm-ix__o">Servidores das duas pontas com recuo</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">258</td><td class="hm-ix__o">Despachos, autor</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">153</td><td class="hm-ix__o">Votos, autor</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">59,30%</td><td class="hm-ix__o">Finalização, autor</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">153 ÷ 258</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">13,2 d</td><td class="hm-ix__o">Fila média até o voto</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">média de Data Despacho − Data Envio</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">6,9 d</td><td class="hm-ix__o">Fila média dos demais despachos</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">média de Data Despacho − Data Envio</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">10,1 d</td><td class="hm-ix__o">Fila média composta, referência</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">média dos dois fluxos</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">36,5%</td><td class="hm-ix__o">Fora do teto de 30 dias, jan/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">119 ÷ 326</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">11,7%</td><td class="hm-ix__o">Fora do teto de 30 dias, fev/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">41 ÷ 351</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">9,8%</td><td class="hm-ix__o">Fora do teto de 30 dias, mar/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">43 ÷ 437</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">6,7%</td><td class="hm-ix__o">Fora do teto de 30 dias, abr/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">27 ÷ 402</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−29,78 p.p.</td><td class="hm-ix__o">Fora do teto de 30 dias, jan a abr/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">36,50 − 6,72</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−4,96 p.p.</td><td class="hm-ix__o">Fora do teto de 30 dias, fev a abr/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">11,68 − 6,72</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">326</td><td class="hm-ix__o">Processos analisados, jan/2026</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">402</td><td class="hm-ix__o">Processos analisados, abr/2026</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">+23,3%</td><td class="hm-ix__o">Variação da vazão, jan a abr/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">402 ÷ 326 − 1</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">163</td><td class="hm-ix__o">Estoque sem despacho, fim de jan/2026</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">124</td><td class="hm-ix__o">Estoque sem despacho, fim de abr/2026</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−23,9%</td><td class="hm-ix__o">Variação do estoque, jan a abr/2026</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">124 ÷ 163 − 1</span></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>ATRIO</span> <small>estrutura da API e recorte processual</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">115.114</td><td class="hm-ix__o">Registros processuais únicos</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/diagnostico_corpus_publico.md">diagnostico_corpus_publico.md</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">31</td><td class="hm-ix__o">Rotas /v1</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s">api.py</td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">33</td><td class="hm-ix__o">Operações HTTP declaradas</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s">api.py</td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">188</td><td class="hm-ix__o">Testes automatizados</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s">suíte local, 26.08.2026</td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>TROIA</span> <small>testes em atos, TJPR e STJ, 12 a 19.10.2026, no CERNE 5.0.0</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">17</td><td class="hm-ix__o">Atos testados, uma rodada por ato</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">22</td><td class="hm-ix__o">Rodadas iniciadas</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">4</td><td class="hm-ix__o">Falhas declaradas</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">15 de 17</td><td class="hm-ix__o">Atos concluídos na primeira tentativa</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">12,2 min</td><td class="hm-ix__o">Tempo médio de rodada por ato</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">média de duracao_min</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">11,1 min</td><td class="hm-ix__o">Tempo mediano de rodada por ato</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">mediana de duracao_min</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">37,6 s</td><td class="hm-ix__o">Crivo por dúvida</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">218</td><td class="hm-ix__o">Dúvidas formadas</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">11</td><td class="hm-ix__o">Dúvidas afastadas no crivo</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">5,0%</td><td class="hm-ix__o">Parcela de dúvidas afastadas</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">11 ÷ 218</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">67</td><td class="hm-ix__o">Perguntas entregues</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">9 de 12</td><td class="hm-ix__o">Atos com pergunta sobre ponto embargável</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">7 de 12</td><td class="hm-ix__o">Pontos corrigidos alcançados por pergunta</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">58,3%</td><td class="hm-ix__o">Correspondência nos pontos corrigidos</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">7 ÷ 12</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">2</td><td class="hm-ix__o">Pergunta sobre outro ponto, corroborado</td><td class="hm-ix__t"><span>Direta</span></td><td class="hm-ix__s"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">2,1</td><td class="hm-ix__o">Correspondências esperadas ao acaso</td><td class="hm-ix__t"><span>Derivada</span></td><td class="hm-ix__s"><span class="hm-ix__calc">soma de cobertura nos atos do teste</span></td></tr>
+                </tbody>
+              </table>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">90,2%</p>
-              <p class="hm-fig__l">redução categorial</p>
-              <p class="hm-fig__m">1 − 10/102; 102 assuntos de origem, 92 categorias suprimidas; <a href="assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">2.758</p>
-              <p class="hm-fig__l">ementas catalogadas</p>
-              <p class="hm-fig__m">Acervo integral; <a href="assets/data/lastro/ementario_publico.xlsx">ementario_publico.xlsx</a></p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">631</p>
-              <p class="hm-fig__l">temas de precedentes</p>
-              <p class="hm-fig__m">483 com tese firmada; <a href="assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></p>
-            </div>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-3">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-3">Taxa de finalização<span class="hm-ev__u">2ª Turma Recursal</span></h3>
-              <p class="hm-ev__s">Finalização = votos ÷ despachos proferidos × 100; 28.11.2025 a 05.05.2026</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">51,05%</p>
-              <p class="hm-fig__l">Finalização publicada</p>
-              <p class="hm-fig__m">899 votos ÷ 1.761 despachos proferidos</p>
+            <div class="hm-pane" id="rx-fin" role="tabpanel" aria-labelledby="rx-tab-fin">
+              <div class="hm-pane__txt">
+                <p class="hm-pane__k">Taxa de finalização | sete meses, cinco comparáveis</p>
+                <h3 class="hm-pane__h">O número depende de onde se mede.</h3>
+                <p>Cinco meses integrais entre duas bordas que não se comparam.</p>
+                <p>Novembro registra dois despachos. Maio cobre cinco dias. Ambos entram na janela oficial e nenhum descreve um mês de operação: aparecem contornados, não preenchidos.</p>
+                <ul class="hm-fin__leg" aria-hidden="true">
+                  <li><i class="is-v"></i>Votos</li>
+                  <li><i class="is-d"></i>Despachos</li>
+                  <li><b>%</b>Finalização</li>
+                </ul>
+              </div>
+              <figure class="hm-fin">
+                <ol class="hm-fin__cols">
+                  <li class="hm-fin__c is-borda" style="--d:0.48%;--v:0.00%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">0,00%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">nov/25</span>
+                    <span class="hm-fin__n">0 de 2</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:68.84%;--v:44.21%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">44,21%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">dez/25</span>
+                    <span class="hm-fin__n">126 de 285</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:70.53%;--v:47.26%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">47,26%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">jan/26</span>
+                    <span class="hm-fin__n">138 de 292</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:83.82%;--v:51.30%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">51,30%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">fev/26</span>
+                    <span class="hm-fin__n">178 de 347</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:90.10%;--v:50.67%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">50,67%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">mar/26</span>
+                    <span class="hm-fin__n">189 de 373</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:100.00%;--v:60.39%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">60,39%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">abr/26</span>
+                    <span class="hm-fin__n">250 de 414</span>
+                  </li>
+                  <li class="hm-fin__c is-borda" style="--d:11.59%;--v:37.50%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">37,50%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">mai/26</span>
+                    <span class="hm-fin__n">18 de 48</span>
+                  </li>
+                </ol>
+                <figcaption class="hm-fin__cap">Janela completa, com bordas: 899 votos em 1.761 despachos, 51,05%. Cinco meses integrais: 881 em 1.711, 51,49%.</figcaption>
+              </figure>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">+16,18 p.p.</p>
-              <p class="hm-fig__l">Amplitude da série integral</p>
-              <p class="hm-fig__m">60,39 − 44,21; dez/2025 – abr/2026; cinco meses integrais</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">13,2 <small>e</small> 6,9 d</p>
-              <p class="hm-fig__l">Fila média até o voto e dos demais despachos</p>
-              <p class="hm-fig__m">Data Despacho − Data Envio</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">−29,8 p.p.</p>
-              <p class="hm-fig__l">Fora do teto de 30 dias, jan a abr/2026</p>
-              <p class="hm-fig__m">36,5% (119 de 326) → 6,7% (27 de 402)</p>
-            </div>
-            <p class="hm-ev__lim">A curva de finalização coincide com a adoção do sistema, e a coincidência não é prova. Não há registro individual de uso, dois colaboradores ingressaram em folha em março e abril teve força-tarefa sazonal.</p>
-            <p class="hm-ev__src"><a href="assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-4">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-4">ATRIO</h3>
-              <p class="hm-ev__s">Estrutura da API e recorte processual</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">115.114</p>
-              <p class="hm-fig__l">Registros processuais únicos</p>
-              <p class="hm-fig__m"><a href="assets/data/lastro/diagnostico_corpus_publico.md">diagnostico_corpus_publico.md</a></p>
+            <div class="hm-pane" id="rx-fila" role="tabpanel" aria-labelledby="rx-tab-fila">
+              <div class="hm-pane__txt">
+                <p class="hm-pane__k">Tempo de fila | Data Despacho − Data Envio</p>
+                <h3 class="hm-pane__h">A média geral é um composto de dois fluxos que quase dobram entre si.</h3>
+                <p>Publicar 10,1 dias seria correto e inútil. O que o número esconde é a segregação: voto e despacho sem voto são trabalhos distintos, com filas distintas, e só separados a medida diz alguma coisa.</p>
+              </div>
+              <figure class="hm-fila" style="--max:16">
+                <div class="hm-fila__r" style="--v:13.2">
+                  <p class="hm-fila__k">Votos</p>
+                  <p class="hm-fila__bar"><i aria-hidden="true"></i><b>13,2 dias</b></p>
+                  <p class="hm-fila__d">Fila média até a publicação do voto. Inclui o intervalo institucional entre a conclusão do trabalho e a inclusão formal em pauta.</p>
+                </div>
+                <div class="hm-fila__r" style="--v:6.9">
+                  <p class="hm-fila__k">Demais despachos</p>
+                  <p class="hm-fila__bar"><i aria-hidden="true"></i><b>6,9 dias</b></p>
+                  <p class="hm-fila__d">Despachos sem voto. Metade do tempo, sem a etapa de pauta e sem a redação do mérito.</p>
+                </div>
+                <span class="hm-fila__ref" style="--v:10.1" aria-hidden="true"><b>10,1</b></span>
+                <ol class="hm-fila__ax" aria-hidden="true"><li>0</li><li>2</li><li>4</li><li>6</li><li>8</li><li>10</li><li>12</li><li>14</li><li>16</li></ol>
+                <figcaption class="hm-fila__cap">Composto dos dois fluxos: 10,1 dias, publicado apenas como referência, não como indicador.</figcaption>
+              </figure>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">31</p>
-              <p class="hm-fig__l">Rotas /v1</p>
-              <p class="hm-fig__m">33 operações HTTP declaradas</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">188</p>
-              <p class="hm-fig__l">Testes automatizados</p>
-              <p class="hm-fig__m">Suíte local, 26.08.2026</p>
-            </div>
-            <p class="hm-ev__lim">Após identificação e deduplicação. O número demonstra escala da base, <strong>não qualidade decisória</strong>.</p>
-            <p class="hm-ev__src"><a href="assets/data/lastro/operacao_atrio_publica.md">operacao_atrio_publica.md</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-5">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-5">TROIA<span class="hm-ev__u">Testes em atos, TJPR + STJ</span></h3>
-              <p class="hm-ev__s">17 rodadas reproduzidas na demonstração, uma por ato, TJPR e STJ, 12 a 19.10.2026, no CERNE 5.0.0</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">12,2 min</p>
-              <p class="hm-fig__l">Tempo médio de rodada por ato</p>
-              <p class="hm-fig__m">média de duracao_min nas 17 rodadas; mediana de 11,1 min</p>
+            <div class="hm-rx__foot">
+              <p>Projeto autoral em contexto profissional, não oficial do TJPR. A base original foi extraída de sistema interno e contém dados de terceiros; não integra os artefatos públicos atuais. São disponibilizados apenas derivados agregados e o hash de integridade da fonte.</p>
+              <ul class="hm-rx__links">
+                <li><a href="assets/data/lastro/README.md">Lastro público <span aria-hidden="true">↗</span></a></li>
+                <li><a href="assets/data/lastro/jurimetria.sha256">Hash SHA-256 <span aria-hidden="true">↗</span></a></li>
+                <li><a href="#data" data-view="data" data-hm-view="data">Base e método <span aria-hidden="true">→</span></a></li>
+              </ul>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">67</p>
-              <p class="hm-fig__l">perguntas em 17 atos</p>
-              <p class="hm-fig__m">soma de perguntas; 218 dúvidas formadas, 11 afastadas</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">15 de 17</p>
-              <p class="hm-fig__l">Atos concluídos na primeira tentativa</p>
-              <p class="hm-fig__m">soma de concluida_na_primeira; 22 rodadas iniciadas, 4 falhas declaradas</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">9 de 12</p>
-              <p class="hm-fig__l">Atos com pergunta sobre ponto embargável</p>
-              <p class="hm-fig__m">7 no ponto corrigido + 2 em outro ponto corroborado</p>
-            </div>
-            <p class="hm-ev__lim">Seleção exploratória, conferência pelo autor. Não é taxa de precisão.</p>
-            <p class="hm-ev__src"><a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></p>
-          </article>
-
-          <article class="hm-ev hm-ev--lim" aria-labelledby="ev-6">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-6">Limites de interpretação</h3>
-            </header>
-            <ul class="hm-neq">
-              <li><span>Volume</span><i aria-label="não equivale a">≠</i><span>Desempenho</span></li>
-              <li><span>Percentual</span><i aria-label="não equivale a">≠</i><span>Ponto percentual</span></li>
-              <li><span>Fila</span><i aria-label="não equivale a">≠</i><span>Tempo de trabalho</span></li>
-              <li><span>Associação</span><i aria-label="não equivale a">≠</i><span>Causalidade</span></li>
-              <li><span>Mês de borda</span><i aria-label="não equivale a">≠</i><span>Mês integral</span></li>
-              <li><span>Ausência de prova</span><i aria-label="não equivale a">≠</i><span>Falsidade</span></li>
-            </ul>
-            <p class="hm-ev__lim">Projeto autoral em contexto profissional, não oficial do TJPR. A base original foi extraída de sistema interno e contém dados de terceiros; não integra os artefatos públicos atuais. São disponibilizados apenas derivados agregados e o hash de integridade da fonte.</p>
-            <ul class="hm-ev__links">
-              <li><a href="assets/data/lastro/README.md">Lastro público <span aria-hidden="true">↗</span></a></li>
-              <li><a href="assets/data/lastro/jurimetria.sha256">Hash SHA-256 <span aria-hidden="true">↗</span></a></li>
-              <li><a href="#data" data-view="data" data-hm-view="data">Base e método <span aria-hidden="true">→</span></a></li>
-            </ul>
-          </article>
+          </div>
         </section>
 
         <!-- 06 — LASTRO: do termo à prova -->

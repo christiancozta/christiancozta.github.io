@@ -107,8 +107,8 @@
 <script src="../assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="../assets/arco/js/arco-shell.en.js?v=20261118-kit" defer></script>
 <script src="../assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261118-kit">
-<script src="../assets/arco/js/arco-home.en.js?v=20261118-kit" defer></script>
+<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261118-rastro">
+<script src="../assets/arco/js/arco-home.en.js?v=20261118-rastro" defer></script>
 </head>
 <body>
 
@@ -260,165 +260,205 @@
           </div>
         </section>
 
-        <!-- 05 — RASTRO: as evidências, cada uma com sua atribuição histórica -->
+        <!-- 05 — RASTRO: índice aberto de todos os números dos projetos, com as
+             leituras da finalização e da fila. Sem JS, as três partes ficam à
+             vista em sequência; com JS, viram abas. -->
         <section class="hm-panel hm-rastro" id="rastro" aria-labelledby="t-rastro">
           <p class="hm-idx" aria-hidden="true">05</p>
           <p class="hm-kick">Jurimetrics</p>
           <h2 class="hm-title" id="t-rastro" data-fit="titulo"><span class="hm-fit">trace</span></h2>
           <p class="hm-lede">Every number with a trace of where it comes from and a grounding for what it allows us to claim.</p>
 
-          <article class="hm-ev" aria-labelledby="ev-1">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-1">Tax enforcement<span class="hm-ev__u">First instance</span></h3>
-              <p class="hm-ev__s">Portfolio clean-up; 3 Jul 2024 to 4 Sep 2024</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">600</p>
-              <p class="hm-fig__l">cases cleaned up</p>
-              <p class="hm-fig__m">256 referred for dismissal under CNJ Resolution 547/2024 + 344 identified as already clearable</p>
+          <div class="hm-rx">
+            <div class="hm-tabs" role="tablist" aria-label="Trace readings">
+              <button type="button" role="tab" id="rx-tab-ix" aria-controls="rx-ix" aria-selected="true">Index</button>
+              <button type="button" role="tab" id="rx-tab-fin" aria-controls="rx-fin" aria-selected="false" tabindex="-1">Finalization</button>
+              <button type="button" role="tab" id="rx-tab-fila" aria-controls="rx-fila" aria-selected="false" tabindex="-1">Queue</button>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">1,543</p>
-              <p class="hm-fig__l">cases triaged</p>
-              <p class="hm-fig__m">tax enforcement cases reviewed in the front; 101 handled directly by the author</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">38.9%</p>
-              <p class="hm-fig__l">of the screened portfolio</p>
-              <p class="hm-fig__m">600 ÷ 1,543</p>
-            </div>
-            <p class="hm-ev__lim">Referral for dismissal does not, by itself, amount to final closure. Conservative floor: only unequivocal clean-up signals.</p>
-            <p class="hm-ev__src"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-2">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-2">ECHO<span class="hm-ev__u">4th Appellate Panel</span></h3>
-              <p class="hm-ev__s">Intake and classification; Operation, 4th Panel</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">1,192</p>
-              <p class="hm-fig__l">cases triaged</p>
-              <p class="hm-fig__m">1,192 anonymized public records; <a href="../assets/data/lastro/acervo_publico.xlsx">acervo_publico.xlsx</a></p>
+            <div class="hm-pane" id="rx-ix" role="tabpanel" aria-labelledby="rx-tab-ix">
+              <div class="hm-ix__bar">
+                <p class="hm-ix__n">65 figures</p>
+                <div class="hm-ix__tags" role="group" aria-label="Reading by type">
+                  <button type="button" class="hm-ix__tag" data-tag="todas" aria-pressed="true">All</button>
+                  <button type="button" class="hm-ix__tag" data-tag="direta" aria-pressed="false">Direct <small>38</small></button>
+                  <button type="button" class="hm-ix__tag" data-tag="derivada" aria-pressed="false">Derived <small>27</small></button>
+                </div>
+              </div>
+              <table class="hm-ix" data-tag="todas">
+                <caption class="arx-sr">Trace index: every number in the projects, what it measures, its type and its source or calculation</caption>
+                <thead>
+                  <tr><th scope="col">Figure</th><th scope="col">What it measures</th><th scope="col">Type</th><th scope="col">Source or calculation</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>Tax enforcement cases</span> <small>First instance; portfolio clean-up, 3 Jul 2024 to 4 Sep 2024</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">600</td><td class="hm-ix__o">Cases cleaned up</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">256</td><td class="hm-ix__o">Referred for dismissal, CNJ Res. 547/2024</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">344</td><td class="hm-ix__o">Identified as already resolvable</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1,543</td><td class="hm-ix__o">Cases triaged</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">101</td><td class="hm-ix__o">Triaged under the author’s direct handling</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/exec_fiscais_res547_derivada.csv">exec_fiscais_res547_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">38.9%</td><td class="hm-ix__o">Share of the triaged portfolio cleaned up</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">600 ÷ 1,543</span></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>ECHO</span> <small>4th Appellate Panel; intake and classification</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1,192</td><td class="hm-ix__o">Cases triaged</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/acervo_publico.xlsx">acervo_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">102</td><td class="hm-ix__o">Original subjects</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">10</td><td class="hm-ix__o">Locators</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">92</td><td class="hm-ix__o">Categories removed</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">102 − 10</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">90.2%</td><td class="hm-ix__o">Category reduction</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">1 − 10 ÷ 102</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">2,758</td><td class="hm-ix__o">Headnotes catalogued</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/ementario_publico.xlsx">ementario_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">631</td><td class="hm-ix__o">Precedent topics</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">483</td><td class="hm-ix__o">Topics with a settled thesis</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">76.5%</td><td class="hm-ix__o">Share with a settled thesis</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">483 ÷ 631</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">245</td><td class="hm-ix__o">Subject codes</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>2nd Appellate Panel</span> <small>finalization rate; 28 Nov 2025 to 5 May 2026</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1,896</td><td class="hm-ix__o">Records assigned</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">135</td><td class="hm-ix__o">Records without an order</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">1,761</td><td class="hm-ix__o">Orders issued</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">899</td><td class="hm-ix__o">Opinions published</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">862</td><td class="hm-ix__o">Orders without an opinion</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">51.05%</td><td class="hm-ix__o">Published finalization</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">899 ÷ 1,761</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">51.49%</td><td class="hm-ix__o">Finalization, full-month cut</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">881 ÷ 1,711</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">47.42%</td><td class="hm-ix__o">Finalization over the raw base, discarded</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">899 ÷ 1,896</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">+16.18 pp</td><td class="hm-ix__o">Range of the full-month series</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">60.39 − 44.21</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">60.11%</td><td class="hm-ix__o">April finalization without newcomers</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">0 of 6</td><td class="hm-ix__o">Staff present at both ends who declined</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">258</td><td class="hm-ix__o">Orders, author</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">153</td><td class="hm-ix__o">Opinions, author</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">59.30%</td><td class="hm-ix__o">Finalization, author</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">153 ÷ 258</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">13.2 d</td><td class="hm-ix__o">Average queue until the opinion</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">mean of Order Date − Submission Date</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">6.9 d</td><td class="hm-ix__o">Average queue for other orders</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">mean of Order Date − Submission Date</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">10.1 d</td><td class="hm-ix__o">Composite average queue, reference</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">mean of the two flows</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">36.5%</td><td class="hm-ix__o">Beyond the 30-day ceiling, Jan/2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">119 ÷ 326</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">11.7%</td><td class="hm-ix__o">Beyond the 30-day ceiling, Feb/2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">41 ÷ 351</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">9.8%</td><td class="hm-ix__o">Beyond the 30-day ceiling, Mar/2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">43 ÷ 437</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">6.7%</td><td class="hm-ix__o">Beyond the 30-day ceiling, Apr/2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">27 ÷ 402</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−29.78 pp</td><td class="hm-ix__o">Beyond the 30-day ceiling, Jan to Apr 2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">36.50 − 6.72</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−4.96 pp</td><td class="hm-ix__o">Beyond the 30-day ceiling, Feb to Apr 2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">11.68 − 6.72</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">326</td><td class="hm-ix__o">Cases reviewed, Jan/2026</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">402</td><td class="hm-ix__o">Cases reviewed, Apr/2026</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">+23.3%</td><td class="hm-ix__o">Change in throughput, Jan to Apr 2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">402 ÷ 326 − 1</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">163</td><td class="hm-ix__o">Backlog without an order, end of Jan/2026</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">124</td><td class="hm-ix__o">Backlog without an order, end of Apr/2026</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">−23.9%</td><td class="hm-ix__o">Change in backlog, Jan to Apr 2026</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">124 ÷ 163 − 1</span></td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>ATRIO</span> <small>API structure and case cut</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">115,114</td><td class="hm-ix__o">Unique case records</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/diagnostico_corpus_publico.md">diagnostico_corpus_publico.md</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">31</td><td class="hm-ix__o">/v1 routes</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s">api.py</td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">33</td><td class="hm-ix__o">Declared HTTP operations</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s">api.py</td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">188</td><td class="hm-ix__o">Automated tests</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s">local suite, 26 Aug 2026</td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="hm-ix__g"><th scope="rowgroup" colspan="4"><span>TROIA</span> <small>tests on rulings, TJPR and STJ, 12 to 19 Oct 2026, on CERNE 5.0.0</small></th></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">17</td><td class="hm-ix__o">Rulings tested, one round per ruling</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">22</td><td class="hm-ix__o">Rounds started</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">4</td><td class="hm-ix__o">Declared failures</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">15 of 17</td><td class="hm-ix__o">Rulings completed on the first attempt</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">12.2 min</td><td class="hm-ix__o">Mean round time per ruling</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">mean of duracao_min</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">11.1 min</td><td class="hm-ix__o">Median round time per ruling</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">median of duracao_min</span></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">37.6 s</td><td class="hm-ix__o">Screening per doubt</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">218</td><td class="hm-ix__o">Doubts formed</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">11</td><td class="hm-ix__o">Doubts dismissed at screening</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">5.0%</td><td class="hm-ix__o">Share of doubts dismissed</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">11 ÷ 218</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">67</td><td class="hm-ix__o">Questions delivered</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">9 of 12</td><td class="hm-ix__o">Rulings with a question on a point open to a motion for clarification</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">7 of 12</td><td class="hm-ix__o">Corrected points reached by a question</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">58.3%</td><td class="hm-ix__o">Match on corrected points</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">7 ÷ 12</span></td></tr>
+                  <tr data-tipo="direta"><td class="hm-ix__v">2</td><td class="hm-ix__o">Question on another point, corroborated</td><td class="hm-ix__t"><span>Direct</span></td><td class="hm-ix__s"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></td></tr>
+                  <tr data-tipo="derivada"><td class="hm-ix__v">2.1</td><td class="hm-ix__o">Matches expected by chance</td><td class="hm-ix__t"><span>Derived</span></td><td class="hm-ix__s"><span class="hm-ix__calc">sum of coverage across the tested rulings</span></td></tr>
+                </tbody>
+              </table>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">90.2%</p>
-              <p class="hm-fig__l">category reduction</p>
-              <p class="hm-fig__m">1 − 10/102; 102 source subjects, 92 categories removed; <a href="../assets/data/lastro/mapa_tematico_publico.pdf">mapa_tematico_publico.pdf</a></p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">2,758</p>
-              <p class="hm-fig__l">headnotes cataloged</p>
-              <p class="hm-fig__m">Full collection; <a href="../assets/data/lastro/ementario_publico.xlsx">ementario_publico.xlsx</a></p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">631</p>
-              <p class="hm-fig__l">precedent topics</p>
-              <p class="hm-fig__m">483 with a settled thesis; <a href="../assets/data/lastro/precedentes_publico.xlsx">precedentes_publico.xlsx</a></p>
-            </div>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-3">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-3">Finalization rate<span class="hm-ev__u">2nd Appellate Panel</span></h3>
-              <p class="hm-ev__s">Finalization = opinions ÷ orders issued × 100; 28 Nov 2025 to 5 May 2026</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">51.05%</p>
-              <p class="hm-fig__l">Published finalization</p>
-              <p class="hm-fig__m">899 opinions ÷ 1,761 orders issued</p>
+            <div class="hm-pane" id="rx-fin" role="tabpanel" aria-labelledby="rx-tab-fin">
+              <div class="hm-pane__txt">
+                <p class="hm-pane__k">Finalization rate | seven months, five comparable</p>
+                <h3 class="hm-pane__h">The number depends on where it is measured.</h3>
+                <p>Five full months between two edges that cannot be compared.</p>
+                <p>November records two orders. May covers five days. Both fall within the official window and neither describes a month of operation: they appear outlined, not filled.</p>
+                <ul class="hm-fin__leg" aria-hidden="true">
+                  <li><i class="is-v"></i>Opinions</li>
+                  <li><i class="is-d"></i>Orders</li>
+                  <li><b>%</b>Finalization</li>
+                </ul>
+              </div>
+              <figure class="hm-fin">
+                <ol class="hm-fin__cols">
+                  <li class="hm-fin__c is-borda" style="--d:0.48%;--v:0.00%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">0.00%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Nov/25</span>
+                    <span class="hm-fin__n">0 of 2</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:68.84%;--v:44.21%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">44.21%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Dec/25</span>
+                    <span class="hm-fin__n">126 of 285</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:70.53%;--v:47.26%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">47.26%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Jan/26</span>
+                    <span class="hm-fin__n">138 of 292</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:83.82%;--v:51.30%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">51.30%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Feb/26</span>
+                    <span class="hm-fin__n">178 of 347</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:90.10%;--v:50.67%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">50.67%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Mar/26</span>
+                    <span class="hm-fin__n">189 of 373</span>
+                  </li>
+                  <li class="hm-fin__c" style="--d:100.00%;--v:60.39%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">60.39%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">Apr/26</span>
+                    <span class="hm-fin__n">250 of 414</span>
+                  </li>
+                  <li class="hm-fin__c is-borda" style="--d:11.59%;--v:37.50%">
+                    <span class="hm-fin__bar"><span class="hm-fin__t">37.50%</span><i aria-hidden="true"></i></span>
+                    <span class="hm-fin__m">May/26</span>
+                    <span class="hm-fin__n">18 of 48</span>
+                  </li>
+                </ol>
+                <figcaption class="hm-fin__cap">Full window, with edges: 899 opinions out of 1,761 orders, 51.05%. Five full months: 881 out of 1,711, 51.49%.</figcaption>
+              </figure>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">+16.18 pp</p>
-              <p class="hm-fig__l">Range of the full-month series</p>
-              <p class="hm-fig__m">60.39 − 44.21; Dec 2025 – Apr 2026; five full months</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">13.2 <small>and</small> 6.9 d</p>
-              <p class="hm-fig__l">Average queue until the opinion and for other orders</p>
-              <p class="hm-fig__m">Data Despacho − Data Envio</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">−29.8 pp</p>
-              <p class="hm-fig__l">Beyond the 30-day ceiling, Jan to Apr 2026</p>
-              <p class="hm-fig__m">36.5% (119 of 326) → 6.7% (27 of 402)</p>
-            </div>
-            <p class="hm-ev__lim">The finalization curve coincides with the adoption of the system, and coincidence is not proof. There is no individual record of use, two staff members joined the payroll in March, and April had a seasonal task force.</p>
-            <p class="hm-ev__src"><a href="../assets/data/lastro/jurimetria_derivada.csv">jurimetria_derivada.csv</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-4">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-4">ATRIO</h3>
-              <p class="hm-ev__s">API structure and case scope</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">115,114</p>
-              <p class="hm-fig__l">Unique case records</p>
-              <p class="hm-fig__m"><a href="../assets/data/lastro/diagnostico_corpus_publico.md">diagnostico_corpus_publico.md</a></p>
+            <div class="hm-pane" id="rx-fila" role="tabpanel" aria-labelledby="rx-tab-fila">
+              <div class="hm-pane__txt">
+                <p class="hm-pane__k">Queue time | Order Date − Submission Date</p>
+                <h3 class="hm-pane__h">The overall average is a composite of two flows, one nearly double the other.</h3>
+                <p>Publishing 10.1 days would be correct and useless. What the number hides is segregation: opinions and orders without an opinion are distinct work, with distinct queues, and only when separated does the measure say anything.</p>
+              </div>
+              <figure class="hm-fila" style="--max:16">
+                <div class="hm-fila__r" style="--v:13.2">
+                  <p class="hm-fila__k">Opinions</p>
+                  <p class="hm-fila__bar"><i aria-hidden="true"></i><b>13.2 days</b></p>
+                  <p class="hm-fila__d">Average queue until the opinion is published. It includes the institutional interval between finishing the work and the formal listing on the judgment agenda.</p>
+                </div>
+                <div class="hm-fila__r" style="--v:6.9">
+                  <p class="hm-fila__k">Other orders</p>
+                  <p class="hm-fila__bar"><i aria-hidden="true"></i><b>6.9 days</b></p>
+                  <p class="hm-fila__d">Orders without an opinion. Half the time, with no agenda stage and no drafting on the merits.</p>
+                </div>
+                <span class="hm-fila__ref" style="--v:10.1" aria-hidden="true"><b>10.1</b></span>
+                <ol class="hm-fila__ax" aria-hidden="true"><li>0</li><li>2</li><li>4</li><li>6</li><li>8</li><li>10</li><li>12</li><li>14</li><li>16</li></ol>
+                <figcaption class="hm-fila__cap">Composite of the two flows: 10.1 days, published only as a reference, not as an indicator.</figcaption>
+              </figure>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">31</p>
-              <p class="hm-fig__l">/v1 routes</p>
-              <p class="hm-fig__m">33 declared HTTP operations</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">188</p>
-              <p class="hm-fig__l">Automated tests</p>
-              <p class="hm-fig__m">Local suite, 26 Aug 2026</p>
-            </div>
-            <p class="hm-ev__lim">After identification and deduplication. The number shows the scale of the base, <strong>not decision quality</strong>.</p>
-            <p class="hm-ev__src"><a href="../assets/data/lastro/operacao_atrio_publica.md">operacao_atrio_publica.md</a></p>
-          </article>
 
-          <article class="hm-ev" aria-labelledby="ev-5">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-5">TROIA<span class="hm-ev__u">Tests on rulings, TJPR + STJ</span></h3>
-              <p class="hm-ev__s">17 rounds reproduced in the demonstration, one per ruling, TJPR and STJ, 12 to 19 Oct 2026, on CERNE 5.0.0</p>
-            </header>
-            <div class="hm-fig hm-fig--lead">
-              <p class="hm-fig__v">12.2 min</p>
-              <p class="hm-fig__l">Mean round time per ruling</p>
-              <p class="hm-fig__m">mean of duracao_min across the 17 rounds; median of 11.1 min</p>
+            <div class="hm-rx__foot">
+              <p>My own project in a professional context, not official TJPR material. The original base was extracted from an internal system and contains third-party data; it is not part of the current public artifacts. Only aggregated derivatives and the source integrity hash are made available.</p>
+              <ul class="hm-rx__links">
+                <li><a href="../assets/data/lastro/README.md">Public grounding <span aria-hidden="true">↗</span></a></li>
+                <li><a href="../assets/data/lastro/jurimetria.sha256">SHA-256 hash <span aria-hidden="true">↗</span></a></li>
+                <li><a href="#data" data-view="data" data-hm-view="data">Base &amp; method <span aria-hidden="true">→</span></a></li>
+              </ul>
             </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">67</p>
-              <p class="hm-fig__l">questions across 17 rulings</p>
-              <p class="hm-fig__m">sum of questions; 218 doubts formed, 11 dismissed</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">15 of 17</p>
-              <p class="hm-fig__l">Rulings completed on the first attempt</p>
-              <p class="hm-fig__m">sum of concluida_na_primeira; 22 rounds started, 4 declared failures</p>
-            </div>
-            <div class="hm-fig">
-              <p class="hm-fig__v">9 of 12</p>
-              <p class="hm-fig__l">Rulings with a question on a point open to a motion for clarification</p>
-              <p class="hm-fig__m">7 on the corrected point + 2 on another corroborated point</p>
-            </div>
-            <p class="hm-ev__lim">Exploratory selection, checked by the author. Not a precision rate.</p>
-            <p class="hm-ev__src"><a href="../assets/data/lastro/cerne_rodadas_derivada.csv">cerne_rodadas_derivada.csv</a></p>
-          </article>
-
-          <article class="hm-ev hm-ev--lim" aria-labelledby="ev-6">
-            <header class="hm-ev__h">
-              <h3 class="hm-ev__t" id="ev-6">Limits of interpretation</h3>
-            </header>
-            <ul class="hm-neq">
-              <li><span>Volume</span><i aria-label="is not the same as">≠</i><span>Performance</span></li>
-              <li><span>Percentage</span><i aria-label="is not the same as">≠</i><span>Percentage point</span></li>
-              <li><span>Queue</span><i aria-label="is not the same as">≠</i><span>Working time</span></li>
-              <li><span>Association</span><i aria-label="is not the same as">≠</i><span>Causality</span></li>
-              <li><span>Edge month</span><i aria-label="is not the same as">≠</i><span>Full month</span></li>
-              <li><span>Absence of proof</span><i aria-label="is not the same as">≠</i><span>Falsity</span></li>
-            </ul>
-            <p class="hm-ev__lim">My own project in a professional context, not official TJPR material. The original base was extracted from an internal system and contains third-party data; it is not part of the current public artifacts. Only aggregated derivatives and the source integrity hash are made available.</p>
-            <ul class="hm-ev__links">
-              <li><a href="../assets/data/lastro/README.md">Public grounding <span aria-hidden="true">↗</span></a></li>
-              <li><a href="../assets/data/lastro/jurimetria.sha256">SHA-256 hash <span aria-hidden="true">↗</span></a></li>
-              <li><a href="#data" data-view="data" data-hm-view="data">Base &amp; method <span aria-hidden="true">→</span></a></li>
-            </ul>
-          </article>
+          </div>
         </section>
 
         <!-- 06 — LASTRO: do termo à prova -->
