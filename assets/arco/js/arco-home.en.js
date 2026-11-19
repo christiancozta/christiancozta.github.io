@@ -229,7 +229,7 @@
     });
   }
 
-  /* Distinções de leitura do Rastro. L é a linha da retícula onde pousa o
+  /* Distinções de leitura do Rastro (Schibsted Grotesk 900, maiúsculas). L é a linha da retícula onde pousa o
      título. As quatro primeiras ficam na faixa do título, a primeira no
      mesmo lugar de sempre (0,86 quadrado acima de L); as duas últimas descem
      para a faixa de baixo, a penúltima a partir de L e a última terminando
