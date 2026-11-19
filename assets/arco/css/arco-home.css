@@ -283,16 +283,14 @@
    sobe o título; cada linha começa um pouco mais longe do título que a
    anterior. Posição e corpo vêm de arco-home.js */
 .hm-neq{
-  position:absolute; z-index:0; margin:0; padding:0; list-style:none; pointer-events:none;
-  top:var(--neq-top, 0); left:var(--neq-left, 50%); height:var(--neq-h, auto);
-  display:flex; flex-direction:column; justify-content:space-between;
+  position:absolute; inset:0; z-index:0; margin:0; padding:0; list-style:none; pointer-events:none;
   font-family:"Instrument Sans", var(--f-body); font-weight:700; text-transform:uppercase;
-  font-size:var(--neq-fs, .9rem); line-height:1; letter-spacing:.01em; white-space:nowrap;
-  color:rgba(44,44,44,.12);
+  font-size:var(--neq-fs, .9rem); font-stretch:78%; letter-spacing:.005em; color:rgba(44,44,44,.12);
 }
-.hm-neq li{ margin-left:calc(var(--i, 0) * var(--neq-step, 1.2rem)); }
-.hm-neq li:nth-child(2){ --i:1; } .hm-neq li:nth-child(3){ --i:2; } .hm-neq li:nth-child(4){ --i:3; }
-.hm-neq li:nth-child(5){ --i:4; } .hm-neq li:nth-child(6){ --i:5; }
+/* cada linha mede exatamente a altura das maiúsculas: assim o espaço entre
+   elas pode ser ínfimo e o desenho cai preciso na retícula */
+.hm-neq li{ position:absolute; top:0; left:0; white-space:nowrap; line-height:1; text-box:trim-both cap alphabetic; }
+.hm-neq__x{ margin:0 .42em; }
 .hm-rastro > .hm-title{ position:relative; z-index:1; }
 
 /* índice */

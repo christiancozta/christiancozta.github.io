@@ -225,17 +225,51 @@
       const alvo = Math.floor((y - 1) / c) * c;
       if (y - alvo > .5) t.style.transform = `translateY(${alvo - y}px)`;
       const neq = t.closest(".hm-panel")?.querySelector(".hm-neq");
-      if (neq){
-        const painel = t.closest(".hm-panel");
-        const topoPainel = painel.getBoundingClientRect().top - home.getBoundingClientRect().top;
-        const fit = t.querySelector(".hm-fit") || t;
-        const direita = fit.getBoundingClientRect().right - painel.getBoundingClientRect().left;
-        neq.style.setProperty("--neq-top", (alvo - c - topoPainel + c * .14) + "px");
-        neq.style.setProperty("--neq-h", (c * .82) + "px");
-        neq.style.setProperty("--neq-left", (direita + c * .3) + "px");
-        neq.style.setProperty("--neq-fs", (c / 8.2) + "px");
-        neq.style.setProperty("--neq-step", (c * .32) + "px");
-      }
+      if (neq) placeNeq(neq, t, alvo, c);
+    });
+  }
+
+  /* Distinções de leitura do Rastro. L é a linha da retícula onde pousa o
+     título. As quatro primeiras ficam na faixa do título, a primeira no
+     mesmo lugar de sempre (0,86 quadrado acima de L); as duas últimas descem
+     para a faixa de baixo, a penúltima a partir de L e a última terminando
+     a 40% dessa faixa. Daí sai a altura das maiúsculas (h) com um vão
+     ínfimo (g) entre as linhas; cada linha começa um passo mais longe do
+     título, sem passar da borda da tela. */
+  function placeNeq(neq, titulo, alvo, c){
+    const itens = [...neq.children];
+    if (!itens.length) return;
+    const painel = neq.closest(".hm-panel");
+    const pr = painel.getBoundingClientRect(), hr = home.getBoundingClientRect();
+    const L = alvo - (pr.top - hr.top);
+    const T1 = L - c * .86;
+    const g = c * .012;
+    const h = (c * .4 - g) / 2;
+    neq.style.setProperty("--neq-fs", (h / .7) + "px");
+    const fs0 = parseFloat(getComputedStyle(itens[0]).fontSize);
+    const cap = itens[0].getBoundingClientRect().height / fs0 || .7;
+    let fs = h / cap;
+    neq.style.setProperty("--neq-fs", fs + "px");
+    const fit = titulo.querySelector(".hm-fit") || titulo;
+    const x0 = fit.getBoundingClientRect().right - pr.left + c * .3;
+    const limite = c * 8 - c * .12;
+    let larg = itens.map(li => li.getBoundingClientRect().width);
+    let passo = c * .32;
+    larg.forEach((w, i) => { if (i) passo = Math.min(passo, (limite - x0 - w) / i); });
+    const minimo = c * .1;
+    if (passo < minimo){
+      const k = Math.min(1, ...larg.map((w, i) => (limite - x0 - i * minimo) / w));
+      fs *= k;
+      neq.style.setProperty("--neq-fs", fs + "px");
+      passo = minimo;
+    }
+    const hReal = itens[0].getBoundingClientRect().height;
+    itens.forEach((li, i) => {
+      const topo = i < 4 ? T1 + i * (hReal + g)
+        : i === 4 ? L
+        : L + c * .4 - hReal;
+      li.style.top = topo + "px";
+      li.style.left = (x0 + i * passo) + "px";
     });
   }
 
