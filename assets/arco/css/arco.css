@@ -120,7 +120,7 @@ body{
    Isso mantém a geometria validada e devolve o preenchimento que o repeat(10)
    havia quebrado (arco/narr-zone voltam a ocupar o palco inteiro). */
 /* --shell-rail é o único controle da coluna do cordão. Só o menu contextual
-   (TROIA/PLAY, ver fim do arquivo) o redefine; nas demais views vale --rail-w. */
+   (CERNE/PLAY, ver fim do arquivo) o redefine; nas demais views vale --rail-w. */
 .shell{ display:grid; grid-template-columns:minmax(0,1fr); align-content:start; min-height:100dvh; }
 
 /* Três blocos, três folgas desiguais: identidade no topo (na altura do nome
@@ -1527,7 +1527,7 @@ body{
 /* o cordão é topo: a barra encosta debaixo dele */
 @media all{
   #repertorio{scroll-margin-top:calc(var(--rail-h,0px) + .9rem)}
-  /* #troia, #play, #data: o salto nativo da âncora pousa sob a barra */
+  /* #cerne, #play, #data: o salto nativo da âncora pousa sob a barra */
   .view[id]{scroll-margin-top:var(--rail-h,0px)}
   .doors{ top:var(--rail-h,0px); }
 }
@@ -2281,18 +2281,18 @@ body{
 /* ===========================================================================
    CORDÃO DE TOPO — 2026-10-27
    Três zonas numa faixa: identidade | projetos | idioma.
-   Projetos em espaçamento único; o filho (PLAY, TROIA) se liga ao projeto-mãe
+   Projetos em espaçamento único; o filho (PLAY, CERNE) se liga ao projeto-mãe
    por um fio fino que ocupa exatamente o vão — nenhum espaço a mais.
    Estado corrente é cor + fio de base: peso que muda empurra os vizinhos.
    =========================================================================== */
 /* Estado = a caixa do território, a mesma dos algarismos do hero:
-   DATA e ATRIO/TROIA em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
+   DATA e ATRIO/CERNE em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
    Hover e corrente falam a mesma língua; o corrente apenas permanece. */
 .rail .rail__link[data-view="data"]{ --tone:#4A90E2; --tone-ink:var(--paper); }
 .rail .rail__link[data-view="echo"],
 .rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
-.rail .rail__link[data-view="troia"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
+.rail .rail__link[data-view="cerne"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
 
 .rail{ --nav-gap:2.1rem; }
 /* RASTRO e LASTRO saem do cordão: DATA é uma entrada só */
@@ -2316,7 +2316,7 @@ body{
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover){ color:var(--tone-ink); }
 .rail .rail__nav .rail__link:is(:hover,[aria-current="true"],.is-data-hover)::after{ opacity:1; }
 /* a passagem entre projetos: ▶ pequeno e discreto no vão antes de ECHO e de
-   ATRIO (DATA ▶ ECHO—PLAY ▶ ATRIO—TROIA). U+FE0E evita o emoji no iOS. */
+   ATRIO (DATA ▶ ECHO—PLAY ▶ ATRIO—CERNE). U+FE0E evita o emoji no iOS. */
 .rail .rail__nav > :is([data-view="echo"],[data-view="atrio"])::before{
   content:"\25B6\FE0E"; position:absolute; top:50%; right:100%; z-index:-2;
   width:var(--nav-gap); transform:translateY(-50%);
@@ -2331,11 +2331,11 @@ body{
 /* a corrente: com mãe ou filho na caixa, o fio e o par ficam na cor do
    território — o mesmo projeto, dito duas vezes */
 .rail .rail__nav:has(> :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) > :is([data-view="echo"],[data-view="play"]):not(:hover):not([aria-current="true"]),
-.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) > :is([data-view="atrio"],[data-view="troia"]):not(:hover):not([aria-current="true"]){
+.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="cerne"]):is(:hover,:focus-visible)) > :is([data-view="atrio"],[data-view="cerne"]):not(:hover):not([aria-current="true"]){
   color:var(--tone);
 }
 .rail .rail__nav:has(> :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) > [data-view="play"]::before,
-.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) > [data-view="troia"]::before{
+.rail .rail__nav:has(> :is([data-view="atrio"],[data-view="cerne"]):is(:hover,:focus-visible)) > [data-view="cerne"]::before{
   background:var(--tone);
 }
 /* foco sobre a faixa preta: o contorno precisa ser papel — inclusive na seta,
@@ -2360,13 +2360,13 @@ body{
   /* a legenda responde ao projeto sob o ponteiro; o filho fala pela mãe.
      Em repouso, volta a ser o portfólio. A altura não muda: o fio não pula. */
   .rail__kicker::before{ font-size:.52rem; letter-spacing:.12em; }
-  .rail:has(.rail__nav > :is([data-view="data"],[data-view="echo"],[data-view="play"],[data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker{ font-size:0; }
+  .rail:has(.rail__nav > :is([data-view="data"],[data-view="echo"],[data-view="play"],[data-view="atrio"],[data-view="cerne"]):is(:hover,:focus-visible)) .rail__kicker{ font-size:0; }
   .rail:has(.rail__nav > [data-view="data"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Data Analytics"; }
   .rail:has(.rail__nav > :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
-  .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
+  .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="cerne"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
   html[lang="en"] .rail:has(.rail__nav > [data-view="data"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Data Analytics"; }
   html[lang="en"] .rail:has(.rail__nav > :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
-  html[lang="en"] .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="troia"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
+  html[lang="en"] .rail:has(.rail__nav > :is([data-view="atrio"],[data-view="cerne"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
   .rail__index{ justify-self:center; }
   .rail__end{
     display:flex; justify-self:end; align-items:center; justify-content:flex-end;
