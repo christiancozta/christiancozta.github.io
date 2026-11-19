@@ -256,8 +256,14 @@
 .hm-lastro{ grid-template-rows:repeat(2, minmax(var(--row), auto)); }
 .hm-rx{ grid-column:2 / 8; grid-row:3; align-self:start; padding-top:var(--g); color:#2C2C2C; }
 
-/* abas: só existem com JS; sem ele, as três partes descem em sequência */
-.hm-tabs{ display:flex; flex-wrap:wrap; border-bottom:1px solid #2C2C2C; }
+/* abas: só existem com JS; sem ele, as três partes descem em sequência.
+   A linha do seletor pousa numa linha da retícula (arco-home.js); contagem
+   e tags do índice ficam acima dela, alinhadas à direita da tabela */
+.hm-rx__top{
+  display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:var(--u) var(--g);
+  border-bottom:1px solid #2C2C2C;
+}
+.hm-tabs{ display:flex; flex-wrap:wrap; }
 .hm-rastro:not(.is-tabbed) .hm-tabs,
 .hm-rastro:not(.is-tabbed) .hm-ix__tags{ display:none; }
 .hm-tabs [role="tab"]{
@@ -269,15 +275,32 @@
 .hm-tabs [role="tab"]:hover{ color:#2C2C2C; }
 .hm-tabs [role="tab"][aria-selected="true"]{ background:#2C2C2C; color:#FCFCFC; }
 .hm-tabs [role="tab"]:focus-visible{ outline:2px solid #2C2C2C; outline-offset:2px; }
-.hm-pane{ padding-top:calc(var(--u) * 3); }
+.hm-pane{ padding-top:calc(var(--u) * 2); }
 .hm-pane[hidden]{ display:none; }
 .hm-rastro:not(.is-tabbed) .hm-pane + .hm-pane{ margin-top:calc(var(--u) * 6); border-top:1px solid #2C2C2C; }
 
+/* distinções de leitura: tatuadas no fundo, na faixa da retícula para onde
+   sobe o título; cada linha começa um pouco mais longe do título que a
+   anterior. Posição e corpo vêm de arco-home.js */
+.hm-neq{
+  position:absolute; z-index:0; margin:0; padding:0; list-style:none; pointer-events:none;
+  top:var(--neq-top, 0); left:var(--neq-left, 50%); height:var(--neq-h, auto);
+  display:flex; flex-direction:column; justify-content:space-between;
+  font-family:"Instrument Sans", var(--f-body); font-weight:700; text-transform:uppercase;
+  font-size:var(--neq-fs, .9rem); line-height:1; letter-spacing:.01em; white-space:nowrap;
+  color:rgba(44,44,44,.12);
+}
+.hm-neq li{ margin-left:calc(var(--i, 0) * var(--neq-step, 1.2rem)); }
+.hm-neq li:nth-child(2){ --i:1; } .hm-neq li:nth-child(3){ --i:2; } .hm-neq li:nth-child(4){ --i:3; }
+.hm-neq li:nth-child(5){ --i:4; } .hm-neq li:nth-child(6){ --i:5; }
+.hm-rastro > .hm-title{ position:relative; z-index:1; }
+
 /* índice */
 .hm-ix__bar{
-  display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between;
-  gap:var(--u) var(--g); padding-bottom:calc(var(--u) * 1.5);
+  display:flex; flex-wrap:wrap; align-items:baseline; justify-content:flex-end;
+  gap:var(--u) calc(var(--u) * 4); padding-bottom:calc(var(--u) * .5);
 }
+.hm-ix__bar[hidden]{ display:none; }
 .hm-ix__n,
 .hm-ix__tag{ font-family:var(--f-micro); font-size:.62rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
 .hm-ix__n{ margin:0; }
@@ -653,6 +676,7 @@
 
   .hm-rx{ padding-left:var(--g); padding-right:var(--g); }
   .hm-tabs [role="tab"]{ flex:1 1 0; padding:0 var(--u); }
+  .hm-neq{ display:none; }
   .hm-ix thead{ display:none; }
   .hm-ix colgroup{ display:none; }
   .hm-ix, .hm-ix tbody{ display:block; }

@@ -85,6 +85,8 @@
           panes[k].hidden = !on;
         });
         if (focus) tabs[i].focus();
+        const meta = rastro.querySelector(".hm-ix__bar");
+        if (meta) meta.hidden = tabs[i].id !== "rx-tab-ix";
         snap(rastro);
       };
       tabs.forEach((t, i) => {
@@ -180,7 +182,63 @@
     fit();
     snapAll();
     lockFigures();
+    alignTabs();
+    raiseTitles();
   }
+  /* ---------- linhas da retícula visível ----------
+     A retícula visível é um quadrado de lado = largura / 8, contínuo desde o
+     topo da home. Estas funções só pousam elementos nas suas linhas. */
+  const cellPx = () => home.clientWidth / 8;
+  const yIn = el => el.getBoundingClientRect().bottom - home.getBoundingClientRect().top;
+
+  /* a linha do seletor de Rastro desce até a próxima linha da retícula */
+  function alignTabs(){
+    const top = home.querySelector(".hm-rx__top");
+    if (!top) return;
+    top.style.marginTop = "";
+    if (stacked.matches) return;
+    const c = cellPx(), y = yIn(top) - 1;
+    const alvo = Math.ceil((y - .5) / c) * c;
+    if (alvo - y > .5){
+      top.style.marginTop = (alvo - y) + "px";
+      snap(top.closest(".hm-panel"));
+    }
+  }
+
+  /* títulos sobem até a linha da retícula logo acima da sua linha de base,
+     sem mexer no que vem abaixo (só transform). Em Rastro, as distinções
+     de leitura ocupam a mesma faixa, à direita do título */
+  function raiseTitles(){
+    const c = cellPx();
+    home.querySelectorAll(".hm-title, .hm-name").forEach(t => {
+      t.style.transform = "";
+      if (stacked.matches) return;
+      let base = t.querySelector(".hm-base");
+      if (!base){
+        base = document.createElement("span");
+        base.className = "hm-base";
+        base.setAttribute("aria-hidden", "true");
+        base.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+        (t.querySelector(".hm-fit") || t).append(base);
+      }
+      const y = yIn(base);
+      const alvo = Math.floor((y - 1) / c) * c;
+      if (y - alvo > .5) t.style.transform = `translateY(${alvo - y}px)`;
+      const neq = t.closest(".hm-panel")?.querySelector(".hm-neq");
+      if (neq){
+        const painel = t.closest(".hm-panel");
+        const topoPainel = painel.getBoundingClientRect().top - home.getBoundingClientRect().top;
+        const fit = t.querySelector(".hm-fit") || t;
+        const direita = fit.getBoundingClientRect().right - painel.getBoundingClientRect().left;
+        neq.style.setProperty("--neq-top", (alvo - c - topoPainel + c * .14) + "px");
+        neq.style.setProperty("--neq-h", (c * .82) + "px");
+        neq.style.setProperty("--neq-left", (direita + c * .3) + "px");
+        neq.style.setProperty("--neq-fs", (c / 8.2) + "px");
+        neq.style.setProperty("--neq-step", (c * .32) + "px");
+      }
+    });
+  }
+
   const schedule = () => { if (!raf) raf = requestAnimationFrame(() => layout()); };
   addEventListener("resize", schedule, {passive:true});
   stacked.addEventListener?.("change", () => layout(true));
