@@ -125,7 +125,7 @@ BK.forEach((m) => { m.tipo = 'anexo'; });
 const MBY = {}; WH.concat(BK).forEach((m) => { MBY[m.id] = m; });
 const fmtKB = (kb) => (kb >= 1000 ? (kb / 1024).toFixed(1).replace('.', ',') + ' MB' : kb + ' KB');
 const nTxt = (n, s, p) => n.toLocaleString('pt-BR') + ' ' + (n === 1 ? s : p);
-const TITULO = 'PLAY | Playbook ECHO';
+const TITULO = 'ECHO | Playbook';
 
 /* Altura na pauta (clave de sol): 28 Mi4, 25.5 Fá4, 23 Sol4, 20.5 Lá4, 18 Si4, 15.5 Dó5, 13 Ré5, 10.5 Mi5.
    As Regras sustentam um pedal de Dó. I abre em Dó maior com os manuais: Notas Introdutórias (Mi4), que acolhe,
@@ -143,10 +143,18 @@ const MARCAS = [
   ['IV', 'Resultados', 'para de~fi~nir an~tes da mon~ta~gem da de~ci~são (“Tem~pla~tes”).'],
   ['V', 'Coda', 'para re~fi~nar e ade~quar a de~ci~são de acor~do com cri~té~rios de~fi~ni~dos.']
 ];
+/* ECHO, 20/11/2026: a partitura fica só com documentos do método.
+   Intro guarda o Roteiro de Entrevistas, ad lib.: o diagnóstico veio antes do método e
+   soa fora do compasso. Índice e Memória passam ao rosto; as ferramentas seguem para o
+   RATIO e continuam abrindo pelos endereços próprios (#calendario, #fundamentos...).
+   Harmonia mantida: I e III em Dó maior, II em Lá menor (a Matriz de Papéis devolve o Lá:
+   a admissibilidade é o portão supervisionado), IV suspende (Fá, Sol, Dó: o Fá agora é da
+   Matriz de Competências) e a coda resolve em Dó, com o Controle de Produtividade no Mi
+   grave que abriu o sistema: a memória volta à entrada. Localizadores soa o Sol do Mapa
+   Temático, porque os dois classificam; Precedentes herda o Sol dos Fundamentos. */
 const NAIPES = [
   { n: 'Intro', chave: 'colchete', vozes: [
-    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
-    { id: 'memoria', sub: 'Registro', marca: 'ad lib.', pdf: 'pdf-memoria' }] },
+    { id: 'roteiro', sub: 'Diagnóstico', marca: 'ad lib.', pdf: 'roteiro' }] },
   { n: 'Coleção', chave: 'chaveta', vozes: [
     { id: 'vol-01', notas: [[1, 28]], pdf: 'vol-01' },
     { id: 'vol-02', notas: [[1, 23]], pdf: 'vol-02' },
@@ -155,16 +163,30 @@ const NAIPES = [
   { n: 'Governança', chave: 'colchete', vozes: [
     { id: 'regras', sub: 'SOP', notas: [[1, 15.5], [2, 15.5], [3, 15.5], [4, 15.5], [5, 15.5]], pdf: 'pdf-regras' },
     { id: 'criterios', sub: 'SOP', notas: [[5, 10.5]], pdf: 'pdf-criterios' }] },
-  { n: 'Ferramenta', chave: 'colchete', vozes: [
-    { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [[2, 20.5]], ferr: true },
-    { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(N.fun, 'registro', 'registros'), notas: [[3, 23]], ferr: true },
-    { id: 'ementario', nome: 'Ementário', sub: nTxt(N.eme, 'assunto', 'assuntos'), notas: [[3, 10.5]], ferr: true },
-    { id: 'templates', nome: 'Templates', sub: nTxt(D.tpl.length, 'modelo', 'modelos'), notas: [[4, 25.5]], ferr: true }] }
+  { n: 'Consulta', chave: 'colchete', vozes: [
+    { id: 'localizadores', sub: 'Categorias', notas: [[1, 23]], pdf: 'localizadores' },
+    { id: 'precedentes', sub: '631 temas', notas: [[3, 23]], pdf: 'precedentes' }] },
+  { n: 'Gestão', chave: 'colchete', vozes: [
+    { id: 'papeis', sub: 'Matriz', notas: [[2, 20.5]], pdf: 'papeis' },
+    { id: 'competencias', sub: 'Matriz', notas: [[3, 10.5], [4, 25.5]], pdf: 'competencias' },
+    { id: 'controle', sub: 'Planilha', notas: [[5, 28]], pdf: 'controle' }] }
+];
+/* Fora da partitura, mas com endereço: o rosto aponta para Índice e Memória, e as
+   ferramentas seguem acessíveis pelos links já publicados até ganharem lugar no RATIO. */
+const FORA = [
+  { n: 'Intro', vozes: [
+    { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
+    { id: 'memoria', sub: 'Registro', marca: 'ad lib.', pdf: 'pdf-memoria' }] },
+  { n: 'Ferramenta', vozes: [
+    { id: 'calendario', nome: 'Calendário Jurídico', sub: nTxt(D.cal.length, 'dia', 'dias'), notas: [], ferr: true },
+    { id: 'fundamentos', nome: 'Fundamentos', sub: nTxt(N.fun, 'registro', 'registros'), notas: [], ferr: true },
+    { id: 'ementario', nome: 'Ementário', sub: nTxt(N.eme, 'assunto', 'assuntos'), notas: [], ferr: true },
+    { id: 'templates', nome: 'Templates', sub: nTxt(D.tpl.length, 'modelo', 'modelos'), notas: [], ferr: true }] }
 ];
 /* Os três primeiros manuais abrem numa gaveta sob a própria pauta, com a página dupla. */
 const GAV = new Set(['vol-01', 'vol-02', 'vol-03']);
 const VOZ = {};
-NAIPES.forEach((g) => g.vozes.forEach((v) => {
+NAIPES.concat(FORA).forEach((g) => g.vozes.forEach((v) => {
   const m = MBY[v.id];
   if (!v.nome) v.nome = m.nome;
   if (!v.sub) v.sub = m.tipo === 'manual' ? 'vol. ' + m.curto : '';
@@ -183,7 +205,7 @@ const COL = $('#coluna');
 const BAT = $('#batuta');
 const MQS = window.matchMedia('(max-width: 700px)');
 /* PDF: "ver" abre o leitor na própria página, em duas páginas; "baixar" baixa o arquivo. */
-const verBaixar = (m, nome, cls) => `<span class="${cls || 'pt'}"><button type="button" data-ver="${m.id}" aria-label="Ver ${esc(nome)} em PDF">ver</button><i aria-hidden="true">|</i><a href="${AS + m.arquivo}" download aria-label="Baixar ${esc(nome)} em PDF">baixar</a></span>`;
+const verBaixar = (m, nome, cls) => `<span class="${cls || 'pt'}"><button type="button" data-ver="${m.id}" aria-label="Ver ${esc(nome)} em PDF">ver</button><i aria-hidden="true">|</i><a href="${AS + (m.baixa || m.arquivo)}" download aria-label="Baixar ${esc(nome)} em ${m.formatoBaixa || 'PDF'}">baixar</a></span>`;
 function montaPartitura() {
   $('#marcas').innerHTML = MARCAS.map(([r, t, x], i) => `<button type="button" data-m="${i + 1}"><span class="mt" lang="pt-BR"><span class="mh"><span class="ensaio">${r}</span><b>${t}</b></span><span class="mx">${esc(x).replace(/~/g, '\u00AD')}</span></span></button>`).join('');
   $('#naipes').innerHTML = NAIPES.map((g) => `<div class="naipe"><div class="chave" aria-hidden="true"><span class="nome-n">${g.n}</span>${g.chave === 'colchete' ? '<span class="colchete"></span>' : '<svg viewBox="0 0 14 100" preserveAspectRatio="none"><path d="M12 1 C3 4 9 30 2 50 C9 70 3 96 12 99" vector-effect="non-scaling-stroke"/></svg>'}</div>` +
@@ -223,7 +245,7 @@ function abreGaveta(id) {
   g.inert = false; g.classList.add('on'); gavAberta = id;
   const nm = $(`.voz[data-id="${id}"] .nm`); if (nm) nm.setAttribute('aria-expanded', 'true');
   marcaVoz(id);
-  document.title = MBY[id].nome + ' | PLAY';
+  document.title = MBY[id].nome + ' | ECHO';
   $('#anuncio').textContent = 'Aberto sob a pauta: ' + MBY[id].nome;
   setTimeout(() => {
     const r = g.getBoundingClientRect();
@@ -759,7 +781,7 @@ function situa(key) {
   ROT.textContent = rotulo(key);
   marcaVoz(vozDe(key));
   const t = tituloFolha(key);
-  document.title = t ? t + ' | PLAY' : TITULO;
+  document.title = t ? t + ' | ECHO' : TITULO;
   $('#anuncio').textContent = 'Aberto sobre a partitura: ' + t;
 }
 function mostraFerr(id) {
@@ -821,19 +843,19 @@ function docSheet(k, m) {
 }
 
 function fichaHTML(m) {
-  const url = AS + m.arquivo; const arq = m.arquivo.split('/').pop();
+  const url = AS + (m.baixa || m.arquivo); const arq = (m.baixa || m.arquivo).split('/').pop();
   let rel = '';
   if (m.le) rel = `<p class="fpdf-rel">Versão diagramada do documento que se lê na tela: <a href="#${m.le}">${esc(MBY[m.le].nome)}</a>.</p>`;
   else if (m.ferramenta === 'templates') rel = '<p class="fpdf-rel">Os seis modelos também se montam no <a href="#templates">montador de Templates</a>, em tela inteira.</p>';
   return `<div class="fpdf">
-    <button type="button" class="fpdf-capa" data-ver="${m.id}" aria-label="Ver o PDF ${esc(m.nome)}"><img src="${AS + m.capa}" width="560" height="793" alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></button>
+    <button type="button" class="fpdf-capa" data-ver="${m.id}" aria-label="Ver o PDF ${esc(m.nome)}"><img src="${AS + m.capa}" width="560" height="${m.paisagem ? 396 : 793}"${m.paisagem ? ' style="aspect-ratio:auto"' : ''} alt="Primeira página do PDF ${esc(m.nome)}" decoding="async"></button>
     <div class="fpdf-txt">
       <h1 class="ft">${esc(m.nome)}</h1>
       ${m.tipo === 'manual' ? `<p class="fpdf-sub"><strong>${m.volume}</strong> | ${esc(m.sub)}</p>` : `<p class="fpdf-lead">${esc(m.lead)}</p>`}
       <div class="pauta" aria-hidden="true"></div>
       <div class="deft narrow">
-        <div class="row"><div class="dt">Natureza</div><div class="dd">${m.tipo === 'manual' ? 'Manual da coleção da Turma Recursal do TJPR' : 'Anexo do Playbook, camada ' + esc(m.camada)}</div></div>
-        <div class="row"><div class="dt">Formato</div><div class="dd">PDF, ${fmtKB(m.kb)}</div></div>
+        <div class="row"><div class="dt">Natureza</div><div class="dd">${m.tipo === 'manual' ? 'Manual da coleção da Turma Recursal do TJPR' : m.acervo ? 'Documento do acervo ECHO, naipe ' + esc(m.camada) : 'Anexo do Playbook, camada ' + esc(m.camada)}</div></div>
+        <div class="row"><div class="dt">Formato</div><div class="dd">${m.baixa ? m.formatoBaixa + ', ' + fmtKB(m.kbBaixa) + ' (prévia em PDF)' : 'PDF, ' + fmtKB(m.kb)}</div></div>
         <div class="row"><div class="dt">Arquivo</div><div class="dd">${esc(arq)}</div></div>
       </div>
       <div class="acoes"><button type="button" class="btn pri" data-ver="${m.id}">Abrir o PDF</button><a class="btn ghost" href="${url}" download>Baixar${ICON.baixa}</a></div>
@@ -987,7 +1009,7 @@ async function abreLeitor(m) {
   if (LEI.hidden) lei.volta = document.activeElement;
   const url = AS + m.arquivo;
   $('#leitor-t').textContent = m.nome;
-  const bx = $('#leitor-baixa'); bx.href = url; bx.setAttribute('download', m.arquivo.split('/').pop());
+  const bx = $('#leitor-baixa'); bx.href = AS + (m.baixa || m.arquivo); bx.setAttribute('download', (m.baixa || m.arquivo).split('/').pop());
   $('#leitor-n').textContent = '…'; $('#leitor-st').textContent = 'Carregando o PDF';
   $('#leitor-ant').disabled = true; $('#leitor-prox').disabled = true;
   if (lei.url !== url) PGS.forEach((cv) => { cv.hidden = true; });
@@ -1718,7 +1740,7 @@ function runSearch() {
   $('#sf').innerHTML = [['all', 'Tudo', total]].concat(keys.map((k) => [k, k, out[k].length])).map(([k, l, n]) => `<button type="button" data-f="${k}" aria-pressed="${sfilter === k}">${l}${P.terms.length ? ' ' + n : ''}</button>`).join('');
   $('#ssyn').innerHTML = P.syn.length ? 'Também: ' + P.syn.slice(0, 4).map((s) => `<strong style="color: var(--ink);">${esc(s)}</strong>`).join(', ') : '';
   const L = $('#sl');
-  if (!P.terms.length) { L.innerHTML = `<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o PLAY: seções dos documentos, ${N.fun} fundamentos, ${N.eme.toLocaleString('pt-BR')} registros do Ementário e os ${D.tpl.length} modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">` + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
+  if (!P.terms.length) { L.innerHTML = `<div style="padding: 18px 0; display: flex; flex-direction: column; gap: 10px;"><p class="small">Busque em todo o playbook: seções dos documentos, ${N.fun} fundamentos, ${N.eme.toLocaleString('pt-BR')} registros do Ementário e os ${D.tpl.length} modelos.</p><div style="display: flex; flex-wrap: wrap; gap: 6px;">` + ['gratuidade', 'negativação', 'dialeticidade', 'ementa resultado', 'tempestividade', 'RI-CONJUNTO', '6226'].map((s) => `<button type="button" class="chip" data-try="${s}">${s}</button>`).join('') + '</div></div>'; return; }
   const aviso = faltam ? '<p class="small sespera" role="status">Consultando também Fundamentos e Ementário</p>' : '';
   if (!total) { L.innerHTML = aviso || '<p class="small" style="padding: 18px 0;">Nenhum resultado. Tente um termo mais geral.</p>'; return; }
   L.innerHTML = aviso + keys.filter((k) => (sfilter === 'all' || sfilter === k) && out[k].length).map((k) => `<div class="sgrp"><span class="lbl">${k}</span><span class="small">${out[k].length}</span></div>` + out[k].slice(0, sfilter === 'all' ? (k === 'Ementário' ? 6 : 5) : 60).map((r) => r.html).join('')).join('');

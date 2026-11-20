@@ -1072,3 +1072,16 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   html.com-parte { overflow: visible; }
   .parte { position: static; width: auto; transform: none; box-shadow: none; }
 }
+
+/* ==========================================================================
+   Só a partitura (?partitura): a home exibe o sistema dentro do painel do ECHO,
+   depois da folha de rosto. Sai o que é da folha (prendedor, carimbo, selo,
+   título, rodapé, maço e orelhas); o sistema fica no papel, sem rolagem.
+   ========================================================================== */
+html.so-partitura, html.so-partitura body { background: var(--papel); }
+html.so-partitura body { padding: 0; overflow: hidden; }
+html.so-partitura :is(.clipe, .carimbos, .selo, .rosto, .rodape) { display: none; }
+html.so-partitura .maco::before, html.so-partitura .maco::after,
+html.so-partitura .a4::before, html.so-partitura .a4::after { display: none; }
+html.so-partitura .a4 { min-height: 0; clip-path: none; }
+html.so-partitura .pag { padding-top: 10px; padding-bottom: 12px; }

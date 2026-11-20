@@ -179,6 +179,7 @@
     if (!force && w === lastWidth && r === lastRow) return;
     lastWidth = w; lastRow = r;
     fit();
+    scoreFit();
     snapAll();
     lockFigures();
     alignTabs();
@@ -270,6 +271,105 @@
       li.style.top = topo + "px";
       li.style.left = (x0 + i * passo) + "px";
     });
+  }
+
+  /* ---------- ECHO: folha de rosto e partitura ----------
+     A folha de rosto mostra os números em repouso e tem o tamanho da partitura.
+     O convite só aparece quando a partitura inteira cabe na tela, abaixo do
+     topo: assim ela nunca pede rolagem. Aberta, a folha vira para a esquerda e
+     a partitura (play.html?partitura, carregada só agora) fica no lugar dela.
+     Sem JS, sem altura ou no celular, fica a folha, sem convite. */
+  const score = home.querySelector(".hm-score");
+  let scoreFit = () => {};
+  if (score){
+    const panel = score.closest(".hm-panel");
+    const rosto = score.querySelector(".hm-rosto");
+    const pe = score.querySelector(".hm-rosto__pe");
+    const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
+    /* altura da partitura medida em play.html?partitura: 723 px a partir de
+       1220 px de largura, 740 px entre 1010 e 1220; abaixo disso ela empilha */
+    const estimada = () => { const w = score.clientWidth; return w >= 1220 ? 723 : w >= 1010 ? 740 : Infinity; };
+    let frame = null, medida = 0, medidaW = 0;
+    const altura = () => (medida && medidaW === score.clientWidth) ? medida : estimada();
+    const cabe = () => !stacked.matches && Number.isFinite(altura()) && innerHeight - railH() >= altura();
+    const seta = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13M12.5 6.5 18 12l-5.5 5.5"/></svg>';
+    const xis = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg>';
+    const convite = document.createElement("button");
+    convite.type = "button"; convite.className = "hm-pil hm-score__abrir"; convite.hidden = true;
+    convite.setAttribute("aria-expanded", "false");
+    convite.innerHTML = '<span class="hm-pil__t">Ver documentos</span><span class="hm-pil__b">' + seta + '</span>';
+    const fechar = document.createElement("button");
+    fechar.type = "button"; fechar.className = "hm-pil hm-score__fechar"; fechar.hidden = true;
+    fechar.setAttribute("aria-label", "Fechar a partitura e voltar à folha de rosto");
+    fechar.innerHTML = '<span class="hm-pil__t" aria-hidden="true">Fechar</span><kbd aria-hidden="true">Esc</kbd><span class="hm-pil__b">' + xis + '</span>';
+    pe.appendChild(convite);
+    score.appendChild(fechar);
+    score.classList.add("is-live");
+
+    const aberto = () => score.classList.contains("is-open");
+    function fecha(devolveFoco = true){
+      if (!aberto()) return;
+      score.classList.remove("is-open");
+      convite.setAttribute("aria-expanded", "false");
+      fechar.hidden = true; rosto.inert = false;
+      if (frame) frame.tabIndex = -1;
+      if (devolveFoco) convite.focus({preventScroll:true});
+    }
+    function mede(){
+      try{
+        const pag = frame.contentDocument.querySelector(".pag");
+        if (!pag) return;
+        medida = Math.ceil(pag.getBoundingClientRect().height); medidaW = score.clientWidth;
+        scoreFit();
+      }catch(_){}
+    }
+    function monta(){
+      frame = document.createElement("iframe");
+      frame.className = "hm-score__frame";
+      frame.title = "Partitura do ECHO: documentos do método";
+      frame.src = score.dataset.score;
+      frame.addEventListener("load", () => {
+        mede();
+        try{
+          const w = frame.contentWindow, d = frame.contentDocument;
+          /* Esc fecha a partitura só quando nada está aberto dentro dela */
+          w.addEventListener("keydown", e => {
+            if (e.key !== "Escape") return;
+            const livre = d.getElementById("sov")?.hidden !== false && d.getElementById("leitor")?.hidden !== false
+              && d.getElementById("camada")?.hidden !== false && !d.getElementById("parte")?.classList.contains("on")
+              && !d.querySelector(".gaveta.on");
+            if (livre){ e.preventDefault(); fecha(); }
+          }, true);
+          w.addEventListener("resize", mede);
+        }catch(_){}
+      });
+      score.insertBefore(frame, score.firstChild);
+    }
+    function abre(){
+      if (!cabe()) return;
+      if (!frame) monta();
+      score.classList.add("is-open");
+      convite.setAttribute("aria-expanded", "true");
+      fechar.hidden = false; rosto.inert = true; frame.tabIndex = 0;
+      const y = score.getBoundingClientRect().top + scrollY - railH();
+      scrollTo({top:y, behavior: reduce ? "auto" : "smooth"});
+      setTimeout(() => frame.focus({preventScroll:true}), reduce ? 0 : 420);
+    }
+    scoreFit = () => {
+      if (stacked.matches){ score.style.removeProperty("--score-h"); }
+      else if (Number.isFinite(altura())) score.style.setProperty("--score-h", altura() + "px");
+      const ok = cabe();
+      convite.hidden = !ok;
+      if (!ok && aberto()) fecha(false);
+      snap(panel);
+    };
+    convite.addEventListener("click", abre);
+    fechar.addEventListener("click", () => fecha());
+    score.addEventListener("keydown", e => { if (e.key === "Escape" && aberto()){ e.preventDefault(); fecha(); } });
+    /* a altura da janela decide o convite: muda sem mudar a largura */
+    let hRaf = 0;
+    addEventListener("resize", () => { if (!hRaf) hRaf = requestAnimationFrame(() => { hRaf = 0; scoreFit(); }); }, {passive:true});
+    scoreFit();
   }
 
   const schedule = () => { if (!raf) raf = requestAnimationFrame(() => layout()); };
