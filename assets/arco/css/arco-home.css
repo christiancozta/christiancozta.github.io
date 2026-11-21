@@ -336,17 +336,21 @@
    narrativa, assinatura, folha de rosto. */
 .hm-lado{ min-width:0; }
 @media (min-width:901px){
+  /* quatro fileiras: rótulo, título, campo e respiro. Playbook e narrativa
+     dividem uma fileira só, que mede o mais alto dos dois: repartidos em
+     várias, cada fileira arredondaria para cima e sobraria papel no pé */
+  .hm-proj--echo{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
   .hm-proj--echo .hm-lado{
-    grid-column:5 / 8; grid-row:3 / 9; align-self:start;
+    grid-column:5 / 8; grid-row:3; align-self:start;
     position:sticky; top:var(--rail-h, 0px);
   }
   .hm-proj--echo .hm-narr{ columns:1; max-width:38em; }
   .hm-proj--echo .hm-sig{ min-height:var(--row); margin:0; padding:0 var(--g) 0 calc(var(--g) * 1.5); }
   .hm-proj--echo .hm-score{
-    grid-column:2 / 5; grid-row:3 / 9; align-self:start;
+    grid-column:2 / 5; grid-row:3; align-self:start;
     margin:0 0 0 1px; container-type:inline-size;
   }
-  .hm-proj--echo::after{ content:""; grid-column:1 / -1; grid-row:9; height:var(--row); }
+  .hm-proj--echo::after{ content:""; grid-column:1 / -1; grid-row:4; height:var(--row); }
 
   /* a folha na largura do campo: quatro compassos em dois sistemas de dois,
      o corpo do número segue o compasso (metade do campo), não a tela */
@@ -373,6 +377,19 @@
       repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
   }
   .hm-proj--echo .hm-rosto__pe{ flex-wrap:wrap; row-gap:calc(var(--u) * 1.5); }
+}
+/* a partir de 1181 px a narrativa recolhe à coluna do meio (6), afastada das
+   margens do campo; a assinatura empilha a marca sobre o convite. Abaixo
+   disso, a coluna do meio daria menos de 150 px de linha, e o texto segue
+   no campo inteiro (5 a 7). Quando o texto passa da partitura, as fileiras
+   crescem com ele e a fixação ao alto deixa de agir, sem nada a corrigir. */
+@media (min-width:1181px){
+  .hm-proj--echo .hm-lado{ grid-column:6 / 7; }
+  .hm-proj--echo .hm-narr{ padding:var(--g); max-width:none; }
+  .hm-proj--echo .hm-sig{
+    flex-direction:column; align-items:flex-start; justify-content:center; gap:var(--u);
+    padding:calc(var(--u) * 1.5) var(--g);
+  }
 }
 
 /* ATRIO: campos invertidos; mesmas medidas, mesmos alinhamentos externos */
