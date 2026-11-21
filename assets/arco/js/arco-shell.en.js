@@ -72,8 +72,8 @@
     if (!VIEWS.includes(view)) view = "home";
     const current = views.find(v => v.dataset.active === "true");
     if (current && current.dataset.view !== view) document.documentElement.classList.add("view-swap");
-    /* Ao sair do PLAY, pausar a partitura; ocultar o iframe não emite visibilitychange. */
-    if (current?.dataset.view === "play" && view !== "play") {
+    /* Ao sair do PLAY ou do ECHO (o playbook), pausar a partitura; ocultar o iframe não emite visibilitychange. */
+    if (["play","echo"].includes(current?.dataset.view) && view !== current.dataset.view) {
       const playFrame = current.querySelector("iframe");
       if (playFrame && playFrame.getAttribute("src") !== "about:blank") {
         try { playFrame.contentWindow?.postMessage({ type: "ARCO_VIEW_ACTIVE", active: false }, location.origin); } catch {}

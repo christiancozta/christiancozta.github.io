@@ -104,10 +104,10 @@
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261120-echo">
 <link rel="stylesheet" href="assets/arco/css/arco.css?v=20261119-nav">
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
-<script src="assets/arco/js/arco-shell.js?v=20261118-kit" defer></script>
+<script src="assets/arco/js/arco-shell.js?v=20261121-vitrine" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261121-papel">
-<script src="assets/arco/js/arco-home.js?v=20261121-play" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261121-vitrine">
+<script src="assets/arco/js/arco-home.js?v=20261121-vitrine" defer></script>
 </head>
 <body>
 
@@ -192,8 +192,9 @@
           <p class="hm-tese" data-fit><span class="hm-fit"><span aria-hidden="true">— </span>Antes de delegar o jurídico,</span><br><span class="hm-fit">é preciso governar seu raciocínio.</span></p>
         </section>
 
-        <!-- 02 — LEGAL OPERATIONS / ECHO: o playbook no campo da esquerda; a narrativa
-             numa coluna sobre papel, entre os meios das colunas vizinhas -->
+        <!-- 02 — LEGAL OPERATIONS / ECHO: o playbook (vitrine) no campo da esquerda; a
+             narrativa numa coluna sobre papel, entre os meios das colunas vizinhas.
+             A folha de rosto do playbook é a única entrada do ECHO na home. -->
         <section class="hm-panel hm-proj hm-proj--echo" id="legal-operations" aria-labelledby="t-echo">
           <p class="hm-kick">ECHO</p>
           <h2 class="hm-title" id="t-echo" data-fit="titulo"><span class="hm-fit">legal operations</span></h2>
@@ -205,31 +206,14 @@
               <p>Em 30 dias, desenvolvi o ECHO, metodologia de Legal Ops para a operação de um gabinete recursal: workflows, taxonomia, manuais.</p>
               <p>Rodou por outros 30 dias. Mas ecoou: foi transmitido ao gabinete que nos sucedeu.</p>
             </div>
-            <a class="hm-sig hm-sig--echo" href="#echo" data-hm-view="echo">
-              <img class="hm-sig__mark" src="assets/arco/showcase/echo.svg" alt="" width="144" height="36" decoding="async">
-              <span class="hm-sig__go">Explorar ECHO <span aria-hidden="true">→</span></span>
-            </a>
           </div>
-          <!-- Folha de rosto do ECHO: os números em repouso, na altura útil da tela.
-               Com JS, ganha o convite; aberta, dá lugar à partitura em coluna
-               (play.html?partitura&empilha), no mesmo quadro. Sem JS, fica a folha. -->
-          <div class="hm-score" data-score="play.html?partitura&amp;empilha">
-            <section class="hm-rosto" aria-labelledby="hm-rosto-t">
-              <span class="hm-rosto__orelha" aria-hidden="true"></span>
-              <header class="hm-rosto__cab">
-                <h3 class="hm-rosto__t" id="hm-rosto-t">ECHO</h3>
-                <p class="hm-rosto__sub">Playbook da metodologia para operações jurídicas</p>
-              </header>
-              <dl class="hm-rosto__nums">
-                <div class="hm-rosto__n"><dt>Ementário</dt><dd><b><span class="hm-rosto__mk">2.758</span></b><span class="hm-rosto__l">assuntos catalogados</span></dd></div>
-                <div class="hm-rosto__n"><dt>Acervo triado</dt><dd><b><span class="hm-rosto__mk">1.192</span></b><span class="hm-rosto__l">processos triados</span></dd></div>
-                <div class="hm-rosto__n"><dt>Taxonomia</dt><dd><b><span class="hm-rosto__mk">90,2%</span></b><span class="hm-rosto__l">102 assuntos em 10 categorias</span></dd></div>
-                <div class="hm-rosto__n"><dt>Precedentes</dt><dd><b><span class="hm-rosto__mk">631</span></b><span class="hm-rosto__l">temas catalogados</span></dd></div>
-              </dl>
-              <footer class="hm-rosto__pe">
-                <p class="hm-rosto__colofao"><a href="play.html#indice">Índice e Arquitetura</a> <i aria-hidden="true">|</i> <a href="play.html#memoria">Memória de Integração</a></p>
-              </footer>
-            </section>
+          <!-- ECHO: o playbook na vitrine (play.html?vitrine). A folha de rosto, os
+               números e o Explorar são da própria página; aqui, só o quadro, na
+               altura útil da tela (arco-home.js), com altura própria sem JS. -->
+          <div class="hm-score">
+            <iframe class="hm-score__frame" src="play.html?vitrine" title="ECHO: playbook da metodologia" loading="lazy"></iframe>
+          </div>
+        </section>
           </div>
         </section>
 
@@ -807,16 +791,17 @@
       </div>
     </section>
 
-    <!-- ===================== FILHO: ECHO ===================== -->
+    <!-- ===================== FILHO: ECHO =====================
+         O playbook (play.html) é o ECHO; o echo.html antigo fica fora do ARCO. -->
     <section class="view" data-view="echo" aria-label="ECHO">
       <div class="child child--echo">
         <div class="child__bar">
-          <a class="child__full" href="echo.html" target="_blank" rel="noopener">
+          <a class="child__full" href="play.html" target="_blank" rel="noopener">
             Prefere a página inteira? Por aqui <span class="arrow" aria-hidden="true">→</span>
           </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
-        <iframe class="child__frame" title="ECHO — página completa" src="about:blank" data-src="echo.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
+        <iframe class="child__frame" title="ECHO — página completa" src="about:blank" data-src="play.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
       </div>
     </section>
 

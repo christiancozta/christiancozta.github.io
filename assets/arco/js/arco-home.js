@@ -259,104 +259,57 @@
     });
   }
 
-  /* ---------- ECHO: folha de rosto e partitura ----------
-     A folha de rosto ocupa o campo da esquerda do painel, na altura útil da
-     tela em fileiras inteiras, para que leitor, parte e montador, que abrem
-     dentro da partitura, fiquem sempre à vista. Aberta, a folha vira para a
-     esquerda e a partitura em coluna (play.html?partitura&empilha, carregada
-     só agora, desenho empilhado) fica no lugar dela, rolando por dentro.
-     Sem JS ou no celular, fica a folha, sem convite. */
+  /* ---------- ECHO: o quadro do playbook ----------
+     Folha de rosto, números e Explorar são do próprio playbook, na vitrine
+     (play.html?vitrine). Aqui só se mede o quadro: no desktop, a altura útil
+     da tela em fileiras inteiras, para que leitor, parte e montador, que
+     abrem dentro da partitura, fiquem sempre à vista; no celular, a altura
+     da folha, e o Explorar pede página inteira (data-explorar="pagina"),
+     para não haver rolagem dentro da rolagem. Sem JS, valem as alturas do CSS. */
   const score = home.querySelector(".hm-score");
+  const quadro = score?.querySelector(".hm-score__frame");
   let scoreFit = () => {};
-  if (score){
+  if (score && quadro){
     const panel = score.closest(".hm-panel");
-    const rosto = score.querySelector(".hm-rosto");
-    const pe = score.querySelector(".hm-rosto__pe");
     const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
-    /* teto: a partitura empilhada inteira (1155 px medidos; depois, a medida
-       real), para que uma tela muito alta não sobre papel em branco */
-    let frame = null, medida = 0;
+    /* teto: a partitura empilhada inteira (~1155 px), para que uma tela muito
+       alta não sobre papel em branco */
     const altura = () => {
       const r = rowPx(), util = innerHeight - railH();
-      const teto = Math.ceil((medida || 1155) / r) * r;
+      const teto = Math.ceil(1155 / r) * r;
       return Math.max(r * 4, Math.min(Math.floor(util / r) * r, teto));
     };
-    const cabe = () => !stacked.matches;
-    const seta = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13M12.5 6.5 18 12l-5.5 5.5"/></svg>';
-    const xis = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg>';
-    const convite = document.createElement("button");
-    convite.type = "button"; convite.className = "hm-pil hm-score__abrir"; convite.hidden = true;
-    convite.setAttribute("aria-expanded", "false");
-    convite.innerHTML = '<span class="hm-pil__t">Ver documentos</span><span class="hm-pil__b">' + seta + '</span>';
-    const fechar = document.createElement("button");
-    fechar.type = "button"; fechar.className = "hm-pil hm-score__fechar"; fechar.hidden = true;
-    fechar.setAttribute("aria-label", "Fechar a partitura e voltar à folha de rosto");
-    fechar.innerHTML = '<span class="hm-pil__t" aria-hidden="true">Fechar</span><kbd aria-hidden="true">Esc</kbd><span class="hm-pil__b">' + xis + '</span>';
-    pe.appendChild(convite);
-    score.appendChild(fechar);
-    score.classList.add("is-live");
-
-    const aberto = () => score.classList.contains("is-open");
-    function fecha(devolveFoco = true){
-      if (!aberto()) return;
-      score.classList.remove("is-open");
-      convite.setAttribute("aria-expanded", "false");
-      fechar.hidden = true; rosto.inert = false;
-      if (frame) frame.tabIndex = -1;
-      if (devolveFoco) convite.focus({preventScroll:true});
-    }
-    function mede(){
+    /* celular: a soma do que a folha mostra (a margem automática dos números
+       não conta, porque é ela que estica a folha até o fim do quadro) */
+    const folha = () => {
       try{
-        const pag = frame.contentDocument.querySelector(".pag");
-        if (!pag) return;
-        medida = Math.ceil(pag.getBoundingClientRect().height);
-        scoreFit();
-      }catch(_){}
-    }
-    function monta(){
-      frame = document.createElement("iframe");
-      frame.className = "hm-score__frame";
-      frame.title = "Partitura do ECHO: documentos do método";
-      frame.src = score.dataset.score;
-      frame.addEventListener("load", () => {
-        mede();
-        try{
-          const w = frame.contentWindow, d = frame.contentDocument;
-          /* Esc fecha a partitura só quando nada está aberto dentro dela */
-          w.addEventListener("keydown", e => {
-            if (e.key !== "Escape") return;
-            const livre = d.getElementById("sov")?.hidden !== false && d.getElementById("leitor")?.hidden !== false
-              && d.getElementById("camada")?.hidden !== false && !d.getElementById("parte")?.classList.contains("on")
-              && !d.querySelector(".gaveta.on");
-            if (livre){ e.preventDefault(); fecha(); }
-          }, true);
-          w.addEventListener("resize", mede);
-        }catch(_){}
-      });
-      score.insertBefore(frame, score.firstChild);
-    }
-    function abre(){
-      if (!cabe()) return;
-      if (!frame) monta();
-      score.classList.add("is-open");
-      convite.setAttribute("aria-expanded", "true");
-      fechar.hidden = false; rosto.inert = true; frame.tabIndex = 0;
-      const y = score.getBoundingClientRect().top + scrollY - railH();
-      scrollTo({top:y, behavior: reduce ? "auto" : "smooth"});
-      setTimeout(() => frame.focus({preventScroll:true}), reduce ? 0 : 420);
-    }
+        const d = quadro.contentDocument, w = d && d.defaultView, pag = d && d.querySelector(".pag");
+        if (!pag) return 0;
+        const px = v => parseFloat(v) || 0;
+        let h = 0;
+        for (const el of pag.children){
+          const cs = w.getComputedStyle(el);
+          if (cs.display === "none") continue;
+          h += el.offsetHeight + px(cs.marginBottom) + (el.classList.contains("vit-nums") ? 0 : px(cs.marginTop));
+        }
+        const ps = w.getComputedStyle(pag), bs = w.getComputedStyle(d.body);
+        return Math.ceil(h + px(ps.paddingTop) + px(ps.paddingBottom) + px(bs.paddingTop) + px(bs.paddingBottom));
+      }catch(_){ return 0; }
+    };
     scoreFit = () => {
-      if (stacked.matches){ score.style.removeProperty("--score-h"); }
-      else score.style.setProperty("--score-h", altura() + "px");
-      const ok = cabe();
-      convite.hidden = !ok;
-      if (!ok && aberto()) fecha(false);
+      if (stacked.matches){
+        score.style.removeProperty("--score-h");
+        quadro.dataset.explorar = "pagina";
+        const h = folha();
+        if (h) score.style.setProperty("--vit-h", h + "px");
+      } else {
+        delete quadro.dataset.explorar;
+        score.style.setProperty("--score-h", altura() + "px");
+      }
       snap(panel);
     };
-    convite.addEventListener("click", abre);
-    fechar.addEventListener("click", () => fecha());
-    score.addEventListener("keydown", e => { if (e.key === "Escape" && aberto()){ e.preventDefault(); fecha(); } });
-    /* a altura da janela decide o convite: muda sem mudar a largura */
+    quadro.addEventListener("load", () => scoreFit());
+    /* a altura da janela decide o quadro: muda sem mudar a largura */
     let hRaf = 0;
     addEventListener("resize", () => { if (!hRaf) hRaf = requestAnimationFrame(() => { hRaf = 0; scoreFit(); }); }, {passive:true});
     scoreFit();

@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-GD0Q3Z4KQ9');
+  if (!/[?&]vitrine\b/.test(location.search)) gtag('config', 'G-GD0Q3Z4KQ9');
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -28,8 +28,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=JetBrains+Mono:wght@400;500;700;800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Shantell+Sans:wght@300&display=swap" rel="stylesheet">
-<script>if(/[?&]partitura\b/.test(location.search))document.documentElement.classList.add('so-partitura');if(/[?&]empilha\b/.test(location.search))document.documentElement.classList.add('empilha')</script>
-<link rel="stylesheet" href="assets/play/play.css?v=20261121-coluna">
+<script>if(/[?&]partitura\b/.test(location.search))document.documentElement.classList.add('so-partitura');if(/[?&]empilha\b/.test(location.search))document.documentElement.classList.add('empilha');if(/[?&]vitrine\b/.test(location.search))document.documentElement.classList.add('vitrine')</script>
+<link rel="stylesheet" href="assets/play/play.css?v=20261121-vitrine2">
 <link rel="icon" href="assets/play/favicon.svg" type="image/svg+xml">
 </head>
 <body class="partitura">
@@ -46,7 +46,7 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
 <svg class="sr" aria-hidden="true" focusable="false"><filter id="tinta" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.2 0 0 0 -.62" result="m"/><feComposite in="d" in2="m" operator="in"/></filter></svg>
 
 <div class="maco">
-  <a class="clipe" href="arco.html#echo" aria-label="Playbook ECHO: abrir a página-mãe">
+  <a class="clipe" href="arco.html#echo" target="_top" aria-label="Playbook ECHO: abrir a página-mãe">
     <svg class="clipe-svg" viewBox="0 0 132 152" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="clipe-aco" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8E949B"/><stop offset=".22" stop-color="#E8EBEE"/><stop offset=".5" stop-color="#A3A9B0"/><stop offset=".78" stop-color="#EEF0F2"/><stop offset="1" stop-color="#868C93"/></linearGradient>
@@ -99,6 +99,15 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
     <p class="rosto-sub">Showcase do playbook da metodologia ECHO para operações jurídicas</p>
   </section>
 
+  <!-- Vitrine (play.html?vitrine): os números do ECHO e o pé onde play-vitrine.js põe o Explorar. -->
+  <dl class="vit-nums" aria-label="O ECHO em números">
+    <div class="vit-n"><dt>Ementário</dt><dd><b><span class="vit-mk">2.758</span></b><span class="vit-l">assuntos catalogados</span></dd></div>
+    <div class="vit-n"><dt>Acervo triado</dt><dd><b><span class="vit-mk">1.192</span></b><span class="vit-l">processos triados</span></dd></div>
+    <div class="vit-n"><dt>Taxonomia</dt><dd><b><span class="vit-mk">90,2%</span></b><span class="vit-l">102 assuntos em 10 categorias</span></dd></div>
+    <div class="vit-n"><dt>Precedentes</dt><dd><b><span class="vit-mk">631</span></b><span class="vit-l">temas catalogados</span></dd></div>
+  </dl>
+  <div class="vit-pe" id="vit-pe"></div>
+
   <section class="sistema" id="sistema" tabindex="-1" aria-label="Partitura do acervo">
     <div class="coluna" id="coluna" aria-hidden="true"></div>
     <div class="batuta" id="batuta" aria-hidden="true"></div>
@@ -111,7 +120,7 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
 
   <footer class="rodape">
     <p class="epigrafe">Harmonia é <mark>coordenação</mark> de diferenças.</p>
-    <a class="assina" href="arco.html">
+    <a class="assina" href="arco.html" target="_top">
       <svg class="assina-marca" viewBox="0 0 120 120" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0,0 H120 V120 H0 Z M22,30 L60,60 L22,90 Z M98,30 L60,60 L98,90 Z"/></svg>
       <span class="assina-txt">
         <span class="assina-nome">Christian da Costa</span>
@@ -259,5 +268,6 @@ FINISH: unreviewed and undocumented is unfinished; DESIGN.md registra este siste
 
 <script src="assets/play/play-dados.js?v=20261120-echo"></script>
 <script src="assets/play/play.js?v=20261120-echo"></script>
+<script src="assets/play/play-vitrine.js?v=20261121-vitrine"></script>
 </body>
 </html>
