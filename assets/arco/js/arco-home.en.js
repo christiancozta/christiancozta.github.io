@@ -117,28 +117,14 @@
     }));
   }
 
-  /* ---------- figuras presas à retícula ----------
-     ECHO: a pauta do símbolo (24 unidades) ocupa exatamente duas fileiras; a
-     linha superior pousa numa linha da retícula e o ritornelo encosta na
-     margem direita do campo. ATRIO: como no hero do próprio ATRIO, o horizonte
+  /* ---------- figura presa à retícula ----------
+     ATRIO: como no hero do próprio ATRIO, o horizonte
      da esteira é travado num múltiplo inteiro da fileira e a base da esteira
-     corre em oitavos da largura do campo. Sem JS, as figuras ficam no desenho
+     corre em oitavos da largura do campo. Sem JS, a figura fica no desenho
      estático, apenas sem esse travamento. */
   const f3 = n => n.toFixed(2);
   function lockFigures(){
     const r = rowPx();
-    const echo = home.querySelector(".hm-nv--echo svg");
-    const art = echo?.querySelector(".hm-art");
-    if (echo && art){
-      const {width:W, height:H} = echo.getBoundingClientRect();
-      if (W > 0 && H > 0){
-        const n = Math.max(2, Math.round(H / r)), s = (2 * r) / 240;
-        const top = Math.floor((n - 2) / 2) * r;
-        echo.setAttribute("viewBox", `0 0 ${f3(W)} ${f3(H)}`);
-        echo.setAttribute("preserveAspectRatio", "none");
-        art.setAttribute("transform", `translate(${f3(W - 720 * s)} ${f3(top - 180 * s)}) scale(${s.toFixed(5)})`);
-      }
-    }
     const atrio = home.querySelector(".hm-nv--atrio svg");
     if (atrio){
       const {width:W, height:H} = atrio.getBoundingClientRect();
@@ -275,11 +261,12 @@
   }
 
   /* ---------- ECHO: folha de rosto e partitura ----------
-     A folha de rosto mostra os números em repouso e tem o tamanho da partitura.
-     O convite só aparece quando a partitura inteira cabe na tela, abaixo do
-     topo: assim ela nunca pede rolagem. Aberta, a folha vira para a esquerda e
-     a partitura (play.html?partitura, carregada só agora) fica no lugar dela.
-     Sem JS, sem altura ou no celular, fica a folha, sem convite. */
+     A folha de rosto ocupa o campo da esquerda do painel, na altura útil da
+     tela em fileiras inteiras, para que leitor, parte e montador, que abrem
+     dentro da partitura, fiquem sempre à vista. Aberta, a folha vira para a
+     esquerda e a partitura em coluna (play.html?partitura&empilha, carregada
+     só agora, desenho empilhado) fica no lugar dela, rolando por dentro.
+     Sem JS ou no celular, fica a folha, sem convite. */
   const score = home.querySelector(".hm-score");
   let scoreFit = () => {};
   if (score){
@@ -287,12 +274,15 @@
     const rosto = score.querySelector(".hm-rosto");
     const pe = score.querySelector(".hm-rosto__pe");
     const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
-    /* altura da partitura medida em play.html?partitura: 723 px a partir de
-       1220 px de largura, 740 px entre 1010 e 1220; abaixo disso ela empilha */
-    const estimada = () => { const w = score.clientWidth; return w >= 1220 ? 723 : w >= 1010 ? 740 : Infinity; };
-    let frame = null, medida = 0, medidaW = 0;
-    const altura = () => (medida && medidaW === score.clientWidth) ? medida : estimada();
-    const cabe = () => !stacked.matches && Number.isFinite(altura()) && innerHeight - railH() >= altura();
+    /* teto: a partitura empilhada inteira (1155 px medidos; depois, a medida
+       real), para que uma tela muito alta não sobre papel em branco */
+    let frame = null, medida = 0;
+    const altura = () => {
+      const r = rowPx(), util = innerHeight - railH();
+      const teto = Math.ceil((medida || 1155) / r) * r;
+      return Math.max(r * 4, Math.min(Math.floor(util / r) * r, teto));
+    };
+    const cabe = () => !stacked.matches;
     const seta = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13M12.5 6.5 18 12l-5.5 5.5"/></svg>';
     const xis = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m7 7 10 10M17 7 7 17"/></svg>';
     const convite = document.createElement("button");
@@ -320,7 +310,7 @@
       try{
         const pag = frame.contentDocument.querySelector(".pag");
         if (!pag) return;
-        medida = Math.ceil(pag.getBoundingClientRect().height); medidaW = score.clientWidth;
+        medida = Math.ceil(pag.getBoundingClientRect().height);
         scoreFit();
       }catch(_){}
     }
@@ -358,7 +348,7 @@
     }
     scoreFit = () => {
       if (stacked.matches){ score.style.removeProperty("--score-h"); }
-      else if (Number.isFinite(altura())) score.style.setProperty("--score-h", altura() + "px");
+      else score.style.setProperty("--score-h", altura() + "px");
       const ok = cabe();
       convite.hidden = !ok;
       if (!ok && aberto()) fecha(false);

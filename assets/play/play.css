@@ -1085,3 +1085,31 @@ html.so-partitura .maco::before, html.so-partitura .maco::after,
 html.so-partitura .a4::before, html.so-partitura .a4::after { display: none; }
 html.so-partitura .a4 { min-height: 0; clip-path: none; }
 html.so-partitura .pag { padding-top: 10px; padding-bottom: 12px; }
+
+/* ==========================================================================
+   Partitura em coluna (play.html?partitura&empilha): o ARCO a põe ao lado do
+   texto, num quadro mais estreito que a folha. Vale o desenho empilhado do
+   celular (nome sobre a pauta, cabeçalhos em lista) qualquer que seja a
+   largura, e o quadro rola por dentro: tem a altura da tela, não a da folha,
+   para que leitor, parte e montador abram sempre à vista.
+   ========================================================================== */
+html.so-partitura.empilha { --nomes: 0px; --chave: 18px; --parte-l: 0px; scrollbar-width: thin; }
+html.so-partitura.empilha body { overflow: visible; }
+html.so-partitura.empilha .voz { height: auto; grid-template-rows: auto 40px; padding-top: 6px; }
+html.so-partitura.empilha .voz .nm { grid-column: 2 / 4; grid-row: 1; justify-self: start; padding: 0; text-align: left; }
+html.so-partitura.empilha .voz .nm small { display: inline; margin-left: 8px; }
+html.so-partitura.empilha .voz .pt { display: none; }
+html.so-partitura.empilha .pauta-s { grid-row: 2; }
+html.so-partitura.empilha .andamento { grid-column: 1 / 4; grid-row: 1; }
+html.so-partitura.empilha .cab { height: auto; grid-template-rows: auto auto; row-gap: 10px; }
+html.so-partitura.empilha .marcas { grid-column: 2 / 4; grid-row: 2; grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
+html.so-partitura.empilha .marcas button { padding: 0 8px 0 0; }
+html.so-partitura.empilha .marcas .mt { font-size: 12.5px; }
+html.so-partitura.empilha .marcas .mx { margin-top: 4px; }
+html.so-partitura.empilha .gav-c { flex-direction: column; align-items: flex-start; gap: 20px; margin-left: var(--chave); padding: 20px 16px 22px; }
+html.so-partitura.empilha .gav-pgs img { width: min(30vw, 120px); }
+html.so-partitura.empilha .gav-txt { padding-right: 0; }
+html.so-partitura.empilha :is(.coluna, .batuta) { display: none; }
+html.so-partitura.empilha .sistema[data-m="1"] .pauta-s .fx[data-mf="1"], html.so-partitura.empilha .sistema[data-m="2"] .pauta-s .fx[data-mf="2"],
+html.so-partitura.empilha .sistema[data-m="3"] .pauta-s .fx[data-mf="3"], html.so-partitura.empilha .sistema[data-m="4"] .pauta-s .fx[data-mf="4"],
+html.so-partitura.empilha .sistema[data-m="5"] .pauta-s .fx[data-mf="5"] { opacity: 1; }

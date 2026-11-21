@@ -329,6 +329,52 @@
 .hm-score:not(.is-open) .hm-rosto{ transition:transform .6s cubic-bezier(.32,.72,0,1), opacity .2s linear, visibility 0s; }
 .hm-score__fechar{ position:absolute; z-index:3; top:12px; right:16px; }
 
+/* ECHO em duas colunas (desktop): o playbook ocupa o campo da imagem (2 a 4),
+   na altura útil da tela em fileiras inteiras (--score-h, arco-home.js); a
+   narrativa fica numa coluna só (5 a 7), presa ao alto enquanto o playbook
+   passa, com a assinatura logo abaixo. No celular, a ordem do documento:
+   narrativa, assinatura, folha de rosto. */
+.hm-lado{ min-width:0; }
+@media (min-width:901px){
+  .hm-proj--echo .hm-lado{
+    grid-column:5 / 8; grid-row:3 / 9; align-self:start;
+    position:sticky; top:var(--rail-h, 0px);
+  }
+  .hm-proj--echo .hm-narr{ columns:1; max-width:38em; }
+  .hm-proj--echo .hm-sig{ min-height:var(--row); margin:0; padding:0 var(--g) 0 calc(var(--g) * 1.5); }
+  .hm-proj--echo .hm-score{
+    grid-column:2 / 5; grid-row:3 / 9; align-self:start;
+    margin:0 0 0 1px; container-type:inline-size;
+  }
+  .hm-proj--echo::after{ content:""; grid-column:1 / -1; grid-row:9; height:var(--row); }
+
+  /* a folha na largura do campo: quatro compassos em dois sistemas de dois,
+     o corpo do número segue o compasso (metade do campo), não a tela */
+  .hm-proj--echo .hm-rosto{
+    min-height:0;
+    padding:clamp(24px, 4vh, 44px) clamp(16px, 7cqw, 48px) clamp(18px, 3vh, 28px);
+  }
+  .hm-proj--echo .hm-rosto__nums{
+    --pauta:clamp(34px, calc(100cqw / 2 * .17), 64px);
+    grid-template-columns:repeat(2, minmax(0, 1fr)); row-gap:calc(var(--u) * 4);
+  }
+  .hm-proj--echo .hm-rosto__nums::before,
+  .hm-proj--echo .hm-rosto__nums::after{ display:none; }
+  /* cada compasso leva a sua pauta; o segundo de cada sistema fecha com barra dupla */
+  .hm-proj--echo .hm-rosto__n::after{
+    content:""; position:absolute; left:0; right:0; top:calc(1.9rem + var(--pauta) * .14); height:var(--pauta);
+    background:repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
+    pointer-events:none;
+  }
+  .hm-proj--echo .hm-rosto__n:nth-child(2n)::after{
+    height:calc(var(--pauta) + 1px); border-right:3px solid var(--ink);
+    background:
+      linear-gradient(to left, transparent 3px, var(--ink) 3px 4px, transparent 4px),
+      repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
+  }
+  .hm-proj--echo .hm-rosto__pe{ flex-wrap:wrap; row-gap:calc(var(--u) * 1.5); }
+}
+
 /* ATRIO: campos invertidos; mesmas medidas, mesmos alinhamentos externos */
 .hm-proj--atrio .hm-nv{ grid-column:5 / 8; background:var(--atrio); }
 .hm-proj--atrio .hm-narr{ grid-column:2 / 5; padding:var(--g) calc(var(--g) * 1.5) var(--g) var(--g); }
