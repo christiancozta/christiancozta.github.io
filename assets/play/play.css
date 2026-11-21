@@ -1127,16 +1127,19 @@ html.vitrine:not(.so-partitura) :is(.carimbos, .selo, .sistema, .rodape) { displ
 html.vitrine:not(.so-partitura) body { overflow: hidden; }
 /* a folha ocupa o quadro inteiro; o pé do convite desce até a base */
 html.vitrine:not(.so-partitura) .a4 { display: flex; flex-direction: column; }
-html.vitrine:not(.so-partitura) .pag { flex: 1; display: flex; flex-direction: column; width: 100%; padding-bottom: clamp(20px, 4vh, 36px); }
+html.vitrine:not(.so-partitura) .pag { flex: 1; display: flex; flex-direction: column; width: 100%; padding-bottom: 20px; }
 html.vitrine .clipe { pointer-events: none; }
-html.vitrine .rosto { min-height: 0; padding: clamp(104px, 17vh, 150px) 0 0; }
+/* o título sobe até a altura do prendedor, ao lado dele; onde a folha é estreita
+   e os dois se cruzariam, desce só o necessário */
+html.vitrine .rosto { min-height: 0; padding: 52px 0 0; }
+@media (max-width: 480px) { html.vitrine .rosto { padding-top: 96px; } }
 
 /* os números do ECHO: quatro compassos em dois sistemas, cada um na sua pauta;
    o segundo de cada sistema fecha com barra dupla; o âmbar só marca */
 .vit-nums {
   --pauta: clamp(32px, calc((100vw - 2 * var(--borda) - 2 * var(--g)) / 2 * .19), 60px);
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: clamp(22px, 4.5vh, 40px);
-  margin: auto 0 0; padding-top: clamp(28px, 6vh, 56px);
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px;
+  margin: auto 0 0; padding-top: 28px;
 }
 .vit-n { position: relative; min-width: 0; padding: 0 clamp(10px, 2.6vw, 22px); }
 .vit-n::before { content: ""; position: absolute; left: 0; top: calc(1.9rem + var(--pauta) * .14); width: 1px; height: calc(var(--pauta) + 1px); background: var(--tinta); }
@@ -1161,7 +1164,7 @@ html.vitrine .rosto { min-height: 0; padding: clamp(104px, 17vh, 150px) 0 0; }
 .vit-l { font: italic 400 clamp(14px, 3.4vw, 18px)/1.3 var(--serif); color: var(--tinta); }
 
 /* o convite: o único botão da folha, em âmbar, a luz do playbook */
-.vit-pe { display: flex; justify-content: center; margin-top: clamp(26px, 5vh, 44px); padding-top: clamp(18px, 3vh, 26px); border-top: 1px solid var(--fio-2); }
+.vit-pe { display: flex; justify-content: center; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--fio-2); }
 .vit-pe:empty { display: none; }
 .pil.vit-explorar { height: 48px; gap: 14px; padding: 0 6px 0 24px; background: var(--ambar); box-shadow: none; font: 600 15px/1 var(--f-text); letter-spacing: .01em; color: var(--tinta); }
 .pil.vit-explorar:hover { background: #FFC24D; }

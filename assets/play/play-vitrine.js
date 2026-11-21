@@ -42,6 +42,8 @@
 
   let contou = false;
   const aberta = () => H.classList.contains('so-partitura');
+  /* o ARCO ajusta o quadro: altura da folha fechada, altura da tela aberta */
+  const avisa = (estado) => { if (window.parent !== window) window.parent.postMessage({ type: 'ECHO_VITRINE', estado }, location.origin); };
 
   function abre() {
     const quadro = window.frameElement;
@@ -49,6 +51,7 @@
       window.top.location.href = new URL('play.html', location.href).href;
       return;
     }
+    avisa('partitura');
     H.classList.add('so-partitura', 'empilha');
     volta.hidden = false;
     window.scrollTo(0, 0);
@@ -59,6 +62,7 @@
     if (!aberta()) return;
     H.classList.remove('so-partitura', 'empilha');
     volta.hidden = true;
+    avisa('folha');
     window.scrollTo(0, 0);
     explorar.focus({ preventScroll: true });
   }

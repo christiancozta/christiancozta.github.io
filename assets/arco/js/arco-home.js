@@ -261,11 +261,12 @@
 
   /* ---------- ECHO: o quadro do playbook ----------
      Folha de rosto, números e Explorar são do próprio playbook, na vitrine
-     (play.html?vitrine). Aqui só se mede o quadro: no desktop, a altura útil
-     da tela em fileiras inteiras, para que leitor, parte e montador, que
-     abrem dentro da partitura, fiquem sempre à vista; no celular, a altura
-     da folha, e o Explorar pede página inteira (data-explorar="pagina"),
-     para não haver rolagem dentro da rolagem. Sem JS, valem as alturas do CSS. */
+     (play.html?vitrine). Aqui só se mede o quadro. Fechado, ele tem a altura
+     exata da folha, para ficar perto da coluna de texto; aberto na partitura (aviso ECHO_VITRINE da página), a altura
+     útil da tela em fileiras inteiras, para que leitor, parte e montador
+     fiquem sempre à vista, e o quadro sobe ao alto da tela. No celular, o
+     Explorar pede página inteira (data-explorar="pagina"), para não haver
+     rolagem dentro da rolagem. Sem JS, valem as alturas do CSS. */
   const score = home.querySelector(".hm-score");
   const quadro = score?.querySelector(".hm-score__frame");
   let scoreFit = () => {};
@@ -296,19 +297,30 @@
         return Math.ceil(h + px(ps.paddingTop) + px(ps.paddingBottom) + px(bs.paddingTop) + px(bs.paddingBottom));
       }catch(_){ return 0; }
     };
+    let aberto = false;
     scoreFit = () => {
+      const h = folha();
       if (stacked.matches){
         score.style.removeProperty("--score-h");
         quadro.dataset.explorar = "pagina";
-        const h = folha();
         if (h) score.style.setProperty("--vit-h", h + "px");
       } else {
         delete quadro.dataset.explorar;
-        score.style.setProperty("--score-h", altura() + "px");
+        score.style.setProperty("--score-h", (aberto || !h ? altura() : h) + "px");
       }
       snap(panel);
     };
-    quadro.addEventListener("load", () => scoreFit());
+    quadro.addEventListener("load", () => { aberto = false; scoreFit(); });
+    addEventListener("message", e => {
+      if (e.origin !== location.origin || e.source !== quadro.contentWindow) return;
+      if (!e.data || e.data.type !== "ECHO_VITRINE") return;
+      aberto = e.data.estado === "partitura";
+      scoreFit();
+      if (aberto && !stacked.matches){
+        const y = score.getBoundingClientRect().top + scrollY - railH();
+        scrollTo({top:y, behavior: reduce ? "auto" : "smooth"});
+      }
+    });
     /* a altura da janela decide o quadro: muda sem mudar a largura */
     let hRaf = 0;
     addEventListener("resize", () => { if (!hRaf) hRaf = requestAnimationFrame(() => { hRaf = 0; scoreFit(); }); }, {passive:true});
