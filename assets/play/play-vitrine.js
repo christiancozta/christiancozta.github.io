@@ -51,9 +51,9 @@
       window.top.location.href = new URL('play.html', location.href).href;
       return;
     }
-    avisa('partitura');
     H.classList.add('so-partitura', 'empilha');
     volta.hidden = false;
+    avisa('partitura');
     window.scrollTo(0, 0);
     sis.focus({ preventScroll: true });
     if (!contou && typeof window.gtag === 'function') { window.gtag('config', 'G-GD0Q3Z4KQ9'); contou = true; }

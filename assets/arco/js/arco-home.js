@@ -298,7 +298,37 @@
       }catch(_){ return 0; }
     };
     let aberto = false;
+    /* partitura aberta sem rolagem: o quadro mede a partitura inteira e, se ela
+       não cabe na altura útil, vira uma janela maior reduzida em escala (o
+       conteúdo do play não muda de medida; leitor e gavetas cabem com ele) */
+    const desescala = () => { quadro.style.width = quadro.style.height = quadro.style.transform = quadro.style.transformOrigin = ""; };
+    const partitura = () => {
+      try{
+        const a4 = quadro.contentDocument.querySelector(".a4");
+        return a4 ? Math.ceil(a4.getBoundingClientRect().height) + 2 : 0;
+      }catch(_){ return 0; }
+    };
+    const escala = () => {
+      const util = altura(), largura = score.clientWidth;
+      desescala();
+      let n = partitura();
+      if (!n) return util;
+      let s = Math.min(1, util / n);
+      for (let i = 0; i < 2 && s < 1; i++){
+        /* na janela mais larga as descrições quebram menos: mede de novo */
+        quadro.style.width = (largura / s) + "px";
+        n = partitura() || n;
+        s = Math.min(1, util / n);
+      }
+      quadro.style.width = (largura / s) + "px";
+      quadro.style.height = n + "px";
+      quadro.style.transformOrigin = "0 0";
+      quadro.style.transform = s < 1 ? `scale(${s})` : "";
+      return Math.ceil(n * s);
+    };
     scoreFit = () => {
+      /* a folha é medida na largura do campo, nunca na janela escalada */
+      if (stacked.matches || !aberto) desescala();
       const h = folha();
       if (stacked.matches){
         score.style.removeProperty("--score-h");
@@ -306,7 +336,8 @@
         if (h) score.style.setProperty("--vit-h", h + "px");
       } else {
         delete quadro.dataset.explorar;
-        score.style.setProperty("--score-h", (aberto || !h ? altura() : h) + "px");
+        if (aberto) score.style.setProperty("--score-h", escala() + "px");
+        else score.style.setProperty("--score-h", (h || altura()) + "px");
       }
       snap(panel);
     };

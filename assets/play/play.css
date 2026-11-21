@@ -1182,3 +1182,15 @@ html.vitrine body { padding: 0; }
 html.vitrine .maco::before, html.vitrine .maco::after { display: none; }
 html.vitrine:not(.so-partitura) .a4 { min-height: 100vh; }
 html.vitrine .clipe { top: 0; }
+/* Partitura aberta na vitrine: as mesmas pautas, com folgas verticais menores,
+   para caber no quadro sem rolagem (o que ainda sobrar, o ARCO resolve
+   reduzindo o quadro inteiro em escala). As linhas da pauta vão de 8 a 28 no
+   desenho de 40 px; na linha de 32 px, ele avança 4 px acima e abaixo. */
+html.vitrine.empilha .pag { padding-top: 6px; padding-bottom: 6px; }
+html.vitrine.empilha .cab { padding-bottom: 6px; row-gap: 8px; }
+html.vitrine.empilha .marcas { row-gap: 6px; }
+html.vitrine.empilha .marcas .mx { margin-top: 2px; }
+html.vitrine.empilha .naipe { padding: 3px 0; }
+html.vitrine.empilha .naipe + .naipe { margin-top: 6px; }
+html.vitrine.empilha .voz { grid-template-rows: auto 32px; padding-top: 2px; }
+html.vitrine.empilha .pauta-s { margin: -4px 0; } /* o desenho segue com 40 px: só avança 4 px sobre as folgas */
