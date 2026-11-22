@@ -12,6 +12,9 @@
    O ARCO mede o quadro por window.vitrine: folha() é a altura da folha de
    rosto; conteudo() é a altura da lista aberta (o ARCO a reduz em escala
    até caber na tela) ou 0, com a rodada, que ocupa a altura da tela.
+   Ampliada (aviso ARCO_AMPLIA do ARCO, tela cheia), a página ganha
+   vit-amplo: a folha de rosto vai ao centro e, aberta, a página rola por
+   dentro. Esc na folha de rosto pede ao ARCO que reduza.
    A visita só é contada ao explorar: a folha à vista na home não é leitura.
    ========================================================================== */
 (() => {
@@ -102,11 +105,23 @@
   /* captura: decide antes do script da página, que fecha a rodada com o mesmo
      Esc; com um ato aberto na lista, Esc o recolhe primeiro */
   window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !aberta() && H.classList.contains('vit-amplo') && window.parent !== window) {
+      e.preventDefault();
+      window.parent.postMessage({ type: 'CERNE_VITRINE', estado: 'folha', pedido: 'reduzir' }, location.origin);
+      return;
+    }
     if (e.key !== 'Escape' || !aberta() || rodada() || document.querySelector('dialog[open]')) return;
     e.preventDefault(); e.stopPropagation();
     const ato = $('.at.aberta .at-btn');
     if (ato) { ato.click(); ato.focus({ preventScroll: true }); } else fecha();
   }, true);
+
+  /* tela cheia no ARCO; ao reduzir no celular, volta à folha de rosto */
+  window.addEventListener('message', (e) => {
+    if (e.origin !== location.origin || e.source !== window.parent || !e.data || e.data.type !== 'ARCO_AMPLIA') return;
+    H.classList.toggle('vit-amplo', !!e.data.amplo);
+    if (!e.data.amplo && e.data.fecha) fecha();
+  });
 
   /* a folha de rosto muda de altura quando as fontes chegam */
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!aberta()) avisa(); });

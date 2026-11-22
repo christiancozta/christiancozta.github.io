@@ -53,13 +53,20 @@
   /* ---------- 2. retícula: fileiras em múltiplos de --row ---------- */
   function snap(panel){
     panel.style.gridTemplateRows = "";
+    panel.style.paddingBottom = "";
     const r = rowPx();
-    const tracks = getComputedStyle(panel).gridTemplateRows.split(/\s+/).map(parseFloat).filter(n => n > 0);
-    if (!tracks.length) return;
-    const units = tracks.map(t => Math.max(1, Math.ceil((t - 1) / r)));
     /* o painel fecha num número inteiro de quadrados: no desktop a fileira é
        meio quadrado, então o total de fileiras precisa ser par */
     const perCell = stacked.matches ? 1 : 2;
+    if (getComputedStyle(panel).display !== "grid"){
+      /* painel sem grade (o hero no celular): completa o último quadrado */
+      const h = panel.getBoundingClientRect().height, q = r * perCell;
+      panel.style.paddingBottom = (parseFloat(getComputedStyle(panel).paddingBottom) + Math.ceil((h - 1) / q) * q - h) + "px";
+      return;
+    }
+    const tracks = getComputedStyle(panel).gridTemplateRows.split(/\s+/).map(parseFloat).filter(n => n > 0);
+    if (!tracks.length) return;
+    const units = tracks.map(t => Math.max(1, Math.ceil((t - 1) / r)));
     const sum = units.reduce((a, b) => a + b, 0);
     if (sum % perCell) units[units.length - 1] += perCell - (sum % perCell);
     panel.style.gridTemplateRows = units.map(u => u * r + "px").join(" ");
@@ -270,7 +277,12 @@
      conteúdo não cabe, o quadro vira uma janela maior reduzida em escala,
      sem rolagem dentro dele; e, ao abrir, sobe ao alto da tela. No celular,
      o Explorar pede página inteira (data-explorar="pagina"), para não haver
-     rolagem dentro da rolagem. Sem JS, valem as alturas do CSS. */
+     rolagem dentro da rolagem. Sem JS, valem as alturas do CSS.
+     Ampliar: um botão ao lado do quadro (sobre ele, no celular), sempre à
+     vista, põe a própria página em tela cheia sobre fundo escuro, sem
+     recarregá-la (o quadro fica no lugar; só o iframe se fixa). Lá, nada se
+     reduz em escala e o Explorar abre ali mesmo, também no celular. Esc
+     (pedido "reduzir" da página, ou da home), o botão ou o fundo voltam. */
   const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
   const altura = () => {
     const r = rowPx(), util = innerHeight - railH();
@@ -282,7 +294,7 @@
     const panel = score.closest(".hm-panel");
     const vit = () => { try{ return quadro.contentWindow.vitrine || null; }catch(_){ return null; } };
     const mede = k => { try{ return Math.ceil(vit()?.[k]?.() || 0); }catch(_){ return 0; } };
-    let aberto = false;
+    let aberto = false, amplo = false, inertes = [];
     const desescala = () => { quadro.style.width = quadro.style.height = quadro.style.transform = quadro.style.transformOrigin = ""; };
     const escala = () => {
       const util = altura(), largura = score.clientWidth;
@@ -303,6 +315,7 @@
       return Math.ceil(n * s);
     };
     const fit = () => {
+      if (amplo){ desescala(); delete quadro.dataset.explorar; return; }
       /* a folha é medida na largura do campo, nunca na janela escalada */
       if (stacked.matches || !aberto) desescala();
       const h = mede("folha");
@@ -316,8 +329,42 @@
       }
       snap(panel);
     };
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.className = "hm-amplia";
+    botao.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="hm-amplia__mais" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path class="hm-amplia__menos" d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg>';
+    const rotulo = () => {
+      const t = amplo ? "Reduzir" : "Ampliar";
+      botao.setAttribute("aria-label", t); botao.title = t;
+      botao.setAttribute("aria-pressed", String(amplo));
+    };
+    rotulo();
+    score.prepend(botao);
+    /* em tela cheia, o resto da página fica inerte: o foco não sai do quadro */
+    const isola = v => {
+      inertes.forEach(el => { el.inert = false; });
+      inertes = [];
+      if (!v) return;
+      for (let el = score; el && el !== document.body; el = el.parentElement)
+        for (const irmao of el.parentElement.children)
+          if (irmao !== el && !irmao.inert && irmao.tagName !== "SCRIPT"){ irmao.inert = true; inertes.push(irmao); }
+    };
+    const amplia = v => {
+      if (v === amplo) return;
+      amplo = v; rotulo();
+      score.classList.toggle("is-amplo", v);
+      document.documentElement.classList.toggle("hm-amplo", v);
+      isola(v);
+      /* no celular, ao reduzir, a página volta à folha de rosto: o quadro tem a altura dela */
+      try{ quadro.contentWindow.postMessage({ type:"ARCO_AMPLIA", amplo:v, fecha:!v && stacked.matches }, location.origin); }catch(_){}
+      fit();
+      (v ? quadro : botao).focus({preventScroll:true});
+    };
+    botao.addEventListener("click", () => amplia(!amplo));
+    score.addEventListener("click", e => { if (amplo && e.target === score) amplia(false); });
     quadro.addEventListener("load", () => { aberto = false; fit(); });
-    return { score, quadro, fit, abre: v => { const antes = aberto; aberto = v; fit(); return v && !antes; } };
+    return { score, quadro, fit, amplia, amplo: () => amplo,
+      abre: v => { const antes = aberto; aberto = v; fit(); return v && !antes && !amplo; } };
   }).filter(Boolean);
   let scoreFit = () => quadros.forEach(q => q.fit());
   if (quadros.length){
@@ -325,16 +372,22 @@
       if (e.origin !== location.origin || !e.data || !/^[A-Z]+_VITRINE$/.test(e.data.type || "")) return;
       const q = quadros.find(x => x.quadro.contentWindow === e.source);
       if (!q) return;
+      if (e.data.pedido === "reduzir"){ q.amplia(false); return; }
       const topo = q.score.getBoundingClientRect().top;
       if (q.abre(e.data.estado !== "folha") && !stacked.matches){
         const y = q.score.getBoundingClientRect().top + scrollY - railH();
         scrollTo({top:y, behavior: reduce ? "auto" : "smooth"});
-      } else {
+      } else if (!q.amplo()){
         /* o quadro fica onde estava: a ancoragem de rolagem do navegador, ao
            refazer as fileiras do painel, empurraria a página */
         const d = q.score.getBoundingClientRect().top - topo;
         if (Math.abs(d) >= 1) scrollBy({top:d, behavior:"instant"});
       }
+    });
+    addEventListener("keydown", e => {
+      if (e.key !== "Escape") return;
+      const q = quadros.find(x => x.amplo());
+      if (q){ e.preventDefault(); q.amplia(false); }
     });
     /* a altura da janela decide o quadro: muda sem mudar a largura */
     let hRaf = 0;

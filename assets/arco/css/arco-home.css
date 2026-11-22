@@ -65,6 +65,12 @@
   letter-spacing:.16em; text-transform:uppercase; color:var(--soft);
 }
 .hm-kick{ grid-column:2 / 5; color:var(--ink); }
+/* as minitags (Autoria, ECHO, ATRIO, CERNE) saem da vista e ficam para o
+   leitor de tela; a fileira 1 segue como respiro sob a barra */
+.hm-panel > .hm-kick{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
 
 /* títulos: um único corpo para os cinco, ajustado ao mais longo (2 a 7) */
 .hm-title{
@@ -92,32 +98,31 @@
   font-family:var(--f-display); font-weight:800;
   font-size:8.4vw; line-height:.82; letter-spacing:-.05em; color:var(--ink);
 }
-/* as quatro frentes: uma linha justificada na largura exata do nome */
+/* Abaixo do nome, duas colunas sem divisórias: as frentes (2 a 4) ao lado do
+   resumo (5 a 7); na base, os contatos ao lado da tese. Cinco fileiras
+   (respiro, nome em duas, frentes e base): o painel inteiro cabe na tela
+   útil, do celular ao monitor largo. */
+.hm-autoria{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
 .hm-lines{
-  grid-column:2 / 8; grid-row:4; align-self:start;
-  display:flex; justify-content:space-between; align-items:baseline; gap:var(--u);
-  padding:calc(var(--u) * 2.5) var(--g) 0;
+  grid-column:2 / 5; grid-row:4; align-self:start;
+  list-style:none; margin:0;
+  display:grid; gap:.18em;
+  padding:calc(var(--u) * 3) var(--g) 0;
   font-family:var(--f-display); font-weight:700;
-  font-size:clamp(.8rem, 1.32vw, 1.4rem); line-height:1.2; letter-spacing:-.012em;
+  font-size:clamp(1rem, 1.75vw, 2rem); line-height:1.08; letter-spacing:-.014em;
 }
-.hm-lines span{ white-space:nowrap; }
-.hm-lines i{ font-style:normal; font-weight:400; color:rgba(44,44,44,.32); }
-
-/* bloco autoral (2 a 4) e tese em contraponto (5 a 7), ambos pousados na base */
-.hm-autor{
-  grid-column:2 / 5; grid-row:6 / 9; align-self:end;
-  display:grid; gap:calc(var(--u) * 3);
-  padding:var(--g) var(--g) calc(var(--u) * 3);
-}
+.hm-lines li{ white-space:nowrap; }
 .hm-summary{
-  margin:0;
+  grid-column:5 / 8; grid-row:4; align-self:start;
+  margin:0; padding:calc(var(--u) * 3) var(--g) 0;
   font-family:var(--f-body); font-size:.92rem; line-height:1.5;
   text-align:justify; text-justify:inter-word; -webkit-hyphens:auto; hyphens:auto;
 }
 .hm-contacts{
-  list-style:none; margin:0; padding:0;
+  grid-column:2 / 5; grid-row:5; align-self:end;
+  list-style:none; margin:0;
   display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--u) * 1.25) var(--g);
-  border-top:1px solid var(--rule); padding-top:calc(var(--u) * 1.5);
+  padding:calc(var(--u) * 4) var(--g) calc(var(--u) * 3);
 }
 .hm-contacts li{ min-width:0; }
 .hm-contacts li > a,
@@ -143,7 +148,7 @@
 .hm-v a:focus-visible{ text-decoration-color:var(--ink); }
 
 .hm-tese{
-  grid-column:5 / 8; grid-row:6 / 9; align-self:end;
+  grid-column:5 / 8; grid-row:5; align-self:end;
   padding:var(--g) var(--g) calc(var(--u) * 3);
   font-family:var(--f-body); font-weight:400; font-style:italic;
   font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
@@ -188,6 +193,46 @@
   height:var(--score-h, calc(100dvh - var(--rail-h, 54px)));
 }
 .hm-score__frame{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; background:transparent; color-scheme:normal; }
+/* Ampliar (arco-home.js): o botão vem antes do quadro, sem ocupar altura, e
+   acompanha a rolagem pelo quadro inteiro. No desktop fica fora, à direita
+   do campo (na meia coluna livre antes da narrativa); no celular, sobre o
+   canto do quadro. Em tela cheia, só o iframe se fixa, sobre fundo escuro;
+   o quadro guarda o lugar na página. */
+.hm-amplia{
+  position:sticky; top:calc(var(--rail-h, 0px) + 8px); z-index:3;
+  display:grid; place-items:center; width:40px; height:40px;
+  margin:0 0 -40px calc(100% + 10px); padding:0;
+  border:0; border-radius:0; background:var(--ink); color:var(--paper);
+  cursor:pointer; transition:background-color var(--fast) var(--ease);
+}
+.hm-amplia svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:square; }
+.hm-amplia__menos{ display:none; }
+.hm-amplia:hover{ background:#000; }
+.hm-amplia:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+html.hm-amplo{ overflow:hidden; }
+.hm-score.is-amplo::before{
+  content:""; position:fixed; inset:0; z-index:1000;
+  background:rgba(18,18,18,.88); cursor:zoom-out;
+}
+.hm-score.is-amplo .hm-score__frame{
+  position:fixed; z-index:1001;
+  top:24px; bottom:auto; left:50%; right:auto;
+  width:min(1240px, calc(100vw - 144px)); height:calc(100dvh - 48px);
+  transform:translateX(-50%);
+}
+.hm-score.is-amplo .hm-amplia{
+  position:fixed; z-index:1002; top:24px; right:16px; margin:0;
+  background:var(--paper); color:var(--ink);
+}
+.hm-score.is-amplo .hm-amplia:hover{ background:#fff; }
+.hm-score.is-amplo .hm-amplia:focus-visible{ outline-color:var(--paper); }
+.hm-score.is-amplo .hm-amplia__mais{ display:none; }
+.hm-score.is-amplo .hm-amplia__menos{ display:inline; }
+@media (max-width:900px){
+  .hm-amplia{ margin-left:calc(100% - 48px); }
+  .hm-score.is-amplo .hm-score__frame{ top:64px; left:0; width:100%; height:calc(100dvh - 64px); transform:none; }
+  .hm-score.is-amplo .hm-amplia{ top:12px; right:12px; }
+}
 
 /* ECHO e CERNE em duas colunas (desktop): o quadro ocupa o campo da imagem
    (2 a 4), na altura de --score-h (arco-home.js). A narrativa fica numa
@@ -195,14 +240,16 @@
    colunas vizinhas (5 e 7). Sob o texto, o papel (#FCFCFC) cobre a retícula
    visível só pela extensão do texto. No celular, a ordem do documento:
    narrativa, depois o quadro. */
-.hm-lado{ min-width:0; }
+.hm-trilho, .hm-lado{ min-width:0; }
 @media (min-width:901px){
   /* quatro fileiras: rótulo, título, campo e respiro. Quadro e narrativa
      dividem uma fileira só, que mede o mais alto dos dois: repartidos em
      várias, cada fileira arredondaria para cima e sobraria papel no pé */
   .hm-proj--vit{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
+  /* o trilho é a fileira do quadro: a narrativa presa ao alto desliza só
+     por ela, sem invadir o fecho nem o respiro */
+  .hm-proj--vit .hm-trilho{ grid-column:5 / 8; grid-row:3; align-self:stretch; }
   .hm-proj--vit .hm-lado{
-    grid-column:5 / 8; grid-row:3; align-self:start;
     margin:0 calc(var(--cell) / 2);
     position:sticky; top:var(--rail-h, 0px);
   }
@@ -215,7 +262,19 @@
     margin:0 0 0 1px;
   }
   .hm-proj--vit::after{ content:""; grid-column:1 / -1; grid-row:4; height:var(--row); }
+  /* ECHO: o fecho ganha uma fileira, sobre as duas colunas, antes do respiro */
+  .hm-proj--echo{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
+  .hm-proj--echo .hm-coda{ grid-column:2 / 8; grid-row:4; }
+  .hm-proj--echo::after{ grid-row:5; }
 
+}
+/* fecho do ECHO: a mesma voz da tese, em corpo grande e itálico */
+.hm-coda{
+  align-self:start; margin:0;
+  padding:calc(var(--u) * 6) var(--g) 0;
+  font-family:var(--f-body); font-weight:400; font-style:italic;
+  font-size:clamp(1.35rem, 2.5vw, 3rem); line-height:1.18; letter-spacing:-.022em;
+  color:var(--ink); text-wrap:balance;
 }
 /* ATRIO: campos invertidos; mesmas medidas, mesmos alinhamentos externos */
 .hm-proj--atrio .hm-nv{ grid-column:5 / 8; background:var(--atrio); }
@@ -654,13 +713,13 @@
   .hm-title{ font-size:11vw; padding-top:var(--g); }
   .hm-lede{ padding-top:var(--u); }
   .hm-name{ font-size:13vw; padding-top:var(--g); }
-  .hm-lines{
-    display:grid; grid-template-columns:1fr 1fr; gap:var(--u) var(--g);
-    font-size:.92rem; white-space:normal;
-  }
-  .hm-lines i{ display:none; }
-  .hm-lines span{ white-space:normal; }
-  .hm-autor{ padding-top:calc(var(--u) * 3); }
+  /* o hero em coluna simples: os blocos não se arredondam um a um, só o
+     painel inteiro (arco-home.js), e cabe na tela de um celular pequeno */
+  .hm-autoria{ display:flex; flex-direction:column; padding-top:var(--u); }
+  .hm-lines{ font-size:1.05rem; padding-top:calc(var(--u) * 2.5); }
+  .hm-lines li{ white-space:normal; }
+  .hm-summary{ padding-top:calc(var(--u) * 3); }
+  .hm-contacts{ padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
   .hm-tese{ font-size:5.4vw; padding-top:var(--u); padding-bottom:calc(var(--u) * 4); }
 
   .hm-nv{ min-height:calc(var(--row) * 6); margin:0; }

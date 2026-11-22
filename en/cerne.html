@@ -1321,8 +1321,13 @@ body{background-position:0 0;background-attachment:fixed}
    painel e impressora ficam parados e só a folha impressa rola.
    ===================================================================== */
 .vit-rosto{display:none}
-html.vitrine{scrollbar-width:none}
-html.vitrine::-webkit-scrollbar{display:none}
+html.vitrine:not(.vit-amplo){scrollbar-width:none}
+html.vitrine:not(.vit-amplo)::-webkit-scrollbar{display:none}
+/* ampliada no ARCO (tela cheia, vit-amplo): a folha de rosto ao centro, numa
+   medida de folha, com o fundo escuro do ARCO em volta; aberta, a página
+   ocupa o quadro e rola por dentro */
+html.vitrine.vit-amplo:not(.vit-aberta) main{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px 16px}
+html.vitrine.vit-amplo .vit-rosto{width:min(600px,100%)}
 html.vitrine:not(.vit-aberta),html.vitrine:not(.vit-aberta) body{background:transparent}
 html.vitrine body>a.sr,html.vitrine .rodape-d,html.vitrine main>*{display:none!important}
 html.vitrine:not(.vit-aberta) main>.vit-rosto,
@@ -1358,7 +1363,7 @@ html.vitrine.vit-aberta main:has(>#op:not([hidden]))>#mesa{display:none!importan
 html.vitrine #mesa{overflow:visible}
 html.vitrine .demo-tit{position:relative;display:flex;align-items:center;min-height:58px;padding-right:9.5em;box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
 html.vitrine .demo-tit>.mx-c{flex:none;padding:10px 0 10px 16px;box-shadow:none}
-html.vitrine .demo-tit>.mx-c:last-child{flex:1;min-width:0}
+html.vitrine .demo-tit>.mx-c:has(h2){flex:1;min-width:0}
 html.vitrine .demo-tit .ind{padding-top:0}
 html.vitrine .demo-tit h2{font-size:clamp(20px,4.4cqw,28px)}
 html.vitrine .vit-volta{position:absolute;right:12px;top:50%;transform:translateY(-50%);min-height:34px;padding:4px 10px 4px 12px;font-size:12.5px;gap:8px}
@@ -5439,7 +5444,7 @@ reset(); render(); setButtons();
   buttons.forEach(function(b){b.addEventListener('click',function(){select(Number(b.dataset.serie));});});
 })();
 </script>
-<script src="../assets/cerne/cerne-vitrine.js?v=20261122-vitrine"></script>
+<script src="../assets/cerne/cerne-vitrine.js?v=20261123-amplia"></script>
 
 </body>
 </html>
