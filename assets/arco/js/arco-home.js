@@ -496,7 +496,7 @@
       const view = viewLink.dataset.hmView;
       const railLink = document.querySelector(`.rail__link[data-view="${view}"]`);
       /* pelo cordão, quando ele tem a entrada; senão a própria casca já abriu a
-         view pelo data-view do link (DATA, base e método, não está no cordão) */
+         view pelo data-view do link, quando a vista não está no cordão) */
       if (railLink) railLink.click();
       else if (!viewLink.dataset.view) location.hash = view;
       return;
@@ -672,22 +672,23 @@
     const FRENTES = [
       {termo:"Legal Operations", trad:"Operações jurídicas",
        comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento"],
-       tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica",
-       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "controladoria", "controladoria juridica", "gestao juridica"],
+       tb:"Legal Ops, Operações Jurídicas",
+       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica"],
        provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}],
        go:"legal-operations"},
-      {termo:"Legal AI Evaluation & Governance", trad:"Avaliação e governança de IA jurídica",
+      {termo:"Controladoria Jurídica", trad:"Legal Controllership",
+       comps:["Gestão de indicadores e desempenho", "Traceability", "Mapeamento e desenho de processos"],
+       tb:"Legal Controllership, Jurimetria, Legal Data Analytics",
+       al:["controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
+       nota:true,
+       provas:[{chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}, {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}],
+       go:"rastro"},
+      {termo:"AI Governance & Evaluation", trad:"Governança e avaliação de IA jurídica",
        comps:["Avaliação adversarial", "Orquestração decisória", "Traceability"],
-       tb:"AI Governance & Evaluation, Governança de IA",
-       al:["legal ai evaluation & governance", "legal ai evaluation and governance", "legal ai evaluation", "legal ai governance", "ai governance & evaluation", "ai evaluation & governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
+       tb:"Legal AI Evaluation & Governance, Governança de IA",
+       al:["ai governance & evaluation", "ai governance and evaluation", "ai evaluation & governance", "legal ai evaluation & governance", "legal ai evaluation", "legal ai governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
        provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados"}],
-       go:"ai-governance"},
-      {termo:"Legal Data Analytics", trad:"Análise de dados jurídicos",
-       comps:["Gestão de indicadores e desempenho", "Traceability", "Engenharia de dados e corpus"],
-       tb:"Jurimetria, Legal Analytics",
-       al:["legal data analytics", "legal analytics", "data analytics", "jurimetria", "analise de dados juridicos"],
-       provas:[{chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
-       go:"rastro"}
+       go:"ai-governance"}
     ];
     const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
     const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
@@ -718,14 +719,13 @@
       const achados = nota(fq);
       const fr = frenteDe(fq);
       if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))){
-        const ctl = fq.includes("controladoria");
         out.innerHTML = `
         <p class="hm-busca__lbl">Frente</p>
         <p class="hm-busca__termo">${esc(fr.termo)}<span class="hm-busca__tr">${esc(fr.trad)}</span></p>
         <p class="hm-busca__lbl">Competências demonstradas</p>
         <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
         <p class="hm-busca__tb">Também lido como ${esc(fr.tb)}.</p>
-        ${ctl ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
+        ${fr.nota ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
         <div class="hm-busca__prova">
           <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
           <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>Ver a prova</a><a class="hm-busca__lx" href="#frentes" data-hm-go>Ver as frentes</a></p>

@@ -232,7 +232,6 @@ body{
 .rail__modlink[data-child="echo"]:hover{ color:var(--echo); }
 .rail__seclink[data-child="atrio"]:hover,
 .rail__modlink[data-child="atrio"]:hover{ color:var(--atrio); }
-.rail__seclink[data-child="data"]:hover,
 .rail__sub i{ font-style:normal; color:var(--hair-inv); margin:0 .2rem; }
 /* a frase autoral: revezamento com a ficha da hero — enquanto ela está em
    campo, o cordão cala. Pousa acima do nome, em corpo menor que a assinatura:
@@ -2286,9 +2285,8 @@ body{
    Estado corrente é cor + fio de base: peso que muda empurra os vizinhos.
    =========================================================================== */
 /* Estado = a caixa do território, a mesma dos algarismos do hero:
-   DATA e ATRIO/TROIA em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
+   ATRIO/TROIA em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
    Hover e corrente falam a mesma língua; o corrente apenas permanece. */
-.rail .rail__link[data-view="data"]{ --tone:#4A90E2; --tone-ink:var(--paper); }
 .rail .rail__link[data-view="echo"],
 .rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
@@ -2301,7 +2299,7 @@ body{
 .rail .rail__nav .rail__link--off::after{ display:none; }
 
 .rail{ --nav-gap:2.1rem; }
-/* RASTRO e LASTRO saem do cordão: DATA é uma entrada só */
+/* RASTRO e LASTRO saem do cordão: são seções da home */
 .rail .rail__sec{ display:none !important; }
 .rail .rail__nav{ flex-wrap:nowrap; align-items:center; gap:0 var(--nav-gap); }
 /* o corpo dos projetos desce 1px; a caixa não: a linha guarda a altura do
@@ -2389,7 +2387,7 @@ body{
   .rail:has(.rail__nav > :is([data-view="echo"],[data-view="atrio"],[data-child="atrio"],[data-proj="cerne"]):is(:hover,:focus-visible)) .rail__kicker{ border-left-color:var(--hair-inv); }
   .rail:has(.rail__nav > [data-view="echo"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
   .rail:has(.rail__nav > :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Engineering"; }
-  .rail:has(.rail__nav > [data-proj="cerne"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal AI Evaluation & Governance"; }
+  .rail:has(.rail__nav > [data-proj="cerne"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"AI Governance & Evaluation"; }
   .rail__index{ justify-self:center; }
   .rail__end{
     display:flex; justify-self:end; align-items:center; justify-content:flex-end;

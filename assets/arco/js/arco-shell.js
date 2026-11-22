@@ -11,7 +11,7 @@
    ========================================================================== */
 (() => {
   "use strict";
-  const VIEWS = ["home","echo","play","atrio","cerne","data"];
+  const VIEWS = ["home","echo","play","atrio","cerne"];
   const views = [...document.querySelectorAll(".view")];
   const railLinks = [...document.querySelectorAll(".rail__link[data-view]")];
   const childLinks = [...document.querySelectorAll(".rail__seclink[data-child]")];
@@ -534,15 +534,13 @@
 
   const FOOTER_H = 84;
   const homeView = document.querySelector('.view[data-view="home"]');
-  const dataTrigger = document.querySelector('a[data-view="data"], button[data-view="data"]');
   const stage = document.querySelector('.stage');
   const childStates = new WeakMap();
   const childProgressInk = {
     echo:'#2C2C2C',
     play:'#FFB627',
     atrio:'#D94F2D',
-    cerne:'#D94F2D',
-    data:'#4A90E2'
+    cerne:'#D94F2D'
   };
 
   cleanupPreviousEndcap();
@@ -563,13 +561,7 @@
     footer.setAttribute('aria-label','Encerramento do portfólio');
     footer.innerHTML = `
       <p class="arco-unified-footer__privacy"><span>Tráfego rastreado</span> <i aria-hidden="true">|</i> <span>Google&nbsp;Analytics</span></p>
-      <p class="arco-unified-footer__seal">daCosta © <time datetime="2026">2026</time></p>
-      <button class="arco-unified-footer__method" type="button" aria-label="Abrir DATA — Base e Método">
-        <span>BASE E MÉTODO:</span><strong>DATA</strong>
-      </button>`;
-    footer.querySelector('.arco-unified-footer__method')?.addEventListener('click',() => {
-      dataTrigger?.click();
-    });
+      <p class="arco-unified-footer__seal">daCosta © <time datetime="2026">2026</time></p>`;
     return footer;
   }
 

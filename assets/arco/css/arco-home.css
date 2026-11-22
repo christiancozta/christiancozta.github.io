@@ -995,26 +995,26 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 
 /* o nome prevalece: uma só linha, à esquerda, na largura das seis colunas
    (data-fit="nome" o ajusta ao campo); abaixo, a coluna dupla */
-.hm-autoria > .hm-name{
+.hm--dossie .hm-autoria > .hm-name{
   grid-column:2 / 8; grid-row:1; align-self:end;
   padding:calc(var(--u) * 6) var(--g) 0;
   font-size:6rem; line-height:.95; letter-spacing:-.045em;
   min-width:0; max-width:100%; box-sizing:border-box;
 }
-.hm-autoria{ min-width:0; }
-.hm-summary{ margin:0; max-width:46ch; font-size:.98rem; line-height:1.6; color:rgba(44,44,44,.84); }
+.hm--dossie .hm-autoria{ min-width:0; }
+.hm--dossie .hm-summary{ margin:0; max-width:46ch; font-size:.98rem; line-height:1.6; color:rgba(44,44,44,.84); }
 
 @media (min-width:901px){
   /* distinção à esquerda; a primeira palavra numa coluna da largura da
      maior delas (produzir), para o ≠ seguir parado no eixo */
-  .hm-autoria .hm-ds{ grid-column:2 / 5; grid-row:2; align-items:flex-start; padding:calc(var(--u) * 5) var(--g) calc(var(--u) * 3); }
-  .hm-autoria .hm-d, .hm-autoria .hm-ds.is-alt .hm-ds__eixo{ align-items:flex-start; }
-  .hm-autoria .hm-d__par{
+  .hm--dossie .hm-autoria .hm-ds{ grid-column:2 / 5; grid-row:2; align-items:flex-start; padding:calc(var(--u) * 5) var(--g) calc(var(--u) * 3); }
+  .hm--dossie .hm-autoria .hm-d, .hm--dossie .hm-autoria .hm-ds.is-alt .hm-ds__eixo{ align-items:flex-start; }
+  .hm--dossie .hm-autoria .hm-d__par{
     width:auto; font-size:2.7vw;
     grid-template-columns:3.6em auto max-content; justify-content:start;
   }
-  .hm-autoria .hm-d__f{ text-align:left; white-space:normal; max-width:36ch; text-wrap:balance; }
-  .hm-autoria .hm-ds__sel{ justify-content:flex-start; margin-left:-8px; }
+  .hm--dossie .hm-autoria .hm-d__f{ text-align:left; white-space:normal; max-width:36ch; text-wrap:balance; }
+  .hm--dossie .hm-autoria .hm-ds__sel{ justify-content:flex-start; margin-left:-8px; }
   .hm-oferta{ grid-column:2 / 5; grid-row:3; align-self:end; }
   .hm-busca{ grid-column:5 / 8; grid-row:2 / 4; align-self:center; margin:calc(var(--u) * 5) var(--g); }
 }
@@ -1087,8 +1087,8 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
     padding:var(--g) calc(var(--g) * 1.5) var(--g) var(--g); background:none;
   }
   /* o fecho do ECHO foi para a origem: o painel volta a quatro fileiras */
-  .hm-proj--echo{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
-  .hm-proj--echo::after{ grid-row:4; }
+  .hm--dossie .hm-proj--echo{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
+  .hm--dossie .hm-proj--echo::after{ grid-row:4; }
 }
 
 /* ---------- contato, no fecho do lastro ---------- */
@@ -1108,7 +1108,7 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-contato .hm-v{ overflow-wrap:normal; }
 
 @media (max-width:900px){
-  .hm-autoria > .hm-name{ padding:calc(var(--u) * 4) var(--g) 0; }
+  .hm--dossie .hm-autoria > .hm-name{ padding:calc(var(--u) * 4) var(--g) 0; }
   .hm-oferta{ padding:calc(var(--u) * 2) var(--g) calc(var(--u) * 3); }
   .hm-busca{ margin:0 var(--g) calc(var(--u) * 4); }
   .hm-busca__k, .hm-busca__vivo, .hm-busca__r{ padding-left:var(--g); padding-right:var(--g); }
