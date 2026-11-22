@@ -9,8 +9,9 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-GD0Q3Z4KQ9');
+  if (!/[?&]vitrine\b/.test(location.search)) gtag('config', 'G-GD0Q3Z4KQ9');
 </script>
+<script>if(/[?&]vitrine\b/.test(location.search))document.documentElement.classList.add('vitrine')</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1310,6 +1311,136 @@ body{background-position:0 0;background-attachment:fixed}
   }
 }
 
+/* =====================================================================
+   vitrine 22/11/2026 ▪ cerne.html?vitrine, o quadro do painel CERNE no ARCO
+   Tudo pende de html.vitrine (script no <head>); fora dela, nada muda.
+   Fechada: só a folha de rosto, presa à impressora, sem fundo próprio.
+   Explorar (cerne-vitrine.js) acrescenta vit-aberta: a lista de atos,
+   compacta, que o ARCO reduz em escala até caber na tela. Com uma rodada
+   em curso (#op sem hidden), a lista sai: o quadro tem a altura da tela,
+   painel e impressora ficam parados e só a folha impressa rola.
+   ===================================================================== */
+.vit-rosto{display:none}
+html.vitrine{scrollbar-width:none}
+html.vitrine::-webkit-scrollbar{display:none}
+html.vitrine:not(.vit-aberta),html.vitrine:not(.vit-aberta) body{background:transparent}
+html.vitrine body>a.sr,html.vitrine .rodape-d,html.vitrine main>*{display:none!important}
+html.vitrine:not(.vit-aberta) main>.vit-rosto,
+html.vitrine.vit-aberta main>#mesa,
+html.vitrine.vit-aberta main>#op:not([hidden]){display:block!important}
+html.vitrine.vit-aberta main:has(>#op:not([hidden]))>#mesa{display:none!important}
+
+/* folha de rosto: a folha de formulário contínuo sai da impressora e fecha no pé */
+.vit-rosto{overflow:visible}
+.vit-rosto .imp-wrap{margin-inline:0;max-width:none}
+.vit-folha{padding:28px 30px 26px;text-align:left}
+/* marca na largura útil da folha: símbolo (.9em), vão (.22em) e palavra (4,67em) */
+.vit-cab{display:flex;align-items:flex-end;gap:.22em;margin:0 18px;font-size:clamp(32px,calc((100cqw - var(--lado) - var(--fx) * 2 - 100px) / 5.9),88px)}
+.vit-sim{width:.9em;height:.9em;flex:none;display:block;margin-bottom:.02em}
+.vit-marca{margin:0;font-size:1em;line-height:.9;font-weight:700}
+.vit-marca .wm{display:block}
+.vit-def{margin:20px 18px 0;max-width:22em;font-style:italic;font-weight:500;font-size:clamp(17px,4.2cqw,22px);line-height:1.3;text-wrap:balance}
+.vit-nums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 20px;margin:24px 18px 0}
+.vit-nums>div{min-width:0;padding-top:8px;box-shadow:inset 0 var(--lw) var(--ink)}
+.vit-nums dt{font-family:var(--f-caps);font-weight:700;font-size:var(--cap);letter-spacing:.08em;line-height:1.4;text-transform:uppercase;color:var(--red)}
+.vit-nums dd{margin:6px 0 0;display:flex;flex-direction:column;gap:4px}
+.vit-nums b{font-family:var(--f-num);font-weight:700;font-size:clamp(30px,8.4cqw,46px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.vit-nums b .vg{margin-inline:-.1em}
+.vit-nums b small{margin-left:.3em;font-family:var(--f-mono);font-weight:600;font-size:.36em;letter-spacing:.02em}
+.vit-nums dd span{font-size:13.5px;line-height:1.35;color:var(--ink2)}
+.vit-fonte{margin:18px 18px 0;font-family:var(--f-caps);font-weight:600;font-size:var(--cap);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.vit-pe{margin:22px 18px 0}
+.vit-pe:empty{display:none}
+.vit-explorar .ic svg{display:block}
+
+/* lista de atos no quadro: o mesmo conteúdo, em medidas de quadro. Saem só a
+   instrução e o cabeçalho da tabela (a legenda nomeia as formas) */
+html.vitrine #mesa{overflow:visible}
+html.vitrine .demo-tit{position:relative;display:flex;align-items:center;min-height:58px;padding-right:9.5em;box-shadow:inset 1px 0 var(--fio),inset 0 1px var(--fio)}
+html.vitrine .demo-tit>.mx-c{flex:none;padding:10px 0 10px 16px;box-shadow:none}
+html.vitrine .demo-tit>.mx-c:last-child{flex:1;min-width:0}
+html.vitrine .demo-tit .ind{padding-top:0}
+html.vitrine .demo-tit h2{font-size:clamp(20px,4.4cqw,28px)}
+html.vitrine .vit-volta{position:absolute;right:12px;top:50%;transform:translateY(-50%);min-height:34px;padding:4px 10px 4px 12px;font-size:12.5px;gap:8px}
+html.vitrine .vit-volta:active{transform:translateY(calc(-50% + 1px))}
+html.vitrine .vit-volta kbd{font-family:var(--f-num);font-weight:700;font-size:10px;padding:1px 4px;border:1.5px solid currentColor;border-radius:4px}
+html.vitrine .reserva-t{padding:9px 16px;gap:10px}
+html.vitrine .reserva-ic{margin-top:1px}
+html.vitrine .reserva-t p{font-size:12.5px;line-height:1.45}
+html.vitrine .ft-corpo{display:none}
+html.vitrine .ft-row{grid-template-columns:minmax(0,1fr)}
+html.vitrine .ft-lado{padding-block:10px 12px}
+html.vitrine .ft-ficha{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 20px;margin-top:10px}
+html.vitrine .ft-ficha dd{margin-top:2px;font-size:11px}
+html.vitrine .lista-row{grid-template-columns:minmax(0,1fr)}
+html.vitrine .lista-lado{gap:8px;padding-block:10px}
+html.vitrine .lista-lado .instr,html.vitrine .lista-cab{display:none}
+html.vitrine .ds-leg{grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:4px 14px}
+html.vitrine .ds-leg dl{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+html.vitrine .ds-leg dl div{padding:3px 0}
+html.vitrine .ds-leg dt{font-size:12px}
+html.vitrine .ds-leg dd{font-size:12px}
+html.vitrine .lista-lado .ft-rod{font-size:11px}
+html.vitrine .lista-col{box-shadow:inset 1px 0 var(--fio)}
+@container mx (min-width:641px){
+  html.vitrine .ft-ficha{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+/* uma linha por ato: o desfecho fica na forma (a legenda diz o nome, que
+   continua na linha para leitor de tela) */
+html.vitrine .at-btn{padding-block:5px}
+html.vitrine .at-t{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.vitrine .at-ds>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+html.vitrine .lista-cab{padding-block:8px 6px}
+html.vitrine .at-in{padding-block:12px 14px}
+html.vitrine .at-esp{margin-bottom:8px}
+html.vitrine .at-dl{margin-bottom:10px}
+html.vitrine .at-em{margin-bottom:12px}
+html.vitrine .at-em p{-webkit-line-clamp:3}
+@container mx (min-width:641px){
+  html.vitrine .at-btn{grid-template-columns:40px minmax(0,1fr) 56px 24px 20px}
+}
+@container mx (max-width:640px){
+  html.vitrine .at-btn{grid-template-columns:24px minmax(0,1fr) auto 16px;gap:4px 10px}
+  html.vitrine .at-n{grid-row:auto;align-self:center;padding-top:0}
+  html.vitrine .at-t{grid-column:auto}
+  html.vitrine .at-ds{grid-column:auto;grid-row:auto;gap:6px}
+  html.vitrine .at-ch{grid-column:auto;grid-row:auto}
+  html.vitrine .ds-leg{grid-template-columns:minmax(0,1fr)}
+  html.vitrine .demo-tit>.mx-c:first-child{display:none}
+}
+
+/* rodada no quadro: o quadro inteiro; a folha é a única parte que rola */
+html.vitrine #op{height:100vh;overflow:hidden}
+html.vitrine .op-row{height:100%;grid-template-rows:auto minmax(0,1fr)}
+html.vitrine .op-lado{position:static}
+html.vitrine .folha-col{display:flex;flex-direction:column;min-height:0;padding-top:14px;padding-bottom:0}
+html.vitrine .imp-wrap{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
+html.vitrine .imp{flex:none}
+/* a folha rola por dentro; os furos e a picotagem viram fundo que rola junto */
+html.vitrine #folha{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ink2) transparent;padding-bottom:24px;
+  background-image:
+    radial-gradient(circle at 15px 10px,var(--desk) 0 4.2px,var(--ink) 4.4px 5.9px,transparent 6.2px),
+    radial-gradient(circle at 15px 10px,var(--desk) 0 4.2px,var(--ink) 4.4px 5.9px,transparent 6.2px),
+    repeating-linear-gradient(to bottom,var(--tint2) 0 2px,transparent 2px 4px),
+    repeating-linear-gradient(to bottom,var(--tint2) 0 2px,transparent 2px 4px),
+    linear-gradient(var(--paper),var(--paper)),
+    linear-gradient(var(--paper),var(--paper)),
+    linear-gradient(var(--gmaj) 1px,transparent 1px),linear-gradient(90deg,var(--gmaj) 1px,transparent 1px),linear-gradient(var(--gmin) 1px,transparent 1px),linear-gradient(90deg,var(--gmin) 1px,transparent 1px);
+  background-size:30px 20px,30px 20px,2px 100%,2px 100%,30px 100%,30px 100%,20px 20px,20px 20px,4px 4px,4px 4px;
+  background-position:0 0,100% 0,30px 0,calc(100% - 30px) 0,0 0,100% 0,30px 0,30px 0,30px 0,30px 0;
+  background-repeat:repeat-y,repeat-y,no-repeat,no-repeat,no-repeat,no-repeat,repeat,repeat,repeat,repeat;
+  background-attachment:local}
+html.vitrine #folha::before,html.vitrine #folha::after{display:none}
+@container mx (min-width:641px){
+  html.vitrine .op-row{grid-template-rows:minmax(0,1fr)}
+  html.vitrine .op-painel{position:static}
+}
+@container mx (max-width:640px){
+  html.vitrine .op-lado{box-shadow:inset 1px 0 var(--fio),inset 0 -2px var(--ink)}
+  html.vitrine .op-painel{flex-wrap:wrap;row-gap:6px}
+  html.vitrine .op-ato{display:block;flex:1 0 100%;font-size:17px}
+}
+
 </style>
 </head>
 <body>
@@ -1343,6 +1474,26 @@ body{background-position:0 0;background-attachment:fixed}
 
 
 <main id="topo">
+<!-- Vitrine (cerne.html?vitrine): a folha de rosto que o ARCO mostra no painel CERNE,
+     presa à impressora da demonstração. Fora da vitrine, não aparece. O Explorar
+     só existe com JS (assets/cerne/cerne-vitrine.js), no pé da folha. -->
+<section class="vit-rosto mx" aria-labelledby="vitT">
+  <div class="imp-wrap vit-imp">
+    <div class="imp" aria-hidden="true"><i class="imp-tampa"></i><i class="imp-corpo"></i><i class="imp-faixa"></i><i class="imp-cabeca"></i><i class="imp-leds"></i><i class="imp-led"></i><i class="imp-lado"></i><i class="imp-fenda"></i></div>
+    <div class="folha fim vit-folha">
+      <div class="vit-cab"><svg class="vit-sim" viewBox="0 0 1080 1080" aria-hidden="true"><use href="#rainha"/></svg><h1 class="vit-marca" id="vitT" aria-label="CERNE"><svg class="wm" viewBox="0 0 9346 1428" aria-hidden="true"><use href="#wm-cerne"/></svg></h1></div>
+      <p class="vit-def">A device for the critical governance of legal reasoning</p>
+      <dl class="vit-nums" aria-label="CERNE in numbers">
+        <div><dt>Rounds</dt><dd><b>17</b><span>recorded, one per ruling</span></dd></div>
+        <div><dt>Mining</dt><dd><b>218</b><span>doubts formed</span></dd></div>
+        <div><dt>Output</dt><dd><b>67</b><span>questions delivered</span></dd></div>
+        <div><dt>Time</dt><dd><b>11<span class="vg">.</span>1<small>min</small></b><span>median per ruling</span></dd></div>
+      </dl>
+      <p class="vit-fonte">CERNE 5.0.0 ▪ 12–19 Oct 2026</p>
+      <div class="vit-pe" id="vit-pe"></div>
+    </div>
+  </div>
+</section>
 <!-- 1.2 e 1.3 abertura (hero anterior, com o símbolo junto ao nome) -->
 <section class="hd mx" id="hd" aria-labelledby="heroT">
   <div class="hd-dobra">
@@ -5288,6 +5439,7 @@ reset(); render(); setButtons();
   buttons.forEach(function(b){b.addEventListener('click',function(){select(Number(b.dataset.serie));});});
 })();
 </script>
+<script src="../assets/cerne/cerne-vitrine.js?v=20261122-vitrine"></script>
 
 </body>
 </html>
