@@ -105,10 +105,12 @@
    qualquer tela. Acima, o espaço livre (fileira 1, flexível); depois, o nome
    (2 a 7); as três obras como quadrados de uma célula cada (2, 3 e 4), com
    as frentes ao lado (5 a 7); sob cada obra, a sua métrica, com o resumo ao
-   lado; na base, a tese (2 a 5) e os contatos (6 e 7). */
+   lado; na base, a tese (2 a 4) e os contatos (5 a 7). A célula cresce com a
+   largura: em tela larga e baixa, o quadrado cede altura (no máximo 30svh)
+   para que o hero caiba, e o nome guarda sempre um respiro sob o cordão. */
 .hm-autoria{
   min-height:calc(100svh - var(--rail-h, 54px));
-  grid-template-rows:minmax(0, 1fr) auto auto auto auto;
+  grid-template-rows:minmax(calc(var(--u) * 4), 1fr) auto auto auto auto;
 }
 .hm-autoria > .hm-name{ grid-row:2; padding-bottom:calc(var(--u) * 2.25); }
 
@@ -118,7 +120,7 @@
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
 }
 .hm-porta{
-  aspect-ratio:1; min-width:0; box-sizing:border-box;
+  height:min(var(--cell), 30svh); min-width:0; box-sizing:border-box;
   display:flex; flex-direction:column; justify-content:space-between;
   padding:var(--g);
   font-family:var(--f-display); font-weight:800; text-decoration:none;
@@ -189,9 +191,9 @@
   text-align:justify; text-justify:inter-word; -webkit-hyphens:auto; hyphens:auto;
 }
 .hm-contacts{
-  grid-column:6 / 8; grid-row:5; align-self:end;
+  grid-column:5 / 8; grid-row:5; align-self:end;
   list-style:none; margin:0;
-  display:grid; grid-template-columns:1fr; gap:calc(var(--u) * 1.25) var(--g);
+  display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--u) * 1.25) var(--g);
   padding:calc(var(--u) * 4) var(--g) calc(var(--u) * 3);
 }
 .hm-contacts li{ min-width:0; }
@@ -218,7 +220,7 @@
 .hm-v a:focus-visible{ text-decoration-color:var(--ink); }
 
 .hm-tese{
-  grid-column:2 / 6; grid-row:5; align-self:end;
+  grid-column:2 / 5; grid-row:5; align-self:end;
   padding:var(--g) var(--g) calc(var(--u) * 3);
   font-family:var(--f-body); font-weight:400; font-style:italic;
   font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
@@ -795,13 +797,13 @@ html.hm-amplo{ overflow:hidden; }
   .hm-portas{ order:3; margin-top:calc(var(--u) * 3); padding:0 var(--g); }
   .hm-metricas{ order:4; padding:0 var(--g); }
   .hm-tese{ order:6; }
-  .hm-porta{ padding:calc(var(--u) * 1.25); }
+  .hm-porta{ height:auto; aspect-ratio:1; padding:calc(var(--u) * 1.25); }
   .hm-porta__n{ font-size:4.4vw; }
   .hm-porta__t{ font-size:6.4vw; }
   .hm-metrica{ padding:calc(var(--u) * 1.5) calc(var(--u) * 1.25) 0; }
   .hm-metrica__v{ font-size:6vw; }
   .hm-metrica__o{ font-size:.74rem; }
-  .hm-contacts{ order:5; grid-template-columns:1fr 1fr; padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
+  .hm-contacts{ order:5; padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
   .hm-tese{ font-size:5.4vw; padding-top:var(--u); padding-bottom:calc(var(--u) * 4); }
 
   .hm-nv{ min-height:calc(var(--row) * 6); margin:0; }
