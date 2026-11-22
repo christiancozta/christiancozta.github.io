@@ -260,65 +260,41 @@
     });
   }
 
-  /* ---------- ECHO: o quadro do playbook ----------
-     Folha de rosto, números e Explorar são do próprio playbook, na vitrine
-     (play.html?vitrine). Aqui só se mede o quadro. Fechado, ele tem a altura
-     exata da folha, para ficar perto da coluna de texto; aberto na partitura (aviso ECHO_VITRINE da página), a altura
-     útil da tela em fileiras inteiras, para que leitor, parte e montador
-     fiquem sempre à vista, e o quadro sobe ao alto da tela. No celular, o
-     Explorar pede página inteira (data-explorar="pagina"), para não haver
+  /* ---------- ECHO e CERNE: o quadro da vitrine ----------
+     Folha de rosto, números e Explorar são da própria página, na vitrine
+     (play.html?vitrine, cerne.html?vitrine). Aqui só se mede o quadro, pelo
+     que a página expõe em window.vitrine: folha(), a altura da folha de
+     rosto; conteudo(), a altura do que está aberto (0: ocupa a tela).
+     Fechado, o quadro tem a altura exata da folha, para ficar perto da
+     coluna de texto. Aberto (aviso ECHO_VITRINE ou CERNE_VITRINE, com estado
+     diferente de "folha"), a altura útil da tela em fileiras inteiras: se o
+     conteúdo não cabe, o quadro vira uma janela maior reduzida em escala,
+     sem rolagem dentro dele; e, ao abrir, sobe ao alto da tela. No celular,
+     o Explorar pede página inteira (data-explorar="pagina"), para não haver
      rolagem dentro da rolagem. Sem JS, valem as alturas do CSS. */
-  const score = home.querySelector(".hm-score");
-  const quadro = score?.querySelector(".hm-score__frame");
-  let scoreFit = () => {};
-  if (score && quadro){
+  const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
+  const altura = () => {
+    const r = rowPx(), util = innerHeight - railH();
+    return Math.max(r * 4, Math.floor(util / r) * r);
+  };
+  const quadros = [...home.querySelectorAll(".hm-score")].map(score => {
+    const quadro = score.querySelector(".hm-score__frame");
+    if (!quadro) return null;
     const panel = score.closest(".hm-panel");
-    const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
-    /* teto: a partitura empilhada inteira (~1155 px), para que uma tela muito
-       alta não sobre papel em branco */
-    const altura = () => {
-      const r = rowPx(), util = innerHeight - railH();
-      const teto = Math.ceil(1155 / r) * r;
-      return Math.max(r * 4, Math.min(Math.floor(util / r) * r, teto));
-    };
-    /* celular: a soma do que a folha mostra (a margem automática dos números
-       não conta, porque é ela que estica a folha até o fim do quadro) */
-    const folha = () => {
-      try{
-        const d = quadro.contentDocument, w = d && d.defaultView, pag = d && d.querySelector(".pag");
-        if (!pag) return 0;
-        const px = v => parseFloat(v) || 0;
-        let h = 0;
-        for (const el of pag.children){
-          const cs = w.getComputedStyle(el);
-          if (cs.display === "none") continue;
-          h += el.offsetHeight + px(cs.marginBottom) + (el.classList.contains("vit-nums") ? 0 : px(cs.marginTop));
-        }
-        const ps = w.getComputedStyle(pag), bs = w.getComputedStyle(d.body);
-        return Math.ceil(h + px(ps.paddingTop) + px(ps.paddingBottom) + px(bs.paddingTop) + px(bs.paddingBottom));
-      }catch(_){ return 0; }
-    };
+    const vit = () => { try{ return quadro.contentWindow.vitrine || null; }catch(_){ return null; } };
+    const mede = k => { try{ return Math.ceil(vit()?.[k]?.() || 0); }catch(_){ return 0; } };
     let aberto = false;
-    /* partitura aberta sem rolagem: o quadro mede a partitura inteira e, se ela
-       não cabe na altura útil, vira uma janela maior reduzida em escala (o
-       conteúdo do play não muda de medida; leitor e gavetas cabem com ele) */
     const desescala = () => { quadro.style.width = quadro.style.height = quadro.style.transform = quadro.style.transformOrigin = ""; };
-    const partitura = () => {
-      try{
-        const a4 = quadro.contentDocument.querySelector(".a4");
-        return a4 ? Math.ceil(a4.getBoundingClientRect().height) + 2 : 0;
-      }catch(_){ return 0; }
-    };
     const escala = () => {
       const util = altura(), largura = score.clientWidth;
       desescala();
-      let n = partitura();
+      let n = mede("conteudo");
       if (!n) return util;
       let s = Math.min(1, util / n);
       for (let i = 0; i < 2 && s < 1; i++){
-        /* na janela mais larga as descrições quebram menos: mede de novo */
+        /* na janela mais larga o texto quebra menos: mede de novo */
         quadro.style.width = (largura / s) + "px";
-        n = partitura() || n;
+        n = mede("conteudo") || n;
         s = Math.min(1, util / n);
       }
       quadro.style.width = (largura / s) + "px";
@@ -327,30 +303,38 @@
       quadro.style.transform = s < 1 ? `scale(${s})` : "";
       return Math.ceil(n * s);
     };
-    scoreFit = () => {
+    const fit = () => {
       /* a folha é medida na largura do campo, nunca na janela escalada */
       if (stacked.matches || !aberto) desescala();
-      const h = folha();
+      const h = mede("folha");
       if (stacked.matches){
         score.style.removeProperty("--score-h");
         quadro.dataset.explorar = "pagina";
         if (h) score.style.setProperty("--vit-h", h + "px");
       } else {
         delete quadro.dataset.explorar;
-        if (aberto) score.style.setProperty("--score-h", escala() + "px");
-        else score.style.setProperty("--score-h", (h || altura()) + "px");
+        score.style.setProperty("--score-h", (aberto ? escala() : (h || altura())) + "px");
       }
       snap(panel);
     };
-    quadro.addEventListener("load", () => { aberto = false; scoreFit(); });
+    quadro.addEventListener("load", () => { aberto = false; fit(); });
+    return { score, quadro, fit, abre: v => { const antes = aberto; aberto = v; fit(); return v && !antes; } };
+  }).filter(Boolean);
+  let scoreFit = () => quadros.forEach(q => q.fit());
+  if (quadros.length){
     addEventListener("message", e => {
-      if (e.origin !== location.origin || e.source !== quadro.contentWindow) return;
-      if (!e.data || e.data.type !== "ECHO_VITRINE") return;
-      aberto = e.data.estado === "partitura";
-      scoreFit();
-      if (aberto && !stacked.matches){
-        const y = score.getBoundingClientRect().top + scrollY - railH();
+      if (e.origin !== location.origin || !e.data || !/^[A-Z]+_VITRINE$/.test(e.data.type || "")) return;
+      const q = quadros.find(x => x.quadro.contentWindow === e.source);
+      if (!q) return;
+      const topo = q.score.getBoundingClientRect().top;
+      if (q.abre(e.data.estado !== "folha") && !stacked.matches){
+        const y = q.score.getBoundingClientRect().top + scrollY - railH();
         scrollTo({top:y, behavior: reduce ? "auto" : "smooth"});
+      } else {
+        /* o quadro fica onde estava: a ancoragem de rolagem do navegador, ao
+           refazer as fileiras do painel, empurraria a página */
+        const d = q.score.getBoundingClientRect().top - topo;
+        if (Math.abs(d) >= 1) scrollBy({top:d, behavior:"instant"});
       }
     });
     /* a altura da janela decide o quadro: muda sem mudar a largura */

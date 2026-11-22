@@ -177,43 +177,44 @@
 
 .hm-sig:focus-visible{ outline:2px solid var(--ink); outline-offset:-2px; }
 
-/* ECHO: o quadro do playbook ---------------------------------------------
-   Folha de rosto, números e Explorar são do próprio playbook, na vitrine
-   (play.html?vitrine); aqui, só o quadro. A altura é a útil da tela em
-   fileiras inteiras (--score-h, arco-home.js); sem JS, a da tela menos a
-   barra. No celular, a da folha (--vit-h). */
+/* ECHO e CERNE: o quadro da vitrine ---------------------------------------
+   Folha de rosto, números e Explorar são da própria página, na vitrine
+   (play.html?vitrine, cerne.html?vitrine); aqui, só o quadro. A altura vem
+   de arco-home.js (--score-h): a da folha, fechado; a útil da tela em
+   fileiras inteiras, aberto. Sem JS, a da tela menos a barra. No celular,
+   a da folha (--vit-h). */
 .hm-score{
   grid-column:1 / -1; position:relative;
   height:var(--score-h, calc(100dvh - var(--rail-h, 54px)));
 }
 .hm-score__frame{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; background:transparent; color-scheme:normal; }
 
-/* ECHO em duas colunas (desktop): o playbook ocupa o campo da imagem (2 a 4),
-   na altura útil da tela em fileiras inteiras (--score-h, arco-home.js). A
-   narrativa fica numa coluna de dois módulos centrada na coluna 6: suas
-   margens são os meios das colunas vizinhas (5 e 7). Sob o texto, o papel
-   (#FCFCFC) cobre a retícula visível só pela extensão do texto. No celular,
-   a ordem do documento: narrativa, depois o playbook. */
+/* ECHO e CERNE em duas colunas (desktop): o quadro ocupa o campo da imagem
+   (2 a 4), na altura de --score-h (arco-home.js). A narrativa fica numa
+   coluna de dois módulos centrada na coluna 6: suas margens são os meios das
+   colunas vizinhas (5 e 7). Sob o texto, o papel (#FCFCFC) cobre a retícula
+   visível só pela extensão do texto. No celular, a ordem do documento:
+   narrativa, depois o quadro. */
 .hm-lado{ min-width:0; }
 @media (min-width:901px){
-  /* quatro fileiras: rótulo, título, campo e respiro. Playbook e narrativa
+  /* quatro fileiras: rótulo, título, campo e respiro. Quadro e narrativa
      dividem uma fileira só, que mede o mais alto dos dois: repartidos em
      várias, cada fileira arredondaria para cima e sobraria papel no pé */
-  .hm-proj--echo{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
-  .hm-proj--echo .hm-lado{
+  .hm-proj--vit{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
+  .hm-proj--vit .hm-lado{
     grid-column:5 / 8; grid-row:3; align-self:start;
     margin:0 calc(var(--cell) / 2);
     position:sticky; top:var(--rail-h, 0px);
   }
-  .hm-proj--echo .hm-narr{
+  .hm-proj--vit .hm-narr{
     columns:1; padding:var(--g) 0;
     background:var(--paper);
   }
-  .hm-proj--echo .hm-score{
+  .hm-proj--vit .hm-score{
     grid-column:2 / 5; grid-row:3; align-self:start;
     margin:0 0 0 1px;
   }
-  .hm-proj--echo::after{ content:""; grid-column:1 / -1; grid-row:4; height:var(--row); }
+  .hm-proj--vit::after{ content:""; grid-column:1 / -1; grid-row:4; height:var(--row); }
 
 }
 /* ATRIO: campos invertidos; mesmas medidas, mesmos alinhamentos externos */
@@ -243,32 +244,6 @@
 .hm-piece:hover,
 .hm-piece:focus-visible{ background:rgba(217,79,45,.08); }
 .hm-piece:focus-visible{ outline:2px solid var(--atrio); outline-offset:-2px; }
-
-/* CERNE: espaços reservados — a moldura de imagem e as linhas de texto */
-.hm-nv--reserva{ border:1px solid var(--rule); margin:0; }
-.hm-nv--reserva line{ stroke:rgba(44,44,44,.16); stroke-width:1; }
-.hm-reserva{
-  font-family:var(--f-micro); font-size:.58rem; font-weight:600;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--soft);
-}
-.hm-nv--reserva .hm-reserva{
-  position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
-  max-width:80%; padding:.35rem .6rem; background:var(--paper); text-align:center;
-}
-.hm-narr--reserva{ columns:auto; }
-.hm-narr__lede{
-  margin:0 0 calc(var(--u) * 3)!important; -webkit-hyphens:manual; hyphens:manual;
-  font-family:var(--f-display); font-weight:700;
-  font-size:clamp(1rem, 1.5vw, 1.45rem); line-height:1.2; letter-spacing:-.018em;
-  text-align:left;
-}
-/* linhas pautadas no ritmo do texto: o lugar da narrativa, sem conteúdo */
-.hm-narr--reserva .hm-reserva{
-  margin:0;
-  padding-top:calc(1.52em * 9);
-  background-image:repeating-linear-gradient(to bottom, transparent 0 calc(1.52rem - 1px), rgba(44,44,44,.14) calc(1.52rem - 1px) 1.52rem);
-  background-size:100% calc(1.52rem * 8); background-repeat:no-repeat;
-}
 
 /* ==========================================================================
    05 — RASTRO: o índice aberto, por local de atuação, com as leituras da

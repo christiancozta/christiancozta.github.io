@@ -9,6 +9,9 @@
    Folha de rosto, ou Esc com nada aberto sobre a partitura, volta. Quando o
    ARCO pede página inteira (no celular, data-explorar="pagina" no quadro),
    Explorar abre o playbook completo na janela de cima.
+   O ARCO mede o quadro por window.vitrine: folha() é a altura da folha de
+   rosto; conteudo(), a da partitura aberta (o ARCO a reduz em escala até
+   caber na tela) ou 0, com a folha.
    A visita só é contada ao explorar: a folha à vista na home não é leitura.
    ========================================================================== */
 (() => {
@@ -39,6 +42,28 @@
   volta.setAttribute('aria-label', T.voA);
   volta.innerHTML = `<span class="t" aria-hidden="true">${T.vo}</span><kbd aria-hidden="true">Esc</kbd><span class="b">${ic('m7 7 10 10M17 7 7 17')}</span>`;
   document.body.appendChild(volta);
+
+  /* a folha: a soma do que ela mostra (a margem automática dos números não
+     conta, porque é ela que estica a folha até o fim do quadro) */
+  window.vitrine = {
+    folha() {
+      const pag = document.querySelector('.pag');
+      if (!pag) return 0;
+      const px = (v) => parseFloat(v) || 0;
+      let h = 0;
+      for (const el of pag.children) {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none') continue;
+        h += el.offsetHeight + px(cs.marginBottom) + (el.classList.contains('vit-nums') ? 0 : px(cs.marginTop));
+      }
+      const ps = getComputedStyle(pag), bs = getComputedStyle(document.body);
+      return Math.ceil(h + px(ps.paddingTop) + px(ps.paddingBottom) + px(bs.paddingTop) + px(bs.paddingBottom));
+    },
+    conteudo() {
+      const a4 = aberta() && document.querySelector('.a4');
+      return a4 ? Math.ceil(a4.getBoundingClientRect().height) + 2 : 0;
+    },
+  };
 
   let contou = false;
   const aberta = () => H.classList.contains('so-partitura');
