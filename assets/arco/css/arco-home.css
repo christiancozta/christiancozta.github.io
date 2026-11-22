@@ -913,9 +913,8 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-cta--cv a:hover{ color:var(--paper); text-decoration:underline; text-underline-offset:.3em; }
 
 /* ---------- hero ---------- */
-.hm-name{ font-size:clamp(2.4rem, 4.4vw, 4.6rem); line-height:.98; padding-bottom:.04em; }
 .hm-oferta{ display:flex; flex-direction:column; gap:calc(var(--u) * 2.5); padding:0 var(--g) calc(var(--u) * 4); }
-.hm-oferta__t{ margin:0; max-width:36ch; font-size:clamp(1.05rem, 1.35vw, 1.3rem); line-height:1.45; color:var(--ink); }
+.hm-oferta__t{ margin:0; max-width:40ch; font-weight:600; font-size:clamp(1.05rem, 1.35vw, 1.3rem); line-height:1.45; color:var(--ink); }
 .hm-oferta__acoes{ display:flex; flex-wrap:wrap; gap:.75rem; }
 
 .hm-busca{
@@ -990,17 +989,30 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-busca__vazio{ font-size:.92rem; line-height:1.55; }
 .hm-busca__vazio a{ color:var(--ink); font-weight:600; }
 
+/* o nome prevalece: uma só linha, à esquerda, na largura das seis colunas
+   (data-fit="nome" o ajusta ao campo); abaixo, a coluna dupla */
+.hm-autoria > .hm-name{
+  grid-column:2 / 8; grid-row:1; align-self:end;
+  padding:calc(var(--u) * 6) var(--g) 0;
+  font-size:6rem; line-height:.95; letter-spacing:-.045em;
+  min-width:0; max-width:100%; box-sizing:border-box;
+}
+.hm-autoria{ min-width:0; }
+.hm-summary{ margin:0; max-width:46ch; font-size:.98rem; line-height:1.6; color:rgba(44,44,44,.84); }
+
 @media (min-width:901px){
-  .hm-autoria .hm-assin{
-    grid-column:2 / 5; grid-row:1;
-    flex-direction:column; align-items:flex-start; gap:.7rem;
-    padding-top:calc(var(--u) * 6);
+  /* distinção à esquerda; a primeira palavra numa coluna da largura da
+     maior delas (produzir), para o ≠ seguir parado no eixo */
+  .hm-autoria .hm-ds{ grid-column:2 / 5; grid-row:2; align-items:flex-start; padding:calc(var(--u) * 5) var(--g) calc(var(--u) * 3); }
+  .hm-autoria .hm-d, .hm-autoria .hm-ds.is-alt .hm-ds__eixo{ align-items:flex-start; }
+  .hm-autoria .hm-d__par{
+    width:auto; font-size:2.7vw;
+    grid-template-columns:3.6em auto max-content; justify-content:start;
   }
-  .hm-autoria .hm-ds{ grid-column:2 / 5; grid-row:2; padding:calc(var(--u) * 5) var(--g); }
-  .hm-autoria .hm-d__par{ font-size:2.7vw; }
-  .hm-autoria .hm-d__f{ white-space:normal; max-width:34ch; text-wrap:balance; }
+  .hm-autoria .hm-d__f{ text-align:left; white-space:normal; max-width:36ch; text-wrap:balance; }
+  .hm-autoria .hm-ds__sel{ justify-content:flex-start; margin-left:-8px; }
   .hm-oferta{ grid-column:2 / 5; grid-row:3; align-self:end; }
-  .hm-busca{ grid-column:5 / 8; grid-row:1 / 4; align-self:center; margin:calc(var(--u) * 5) var(--g); }
+  .hm-busca{ grid-column:5 / 8; grid-row:2 / 4; align-self:center; margin:calc(var(--u) * 5) var(--g); }
 }
 
 /* ---------- rótulo de território visível sobre o título das obras ---------- */
@@ -1092,7 +1104,7 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-contato .hm-v{ overflow-wrap:normal; }
 
 @media (max-width:900px){
-  .hm-name{ font-size:clamp(2.3rem, 11vw, 3.4rem); }
+  .hm-autoria > .hm-name{ padding:calc(var(--u) * 4) var(--g) 0; }
   .hm-oferta{ padding:calc(var(--u) * 2) var(--g) calc(var(--u) * 3); }
   .hm-busca{ margin:0 var(--g) calc(var(--u) * 4); }
   .hm-busca__k, .hm-busca__vivo, .hm-busca__r{ padding-left:var(--g); padding-right:var(--g); }
