@@ -656,7 +656,7 @@
     const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]));
     /* competência → a prova (copy a fechar com o autor) */
     const PROVA = {
-      "Gestão de indicadores e desempenho": {chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe", go:"rastro"},
+      "Gestão de indicadores e desempenho": {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe", go:"rastro"},
       "Gestão do conhecimento": {chip:"echo", tag:"ECHO", n:"2.758", l:"ementas catalogadas", go:"legal-operations"},
       "Mapeamento e desenho de processos": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores", go:"legal-operations"},
       "Governança de conteúdo e linguagem controlada": {chip:"echo", tag:"ECHO", n:"631", l:"temas de precedentes", go:"legal-operations"},
@@ -664,7 +664,7 @@
       "Orquestração decisória": {chip:"atrio", tag:"ATRIO", n:"31", l:"rotas na API do ATRIO", go:"legal-engineering"},
       "Avaliação adversarial": {chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais", go:"ai-governance"},
       "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cifra na API do ATRIO", go:"legal-engineering"},
-      "Traceability": {chip:"data", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo", go:"rastro"},
+      "Traceability": {chip:"rastro", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo", go:"rastro"},
       "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados", go:"legal-engineering"}
     };
     /* nomes de área: o recrutador digita a frente, não a prática. Não são
@@ -674,7 +674,7 @@
        comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento"],
        tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica",
        al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "controladoria", "controladoria juridica", "gestao juridica"],
-       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe"}],
+       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}],
        go:"legal-operations"},
       {termo:"Legal AI Evaluation & Governance", trad:"Avaliação e governança de IA jurídica",
        comps:["Avaliação adversarial", "Orquestração decisória", "Traceability"],
@@ -686,7 +686,7 @@
        comps:["Gestão de indicadores e desempenho", "Traceability", "Engenharia de dados e corpus"],
        tb:"Jurimetria, Legal Analytics",
        al:["legal data analytics", "legal analytics", "data analytics", "jurimetria", "analise de dados juridicos"],
-       provas:[{chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe"}, {chip:"data", tag:"DATA", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
+       provas:[{chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
        go:"rastro"}
     ];
     const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
