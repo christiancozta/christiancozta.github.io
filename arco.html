@@ -102,12 +102,12 @@
 <link rel="preload" href="assets/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/martian-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261120-echo">
-<link rel="stylesheet" href="assets/arco/css/arco.css?v=20261123-amplia">
+<link rel="stylesheet" href="assets/arco/css/arco.css?v=20261124-cordao">
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261121-vitrine" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261124-portas2">
-<script src="assets/arco/js/arco-home.js?v=20261123-base" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261124-dist">
+<script src="assets/arco/js/arco-home.js?v=20261124-dist" defer></script>
 </head>
 <body>
 
@@ -175,38 +175,49 @@
     <section class="view" data-view="home" data-active="true" aria-label="Percurso">
       <div class="hm" id="hm">
 
-        <!-- 01 — AUTORIA -->
+        <!-- 01 — AUTORIA: uma distinção por vez, em torno de um único sinal.
+             O ≠ toma o accent do projeto a que a distinção se liga (ECHO âmbar;
+             ATRIO, RATIO, TROIA e CERNE vermelhão; rastro e lastro em tinta).
+             Sem JS, a série inteira aparece em lista; com JS (arco-home.js), uma
+             por vez, em alternância lenta, com seletor: as distinções se sobrepõem
+             numa só célula e um único sinal (hm-ds__eixo) fica parado no eixo,
+             mudando só de cor. As distinções do Rastro ficam no Rastro. -->
         <section class="hm-panel hm-autoria" id="autoria" aria-labelledby="bio-name">
           <p class="hm-kick">Autoria</p>
-          <h1 class="hm-name" id="bio-name" data-fit><span class="hm-fit">Christian da Costa</span></h1>
-          <!-- abaixo do nome, sobre a retícula: as três obras como quadrados de
-               uma célula (2 a 4), cada uma com a sua métrica logo abaixo; ao
-               lado, as frentes sobre o resumo; na base, a tese e os contatos.
-               As métricas repetem, palavra por palavra, linhas do Rastro. -->
-          <nav class="hm-portas" aria-label="Obras">
-            <a class="hm-porta hm-porta--echo" href="#legal-operations" data-hm-go><span class="hm-porta__n">02</span><span class="hm-porta__t">ECHO</span></a>
-            <a class="hm-porta hm-porta--atrio" href="#legal-engineering" data-hm-go><span class="hm-porta__n">03</span><span class="hm-porta__t">ATRIO</span></a>
-            <a class="hm-porta hm-porta--cerne" href="#ai-governance" data-hm-go><span class="hm-porta__n">04</span><span class="hm-porta__t">CERNE</span></a>
+          <div class="hm-assin">
+            <h1 class="hm-name" id="bio-name">Christian da Costa</h1>
+            <p class="hm-assin__q">Advogado · Mestre em Direito</p>
+          </div>
+          <div class="hm-ds" data-proj="atrio">
+            <ol class="hm-ds__l" aria-label="Distinções">
+              <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">governar</span></p><p class="hm-d__f">Antes de delegar o jurídico, é preciso governar seu raciocínio.</p></li>
+              <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">acervo</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">procedimento</span></p><p class="hm-d__f">Havia acervo, havia prazo, havia colegiado. Não havia procedimento.</p></li>
+              <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">redigir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">formular</span></p><p class="hm-d__f">A pendência nasce dentro do texto.</p></li>
+              <li class="hm-d" data-proj="troia"><p class="hm-d__par"><span class="hm-d__a">silêncio</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">omissão</span></p><p class="hm-d__f">Uma lente tem o direito de não achar nada.</p></li>
+              <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">produzir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">verificar</span></p><p class="hm-d__f">O problema já não estava na capacidade de produzir, mas na de verificar.</p></li>
+              <li class="hm-d" data-proj="neutro"><p class="hm-d__par"><span class="hm-d__a">rastro</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">lastro</span></p><p class="hm-d__f">Rastro para saber por onde; lastro para saber por quê.</p></li>
+              <li class="hm-ds__eixo" aria-hidden="true"><p class="hm-d__par"><span></span><span class="hm-d__x">≠</span><span></span></p></li>
+            </ol>
+            <div class="hm-ds__sel" role="group" aria-label="Escolher distinção" hidden>
+              <button type="button" aria-pressed="false" aria-label="delegar ≠ governar"></button>
+              <button type="button" aria-pressed="false" aria-label="acervo ≠ procedimento"></button>
+              <button type="button" aria-pressed="false" aria-label="redigir ≠ formular"></button>
+              <button type="button" aria-pressed="false" aria-label="silêncio ≠ omissão"></button>
+              <button type="button" aria-pressed="false" aria-label="produzir ≠ verificar"></button>
+              <button type="button" aria-pressed="false" aria-label="rastro ≠ lastro"></button>
+            </div>
+          </div>
+          <nav class="hm-obras" aria-label="Obras">
+            <a class="hm-obra hm-obra--echo" href="#legal-operations" data-hm-go>ECHO</a>
+            <a class="hm-obra hm-obra--atrio" href="#legal-engineering" data-hm-go>ATRIO</a>
+            <a class="hm-obra hm-obra--cerne" href="#ai-governance" data-hm-go>CERNE</a>
           </nav>
-          <ul class="hm-metricas" aria-label="Métricas">
-            <li class="hm-metrica"><span class="hm-metrica__v">1.192</span><span class="hm-metrica__o">Processos triados</span><span class="hm-metrica__s"><span>4ª TR</span> <a href="assets/data/lastro/acervo_publico.xlsx">acervo_<wbr>publico.xlsx</a></span></li>
-            <li class="hm-metrica"><span class="hm-metrica__v">+23,3%</span><span class="hm-metrica__o">Variação da vazão, jan a abr/2026</span><span class="hm-metrica__s"><span>2ª TR</span> <span>402 ÷ 326 − 1</span></span></li>
-            <li class="hm-metrica"><span class="hm-metrica__v">15 de 17</span><span class="hm-metrica__o">Atos concluídos na primeira tentativa</span><span class="hm-metrica__s"><span>TJPR/STJ</span> <a href="assets/data/lastro/cerne_rodadas_derivada.csv">cerne_<wbr>rodadas_<wbr>derivada.csv</a></span></li>
-          </ul>
-          <ul class="hm-lines" aria-label="Frentes de atuação">
-            <li>Legal Engineering</li>
-            <li>Legal Operations</li>
-            <li>AI Governance &amp; Evaluation</li>
-            <li>Controladoria Jurídica</li>
-          </ul>
-          <p class="hm-summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
           <ul class="hm-contacts" aria-label="Contatos">
             <li><span class="hm-k">CURRÍCULO</span><span class="hm-v"><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener" aria-label="Currículo em português">PT</a> <span aria-hidden="true">|</span> <a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="Currículo em inglês">EN</a></span></li>
             <li><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener"><span class="hm-k">LinkedIn</span><span class="hm-v">in/christiandcosta</span></a></li>
             <li><a href="mailto:christiandscosta@gmail.com"><span class="hm-k">E-mail</span><span class="hm-v">christiandscosta@gmail.com</span></a></li>
             <li><a href="https://wa.me/5541991521304" target="_blank" rel="noopener"><span class="hm-k">WhatsApp</span><span class="hm-v">+55 41 99152-1304</span></a></li>
           </ul>
-          <p class="hm-tese" data-fit><span class="hm-fit"><span aria-hidden="true">— </span>Antes de delegar o jurídico,</span><br><span class="hm-fit">é preciso governar seu raciocínio.</span></p>
         </section>
 
         <!-- 02 — LEGAL OPERATIONS / ECHO: o playbook (vitrine) no campo da esquerda; a

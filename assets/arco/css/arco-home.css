@@ -95,106 +95,121 @@
 /* ==========================================================================
    01 — AUTORIA
    ========================================================================== */
-.hm-name{
-  grid-column:2 / 8; grid-row:2 / 4; align-self:end;
-  padding:0 var(--g);
-  font-family:var(--f-display); font-weight:800;
-  font-size:8.4vw; line-height:.82; letter-spacing:-.05em; color:var(--ink);
-}
-/* O hero ocupa a altura útil da tela, e os blocos pousam na base, em
-   qualquer tela. Acima, o espaço livre (fileira 1, flexível); depois, o nome
-   (2 a 7); as três obras como quadrados de uma célula cada (2, 3 e 4), com
-   as frentes ao lado (5 a 7); sob cada obra, a sua métrica, com o resumo ao
-   lado; na base, a tese (2 a 4) e os contatos (5 a 7). A célula cresce com a
-   largura: em tela larga e baixa, o quadrado cede altura (no máximo 30svh)
-   para que o hero caiba, e o nome guarda sempre um respiro sob o cordão. */
+/* O hero ocupa a altura útil da tela: no alto, a assinatura; no meio, uma
+   distinção por vez, em torno de um único sinal; na base, as obras e os
+   contatos. O par ocupa três trilhas (1fr auto 1fr): o sinal fica sempre no
+   eixo da tela, as palavras encostam nele dos dois lados. */
 .hm-autoria{
   min-height:calc(100svh - var(--rail-h, 54px));
-  grid-template-rows:minmax(calc(var(--u) * 4), 1fr) auto auto auto auto;
+  grid-template-rows:auto minmax(0, 1fr) auto;
 }
-.hm-autoria > .hm-name{ grid-row:2; padding-bottom:calc(var(--u) * 2.25); }
-
-/* as obras: um quadrado da retícula cada, na cor do próprio projeto */
-.hm-portas{
-  grid-column:2 / 5; grid-row:3;
-  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+.hm-assin{
+  grid-column:2 / 8; grid-row:1;
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:.4rem 1.25rem;
+  padding:calc(var(--u) * 5) var(--g) 0;
 }
-.hm-porta{
-  height:min(var(--cell), 30svh); min-width:0; box-sizing:border-box;
-  display:flex; flex-direction:column; justify-content:space-between;
-  padding:var(--g);
-  font-family:var(--f-display); font-weight:800; text-decoration:none;
-  transition:filter var(--fast) var(--ease);
-}
-.hm-porta--echo{ background:var(--echo); color:#000; }
-.hm-porta--atrio{ background:var(--atrio); color:var(--paper); }
-.hm-porta--cerne{ background:var(--ink); color:var(--paper); }
-.hm-porta__n{
-  display:flex; justify-content:space-between;
-  font-size:clamp(1rem, 1.67vw, 2rem); line-height:1;
-}
-.hm-porta__n::after{
-  content:"→" / ""; transition:transform var(--fast) var(--ease);
-}
-.hm-porta__t{ font-size:clamp(1.4rem, 2.8vw, 3.4rem); line-height:.9; letter-spacing:-.04em; }
-.hm-porta:hover,
-.hm-porta:focus-visible{ filter:brightness(.92); }
-.hm-porta:hover .hm-porta__n::after,
-.hm-porta:focus-visible .hm-porta__n::after{ transform:translateX(.2em); }
-.hm-porta:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
-
-/* sob cada obra, a sua métrica: o número, o que mede, o local e a fonte */
-.hm-metricas{
-  grid-column:2 / 5; grid-row:4; align-self:start;
-  list-style:none; margin:0; padding:0;
-  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
-}
-.hm-metrica{
-  min-width:0;
-  display:flex; flex-direction:column; gap:calc(var(--u) * .75);
-  padding:calc(var(--u) * 2.5) var(--g) 0;
-  box-shadow:inset 0 1px 0 var(--ink);
-}
-.hm-metrica__v{
-  display:block;
+.hm-name{
+  margin:0;
   font-family:var(--f-display); font-weight:800;
-  font-size:2.6vw; line-height:.9; letter-spacing:-.045em; white-space:nowrap;
+  font-size:clamp(1.25rem, 1.95vw, 2.25rem); line-height:1; letter-spacing:-.035em; color:var(--ink);
 }
-.hm-metrica__o{ font-family:var(--f-body); font-size:.82rem; line-height:1.35; }
-.hm-metrica__s{
-  display:flex; flex-wrap:wrap; gap:0 .5em;
-  font-family:var(--f-micro); font-size:.6rem; line-height:1.5; color:var(--soft);
-  overflow-wrap:anywhere;
+.hm-assin__q{
+  margin:0;
+  font-family:var(--f-micro); font-size:.68rem; font-weight:600; line-height:1.3;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
 }
-.hm-metrica__s > :first-child::after{ content:"·" / ""; margin-left:.5em; }
-.hm-metrica__s a{
-  color:inherit; text-decoration:underline; text-decoration-thickness:1px;
-  text-underline-offset:.22em; text-decoration-color:rgba(44,44,44,.22);
-}
-.hm-metrica__s a:hover,
-.hm-metrica__s a:focus-visible{ color:var(--ink); text-decoration-color:var(--ink); }
 
-/* as frentes, ao lado das obras, pousadas na base dos quadrados */
-.hm-lines{
-  grid-column:5 / 8; grid-row:3; align-self:end;
-  list-style:none; margin:0;
-  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.3em var(--g);
-  padding:0 var(--g);
+.hm-ds{
+  grid-column:1 / -1; grid-row:2; align-self:center;
+  display:flex; flex-direction:column; align-items:center;
+  padding:calc(var(--u) * 4) var(--g);
+}
+.hm-ds__l{ list-style:none; margin:0; padding:0; display:grid; gap:calc(var(--u) * 5); width:100%; }
+.hm-d{ display:flex; flex-direction:column; align-items:center; gap:calc(var(--u) * 1.75); }
+.hm-d__par{
+  margin:0; width:100%;
+  display:grid; grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr); align-items:center;
+  column-gap:.32em;
   font-family:var(--f-display); font-weight:800;
-  font-size:clamp(1rem, 1.67vw, 2rem); line-height:1.05; letter-spacing:-.014em;
+  font-size:5.8vw; line-height:1; letter-spacing:-.045em; color:var(--ink);
 }
-.hm-summary{
-  grid-column:5 / 8; grid-row:4; align-self:start;
-  margin:0; padding:calc(var(--u) * 2.5) var(--g) 0;
-  box-shadow:inset 0 1px 0 var(--rule);
-  font-family:var(--f-body); font-size:.92rem; line-height:1.5;
-  text-align:justify; text-justify:inter-word; -webkit-hyphens:auto; hyphens:auto;
+.hm-d__a{ justify-self:end; white-space:nowrap; }
+.hm-d__b{ justify-self:start; white-space:nowrap; }
+.hm-d__x{
+  font-size:1.43em; line-height:.8; letter-spacing:0;
+  color:var(--ink); transition:color var(--slow) var(--ease);
 }
+/* o accent do sinal: o do projeto a que a distinção se liga; rastro e
+   lastro, neutros, só em contorno */
+.hm-d[data-proj="echo"] .hm-d__x,
+.hm-ds[data-proj="echo"] .hm-ds__eixo .hm-d__x{ color:var(--echo); }
+.hm-d[data-proj="atrio"] .hm-d__x, .hm-d[data-proj="ratio"] .hm-d__x,
+.hm-d[data-proj="troia"] .hm-d__x, .hm-d[data-proj="cerne"] .hm-d__x,
+.hm-ds[data-proj="atrio"] .hm-ds__eixo .hm-d__x, .hm-ds[data-proj="ratio"] .hm-ds__eixo .hm-d__x,
+.hm-ds[data-proj="troia"] .hm-ds__eixo .hm-d__x, .hm-ds[data-proj="cerne"] .hm-ds__eixo .hm-d__x{ color:var(--atrio); }
+.hm-d[data-proj="neutro"] .hm-d__x,
+.hm-ds[data-proj="neutro"] .hm-ds__eixo .hm-d__x{ color:transparent; -webkit-text-stroke:.03em #2C2C2C; }
+.hm-d__x{ -webkit-text-stroke:.03em transparent; transition:color var(--slow) var(--ease), -webkit-text-stroke-color var(--slow) var(--ease); }
+.hm-d__f{
+  margin:0; text-align:center; white-space:nowrap;
+  font-family:var(--f-micro); font-size:.7rem; font-weight:600; line-height:1.4;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+}
+/* com JS: as distinções se sobrepõem numa só célula, e só a da vez
+   aparece; o sinal é um só (o eixo), parado, e muda apenas de cor. O ≠ de
+   cada distinção guarda o lugar, invisível. Sem JS, a série desce em lista
+   e o eixo não aparece. */
+.hm-ds__eixo{ display:none; }
+.hm-ds.is-alt .hm-ds__l{ gap:0; }
+.hm-ds.is-alt .hm-ds__l > li{ grid-area:1 / 1; align-self:start; }
+.hm-ds.is-alt .hm-ds__eixo{ display:flex; flex-direction:column; align-items:center; pointer-events:none; }
+.hm-ds.is-alt .hm-d .hm-d__x{ visibility:hidden; }
+.hm-ds.is-alt .hm-d{
+  opacity:0; visibility:hidden;
+  transition:opacity var(--slow) var(--ease), visibility 0s linear var(--slow);
+}
+.hm-ds.is-alt .hm-d.is-on{
+  opacity:1; visibility:visible;
+  transition:opacity var(--slow) var(--ease), visibility 0s;
+}
+@media (prefers-reduced-motion: reduce){
+  .hm-ds.is-alt .hm-d, .hm-ds.is-alt .hm-d.is-on, .hm-d__x{ transition:none; }
+}
+.hm-ds__sel{ display:flex; justify-content:center; gap:0; margin-top:calc(var(--u) * 1.25); }
+.hm-ds__sel[hidden]{ display:none; }
+.hm-ds__sel button{
+  width:24px; height:24px; padding:0; border:0; background:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.hm-ds__sel button::before{
+  content:""; width:6px; height:6px; box-sizing:border-box;
+  box-shadow:inset 0 0 0 1px var(--ink);
+}
+.hm-ds__sel button[aria-pressed="true"]::before{ background:var(--ink); }
+.hm-ds__sel button:focus-visible{ outline:1px solid var(--ink); outline-offset:-4px; }
+
+/* base: as obras, cada uma com o seu sinal de cor, e os contatos */
+.hm-obras{
+  grid-column:2 / 4; grid-row:3; align-self:end;
+  display:flex; flex-wrap:wrap; gap:.75rem 1.75rem;
+  padding:0 var(--g) calc(var(--u) * 3.5);
+}
+.hm-obra{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-family:var(--f-micro); font-size:.68rem; font-weight:600; letter-spacing:.14em;
+  color:var(--ink); text-decoration:none;
+}
+.hm-obra::before{ content:""; width:12px; height:12px; flex:none; }
+.hm-obra--echo::before{ background:var(--echo); }
+.hm-obra--atrio::before{ background:var(--atrio); }
+.hm-obra--cerne::before{ background:var(--ink); }
+.hm-obra:hover,
+.hm-obra:focus-visible{ text-decoration:underline; text-underline-offset:.3em; }
 .hm-contacts{
-  grid-column:5 / 8; grid-row:5; align-self:end;
+  grid-column:4 / 8; grid-row:3; align-self:end; justify-self:end;
   list-style:none; margin:0;
-  display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--u) * 1.25) var(--g);
-  padding:calc(var(--u) * 4) var(--g) calc(var(--u) * 3);
+  display:flex; flex-wrap:wrap; justify-content:flex-end; gap:calc(var(--u) * 1.25) calc(var(--u) * 4);
+  padding:0 var(--g) calc(var(--u) * 3);
 }
 .hm-contacts li{ min-width:0; }
 .hm-contacts li > a,
@@ -219,13 +234,6 @@
 .hm-v a:hover,
 .hm-v a:focus-visible{ text-decoration-color:var(--ink); }
 
-.hm-tese{
-  grid-column:2 / 5; grid-row:5; align-self:end;
-  padding:var(--g) var(--g) calc(var(--u) * 3);
-  font-family:var(--f-body); font-weight:400; font-style:italic;
-  font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
-  text-align:left;
-}
 
 /* ==========================================================================
    02 a 04 — OBRAS: dois campos equivalentes (2–4 | 5–7), assinatura na base
@@ -784,27 +792,21 @@ html.hm-amplo{ overflow:hidden; }
 
   .hm-title{ font-size:11vw; padding-top:var(--g); }
   .hm-lede{ padding-top:var(--u); }
-  .hm-name{ font-size:13vw; padding-top:var(--g); }
-  /* o hero em coluna simples: os blocos não se arredondam um a um, só o
-     painel inteiro (arco-home.js), e cabe na tela de um celular pequeno */
-  .hm-autoria{ display:flex; flex-direction:column; justify-content:flex-end; padding-top:var(--u); }
+  /* o hero em coluna simples: assinatura, a distinção, as obras e os
+     contatos; o painel inteiro se arredonda em quadrados (arco-home.js) */
+  .hm-autoria{ display:flex; flex-direction:column; justify-content:space-between; padding-top:var(--u); }
   .hm-autoria > *{ align-self:stretch; }
-  /* no celular: quem (nome, frentes, resumo), depois as obras com as
-     métricas, depois os contatos e a tese */
-  .hm-autoria > .hm-name{ order:0; }
-  .hm-lines{ order:1; font-size:1.05rem; padding-top:calc(var(--u) * 2.5); }
-  .hm-summary{ order:2; padding-top:calc(var(--u) * 3); box-shadow:none; }
-  .hm-portas{ order:3; margin-top:calc(var(--u) * 3); padding:0 var(--g); }
-  .hm-metricas{ order:4; padding:0 var(--g); }
-  .hm-tese{ order:6; }
-  .hm-porta{ height:auto; aspect-ratio:1; padding:calc(var(--u) * 1.25); }
-  .hm-porta__n{ font-size:4.4vw; }
-  .hm-porta__t{ font-size:6.4vw; }
-  .hm-metrica{ padding:calc(var(--u) * 1.5) calc(var(--u) * 1.25) 0; }
-  .hm-metrica__v{ font-size:6vw; }
-  .hm-metrica__o{ font-size:.74rem; }
-  .hm-contacts{ order:5; padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
-  .hm-tese{ font-size:5.4vw; padding-top:var(--u); padding-bottom:calc(var(--u) * 4); }
+  .hm-assin{ padding-top:calc(var(--u) * 3); }
+  .hm-ds{ padding:calc(var(--u) * 6) var(--g); }
+  /* no celular o par empilha (palavra, sinal, palavra): com o sinal no eixo,
+     a palavra mais longa não caberia em meia largura */
+  .hm-d__par{ grid-template-columns:minmax(0, 1fr); justify-items:center; row-gap:.12em; font-size:12vw; }
+  .hm-d__a, .hm-d__b{ justify-self:center; }
+  .hm-d__x{ font-size:1.1em; }
+  .hm-ds__eixo .hm-d__par > span:empty::before{ content:"\00a0"; }
+  .hm-d__f{ white-space:normal; max-width:30ch; font-size:.62rem; }
+  .hm-obras{ padding-bottom:calc(var(--u) * 2); }
+  .hm-contacts{ justify-self:stretch; display:grid; grid-template-columns:1fr 1fr; padding-top:calc(var(--u) * 2); padding-bottom:var(--g); }
 
   .hm-nv{ min-height:calc(var(--row) * 6); margin:0; }
   .hm-narr,

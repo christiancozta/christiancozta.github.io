@@ -90,6 +90,42 @@
   }
   const snapAll = () => panels.forEach(snap);
 
+  /* ---------- hero: distinções em alternância ----------
+     Sem JS, a série aparece inteira, em lista. Com JS, uma por vez, trocando
+     a cada 5 s; para sob o ponteiro ou o foco, com a aba escondida e com
+     movimento reduzido. Quem escolhe no seletor assume: a troca para. */
+  const ds = home.querySelector(".hm-ds");
+  if (ds){
+    const itens = [...ds.querySelectorAll(".hm-d")];
+    const sel = ds.querySelector(".hm-ds__sel");
+    const botoes = sel ? [...sel.querySelectorAll("button")] : [];
+    if (itens.length > 1 && botoes.length === itens.length){
+      let atual = 0, timer = 0, escolhido = false, sobre = false;
+      const mostra = k => {
+        atual = k;
+        ds.dataset.proj = itens[k].dataset.proj || "";
+        itens.forEach((el, n) => el.classList.toggle("is-on", n === k));
+        botoes.forEach((b, n) => b.setAttribute("aria-pressed", String(n === k)));
+      };
+      const para = () => { clearInterval(timer); timer = 0; };
+      const roda = () => {
+        para();
+        if (reduce || escolhido || sobre || document.hidden) return;
+        timer = setInterval(() => mostra((atual + 1) % itens.length), 5000);
+      };
+      botoes.forEach((b, n) => b.addEventListener("click", () => { escolhido = true; para(); mostra(n); }));
+      ds.addEventListener("pointerenter", () => { sobre = true; para(); });
+      ds.addEventListener("pointerleave", () => { sobre = false; roda(); });
+      ds.addEventListener("focusin", () => { sobre = true; para(); });
+      ds.addEventListener("focusout", () => { sobre = false; roda(); });
+      document.addEventListener("visibilitychange", roda);
+      ds.classList.add("is-alt");
+      sel.hidden = false;
+      mostra(0);
+      roda();
+    }
+  }
+
   /* ---------- Rastro: abas de leitura e tags do índice ----------
      Sem JS, índice, finalização e fila descem em sequência e o índice fica
      inteiro. Com JS, as três partes viram abas (setas trocam de aba) e as
