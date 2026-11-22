@@ -101,34 +101,97 @@
   font-family:var(--f-display); font-weight:800;
   font-size:8.4vw; line-height:.82; letter-spacing:-.05em; color:var(--ink);
 }
-/* O hero ocupa a altura útil da tela, e os cinco blocos pousam na base, em
-   qualquer tela, com vãos curtos entre eles: o nome; abaixo, as frentes
-   (2 a 4) ao lado do resumo (5 a 7); na base, os contatos ao lado da tese.
-   Sem divisórias. Acima, o espaço livre (fileira 1, flexível). */
+/* O hero ocupa a altura útil da tela, e os blocos pousam na base, em
+   qualquer tela. Acima, o espaço livre (fileira 1, flexível); depois, o nome
+   (2 a 7); as três obras como quadrados de uma célula cada (2, 3 e 4), com
+   as frentes ao lado (5 a 7); sob cada obra, a sua métrica, com o resumo ao
+   lado; na base, a tese (2 a 5) e os contatos (6 e 7). */
 .hm-autoria{
   min-height:calc(100svh - var(--rail-h, 54px));
-  grid-template-rows:minmax(0, 1fr) auto auto auto;
+  grid-template-rows:minmax(0, 1fr) auto auto auto auto;
 }
-.hm-autoria > .hm-name{ grid-row:2; }
+.hm-autoria > .hm-name{ grid-row:2; padding-bottom:calc(var(--u) * 2.25); }
+
+/* as obras: um quadrado da retícula cada, na cor do próprio projeto */
+.hm-portas{
+  grid-column:2 / 5; grid-row:3;
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+.hm-porta{
+  aspect-ratio:1; min-width:0; box-sizing:border-box;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:var(--g);
+  font-family:var(--f-display); font-weight:800; text-decoration:none;
+  transition:filter var(--fast) var(--ease);
+}
+.hm-porta--echo{ background:var(--echo); color:#000; }
+.hm-porta--atrio{ background:var(--atrio); color:var(--paper); }
+.hm-porta--cerne{ background:var(--ink); color:var(--paper); }
+.hm-porta__n{
+  display:flex; justify-content:space-between;
+  font-size:clamp(1rem, 1.67vw, 2rem); line-height:1;
+}
+.hm-porta__n::after{
+  content:"→" / ""; transition:transform var(--fast) var(--ease);
+}
+.hm-porta__t{ font-size:clamp(1.4rem, 2.8vw, 3.4rem); line-height:.9; letter-spacing:-.04em; }
+.hm-porta:hover,
+.hm-porta:focus-visible{ filter:brightness(.92); }
+.hm-porta:hover .hm-porta__n::after,
+.hm-porta:focus-visible .hm-porta__n::after{ transform:translateX(.2em); }
+.hm-porta:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
+/* sob cada obra, a sua métrica: o número, o que mede, o local e a fonte */
+.hm-metricas{
+  grid-column:2 / 5; grid-row:4; align-self:start;
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+}
+.hm-metrica{
+  min-width:0;
+  display:flex; flex-direction:column; gap:calc(var(--u) * .75);
+  padding:calc(var(--u) * 2.5) var(--g) 0;
+  box-shadow:inset 0 1px 0 var(--ink);
+}
+.hm-metrica__v{
+  display:block;
+  font-family:var(--f-display); font-weight:800;
+  font-size:2.6vw; line-height:.9; letter-spacing:-.045em; white-space:nowrap;
+}
+.hm-metrica__o{ font-family:var(--f-body); font-size:.82rem; line-height:1.35; }
+.hm-metrica__s{
+  display:flex; flex-wrap:wrap; gap:0 .5em;
+  font-family:var(--f-micro); font-size:.6rem; line-height:1.5; color:var(--soft);
+  overflow-wrap:anywhere;
+}
+.hm-metrica__s > :first-child::after{ content:"·" / ""; margin-left:.5em; }
+.hm-metrica__s a{
+  color:inherit; text-decoration:underline; text-decoration-thickness:1px;
+  text-underline-offset:.22em; text-decoration-color:rgba(44,44,44,.22);
+}
+.hm-metrica__s a:hover,
+.hm-metrica__s a:focus-visible{ color:var(--ink); text-decoration-color:var(--ink); }
+
+/* as frentes, ao lado das obras, pousadas na base dos quadrados */
 .hm-lines{
-  grid-column:2 / 5; grid-row:3; align-self:start;
+  grid-column:5 / 8; grid-row:3; align-self:end;
   list-style:none; margin:0;
-  display:grid; gap:.18em;
-  padding:calc(var(--u) * 3) var(--g) 0;
-  font-family:var(--f-display); font-weight:700;
-  font-size:clamp(1rem, 1.75vw, 2rem); line-height:1.08; letter-spacing:-.014em;
+  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:.3em var(--g);
+  padding:0 var(--g);
+  font-family:var(--f-display); font-weight:800;
+  font-size:clamp(1rem, 1.67vw, 2rem); line-height:1.05; letter-spacing:-.014em;
 }
-.hm-lines li{ white-space:nowrap; }
 .hm-summary{
-  grid-column:5 / 8; grid-row:3; align-self:start;
-  margin:0; padding:calc(var(--u) * 3) var(--g) 0;
+  grid-column:5 / 8; grid-row:4; align-self:start;
+  margin:0; padding:calc(var(--u) * 2.5) var(--g) 0;
+  box-shadow:inset 0 1px 0 var(--rule);
   font-family:var(--f-body); font-size:.92rem; line-height:1.5;
   text-align:justify; text-justify:inter-word; -webkit-hyphens:auto; hyphens:auto;
 }
 .hm-contacts{
-  grid-column:2 / 5; grid-row:4; align-self:end;
+  grid-column:6 / 8; grid-row:5; align-self:end;
   list-style:none; margin:0;
-  display:grid; grid-template-columns:1fr 1fr; gap:calc(var(--u) * 1.25) var(--g);
+  display:grid; grid-template-columns:1fr; gap:calc(var(--u) * 1.25) var(--g);
   padding:calc(var(--u) * 4) var(--g) calc(var(--u) * 3);
 }
 .hm-contacts li{ min-width:0; }
@@ -155,7 +218,7 @@
 .hm-v a:focus-visible{ text-decoration-color:var(--ink); }
 
 .hm-tese{
-  grid-column:5 / 8; grid-row:4; align-self:end;
+  grid-column:2 / 6; grid-row:5; align-self:end;
   padding:var(--g) var(--g) calc(var(--u) * 3);
   font-family:var(--f-body); font-weight:400; font-style:italic;
   font-size:2.1vw; line-height:1.18; letter-spacing:-.022em; color:var(--ink);
@@ -724,10 +787,21 @@ html.hm-amplo{ overflow:hidden; }
      painel inteiro (arco-home.js), e cabe na tela de um celular pequeno */
   .hm-autoria{ display:flex; flex-direction:column; justify-content:flex-end; padding-top:var(--u); }
   .hm-autoria > *{ align-self:stretch; }
-  .hm-lines{ font-size:1.05rem; padding-top:calc(var(--u) * 2.5); }
-  .hm-lines li{ white-space:normal; }
-  .hm-summary{ padding-top:calc(var(--u) * 3); }
-  .hm-contacts{ padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
+  /* no celular: quem (nome, frentes, resumo), depois as obras com as
+     métricas, depois os contatos e a tese */
+  .hm-autoria > .hm-name{ order:0; }
+  .hm-lines{ order:1; font-size:1.05rem; padding-top:calc(var(--u) * 2.5); }
+  .hm-summary{ order:2; padding-top:calc(var(--u) * 3); box-shadow:none; }
+  .hm-portas{ order:3; margin-top:calc(var(--u) * 3); padding:0 var(--g); }
+  .hm-metricas{ order:4; padding:0 var(--g); }
+  .hm-tese{ order:6; }
+  .hm-porta{ padding:calc(var(--u) * 1.25); }
+  .hm-porta__n{ font-size:4.4vw; }
+  .hm-porta__t{ font-size:6.4vw; }
+  .hm-metrica{ padding:calc(var(--u) * 1.5) calc(var(--u) * 1.25) 0; }
+  .hm-metrica__v{ font-size:6vw; }
+  .hm-metrica__o{ font-size:.74rem; }
+  .hm-contacts{ order:5; grid-template-columns:1fr 1fr; padding-top:calc(var(--u) * 3); padding-bottom:var(--g); }
   .hm-tese{ font-size:5.4vw; padding-top:var(--u); padding-bottom:calc(var(--u) * 4); }
 
   .hm-nv{ min-height:calc(var(--row) * 6); margin:0; }
