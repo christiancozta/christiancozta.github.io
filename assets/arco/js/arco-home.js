@@ -667,6 +667,29 @@
       "Traceability": {chip:"data", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo", go:"rastro"},
       "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados", go:"legal-engineering"}
     };
+    /* nomes de área: o recrutador digita a frente, não a prática. Não são
+       verbetes do lastro; respondem com a frente inteira e as suas provas. */
+    const FRENTES = [
+      {termo:"Legal Operations", trad:"Operações jurídicas",
+       comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento"],
+       tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica",
+       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "controladoria", "controladoria juridica", "gestao juridica"],
+       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe"}],
+       go:"legal-operations"},
+      {termo:"Legal AI Evaluation & Governance", trad:"Avaliação e governança de IA jurídica",
+       comps:["Avaliação adversarial", "Orquestração decisória", "Traceability"],
+       tb:"AI Governance & Evaluation, Governança de IA",
+       al:["legal ai evaluation & governance", "legal ai evaluation and governance", "legal ai evaluation", "legal ai governance", "ai governance & evaluation", "ai evaluation & governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
+       provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados"}],
+       go:"ai-governance"},
+      {termo:"Legal Data Analytics", trad:"Análise de dados jurídicos",
+       comps:["Gestão de indicadores e desempenho", "Traceability", "Engenharia de dados e corpus"],
+       tb:"Jurimetria, Legal Analytics",
+       al:["legal data analytics", "legal analytics", "data analytics", "jurimetria", "analise de dados juridicos"],
+       provas:[{chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe"}, {chip:"data", tag:"DATA", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
+       go:"rastro"}
+    ];
+    const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
     const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
       const termo = limpa(e.querySelector(".lex__t")?.textContent);
       const trad = limpa(e.querySelector(".lex__p .arx-sr")?.textContent);
@@ -693,6 +716,22 @@
       ultima = fq;
       if (!fq){ out.innerHTML = vazio; return requestAnimationFrame(() => layout()); }
       const achados = nota(fq);
+      const fr = frenteDe(fq);
+      if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))){
+        const ctl = fq.includes("controladoria");
+        out.innerHTML = `
+        <p class="hm-busca__lbl">Frente</p>
+        <p class="hm-busca__termo">${esc(fr.termo)}<span class="hm-busca__tr">${esc(fr.trad)}</span></p>
+        <p class="hm-busca__lbl">Competências demonstradas</p>
+        <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
+        <p class="hm-busca__tb">Também lido como ${esc(fr.tb)}.</p>
+        ${ctl ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
+        <div class="hm-busca__prova">
+          <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
+          <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>Ver a prova</a><a class="hm-busca__lx" href="#frentes" data-hm-go>Ver as frentes</a></p>
+        </div>`;
+        return requestAnimationFrame(() => layout());
+      }
       if (!achados.length){
         out.innerHTML = `<p class="hm-busca__vazio">Nenhum verbete para “${esc(q.trim())}”. O lastro reúne ${total} termos de mercado. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>`;
         return requestAnimationFrame(() => layout());
