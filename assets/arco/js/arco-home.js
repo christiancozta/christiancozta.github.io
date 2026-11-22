@@ -640,4 +640,102 @@
     apply();
     lexBar.hidden = false;
   }
+  /* ---------- 6. busca do hero: do termo da vaga à prova ----------
+     Lê os verbetes do próprio lastro (termo, tradução, variantes e
+     competências) e devolve a competência que o termo nomeia, com o número
+     que a prova e os caminhos até a obra e até o verbete. Sem JS, o bloco
+     fica só com o caminho para o lastro inteiro. */
+  const busca = document.getElementById("busca");
+  if (busca && lex){
+    const vivo = busca.querySelector(".hm-busca__vivo");
+    const inp = busca.querySelector(".hm-busca__i");
+    const exs = [...busca.querySelectorAll(".hm-busca__ex button")];
+    const out = busca.querySelector(".hm-busca__r");
+    const dobra = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+    const limpa = s => (s || "").replace(/\s+/g, " ").trim();
+    const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]));
+    /* competência → a prova (copy a fechar com o autor) */
+    const PROVA = {
+      "Gestão de indicadores e desempenho": {chip:"data", tag:"DATA", n:"60,4%", l:"taxa de finalização da equipe", go:"rastro"},
+      "Gestão do conhecimento": {chip:"echo", tag:"ECHO", n:"2.758", l:"ementas catalogadas", go:"legal-operations"},
+      "Mapeamento e desenho de processos": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores", go:"legal-operations"},
+      "Governança de conteúdo e linguagem controlada": {chip:"echo", tag:"ECHO", n:"631", l:"temas de precedentes", go:"legal-operations"},
+      "Engenharia de dados e corpus": {chip:"atrio", tag:"ATRIO", n:"115.114", l:"registros processuais únicos", go:"legal-engineering"},
+      "Orquestração decisória": {chip:"atrio", tag:"ATRIO", n:"31", l:"rotas na API do ATRIO", go:"legal-engineering"},
+      "Avaliação adversarial": {chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais", go:"ai-governance"},
+      "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cifra na API do ATRIO", go:"legal-engineering"},
+      "Traceability": {chip:"data", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo", go:"rastro"},
+      "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados", go:"legal-engineering"}
+    };
+    const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
+      const termo = limpa(e.querySelector(".lex__t")?.textContent);
+      const trad = limpa(e.querySelector(".lex__p .arx-sr")?.textContent);
+      const comps = [...e.querySelectorAll(".lex__k")].map(k => limpa(k.textContent));
+      const tb = limpa(e.querySelector(".lex__v")?.textContent).replace(/^tb\.\s*/, "").replace(/\.$/, "");
+      return {id:e.id, termo, trad, comps, tb, ft:dobra(termo), fx:dobra([termo, trad, tb, comps.join(" ")].join(" "))};
+    });
+    const total = verbetes.length;
+    const nota = q => verbetes.map(v => {
+      let n = 0;
+      if (v.ft === q) n = 4;
+      else if (v.ft.startsWith(q)) n = 3;
+      else if (v.ft.includes(q)) n = 2;
+      else if (v.fx.includes(q)) n = 1;
+      else if (q.split(" ").every(t => v.fx.includes(t))) n = .5;
+      return [n, v];
+    }).filter(([n]) => n > 0).sort((a, b) => b[0] - a[0]).map(([, v]) => v);
+    const vazio = out.innerHTML;
+    let ultima = "";
+    function mostra(q){
+      const fq = dobra(q);
+      exs.forEach(b => b.setAttribute("aria-pressed", String(dobra(b.dataset.q) === fq)));
+      if (fq === ultima) return;
+      ultima = fq;
+      if (!fq){ out.innerHTML = vazio; return requestAnimationFrame(() => layout()); }
+      const achados = nota(fq);
+      if (!achados.length){
+        out.innerHTML = `<p class="hm-busca__vazio">Nenhum verbete para “${esc(q.trim())}”. O lastro reúne ${total} termos de mercado. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>`;
+        return requestAnimationFrame(() => layout());
+      }
+      const v = achados[0];
+      const comp = v.comps.find(c => PROVA[c]);
+      const p = comp ? PROVA[comp] : null;
+      const comps = v.comps.length ? v.comps.map(esc).join("; ") : "Princípio transversal, presente nas três obras";
+      const mais = achados.length > 1
+        ? `<button type="button" class="hm-busca__mais" data-q="${esc(q.trim())}">Ver os ${achados.length} verbetes no lastro</button>`
+        : `<a class="hm-busca__lx" href="#${v.id}" data-hm-term>Ver no lastro</a>`;
+      out.innerHTML = `
+        <p class="hm-busca__lbl">Verbete</p>
+        <p class="hm-busca__termo">${esc(v.termo)}${v.trad ? `<span class="hm-busca__tr">${esc(v.trad)}</span>` : ""}</p>
+        <p class="hm-busca__lbl">Competência demonstrada</p>
+        <p class="hm-busca__comp">${comps}</p>
+        ${v.tb ? `<p class="hm-busca__tb">Também lido como ${esc(v.tb.replace(/;\s*/g, ", "))}.</p>` : ""}
+        <div class="hm-busca__prova">
+          ${p ? `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>` : ""}
+          <p class="hm-busca__acoes">${p ? `<a class="hm-cta" href="#${p.go}" data-hm-go>Ver a prova</a>` : ""}${mais}</p>
+        </div>`;
+      requestAnimationFrame(() => layout());
+    }
+    let espera = 0;
+    inp.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(() => mostra(inp.value), 140); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); clearTimeout(espera); mostra(inp.value); } });
+    exs.forEach(b => b.addEventListener("click", () => { inp.value = b.dataset.q; clearTimeout(espera); mostra(b.dataset.q); }));
+    /* vários verbetes: o lastro abre filtrado pela mesma busca */
+    out.addEventListener("click", e => {
+      const b = e.target instanceof Element ? e.target.closest(".hm-busca__mais") : null;
+      if (!b || !lexBar) return;
+      const li = lexBar.querySelector(".lexf__i");
+      li.value = b.dataset.q;
+      li.dispatchEvent(new Event("input", {bubbles:true}));
+      go("repertorio", {focus:li});
+    });
+    vivo.hidden = false;
+    if (exs[0]){ inp.value = exs[0].dataset.q; mostra(exs[0].dataset.q); }
+  }
+
+  /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
+  home.addEventListener("toggle", e => {
+    const panel = e.target instanceof Element ? e.target.closest(".hm-panel") : null;
+    if (panel) snap(panel);
+  }, true);
 })();
