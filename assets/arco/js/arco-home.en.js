@@ -51,10 +51,27 @@
     }));
   }
 
+  /* ---------- retícula ancorada na base do hero ----------
+     O hero ocupa a altura útil da tela, com os blocos na base. A origem da
+     retícula visível desce o resto da divisão dessa altura pelo quadrado
+     (--ret-y): uma linha cai na base do hero, e os painéis seguintes, em
+     quadrados inteiros, seguem sobre as linhas. */
+  let retY = 0, lastHero = 0;
+  const heroH = () => home.querySelector(".hm-autoria")?.getBoundingClientRect().height || 0;
+  function ancora(){
+    const c = home.clientWidth / 8, h = heroH();
+    lastHero = h;
+    retY = c > 0 ? ((h % c) + c) % c : 0;
+    home.style.setProperty("--ret-y", retY.toFixed(2) + "px");
+  }
+
   /* ---------- 2. retícula: fileiras em múltiplos de --row ---------- */
   function snap(panel){
     panel.style.gridTemplateRows = "";
     panel.style.paddingBottom = "";
+    /* o hero tem a altura da tela, não de quadrados: a retícula é que se
+       ancora na base dele (ancora) */
+    if (panel.classList.contains("hm-autoria")) return;
     const r = rowPx();
     /* o painel fecha num número inteiro de quadrados: no desktop a fileira é
        meio quadrado, então o total de fileiras precisa ser par */
@@ -170,11 +187,12 @@
   function layout(force = false){
     raf = 0;
     const w = home.clientWidth, r = rowPx();
-    if (!force && w === lastWidth && r === lastRow) return;
+    if (!force && w === lastWidth && r === lastRow && Math.abs(heroH() - lastHero) < .5) return;
     lastWidth = w; lastRow = r;
     fit();
     scoreFit();
     snapAll();
+    ancora();
     lockFigures();
     alignTabs();
     raiseTitles();
@@ -183,7 +201,8 @@
      A retícula visível é um quadrado de lado = largura / 8, contínuo desde o
      topo da home. Estas funções só pousam elementos nas suas linhas. */
   const cellPx = () => home.clientWidth / 8;
-  const yIn = el => el.getBoundingClientRect().bottom - home.getBoundingClientRect().top;
+  /* altura medida a partir da origem da retícula, não do topo da home */
+  const yIn = el => el.getBoundingClientRect().bottom - home.getBoundingClientRect().top - retY;
 
   /* a linha do seletor de Rastro desce até a próxima linha da retícula */
   function alignTabs(){
@@ -204,7 +223,8 @@
      de leitura ocupam a mesma faixa, à direita do título */
   function raiseTitles(){
     const c = cellPx();
-    home.querySelectorAll(".hm-title, .hm-name").forEach(t => {
+    /* o nome não: no hero ele pousa sobre os blocos da base, com vão curto */
+    home.querySelectorAll(".hm-title").forEach(t => {
       t.style.transform = "";
       if (stacked.matches) return;
       let base = t.querySelector(".hm-base");
@@ -235,7 +255,7 @@
     if (!itens.length) return;
     const painel = neq.closest(".hm-panel");
     const pr = painel.getBoundingClientRect(), hr = home.getBoundingClientRect();
-    const L = alvo - (pr.top - hr.top);
+    const L = alvo - (pr.top - hr.top - retY);
     const T1 = L - c * .86;
     const g = c * .012;
     const h = (c * .4 - g) / 2;
