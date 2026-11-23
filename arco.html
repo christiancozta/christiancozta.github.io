@@ -101,12 +101,16 @@
 <link rel="preload" href="assets/fonts/cabinet-grotesk-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/schibsted-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/martian-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261120-echo">
-<link rel="stylesheet" href="assets/arco/css/arco.css?v=20261122-semdata">
+<!-- Mozilla Text (corpo da home) vem do Google Fonts por @import em arco-home.css:
+     a conexão abre já aqui, para a fonte não esperar a folha que a declara -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/arco/css/fonts.css?v=20261123-raiz">
+<link rel="stylesheet" href="assets/arco/css/arco.css?v=20261123-raiz">
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261122-semdata" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261123-areas2">
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261123-hero">
 <script src="assets/arco/js/arco-home.js?v=20261123-areas2" defer></script>
 </head>
 <body>
@@ -184,26 +188,10 @@
              mudando só de cor. As distinções do Rastro ficam no Rastro. -->
         <section class="hm-panel hm-autoria" id="autoria" aria-labelledby="bio-name">
           <p class="hm-kick">Autoria</p>
-          <h1 class="hm-name" id="bio-name" data-fit="nome"><span class="hm-fit">Christian da Costa</span></h1>
-          <div class="hm-ds" data-proj="atrio">
-            <ol class="hm-ds__l" aria-label="Distinções">
-              <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">governar</span></p><p class="hm-d__f">Antes de delegar o jurídico, é preciso governar seu raciocínio.</p></li>
-              <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">acervo</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">procedimento</span></p><p class="hm-d__f">Havia acervo, havia prazo, havia colegiado. Não havia procedimento.</p></li>
-              <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">redigir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">formular</span></p><p class="hm-d__f">A pendência nasce dentro do texto.</p></li>
-              <li class="hm-d" data-proj="troia"><p class="hm-d__par"><span class="hm-d__a">silêncio</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">omissão</span></p><p class="hm-d__f">Uma lente tem o direito de não achar nada.</p></li>
-              <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">produzir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">verificar</span></p><p class="hm-d__f">O problema já não estava na capacidade de produzir, mas na de verificar.</p></li>
-              <li class="hm-d" data-proj="neutro"><p class="hm-d__par"><span class="hm-d__a">rastro</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">lastro</span></p><p class="hm-d__f">Rastro para saber por onde; lastro para saber por quê.</p></li>
-              <li class="hm-ds__eixo" aria-hidden="true"><p class="hm-d__par"><span></span><span class="hm-d__x">≠</span><span></span></p></li>
-            </ol>
-            <div class="hm-ds__sel" role="group" aria-label="Escolher distinção" hidden>
-              <button type="button" aria-pressed="false" aria-label="delegar ≠ governar"></button>
-              <button type="button" aria-pressed="false" aria-label="acervo ≠ procedimento"></button>
-              <button type="button" aria-pressed="false" aria-label="redigir ≠ formular"></button>
-              <button type="button" aria-pressed="false" aria-label="silêncio ≠ omissão"></button>
-              <button type="button" aria-pressed="false" aria-label="produzir ≠ verificar"></button>
-              <button type="button" aria-pressed="false" aria-label="rastro ≠ lastro"></button>
-            </div>
-          </div>
+          <!-- o nome, centrado e numa só linha, no corpo que a tela permite
+               (CSS), sem esticar à largura do campo -->
+          <h1 class="hm-name" id="bio-name"><span class="hm-fit">Christian da Costa</span></h1>
+          <!-- à esquerda: apresentação, resumo e ações -->
           <div class="hm-oferta">
             <p class="hm-oferta__t">Legal Operations, Legal Engineering e governança de IA jurídica, com cada competência ligada à sua prova.</p>
             <p class="hm-summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
@@ -212,22 +200,45 @@
               <a class="hm-cta hm-cta--linha" href="#contato" data-hm-go>Contato</a>
             </div>
           </div>
-          <!-- BUSCA: do termo da vaga à prova. Lê o próprio lastro (verbetes do
-               dicionário abaixo); sem JS, fica o caminho para o lastro inteiro. -->
-          <div class="hm-busca" id="busca" role="search" aria-labelledby="busca-t">
-            <label class="hm-busca__k" id="busca-t" for="busca-i">Do termo da vaga à prova</label>
-            <div class="hm-busca__vivo" hidden>
-              <input class="hm-busca__i" id="busca-i" type="search" autocomplete="off" spellcheck="false" placeholder="Cole um termo, ex.: AI Governance">
-              <div class="hm-busca__ex" role="group" aria-label="Exemplos de termos">
-                <button type="button" data-q="LLM &amp; Output Evaluation">LLM &amp; Output Evaluation</button>
-                <button type="button" data-q="AI Governance">AI Governance</button>
-                <button type="button" data-q="Process Mapping">Process Mapping</button>
-                <button type="button" data-q="Legal Operations">Legal Operations</button>
-                <button type="button" data-q="KPI Management">KPI Management</button>
+          <!-- à direita: a busca por competências e, abaixo dela, a
+               composição rotativa das distinções -->
+          <div class="hm-dir">
+            <!-- BUSCA: do termo da vaga à prova. Lê o próprio lastro (verbetes do
+                 dicionário abaixo); sem JS, fica o caminho para o lastro inteiro. -->
+            <div class="hm-busca" id="busca" role="search" aria-labelledby="busca-t">
+              <label class="hm-busca__k" id="busca-t" for="busca-i">Do termo da vaga à prova</label>
+              <div class="hm-busca__vivo" hidden>
+                <input class="hm-busca__i" id="busca-i" type="search" autocomplete="off" spellcheck="false" placeholder="Cole um termo, ex.: AI Governance">
+                <div class="hm-busca__ex" role="group" aria-label="Exemplos de termos">
+                  <button type="button" data-q="LLM &amp; Output Evaluation">LLM &amp; Output Evaluation</button>
+                  <button type="button" data-q="AI Governance">AI Governance</button>
+                  <button type="button" data-q="Process Mapping">Process Mapping</button>
+                  <button type="button" data-q="Legal Operations">Legal Operations</button>
+                  <button type="button" data-q="KPI Management">KPI Management</button>
+                </div>
+              </div>
+              <div class="hm-busca__r" aria-live="polite">
+                <p class="hm-busca__vazio">Quem procura pelo nome encontra a prova: 48 verbetes de mercado, cada um ligado à competência que o demonstra. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>
               </div>
             </div>
-            <div class="hm-busca__r" aria-live="polite">
-              <p class="hm-busca__vazio">Quem procura pelo nome encontra a prova: 48 verbetes de mercado, cada um ligado à competência que o demonstra. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>
+            <div class="hm-ds" data-proj="atrio">
+              <ol class="hm-ds__l" aria-label="Distinções">
+                <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">governar</span></p><p class="hm-d__f">Antes de delegar o jurídico, é preciso governar seu raciocínio.</p></li>
+                <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">acervo</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">procedimento</span></p><p class="hm-d__f">Havia acervo, havia prazo, havia colegiado. Não havia procedimento.</p></li>
+                <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">redigir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">formular</span></p><p class="hm-d__f">A pendência nasce dentro do texto.</p></li>
+                <li class="hm-d" data-proj="troia"><p class="hm-d__par"><span class="hm-d__a">silêncio</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">omissão</span></p><p class="hm-d__f">Uma lente tem o direito de não achar nada.</p></li>
+                <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">produzir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">verificar</span></p><p class="hm-d__f">O problema já não estava na capacidade de produzir, mas na de verificar.</p></li>
+                <li class="hm-d" data-proj="neutro"><p class="hm-d__par"><span class="hm-d__a">rastro</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">lastro</span></p><p class="hm-d__f">Rastro para saber por onde; lastro para saber por quê.</p></li>
+                <li class="hm-ds__eixo" aria-hidden="true"><p class="hm-d__par"><span></span><span class="hm-d__x">≠</span><span></span></p></li>
+              </ol>
+              <div class="hm-ds__sel" role="group" aria-label="Escolher distinção" hidden>
+                <button type="button" aria-pressed="false" aria-label="delegar ≠ governar"></button>
+                <button type="button" aria-pressed="false" aria-label="acervo ≠ procedimento"></button>
+                <button type="button" aria-pressed="false" aria-label="redigir ≠ formular"></button>
+                <button type="button" aria-pressed="false" aria-label="silêncio ≠ omissão"></button>
+                <button type="button" aria-pressed="false" aria-label="produzir ≠ verificar"></button>
+                <button type="button" aria-pressed="false" aria-label="rastro ≠ lastro"></button>
+              </div>
             </div>
           </div>
         </section>
