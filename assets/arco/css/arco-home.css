@@ -423,8 +423,8 @@ html.hm-amplo{ overflow:hidden; }
    anterior. Posição e corpo vêm de arco-home.js */
 .hm-neq{
   position:absolute; inset:0; z-index:0; margin:0; padding:0; list-style:none; pointer-events:none;
-  font-family:"Schibsted Grotesk", var(--f-body); font-weight:900; text-transform:uppercase;
-  font-size:var(--neq-fs, .9rem); letter-spacing:-.01em; color:rgba(44,44,44,.12);
+  font-family:"Schibsted Grotesk", var(--f-body); font-weight:700; text-transform:uppercase;
+  font-size:var(--neq-fs, .9rem); letter-spacing:-.01em; color:rgba(44,44,44,.07);
 }
 /* cada linha mede exatamente a altura das maiúsculas: assim o espaço entre
    elas pode ser ínfimo e o desenho cai preciso na retícula */
@@ -878,7 +878,7 @@ html.hm-amplo{ overflow:hidden; }
    PROPOSTA C — DOSSIÊ (nov/2026)
    O recrutador primeiro: no hero, ao lado da assinatura e da distinção, a
    busca do termo da vaga até a prova (lê o próprio lastro); em seguida, as
-   quatro frentes; cada obra vira uma ficha (gargalo, sistema, medição), com
+   três frentes; cada obra vira uma ficha (tese, sistema, medição), com
    a origem recolhida e a vitrine mantida no campo da esquerda.
    ========================================================================== */
 
@@ -1032,7 +1032,7 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-ne{ color:var(--atrio); letter-spacing:0; }
 .hm-ne--echo{ color:var(--echo); }
 
-/* ---------- quatro frentes ---------- */
+/* ---------- três frentes ---------- */
 .hm-frentes{ grid-template-rows:repeat(2, minmax(var(--row), auto)); }
 .hm-frentes::after{ content:""; grid-column:1 / -1; height:var(--row); }
 .hm-fr{ grid-column:2 / 8; grid-row:3; align-self:start; list-style:none; margin:0; padding:var(--g) 0 0; }
@@ -1198,4 +1198,71 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm .hm-origem summary{
   font-stretch:87.5%;
   letter-spacing:.055em;
+}
+
+/* ==========================================================================
+   ARQUITETURA — um nome por papel (23/11/2026)
+   A área é o título do painel (nome próprio, sem caixa baixa forçada), com
+   um filete na cor do projeto; a tese ≠ abre a ficha em corpo médio; o
+   projeto é nomeado pela vitrine e pelo botão. "três frentes", "rastro" e
+   "lastro" seguem em caixa baixa: são substantivos comuns.
+   ========================================================================== */
+.hm-proj--echo{ --proj:var(--echo); }
+.hm-proj--atrio, .hm-proj--cerne{ --proj:var(--atrio); }
+.hm-title--area{ text-transform:none; }
+.hm-title--area::before{
+  content:""; display:block; width:.9em; height:max(3px, .055em);
+  margin:0 0 .22em; background:var(--proj, var(--ink));
+}
+.hm .hm-ficha__b .hm-tese{
+  margin:0 0 .55rem;
+  font-family:var(--f-display); font-weight:700; font-stretch:100%;
+  font-size:clamp(1.45rem, 2.1vw, 2.1rem); line-height:1.05; letter-spacing:-.03em;
+  text-transform:none; color:var(--ink); text-wrap:balance;
+}
+.hm-ficha__b--tese{ padding-top:.9rem; }
+.hm-ficha__b p a{ color:var(--ink); font-weight:600; text-underline-offset:.2em; }
+
+/* busca: sem moldura; um filete no alto, como as fichas, e o texto na
+   medida das colunas */
+.hm-busca{ border:0; border-top:1.5px solid var(--ink); }
+label.hm-busca__k{ display:block; }
+.hm-busca__k, .hm-busca__vivo, .hm-busca__r{ padding-left:0; padding-right:0; }
+
+/* frentes: Legal Operations leva duas provas (ECHO e RASTRO), empilhadas */
+.hm-fr__p{ display:flex; flex-direction:column; align-items:flex-start; gap:.3rem; }
+@media (max-width:900px){
+  .hm-fr__p{ flex-direction:row; flex-wrap:wrap; justify-content:flex-end; }
+}
+
+/* piso de leitura dos rótulos monoespaçados: 11px (antes, de 7 a 9,8px) */
+.hm .hm-kick,
+.hm .hm-ficha__b h3:not(.hm-tese),
+.hm .hm-busca__k,
+.hm .hm-busca__lbl,
+.hm .hm-busca__lx,
+.hm .hm-busca__mais,
+.hm .hm-busca__ex button,
+.hm .hm-origem summary,
+.hm .hm-fr__a a,
+.hm .hm-chip,
+.hm .hm-tag,
+.hm .hm-tabs [role="tab"],
+.hm .hm-ix thead th,
+.hm .hm-ix__tag,
+.hm .hm-ix__n,
+.hm .hm-ix__l,
+.hm .hm-ix__t span,
+.hm .hm-ix__s,
+.hm .hm-pane__k,
+.hm .hm-fila__k,
+.hm .hm-corr__h,
+.hm .hm-rx__links,
+.hm .hm-cta--cv a{
+  font-size:.765rem; /* raiz a 90%: .765rem = 11px */
+}
+@media (min-width:901px){
+  /* com o corpo ajustado a "AI Governance & Evaluation", o título das frentes
+     pousa sobre a lista: um respiro de meio quadrado entre os dois */
+  .hm--dossie .hm-fr{ padding-top:calc(var(--cell) * .45); }
 }

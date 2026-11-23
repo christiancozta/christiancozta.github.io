@@ -106,8 +106,8 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261122-semdata" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261123-tipografia1">
-<script src="assets/arco/js/arco-home.js?v=20261122-dossie5" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261123-areas2">
+<script src="assets/arco/js/arco-home.js?v=20261123-areas2" defer></script>
 </head>
 <body>
 
@@ -215,10 +215,9 @@
           <!-- BUSCA: do termo da vaga à prova. Lê o próprio lastro (verbetes do
                dicionário abaixo); sem JS, fica o caminho para o lastro inteiro. -->
           <div class="hm-busca" id="busca" role="search" aria-labelledby="busca-t">
-            <p class="hm-busca__k" id="busca-t">Do termo da vaga à prova</p>
+            <label class="hm-busca__k" id="busca-t" for="busca-i">Do termo da vaga à prova</label>
             <div class="hm-busca__vivo" hidden>
-              <label class="hm-busca__q" for="busca-i">Cole um termo da vaga</label>
-              <input class="hm-busca__i" id="busca-i" type="search" autocomplete="off" spellcheck="false" placeholder="Ex.: AI Governance">
+              <input class="hm-busca__i" id="busca-i" type="search" autocomplete="off" spellcheck="false" placeholder="Cole um termo, ex.: AI Governance">
               <div class="hm-busca__ex" role="group" aria-label="Exemplos de termos">
                 <button type="button" data-q="LLM &amp; Output Evaluation">LLM &amp; Output Evaluation</button>
                 <button type="button" data-q="AI Governance">AI Governance</button>
@@ -233,31 +232,25 @@
           </div>
         </section>
 
-        <!-- FRENTES: as quatro frentes do cabeçalho, cada uma com o projeto que a
-             prova, um número e o caminho até o caso. -->
+        <!-- FRENTES: as três frentes do cabeçalho, na ordem dos painéis, cada uma
+             com o projeto que a prova, um número e o caminho até o caso. A
+             controladoria (prazo, fila, finalização) integra Legal Operations. -->
         <section class="hm-panel hm-frentes" id="frentes" aria-labelledby="t-frentes">
-          <h2 class="hm-title" id="t-frentes" data-fit="titulo"><span class="hm-fit">quatro frentes</span></h2>
+          <h2 class="hm-title" id="t-frentes" data-fit="titulo"><span class="hm-fit">três frentes</span></h2>
           <ol class="hm-fr" aria-label="Frentes de atuação">
+            <li class="hm-fr__r">
+              <p class="hm-fr__f">Legal Operations</p>
+              <p class="hm-fr__p"><span class="hm-chip hm-chip--echo">ECHO</span><span class="hm-chip hm-chip--rastro">RASTRO</span></p>
+              <p class="hm-fr__d">Metodologia de gabinete de alto volume e controladoria de prazo, fila e finalização, com fonte ou cálculo declarado em cada figura.</p>
+              <p class="hm-fr__n"><b>102 → 10</b><span>assuntos em localizadores</span></p>
+              <p class="hm-fr__a"><a href="#legal-operations" data-hm-go>Ver o caso</a></p>
+            </li>
             <li class="hm-fr__r">
               <p class="hm-fr__f">Legal Engineering</p>
               <p class="hm-fr__p"><span class="hm-chip hm-chip--atrio">ATRIO</span></p>
               <p class="hm-fr__d">Arquitetura de governança do raciocínio jurídico mediado por IA, com corpus e API próprios.</p>
               <p class="hm-fr__n"><b>31 rotas</b><span>188 testes automatizados</span></p>
               <p class="hm-fr__a"><a href="#legal-engineering" data-hm-go>Ver o caso</a></p>
-            </li>
-            <li class="hm-fr__r">
-              <p class="hm-fr__f">Legal Operations</p>
-              <p class="hm-fr__p"><span class="hm-chip hm-chip--echo">ECHO</span></p>
-              <p class="hm-fr__d">Metodologia de gabinete de alto volume, transferida à equipe que sucedeu na operação.</p>
-              <p class="hm-fr__n"><b>102 → 10</b><span>assuntos em localizadores</span></p>
-              <p class="hm-fr__a"><a href="#legal-operations" data-hm-go>Ver o caso</a></p>
-            </li>
-            <li class="hm-fr__r">
-              <p class="hm-fr__f">Controladoria Jurídica</p>
-              <p class="hm-fr__p"><span class="hm-chip hm-chip--rastro">RASTRO</span></p>
-              <p class="hm-fr__d">Indicadores de prazo, fila e finalização, com fonte ou cálculo declarado em cada figura.</p>
-              <p class="hm-fr__n"><b>−29,8 p.p.</b><span>processos acima do teto de 30 dias</span></p>
-              <p class="hm-fr__a"><a href="#rastro" data-hm-go>Ver o rastro</a></p>
             </li>
             <li class="hm-fr__r">
               <p class="hm-fr__f">AI Governance &amp; Evaluation</p>
@@ -269,18 +262,17 @@
           </ol>
         </section>
 
-        <!-- 02 — LEGAL OPERATIONS / ECHO: o playbook (vitrine) no campo da esquerda; a
+        <!-- 02 — LEGAL OPERATIONS / ECHO: a área no título; a tese abre a ficha. O playbook (vitrine) no campo da esquerda; a
              narrativa numa coluna sobre papel, entre os meios das colunas vizinhas.
              A folha de rosto do playbook é a única entrada do ECHO na home. -->
         <section class="hm-panel hm-proj hm-proj--vit hm-proj--echo" id="legal-operations" aria-labelledby="t-echo">
-          <p class="hm-kick hm-kick--on"><span class="hm-chip hm-chip--echo">ECHO</span>Legal Operations</p>
-          <h2 class="hm-title" id="t-echo" data-fit="titulo"><span class="hm-fit">acervo <span class="hm-ne hm-ne--echo">≠</span> procedimento</span></h2>
+          <h2 class="hm-title hm-title--area" id="t-echo" data-fit="titulo"><span class="hm-fit">Legal Operations</span></h2>
           <div class="hm-trilho">
             <div class="hm-lado">
               <div class="hm-ficha">
-              <div class="hm-ficha__b"><h3>O gargalo</h3><p>Na instância recursal havia acervo, prazo e colegiado, mas nenhum procedimento instituído nem tradição a que recorrer.</p></div>
+              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">acervo <span class="hm-ne hm-ne--echo">≠</span> procedimento</h3><p>Na instância recursal havia acervo, prazo e colegiado, mas nenhum procedimento instituído nem tradição a que recorrer.</p></div>
               <div class="hm-ficha__b"><h3>O sistema</h3><p>O ECHO, desenhado em 30 dias: entrada, classificação, distribuição, verificação, produção e memória do gabinete, em materiais reutilizáveis.</p></div>
-              <div class="hm-ficha__b"><h3>O que mediu</h3><p>102 assuntos reduzidos a 10 localizadores, 2.758 ementas catalogadas e 1.192 processos triados. O modelo passou ao gabinete que sucedeu na operação.</p></div>
+              <div class="hm-ficha__b"><h3>O que ficou</h3><p>O modelo passou ao gabinete que sucedeu na operação. Cada número da folha tem fonte ou cálculo declarado no <a href="#rastro" data-hm-go>rastro</a>.</p></div>
               <p class="hm-ficha__a"><a class="hm-cta" href="#echo" data-hm-view="echo">Abrir o ECHO</a></p>
               <details class="hm-origem"><summary>Ler a origem</summary>
                 <div class="hm-narr">
@@ -302,10 +294,9 @@
           </div>
         </section>
 
-        <!-- 03 — LEGAL ENGINEERING / ATRIO: disposição invertida -->
+        <!-- 03 — LEGAL ENGINEERING / ATRIO: disposição invertida; área no título, tese na ficha -->
         <section class="hm-panel hm-proj hm-proj--atrio" id="legal-engineering" aria-labelledby="t-atrio">
-          <p class="hm-kick hm-kick--on"><span class="hm-chip hm-chip--atrio">ATRIO</span>Legal Engineering</p>
-          <h2 class="hm-title" id="t-atrio" data-fit="titulo"><span class="hm-fit">redigir <span class="hm-ne">≠</span> formular</span></h2>
+          <h2 class="hm-title hm-title--area" id="t-atrio" data-fit="titulo"><span class="hm-fit">Legal Engineering</span></h2>
           <figure class="hm-nv hm-nv--atrio" aria-hidden="true">
             <svg class="hm-nv__svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMax slice" focusable="false">
               <path class="hm-runway__light" fill="#FAFAFA" d="M300,366L846,791.9L-246,791.9Z"/>
@@ -314,7 +305,7 @@
             </svg>
           </figure>
           <div class="hm-ficha">
-              <div class="hm-ficha__b"><h3>O gargalo</h3><p>Uma mudança súbita nos indicadores mostrou a produção acelerando em descompasso com o método, como apontava a esteira de correções.</p></div>
+              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">redigir <span class="hm-ne">≠</span> formular</h3><p>Uma mudança súbita nos indicadores mostrou a produção acelerando em descompasso com o método, como apontava a esteira de correções.</p></div>
               <div class="hm-ficha__b"><h3>O sistema</h3><p>O ATRIO governa o raciocínio jurídico mediado por IA, entre memória, formulação, confronto e proteção de dados. A decisão segue humana.</p></div>
               <div class="hm-ficha__b"><h3>O que mediu</h3><p>Corpus de 115.114 registros processuais do TJPR e API com 31 rotas e 188 testes automatizados.</p></div>
               <p class="hm-ficha__a"><a class="hm-cta" href="#atrio" data-hm-view="atrio">Abrir o ATRIO</a></p>
@@ -338,14 +329,13 @@
              página (vitrine) no campo da esquerda e a narrativa numa coluna sobre papel.
              Explorar abre, no próprio quadro, a lista de atos e a impressora. -->
         <section class="hm-panel hm-proj hm-proj--vit hm-proj--cerne" id="ai-governance" aria-labelledby="t-cerne">
-          <p class="hm-kick hm-kick--on"><span class="hm-chip hm-chip--cerne">CERNE</span>AI Governance &amp; Evaluation</p>
-          <h2 class="hm-title" id="t-cerne" data-fit="titulo"><span class="hm-fit">produzir <span class="hm-ne">≠</span> verificar</span></h2>
+          <h2 class="hm-title hm-title--area" id="t-cerne" data-fit="titulo"><span class="hm-fit">AI Governance &amp; Evaluation</span></h2>
           <div class="hm-trilho">
             <div class="hm-lado">
               <div class="hm-ficha">
-              <div class="hm-ficha__b"><h3>O gargalo</h3><p>A produção acelerou e a fila de correções passou a concentrar o custo de revisar raciocínios mediados por IA.</p></div>
+              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">produzir <span class="hm-ne">≠</span> verificar</h3><p>A produção acelerou e a fila de correções passou a concentrar o custo de revisar raciocínios mediados por IA.</p></div>
               <div class="hm-ficha__b"><h3>O sistema</h3><p>Lentes independentes examinam premissas, inferências e fundamentos do ato, antes que a fluência do texto oculte a falha.</p></div>
-              <div class="hm-ficha__b"><h3>O que mediu</h3><p>17 rodadas, uma por ato. 218 dúvidas formadas, 67 perguntas entregues e mediana de 11,1 min por ato.</p></div>
+              <div class="hm-ficha__b"><h3>O que mediu</h3><p>15 de 17 atos concluídos na primeira tentativa. Em 9 de 12 atos, ao menos uma pergunta sobre ponto embargável; em 7, sobre o ponto depois corrigido.</p></div>
               <p class="hm-ficha__a"><a class="hm-cta" href="#cerne" data-hm-view="cerne" data-view="cerne">Abrir o CERNE</a></p>
               <details class="hm-origem"><summary>Ler a origem</summary>
                 <div class="hm-narr">
@@ -554,7 +544,7 @@
         <!-- 06 — LASTRO: do termo à prova -->
         <section class="hm-panel hm-lastro" id="lastro" aria-labelledby="t-lastro">
           <h2 class="hm-title" id="t-lastro" data-fit="titulo"><span class="hm-fit">lastro</span></h2>
-          <p class="hm-lede">O vocabulário com que o mercado nomeia a operação jurídica, verbete a verbete, cada um ligado às competências que o demonstram no Rastro, no ECHO ou no ATRIO. Quem procura pelo nome encontra a prova.</p>
+          <p class="hm-lede">O vocabulário com que o mercado nomeia a operação jurídica, verbete a verbete, cada um ligado às competências que o demonstram no Rastro, no ECHO ou no ATRIO.</p>
 
           <div class="hm-corr">
             <p class="hm-corr__h" aria-hidden="true"><span>Competência demonstrada</span><span>Prova</span><span>Termos de mercado</span></p>

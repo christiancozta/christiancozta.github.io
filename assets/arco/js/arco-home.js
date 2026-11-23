@@ -271,9 +271,14 @@
         (t.querySelector(".hm-fit") || t).append(base);
       }
       const y = yIn(base);
-      const alvo = Math.floor((y - 1) / c) * c;
-      if (y - alvo > .5) t.style.transform = `translateY(${alvo - y}px)`;
-      const neq = t.closest(".hm-panel")?.querySelector(".hm-neq");
+      let alvo = Math.floor((y - 1) / c) * c;
+      /* nunca acima do topo do próprio painel: se a linha de cima o tiraria
+         do painel (a linha de base quase pousada na linha seguinte), desce
+         até a seguinte */
+      const painel = t.closest(".hm-panel");
+      if (painel && t.getBoundingClientRect().top + (alvo - y) < painel.getBoundingClientRect().top) alvo += c;
+      if (Math.abs(y - alvo) > .5) t.style.transform = `translateY(${alvo - y}px)`;
+      const neq = painel?.querySelector(".hm-neq");
       if (neq) placeNeq(neq, t, alvo, c);
     });
   }
@@ -668,21 +673,17 @@
       "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados", go:"legal-engineering"}
     };
     /* nomes de área: o recrutador digita a frente, não a prática. Não são
-       verbetes do lastro; respondem com a frente inteira e as suas provas. */
+       verbetes do lastro; respondem com a frente inteira e as suas provas.
+       Três frentes; a controladoria (e jurimetria) responde com Legal Operations. */
     const FRENTES = [
       {termo:"Legal Operations", trad:"Operações jurídicas",
-       comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento"],
-       tb:"Legal Ops, Operações Jurídicas",
-       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica"],
-       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}],
+       comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento", "Traceability"],
+       tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica, Legal Controllership, Jurimetria, Legal Data Analytics",
+       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica",
+           "controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
+       nota:["controladoria", "controllership", "controller"],
+       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
        go:"legal-operations"},
-      {termo:"Controladoria Jurídica", trad:"Legal Controllership",
-       comps:["Gestão de indicadores e desempenho", "Traceability", "Mapeamento e desenho de processos"],
-       tb:"Legal Controllership, Jurimetria, Legal Data Analytics",
-       al:["controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
-       nota:true,
-       provas:[{chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}, {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"}],
-       go:"rastro"},
       {termo:"AI Governance & Evaluation", trad:"Governança e avaliação de IA jurídica",
        comps:["Avaliação adversarial", "Orquestração decisória", "Traceability"],
        tb:"Legal AI Evaluation & Governance, Governança de IA",
@@ -725,7 +726,7 @@
         <p class="hm-busca__lbl">Competências demonstradas</p>
         <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
         <p class="hm-busca__tb">Também lido como ${esc(fr.tb)}.</p>
-        ${fr.nota ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
+        ${fr.nota && fr.nota.some(a => fq.includes(a)) ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
         <div class="hm-busca__prova">
           <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
           <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>Ver a prova</a><a class="hm-busca__lx" href="#frentes" data-hm-go>Ver as frentes</a></p>
