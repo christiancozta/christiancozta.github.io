@@ -680,7 +680,7 @@
        comps:["Mapeamento e desenho de processos", "Gestão de indicadores e desempenho", "Gestão do conhecimento", "Traceability"],
        tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica, Legal Controllership, Jurimetria, Legal Data Analytics",
        al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica",
-           "controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
+           "controladoria juridica", "controladoria", "legal controllership", "controllership", "legal controller", "controller juridico", "jurimetria", "jurimetrics", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
        nota:["controladoria", "controllership", "controller"],
        provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
        go:"legal-operations"},

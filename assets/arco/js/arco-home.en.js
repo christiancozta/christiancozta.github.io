@@ -272,9 +272,14 @@
         (t.querySelector(".hm-fit") || t).append(base);
       }
       const y = yIn(base);
-      const alvo = Math.floor((y - 1) / c) * c;
-      if (y - alvo > .5) t.style.transform = `translateY(${alvo - y}px)`;
-      const neq = t.closest(".hm-panel")?.querySelector(".hm-neq");
+      let alvo = Math.floor((y - 1) / c) * c;
+      /* nunca acima do topo do próprio painel: se a linha de cima o tiraria
+         do painel (a linha de base quase pousada na linha seguinte), desce
+         até a seguinte */
+      const painel = t.closest(".hm-panel");
+      if (painel && t.getBoundingClientRect().top + (alvo - y) < painel.getBoundingClientRect().top) alvo += c;
+      if (Math.abs(y - alvo) > .5) t.style.transform = `translateY(${alvo - y}px)`;
+      const neq = painel?.querySelector(".hm-neq");
       if (neq) placeNeq(neq, t, alvo, c);
     });
   }
@@ -497,7 +502,7 @@
       const view = viewLink.dataset.hmView;
       const railLink = document.querySelector(`.rail__link[data-view="${view}"]`);
       /* pelo cordão, quando ele tem a entrada; senão a própria casca já abriu a
-         view pelo data-view do link (DATA, base e método, não está no cordão) */
+         view pelo data-view do link, quando a vista não está no cordão) */
       if (railLink) railLink.click();
       else if (!viewLink.dataset.view) location.hash = view;
       return;
@@ -641,4 +646,137 @@
     apply();
     lexBar.hidden = false;
   }
+  /* ---------- 6. busca do hero: do termo da vaga à prova ----------
+     Lê os verbetes do próprio lastro (termo, tradução, variantes e
+     competências) e devolve a competência que o termo nomeia, com o número
+     que a prova e os caminhos até a obra e até o verbete. Sem JS, o bloco
+     fica só com o caminho para o lastro inteiro. */
+  const busca = document.getElementById("busca");
+  if (busca && lex){
+    const vivo = busca.querySelector(".hm-busca__vivo");
+    const inp = busca.querySelector(".hm-busca__i");
+    const exs = [...busca.querySelectorAll(".hm-busca__ex button")];
+    const out = busca.querySelector(".hm-busca__r");
+    const dobra = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+    const limpa = s => (s || "").replace(/\s+/g, " ").trim();
+    const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]));
+    /* competência → a prova (copy a fechar com o autor) */
+    const PROVA = {
+      "KPI and performance management": {chip:"rastro", tag:"TRACE", n:"60.4%", l:"team finalization rate", go:"rastro"},
+      "Knowledge management": {chip:"echo", tag:"ECHO", n:"2,758", l:"headnotes catalogued", go:"legal-operations"},
+      "Process mapping and design": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"subjects into locators", go:"legal-operations"},
+      "Content governance and controlled language": {chip:"echo", tag:"ECHO", n:"631", l:"precedent topics", go:"legal-operations"},
+      "Data and corpus engineering": {chip:"atrio", tag:"ATRIO", n:"115,114", l:"unique case records", go:"legal-engineering"},
+      "Decision orchestration": {chip:"atrio", tag:"ATRIO", n:"31", l:"routes in the ATRIO API", go:"legal-engineering"},
+      "Adversarial evaluation": {chip:"cerne", tag:"CERNE", n:"17", l:"rounds on real rulings", go:"ai-governance"},
+      "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cipher in the ATRIO API", go:"legal-engineering"},
+      "Traceability": {chip:"rastro", tag:"TRACE", n:"46", l:"figures with source or calculation", go:"rastro"},
+      "Controlled text generation": {chip:"atrio", tag:"ATRIO", n:"188", l:"automated tests", go:"legal-engineering"}
+    };
+    /* nomes de área: o recrutador digita a frente, não a prática. Não são
+       verbetes do lastro; respondem com a frente inteira e as suas provas.
+       Três frentes; a controladoria (e jurimetria) responde com Legal Operations. */
+    const FRENTES = [
+      {termo:"Legal Operations", trad:"Operações jurídicas",
+       comps:["Process mapping and design", "KPI and performance management", "Knowledge management", "Traceability"],
+       tb:"Legal Ops, Legal Controllership, Jurimetrics, Legal Data Analytics",
+       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica",
+           "controladoria juridica", "controladoria", "legal controllership", "controllership", "legal controller", "controller juridico", "jurimetria", "jurimetrics", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
+       nota:["controladoria", "controllership", "controller"],
+       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"subjects into locators"}, {chip:"rastro", tag:"TRACE", n:"−29.8 pp", l:"cases beyond the 30-day ceiling"}],
+       go:"legal-operations"},
+      {termo:"AI Governance & Evaluation", trad:"Governança e avaliação de IA jurídica",
+       comps:["Adversarial evaluation", "Decision orchestration", "Traceability"],
+       tb:"Legal AI Evaluation & Governance, AI Governance",
+       al:["ai governance & evaluation", "ai governance and evaluation", "ai evaluation & governance", "legal ai evaluation & governance", "legal ai evaluation", "legal ai governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
+       provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rounds on real rulings"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"automated tests"}],
+       go:"ai-governance"}
+    ];
+    const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
+    const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
+      const termo = limpa(e.querySelector(".lex__t")?.textContent);
+      const trad = limpa(e.querySelector(".lex__p .arx-sr")?.textContent);
+      const comps = [...e.querySelectorAll(".lex__k")].map(k => limpa(k.textContent));
+      const tb = limpa(e.querySelector(".lex__v")?.textContent).replace(/^aka\s*/, "").replace(/\.$/, "");
+      return {id:e.id, termo, trad, comps, tb, ft:dobra(termo), fx:dobra([termo, trad, tb, comps.join(" ")].join(" "))};
+    });
+    const total = verbetes.length;
+    const nota = q => verbetes.map(v => {
+      let n = 0;
+      if (v.ft === q) n = 4;
+      else if (v.ft.startsWith(q)) n = 3;
+      else if (v.ft.includes(q)) n = 2;
+      else if (v.fx.includes(q)) n = 1;
+      else if (q.split(" ").every(t => v.fx.includes(t))) n = .5;
+      return [n, v];
+    }).filter(([n]) => n > 0).sort((a, b) => b[0] - a[0]).map(([, v]) => v);
+    const vazio = out.innerHTML;
+    let ultima = "";
+    function mostra(q){
+      const fq = dobra(q);
+      exs.forEach(b => b.setAttribute("aria-pressed", String(dobra(b.dataset.q) === fq)));
+      if (fq === ultima) return;
+      ultima = fq;
+      if (!fq){ out.innerHTML = vazio; return requestAnimationFrame(() => layout()); }
+      const achados = nota(fq);
+      const fr = frenteDe(fq);
+      if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))){
+        out.innerHTML = `
+        <p class="hm-busca__lbl">Area</p>
+        <p class="hm-busca__termo">${esc(fr.termo)}<span class="hm-busca__tr" lang="pt-BR">${esc(fr.trad)}</span></p>
+        <p class="hm-busca__lbl">Demonstrated competencies</p>
+        <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
+        <p class="hm-busca__tb">Also read as ${esc(fr.tb)}.</p>
+        ${fr.nota && fr.nota.some(a => fq.includes(a)) ? `<p class="hm-busca__tb">On the controllership side, the financial dimension (e-billing, spend management, matter budgeting) is declared out of scope. <a href="#fronteira" data-hm-go>See the boundary</a></p>` : ""}
+        <div class="hm-busca__prova">
+          <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
+          <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>See the proof</a><a class="hm-busca__lx" href="#frentes" data-hm-go>See the areas</a></p>
+        </div>`;
+        return requestAnimationFrame(() => layout());
+      }
+      if (!achados.length){
+        out.innerHTML = `<p class="hm-busca__vazio">No entry for “${esc(q.trim())}”. The grounding gathers ${total} market terms. <a href="#repertorio" data-hm-go>Open the grounding</a></p>`;
+        return requestAnimationFrame(() => layout());
+      }
+      const v = achados[0];
+      const comp = v.comps.find(c => PROVA[c]);
+      const p = comp ? PROVA[comp] : null;
+      const comps = v.comps.length ? v.comps.map(esc).join("; ") : "Cross-cutting principle, present in all three works";
+      const mais = achados.length > 1
+        ? `<button type="button" class="hm-busca__mais" data-q="${esc(q.trim())}">See all ${achados.length} entries in the grounding</button>`
+        : `<a class="hm-busca__lx" href="#${v.id}" data-hm-term>See in the grounding</a>`;
+      out.innerHTML = `
+        <p class="hm-busca__lbl">Entry</p>
+        <p class="hm-busca__termo">${esc(v.termo)}${v.trad ? `<span class="hm-busca__tr" lang="pt-BR">${esc(v.trad)}</span>` : ""}</p>
+        <p class="hm-busca__lbl">Demonstrated competency</p>
+        <p class="hm-busca__comp">${comps}</p>
+        ${v.tb ? `<p class="hm-busca__tb">Also read as ${esc(v.tb.replace(/;\s*/g, ", "))}.</p>` : ""}
+        <div class="hm-busca__prova">
+          ${p ? `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>` : ""}
+          <p class="hm-busca__acoes">${p ? `<a class="hm-cta" href="#${p.go}" data-hm-go>See the proof</a>` : ""}${mais}</p>
+        </div>`;
+      requestAnimationFrame(() => layout());
+    }
+    let espera = 0;
+    inp.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(() => mostra(inp.value), 140); });
+    inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); clearTimeout(espera); mostra(inp.value); } });
+    exs.forEach(b => b.addEventListener("click", () => { inp.value = b.dataset.q; clearTimeout(espera); mostra(b.dataset.q); }));
+    /* vários verbetes: o lastro abre filtrado pela mesma busca */
+    out.addEventListener("click", e => {
+      const b = e.target instanceof Element ? e.target.closest(".hm-busca__mais") : null;
+      if (!b || !lexBar) return;
+      const li = lexBar.querySelector(".lexf__i");
+      li.value = b.dataset.q;
+      li.dispatchEvent(new Event("input", {bubbles:true}));
+      go("repertorio", {focus:li});
+    });
+    vivo.hidden = false;
+    if (exs[0]){ inp.value = exs[0].dataset.q; mostra(exs[0].dataset.q); }
+  }
+
+  /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
+  home.addEventListener("toggle", e => {
+    const panel = e.target instanceof Element ? e.target.closest(".hm-panel") : null;
+    if (panel) snap(panel);
+  }, true);
 })();
