@@ -933,30 +933,29 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 .hm-cta--cv a:hover{ color:var(--paper); text-decoration:underline; text-underline-offset:.3em; }
 
-/* ---------- hero (nov/2026): nome com meia tela de respiro ----------
-   Acima do nome, meia tela de papel e retícula; abaixo, à esquerda, o
-   resumo e as ações, à direita, a busca, tudo a partir de uma só margem
-   esquerda. O respiro é de 50% da altura útil quando o conteúdo cabe; numa
-   tela baixa ele cede (nunca abaixo de --hy) para que o resumo e as ações
-   sigam na primeira dobra. */
+/* ---------- hero (nov/2026): o nome no centro da primeira tela ----------
+   O nome fica centrado na horizontal e na vertical da altura útil (o seu
+   eixo a 50% da tela, sob o cordão). Abaixo dele, à esquerda, o resumo e as
+   ações; à direita, a busca, alinhados por uma só margem esquerda. */
 .hm--dossie .hm-autoria{
   --hy:clamp(16px, 4svh, 48px);
   --hx:clamp(var(--g), 3.4vw, 64px);
   --vh:calc(100svh - var(--rail-h, 54px));
+  --nf:clamp(2.5rem, min(6.1vw, 10.5svh), 6.25rem);  /* corpo do nome */
   display:flex; flex-direction:column;
   min-height:var(--vh);
-  padding-bottom:calc(var(--hy) * 1.25);
+  padding-bottom:calc(var(--hy) * 1.5);
 }
-/* o respiro: cresce com o que sobra da altura útil (flex sobre a altura
-   mínima) e para em meia tela; com pouco espaço, encolhe até --hy */
+/* o respiro: meia tela menos meia linha do nome, para o eixo do nome
+   pousar exatamente no meio */
 .hm--dossie .hm-autoria::before{
-  content:""; flex:1 1 0; min-height:var(--hy); max-height:calc(var(--vh) * .5);
+  content:""; flex:none; height:calc(var(--vh) * .5 - var(--nf) * .475);
 }
 .hm--dossie .hm-autoria > .hm-name{
-  align-self:flex-start;
-  padding:0 var(--g) calc(var(--hy) * .85) calc(var(--cell) + var(--g));
-  font-size:clamp(2.5rem, min(6.1vw, 10.5svh), 6.25rem);
-  line-height:.95; letter-spacing:-.045em; text-align:left; white-space:nowrap;
+  align-self:center;
+  padding:0 var(--g); margin-bottom:clamp(40px, 9svh, 104px);
+  font-size:var(--nf);
+  line-height:.95; letter-spacing:-.045em; text-align:center; white-space:nowrap;
 }
 .hm-base{ display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); align-items:start; }
 
@@ -1063,24 +1062,15 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 /* entre o tablet e o notebook estreito, as colunas usam também as margens */
 @media (min-width:901px) and (max-width:1100px){
-  .hm--dossie .hm-autoria > .hm-name{ padding-left:calc(var(--cell) * .5); }
   .hm-oferta{ grid-column:1 / 5; padding-left:calc(var(--cell) * .5); }
   .hm-base > .hm-busca{ grid-column:5 / 9; padding-right:calc(var(--cell) * .5); }
 }
 
-/* celular: uma coluna (nome, resumo e ações, busca). O respiro acima do
-   nome é meia tela, menos o que o resumo e as ações pedem para caberem na
-   primeira dobra (24rem). */
+/* celular: uma coluna (nome, resumo e ações, busca); o nome também no
+   centro da primeira tela */
 @media (max-width:900px){
-  .hm--dossie .hm-autoria{ justify-content:flex-start; padding:0 0 calc(var(--u) * 5); }
-  .hm--dossie .hm-autoria::before{
-    flex:none; max-height:none;
-    height:max(var(--g), min(calc(var(--vh) * .5), calc(var(--vh) - 24rem)));
-  }
-  .hm--dossie .hm-autoria > .hm-name{
-    padding:0 var(--g) calc(var(--u) * 2.5);
-    font-size:clamp(1.875rem, 10.4vw, 3.75rem);
-  }
+  .hm--dossie .hm-autoria{ --nf:clamp(1.875rem, 10.4vw, 3.75rem); justify-content:flex-start; padding:0 0 calc(var(--u) * 5); }
+  .hm--dossie .hm-autoria > .hm-name{ padding:0 var(--g); margin-bottom:calc(var(--u) * 6); }
   .hm-base{ display:flex; flex-direction:column; align-items:stretch; }
   .hm-oferta{ padding:0 var(--g); }
   .hm-base > .hm-busca{ padding:calc(var(--u) * 6) var(--g) 0; }
