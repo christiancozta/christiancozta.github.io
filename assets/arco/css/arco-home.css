@@ -933,38 +933,40 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 .hm-cta--cv a:hover{ color:var(--paper); text-decoration:underline; text-underline-offset:.3em; }
 
-/* ---------- hero (nov/2026): nome ao centro; duas colunas sem divisórias ----------
-   No alto, o nome, centrado e numa só linha, no corpo que a tela permite (não
-   estica à largura do campo). Abaixo, duas colunas separadas só pelo respiro:
-   à esquerda, apresentação, resumo e ações; à direita, a busca por
-   competências e, sob ela, a composição rotativa das distinções, em escala
-   secundária. O respiro vertical (--hy) acompanha a altura da tela: um
-   notebook baixo aperta as folgas, não as letras. */
+/* ---------- hero (nov/2026): nome com meia tela de respiro ----------
+   Acima do nome, meia tela de papel e retícula; abaixo, à esquerda, o
+   resumo e as ações, à direita, a busca, tudo a partir de uma só margem
+   esquerda. O respiro é de 50% da altura útil quando o conteúdo cabe; numa
+   tela baixa ele cede (nunca abaixo de --hy) para que o resumo e as ações
+   sigam na primeira dobra. */
 .hm--dossie .hm-autoria{
-  --hy:clamp(16px, 4.2svh, 52px);
+  --hy:clamp(16px, 4svh, 48px);
   --hx:clamp(var(--g), 3.4vw, 64px);
-  grid-template-rows:auto auto;
-  align-content:center;
+  --vh:calc(100svh - var(--rail-h, 54px));
+  display:flex; flex-direction:column;
+  min-height:var(--vh);
   padding-bottom:calc(var(--hy) * 1.25);
 }
+/* o respiro: cresce com o que sobra da altura útil (flex sobre a altura
+   mínima) e para em meia tela; com pouco espaço, encolhe até --hy */
+.hm--dossie .hm-autoria::before{
+  content:""; flex:1 1 0; min-height:var(--hy); max-height:calc(var(--vh) * .5);
+}
 .hm--dossie .hm-autoria > .hm-name{
-  grid-column:1 / -1; grid-row:1; justify-self:center;
-  padding:calc(var(--hy) * .9) var(--g) calc(var(--hy) * 1.15);
+  align-self:flex-start;
+  padding:0 var(--g) calc(var(--hy) * .85) calc(var(--cell) + var(--g));
   font-size:clamp(2.5rem, min(6.1vw, 10.5svh), 6.25rem);
-  line-height:.95; letter-spacing:-.045em; text-align:center; white-space:nowrap;
+  line-height:.95; letter-spacing:-.045em; text-align:left; white-space:nowrap;
 }
+.hm-base{ display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); align-items:start; }
 
-/* esquerda */
-.hm-oferta{ display:flex; flex-direction:column; gap:clamp(14px, 2.4svh, 24px); min-width:0; }
-.hm-oferta__t{
-  margin:0; max-width:34ch; text-wrap:pretty;
-  font-weight:600; font-size:clamp(1.0625rem, 1.3vw, 1.3125rem); line-height:1.4; letter-spacing:-.005em; color:var(--ink);
+/* esquerda: resumo e ações */
+.hm-oferta{ display:flex; flex-direction:column; gap:clamp(16px, 2.6svh, 28px); min-width:0; }
+.hm--dossie .hm-summary{
+  margin:0; max-width:52ch; text-wrap:pretty;
+  font-size:clamp(1rem, 1.15vw, 1.125rem); line-height:1.6; color:rgba(44,44,44,.88);
 }
-.hm--dossie .hm-summary{ margin:0; max-width:44ch; font-size:clamp(.9375rem, 1.05vw, 1rem); line-height:1.6; color:rgba(44,44,44,.86); }
-.hm-oferta__acoes{ display:flex; flex-wrap:wrap; gap:.625rem; padding-top:clamp(0px, 1svh, 8px); }
-
-/* direita */
-.hm-dir{ display:flex; flex-direction:column; gap:clamp(24px, 5svh, 56px); min-width:0; }
+.hm-oferta__acoes{ display:flex; flex-wrap:wrap; gap:.625rem; }
 
 /* busca: rótulo, campo, exemplos e a ficha do resultado, sem moldura nem
    filetes; o campo guarda o único traço, o de escrever. A ficha alinha
@@ -1049,63 +1051,39 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
   .hm-busca__acoes .hm-cta, .hm-busca__lx, .hm-busca__mais{ min-height:44px; }
 }
 
-/* a composição rotativa: secundária, alinhada à esquerda; a primeira
-   palavra numa coluna da largura da maior delas (produzir, 3,9em), para o ≠ seguir
-   parado no eixo */
-.hm--dossie .hm-dir .hm-ds{ align-self:stretch; align-items:flex-start; padding:0; }
-.hm--dossie .hm-dir .hm-ds__l{ gap:calc(var(--u) * 3); }
-.hm--dossie .hm-dir .hm-d,
-.hm--dossie .hm-dir .hm-ds.is-alt .hm-ds__eixo{ align-items:flex-start; gap:10px; }
-.hm--dossie .hm-dir .hm-d__par{
-  width:auto; font-size:clamp(1.375rem, min(2vw, 3.7svh), 2rem);
-  grid-template-columns:3.9em auto max-content; justify-content:start; justify-items:start;
-}
-.hm--dossie .hm-dir .hm-d__a{ justify-self:end; }
-.hm--dossie .hm-dir .hm-d__x{ font-size:1.3em; }
-.hm--dossie .hm-dir .hm-d__f{ text-align:left; white-space:normal; max-width:42ch; text-wrap:balance; }
-.hm--dossie .hm-dir .hm-ds__sel{ justify-content:flex-start; margin:2px 0 0 -9px; }
-
 @media (min-width:901px){
-  .hm-oferta{ grid-column:2 / 5; grid-row:2; align-self:start; padding:0 var(--hx) 0 var(--g); }
-  .hm-dir{ grid-column:5 / 8; grid-row:2; align-self:start; padding:0 var(--g) 0 var(--hx); }
+  .hm-oferta{ grid-column:2 / 5; padding:0 var(--hx) 0 var(--g); }
+  .hm-base > .hm-busca{ grid-column:5 / 8; padding:0 var(--g) 0 var(--hx); }
 }
 /* telas largas e baixas (notebooks): as folgas cedem antes das letras */
 @media (min-width:901px) and (max-height:760px){
   .hm--dossie .hm-summary{ line-height:1.55; }
   .hm-busca__ex button{ min-height:30px; padding:.25rem .5rem; }
-}
-@media (min-width:901px) and (max-height:700px){
-  .hm--dossie .hm-autoria{ padding-bottom:12px; }
-  .hm--dossie .hm-autoria > .hm-name{ font-size:clamp(2.5rem, min(6.1vw, 9.6svh), 6.25rem); padding-bottom:var(--hy); }
-  .hm-dir{ gap:18px; }
   .hm-busca, .hm-busca__vivo{ gap:8px; }
-  .hm--dossie .hm-dir .hm-d{ gap:8px; }
 }
 /* entre o tablet e o notebook estreito, as colunas usam também as margens */
 @media (min-width:901px) and (max-width:1100px){
+  .hm--dossie .hm-autoria > .hm-name{ padding-left:calc(var(--cell) * .5); }
   .hm-oferta{ grid-column:1 / 5; padding-left:calc(var(--cell) * .5); }
-  .hm-dir{ grid-column:5 / 9; padding-right:calc(var(--cell) * .5); }
+  .hm-base > .hm-busca{ grid-column:5 / 9; padding-right:calc(var(--cell) * .5); }
 }
 
-/* celular: uma coluna, na ordem do documento (nome, apresentação, busca,
-   composição) */
+/* celular: uma coluna (nome, resumo e ações, busca). O respiro acima do
+   nome é meia tela, menos o que o resumo e as ações pedem para caberem na
+   primeira dobra (24rem). */
 @media (max-width:900px){
-  .hm--dossie .hm-autoria{ display:flex; flex-direction:column; justify-content:flex-start; padding:0 0 calc(var(--u) * 5); }
+  .hm--dossie .hm-autoria{ justify-content:flex-start; padding:0 0 calc(var(--u) * 5); }
+  .hm--dossie .hm-autoria::before{
+    flex:none; max-height:none;
+    height:max(var(--g), min(calc(var(--vh) * .5), calc(var(--vh) - 24rem)));
+  }
   .hm--dossie .hm-autoria > .hm-name{
-    align-self:center; padding:calc(var(--u) * 4) var(--g) calc(var(--u) * 3);
+    padding:0 var(--g) calc(var(--u) * 2.5);
     font-size:clamp(1.875rem, 10.4vw, 3.75rem);
   }
+  .hm-base{ display:flex; flex-direction:column; align-items:stretch; }
   .hm-oferta{ padding:0 var(--g); }
-  .hm-dir{ padding:calc(var(--u) * 5) var(--g) 0; gap:calc(var(--u) * 5); }
-  .hm--dossie .hm-dir .hm-ds{ padding:0; }
-  .hm--dossie .hm-dir .hm-d__par{
-    grid-template-columns:3.9em auto max-content; justify-items:start; row-gap:0;
-    font-size:clamp(1.375rem, 7.6vw, 2.25rem);
-  }
-  .hm--dossie .hm-dir .hm-d__a{ justify-self:end; }
-  .hm--dossie .hm-dir .hm-d__x{ font-size:1.3em; }
-  .hm--dossie .hm-dir .hm-ds__eixo .hm-d__par > span:empty::before{ content:none; }
-  .hm--dossie .hm-dir .hm-d__f{ max-width:34ch; }
+  .hm-base > .hm-busca{ padding:calc(var(--u) * 6) var(--g) 0; }
 }
 
 /* ---------- rótulo de território visível sobre o título das obras ---------- */
@@ -1119,34 +1097,82 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-ne{ color:var(--atrio); letter-spacing:0; }
 .hm-ne--echo{ color:var(--echo); }
 
-/* ---------- três frentes ---------- */
+/* ---------- três frentes ----------
+   Uma linha por frente, tudo alinhado pelo alto: a distinção (primeira
+   coluna), o projeto, a área sobre a sua descrição (coluna central), o
+   número e o caminho até o caso. */
 .hm-frentes{ grid-template-rows:repeat(2, minmax(var(--row), auto)); }
 .hm-frentes::after{ content:""; grid-column:1 / -1; height:var(--row); }
 .hm-fr{ grid-column:2 / 8; grid-row:3; align-self:start; list-style:none; margin:0; padding:var(--g) 0 0; }
 .hm-fr__r{
-  display:grid; grid-template-columns:minmax(0, 3.2fr) 4.14rem minmax(0, 4fr) minmax(0, 2.2fr) 6.84rem;
-  align-items:center; gap:var(--u) calc(var(--g) * 1.5);
-  padding:calc(var(--u) * 2.5) var(--g);
+  display:grid;
+  grid-template-columns:minmax(0, 3.4fr) minmax(4.5rem, auto) minmax(0, 4fr) minmax(0, 1.9fr) auto;
+  align-items:start; gap:var(--u) calc(var(--g) * 1.5);
+  padding:calc(var(--u) * 3) var(--g);
   border-top:1px solid var(--rule); background:var(--paper);
 }
 .hm-fr__r:first-child{ border-top-color:var(--ink); }
 .hm-fr__r:last-child{ border-bottom:1px solid var(--rule); }
 .hm-fr p{ margin:0; }
+.hm-fr__c{ display:flex; flex-direction:column; gap:.4rem; min-width:0; }
 .hm-fr__f{
-  font-family:var(--f-display); font-weight:800; letter-spacing:-.035em;
-  font-size:clamp(1.035rem, 1.8vw, 1.665rem); line-height:1.08;
+  font-family:var(--f-display); font-weight:800; letter-spacing:-.025em;
+  font-size:clamp(1.0625rem, 1.25vw, 1.3125rem); line-height:1.15;
 }
-.hm-fr__d{ font-size:.81rem; line-height:1.5; }
-.hm-fr__n{ display:flex; flex-direction:column; gap:.135rem; }
+.hm-fr__d{ font-size:.875rem; line-height:1.5; max-width:46ch; }
+.hm-fr__n{ display:flex; flex-direction:column; gap:.135rem; padding-top:.1rem; }
 .hm-fr__n b{ font-family:var(--f-display); font-weight:800; font-size:1.35rem; line-height:1.05; letter-spacing:-.03em; }
-.hm-fr__n span{ font-size:.702rem; line-height:1.35; color:rgba(44,44,44,.84); }
-.hm-fr__a{ justify-self:end; }
+.hm-fr__n span{ font-size:.75rem; line-height:1.35; color:rgba(44,44,44,.84); }
+.hm-fr__a{ justify-self:end; margin-top:-.6rem!important; }
 .hm-fr__a a{
   display:inline-flex; align-items:center; min-height:44px; white-space:nowrap;
   font-family:var(--f-micro); font-size:.558rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
   color:var(--ink); text-decoration:underline; text-underline-offset:.3em; text-decoration-color:rgba(44,44,44,.35);
 }
 .hm-fr__a a:hover, .hm-fr__a a:focus-visible{ text-decoration-color:var(--ink); }
+
+/* a distinção, na primeira coluna: par em display, frase em micro, à
+   esquerda. Onde há série (ATRIO, RATIO, TROIA), uma por vez (arco-home.js);
+   cada uma leva o seu próprio ≠. */
+.hm-fr .hm-fr__ds{
+  grid-column:auto; grid-row:auto; align-self:start;
+  display:block; padding:0; min-width:0;
+}
+.hm-fr__ds .hm-ds__l{ gap:calc(var(--u) * 2); }
+.hm-fr__ds .hm-d{ align-items:flex-start; gap:8px; }
+.hm-fr__ds .hm-d__par{
+  display:block; width:auto; white-space:nowrap;
+  font-size:clamp(1.25rem, 1.75vw, 1.75rem); line-height:1.05; letter-spacing:-.035em;
+}
+.hm-fr__ds .hm-d__x{ font-size:1.15em; line-height:.8; }
+.hm .hm-fr__ds .hm-d__f{
+  text-align:left; white-space:normal; max-width:40ch; text-wrap:balance;
+  font-size:.6875rem; line-height:1.45; letter-spacing:.06em;
+}
+.hm-fr__ds.is-alt .hm-d .hm-d__x{ visibility:inherit; }
+.hm-fr__ds .hm-ds__sel{ justify-content:flex-start; margin:6px 0 0 -9px; }
+
+/* as tags: a do projeto e, na linha do ATRIO, o elo com o módulo da vez.
+   O fio tem o peso e o comprimento do conectivo do cordão (1px, --nav-gap);
+   a tag do módulo inverte o tratamento: papel, borda e letra no accent. */
+.hm-fr__p{ display:flex; flex-direction:column; align-items:center; justify-self:start; width:max-content; padding-top:.2rem; }
+.hm-fr__elo{ display:flex; flex-direction:column; align-items:center; }
+.hm-fr__fio{
+  display:block; width:1px; height:1.89rem; background:var(--atrio);
+  transform-origin:50% 0; transform:scaleY(0);
+  transition:transform var(--fast) var(--ease);
+}
+.hm-chip--mod{
+  background:var(--paper); border-color:var(--atrio); color:var(--atrio);
+  min-width:calc(5ch + 1.1em); text-align:center;
+  opacity:0; transition:opacity var(--fast) var(--ease) 80ms;
+}
+.hm-fr__elo:not([data-on]){ display:none; }
+.hm-fr__elo[data-on="true"] .hm-fr__fio{ transform:scaleY(1); }
+.hm-fr__elo[data-on="true"] .hm-chip--mod{ opacity:1; }
+@media (prefers-reduced-motion: reduce){
+  .hm-fr__fio, .hm-chip--mod{ transition:none; }
+}
 
 /* ---------- ficha das obras ---------- */
 .hm-ficha{ display:flex; flex-direction:column; gap:calc(var(--u) * 2.25); padding:var(--g) 0; background:var(--paper); }
@@ -1198,11 +1224,14 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 
 @media (max-width:900px){
   .hm-fr{ padding:var(--g) var(--g) 0; }
-  .hm-fr__r{ grid-template-columns:minmax(0, 1fr) auto; padding:calc(var(--u) * 2) 0; }
-  .hm-fr__f{ grid-column:1; }
-  .hm-fr__p{ grid-column:2; justify-self:end; }
-  .hm-fr__d, .hm-fr__n, .hm-fr__a{ grid-column:1 / -1; }
-  .hm-fr__a{ justify-self:start; }
+  /* no celular: a distinção à esquerda e as tags à direita; abaixo, a área
+     e a descrição, o número e o caminho */
+  .hm-fr__r{ grid-template-columns:minmax(0, 1fr) auto; row-gap:calc(var(--u) * 1.5); padding:calc(var(--u) * 3) 0; }
+  .hm-fr .hm-fr__ds{ grid-column:1; grid-row:1; }
+  .hm-fr__p{ grid-column:2; grid-row:1; justify-self:end; }
+  .hm-fr__c, .hm-fr__n, .hm-fr__a{ grid-column:1 / -1; }
+  .hm-fr__ds .hm-d__par{ font-size:clamp(1.25rem, 6.4vw, 1.75rem); }
+  .hm-fr__a{ justify-self:start; margin-top:-.5rem!important; }
   .hm-panel > .hm-kick.hm-kick--on{ padding:var(--g) var(--g) 0; }
   .hm-ficha{ padding:calc(var(--u) * 3) var(--g); }
   .hm-proj--atrio .hm-ficha{ padding:calc(var(--u) * 3) var(--g); }
@@ -1308,12 +1337,6 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 .hm-ficha__b--tese{ padding-top:.81rem; }
 .hm-ficha__b p a{ color:var(--ink); font-weight:600; text-underline-offset:.2em; }
-
-/* frentes: Legal Operations leva duas provas (ECHO e RASTRO), empilhadas */
-.hm-fr__p{ display:flex; flex-direction:column; align-items:flex-start; gap:.27rem; }
-@media (max-width:900px){
-  .hm-fr__p{ flex-direction:row; flex-wrap:wrap; justify-content:flex-end; }
-}
 
 /* piso de leitura dos rótulos monoespaçados: 11px (antes, de 7 a 9,8px) */
 .hm .hm-kick,

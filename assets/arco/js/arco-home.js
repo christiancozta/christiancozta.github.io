@@ -90,41 +90,55 @@
   }
   const snapAll = () => panels.forEach(snap);
 
-  /* ---------- hero: distinções em alternância ----------
-     Sem JS, a série aparece inteira, em lista. Com JS, uma por vez, trocando
-     a cada 5 s; para sob o ponteiro ou o foco, com a aba escondida e com
-     movimento reduzido. Quem escolhe no seletor assume: a troca para. */
-  const ds = home.querySelector(".hm-ds");
-  if (ds){
+  /* ---------- frentes: distinções em alternância ----------
+     Cada frente traz, na primeira coluna, a distinção do projeto que a prova.
+     Onde há mais de uma (Legal Engineering: ATRIO, RATIO, TROIA), sem JS a
+     série aparece inteira; com JS, uma por vez, trocando a cada 3,5 s; para
+     sob o ponteiro ou o foco, com a aba escondida e com movimento reduzido.
+     Quem escolhe no seletor assume: a troca para. Com RATIO ou TROIA na vez,
+     o fio desce da tag ATRIO até a tag do módulo (.hm-fr__elo). */
+  const MODULOS = {ratio:"RATIO", troia:"TROIA"};
+  home.querySelectorAll(".hm-ds").forEach(ds => {
     const itens = [...ds.querySelectorAll(".hm-d")];
     const sel = ds.querySelector(".hm-ds__sel");
     const botoes = sel ? [...sel.querySelectorAll("button")] : [];
-    if (itens.length > 1 && botoes.length === itens.length){
-      let atual = 0, timer = 0, escolhido = false, sobre = false;
-      const mostra = k => {
-        atual = k;
-        ds.dataset.proj = itens[k].dataset.proj || "";
-        itens.forEach((el, n) => el.classList.toggle("is-on", n === k));
-        botoes.forEach((b, n) => b.setAttribute("aria-pressed", String(n === k)));
-      };
-      const para = () => { clearInterval(timer); timer = 0; };
-      const roda = () => {
-        para();
-        if (reduce || escolhido || sobre || document.hidden) return;
-        timer = setInterval(() => mostra((atual + 1) % itens.length), 5000);
-      };
-      botoes.forEach((b, n) => b.addEventListener("click", () => { escolhido = true; para(); mostra(n); }));
-      ds.addEventListener("pointerenter", () => { sobre = true; para(); });
-      ds.addEventListener("pointerleave", () => { sobre = false; roda(); });
-      ds.addEventListener("focusin", () => { sobre = true; para(); });
-      ds.addEventListener("focusout", () => { sobre = false; roda(); });
-      document.addEventListener("visibilitychange", roda);
-      ds.classList.add("is-alt");
-      sel.hidden = false;
-      mostra(0);
-      roda();
-    }
-  }
+    if (itens.length < 2 || botoes.length !== itens.length) return;
+    const linha = ds.closest(".hm-fr__r");
+    const elo = linha && linha.querySelector(".hm-fr__elo");
+    const eloTag = elo && elo.querySelector(".hm-chip--mod");
+    let atual = 0, timer = 0, escolhido = false, sobre = false;
+    const mostra = k => {
+      atual = k;
+      const proj = itens[k].dataset.proj || "";
+      ds.dataset.proj = proj;
+      itens.forEach((el, n) => el.classList.toggle("is-on", n === k));
+      botoes.forEach((b, n) => b.setAttribute("aria-pressed", String(n === k)));
+      if (elo){
+        const mod = MODULOS[proj];
+        if (mod) eloTag.textContent = mod;
+        elo.dataset.on = String(!!mod);
+      }
+    };
+    const para = () => { clearInterval(timer); timer = 0; };
+    const roda = () => {
+      para();
+      if (reduce || escolhido || sobre || document.hidden) return;
+      timer = setInterval(() => mostra((atual + 1) % itens.length), 3500);
+    };
+    botoes.forEach((b, n) => b.addEventListener("click", () => { escolhido = true; para(); mostra(n); }));
+    /* a pausa vale para a linha inteira da frente: ler a área ou o elo não
+       deixa a distinção trocar */
+    const alvo = linha || ds;
+    alvo.addEventListener("pointerenter", () => { sobre = true; para(); });
+    alvo.addEventListener("pointerleave", () => { sobre = false; roda(); });
+    alvo.addEventListener("focusin", () => { sobre = true; para(); });
+    alvo.addEventListener("focusout", () => { sobre = false; roda(); });
+    document.addEventListener("visibilitychange", roda);
+    ds.classList.add("is-alt");
+    sel.hidden = false;
+    mostra(0);
+    roda();
+  });
 
   /* ---------- Rastro: abas de leitura e tags do índice ----------
      Sem JS, índice, finalização e fila descem em sequência e o índice fica
