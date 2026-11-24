@@ -85,7 +85,10 @@
     if (!tracks.length) return;
     const units = tracks.map(t => Math.max(1, Math.ceil((t - 1) / r)));
     const sum = units.reduce((a, b) => a + b, 0);
-    if (sum % perCell) units[units.length - 1] += perCell - (sum % perCell);
+    /* a fileira que completa o quadrado: a última, ou a que o painel indicar
+       (data-sobra, 1 = primeira), para que uma faixa no pé não cresça */
+    const sobra = Math.min(units.length, Math.max(1, +panel.dataset.sobra || units.length)) - 1;
+    if (sum % perCell) units[sobra] += perCell - (sum % perCell);
     panel.style.gridTemplateRows = units.map(u => u * r + "px").join(" ");
   }
   const snapAll = () => panels.forEach(snap);

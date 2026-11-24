@@ -1406,15 +1406,15 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 /* a faixa: a distinção na voz do hero, em papel sobre tinta, sinal no azul */
 .hm .hm-fund-faixa{
   grid-column:1 / -1; align-self:stretch; justify-content:center;
-  padding:calc(var(--u) * 7) var(--g);
+  padding:calc(var(--u) * .75) var(--g);
+  gap:calc(var(--u) * .5);
   background:#2C2C2C;
 }
-.hm-fund-faixa .hm-d__par{ font-size:clamp(2.2rem, 4.6vw, 4.4rem); color:#FCFCFC; }
+.hm-fund-faixa .hm-d__par{ font-size:clamp(1.5rem, 2.6vw, 2.8rem); color:#FCFCFC; }
 .hm-fund-faixa .hm-d__f{ color:#FCFCFC; }
-.hm-fund-faixa .hm-d__f i{ font-style:normal; margin:0 .6em; }
+.hm-fund-faixa .hm-d__f{ display:flex; flex-wrap:wrap; justify-content:center; column-gap:2.4em; row-gap:.2em; }
 @media (max-width:900px){
-  .hm-fund-faixa .hm-d__f i{ display:none; }
-  .hm-fund-faixa .hm-d__f span{ display:block; }
+  .hm-fund-faixa .hm-d__f{ flex-direction:column; align-items:center; }
 }
 @media (min-width:901px){
   .hm-proj--cerne{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
