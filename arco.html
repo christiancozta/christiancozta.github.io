@@ -108,10 +108,10 @@
 <script src="assets/arco/js/arco-shell.js?v=20261122-semdata" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261123-centro">
-<script src="assets/arco/js/arco-home.js?v=20261123-frentes" defer></script>
-<link rel="stylesheet" href="assets/atrio/css/ratio-clock.css">
-<script src="assets/atrio/js/ratio-demo-cases.js" defer></script>
-<script src="assets/atrio/js/ratio-clock.js" defer></script>
+<script src="assets/arco/js/arco-home.js?v=20261124-handoff02" defer></script>
+<link rel="stylesheet" href="assets/atrio/css/ratio-clock.css?v=20261124-handoff02">
+<script src="assets/atrio/js/ratio-demo-cases.js?v=20261124-handoff02" defer></script>
+<script src="assets/atrio/js/ratio-clock.js?v=20261124-handoff02" defer></script>
 </head>
 <body>
 
@@ -142,8 +142,8 @@
         </div>
 
         <button class="rail__link" type="button" data-view="atrio">ATRIO</button>
-        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-clock-shortcut>RATIO</button>
-        <span class="rail__link rail__link--child rail__link--off" aria-disabled="true">TROIA</span>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-demo-tab="tab-ratio">RATIO</button>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-demo-tab="tab-troia">TROIA</button>
 
         <button class="rail__link" type="button" data-anchor="ai-governance" data-proj="cerne">CERNE</button>
       </div>
@@ -353,18 +353,10 @@
               </div>
               <details class="ratio-path"><summary>Percurso do caso</summary><ol class="ratio-demo__stages" data-ratio-stages aria-label="Fases da demonstração"></ol></details>
               
-              <div class="ratio-troia" data-ratio-troia hidden>
-                <div class="ratio-troia__printer" aria-hidden="true">
-                  <i class="ratio-troia__body"></i><i class="ratio-troia__cover"></i>
-                  <i class="ratio-troia__rail"></i><i class="ratio-troia__head"></i>
-                  <i class="ratio-troia__side"></i><i class="ratio-troia__led"></i>
-                  <i class="ratio-troia__slot"></i>
-                </div>
-                <div class="ratio-troia__paper">
-                  <h4>TROIA · Matriz contrafactual</h4>
-                  <dl data-ratio-matrix></dl>
-                </div>
-              </div>
+              <section class="ratio-matrix" data-ratio-matrix-panel aria-labelledby="ratio-matrix-title" hidden>
+                <h4 id="ratio-matrix-title">Matriz contrafactual</h4>
+                <dl data-ratio-matrix></dl>
+              </section>
               <div class="ratio-demo__exchange">
                 <div>
                   <h4 data-ratio-stage tabindex="-1"></h4>
@@ -423,12 +415,15 @@
                 <p class="ratio-clock__status" data-ratio-status role="status"></p>
               </figure>
             </section>
+          <section class="hm-score troia-demo" id="troia-demo" role="tabpanel" aria-labelledby="tab-troia" hidden>
+            <iframe class="hm-score__frame" src="troia-registradora.html?vitrine" title="TROIA: réplica da registradora do CERNE" loading="lazy"></iframe>
+          </section>
           <nav class="hm-sig hm-sig--atrio" aria-label="Arquitetura integrada: ATRIO, RATIO e TROIA">
-            <div class="ratio-tabs" role="tablist" aria-label="ATRIO / RATIO">
-            <button class="hm-piece" type="button" role="tab" id="tab-atrio" aria-selected="true" aria-controls="atrio-overview"><img src="assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">A<em>T</em>RIO</span></button>
-            <button class="hm-piece" type="button" role="tab" id="tab-ratio" aria-selected="false" aria-controls="ratio-demo" tabindex="-1"><img src="assets/atrio/brand/ratio-rainha.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">R<em>A</em>TIO</span></button>
+            <div class="ratio-tabs" role="tablist" aria-label="ATRIO / RATIO / TROIA">
+              <button class="hm-piece" type="button" role="tab" id="tab-atrio" aria-selected="true" aria-controls="atrio-overview"><img src="assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">A<em>T</em>RIO</span></button>
+              <button class="hm-piece" type="button" role="tab" id="tab-ratio" aria-selected="false" aria-controls="ratio-demo" tabindex="-1"><img src="assets/atrio/brand/ratio-rainha.svg?v=20261124-handoff02" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">R<em>A</em>TIO</span></button>
+              <button class="hm-piece" type="button" role="tab" id="tab-troia" aria-selected="false" aria-controls="troia-demo" tabindex="-1"><img src="assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">T<em>R</em>OIA</span></button>
             </div>
-            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="cerne"><img src="assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">T<em>R</em>OIA</span></button>
           </nav>
         </section>
 

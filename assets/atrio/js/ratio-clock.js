@@ -9,7 +9,6 @@
   const copy = english ? {
     idle: ["Choose a case", "Ready", "Choose"],
     ai: ["AI's turn", "Analyzing", "Wait"],
-    print: ["TROIA is printing the matrix", "Printing", "Wait"],
     human: ["Your turn to respond", "Requested", "Respond"],
     confirm: ["Awaiting your confirmation", "Requested", "Confirm"],
     done: ["Simulated handoff to CERNE", "Drafted", "Confirmed"],
@@ -25,7 +24,6 @@
   } : {
     idle: ["Escolha um caso", "Pronta", "Escolher"],
     ai: ["Vez da IA", "Analisa", "Aguarde"],
-    print: ["TROIA está imprimindo a matriz", "Imprime", "Aguarde"],
     human: ["Sua vez de responder", "Solicitou", "Responder"],
     confirm: ["Aguardando sua confirmação", "Solicitou", "Confirmar"],
     done: ["Encaminhamento simulado ao CERNE", "Formulado", "Confirmado"],
@@ -41,7 +39,6 @@
   };
 
   const find = (name) => demo.querySelector("[data-ratio-" + name + "]");
-  const heading = document.getElementById("ratio-demo-title");
   const select = find("case");
   const stageHeading = find("stage");
   const knob = find("knob");
@@ -57,7 +54,7 @@
     shade.setAttribute("class", "ratio-clock__shade");
     veil.before(shade);
   }
-  const paper = find("troia");
+  const matrixPanel = find("matrix-panel");
   const source = find("source");
   const form = find("form");
   const reply = find("reply");
@@ -129,7 +126,7 @@
     find("counter").textContent = session ? String(session.index + 1).padStart(2, "0") + " / " + String(stages.length).padStart(2, "0") : "— / —";
     const [status, ai, human] = copy[state];
     const humanTurn = state === "human" || state === "confirm";
-    demo.dataset.turn = humanTurn ? "human" : state === "ai" || state === "print" ? "ai" : "none";
+    demo.dataset.turn = humanTurn ? "human" : state === "ai" ? "ai" : "none";
     knob.disabled = !humanTurn;
     const knobLabel = !humanTurn ? copy.lockedKnob : state === "confirm" ? copy.confirmPaddle : copy.paddle;
     knob.setAttribute("aria-label", knobLabel);
@@ -157,7 +154,7 @@
   }
 
   function finish(animate = false) {
-    paper.hidden = true;
+    matrixPanel.hidden = true;
     source.hidden = true;
     request.textContent = "";
     const message = copy.finished + " " + activeCase.phases.at(-2).excerpt;
@@ -179,8 +176,7 @@
     if (focus && !demo.hidden) stageHeading.focus({preventScroll: true});
   }
 
-  function printMatrix(entries, focus) {
-    const matrix = find("matrix");
+  function showMatrix(entries) {
     const rows = entries.map(([label, value]) => {
       const row = document.createElement("div");
       const term = document.createElement("dt");
@@ -188,24 +184,10 @@
       term.textContent = label;
       detail.textContent = value;
       row.append(term, detail);
-      row.hidden = !motion.matches;
       return row;
     });
-    matrix.replaceChildren(...rows);
-    paper.hidden = false;
-    if (motion.matches) {
-      handToHuman(focus);
-      return;
-    }
-    clock("print");
-    paper.classList.add("is-printing");
-    paper.setAttribute("aria-busy", "true");
-    rows.forEach((row, index) => later(() => { row.hidden = false; }, index * 330));
-    later(() => {
-      paper.classList.remove("is-printing");
-      paper.removeAttribute("aria-busy");
-      handToHuman(focus);
-    }, rows.length * 330);
+    find("matrix").replaceChildren(...rows);
+    matrixPanel.hidden = false;
   }
 
   function renderMove(focus = false) {
@@ -219,9 +201,7 @@
     }
 
     clock("ai");
-    paper.hidden = true;
-    paper.classList.remove("is-printing");
-    paper.removeAttribute("aria-busy");
+    matrixPanel.hidden = true;
     source.hidden = true;
     source.open = false;
     error.hidden = true;
@@ -233,8 +213,8 @@
       find("source-title").textContent = copy.source + " · " + current.source;
       find("excerpt").textContent = current.excerpt;
       source.hidden = false;
-      if (current.matrix) printMatrix(current.matrix, focus);
-      else handToHuman(focus);
+      if (current.matrix) showMatrix(current.matrix);
+      handToHuman(focus);
     }), motion.matches ? 0 : turnPause);
   }
 
@@ -245,7 +225,7 @@
     activeCase = cases[key];
     session = null;
     reply.value = "";
-    paper.hidden = true;
+    matrixPanel.hidden = true;
     source.hidden = true;
     find("last").hidden = true;
     find("request").textContent = "";
@@ -355,15 +335,16 @@
 
   function bindTabs() {
     const overview = document.getElementById("atrio-overview");
+    const troia = document.getElementById("troia-demo");
     const panel = overview.closest(".hm-panel");
     const grid = panel.closest(".hm");
     const clockFace = demo.querySelector(".ratio-clock");
     const art = overview.querySelector(".hm-nv");
     const sheet = overview.querySelector(":scope > .hm-ficha, :scope > .hm-narr");
-    const tabs = [...panel.querySelectorAll('[role="tab"]')];
+    const tabs = [...panel.querySelectorAll('.ratio-tabs [role="tab"]')];
     const narrow = matchMedia("(max-width: 900px)");
 
-    // The original card sizes the grid in both states, including an expanded origin.
+    // The overview keeps the grid dimensions while the clock is active.
     function fit() {
       if (demo.hidden) return;
       const bounds = panel.getBoundingClientRect();
@@ -389,20 +370,25 @@
 
     function activate(tab) {
       const showClock = tab.id === "tab-ratio";
-      overview.inert = showClock;
-      overview.setAttribute("aria-hidden", String(showClock));
+      const showTroia = tab.id === "tab-troia";
+      overview.hidden = showTroia;
+      overview.inert = showClock || showTroia;
+      overview.setAttribute("aria-hidden", String(overview.inert));
       demo.hidden = !showClock;
+      troia.hidden = !showTroia;
       tabs.forEach(item => {
         item.setAttribute("aria-selected", String(item === tab));
         item.tabIndex = item === tab ? 0 : -1;
       });
+      panel.dispatchEvent(new Event("arco:tabchange"));
       fit();
     }
 
     for (const [i, tab] of tabs.entries()) {
       tab.addEventListener("click", () => activate(tab));
       tab.addEventListener("keydown", event => {
-        const indices = {ArrowLeft: 1 - i, ArrowRight: 1 - i, Home: 0, End: 1};
+        const last = tabs.length - 1;
+        const indices = {ArrowLeft: (i + last) % tabs.length, ArrowRight: (i + 1) % tabs.length, Home: 0, End: last};
         if (!(event.key in indices)) return;
         event.preventDefault();
         const next = tabs[indices[event.key]];
@@ -410,9 +396,12 @@
         next.focus({preventScroll: true});
       });
     }
-    document.querySelector("[data-clock-shortcut]")?.addEventListener("click", () => {
-      activate(tabs[1]);
-      heading.focus({preventScroll: true});
+    document.querySelectorAll("[data-demo-tab]").forEach(shortcut => {
+      shortcut.addEventListener("click", () => {
+        const tab = document.getElementById(shortcut.dataset.demoTab);
+        activate(tab);
+        (tab.id === "tab-ratio" ? document.getElementById("ratio-demo-title") : tab).focus({preventScroll: true});
+      });
     });
     const observer = new ResizeObserver(fit);
     [art, sheet, panel, grid].forEach(node => observer.observe(node));
