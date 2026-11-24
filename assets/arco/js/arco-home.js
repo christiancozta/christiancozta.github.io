@@ -675,30 +675,32 @@
   }
   /* ---------- 6. busca do hero: do termo da vaga à prova ----------
      Lê os verbetes do próprio lastro (termo, tradução, variantes e
-     competências) e devolve a competência que o termo nomeia, com o número
-     que a prova e os caminhos até a obra e até o verbete. Sem JS, o bloco
-     fica só com o caminho para o lastro inteiro. */
+     competências). Em repouso, os dois campos (verbete e competência) ficam em
+     reticências; enquanto se digita, uma lista sugere os verbetes (e as
+     frentes) que o termo alcança. Escolhido um, a ficha mostra a competência
+     que ele nomeia e o número que a prova, na mesma coluna das respostas.
+     Sem JS, o bloco fica só com o caminho para o lastro inteiro. */
   const busca = document.getElementById("busca");
   if (busca && lex){
     const vivo = busca.querySelector(".hm-busca__vivo");
     const inp = busca.querySelector(".hm-busca__i");
-    const exs = [...busca.querySelectorAll(".hm-busca__ex button")];
+    const sug = busca.querySelector(".hm-busca__sug");
     const out = busca.querySelector(".hm-busca__r");
     const dobra = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
     const limpa = s => (s || "").replace(/\s+/g, " ").trim();
     const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]));
     /* competência → a prova (copy a fechar com o autor) */
     const PROVA = {
-      "Gestão de indicadores e desempenho": {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe", go:"rastro"},
-      "Gestão do conhecimento": {chip:"echo", tag:"ECHO", n:"2.758", l:"ementas catalogadas", go:"legal-operations"},
-      "Mapeamento e desenho de processos": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores", go:"legal-operations"},
-      "Governança de conteúdo e linguagem controlada": {chip:"echo", tag:"ECHO", n:"631", l:"temas de precedentes", go:"legal-operations"},
-      "Engenharia de dados e corpus": {chip:"atrio", tag:"ATRIO", n:"115.114", l:"registros processuais únicos", go:"legal-engineering"},
-      "Orquestração decisória": {chip:"atrio", tag:"ATRIO", n:"31", l:"rotas na API do ATRIO", go:"legal-engineering"},
-      "Avaliação adversarial": {chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais", go:"ai-governance"},
-      "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cifra na API do ATRIO", go:"legal-engineering"},
-      "Traceability": {chip:"rastro", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo", go:"rastro"},
-      "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados", go:"legal-engineering"}
+      "Gestão de indicadores e desempenho": {chip:"rastro", tag:"RASTRO", n:"60,4%", l:"taxa de finalização da equipe"},
+      "Gestão do conhecimento": {chip:"echo", tag:"ECHO", n:"2.758", l:"ementas catalogadas"},
+      "Mapeamento e desenho de processos": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"},
+      "Governança de conteúdo e linguagem controlada": {chip:"echo", tag:"ECHO", n:"631", l:"temas de precedentes"},
+      "Engenharia de dados e corpus": {chip:"atrio", tag:"ATRIO", n:"115.114", l:"registros processuais únicos"},
+      "Orquestração decisória": {chip:"atrio", tag:"ATRIO", n:"31", l:"rotas na API do ATRIO"},
+      "Avaliação adversarial": {chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais"},
+      "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cifra na API do ATRIO"},
+      "Traceability": {chip:"rastro", tag:"RASTRO", n:"46", l:"figuras com fonte ou cálculo"},
+      "Geração textual controlada": {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados"}
     };
     /* nomes de área: o recrutador digita a frente, não a prática. Não são
        verbetes do lastro; respondem com a frente inteira e as suas provas.
@@ -710,16 +712,16 @@
        al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica",
            "controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
        nota:["controladoria", "controllership", "controller"],
-       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}],
-       go:"legal-operations"},
+       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"assuntos em localizadores"}, {chip:"rastro", tag:"RASTRO", n:"−29,8 p.p.", l:"processos acima do teto de 30 dias"}]},
       {termo:"AI Governance & Evaluation", trad:"Governança e avaliação de IA jurídica",
        comps:["Avaliação adversarial", "Orquestração decisória", "Traceability"],
        tb:"Legal AI Evaluation & Governance, Governança de IA",
        al:["ai governance & evaluation", "ai governance and evaluation", "ai evaluation & governance", "legal ai evaluation & governance", "legal ai evaluation", "legal ai governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
-       provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados"}],
-       go:"ai-governance"}
+       provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rodadas sobre atos reais"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"testes automatizados"}]}
     ];
     const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
+    /* na sugestão, a frente entra pelo começo de qualquer nome seu */
+    const frentesPara = q => FRENTES.filter(f => f.al.some(a => a.startsWith(q) || (q.length >= 4 && a.includes(q))));
     const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
       const termo = limpa(e.querySelector(".lex__t")?.textContent);
       const trad = limpa(e.querySelector(".lex__p .arx-sr")?.textContent);
@@ -737,68 +739,138 @@
       else if (q.split(" ").every(t => v.fx.includes(t))) n = .5;
       return [n, v];
     }).filter(([n]) => n > 0).sort((a, b) => b[0] - a[0]).map(([, v]) => v);
-    const vazio = out.innerHTML;
-    let ultima = "";
-    function mostra(q){
-      const fq = dobra(q);
-      exs.forEach(b => b.setAttribute("aria-pressed", String(dobra(b.dataset.q) === fq)));
-      if (fq === ultima) return;
-      ultima = fq;
-      if (!fq){ out.innerHTML = vazio; return requestAnimationFrame(() => layout()); }
-      const achados = nota(fq);
-      const fr = frenteDe(fq);
-      if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))){
-        out.innerHTML = `
-        <p class="hm-busca__lbl">Frente</p>
-        <p class="hm-busca__termo">${esc(fr.termo)}<span class="hm-busca__tr">${esc(fr.trad)}</span></p>
-        <p class="hm-busca__lbl">Competências demonstradas</p>
-        <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
-        <p class="hm-busca__tb">Também lido como ${esc(fr.tb)}.</p>
-        ${fr.nota && fr.nota.some(a => fq.includes(a)) ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : ""}
-        <div class="hm-busca__prova">
-          <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
-          <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>Ver a prova</a><a class="hm-busca__lx" href="#frentes" data-hm-go>Ver as frentes</a></p>
-        </div>`;
-        return requestAnimationFrame(() => layout());
-      }
-      if (!achados.length){
-        out.innerHTML = `<p class="hm-busca__vazio">Nenhum verbete para “${esc(q.trim())}”. O lastro reúne ${total} termos de mercado. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>`;
-        return requestAnimationFrame(() => layout());
-      }
-      const v = achados[0];
-      const comp = v.comps.find(c => PROVA[c]);
-      const p = comp ? PROVA[comp] : null;
-      const comps = v.comps.length ? v.comps.map(esc).join("; ") : "Princípio transversal, presente nas três obras";
-      const mais = achados.length > 1
-        ? `<button type="button" class="hm-busca__mais" data-q="${esc(q.trim())}">Ver os ${achados.length} verbetes no lastro</button>`
-        : `<a class="hm-busca__lx" href="#${v.id}" data-hm-term>Ver no lastro</a>`;
+
+    /* a ficha: rótulo e valor por par, sempre os mesmos dois rótulos */
+    const RETIC = "…";
+    const prova = p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`;
+    function ficha({termo = "", trad = "", comp = "", lista = false, tb = "", nota = "", provas = []} = {}){
+      const vazio = !termo;
       out.innerHTML = `
-        <p class="hm-busca__lbl">Verbete</p>
-        <p class="hm-busca__termo">${esc(v.termo)}${v.trad ? `<span class="hm-busca__tr">${esc(v.trad)}</span>` : ""}</p>
-        <p class="hm-busca__lbl">Competência demonstrada</p>
-        <p class="hm-busca__comp">${comps}</p>
-        ${v.tb ? `<p class="hm-busca__tb">Também lido como ${esc(v.tb.replace(/;\s*/g, ", "))}.</p>` : ""}
-        <div class="hm-busca__prova">
-          ${p ? `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>` : ""}
-          <p class="hm-busca__acoes">${p ? `<a class="hm-cta" href="#${p.go}" data-hm-go>Ver a prova</a>` : ""}${mais}</p>
-        </div>`;
+        <dl class="hm-busca__f${vazio ? " is-vazio" : ""}">
+          <div class="hm-busca__par">
+            <dt class="hm-busca__lbl">Verbete</dt>
+            <dd><p class="hm-busca__termo">${vazio ? RETIC : esc(termo)}${trad ? `<span class="hm-busca__tr">${esc(trad)}</span>` : ""}</p></dd>
+          </div>
+          <div class="hm-busca__par">
+            <dt class="hm-busca__lbl">Competência demonstrada</dt>
+            <dd>
+              <p class="hm-busca__comp${lista ? " hm-busca__comp--lista" : ""}">${vazio ? RETIC : comp}</p>
+              ${tb ? `<p class="hm-busca__tb">Também lido como ${esc(tb)}.</p>` : ""}
+              ${nota}
+              ${provas.length ? `<div class="hm-busca__ns">${provas.map(prova).join("")}</div>` : ""}
+            </dd>
+          </div>
+        </dl>`;
       requestAnimationFrame(() => layout());
     }
-    let espera = 0;
-    inp.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(() => mostra(inp.value), 140); });
-    inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); clearTimeout(espera); mostra(inp.value); } });
-    exs.forEach(b => b.addEventListener("click", () => { inp.value = b.dataset.q; clearTimeout(espera); mostra(b.dataset.q); }));
-    /* vários verbetes: o lastro abre filtrado pela mesma busca */
-    out.addEventListener("click", e => {
-      const b = e.target instanceof Element ? e.target.closest(".hm-busca__mais") : null;
-      if (!b || !lexBar) return;
-      const li = lexBar.querySelector(".lexf__i");
-      li.value = b.dataset.q;
-      li.dispatchEvent(new Event("input", {bubbles:true}));
-      go("repertorio", {focus:li});
+    function mostraFrente(fr, fq){
+      ficha({
+        termo:fr.termo, trad:fr.trad, comp:fr.comps.map(esc).join("; "), lista:true, tb:fr.tb,
+        nota:fr.nota && fr.nota.some(a => fq.includes(a)) ? `<p class="hm-busca__tb">Na controladoria, a face financeira (e-billing, spend management, matter budgeting) está declarada fora do escopo. <a href="#fronteira" data-hm-go>Ver a fronteira</a></p>` : "",
+        provas:fr.provas
+      });
+    }
+    function mostraVerbete(v){
+      const c = v.comps.find(k => PROVA[k]);
+      ficha({
+        termo:v.termo, trad:v.trad,
+        comp:v.comps.length ? v.comps.map(esc).join("; ") : "Princípio transversal, presente nas três obras",
+        tb:v.tb ? v.tb.replace(/;\s*/g, ", ") : "",
+        provas:c ? [PROVA[c]] : []
+      });
+    }
+    /* Enter sem sugestão escolhida: a melhor leitura do que foi digitado */
+    function mostra(q){
+      const fq = dobra(q);
+      if (!fq) return ficha();
+      const achados = nota(fq);
+      const fr = frenteDe(fq);
+      if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))) return mostraFrente(fr, fq);
+      if (achados.length) return mostraVerbete(achados[0]);
+      ficha();
+    }
+
+    /* ---------- autocomplete (combobox ARIA, lista própria) ---------- */
+    let itens = [], ativo = -1, espera = 0;
+    const realce = (t, q) => {
+      const i = t.toLowerCase().indexOf(q);
+      return i < 0 || dobra(t.slice(i, i + q.length)) !== q ? esc(t) : `${esc(t.slice(0, i))}<mark>${esc(t.slice(i, i + q.length))}</mark>${esc(t.slice(i + q.length))}`;
+    };
+    function fecha(){
+      sug.hidden = true; sug.innerHTML = ""; itens = []; ativo = -1;
+      inp.setAttribute("aria-expanded", "false");
+      inp.removeAttribute("aria-activedescendant");
+    }
+    function marca(i){
+      ativo = i;
+      [...sug.children].forEach((li, k) => li.setAttribute("aria-selected", String(k === i)));
+      if (i < 0){ inp.removeAttribute("aria-activedescendant"); return; }
+      const li = sug.children[i];
+      inp.setAttribute("aria-activedescendant", li.id);
+      li.scrollIntoView({block:"nearest"});
+    }
+    function sugere(){
+      const bruto = inp.value.trim();
+      const fq = dobra(bruto);
+      if (fq.length < 2){ fecha(); if (!fq) ficha(); return; }
+      const fs = frentesPara(fq).map(f => ({f}));
+      const vs = nota(fq).filter(v => !fs.some(({f}) => dobra(f.termo) === v.ft)).map(v => ({v}));
+      itens = [...fs, ...vs].slice(0, 6);
+      const q = bruto.toLowerCase();
+      sug.innerHTML = itens.length
+        ? itens.map((it, i) => {
+            const t = it.f ? it.f.termo : it.v.termo;
+            const tr = it.f ? it.f.trad : it.v.trad;
+            return `<li class="hm-busca__op" id="busca-op-${i}" role="option" aria-selected="false" data-i="${i}"><span class="hm-busca__opt">${realce(t, q)}</span>${tr ? `<span class="hm-busca__opr">${esc(tr)}</span>` : ""}${it.f ? `<span class="hm-busca__opk">Frente</span>` : ""}</li>`;
+          }).join("")
+        : `<li class="hm-busca__op is-nada" role="option" aria-disabled="true" aria-selected="false">Nenhum verbete para “${esc(bruto)}”. O lastro reúne ${total} termos.</li>`;
+      sug.hidden = false;
+      inp.setAttribute("aria-expanded", "true");
+      ativo = -1; inp.removeAttribute("aria-activedescendant");
+    }
+    function escolhe(i){
+      const it = itens[i];
+      if (!it) return;
+      const fq = dobra(inp.value);
+      inp.value = it.f ? it.f.termo : it.v.termo;
+      fecha();
+      it.f ? mostraFrente(it.f, fq) : mostraVerbete(it.v);
+    }
+    inp.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(sugere, 90); });
+    inp.addEventListener("focus", () => { if (inp.value.trim() && sug.hidden) sugere(); });
+    inp.addEventListener("keydown", e => {
+      const aberto = !sug.hidden && itens.length;
+      if (e.key === "ArrowDown"){
+        e.preventDefault();
+        if (sug.hidden){ sugere(); return; }
+        if (aberto) marca((ativo + 1) % itens.length);
+      } else if (e.key === "ArrowUp"){
+        if (!aberto) return;
+        e.preventDefault();
+        marca(ativo <= 0 ? itens.length - 1 : ativo - 1);
+      } else if (e.key === "Enter"){
+        e.preventDefault();
+        clearTimeout(espera);
+        if (aberto) escolhe(ativo >= 0 ? ativo : 0);
+        else { fecha(); mostra(inp.value); }
+      } else if (e.key === "Escape"){
+        if (!sug.hidden){ e.preventDefault(); fecha(); }
+        else if (inp.value){ e.preventDefault(); inp.value = ""; ficha(); }
+      }
     });
+    /* mousedown, não click: o campo não perde o foco antes da escolha */
+    sug.addEventListener("mousedown", e => {
+      const li = e.target instanceof Element ? e.target.closest(".hm-busca__op[data-i]") : null;
+      e.preventDefault();
+      if (li) escolhe(+li.dataset.i);
+    });
+    sug.addEventListener("mousemove", e => {
+      const li = e.target instanceof Element ? e.target.closest(".hm-busca__op[data-i]") : null;
+      if (li && +li.dataset.i !== ativo) marca(+li.dataset.i);
+    });
+    inp.addEventListener("blur", () => setTimeout(fecha, 0));
     vivo.hidden = false;
-    if (exs[0]){ inp.value = exs[0].dataset.q; mostra(exs[0].dataset.q); }
+    ficha();
   }
 
   /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
