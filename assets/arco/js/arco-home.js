@@ -492,7 +492,7 @@
   layout(true);
 
   /* ---------- 3. navegação interna ---------- */
-  const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering"};
+  const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering", cerne:"ai-governance"};
   const isHomeTarget = id => {
     const el = id && document.getElementById(id);
     return el && home.contains(el) ? el : null;
