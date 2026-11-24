@@ -1365,3 +1365,42 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
      pousa sobre a lista: um respiro de meio quadrado entre os dois */
   .hm--dossie .hm-fr{ padding-top:calc(var(--cell) * .45); }
 }
+
+/* ---------- CERNE: Fundamento (subseção do painel AI Governance) ----------
+   Versão reduzida da tese, em coluna única e corpo menor: a delimitação, o
+   conceito, as duas condições (rastro, lastro) e o fecho ao centro, que
+   antecede o painel rastro. */
+.hm-fund{
+  display:flex; flex-direction:column; gap:calc(var(--u) * 2.5);
+  padding:calc(var(--u) * 6) var(--g) calc(var(--u) * 4);
+  background:var(--paper);
+}
+.hm-fund > *{ margin:0; max-width:44rem; }
+.hm-fund__t{
+  font-family:var(--f-display); font-weight:800; letter-spacing:-.03em;
+  font-size:clamp(1.17rem, 2vw, 1.71rem); line-height:1.05;
+  padding-top:.63rem; border-top:max(3px, .06em) solid var(--cerne);
+  align-self:flex-start;
+}
+.hm-fund__del{ font-size:.855rem; line-height:1.6; }
+.hm-fund__conc{
+  padding-left:var(--g); border-left:3px solid var(--cerne);
+  font-family:var(--f-body); font-style:italic; font-size:clamp(.99rem, 1.4vw, 1.17rem); line-height:1.4;
+}
+.hm-fund__conc b{ display:block; margin-bottom:.3em; font-style:normal; font-family:var(--f-micro); font-size:.54rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.hm-fund__cond{ display:flex; flex-direction:column; gap:calc(var(--u) * 1.5); }
+.hm-fund__cond > div{ border-top:1px solid var(--ink); padding-top:.63rem; }
+.hm-fund__cond dt{ font-family:var(--f-display); font-weight:800; font-size:.99rem; letter-spacing:-.01em; }
+.hm-fund__cond dd{ margin:.2rem 0 0; font-size:.855rem; line-height:1.55; }
+.hm-fund__fecho{ align-self:stretch; max-width:none; text-align:center; padding-top:calc(var(--u) * 4); }
+.hm-fund__par{
+  margin:0; font-family:var(--f-display); font-weight:800; letter-spacing:-.035em;
+  font-size:clamp(1.62rem, 3.4vw, 2.88rem); line-height:1;
+}
+.hm-fund__sub{ margin:.6em 0 0; font-size:.9rem; color:var(--soft); }
+.hm-fund__sub i{ font-style:normal; margin:0 .6em; }
+@media (min-width:901px){
+  .hm-proj--cerne{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
+  .hm-proj--cerne .hm-fund{ grid-column:2 / 8; grid-row:4; }
+  .hm-proj--cerne::after{ grid-row:5; }
+}
