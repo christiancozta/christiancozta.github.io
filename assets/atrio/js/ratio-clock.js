@@ -67,6 +67,7 @@
   const finding = find("finding");
   const request = find("request");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
+  const turnPause = 520;
   const timers = new Set();
   const sessions = new Map();
 
@@ -97,7 +98,7 @@
   function typeResponse(entries, complete) {
     const lines = entries.map(([node, text]) => ({node, characters: Array.from(text)}));
     const length = lines.reduce((total, line) => total + line.characters.length, 0);
-    const duration = Math.max(360, Math.min(1080, length * 12));
+    const duration = Math.max(900, Math.min(3600, length * 24));
     const started = performance.now();
     finding.parentElement.setAttribute("aria-busy", "true");
 
@@ -234,7 +235,7 @@
       source.hidden = false;
       if (current.matrix) printMatrix(current.matrix, focus);
       else handToHuman(focus);
-    }), motion.matches ? 0 : 140);
+    }), motion.matches ? 0 : turnPause);
   }
 
   function selectCase() {
@@ -316,7 +317,7 @@
     reply.value = "";
     if (session.index === activeCase.phases.length - 1) {
       session.done = true;
-      later(() => finish(true), motion.matches ? 0 : 140);
+      later(() => finish(true), motion.matches ? 0 : turnPause);
     } else {
       session.index += 1;
       renderMove(true);
