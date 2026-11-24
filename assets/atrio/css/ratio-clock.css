@@ -70,65 +70,76 @@
 .ratio-demo :is(button, summary, select, textarea):focus-visible { outline: 2px solid #9e3218; outline-offset: 2px; }
 .ratio-demo ::selection { background: #f6c3b4; color: var(--ink); }
 
-/* Two sprung paddles, two dials and the move number stamped into the base. */
+/* A gravura como instrumento: o corpo e o botão são camadas raster; os mostradores
+   recebem texto e hachura num SVG com o mesmo viewBox (1376 × 970), de modo que
+   conteúdo e moldura se alinham em qualquer largura. Só tinta e papel do site. */
 .ratio-clock {
-  container-type: inline-size;
+  container-type: size;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-width: 0; margin: 0 0 0 1px; overflow: hidden;
-  background: var(--atrio); color: #272322;
+  background: var(--atrio); color: var(--ink);
 }
-.ratio-clock__case {
-  position: relative; width: 85%; max-width: 52rem; margin-top: 7cqw;
-  padding: 3.6cqw 3.6cqw 2.6cqw;
-  background: #292828; border-radius: 2.4cqw 2.4cqw 1.3cqw 1.3cqw;
-  border-bottom: 1.1cqw solid #191817;
+.ratio-clock__instrument {
+  position: relative;
+  width: min(86cqw, calc((100cqh - 5.5rem) * 1376 / 970));
+  aspect-ratio: 1376 / 970;
 }
-.ratio-clock__paddles, .ratio-clock__faces { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2.4cqw; }
-.ratio-clock__paddles { position: absolute; inset: auto 3.6cqw calc(100% - 1px); align-items: end; }
-.ratio-clock__paddle {
-  height: max(44px, 8cqw); background: transparent; border: 0; padding: 0;
-  position: relative; opacity: 1; cursor: default;
+.ratio-clock__body, .ratio-clock__dials { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ratio-clock__dials { overflow: visible; }
+.ratio-clock__dials text {
+  text-anchor: middle; fill: var(--ink);
+  stroke: var(--paper); stroke-width: 18px; stroke-linejoin: round; paint-order: stroke;
 }
-.ratio-clock__paddle::before {
-  content: ""; position: absolute; inset: auto 5% 0; height: 26%;
-  background: #342e2b; transition: height .18s ease-out;
+/* O corpo do estado é medido pela corda do mostrador ("Confirmado" é a palavra mais
+   longa), não pela tela: é o mesmo em qualquer largura. */
+.ratio-clock__agent { font: 500 34px var(--f-micro); letter-spacing: .14em; text-transform: uppercase; }
+.ratio-clock__state { font: 800 60px var(--f-display); letter-spacing: -.035em; }
+/* O turno: o mostrador de quem espera recebe a hachura horizontal da própria caixa. */
+.ratio-clock__veil { fill: url(#ratio-hatch); opacity: 0; transition: opacity .2s ease-out; }
+#ratio-hatch rect { fill: var(--ink); }
+.ratio-demo:is([data-state="ai"],[data-state="print"]) [data-dial="human"] .ratio-clock__veil,
+.ratio-demo:is([data-state="human"],[data-state="confirm"]) [data-dial="ai"] .ratio-clock__veil { opacity: 1; }
+
+/* O botão superior: em cima quando a iniciativa é do humano; recolhido no colar quando
+   a vez é da IA ou não há turno. O acionamento é um curso curto, sem retorno elástico. */
+.ratio-clock__knob {
+  position: absolute; left: 42.515%; top: 0; width: 14.898%; height: 13.093%;
+  padding: 0; border: 0; background: none; cursor: default;
 }
-.ratio-clock__paddle::after {
-  content: ""; position: absolute; inset: auto 0 23%; height: max(8px, 2.2cqw);
-  background: #ebe7de; border-bottom: 3px solid #9e978c; border-radius: 2px;
-  transition: bottom .18s ease-out;
+.ratio-clock__knob::before { content: ""; position: absolute; inset: -12px -6px -4px; }
+.ratio-clock__knob[aria-disabled="false"] { cursor: pointer; }
+.ratio-demo .ratio-clock__knob:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+.ratio-clock__well { position: absolute; inset: 0; overflow: hidden; }
+.ratio-clock__well img {
+  display: block; width: 100%; height: 100%;
+  transform: translateY(11%); transition: transform .12s ease-out;
 }
-.ratio-clock__paddle.is-raised::before { height: 69%; }
-.ratio-clock__paddle.is-raised::after { bottom: 65%; background: #fff9e9; }
-.ratio-clock__paddle[aria-disabled="false"] { cursor: pointer; }
-.ratio-clock__paddle:focus-visible { outline-color: #fff !important; }
-.ratio-clock__face {
-  min-width: 0; min-height: 20cqw; padding: 2.2cqw 1cqw;
-  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5cqw;
-  background: #e2dfd7; border-top: .7cqw solid #a9a69e; border-radius: .6cqw;
+.ratio-demo:is([data-state="human"],[data-state="confirm"]) .ratio-clock__well img { transform: none; }
+.ratio-demo:is([data-state="human"],[data-state="confirm"]) .ratio-clock__knob:is(:active,.is-pressed) .ratio-clock__well img {
+  transform: translateY(11%); transition-duration: .07s;
 }
-.ratio-clock__face span, .ratio-clock__engraving, .ratio-clock__status {
-  font-family: var(--f-micro); font-weight: 500; text-transform: uppercase;
+
+.ratio-clock__plate {
+  display: flex; justify-content: space-between; align-items: baseline;
+  width: min(86cqw, calc((100cqh - 5.5rem) * 1376 / 970));
+  margin-top: .7rem; padding-inline: 1.5%;
 }
-.ratio-clock__face span { font-size: clamp(11px, 2cqw, 16px); letter-spacing: .13em; }
-.ratio-clock__face strong { font: 800 clamp(1rem, 5cqw, 3.3rem)/1 var(--f-display); letter-spacing: -.035em; }
-.ratio-demo:is([data-state="human"],[data-state="confirm"]) .ratio-clock__face:last-child,
-.ratio-demo:is([data-state="ai"],[data-state="print"]) .ratio-clock__face:first-child {
-  background: #fffaf1; border-top-color: var(--atrio);
-}
-.ratio-clock__engraving { display: flex; justify-content: space-between; align-items: center; margin: 2.2cqw .4cqw 0; color: #f2efe7; }
-.ratio-clock__wordmark { font: 650 clamp(.82rem, 3cqw, 1.65rem)/1 "Science Gothic", var(--f-display); letter-spacing: .02em; }
-.ratio-clock__wordmark em { color: #ff8c69; font-style: normal; }
-[data-ratio-counter] { font: 500 clamp(.65rem, 1.95cqw, 1rem)/1 var(--f-micro); font-variant-numeric: tabular-nums; }
-.ratio-clock__status { margin: 3.5cqw 1rem 0; text-align: center; font-size: clamp(11px, 2cqw, 16px); letter-spacing: .03em; }
+.ratio-clock__wordmark { font: 650 clamp(.8rem, 2.6cqw, 1.3rem)/1 "Science Gothic", var(--f-display); letter-spacing: .02em; }
+.ratio-clock__wordmark em { color: var(--paper); font-style: normal; }
+[data-ratio-counter] { font: 500 clamp(.65rem, 1.8cqw, .9rem)/1 var(--f-micro); font-variant-numeric: tabular-nums; }
+.ratio-clock__status, [data-ratio-counter] { font-family: var(--f-micro); font-weight: 500; text-transform: uppercase; }
+.ratio-clock__status { margin: .55rem 1rem 0; text-align: center; font-size: clamp(11px, 1.9cqw, 15px); letter-spacing: .03em; }
 @media (max-width:900px) {
   #atrio-overview > * { grid-row: auto !important; grid-column: 1 / -1 !important; }
   .hm-panel > .ratio-demo { grid-area: auto !important; grid-template-columns: 100%; grid-template-rows: var(--picture-height) minmax(0,1fr); }
   .ratio-clock { grid-row: 1; margin: 0; }
   .ratio-work { grid-row: 2; padding: var(--g); }
+  /* o instrumento fica estreito: os mostradores ganham corpo para seguir legíveis */
+  .ratio-clock__agent { font-size: 46px; transform: translateY(-10px); }
+  .ratio-clock__instrument, .ratio-clock__plate { width: min(90cqw, calc((100cqh - 4.6rem) * 1376 / 970)); }
 }
 @media (prefers-reduced-motion:reduce) {
-  .ratio-clock__paddle::before, .ratio-clock__paddle::after { transition: none; }
+  .ratio-clock__veil, .ratio-clock__well img { transition: none !important; }
   .ratio-troia.is-printing :is(dl div,.ratio-troia__head) { animation: none; }
 }
 

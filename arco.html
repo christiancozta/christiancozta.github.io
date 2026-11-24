@@ -399,17 +399,27 @@
               </div>
             </div>
               <figure class="ratio-clock">
-                <div class="ratio-clock__case">
-                  <div class="ratio-clock__paddles">
-                    <button class="ratio-clock__paddle" type="button" data-ratio-paddle="ai" disabled></button>
-                    <button class="ratio-clock__paddle" type="button" data-ratio-paddle="human" disabled></button>
-                  </div>
-                  <div class="ratio-clock__faces">
-                    <div class="ratio-clock__face"><span>IA</span><strong data-ratio-ai></strong></div>
-                    <div class="ratio-clock__face"><span>Humano</span><strong data-ratio-human></strong></div>
-                  </div>
-                  <div class="ratio-clock__engraving"><span class="ratio-clock__wordmark" aria-hidden="true">R<em>A</em>TIO</span><span data-ratio-counter></span></div>
+                <!-- Gravura em duas camadas (scripts/ratio-relogio.py): o corpo, com os mostradores
+                     limpos, e o botão superior, que desce para dentro do colar ao ser acionado.
+                     Textos e turno ficam no SVG, no mesmo sistema de coordenadas da gravura. -->
+                <div class="ratio-clock__instrument">
+                  <img class="ratio-clock__body" src="assets/atrio/ratio/relogio-corpo.webp" alt="" width="1376" height="970" loading="lazy" decoding="async">
+                  <svg class="ratio-clock__dials" viewBox="0 0 1376 970" focusable="false">
+                    <defs><pattern id="ratio-hatch" width="9" height="7" patternUnits="userSpaceOnUse"><rect width="9" height="1.7"/></pattern></defs>
+                    <g class="ratio-clock__dial" data-dial="ai">
+                      <circle class="ratio-clock__veil" cx="399.5" cy="513.5" r="197"/>
+                      <text class="ratio-clock__agent" x="399.5" y="482">IA</text>
+                      <text class="ratio-clock__state" x="399.5" y="562" data-ratio-ai></text>
+                    </g>
+                    <g class="ratio-clock__dial" data-dial="human">
+                      <circle class="ratio-clock__veil" cx="974.5" cy="513.5" r="197"/>
+                      <text class="ratio-clock__agent" x="974.5" y="482">Humano</text>
+                      <text class="ratio-clock__state" x="974.5" y="562" data-ratio-human></text>
+                    </g>
+                  </svg>
+                  <button class="ratio-clock__knob" type="button" data-ratio-knob disabled><span class="ratio-clock__well"><img src="assets/atrio/ratio/relogio-botao.webp" alt="" width="205" height="127" loading="lazy" decoding="async"></span></button>
                 </div>
+                <div class="ratio-clock__plate"><span class="ratio-clock__wordmark" aria-hidden="true">R<em>A</em>TIO</span><span data-ratio-counter></span></div>
                 <p class="ratio-clock__status" data-ratio-status role="status"></p>
               </figure>
             </section>

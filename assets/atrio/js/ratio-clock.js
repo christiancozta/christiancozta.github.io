@@ -20,7 +20,7 @@
     source: "Open case file",
     paddle: "Review your response",
     confirmPaddle: "Confirm and press the clock",
-    aiPaddle: "AI clock button",
+    lockedKnob: "Clock button, locked until your turn",
     retry: "I still need the information requested in this phase. Check the excerpt in the case file and supplement your response."
   } : {
     idle: ["Escolha um caso", "Pronta", "Escolher"],
@@ -36,7 +36,7 @@
     source: "Abrir autos",
     paddle: "Revisar sua resposta",
     confirmPaddle: "Confirmar e bater o relógio",
-    aiPaddle: "Botão da IA",
+    lockedKnob: "Botão do relógio, travado até a sua vez",
     retry: "Ainda preciso do dado pedido nesta fase. Consulte o trecho nos autos e complete sua resposta."
   };
 
@@ -44,8 +44,7 @@
   const heading = document.getElementById("ratio-demo-title");
   const select = find("case");
   const stageHeading = find("stage");
-  const humanPaddle = demo.querySelector('[data-ratio-paddle="human"]');
-  const aiPaddle = demo.querySelector('[data-ratio-paddle="ai"]');
+  const knob = find("knob");
   const paper = find("troia");
   const source = find("source");
   const form = find("form");
@@ -83,14 +82,11 @@
     demo.dataset.state = state;
     find("counter").textContent = session ? String(session.index + 1).padStart(2, "0") + " / " + String(stages.length).padStart(2, "0") : "— / —";
     const [status, ai, human] = copy[state];
-    const computing = state === "ai" || state === "print";
     const humanTurn = state === "human" || state === "confirm";
-    aiPaddle.classList.toggle("is-raised", computing);
-    humanPaddle.classList.toggle("is-raised", humanTurn);
-    humanPaddle.setAttribute("aria-disabled", String(!humanTurn));
-    const paddleLabel = state === "confirm" ? copy.confirmPaddle : copy.paddle;
-    humanPaddle.setAttribute("aria-label", paddleLabel);
-    humanPaddle.title = paddleLabel;
+    knob.setAttribute("aria-disabled", String(!humanTurn));
+    const knobLabel = !humanTurn ? copy.lockedKnob : state === "confirm" ? copy.confirmPaddle : copy.paddle;
+    knob.setAttribute("aria-label", knobLabel);
+    knob.title = knobLabel;
     find("ai").textContent = ai;
     find("human").textContent = human;
     find("status").textContent = status;
@@ -297,11 +293,16 @@
   });
   confirmButton.addEventListener("click", confirm);
   find("edit").addEventListener("click", edit);
-  humanPaddle.disabled = false;
-  aiPaddle.setAttribute("aria-label", copy.aiPaddle);
-  humanPaddle.addEventListener("click", () => {
+  // The top button only acts on the human's turn and runs the same gates as the form.
+  knob.disabled = false;
+  knob.addEventListener("click", () => {
+    if (state !== "human" && state !== "confirm") return;
+    if (!motion.matches) {
+      knob.classList.add("is-pressed");
+      setTimeout(() => knob.classList.remove("is-pressed"), 150);
+    }
     if (state === "confirm") confirm();
-    else if (state === "human") form.requestSubmit();
+    else form.requestSubmit();
   });
 
   function bindTabs() {
