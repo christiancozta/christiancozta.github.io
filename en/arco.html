@@ -109,6 +109,9 @@
 <script src="../assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261124-dist">
 <script src="../assets/arco/js/arco-home.en.js?v=20261124-dist" defer></script>
+<link rel="stylesheet" href="../assets/atrio/css/ratio-clock.css">
+<script src="../assets/atrio/js/ratio-demo-cases.js" defer></script>
+<script src="../assets/atrio/js/ratio-clock.js" defer></script>
 </head>
 <body>
 
@@ -138,10 +141,8 @@
           </div>
         </div>
 
-        <!-- ATRIO-RATIO-TROIA: RATIO abre o ATRIO na Arquitetura, com o módulo
-             em destaque; TROIA fica no cordão, inativo por ora -->
         <button class="rail__link" type="button" data-view="atrio">ATRIO</button>
-        <button class="rail__link rail__link--child" type="button" data-child="atrio" data-target="arquitetura" data-module="ratio">RATIO</button>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-clock-shortcut>RATIO</button>
         <span class="rail__link rail__link--child rail__link--off" aria-disabled="true">TROIA</span>
 
         <button class="rail__link" type="button" data-anchor="ai-governance" data-proj="cerne">CERNE</button>
@@ -245,6 +246,7 @@
         <section class="hm-panel hm-proj hm-proj--atrio" id="legal-engineering" aria-labelledby="t-atrio">
           <p class="hm-kick">ATRIO</p>
           <h2 class="hm-title" id="t-atrio" data-fit="titulo"><span class="hm-fit">legal engineering</span></h2>
+          <div id="atrio-overview" role="tabpanel" aria-labelledby="tab-atrio">
           <figure class="hm-nv hm-nv--atrio" aria-hidden="true">
             <svg class="hm-nv__svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMax slice" focusable="false">
               <path class="hm-runway__light" fill="#FAFAFA" d="M300,366L846,791.9L-246,791.9Z"/>
@@ -258,9 +260,92 @@
             <p>In response, I designed ATRIO: an architecture for governing AI-mediated legal reasoning, spanning memory, formulation, confrontation and data protection.</p>
             <p>AI does not replace the decision: it operates along a governed path.</p>
           </div>
+          </div>
+          <section class="ratio-demo" id="ratio-demo" role="tabpanel" aria-labelledby="tab-ratio" hidden>
+              <div class="ratio-work"><header class="ratio-demo__header">
+                <div>
+                  <h3 id="ratio-demo-title" tabindex="-1">RATIO, turn by turn</h3>
+                  <p>Fictional cases · Based on the ATRIO-API workflow</p>
+                </div>
+                
+              </header>
+              <div class="ratio-demo__cases">
+                <label for="ratio-demo-case">Choose a case</label>
+                <select id="ratio-demo-case" data-ratio-case>
+                  <option value="">Select a procedure</option>
+                  <option value="RI">Small claims appeal</option>
+                  <option value="ED">Motion for clarification</option>
+                  <option value="MS">Writ of mandamus</option>
+                </select>
+                <p data-ratio-case-summary></p>
+              </div>
+              <details class="ratio-path"><summary>Case phases</summary><ol class="ratio-demo__stages" data-ratio-stages aria-label="Demo phases"></ol></details>
+              
+              <div class="ratio-troia" data-ratio-troia hidden>
+                <div class="ratio-troia__printer" aria-hidden="true">
+                  <i class="ratio-troia__body"></i><i class="ratio-troia__cover"></i>
+                  <i class="ratio-troia__rail"></i><i class="ratio-troia__head"></i>
+                  <i class="ratio-troia__side"></i><i class="ratio-troia__led"></i>
+                  <i class="ratio-troia__slot"></i>
+                </div>
+                <div class="ratio-troia__paper">
+                  <h4>TROIA · Counterfactual matrix</h4>
+                  <dl data-ratio-matrix></dl>
+                </div>
+              </div>
+              <div class="ratio-demo__exchange">
+                <div>
+                  <h4 data-ratio-stage tabindex="-1"></h4>
+                  <p data-ratio-finding></p>
+                  <p class="ratio-demo__question" data-ratio-request></p>
+                  <details class="ratio-demo__source" data-ratio-source hidden>
+                    <summary data-ratio-source-title></summary>
+                    <blockquote data-ratio-excerpt></blockquote>
+                  </details>
+                  <p class="ratio-demo__last" data-ratio-last hidden></p>
+                </div>
+                <div>
+                  <h4>Your move</h4>
+                  <form data-ratio-form>
+                    <label for="ratio-demo-reply">Operator response</label>
+                    <textarea id="ratio-demo-reply" data-ratio-reply rows="2" maxlength="500" aria-describedby="ratio-demo-instruction" required></textarea>
+                    <p id="ratio-demo-instruction">Enter prepares your response for confirmation. Shift + Enter adds a line break.</p>
+                    <p data-ratio-error role="alert" hidden></p>
+                    <button class="ratio-demo__action" type="submit">Review response</button>
+                  </form>
+                  <div class="ratio-demo__confirmation" data-ratio-confirmation hidden>
+                    <h5>Confirm the response to be recorded</h5>
+                    <blockquote data-ratio-preview></blockquote>
+                    <p>Confirmation hands the turn to the AI and allows it to proceed if the requested information is present.</p>
+                    <div class="ratio-demo__controls">
+                      <button class="ratio-demo__action" type="button" data-ratio-confirm>Confirm and press the clock</button>
+                      <button class="ratio-demo__link" type="button" data-ratio-edit>Edit response</button>
+                    </div>
+                  </div>
+                  <button class="ratio-demo__link" type="button" data-ratio-reset hidden>Restart this case</button>
+                </div>
+              </div>
+            </div>
+              <figure class="ratio-clock">
+                <div class="ratio-clock__case">
+                  <div class="ratio-clock__paddles">
+                    <button class="ratio-clock__paddle" type="button" data-ratio-paddle="ai" disabled></button>
+                    <button class="ratio-clock__paddle" type="button" data-ratio-paddle="human" disabled></button>
+                  </div>
+                  <div class="ratio-clock__faces">
+                    <div class="ratio-clock__face"><span>AI</span><strong data-ratio-ai></strong></div>
+                    <div class="ratio-clock__face"><span>Human</span><strong data-ratio-human></strong></div>
+                  </div>
+                  <div class="ratio-clock__engraving"><span class="ratio-clock__wordmark" aria-hidden="true">R<em>A</em>TIO</span><span data-ratio-counter></span></div>
+                </div>
+                <p class="ratio-clock__status" data-ratio-status role="status"></p>
+              </figure>
+            </section>
           <nav class="hm-sig hm-sig--atrio" aria-label="Integrated architecture: ATRIO, RATIO and TROIA">
-            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="atrio"><img src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">A<em>T</em>RIO</span></button>
-            <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="ratio"><img src="../assets/atrio/brand/ratio-rainha.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">R<em>A</em>TIO</span></button>
+            <div class="ratio-tabs" role="tablist" aria-label="ATRIO / RATIO">
+            <button class="hm-piece" type="button" role="tab" id="tab-atrio" aria-selected="true" aria-controls="atrio-overview"><img src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">A<em>T</em>RIO</span></button>
+            <button class="hm-piece" type="button" role="tab" id="tab-ratio" aria-selected="false" aria-controls="ratio-demo" tabindex="-1"><img src="../assets/atrio/brand/ratio-rainha.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">R<em>A</em>TIO</span></button>
+            </div>
             <button class="hm-piece" type="button" data-child="atrio" data-target="arquitetura" data-module="cerne"><img src="../assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">T<em>R</em>OIA</span></button>
           </nav>
         </section>
