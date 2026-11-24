@@ -50,6 +50,7 @@
   --echo:#FFB627;
   --echo-paper:#F2EFE9;
   --atrio:#D94F2D;
+  --cerne:#4F6BFF;
   background-color:var(--paper);
   background-image:
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
@@ -165,9 +166,11 @@
 .hm-d[data-proj="echo"] .hm-d__x,
 .hm-ds[data-proj="echo"] .hm-ds__eixo .hm-d__x{ color:var(--echo); }
 .hm-d[data-proj="atrio"] .hm-d__x, .hm-d[data-proj="ratio"] .hm-d__x,
-.hm-d[data-proj="troia"] .hm-d__x, .hm-d[data-proj="cerne"] .hm-d__x,
+.hm-d[data-proj="troia"] .hm-d__x,
 .hm-ds[data-proj="atrio"] .hm-ds__eixo .hm-d__x, .hm-ds[data-proj="ratio"] .hm-ds__eixo .hm-d__x,
-.hm-ds[data-proj="troia"] .hm-ds__eixo .hm-d__x, .hm-ds[data-proj="cerne"] .hm-ds__eixo .hm-d__x{ color:var(--atrio); }
+.hm-ds[data-proj="troia"] .hm-ds__eixo .hm-d__x{ color:var(--atrio); }
+.hm-d[data-proj="cerne"] .hm-d__x,
+.hm-ds[data-proj="cerne"] .hm-ds__eixo .hm-d__x{ color:var(--cerne); }
 .hm-d[data-proj="neutro"] .hm-d__x,
 .hm-ds[data-proj="neutro"] .hm-ds__eixo .hm-d__x{ color:transparent; -webkit-text-stroke:.03em #2C2C2C; }
 .hm-d__x{ -webkit-text-stroke:.03em transparent; transition:color var(--slow) var(--ease), -webkit-text-stroke-color var(--slow) var(--ease); }
@@ -223,7 +226,7 @@
 .hm-obra::before{ content:""; width:12px; height:12px; flex:none; }
 .hm-obra--echo::before{ background:var(--echo); }
 .hm-obra--atrio::before{ background:var(--atrio); }
-.hm-obra--cerne::before{ background:var(--ink); }
+.hm-obra--cerne::before{ background:var(--cerne); }
 .hm-obra:hover,
 .hm-obra:focus-visible{ text-decoration:underline; text-underline-offset:.3em; }
 .hm-contacts{
@@ -910,6 +913,7 @@ html.hm-amplo{ overflow:hidden; }
 }
 .hm-chip--echo{ background:var(--echo); border-color:var(--echo); color:#000; }
 .hm-chip--atrio{ background:var(--atrio); border-color:var(--atrio); color:#FCFCFC; }
+.hm-chip--cerne{ background:var(--cerne); border-color:var(--cerne); color:#FCFCFC; }
 .hm-chip--rastro{ background:var(--paper); color:var(--ink); }
 
 /* botões: retos, como o resto da casa; um só tom de tinta */
@@ -1086,6 +1090,7 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 .hm-ne{ color:var(--atrio); letter-spacing:0; }
 .hm-ne--echo{ color:var(--echo); }
+.hm-ne--cerne{ color:var(--cerne); }
 
 /* ---------- três frentes ----------
    Uma linha por frente, tudo alinhado pelo alto: a distinção (primeira
@@ -1313,7 +1318,8 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
    "lastro" seguem em caixa baixa: são substantivos comuns.
    ========================================================================== */
 .hm-proj--echo{ --proj:var(--echo); }
-.hm-proj--atrio, .hm-proj--cerne{ --proj:var(--atrio); }
+.hm-proj--atrio{ --proj:var(--atrio); }
+.hm-proj--cerne{ --proj:var(--cerne); }
 .hm-title--area{ text-transform:none; }
 .hm-title--area::before{
   content:""; display:block; width:.9em; height:max(3px, .055em);

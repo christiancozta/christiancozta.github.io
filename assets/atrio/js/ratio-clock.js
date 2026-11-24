@@ -384,7 +384,7 @@
       overview.inert = showClock || showTroia;
       overview.setAttribute("aria-hidden", String(overview.inert));
       demo.hidden = !showClock;
-      troia.hidden = !showTroia;
+      if (troia) troia.hidden = !showTroia;  /* TROIA sem acesso por ora (24/11/2026) */
       tabs.forEach(item => {
         item.setAttribute("aria-selected", String(item === tab));
         item.tabIndex = item === tab ? 0 : -1;

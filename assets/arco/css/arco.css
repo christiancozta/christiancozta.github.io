@@ -13,6 +13,7 @@
   /* Sinais de território — só onde a marca é nomeada e nos acentos das leituras */
   --echo:     #FFB627;
   --atrio:    #D94F2D;
+  --cerne:    #4F6BFF;
 
   /* A FAIXA DA MARCA — o nome não recebe cor de tinta: recebe campo próprio.
      ECHO em creme com letra preta, ATRIO em terra com letra branca. Vale em
@@ -21,6 +22,8 @@
   --echo-ink:   #000000;
   --atrio-band: #D94F2D;
   --atrio-ink:  #FCFCFC;
+  --cerne-band: #4F6BFF;
+  --cerne-ink:  #FCFCFC;
 
   /* tinta sobre papel — todas AA */
   --ink-78:   rgba(44,44,44,.84);   /* corpo secundario: cinza mais denso    */
@@ -2292,10 +2295,10 @@ body{
 .rail .rail__link[data-view="echo"],
 .rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
-.rail .rail__link[data-view="cerne"],
 .rail .rail__link[data-child="atrio"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
-/* CERNE: accent ainda em aberto; a caixa é papel com tinta */
-.rail .rail__link[data-proj="cerne"]{ --tone:var(--paper); --tone-ink:var(--ink); }
+/* CERNE: marca própria (24/11/2026), azul com papel */
+.rail .rail__link[data-view="cerne"],
+.rail .rail__link[data-proj="cerne"]{ --tone:var(--cerne); --tone-ink:var(--paper); }
 /* TROIA fica no cordão, inativo por ora: presente, sem caixa nem clique */
 .rail .rail__link--off{ cursor:default; pointer-events:none; color:var(--pp-58); opacity:.55; }
 .rail .rail__nav .rail__link--off::after{ display:none; }

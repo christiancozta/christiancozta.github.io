@@ -19,7 +19,7 @@
    lado de Folha de rosto, na partitura, abrem a camada de Templates (#templates)
    já em tela cheia: a página pede ao ARCO que amplie (pedido "ampliar") e, ao
    fechar a camada, que reduza, se foi ela quem ampliou. No celular, abre a
-   página inteira em #templates.
+   vista PLAY do ARCO já em #templates.
    Partitura aberta no quadro: o ARCO informa a altura útil (vitrine.ajusta) e
    os nomes das pautas crescem (--vz) até o limite em que a partitura ainda
    cabe sem rolagem nem redução; em tela cheia, a medida é a própria janela.
@@ -144,6 +144,16 @@
   window.addEventListener('resize', () => { if (!rz) rz = requestAnimationFrame(() => { rz = 0; ajustaJanela(); }); }, { passive: true });
 
   let contou = false;
+  /* No celular, a página inteira é a vista-filha do ARCO (as páginas avulsas
+     não têm acesso direto): a âncora interna vai por sessionStorage. */
+  const noArco = (vista, alvo) => {
+    const T = window.top;
+    try { if (alvo) T.sessionStorage.setItem('arco:alvo:' + vista, alvo); } catch (e) {}
+    try {
+      if (T.location.hash === '#' + vista) T.dispatchEvent(new PopStateEvent('popstate'));
+      else { T.location.hash = vista; T.dispatchEvent(new PopStateEvent('popstate')); }
+    } catch (e) { T.location.href = new URL('arco.html#' + vista, location.href).href; }
+  };
   const aberta = () => H.classList.contains('so-partitura');
   /* o ARCO ajusta o quadro: altura da folha fechada, altura da tela aberta */
   const avisa = (estado) => { if (window.parent !== window) window.parent.postMessage({ type: 'ECHO_VITRINE', estado }, location.origin); };
@@ -151,7 +161,7 @@
   function abre() {
     const quadro = window.frameElement;
     if (quadro && quadro.dataset.explorar === 'pagina') {
-      window.top.location.href = new URL('play.html', location.href).href;
+      noArco('play');
       return;
     }
     H.classList.add('so-partitura', 'empilha');
@@ -179,7 +189,7 @@
   function montador() {
     const quadro = window.frameElement;
     if (quadro && quadro.dataset.explorar === 'pagina') {
-      window.top.location.href = new URL('play.html#templates', location.href).href;
+      noArco('play', 'templates');
       return;
     }
     if (window.parent !== window && !amplo()) {

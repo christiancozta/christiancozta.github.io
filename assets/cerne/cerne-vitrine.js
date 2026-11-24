@@ -63,10 +63,20 @@
   };
 
   let contou = false;
+  /* No celular, a página inteira é a vista-filha do ARCO (as páginas avulsas
+     não têm acesso direto): a âncora interna vai por sessionStorage. */
+  const noArco = (vista, alvo) => {
+    const T = window.top;
+    try { if (alvo) T.sessionStorage.setItem('arco:alvo:' + vista, alvo); } catch (e) {}
+    try {
+      if (T.location.hash === '#' + vista) T.dispatchEvent(new PopStateEvent('popstate'));
+      else { T.location.hash = vista; T.dispatchEvent(new PopStateEvent('popstate')); }
+    } catch (e) { T.location.href = new URL('arco.html#' + vista, location.href).href; }
+  };
   function abre() {
     const quadro = window.frameElement;
     if (quadro && quadro.dataset.explorar === 'pagina') {
-      window.top.location.href = new URL('cerne.html#mesa', location.href).href;
+      noArco('cerne', 'mesa');
       return;
     }
     H.classList.add('vit-aberta');

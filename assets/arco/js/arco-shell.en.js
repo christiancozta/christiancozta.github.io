@@ -83,12 +83,19 @@
     railLinks.forEach(l => l.setAttribute("aria-current", String(l.dataset.view === view)));
 
     const frame = document.querySelector('.view[data-active="true"] iframe');
+    /* destino de uma só vez: a página avulsa que redireciona ao ARCO (ou a
+       vitrine no celular) deixa aqui a âncora interna, ex.: play → templates */
+    let alvoUnico = "";
+    try { alvoUnico = sessionStorage.getItem("arco:alvo:" + view) || ""; sessionStorage.removeItem("arco:alvo:" + view); } catch {}
+    if (frame && alvoUnico && frame.getAttribute("src") !== "about:blank"){
+      try { frame.contentWindow.location.hash = alvoUnico; } catch {}
+    }
     if (frame && frame.dataset.src && frame.getAttribute("src") === "about:blank"){
-      const remembered = rememberedChild(view);
+      const remembered = alvoUnico || rememberedChild(view);
       if (remembered){
         const base = frame.dataset.src.split("#")[0];
         frame.dataset.src = base + "#" + remembered;
-        setChildActive(view, remembered, {persist:false});
+        if (!alvoUnico) setChildActive(view, remembered, {persist:false});
       }
       const child = frame.closest(".child");
       child.dataset.loading = "true";
@@ -541,7 +548,7 @@
     echo:'#2C2C2C',
     play:'#FFB627',
     atrio:'#D94F2D',
-    cerne:'#D94F2D'
+    cerne:'#4F6BFF'
   };
 
   cleanupPreviousEndcap();

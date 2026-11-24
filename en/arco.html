@@ -52,7 +52,7 @@
     data: "../assets/data/brand/favicon.svg?v=20261014",
     echo: "../assets/echo/brand/favicon.svg?v=20261014",
     atrio: "../assets/arco/brand/favicon-atrio.svg?v=20261112-v25",
-    cerne: "../assets/atrio/brand/cerne-rainha.svg?v=20261112-v25"
+    cerne: "../assets/cerne/brand/favicon.svg?v=20261124-marca"
   };
 
   const icons = [...document.querySelectorAll('link[rel~="icon"]')];
@@ -104,15 +104,15 @@
 <link rel="preload" href="../assets/fonts/martian-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/mozilla-text-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/arco/css/fonts.css?v=20261123-raiz">
-<link rel="stylesheet" href="../assets/arco/css/arco.css?v=20261123-raiz">
+<link rel="stylesheet" href="../assets/arco/css/arco.css?v=20261124-marca">
 <script src="../assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
-<script src="../assets/arco/js/arco-shell.en.js?v=20261122-semdata" defer></script>
+<script src="../assets/arco/js/arco-shell.en.js?v=20261124-marca" defer></script>
 <script src="../assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261123-centro">
+<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261124-marca">
 <script src="../assets/arco/js/arco-home.en.js?v=20261124-montador" defer></script>
 <link rel="stylesheet" href="../assets/atrio/css/ratio-clock.css?v=20261124-handoff02">
 <script src="../assets/atrio/js/ratio-demo-cases.js?v=20261124-handoff02" defer></script>
-<script src="../assets/atrio/js/ratio-clock.js?v=20261124-handoff02b" defer></script>
+<script src="../assets/atrio/js/ratio-clock.js?v=20261124-marca" defer></script>
 </head>
 <body>
 
@@ -144,7 +144,7 @@
 
         <button class="rail__link" type="button" data-view="atrio">ATRIO</button>
         <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-demo-tab="tab-ratio">RATIO</button>
-        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-demo-tab="tab-troia">TROIA</button>
+        <button class="rail__link rail__link--child rail__link--off" type="button" disabled aria-disabled="true">TROIA</button>
 
         <button class="rail__link" type="button" data-anchor="ai-governance" data-proj="cerne">CERNE</button>
       </div>
@@ -237,12 +237,10 @@
                 <ol class="hm-ds__l" aria-label="Distinctions">
                   <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegate</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">govern</span></p><p class="hm-d__f">Before delegating the legal function, one must govern its reasoning.</p></li>
                   <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">draft</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">formulate</span></p><p class="hm-d__f">The open item is born inside the text.</p></li>
-                  <li class="hm-d" data-proj="troia"><p class="hm-d__par"><span class="hm-d__a">silence</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">omission</span></p><p class="hm-d__f">A lens has the right to find nothing.</p></li>
                 </ol>
                 <div class="hm-ds__sel" role="group" aria-label="Choose a distinction" hidden>
                   <button type="button" aria-pressed="false" aria-label="delegate ≠ govern"></button>
                   <button type="button" aria-pressed="false" aria-label="draft ≠ formulate"></button>
-                  <button type="button" aria-pressed="false" aria-label="silence ≠ omission"></button>
                 </div>
               </div>
               <p class="hm-fr__p"><span class="hm-chip hm-chip--atrio">ATRIO</span><span class="hm-fr__elo" aria-hidden="true"><i class="hm-fr__fio"></i><span class="hm-chip hm-chip--mod"></span></span></p>
@@ -410,14 +408,10 @@
                 <p class="ratio-clock__status" data-ratio-status role="status"></p>
               </figure>
             </section>
-          <section class="hm-score troia-demo" id="troia-demo" role="tabpanel" aria-labelledby="tab-troia" hidden>
-            <iframe class="hm-score__frame" src="troia-registradora.html?vitrine" title="TROIA: replica of the CERNE register" loading="lazy"></iframe>
-          </section>
-          <nav class="hm-sig hm-sig--atrio" aria-label="Integrated architecture: ATRIO, RATIO and TROIA">
-            <div class="ratio-tabs" role="tablist" aria-label="ATRIO / RATIO / TROIA">
+          <nav class="hm-sig hm-sig--atrio" aria-label="Integrated architecture: ATRIO and RATIO">
+            <div class="ratio-tabs" role="tablist" aria-label="ATRIO / RATIO">
               <button class="hm-piece" type="button" role="tab" id="tab-atrio" aria-selected="true" aria-controls="atrio-overview"><img src="../assets/atrio/brand/atrio-rei.svg?v=20261112-v25" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">A<em>T</em>RIO</span></button>
               <button class="hm-piece" type="button" role="tab" id="tab-ratio" aria-selected="false" aria-controls="ratio-demo" tabindex="-1"><img src="../assets/atrio/brand/ratio-rainha.svg?v=20261124-handoff02" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">R<em>A</em>TIO</span></button>
-              <button class="hm-piece" type="button" role="tab" id="tab-troia" aria-selected="false" aria-controls="troia-demo" tabindex="-1"><img src="../assets/atrio/brand/troia-cavalo.svg?v=20261117-troia" alt="" width="40" height="40" decoding="async"><span class="hm-piece__n">T<em>R</em>OIA</span></button>
             </div>
           </nav>
         </section>
@@ -430,7 +424,7 @@
           <div class="hm-trilho">
             <div class="hm-lado">
               <div class="hm-ficha">
-              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">produce <span class="hm-ne">≠</span> verify</h3><p>Output accelerated, and the corrections queue came to concentrate the cost of reviewing AI-mediated reasoning.</p></div>
+              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">produce <span class="hm-ne hm-ne--cerne">≠</span> verify</h3><p>Output accelerated, and the corrections queue came to concentrate the cost of reviewing AI-mediated reasoning.</p></div>
               <div class="hm-ficha__b"><h3>The system</h3><p>Independent lenses examine the ruling’s premises, inferences and grounds before the fluency of the text hides the flaw.</p></div>
               <div class="hm-ficha__b"><h3>What it measured</h3><p>15 of 17 rulings completed on the first attempt. In 9 of 12 rulings, at least one question on a point open to a motion for clarification; in 7, on the point later corrected.</p></div>
               <p class="hm-ficha__a"><a class="hm-cta" href="#cerne" data-hm-view="cerne" data-view="cerne">Open CERNE</a></p>
@@ -997,9 +991,6 @@
     <section class="view" data-view="echo" aria-label="ECHO">
       <div class="child child--echo">
         <div class="child__bar">
-          <a class="child__full" href="play.html" target="_blank" rel="noopener">
-            Prefer the full page? This way <span class="arrow" aria-hidden="true">→</span>
-          </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
         <iframe class="child__frame" title="ECHO — full page" src="about:blank" data-src="play.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
@@ -1010,9 +1001,6 @@
     <section class="view" id="play" data-view="play" aria-label="PLAY — ECHO Playbook">
       <div class="child child--play">
         <div class="child__bar">
-          <a class="child__full" href="play.html" target="_blank" rel="noopener">
-            Prefer the full page? This way <span class="arrow" aria-hidden="true">→</span>
-          </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
         <iframe class="child__frame" title="PLAY — ECHO Playbook" src="about:blank" data-src="play.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
@@ -1023,9 +1011,6 @@
     <section class="view" data-view="atrio" aria-label="ATRIO">
       <div class="child child--atrio">
         <div class="child__bar">
-          <a class="child__full" href="atrio.html" target="_blank" rel="noopener">
-            Prefer the full page? This way <span class="arrow" aria-hidden="true">→</span>
-          </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
         <iframe class="child__frame" title="ATRIO — full page" src="about:blank" data-src="atrio.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
@@ -1036,9 +1021,6 @@
     <section class="view" id="cerne" data-view="cerne" aria-label="CERNE — ATRIO module">
       <div class="child child--cerne">
         <div class="child__bar">
-          <a class="child__full" href="cerne.html" target="_blank" rel="noopener">
-            Prefer the full page? This way <span class="arrow" aria-hidden="true">→</span>
-          </a>
           <span class="child__load" aria-hidden="true"></span>
         </div>
         <iframe class="child__frame" title="CERNE — ATRIO module" src="about:blank" data-src="cerne.html" loading="lazy" referrerpolicy="no-referrer"></iframe>
