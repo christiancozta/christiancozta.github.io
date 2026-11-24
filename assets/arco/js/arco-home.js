@@ -367,6 +367,7 @@
     const quadro = score.querySelector(".hm-score__frame");
     if (!quadro) return null;
     const panel = score.closest(".hm-panel");
+    const inTab = score.getAttribute("role") === "tabpanel";
     const vit = () => { try{ return quadro.contentWindow.vitrine || null; }catch(_){ return null; } };
     const mede = k => { try{ return Math.ceil(vit()?.[k]?.() || 0); }catch(_){ return 0; } };
     let aberto = false, amplo = false, inertes = [];
@@ -390,14 +391,16 @@
       return Math.ceil(n * s);
     };
     const fit = () => {
+      if (score.hidden) return;
       if (amplo){ desescala(); delete quadro.dataset.explorar; return; }
       /* a folha é medida na largura do campo, nunca na janela escalada */
       if (stacked.matches || !aberto) desescala();
       const h = mede("folha");
       if (stacked.matches){
         score.style.removeProperty("--score-h");
-        quadro.dataset.explorar = "pagina";
-        if (h) score.style.setProperty("--vit-h", h + "px");
+        if (!inTab) quadro.dataset.explorar = "pagina";
+        const height = inTab && aberto ? mede("conteudo") || altura() : h;
+        if (height) score.style.setProperty("--vit-h", height + "px");
       } else {
         delete quadro.dataset.explorar;
         score.style.setProperty("--score-h", (aberto ? escala() : (h || altura())) + "px");
@@ -438,6 +441,10 @@
     botao.addEventListener("click", () => amplia(!amplo));
     score.addEventListener("click", e => { if (amplo && e.target === score) amplia(false); });
     quadro.addEventListener("load", () => { aberto = false; fit(); });
+    if (inTab) panel.addEventListener("arco:tabchange", () => {
+      if (score.hidden) snap(panel);
+      else fit();
+    });
     return { score, quadro, fit, amplia, amplo: () => amplo,
       abre: v => { const antes = aberto; aberto = v; fit(); return v && !antes && !amplo; } };
   }).filter(Boolean);
@@ -446,7 +453,7 @@
     addEventListener("message", e => {
       if (e.origin !== location.origin || !e.data || !/^[A-Z]+_VITRINE$/.test(e.data.type || "")) return;
       const q = quadros.find(x => x.quadro.contentWindow === e.source);
-      if (!q) return;
+      if (!q || q.score.hidden) return;
       if (e.data.pedido === "reduzir"){ q.amplia(false); return; }
       const topo = q.score.getBoundingClientRect().top;
       if (q.abre(e.data.estado !== "folha") && !stacked.matches){
