@@ -74,10 +74,26 @@
    recebem texto e hachura num SVG com o mesmo viewBox (1376 × 970), de modo que
    conteúdo e moldura se alinham em qualquer largura. Só tinta e papel do site. */
 .ratio-clock {
+  /* A aparência vem de Preliminares. A retícula segue as células e a origem do ARCO. */
+  --clock-field: #2c2c2c;
+  --clock-grid: #414141;
+  --clock-caption: #fafafa;
   container-type: size;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-width: 0; margin: 0 0 0 1px; overflow: hidden;
-  background: var(--atrio); color: var(--ink);
+  background-color: var(--clock-field);
+  background-image:
+    linear-gradient(to right, var(--clock-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--clock-grid) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  background-position: var(--clock-grid-x, 0px) calc(var(--ret-y, 0px) + var(--clock-grid-y, 0px));
+  color: var(--clock-caption);
+  transition: background-color .18s ease-out, color .18s ease-out;
+}
+.ratio-demo[data-turn="human"] .ratio-clock {
+  --clock-field: var(--atrio);
+  --clock-grid: color-mix(in srgb, var(--atrio) 82%, #fafafa);
+  --clock-caption: #101010;
 }
 .ratio-clock__instrument {
   position: relative;
@@ -85,6 +101,7 @@
   aspect-ratio: 1376 / 970;
 }
 .ratio-clock__body, .ratio-clock__dials { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ratio-clock__body { clip-path: inset(15.85% 0 0); }
 .ratio-clock__dials { overflow: visible; }
 .ratio-clock__dials text {
   text-anchor: middle; fill: var(--ink);
@@ -94,38 +111,64 @@
    longa), não pela tela: é o mesmo em qualquer largura. */
 .ratio-clock__agent { font: 500 34px var(--f-micro); letter-spacing: .14em; text-transform: uppercase; }
 .ratio-clock__state { font: 800 60px var(--f-display); letter-spacing: -.035em; }
-/* O turno: o mostrador de quem espera recebe a hachura horizontal da própria caixa. */
-.ratio-clock__veil { fill: url(#ratio-hatch); opacity: 0; transition: opacity .2s ease-out; }
+/* O mostrador em espera perde luminosidade e conserva a hachura da gravura. */
+.ratio-clock__shade, .ratio-clock__veil { opacity: 0; transition: opacity .18s ease-out; }
+.ratio-clock__shade { fill: #30282a; }
+.ratio-clock__veil { fill: url(#ratio-hatch); }
 #ratio-hatch rect { fill: var(--ink); }
-.ratio-demo:is([data-state="ai"],[data-state="print"]) [data-dial="human"] .ratio-clock__veil,
-.ratio-demo:is([data-state="human"],[data-state="confirm"]) [data-dial="ai"] .ratio-clock__veil { opacity: 1; }
+.ratio-demo[data-turn="ai"] [data-dial="human"] .ratio-clock__shade,
+.ratio-demo[data-turn="human"] [data-dial="ai"] .ratio-clock__shade { opacity: .28; }
+.ratio-demo[data-turn="ai"] [data-dial="human"] .ratio-clock__veil,
+.ratio-demo[data-turn="human"] [data-dial="ai"] .ratio-clock__veil { opacity: .42; }
+.ratio-demo[data-turn="ai"] [data-dial="human"] text,
+.ratio-demo[data-turn="human"] [data-dial="ai"] text { stroke: #ded9d8; }
 
-/* O botão superior: em cima quando a iniciativa é do humano; recolhido no colar quando
-   a vez é da IA ou não há turno. O acionamento é um curso curto, sem retorno elástico. */
+/* Dois acionadores reutilizam o botão e o colar recortado da gravura original. */
 .ratio-clock__knob {
-  position: absolute; left: 42.515%; top: 0; width: 14.898%; height: 13.093%;
+  position: absolute; top: 0; width: 14.898%; height: 16%;
   padding: 0; border: 0; background: none; cursor: default;
 }
-.ratio-clock__knob::before { content: ""; position: absolute; inset: -12px -6px -4px; }
-.ratio-clock__knob[aria-disabled="false"] { cursor: pointer; }
-.ratio-demo .ratio-clock__knob:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
-.ratio-clock__well { position: absolute; inset: 0; overflow: hidden; }
+.ratio-clock__knob[data-owner="ai"] { left: 21.58%; pointer-events: none; }
+.ratio-clock__knob[data-owner="human"] { left: 63.37%; }
+.ratio-clock__knob[data-owner="human"]::before {
+  content: "";
+  position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+.ratio-clock__knob::after {
+  content: "";
+  position: absolute; top: 81.8%; left: 0; width: 100%; height: 20%;
+  background: url("../ratio/relogio-corpo.webp") 49.96% 13.53% / 671.22% auto no-repeat;
+  pointer-events: none;
+}
+.ratio-clock__knob[data-owner="human"]:enabled { cursor: pointer; }
+.ratio-demo .ratio-clock__knob:focus-visible { outline: 2px solid var(--clock-caption); outline-offset: 3px; }
+.ratio-clock__well { position: absolute; inset: 0 0 18.2%; overflow: hidden; }
 .ratio-clock__well img {
   display: block; width: 100%; height: 100%;
-  transform: translateY(11%); transition: transform .12s ease-out;
+  transition: transform .14s ease-out;
 }
-.ratio-demo:is([data-state="human"],[data-state="confirm"]) .ratio-clock__well img { transform: none; }
-.ratio-demo:is([data-state="human"],[data-state="confirm"]) .ratio-clock__knob:is(:active,.is-pressed) .ratio-clock__well img {
-  transform: translateY(11%); transition-duration: .07s;
+.ratio-demo[data-turn="ai"] [data-owner="ai"] .ratio-clock__well img,
+.ratio-demo[data-turn="human"] [data-owner="human"] .ratio-clock__well img {
+  transform: translateY(27%);
 }
 
+.ratio-demo [data-typing]::after {
+  content: "";
+  display: inline-block;
+  height: .95em;
+  border-inline-start: 1px solid #8f311b;
+  margin-inline-start: .16em;
+  vertical-align: -.12em;
+}
 .ratio-clock__plate {
   display: flex; justify-content: space-between; align-items: baseline;
   width: min(86cqw, calc((100cqh - 5.5rem) * 1376 / 970));
   margin-top: .7rem; padding-inline: 1.5%;
 }
 .ratio-clock__wordmark { font: 650 clamp(.8rem, 2.6cqw, 1.3rem)/1 "Science Gothic", var(--f-display); letter-spacing: .02em; }
-.ratio-clock__wordmark em { color: var(--paper); font-style: normal; }
+.ratio-clock__wordmark em { color: #ff987f; font-style: normal; }
+.ratio-demo[data-turn="human"] .ratio-clock__wordmark em { color: var(--clock-caption); }
 [data-ratio-counter] { font: 500 clamp(.65rem, 1.8cqw, .9rem)/1 var(--f-micro); font-variant-numeric: tabular-nums; }
 .ratio-clock__status, [data-ratio-counter] { font-family: var(--f-micro); font-weight: 500; text-transform: uppercase; }
 .ratio-clock__status { margin: .55rem 1rem 0; text-align: center; font-size: clamp(11px, 1.9cqw, 15px); letter-spacing: .03em; }
@@ -139,7 +182,7 @@
   .ratio-clock__instrument, .ratio-clock__plate { width: min(90cqw, calc((100cqh - 4.6rem) * 1376 / 970)); }
 }
 @media (prefers-reduced-motion:reduce) {
-  .ratio-clock__veil, .ratio-clock__well img { transition: none !important; }
+  .ratio-clock, .ratio-clock__shade, .ratio-clock__veil, .ratio-clock__well img { transition: none; }
   .ratio-troia.is-printing :is(dl div,.ratio-troia__head) { animation: none; }
 }
 

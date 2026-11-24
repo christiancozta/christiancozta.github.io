@@ -45,6 +45,18 @@
   const select = find("case");
   const stageHeading = find("stage");
   const knob = find("knob");
+  const leftKnob = document.createElement("span");
+  leftKnob.className = knob.className;
+  leftKnob.dataset.owner = "ai";
+  leftKnob.setAttribute("aria-hidden", "true");
+  leftKnob.append(knob.firstElementChild.cloneNode(true));
+  knob.dataset.owner = "human";
+  knob.before(leftKnob);
+  for (const veil of demo.querySelectorAll(".ratio-clock__veil")) {
+    const shade = veil.cloneNode(false);
+    shade.setAttribute("class", "ratio-clock__shade");
+    veil.before(shade);
+  }
   const paper = find("troia");
   const source = find("source");
   const form = find("form");
@@ -52,6 +64,8 @@
   const confirmation = find("confirmation");
   const confirmButton = find("confirm");
   const error = find("error");
+  const finding = find("finding");
+  const request = find("request");
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   const timers = new Set();
   const sessions = new Map();
@@ -75,6 +89,37 @@
   function stopTimers() {
     timers.forEach(clearTimeout);
     timers.clear();
+    finding.removeAttribute("data-typing");
+    request.removeAttribute("data-typing");
+    finding.parentElement.removeAttribute("aria-busy");
+  }
+
+  function typeResponse(entries, complete) {
+    const lines = entries.map(([node, text]) => ({node, characters: Array.from(text)}));
+    const length = lines.reduce((total, line) => total + line.characters.length, 0);
+    const duration = Math.max(360, Math.min(1080, length * 12));
+    const started = performance.now();
+    finding.parentElement.setAttribute("aria-busy", "true");
+
+    function write() {
+      const instant = motion.matches || demo.hidden || document.hidden;
+      const progress = instant ? 1 : Math.min(1, (performance.now() - started) / duration);
+      let remaining = Math.ceil(progress * length);
+      for (const {node, characters} of lines) {
+        const shown = Math.max(0, remaining);
+        node.textContent = characters.slice(0, shown).join("");
+        node.toggleAttribute("data-typing", progress < 1 && remaining >= 0 && remaining < characters.length);
+        remaining -= characters.length;
+      }
+      if (progress < 1) {
+        later(write, 28);
+        return;
+      }
+      finding.parentElement.removeAttribute("aria-busy");
+      complete();
+    }
+
+    write();
   }
 
   function clock(next) {
@@ -83,7 +128,8 @@
     find("counter").textContent = session ? String(session.index + 1).padStart(2, "0") + " / " + String(stages.length).padStart(2, "0") : "— / —";
     const [status, ai, human] = copy[state];
     const humanTurn = state === "human" || state === "confirm";
-    knob.setAttribute("aria-disabled", String(!humanTurn));
+    demo.dataset.turn = humanTurn ? "human" : state === "ai" || state === "print" ? "ai" : "none";
+    knob.disabled = !humanTurn;
     const knobLabel = !humanTurn ? copy.lockedKnob : state === "confirm" ? copy.confirmPaddle : copy.paddle;
     knob.setAttribute("aria-label", knobLabel);
     knob.title = knobLabel;
@@ -109,14 +155,22 @@
     record.textContent = last ? copy.recorded + " · " + last.phase + " — " + last.answer : "";
   }
 
-  function finish() {
+  function finish(animate = false) {
     paper.hidden = true;
     source.hidden = true;
-    find("request").textContent = "";
-    find("finding").textContent = copy.finished + " " + activeCase.phases.at(-2).excerpt;
-    showLastReply();
-    clock("done");
-    if (!demo.hidden) stageHeading.focus({preventScroll: true});
+    request.textContent = "";
+    const message = copy.finished + " " + activeCase.phases.at(-2).excerpt;
+    const complete = () => {
+      showLastReply();
+      clock("done");
+      if (!demo.hidden) stageHeading.focus({preventScroll: true});
+    };
+    if (animate) {
+      typeResponse([[finding, message]], complete);
+    } else {
+      finding.textContent = message;
+      complete();
+    }
   }
 
   function handToHuman(focus) {
@@ -170,19 +224,17 @@
     source.hidden = true;
     source.open = false;
     error.hidden = true;
-    find("request").textContent = "";
-    find("finding").textContent = copy.working;
+    request.textContent = "";
+    finding.textContent = copy.working;
     reply.value = session.draft;
 
-    later(() => {
-      find("finding").textContent = current.reading;
-      find("request").textContent = current.question;
+    later(() => typeResponse([[finding, current.reading], [request, current.question]], () => {
       find("source-title").textContent = copy.source + " · " + current.source;
       find("excerpt").textContent = current.excerpt;
       source.hidden = false;
       if (current.matrix) printMatrix(current.matrix, focus);
       else handToHuman(focus);
-    }, motion.matches ? 120 : 600);
+    }), motion.matches ? 0 : 140);
   }
 
   function selectCase() {
@@ -264,7 +316,7 @@
     reply.value = "";
     if (session.index === activeCase.phases.length - 1) {
       session.done = true;
-      later(finish, motion.matches ? 120 : 450);
+      later(() => finish(true), motion.matches ? 0 : 140);
     } else {
       session.index += 1;
       renderMove(true);
@@ -293,14 +345,9 @@
   });
   confirmButton.addEventListener("click", confirm);
   find("edit").addEventListener("click", edit);
-  // The top button only acts on the human's turn and runs the same gates as the form.
-  knob.disabled = false;
+  // The right button runs the same checks as the form.
   knob.addEventListener("click", () => {
     if (state !== "human" && state !== "confirm") return;
-    if (!motion.matches) {
-      knob.classList.add("is-pressed");
-      setTimeout(() => knob.classList.remove("is-pressed"), 150);
-    }
     if (state === "confirm") confirm();
     else form.requestSubmit();
   });
@@ -308,6 +355,8 @@
   function bindTabs() {
     const overview = document.getElementById("atrio-overview");
     const panel = overview.closest(".hm-panel");
+    const grid = panel.closest(".hm");
+    const clockFace = demo.querySelector(".ratio-clock");
     const art = overview.querySelector(".hm-nv");
     const sheet = overview.querySelector(":scope > .hm-ficha, :scope > .hm-narr");
     const tabs = [...panel.querySelectorAll('[role="tab"]')];
@@ -331,6 +380,10 @@
         height: (bottom - top) + "px"
       });
       demo.style.setProperty("--picture-height", picture.height + "px");
+      const page = grid.getBoundingClientRect();
+      const face = clockFace.getBoundingClientRect();
+      clockFace.style.setProperty("--clock-grid-x", (page.left - face.left) + "px");
+      clockFace.style.setProperty("--clock-grid-y", (page.top - face.top) + "px");
     }
 
     function activate(tab) {
@@ -361,7 +414,7 @@
       heading.focus({preventScroll: true});
     });
     const observer = new ResizeObserver(fit);
-    [art, sheet, panel].forEach(node => observer.observe(node));
+    [art, sheet, panel, grid].forEach(node => observer.observe(node));
   }
 
   selectCase();
