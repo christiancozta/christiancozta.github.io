@@ -79,7 +79,7 @@
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:12px}
-::selection{background:rgba(217,79,45,.14)}
+::selection{background:var(--accent);color:var(--paper)}
 body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{position:relative}
 button{font:inherit;color:inherit}
@@ -416,7 +416,7 @@ a.btn{color:var(--ink);text-decoration:none}
 
 /* =====================================================================
    CERNE 5.0.0 ▪ camada v4 (19/10/2026)
-   Paleta: papel #FCFCFC ▪ tinta #2C2C2C ▪ accent CERNE #4F6BFF (#7F93FF no escuro; marca nova, 24/11/2026)
+   Paleta: papel #FCFCFC ▪ tinta #2C2C2C ▪ accent CERNE #4F6BFF, único, sem variantes (marca nova, 24/11/2026)
            marigold #E8A628 ▪ juniper #2D5E4A ▪ plum #5C2341
    Tipos:  revistos em 24/10/2026; ver o bloco "tipografia: quatro famílias"
    ===================================================================== */
@@ -425,7 +425,7 @@ a.btn{color:var(--ink);text-decoration:none}
   --paper:#FCFCFC;
   --desk:#FCFCFC;
   --accent:#4F6BFF;
-  --accent-d:#7F93FF;
+  
   --yellow:#E8A628;
   --juniper:#2D5E4A;
   --plum:#5C2341;
@@ -439,7 +439,7 @@ a.btn{color:var(--ink);text-decoration:none}
   --nav-h:61px;
   --wrap:1400px;
 }
-::selection{background:rgba(217,79,45,.16)}
+::selection{background:var(--accent);color:var(--paper)}
 html{scroll-padding-top:calc(var(--nav-h) + 12px)}
 body{background-color:var(--paper);
   background-image:linear-gradient(to right,rgba(220,219,217,.42) 1px,transparent 1px),linear-gradient(to bottom,rgba(220,219,217,.42) 1px,transparent 1px);
@@ -497,10 +497,10 @@ body{background-color:var(--paper);
 .ref a{color:inherit}
 /* faixa escura */
 .sec-d{background-color:var(--ink);color:var(--paper);background-image:linear-gradient(to right,rgba(48,48,48,.55) 1px,transparent 1px),linear-gradient(to bottom,rgba(48,48,48,.55) 1px,transparent 1px);background-size:32px 32px;background-position:0 0;background-attachment:fixed;border-bottom:0}
-.sec-d .ind{color:var(--accent-d)}
+.sec-d .ind{color:var(--accent)}
 .sec-d .corpo{color:var(--papel-2)}
 .sec-d .ref{color:var(--papel-2)}
-.sec-d ::selection{background:rgba(208,93,65,.4)}
+.sec-d ::selection{background:var(--accent);color:var(--paper)}
 .cond b{display:block;margin-bottom:10px;font-family:var(--f-tit);font-weight:700;font-size:22px;color:var(--yellow)}
 .cond span{font-size:16px;line-height:1.5;color:var(--papel-2)}
 .fecho-d{margin:36px 0 0;font-family:var(--f-tit);font-weight:700;font-size:clamp(22px,2.2vw,30px);line-height:1.2;color:var(--paper)}
@@ -541,7 +541,7 @@ body{background-color:var(--paper);
 .vlist b{font-weight:600}
 /* fecho da tese */
 .epigrafe{margin:0 0 32px;font-family:var(--f-tit);font-weight:700;font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;max-width:18em;text-wrap:balance}
-.epigrafe .e{color:var(--accent-d)}
+.epigrafe .e{color:var(--accent)}
 .fecho-acoes{display:flex;flex-wrap:wrap;gap:10px}
 .sec-d .btn{background:transparent;border-color:var(--paper);color:var(--paper)}
 .sec-d .btn:hover{background:var(--paper);color:var(--ink)}
@@ -555,7 +555,7 @@ body{background-color:var(--paper);
 .rodape-d .btn:hover{background:var(--paper);color:var(--ink)}
 .rodape-d .base{margin:0;font-family:var(--f-mono);font-weight:600;font-size:13px;letter-spacing:.03em;color:var(--papel-2)}
 .rodape-d .base .wm{color:var(--paper);font-size:15px}
-.rodape-d .base .wm{--wm-d:var(--accent-d);margin-right:.2em}
+.rodape-d .base .wm{--wm-d:var(--accent);margin-right:.2em}
 .rodape-d .base a{color:var(--paper)}
 
 /* ---------- responsivo ---------- */
@@ -656,7 +656,7 @@ body{background-color:var(--paper);
    ===================================================================== */
 :root{
   --azul:#2C2C2C;  /* AFASTADO: grafite (24/11/2026) */
-  --azul-d:#B9B9B9;
+  --azul-d:#FCFCFC;
   --yellow:var(--azul);
   --juniper:var(--azul);
   --mola:cubic-bezier(.32,.72,0,1);
@@ -669,7 +669,7 @@ body{background-color:var(--paper);
 /* ---------- ficha técnica ---------- */
 .ft-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .ft-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 3px;border-radius:999px;background:var(--ink);color:var(--paper);font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
-.ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent-d)}
+.ft-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
 .ft-lead{margin:0 0 14px;font-family:var(--f-cit);font-style:italic;font-weight:600;font-size:17px;line-height:1.35;text-wrap:pretty}
 .ft{margin:0;display:grid}
 .ft dt,.ft-ficha dt{padding-top:2px;font-family:var(--f-caps);font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
@@ -732,7 +732,7 @@ body{background-color:var(--paper);
 .mv .vlist li:first-child{border-top:0}
 .mv .vlist li::before{content:"";position:absolute;left:-26px;top:17px;width:10px;height:10px;border:1.5px solid var(--ink);border-radius:50%;background:var(--paper)}
 .mv .vlist li.maior::before{width:12px;height:12px;left:-27px;top:16px;background:var(--ink)}
-.mv .vlist li:first-child::before{background-color:var(--accent);background-image:var(--grain);border-color:var(--ink);box-shadow:0 0 0 4px rgba(217,79,45,.14)}
+.mv .vlist li:first-child::before{background-color:var(--accent);background-image:var(--grain);border-color:var(--ink);box-shadow:0 0 0 3px var(--paper),0 0 0 4px var(--accent)}
 .mv .vlist .vn{grid-row:1 / span 2;font-family:var(--f-num);font-weight:700;font-size:15px;line-height:1.35}
 .mv .vlist li.maior .vn{font-size:18px}
 .mv .vlist li:first-child .vn{color:var(--accent)}
@@ -999,7 +999,7 @@ body{background-position:0 0;background-attachment:fixed}
 .sec-p .mx-k{color:rgba(252,252,252,.8)}
 /* citação: régua fina na cor do texto, sem moldura própria */
 .cit-l{padding:4px 0 4px 16px;border-left:2px solid currentColor;font-size:clamp(20px,2cqw,24px)}
-.canonica{margin:0;padding-left:16px;border-left:3px solid var(--accent-d);font-family:var(--f-cit);font-style:italic;font-weight:600;font-size:clamp(21px,2.4cqw,30px);line-height:1.3;max-width:34em}
+.canonica{margin:0;padding-left:16px;border-left:3px solid var(--accent);font-family:var(--f-cit);font-style:italic;font-weight:600;font-size:clamp(21px,2.4cqw,30px);line-height:1.3;max-width:34em}
 .fecho-d{margin:0}
 .ref{margin:0}
 /* listas paralelas como campos de uma mesma linha */
@@ -1077,7 +1077,7 @@ body{background-position:0 0;background-attachment:fixed}
 .at-btn:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;border-radius:0;background:var(--ink);color:var(--paper);box-shadow:inset 0 0 0 4px var(--paper)}
 .at-btn:focus-visible .at-n{color:rgba(252,252,252,.7)}
 .at.rodada .at-t::after{content:"";display:inline-block;width:7px;height:7px;margin:0 0 .15em 8px;border-radius:50%;background-color:var(--accent);background-image:var(--grain);vertical-align:middle}
-.at.aberta .at-t::after{background-color:var(--accent-d)}
+.at.aberta .at-t::after{background-color:var(--accent)}
 /* resumo do ato: abre sob a linha */
 .at-d{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--mola)}
 .at.aberta .at-d{grid-template-rows:1fr}
@@ -1450,6 +1450,19 @@ html.vitrine #folha::before,html.vitrine #folha::after{display:none}
   html.vitrine .op-ato{display:block;flex:1 0 100%;font-size:17px}
 }
 
+
+/* coluna única (24/11/2026): o texto começa na coluna da esquerda e desce;
+   o fecho da tese fica ao centro */
+.mx .mx-row.uni{grid-template-columns:minmax(0,1fr)}
+.uni .cit-l{margin-top:1.6em;max-width:26em}
+.uni .canonica{margin:.9em 0 1.2em}
+.uni .cond span{max-width:40em}
+.fecho-uni .mx-c{text-align:center;padding-top:calc(var(--pad) * 2.5)}
+.fecho-uni .fecho-d{margin:0;font-size:clamp(30px,4cqw,52px);line-height:1.05}
+.fecho-ne{color:var(--accent)}
+.fecho-s{margin:.7em 0 0;font-family:var(--f-tit);font-weight:700;font-size:clamp(17px,1.6cqw,21px);color:var(--paper)}
+.fecho-s i{font-style:normal;margin:0 .5em;color:var(--papel-2)}
+.fecho-uni .ref{margin-top:28px}
 </style>
 </head>
 <body>
@@ -1781,14 +1794,13 @@ html.vitrine #folha::before,html.vitrine #folha::after{display:none}
       <div class="mx-c"><p class="ind">01 ▪ O problema</p></div>
       <div class="mx-c"><h2 class="sec-t" id="t21" tabindex="-1">Houve supervisão. Falta saber do quê.</h2></div>
     </div>
-    <div class="mx-row r-3">
-      <div class="mx-c mx-v"></div>
+    <div class="mx-row uni">
       <div class="mx-c corpo">
         <p>Uma ferramenta pesquisa. Outra resume. Uma terceira compara. Um modelo formula a resposta. Alguém recebe o resultado, lê, concorda e segue.</p>
         <p class="forte">O humano permaneceu no fluxo. Ainda falta saber o que ele fez dentro dele.</p>
         <p>O Direito governa o raciocínio há muito tempo: fundamentação, contraditório e recurso existem porque a conclusão responde pelo percurso que a sustenta. Esse controle alcança o que se exterioriza. Quando sistemas selecionam, relacionam, inferem e reescrevem, parte da intervenção acontece antes do texto.</p>
+        <blockquote class="cit-l">“Governança começa quando o texto deixa de bastar como prova do caminho.”</blockquote>
       </div>
-      <div class="mx-c"><blockquote class="cit-l">“Governança começa quando o texto deixa de bastar como prova do caminho.”</blockquote></div>
     </div>
   </section>
 
@@ -1798,25 +1810,36 @@ html.vitrine #folha::before,html.vitrine #folha::after{display:none}
       <div class="mx-c"><p class="ind">02 ▪ A tese</p></div>
       <div class="mx-c"><h2 class="sec-t" id="t22">Governança do Raciocínio Jurídico</h2></div>
     </div>
-    <div class="mx-row r-3">
-      <div class="mx-c"><p class="mx-k">Formulação canônica</p></div>
-      <div class="mx-c"><p class="canonica">Disciplina que estabelece e controla as condições de formação do raciocínio tecnologicamente mediado que sustenta conclusões com consequências jurídicas.</p></div>
-      <div class="mx-c corpo"><p>Os marcos existentes trabalham com organização, sistema ou dado. Aqui, a unidade é a conclusão com consequência jurídica e o percurso que a tornou possível.</p></div>
+    <div class="mx-row uni">
+      <div class="mx-c">
+        <p class="mx-k">Formulação canônica</p>
+        <p class="canonica">Disciplina que estabelece e controla as condições de formação do raciocínio tecnologicamente mediado que sustenta conclusões com consequências jurídicas.</p>
+        <div class="corpo"><p>Os marcos existentes trabalham com organização, sistema ou dado. Aqui, a unidade é a conclusão com consequência jurídica e o percurso que a tornou possível.</p></div>
+      </div>
     </div>
-    <div class="mx-row">
+    <div class="mx-row uni">
       <div class="mx-c"><p class="mx-k">Condições necessárias e insuficientes</p></div>
       <div class="mx-c mx-lista">
-        <ul class="cond mx-campos c3">
-          <li><b>Lastro</b><span>Há base verificável, fática e jurídica, para o que foi afirmado?</span></li>
+        <ul class="cond mx-campos">
           <li><b>Rastro</b><span>O percurso pode ser reconstruído a partir de registros?</span></li>
+          <li><b>Lastro</b><span>Há base verificável, fática e jurídica, para o que foi afirmado?</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mx-row uni">
+      <div class="mx-c"><p class="mx-k">Outra questão</p></div>
+      <div class="mx-c mx-lista">
+        <ul class="cond mx-campos">
           <li><b>Responsabilidade</b><span>As intervenções relevantes podem ser atribuídas?</span></li>
         </ul>
       </div>
     </div>
-    <div class="mx-row r-3">
-      <div class="mx-c mx-v"></div>
-      <div class="mx-c"><p class="fecho-d">Rastro para saber por onde.<br>Lastro para saber por quê.</p></div>
-      <div class="mx-c"><p class="ref">Christian da Costa ▪ 2026 ▪ <a href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">DOI 10.5281/zenodo.22892157</a></p></div>
+    <div class="mx-row uni fecho-uni">
+      <div class="mx-c">
+        <p class="fecho-d">rastro <span class="fecho-ne">≠</span> lastro</p>
+        <p class="fecho-s">para saber por onde <i aria-hidden="true">|</i> para saber por quê</p>
+        <p class="ref">Christian da Costa ▪ 2026 ▪ <a href="https://doi.org/10.5281/zenodo.22892157" target="_blank" rel="noopener">DOI 10.5281/zenodo.22892157</a></p>
+      </div>
     </div>
   </section>
 
