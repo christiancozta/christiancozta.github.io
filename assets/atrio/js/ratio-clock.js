@@ -54,7 +54,9 @@
     shade.setAttribute("class", "ratio-clock__shade");
     veil.before(shade);
   }
+  const work = demo.querySelector(".ratio-work");
   const matrixPanel = find("matrix-panel");
+  const matrixHeading = matrixPanel.querySelector("h4");
   const source = find("source");
   const form = find("form");
   const reply = find("reply");
@@ -171,9 +173,9 @@
     }
   }
 
-  function handToHuman(focus) {
+  function handToHuman(focus, heading = stageHeading) {
     clock("human");
-    if (focus && !demo.hidden) stageHeading.focus({preventScroll: true});
+    if (focus && !demo.hidden) heading.focus({preventScroll: true});
   }
 
   function showMatrix(entries) {
@@ -213,8 +215,15 @@
       find("source-title").textContent = copy.source + " · " + current.source;
       find("excerpt").textContent = current.excerpt;
       source.hidden = false;
-      if (current.matrix) showMatrix(current.matrix);
-      handToHuman(focus);
+      if (current.matrix) {
+        showMatrix(current.matrix);
+        handToHuman(focus, matrixHeading);
+        if (!demo.hidden) {
+          work.scrollTop += matrixPanel.getBoundingClientRect().top - work.getBoundingClientRect().top;
+        }
+      } else {
+        handToHuman(focus);
+      }
     }), motion.matches ? 0 : turnPause);
   }
 
