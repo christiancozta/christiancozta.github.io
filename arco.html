@@ -107,7 +107,7 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261124-marca" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261124-hero">
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261124-ficha">
 <script src="assets/arco/js/arco-home.js?v=20261124-hero" defer></script>
 <link rel="stylesheet" href="assets/atrio/css/ratio-clock.css?v=20261124-handoff02">
 <script src="assets/atrio/js/ratio-demo-cases.js?v=20261124-handoff02" defer></script>
@@ -177,14 +177,19 @@
     <section class="view" data-view="home" data-active="true" aria-label="Percurso">
       <div class="hm hm--dossie" id="hm">
 
-        <!-- 01 — AUTORIA: o nome no centro da primeira tela (horizontal e
-             vertical). No alto, à direita, a busca; abaixo do nome, à
-             esquerda, o resumo e, à direita, os meios de contato, pela mesma
-             margem esquerda da busca. As distinções descem para as frentes,
-             cada uma na linha do projeto a que se liga. -->
+        <!-- 01 — AUTORIA: uma ficha em duas colunas sobre a retícula. À
+             esquerda, a identidade (o nome em duas linhas e o resumo); à
+             direita, o instrumento (a busca no alto, os contatos na base).
+             As colunas são independentes: em repouso, o alto do nome encontra
+             o filete da busca e o filete do resumo, o dos contatos; quando a
+             ficha da busca cresce, só os contatos descem. -->
         <section class="hm-panel hm-autoria" id="autoria" aria-labelledby="bio-name">
           <p class="hm-kick">Autoria</p>
-          <div class="hm-topo">
+          <div class="hm-col hm-col--id">
+            <h1 class="hm-name" id="bio-name"><span>Christian</span> <span>da Costa</span></h1>
+            <p class="hm-summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, com uma equipe de oito colaboradores, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
+          </div>
+          <div class="hm-col hm-col--ins">
             <!-- BUSCA: do termo da vaga à prova. Lê o próprio lastro (verbetes do
                  dicionário abaixo) e sugere verbetes enquanto se digita; em
                  repouso, os dois campos ficam em reticências. Sem JS, fica o
@@ -198,12 +203,6 @@
               <div class="hm-busca__r" aria-live="polite">
                 <p class="hm-busca__vazio">Quem procura pelo nome encontra a prova: 48 verbetes de mercado, cada um ligado à competência que o demonstra. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>
               </div>
-            </div>
-          </div>
-          <h1 class="hm-name" id="bio-name"><span class="hm-fit">Christian da Costa</span></h1>
-          <div class="hm-base">
-            <div class="hm-oferta">
-              <p class="hm-summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, com uma equipe de oito colaboradores, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
             </div>
             <!-- CONTATO: os mesmos meios do fecho da página, na ficha de rótulo e
                  valor da busca (mesma coluna de rótulos, mesma margem). -->

@@ -944,42 +944,43 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 .hm-cta--cv a:hover{ color:var(--paper); text-decoration:underline; text-underline-offset:.3em; }
 
-/* ---------- hero (nov/2026): o nome no centro da primeira tela ----------
-   O nome fica centrado na horizontal e na vertical da altura útil (o seu
-   eixo a 50% da tela, sob o cordão). No alto, à direita, a busca; abaixo do
-   nome, à esquerda, o resumo e, à direita, os contatos. Busca e contatos
-   dividem a mesma margem esquerda e a mesma coluna de rótulos. */
+/* ---------- hero (nov/2026): a ficha de abertura ----------
+   Duas colunas sobre a retícula, cada uma de três quadrados: à esquerda, a
+   identidade (o nome em duas linhas e o resumo); à direita, o instrumento
+   (a busca no alto, os contatos na base). As colunas são independentes,
+   mas o primeiro bloco de cada uma tem a mesma altura mínima: em repouso, o
+   alto das maiúsculas do nome encontra o filete da busca, e o filete do
+   resumo, o dos contatos. Quando a ficha da busca cresce, só os contatos
+   descem; o nome e o resumo ficam. Busca, resumo e contatos abrem com o
+   filete de tinta das fichas das obras. O hero tem a altura do que
+   carrega: a primeira tela já mostra o começo das frentes. */
 .hm--dossie .hm-autoria{
-  --hy:clamp(16px, 4svh, 48px);
   --hx:clamp(var(--g), 3.4vw, 64px);
-  --vh:calc(100svh - var(--rail-h, 54px));
-  --nf:clamp(2.5rem, min(6.1vw, 10.5svh), 6.25rem);  /* corpo do nome */
-  --sobe:calc(var(--vh) * .5 - var(--nf) * .475);    /* do topo ao alto do nome */
-  --rot:6.75rem;                                     /* coluna de rótulos */
-  display:flex; flex-direction:column;
-  min-height:var(--vh);
-  padding-bottom:calc(var(--hy) * 1.5);
+  --rot:6.75rem;                                       /* coluna de rótulos */
+  --nf:clamp(2.75rem, min(7.2vw, 14.5svh), 8.5rem);    /* corpo do nome */
+  /* altura do nome aparado: maiúscula (.703) + uma entrelinha (.9) */
+  --alto:max(calc(var(--nf) * 1.603), 10.75rem);
+  --vao:clamp(36px, 7svh, 80px);                       /* entre os dois blocos */
+  min-height:0;
 }
-/* o respiro: meia tela menos meia linha do nome, para o eixo do nome
-   pousar exatamente no meio. No computador, quem ocupa esse respiro é o
-   topo, que guarda a busca: se a ficha crescer além dele, o nome desce em
-   vez de ser coberto. */
-.hm--dossie .hm-autoria::before{ content:""; flex:none; height:var(--sobe); }
-.hm-topo{ display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); align-items:start; }
-.hm--dossie .hm-autoria > .hm-name{
-  align-self:center;
-  padding:0 var(--g); margin-bottom:clamp(40px, 9svh, 104px);
-  font-size:var(--nf);
-  line-height:.95; letter-spacing:-.045em; text-align:center; white-space:nowrap;
+.hm-col{ display:flex; flex-direction:column; gap:var(--vao); min-width:0; }
+.hm--dossie .hm-autoria::before{ content:none; }
+.hm--dossie .hm-autoria .hm-name{
+  margin:0;
+  font-size:var(--nf); line-height:.9; letter-spacing:-.05em; text-align:left;
+  /* a caixa do nome vai do alto das maiúsculas à linha de base: o alto
+     encontra o filete da busca, a base pousa sobre o resumo */
+  text-box:trim-both cap alphabetic;
 }
-.hm-base{ display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); align-items:start; }
-
-/* esquerda: o resumo */
-.hm-oferta{ display:flex; flex-direction:column; min-width:0; }
+.hm-name > span{ display:block; white-space:nowrap; }
 .hm--dossie .hm-summary{
-  margin:0; max-width:52ch; text-wrap:pretty;
+  margin:0; max-width:54ch; text-wrap:pretty;
   font-size:clamp(1rem, 1.15vw, 1.125rem); line-height:1.6; color:rgba(44,44,44,.88);
 }
+/* o filete das fichas: abre busca, resumo e contatos */
+.hm-col > .hm-busca,
+.hm-col > .hm-summary,
+.hm-col > .hm-canal{ border-top:1px solid var(--ink); padding-top:14px; }
 
 /* rótulo micro, comum à busca e aos contatos */
 .hm-busca__k,
@@ -1099,38 +1100,45 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 }
 
 @media (min-width:901px){
-  .hm--dossie .hm-autoria::before{ display:none; }
-  .hm-topo{
-    flex:none; position:relative; z-index:2;
-    min-height:var(--sobe);
-    padding:calc(var(--u) * 5) 0 calc(var(--u) * 4);
+  .hm--dossie .hm-autoria{
+    display:grid;
+    grid-template-columns:repeat(8, minmax(0, 1fr));
+    grid-template-rows:auto;
+    align-items:start;
+    padding:clamp(48px, 10svh, 112px) 0 clamp(56px, 12svh, 128px);
   }
-  .hm-oferta{ grid-column:2 / 5; padding:0 var(--hx) 0 var(--g); }
-  .hm-topo > .hm-busca,
-  .hm-base > .hm-canal{ grid-column:5 / 8; padding:0 var(--g) 0 var(--hx); }
+  .hm-col--id{ grid-column:2 / 5; grid-row:1; padding:0 var(--hx) 0 var(--g); }
+  .hm-col--ins{ grid-column:5 / 8; grid-row:1; padding:0 var(--g) 0 var(--hx); }
+  /* o primeiro bloco de cada coluna com a mesma altura mínima */
+  .hm-col > .hm-name,
+  .hm-col > .hm-busca{ min-height:var(--alto); }
+  .hm-col > .hm-busca{ position:relative; z-index:2; }
 }
 /* telas largas e baixas (notebooks): as folgas cedem antes das letras */
 @media (min-width:901px) and (max-height:760px){
   .hm--dossie .hm-summary,
   .hm-canal dd{ line-height:1.55; }
-  .hm-topo{ padding-top:calc(var(--u) * 3); }
   .hm-busca, .hm-busca__f{ gap:8px; }
 }
 /* entre o tablet e o notebook estreito, as colunas usam também as margens */
 @media (min-width:901px) and (max-width:1100px){
-  .hm-oferta{ grid-column:1 / 5; padding-left:calc(var(--cell) * .5); }
-  .hm-topo > .hm-busca,
-  .hm-base > .hm-canal{ grid-column:5 / 9; padding-right:calc(var(--cell) * .5); }
+  .hm-col--id{ grid-column:1 / 5; padding-left:calc(var(--cell) * .5); }
+  .hm-col--ins{ grid-column:5 / 9; padding-right:calc(var(--cell) * .5); }
 }
 
-/* celular: uma coluna (nome, resumo, contatos e, por fim, a busca); o nome
-   também no centro da primeira tela */
+/* celular: uma coluna (nome, resumo, contatos e, por fim, a busca) */
 @media (max-width:900px){
-  .hm--dossie .hm-autoria{ --nf:clamp(1.875rem, 10.4vw, 3.75rem); justify-content:flex-start; padding:0 0 calc(var(--u) * 5); }
-  .hm--dossie .hm-autoria > .hm-name{ padding:0 var(--g); margin-bottom:calc(var(--u) * 6); }
-  .hm-topo{ order:1; display:block; padding:calc(var(--u) * 6) var(--g) 0; }
-  .hm-base{ display:flex; flex-direction:column; align-items:stretch; gap:calc(var(--u) * 4); }
-  .hm-oferta, .hm-canal{ padding:0 var(--g); }
+  .hm--dossie .hm-autoria{
+    --nf:clamp(2.75rem, 15.5vw, 4.5rem);
+    --vao:calc(var(--u) * 4);
+    display:flex; flex-direction:column; justify-content:flex-start; gap:var(--vao);
+    padding:calc(var(--u) * 6) var(--g);
+  }
+  .hm-col{ display:contents; }
+  .hm-col--id > .hm-name{ order:0; margin-bottom:var(--u); }
+  .hm-col--id > .hm-summary{ order:1; }
+  .hm-col--ins > .hm-canal{ order:2; }
+  .hm-col--ins > .hm-busca{ order:3; margin-top:calc(var(--u) * 2); }
 }
 
 /* ---------- rótulo de território visível sobre o título das obras ---------- */
