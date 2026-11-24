@@ -357,7 +357,8 @@
      vista, põe a própria página em tela cheia sobre fundo escuro, sem
      recarregá-la (o quadro fica no lugar; só o iframe se fixa). Lá, nada se
      reduz em escala e o Explorar abre ali mesmo, também no celular. Esc
-     (pedido "reduzir" da página, ou da home), o botão ou o fundo voltam. */
+     (pedido "reduzir" da página, ou da home), o botão ou o fundo voltam. A
+     página também pode pedir "ampliar" (o Montador do ECHO abre em tela cheia). */
   const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
   const altura = () => {
     const r = rowPx(), util = innerHeight - railH();
@@ -375,6 +376,8 @@
     const escala = () => {
       const util = altura(), largura = score.clientWidth;
       desescala();
+      /* a página pode crescer o que mostra até caber na altura útil (ECHO) */
+      try{ vit()?.ajusta?.(util); }catch(_){}
       let n = mede("conteudo");
       if (!n) return util;
       let s = Math.min(1, util / n);
@@ -455,6 +458,7 @@
       const q = quadros.find(x => x.quadro.contentWindow === e.source);
       if (!q || q.score.hidden) return;
       if (e.data.pedido === "reduzir"){ q.amplia(false); return; }
+      if (e.data.pedido === "ampliar"){ q.amplia(true); return; }
       const topo = q.score.getBoundingClientRect().top;
       if (q.abre(e.data.estado !== "folha") && !stacked.matches){
         const y = q.score.getBoundingClientRect().top + scrollY - railH();

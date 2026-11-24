@@ -357,6 +357,8 @@
     const escala = () => {
       const util = altura(), largura = score.clientWidth;
       desescala();
+      /* a página pode crescer o que mostra até caber na altura útil (ECHO) */
+      try{ vit()?.ajusta?.(util); }catch(_){}
       let n = mede("conteudo");
       if (!n) return util;
       let s = Math.min(1, util / n);
@@ -437,6 +439,7 @@
       const q = quadros.find(x => x.quadro.contentWindow === e.source);
       if (!q || q.score.hidden) return;
       if (e.data.pedido === "reduzir"){ q.amplia(false); return; }
+      if (e.data.pedido === "ampliar"){ q.amplia(true); return; }
       const topo = q.score.getBoundingClientRect().top;
       if (q.abre(e.data.estado !== "folha") && !stacked.matches){
         const y = q.score.getBoundingClientRect().top + scrollY - railH();
