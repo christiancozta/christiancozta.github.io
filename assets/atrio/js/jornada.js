@@ -18,6 +18,28 @@
   const EN = (document.documentElement.lang || "").toLowerCase().startsWith("en");
   const T = EN ? BASE.en : BASE.pt;
   const J = T.jogadas;
+  const ESC = (BASE.escolhas && (EN ? BASE.escolhas.en : BASE.escolhas.pt)) || [];
+  const U = EN ? {
+    k: { pronto: "Your move", ia: "AI's turn: wait for its move", humano: "Your move", troia: "TROIA's turn", fim: "End of the path" },
+    caso: "Case 0012345 · fictional",
+    resumo: "Someone called Christian pretending to be the bank. He gave a code, and in the small hours R$ 10,000.00 left his account. Who pays?",
+    comecaP: "The case enters the board. You play the human: read the excerpt, choose, press the clock.",
+    comeca: "Start", bate: "Press the clock", seguir: "Next",
+    troiaP: "TROIA plays alone. The human only watches the rivals.",
+    fimQ: "Legality holds. The half split is unstable. The draft goes on to CERNE for audit.",
+    fimP: "Contest ≠ audit.", recomeca: "Restart", escolhaFeita: "Press the clock to confirm.",
+    letras: "ABC"
+  } : {
+    k: { pronto: "Sua jogada", ia: "Vez da IA: aguarde o lance", humano: "Sua jogada", troia: "Vez da TROIA", fim: "Fim do percurso" },
+    caso: "Caso 0012345 · fictício",
+    resumo: "Alguém ligou para o Christian fingindo ser do banco. Ele passou um código, e de madrugada saíram R$ 10.000,00 da conta. Quem paga?",
+    comecaP: "O caso entra no tabuleiro. Você joga como humano: lê o trecho, escolhe, bate o relógio.",
+    comeca: "Começar", bate: "Bater o relógio", seguir: "Seguir",
+    troiaP: "A TROIA joga sozinha. O humano só acompanha as rivais.",
+    fimQ: "A legalidade resiste. A divisão em metade fica instável. A minuta segue para o CERNE, para auditoria.",
+    fimP: "Contrariar ≠ auditar.", recomeca: "Recomeçar", escolhaFeita: "Bata o relógio para confirmar.",
+    letras: "ABC"
+  };
   const reduz = matchMedia("(prefers-reduced-motion: reduce)");
   const $ = (s) => raiz.querySelector(s);
 
@@ -55,13 +77,7 @@
     const el = document.createElement("div");
     el.className = "aj-casa";
     el.dataset.c = c;
-    if (y === 7 || x === 0) {
-      const k = document.createElement("span");
-      k.className = "aj-casa__c";
-      k.setAttribute("aria-hidden", "true");
-      k.textContent = c;
-      el.append(k);
-    }
+    if ((x + y) % 2) el.dataset.esc = "";
     casas[c] = el;
     casasEl.append(el);
   }
@@ -78,21 +94,34 @@
     i.alt = ""; i.decoding = "async";
     return i;
   };
-  const rei = document.createElement("span");
-  rei.className = "aj-peca aj-peca--rei";
-  rei.append(img("atrio-rei"));
+  const peca = (classe, nome) => {
+    const p = document.createElement("span");
+    p.className = "aj-peca " + classe;
+    const f = document.createElement("span");
+    f.className = "aj-peca__f";
+    f.append(img(nome));
+    p.append(f);
+    return p;
+  };
+  const rei = peca("aj-peca--rei", "atrio-rei");
   rei.hidden = true;
   pecasEl.append(rei);
   const rivais = [];
 
   const poe = (peca, c) => { const p = pos(c); peca.style.setProperty("--x", p.x); peca.style.setProperty("--y", p.y); };
-  const rotula = (c, n, texto, extra) => {
-    const el = casas[c];
-    el.querySelector(".aj-casa__r")?.remove();
-    const r = document.createElement("span");
-    r.className = "aj-casa__r";
-    r.innerHTML = (n ? "<b>" + n + "</b>" : "") + esc(texto) + (extra || "");
-    el.append(r);
+  /* rótulo de pé na frente da casa */
+  const tags = {};
+  const rotula = (c, n, texto, extra, classe) => {
+    tags[c]?.remove();
+    const t = document.createElement("span");
+    t.className = "aj-tag" + (classe ? " " + classe : "");
+    poe(t, c);
+    const f = document.createElement("span");
+    f.className = "aj-tag__f";
+    f.innerHTML = (n ? "<b>" + n + "</b>" : "") + "<span>" + esc(texto) + "</span>" + (extra || "");
+    t.append(f);
+    pecasEl.append(t);
+    tags[c] = t;
   };
   const esc = (s) => String(s).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
   const pontos = [];
@@ -105,6 +134,54 @@
     trilha.setAttribute("points", pontos.map(([x, y]) => (x + .5) + "," + (y + .5)).join(" "));
   };
 
+  /* ---------- a vez do humano: trecho do caso e escolha ---------- */
+  const vezEl = $(".aj-vez");
+  const V = vezEl ? {
+    k: vezEl.querySelector(".aj-vez__k"), peca: vezEl.querySelector(".aj-vez__peca"), q: vezEl.querySelector(".aj-vez__q"),
+    p: vezEl.querySelector(".aj-vez__p"), ops: vezEl.querySelector(".aj-vez__ops"), dica: vezEl.querySelector(".aj-vez__dica"),
+    bate: vezEl.querySelector(".aj-vez__bate")
+  } : null;
+  let liberado = false;
+  function painel(estado, o) {
+    if (!V) return;
+    vezEl.dataset.estado = estado;
+    V.k.textContent = o.k;
+    if (o.peca !== undefined) { V.peca.textContent = o.peca; V.q.textContent = o.q; V.p.textContent = o.p; }
+    if (o.ops !== undefined) V.ops.replaceChildren(...o.ops);
+    V.dica.textContent = "";
+    V.bate.hidden = !o.bate;
+    if (o.bate) { V.bate.textContent = o.bate; V.bate.disabled = !!o.trava; }
+  }
+  function opcoes(k, e) {
+    return e.opcoes.map((txt, n) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "aj-op";
+      b.innerHTML = '<span class="aj-op__l" aria-hidden="true">' + U.letras[n] + "</span><span>" + esc(txt) + "</span>";
+      b.addEventListener("click", () => escolhe(k, e, n, b));
+      return b;
+    });
+  }
+  function escolhe(k, e, n, b) {
+    if (vez !== "humano" || liberado) return;
+    if (n === e.certa) {
+      liberado = true;
+      b.dataset.res = "certa";
+      b.setAttribute("aria-pressed", "true");
+      V.ops.querySelectorAll(".aj-op").forEach((x) => { x.disabled = true; });
+      V.dica.textContent = "";
+      V.bate.disabled = false;
+      botao.disabled = false;
+      poeStatus(U.escolhaFeita);
+      anuncia(U.escolhaFeita);
+      V.bate.focus({ preventScroll: true });
+    } else {
+      b.dataset.res = "errada";
+      b.disabled = true;
+      V.dica.textContent = e.dica;
+    }
+  }
+
   /* ---------- relógio, vez e módulo ---------- */
   let vez = "pronto";
   const dizRelogio = (par) => { txtIA.textContent = par[0]; txtHum.textContent = par[1]; };
@@ -116,7 +193,7 @@
     else if (v === "ia") dizRelogio(troia ? T.relogio.troia : T.relogio.ia);
     else if (v === "humano") dizRelogio(troia ? [T.relogio.troia[0], T.relogio.humano[1]] : T.relogio.humano);
     else dizRelogio(T.relogio.fim);
-    const livre = v === "humano" || v === "pronto" || v === "fim";
+    const livre = v === "pronto" || v === "fim" || (v === "humano" && liberado);
     botao.disabled = !livre;
     const rot = v === "pronto" ? T.relogio.pronto[1] : v === "fim" ? T.recomecar : v === "humano" ? j.botao : T.relogio.botaoTrava;
     botao.setAttribute("aria-label", rot);
@@ -215,10 +292,8 @@
   /* ---------- lances ---------- */
   function lanceIA(k, j) {
     if (j.rival) {
-      const r = document.createElement("span");
-      r.className = "aj-peca aj-peca--rival";
+      const r = peca("aj-peca--rival", "troia-cavalo");
       r.dataset.estado = j.rival.estado;
-      r.append(img("troia-cavalo"));
       poe(r, j.rival.casa);
       pecasEl.append(r);
       rivais.push(r);
@@ -239,9 +314,12 @@
   }
   function lanceHumano(k, j) {
     if (j.rotas) {
-      j.rotas.forEach((r) => { casas[r.casa].dataset.rota = r.escolha ? "escolha" : "descartada"; });
+      j.rotas.forEach((r) => {
+        casas[r.casa].dataset.rota = r.escolha ? "escolha" : "descartada";
+        if (!r.escolha) rotula(r.casa, "", r.r, "", "aj-tag--descartada");
+      });
       anda(j.depois);
-      rotula(j.depois, String(k + 1).padStart(2, "0"), j.rotulo + " · " + j.rotas.find((r) => r.escolha).r);
+      rotula(j.depois, String(k + 1).padStart(2, "0"), j.rotulo);
     }
     if (j.saida) rei.classList.add("is-saida");
   }
@@ -253,6 +331,7 @@
     const j = J[k];
     poeMod(j.mod);
     poeConta(k + 1);
+    if (!instantaneo) painel("ia", { k: U.k.ia, bate: "" });
     poeVez("ia", j);
     poeStatus(T.status.ia);
     lanceIA(k, j);
@@ -262,8 +341,12 @@
     if (!instantaneo) anuncia(j.ia);
     if (!instantaneo) {
       await espera(420, g);
+      const e = ESC[k];
+      liberado = !e;
+      if (e) painel("humano", { k: U.k.humano + " · " + (j.rotulo || ""), peca: e.peca, q: e.trecho, p: e.pergunta, ops: opcoes(k, e), bate: U.bate, trava: true });
+      else painel("troia", { k: U.k.troia, peca: j.rival ? j.rival.rotulo : "", q: j.ia, p: U.troiaP, ops: [], bate: U.seguir });
       poeVez("humano", j);
-      poeStatus(j.pede);
+      poeStatus(e ? e.pergunta : j.pede);
       await vezHumana(j);
       if (g !== geracao) throw PARA;
     }
@@ -288,6 +371,7 @@
   function fim() {
     poeVez("fim");
     poeStatus(T.status.fim);
+    painel("fim", { k: U.k.fim, peca: U.caso, q: U.fimQ, p: U.fimP, ops: [], bate: U.recomeca });
     const p = document.createElement("p");
     p.className = "aj-e__fim";
     p.innerHTML = '<a href="#ai-governance" data-hm-go>' + esc(T.arquivo.cerne) + "</a>";
@@ -324,7 +408,8 @@
     v.textContent = T.arquivo.vazio;
     folhasEl.append(v);
     arqN.textContent = "0";
-    Object.values(casas).forEach((c) => { c.querySelector(".aj-casa__r")?.remove(); delete c.dataset.rota; });
+    Object.values(casas).forEach((c) => { delete c.dataset.rota; });
+    Object.keys(tags).forEach((c) => { tags[c].remove(); delete tags[c]; });
     rivais.splice(0).forEach((r) => r.remove());
     linhas.querySelectorAll(".aj-ataque").forEach((l) => l.remove());
     pontos.length = 0;
@@ -348,11 +433,12 @@
   }
 
   /* ---------- controles ---------- */
-  botao.addEventListener("click", () => {
-    if (vez === "pronto") { comeca(0); return; }
-    if (vez === "fim") { comeca(0); return; }
-    if (vez === "humano" && aguarda) { const r = aguarda; aguarda = null; poeVez("ia", null); r(); }
-  });
+  function bate() {
+    if (vez === "pronto" || vez === "fim") { comeca(0); return; }
+    if (vez === "humano" && liberado && aguarda) { const r = aguarda; aguarda = null; liberado = false; poeVez("ia", null); r(); }
+  }
+  botao.addEventListener("click", bate);
+  V?.bate.addEventListener("click", bate);
   mods.forEach((b) => b.addEventListener("click", () => {
     const k = J.findIndex((j) => j.mod === b.dataset.mod);
     if (k >= 0) comeca(k);
@@ -375,7 +461,7 @@
   function ajustaArq() {
     if (!arq) return;
     arq.style.minHeight = "";
-    const c = tab.getBoundingClientRect().width / 8;
+    const c = (raiz.closest(".hm-panel") || raiz).getBoundingClientRect().width / 8;
     if (!(c > 0)) return;
     const h = arq.getBoundingClientRect().height;
     arq.style.minHeight = Math.max(1, Math.ceil((h - .5) / c)) * c + "px";
@@ -390,10 +476,21 @@
     ajustaArq();
   }).observe(tab);
 
+  /* ---------- a borda do fundo da mesa: onde pousam relógio, registradora e seletor ---------- */
+  const palco = $(".aj-palco");
+  function medeFundo() {
+    const p = palco.getBoundingClientRect(), a = casas.a8.getBoundingClientRect();
+    if (!p.height) return;
+    raiz.style.setProperty("--aj-fundo", (a.top - p.top).toFixed(1) + "px");
+  }
+  new ResizeObserver(medeFundo).observe(palco);
+  medeFundo();
+
   /* ---------- estado inicial ---------- */
   zera();
   poeMod("atrio");
   poeConta(0);
   poeVez("pronto");
   poeStatus(T.status.pronto);
+  painel("pronto", { k: U.k.pronto, peca: U.caso, q: U.resumo, p: U.comecaP, ops: [], bate: U.comeca });
 })();

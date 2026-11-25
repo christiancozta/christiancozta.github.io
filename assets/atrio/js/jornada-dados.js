@@ -151,3 +151,70 @@ window.ATRIO_JORNADA = {
     "Diante do parcial êxito recursal, inaplicável a condenação da parte recorrente ao pagamento de verbas sucumbenciais, nos termos do art. 55 da Lei nº 9.099, de 26 de setembro de 1995, e em conformidade com o entendimento firmado no PUIL nº 3.874/PR."
   ]
 };
+
+/* A vez do humano: antes de bater o relógio, o visitante lê o trecho do caso
+   e escolhe. A escolha certa libera o relógio; a errada devolve a dica.
+   Índice = jogada (null: a TROIA joga sozinha). Trechos das peças em
+   ATRIO\JORNADA\0012345\entrada e ratio. */
+window.ATRIO_JORNADA.escolhas = {
+  pt: [
+    { peca: "Recurso inominado", trecho: "CHRISTIAN DA COSTA, nos autos da ação movida contra BANCO FINANÇAS MÚLTIPLAS S.A., vem interpor RECURSO INOMINADO contra a sentença do evento 45.1.",
+      pergunta: "Por qual via o caso entra?", opcoes: ["Recurso Inominado", "Embargos de Declaração", "Mandado de Segurança"], certa: 0,
+      dica: "O próprio recurso diz a via: recurso inominado." },
+    { peca: "Recurso inominado", trecho: "CHRISTIAN DA COSTA, nos autos da ação movida contra BANCO FINANÇAS MÚLTIPLAS S.A. [...]",
+      pergunta: "O que vira código antes de seguir?", opcoes: ["O nome da pessoa: Christian da Costa", "O número dos autos", "O nome do tribunal"], certa: 0,
+      dica: "A proteção alcança o dado pessoal: o nome de quem recorre." },
+    { peca: "Certidão", trecho: "Ciência da sentença em 16/07/2026. Prazo de 10 dias úteis de 17/07 a 30/07/2026. Recurso protocolado em 30/07/2026. Preparo comprovado no evento 50.2.",
+      pergunta: "O recurso pode ser examinado?", opcoes: ["Sim: no prazo e com preparo", "Não: fora do prazo", "Não: sem preparo"], certa: 0,
+      dica: "Protocolo em 30/07, último dia do prazo. Preparo no evento 50.2." },
+    { peca: "Sentença e recurso", trecho: "Sentença: o golpe aconteceu fora do banco, por culpa da vítima. Recurso: duas transferências seguidas, em oito minutos, levando todo o dinheiro, é algo que qualquer sistema de segurança deveria estranhar.",
+      pergunta: "O que está em disputa?", opcoes: ["Se o banco devia ter segurado as transferências", "Se as transferências aconteceram", "Se o recurso chegou no prazo"], certa: 0,
+      dica: "Os dois lados admitem as transferências. A briga é sobre o dever do banco." },
+    { peca: "Contrarrazões", trecho: "O banco não pode adivinhar que o próprio cliente está sendo enganado. Os valores cabiam no limite da conta.",
+      pergunta: "Qual é a objeção mais forte à hipótese de que os dois erraram?", opcoes: ["O banco não pode adivinhar o golpe", "O valor é pequeno", "O recurso não tem preparo"], certa: 0,
+      dica: "A objeção está nas contrarrazões, na primeira frase." },
+    { peca: "Parecer (RI_04)", trecho: "Os dois erraram: o recorrente passou o código; o banco deixou sair tudo, de madrugada, sem confirmar. Recomendação: dar parcial provimento.",
+      pergunta: "A rota é sua. Qual?", opcoes: ["Negar provimento", "Dar provimento", "Dar parcial provimento (recomendada)"], certa: 2,
+      dica: "As outras rotas existem, mas pediriam outra minuta. Nesta partida, a rota é a recomendada." },
+    { peca: "Minuta (RI_05)", trecho: "[...] o recorrido deve restituir metade do valor transferido, ou seja, R$ 5.000,00 [...] mantida a improcedência do pedido de indenização por danos morais.",
+      pergunta: "A minuta cumpre a rota escolhida?", opcoes: ["Sim: metade de volta, sem danos morais", "Não: devolve tudo", "Não: nega tudo"], certa: 0,
+      dica: "Parcial provimento: um pedido aceito pela metade, o outro recusado." },
+    { peca: "Minuta (RI_06)", trecho: "Ementa: RECURSO CONHECIDO E PARCIALMENTE PROVIDO. Dispositivo: voto pelo CONHECIMENTO e PARCIAL PROVIMENTO.",
+      pergunta: "Ementa e dispositivo dizem o mesmo?", opcoes: ["Sim: liberar a minuta", "Não: voltar à RI_05"], certa: 0,
+      dica: "Compare as duas frases: dizem o mesmo resultado." },
+    null, null, null,
+    { peca: "Resultado da TROIA", trecho: "Legalidade: resiste. Segurança jurídica e isonomia: instável, sobre a divisão em metade. Nenhuma rival derrubou a minuta por inteiro.",
+      pergunta: "Quem dá o mate?", opcoes: ["O julgador", "A TROIA", "O RATIO"], certa: 0,
+      dica: "A IA contraria e audita; a decisão final é humana." }
+  ],
+  en: [
+    { peca: "Appeal", trecho: "CHRISTIAN DA COSTA, in the action against BANCO FINANÇAS MÚLTIPLAS S.A., hereby files a RECURSO INOMINADO (small-claims appeal) against the judgment at entry 45.1.",
+      pergunta: "Through which track does the case enter?", opcoes: ["Small-claims appeal (RI)", "Motion for clarification (ED)", "Writ of mandamus (MS)"], certa: 0,
+      dica: "The filing names its own track: a small-claims appeal." },
+    { peca: "Appeal", trecho: "CHRISTIAN DA COSTA, in the action against BANCO FINANÇAS MÚLTIPLAS S.A. [...]",
+      pergunta: "What becomes a code before moving on?", opcoes: ["The person's name: Christian da Costa", "The case number", "The court's name"], certa: 0,
+      dica: "Protection covers personal data: the appellant's name." },
+    { peca: "Certificate", trecho: "Notice of judgment on 07/16/2026. Ten business days, 07/17 to 07/30/2026. Appeal filed on 07/30/2026. Fee paid at entry 50.2.",
+      pergunta: "Can the appeal be examined?", opcoes: ["Yes: on time and fee paid", "No: late", "No: fee unpaid"], certa: 0,
+      dica: "Filed on 07/30, the last day. Fee at entry 50.2." },
+    { peca: "Judgment and appeal", trecho: "Judgment: the scam happened outside the bank, through the victim's fault. Appeal: two transfers in a row, eight minutes apart, taking all the money, is something any security system should flag.",
+      pergunta: "What is in dispute?", opcoes: ["Whether the bank should have held the transfers", "Whether the transfers happened", "Whether the appeal was on time"], certa: 0,
+      dica: "Both sides admit the transfers. The fight is about the bank's duty." },
+    { peca: "Response brief", trecho: "The bank cannot guess that its own client is being deceived. The amounts fit within the account limit.",
+      pergunta: "What is the strongest objection to 'both sides failed'?", opcoes: ["The bank cannot guess the scam", "The amount is small", "The appeal fee is unpaid"], certa: 0,
+      dica: "The objection is in the response brief, first sentence." },
+    { peca: "Opinion (RI_04)", trecho: "Both failed: the appellant gave the code; the bank let everything go, at night, without confirming. Recommendation: grant in part.",
+      pergunta: "The route is yours. Which one?", opcoes: ["Deny", "Grant", "Grant in part (recommended)"], certa: 2,
+      dica: "The other routes exist, but would need another draft. In this game, the route is the recommended one." },
+    { peca: "Draft (RI_05)", trecho: "[...] the respondent must return half of the amount transferred, R$ 5,000.00 [...] the claim for moral damages remains dismissed.",
+      pergunta: "Does the draft carry out the chosen route?", opcoes: ["Yes: half back, no moral damages", "No: returns everything", "No: denies everything"], certa: 0,
+      dica: "Granted in part: one claim halved, the other dismissed." },
+    { peca: "Draft (RI_06)", trecho: "Headnote: APPEAL HEARD AND GRANTED IN PART. Operative part: I vote to HEAR the appeal and GRANT IT IN PART.",
+      pergunta: "Do headnote and operative part say the same?", opcoes: ["Yes: release the draft", "No: back to RI_05"], certa: 0,
+      dica: "Compare both sentences: same outcome." },
+    null, null, null,
+    { peca: "TROIA result", trecho: "Legality: holds. Legal certainty and equality: unstable, on the half split. No rival knocked the draft down entirely.",
+      pergunta: "Who gives the mate?", opcoes: ["The judge", "TROIA", "RATIO"], certa: 0,
+      dica: "AI contests and audits; the final decision is human." }
+  ]
+};
