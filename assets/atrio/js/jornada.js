@@ -141,12 +141,47 @@
     p: vezEl.querySelector(".aj-vez__p"), ops: vezEl.querySelector(".aj-vez__ops"), dica: vezEl.querySelector(".aj-vez__dica"),
     bate: vezEl.querySelector(".aj-vez__bate")
   } : null;
+  if (V) {
+    V.expl = document.createElement("div");
+    V.expl.className = "aj-vez__expl";
+    V.p.before(V.expl);
+  }
+  /* texto, lista de tópicos ou nós prontos */
+  function conteudo(x) {
+    if (x == null) return [];
+    if (x instanceof Node) return [x];
+    if (Array.isArray(x)) {
+      const ul = document.createElement("ul");
+      ul.className = "aj-vez__lista";
+      x.forEach((t) => { const li = document.createElement("li"); li.textContent = t; ul.append(li); });
+      return [ul];
+    }
+    return [document.createTextNode(x)];
+  }
+  /* os nomes riscados e trocados por código */
+  function trocas(lista) {
+    const d = document.createElement("div");
+    d.className = "aj-troca";
+    lista.forEach(([nome, cod], n) => {
+      const l = document.createElement("p");
+      l.className = "aj-troca__l";
+      l.style.setProperty("--n", n);
+      l.innerHTML = "<s>" + esc(nome) + '</s><span class="aj-troca__cod"><span class="aj-troca__seta" aria-hidden="true">→</span><b>' + esc(cod) + "</b></span>";
+      d.append(l);
+    });
+    return d;
+  }
   let liberado = false;
   function painel(estado, o) {
     if (!V) return;
     vezEl.dataset.estado = estado;
     V.k.textContent = o.k;
-    if (o.peca !== undefined) { V.peca.textContent = o.peca; V.q.textContent = o.q; V.p.textContent = o.p; }
+    if (o.peca !== undefined) {
+      V.peca.textContent = o.peca;
+      V.q.replaceChildren(...conteudo(o.q));
+      V.p.textContent = o.p;
+      V.expl.replaceChildren(...(o.expl ? conteudo(o.expl) : []));
+    }
     if (o.ops !== undefined) V.ops.replaceChildren(...o.ops);
     V.dica.textContent = "";
     V.bate.hidden = !o.bate;
@@ -342,11 +377,16 @@
     if (!instantaneo) {
       await espera(420, g);
       const e = ESC[k];
-      liberado = !e;
-      if (e) painel("humano", { k: U.k.humano + " · " + (j.rotulo || ""), peca: e.peca, q: e.trecho, p: e.pergunta, ops: opcoes(k, e), bate: U.bate, trava: true });
+      const semEscolha = !e || !e.opcoes;
+      liberado = semEscolha;
+      const kk = U.k.humano + " · " + (j.rotulo || "");
+      if (e && e.tipo === "troca") painel("humano", { k: kk, peca: e.peca, q: trocas(e.trocas), expl: e.explica, p: e.pergunta, ops: [], bate: U.bate });
+      else if (e && e.tipo === "bater") painel("humano", { k: kk, peca: e.peca, q: e.trecho, p: e.pergunta, ops: [], bate: U.bate });
+      else if (e) painel("humano", { k: kk, peca: e.peca, q: e.trecho, p: e.pergunta, ops: opcoes(k, e), bate: U.bate, trava: true });
       else painel("troia", { k: U.k.troia, peca: j.rival ? j.rival.rotulo : "", q: j.ia, p: U.troiaP, ops: [], bate: U.seguir });
       poeVez("humano", j);
       poeStatus(e ? e.pergunta : j.pede);
+      if (semEscolha) V?.bate.focus({ preventScroll: true });
       await vezHumana(j);
       if (g !== geracao) throw PARA;
     }
