@@ -5,7 +5,8 @@
    2) retícula: fileiras em múltiplos de --row, painel em quadrados inteiros;
    3) navegação interna: painéis, competências e verbetes, sem hover;
    4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
-   5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice.
+   5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice;
+   7) hero: o feixe (prisma e esteira) e o cordão recolhido durante o hero.
    A casca (cordão, views, histórico) continua em arco-shell.js.
    ========================================================================== */
 (() => {
@@ -235,6 +236,203 @@
     }
   }
 
+  /* ---------- 7. hero: o feixe ----------
+     A mecânica é a da esteira do ATRIO (atrio.js: drawStaticRunway, draw,
+     tick), levada a um ponto de fuga deslocado: o prisma. Unidades:
+       c  = macrocoluna (largura / 8), a mesma de --cell;
+       v  = c / 5, a unidade só visual da retícula de 40 colunas (--vu).
+     O prisma pousa em (2c, horizonte); o horizonte fica a m·v da base (m
+     inteiro), como o do ATRIO fica em múltiplos da unidade. As faixas da
+     esteira são as colunas de v contadas a partir de x = 0: na base do hero,
+     cada divisão longitudinal cai sobre uma linha da retícula, que continua
+     pelos painéis abaixo. Os cortes transversais seguem a perspectiva do
+     ATRIO, r = m / (m + n − fase): com d0 = m, a última fileira mede v na
+     base, e o quadrado da esteira encontra o quadrado da retícula. O corte
+     é uma faixa #2C2C2C que vai da direita da tela até a borda esquerda do
+     feixe: sobre o fundo, invisível; sobre o branco, corta.
+     Abertura (uma vez): os feixes entram pela esquerda até o prisma; o
+     branco nasce dele, já dividido em faixas; os cortes avançam da direita
+     para a esquerda; depois, a esteira corre. Movimento reduzido: o desenho
+     final, parado (fase 0, quando a fileira da base pousa na linha da base).
+     Fora da tela, o laço para. */
+  const feixe = (() => {
+    const hero = home.querySelector(".hm-feixe");
+    const svg = hero && hero.querySelector(".hm-feixe__svg");
+    if (!svg) return null;
+    const luz = svg.querySelector(".hm-feixe__luz");
+    const faixas = svg.querySelector(".hm-feixe__faixas");
+    const cortes = svg.querySelector(".hm-feixe__cortes");
+    const cores = [...svg.querySelectorAll(".hm-feixe__cor")];
+    const prisma = svg.querySelector(".hm-feixe__prisma");
+    const id = hero.querySelector(".hm-feixe__id");
+    const txt = hero.querySelector(".hm-feixe__txt");
+    const nomeEl = hero.querySelector(".hm-name");
+    const fitLine = nomeEl && nomeEl.querySelector(".hm-fit");
+    const linhas = fitLine ? [...fitLine.querySelectorAll(".hm-feixe__l")] : [];
+    const alto = matchMedia("(max-aspect-ratio:10/11)");
+    const anima = !reduce;
+    const ROW_MS = 3200;                              /* uma fileira por período */
+    const T = {cor:[0, 760], luz:[520, 820], corte:[1180, 1200]};
+    const fim = T.corte[0] + T.corte[1] + 480;
+    const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
+    const p2 = n => n.toFixed(2);
+    let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
+
+    /* baseline do nome: sonda de largura zero, como em raiseTitles, na
+       última linha */
+    let bl = null;
+    if (fitLine){
+      bl = document.createElement("span");
+      bl.setAttribute("aria-hidden", "true");
+      bl.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+      (linhas[linhas.length - 1] || fitLine).append(bl);
+    }
+
+    /* o nome ocupa a largura exata do seu bloco, como os títulos (fit):
+       numa linha na composição larga; em duas na alta, pela mais longa, sem
+       passar de 8,5% da altura da tela */
+    function ajustaNome(largo){
+      if (!nomeEl || !fitLine) return;
+      nomeEl.style.removeProperty("font-size");
+      const room = nomeEl.clientWidth;
+      const els = largo || !linhas.length ? [fitLine] : linhas;
+      const widest = Math.max(...els.map(l => l.getBoundingClientRect().width));
+      if (!(room > 0 && widest > 0)) return;
+      let fs = parseFloat(getComputedStyle(nomeEl).fontSize) * room / widest * .995;
+      if (!largo) fs = Math.min(fs, innerHeight * .085);
+      nomeEl.style.fontSize = p2(fs) + "px";
+    }
+
+    function mede(){
+      const W = hero.clientWidth;
+      const largo = !alto.matches;
+      ajustaNome(largo);
+      const H = hero.clientHeight;
+      if (!(W > 0 && H > 0)){ G = null; return; }
+      const c = W / 8, v = c / 5;
+      let m = Math.max(6, Math.round((largo ? .5 : .36) * H / v));
+      /* na composição alta, o horizonte desce, em v inteiros, até ficar
+         pelo menos 2v abaixo do texto */
+      if (!largo && txt && txt.lastElementChild){
+        const fundo = txt.lastElementChild.getBoundingClientRect().bottom - hero.getBoundingClientRect().top;
+        m = Math.max(6, Math.min(m, Math.floor((H - fundo - 2 * v) / v)));
+      }
+      const D = m * v, py = H - D, px = 2 * c;
+      /* borda esquerda do branco: uma linha de faixa (x = −nL·v na base),
+         escolhida para cruzar a borda da tela a ~55% da profundidade */
+      const nL = Math.max(1, Math.round(px * (1 / .55 - 1) / v));
+      const kR = largo ? 20 : 30;                    /* borda direita: 4c ou 6c */
+      const xL = -nL * v, xR = kR * v;
+      const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
+      const g = Math.max(1, Math.round(v / 24));      /* espessura do corte na base */
+      const s = Math.max(14, v * 1.5);                /* lado do prisma */
+      G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, s, largo};
+      hero.style.setProperty("--hz", p2(py) + "px");
+      svg.setAttribute("viewBox", `0 0 ${p2(W)} ${p2(H)}`);
+      estatico = "";
+      nome();
+    }
+
+    /* o nome pousa a linha de base no horizonte (composição larga) */
+    function nome(){
+      if (!id) return;
+      id.style.transform = "";
+      if (!G || !G.largo || !bl) return;
+      const y = bl.getBoundingClientRect().top - hero.getBoundingClientRect().top;
+      const d = G.py - y;
+      if (Math.abs(d) > .25) id.style.transform = `translateY(${p2(d)}px)`;
+    }
+
+    /* um ponto da borda esquerda (x = 0, altura y), prolongado para fora da
+       tela sobre a linha que vai ao prisma: as bordas não deixam frestas */
+    const fora = y => p2(y + (y - G.py) * 2 / G.px);
+
+    function desenhaEstatico(t){
+      const {H, v, px, py, xL, xR, nL, kR, Ye, g, s} = G;
+      /* 1. os nove feixes, contíguos: cada um vai do seu topo até o fim do
+         leque, e o seguinte o cobre; assim a junta é cor sobre cor */
+      const fx = px * ease((t - T.cor[0]) / T.cor[1]);
+      const yOf = j => Ye * j / 9;
+      cores.forEach((path, j) => {
+        if (fx <= 0){ path.setAttribute("d", ""); return; }
+        const a = yOf(j), atx = y => p2(y + (py - y) * fx / px);
+        path.setAttribute("d", `M-2,${fora(a)}L${p2(fx)},${atx(a)}L${p2(fx)},${atx(Ye)}L-2,${fora(Ye)}Z`);
+      });
+      /* 2. o branco nasce do prisma: alcance k de 0 a 1 */
+      const k = ease((t - T.luz[0]) / T.luz[1]);
+      if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); }
+      else {
+        const at = (x, y) => `${p2(px + (x - px) * k)},${p2(py + (y - py) * k)}`;
+        /* inteiro, o branco também passa sob o último feixe colorido */
+        luz.setAttribute("d", k < 1
+          ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
+          : `M${p2(px)},${p2(py)}L${p2(xR)},${p2(H)}L-2,${p2(H)}L-2,${fora(yOf(8))}Z`);
+        /* divisões longitudinais: do prisma até x = j·v na base, largura g
+           na base e proporcional à profundidade (triângulo com vértice no
+           prisma). A borda esquerda não leva divisão: é a junta com as cores */
+        const d = [];
+        for (let j = -nL + 1; j < kR; j++) d.push(`M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`);
+        faixas.setAttribute("d", d.join(""));
+      }
+      /* 3. o prisma: triângulo equilátero com o baricentro no ponto de fuga */
+      const R = s / Math.sqrt(3), r = R / 2;
+      prisma.setAttribute("d", `M${p2(px)},${p2(py - R)}L${p2(px + s / 2)},${p2(py + r)}L${p2(px - s / 2)},${p2(py + r)}Z`);
+    }
+
+    /* 4. os cortes transversais, na perspectiva do ATRIO */
+    function desenhaCortes(t, fase){
+      const {W, H, v, m, D, px, py, xL, xR, g} = G;
+      if (t < T.corte[0]){ cortes.setAttribute("d", ""); return; }
+      const d = [];
+      for (let n = 0; n < 400; n++){
+        const r = m / (m + n - fase);
+        if (r > 1) continue;
+        const y = py + D * r;
+        /* mais perto do prisma que isto, as fileiras viram cinza: param */
+        if (D * (r - m / (m + n + 1 - fase)) < 1.2) break;
+        const e = g * r * r;
+        if (e < .04) break;
+        const dir = px + (xR - px) * r + 1, esq = Math.max(0, px + (xL - px) * r);
+        /* a frente do corte: da borda direita do branco à esquerda; as
+           fileiras mais distantes começam um pouco depois */
+        const u = ease((t - T.corte[0] - (1 - r) * 420) / (T.corte[1] - 420));
+        if (u <= 0) continue;
+        const x0 = dir - (dir - esq + 1) * u;
+        d.push(`M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`);
+      }
+      cortes.setAttribute("d", d.join(""));
+    }
+
+    function quadro(now){
+      loop = 0;
+      if (!G) return;
+      if (!t0) t0 = now;
+      const t = abertura ? now - t0 : Infinity;
+      if (t >= fim) abertura = false;
+      const chave = abertura ? "" : "fim";
+      if (abertura || estatico !== chave){ desenhaEstatico(t); estatico = chave; }
+      desenhaCortes(t, anima ? (now / ROW_MS) % 1 : 0);
+      if (anima && visivel) loop = requestAnimationFrame(quadro);
+    }
+    const roda = () => { if (!loop && G) loop = requestAnimationFrame(quadro); };
+
+    /* o cordão: recolhido enquanto o hero está na tela */
+    const html = document.documentElement;
+    html.classList.add("hm-veu-on", "hm-veu");
+    if ("IntersectionObserver" in window){
+      new IntersectionObserver(([e]) => {
+        visivel = e.isIntersecting;
+        html.classList.toggle("hm-veu", visivel);
+        if (visivel) roda();
+      }, {threshold:0}).observe(hero);
+    }
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && visivel) roda(); });
+
+    return {
+      mede(){ mede(); if (!anima || !abertura) estatico = ""; roda(); }
+    };
+  })();
+
   let raf = 0, lastWidth = 0, lastRow = 0;
   function layout(force = false){
     raf = 0;
@@ -245,6 +443,7 @@
     scoreFit();
     snapAll();
     ancora();
+    feixe?.mede();
     lockFigures();
     alignTabs();
     raiseTitles();

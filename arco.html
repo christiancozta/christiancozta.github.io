@@ -107,8 +107,8 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261124-marca" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261124-hero">
-<script src="assets/arco/js/arco-home.js?v=20261124-hero" defer></script>
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261125-feixe">
+<script src="assets/arco/js/arco-home.js?v=20261125-feixe" defer></script>
 <link rel="stylesheet" href="assets/atrio/css/ratio-clock.css?v=20261124-handoff02">
 <script src="assets/atrio/js/ratio-demo-cases.js?v=20261124-handoff02" defer></script>
 <script src="assets/atrio/js/ratio-clock.js?v=20261124-marca" defer></script>
@@ -177,36 +177,39 @@
     <section class="view" data-view="home" data-active="true" aria-label="Percurso">
       <div class="hm hm--dossie" id="hm">
 
-        <!-- 01 — AUTORIA: o nome no centro da primeira tela (horizontal e
-             vertical). No alto, à direita, a busca; abaixo do nome, à
-             esquerda, o resumo e, à direita, os meios de contato, pela mesma
-             margem esquerda da busca. As distinções descem para as frentes,
-             cada uma na linha do projeto a que se liga. -->
-        <section class="hm-panel hm-autoria" id="autoria" aria-labelledby="bio-name">
+        <!-- 01 — AUTORIA (hero, nov/2026): fundo #2C2C2C. Nove feixes (ECHO,
+             ATRIO, CERNE, três vezes) entram pela borda esquerda, contíguos,
+             do vértice superior até o encontro com a esteira, e convergem num
+             pequeno prisma. Do prisma nasce o feixe branco, já dividido em
+             faixas; os cortes transversais avançam da direita para a esquerda
+             e ele vira a esteira do ATRIO, cujas faixas pousam, na base, sobre
+             as linhas da retícula de 40 colunas. Desenho em arco-home.js
+             (feixe); sem JS, o SVG fica vazio e o texto, no campo escuro. No
+             campo à direita, só o nome, o que ele é e os contatos. -->
+        <section class="hm-panel hm-autoria hm-feixe" id="autoria" aria-labelledby="bio-name">
           <p class="hm-kick">Autoria</p>
-          <div class="hm-topo">
-            <!-- BUSCA: do termo da vaga à prova. Lê o próprio lastro (verbetes do
-                 dicionário abaixo) e sugere verbetes enquanto se digita; em
-                 repouso, os dois campos ficam em reticências. Sem JS, fica o
-                 caminho para o lastro inteiro. -->
-            <div class="hm-busca" id="busca" role="search" aria-labelledby="busca-t">
-              <label class="hm-busca__k" id="busca-t" for="busca-i">Do termo da vaga à prova</label>
-              <div class="hm-busca__vivo" hidden>
-                <input class="hm-busca__i" id="busca-i" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="busca-sug" autocomplete="off" spellcheck="false" placeholder="Digite um termo, ex.: AI Governance">
-                <ul class="hm-busca__sug" id="busca-sug" role="listbox" aria-label="Verbetes sugeridos" hidden></ul>
-              </div>
-              <div class="hm-busca__r" aria-live="polite">
-                <p class="hm-busca__vazio">Quem procura pelo nome encontra a prova: 48 verbetes de mercado, cada um ligado à competência que o demonstra. <a href="#repertorio" data-hm-go>Abrir o lastro</a></p>
-              </div>
+          <svg class="hm-feixe__svg" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+            <path class="hm-feixe__luz"></path>
+            <path class="hm-feixe__faixas"></path>
+            <path class="hm-feixe__cortes"></path>
+            <g class="hm-feixe__cores">
+              <path class="hm-feixe__cor hm-feixe__cor--echo"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--atrio"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--cerne"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--echo"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--atrio"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--cerne"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--echo"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--atrio"></path>
+              <path class="hm-feixe__cor hm-feixe__cor--cerne"></path>
+            </g>
+            <path class="hm-feixe__prisma"></path>
+          </svg>
+          <div class="hm-feixe__txt">
+            <div class="hm-feixe__id">
+              <p class="hm-feixe__tag">Portfólio de inteligência jurídica</p>
+              <h1 class="hm-name" id="bio-name"><span class="hm-fit"><span class="hm-feixe__l">Christian</span> <span class="hm-feixe__l">da Costa</span></span></h1>
             </div>
-          </div>
-          <h1 class="hm-name" id="bio-name"><span class="hm-fit">Christian da Costa</span></h1>
-          <div class="hm-base">
-            <div class="hm-oferta">
-              <p class="hm-summary">Advogado e mestre em Direito. Há quase uma década entre a advocacia privada e o setor público, com mais de 5 anos à frente de operações jurídicas no Poder Judiciário. Na liderança de um gabinete judicial, com uma equipe de oito colaboradores, conduzi a operação jurídica no ponto em que ela se sustenta ou desmorona: o alto volume.</p>
-            </div>
-            <!-- CONTATO: os mesmos meios do fecho da página, na ficha de rótulo e
-                 valor da busca (mesma coluna de rótulos, mesma margem). -->
             <dl class="hm-canal" aria-label="Contato">
               <div class="hm-canal__r"><dt>Currículo</dt><dd><a href="https://christiancozta.github.io/CV-Christian_daCosta.pdf" target="_blank" rel="noopener" aria-label="Currículo em português">PT</a><i aria-hidden="true">/</i><a href="https://christiancozta.github.io/CV-Christian_daCosta-EN.pdf" target="_blank" rel="noopener" aria-label="Currículo em inglês" hreflang="en">EN</a></dd></div>
               <div class="hm-canal__r"><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/christiandcosta" target="_blank" rel="noopener">in/christiandcosta</a></dd></div>

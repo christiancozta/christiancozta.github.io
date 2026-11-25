@@ -29,7 +29,8 @@
      --u      unidade de 8px para folgas internas
 
    A retícula visível é canônica: só quadrados, oito pela largura da tela,
-   contínuos de cima a baixo da home. Textos e elementos podem terminar em
+   contínuos de cima a baixo da home, cada um dividido em cinco (--vu, 40
+   colunas), linha só de desenho. Textos e elementos podem terminar em
    qualquer ponto; o que se vê é sempre o quadrado. A grade de composição
    (8 colunas, fileiras de meio quadrado) fica invisível por baixo, e cada
    painel fecha num número inteiro de quadrados (arco-home.js), para que o
@@ -45,6 +46,12 @@
   --paper:#FCFCFC;
   --ink:#2C2C2C;
   --grid:rgba(44,44,44,.07);
+  /* retícula visual (nov/2026): 40 colunas, cinco por macrocoluna, em
+     quadrados de --vu. É só desenho: a composição continua em --cell e
+     --row, e nada pousa em --vu. Como no CERNE, a linha maior (--grid) e a
+     menor (--grid-min) dizem as duas escalas sem que uma governe a outra. */
+  --vu:calc(var(--cell) / 5);
+  --grid-min:rgba(44,44,44,.04);
   --rule:rgba(44,44,44,.2);
   --soft:rgba(44,44,44,.66);
   --echo:#FFB627;
@@ -54,11 +61,14 @@
   background-color:var(--paper);
   background-image:
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size:var(--cell) var(--cell);
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px),
+    linear-gradient(to right, var(--grid-min) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-min) 1px, transparent 1px);
+  background-size:var(--cell) var(--cell), var(--cell) var(--cell), var(--vu) var(--vu), var(--vu) var(--vu);
   /* a origem da retícula desce até a base do hero (--ret-y, arco-home.js):
      ali o hero termina numa linha, e os painéis seguintes, em quadrados
-     inteiros, seguem alinhados a ela */
+     inteiros, seguem alinhados a ela. A linha menor parte da mesma origem:
+     a base do hero cai nas duas. */
   background-position:0 var(--ret-y, 0px);
   color:var(--ink);
 }
@@ -1478,3 +1488,139 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
   .hm-proj--cerne .hm-fund-faixa{ grid-row:5; }
   .hm-proj--cerne::after{ display:none; }
 }
+
+/* ==========================================================================
+   HERO — FEIXE (nov/2026)
+   --------------------------------------------------------------------------
+   Campo #2C2C2C na altura da tela. Nove feixes (ECHO, ATRIO, CERNE, três
+   vezes) entram pela borda esquerda, contíguos, e convergem num pequeno
+   prisma; do prisma nasce o feixe branco que vira a esteira do ATRIO. A
+   geometria é de arco-home.js (feixe): o prisma pousa no cruzamento de uma
+   macrocoluna com o horizonte (--hz, múltiplo inteiro de --vu contado da
+   base), e as faixas da esteira pousam, na base, sobre as linhas da
+   retícula de 40 colunas, que seguem pelos painéis abaixo. Cores chapadas,
+   sem brilho nem contorno. No campo à direita, só texto, em #FCFCFC.
+   Duas composições: larga (texto nas colunas 5 a 7, o nome sobre o
+   horizonte) e alta (retrato: texto no alto, da coluna 2 à 8; a esteira
+   embaixo). O JS lê a mesma media query.
+   ========================================================================== */
+.hm--dossie .hm-feixe{
+  --hero-ink:#2C2C2C;
+  --hero-paper:#FCFCFC;
+  --hz:50svh;
+  position:relative; isolation:isolate; overflow:hidden;
+  display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); grid-template-rows:minmax(0, 1fr);
+  min-height:calc(100svh - var(--rail-h, 0px));
+  padding:0;
+  background:var(--hero-ink); color:var(--hero-paper);
+}
+/* com o cordão recolhido durante o hero, o hero ocupa a tela inteira */
+html.hm-veu-on .hm--dossie .hm-feixe{ min-height:100svh; }
+.hm--dossie .hm-feixe::before{ display:none; }
+
+.hm-feixe__svg{
+  position:absolute; inset:0; z-index:0;
+  width:100%; height:100%; display:block; pointer-events:none;
+}
+.hm-feixe__luz,
+.hm-feixe__prisma{ fill:var(--hero-paper); }
+.hm-feixe__faixas,
+.hm-feixe__cortes{ fill:var(--hero-ink); }
+.hm-feixe__cor--echo{ fill:var(--echo); }
+.hm-feixe__cor--atrio{ fill:var(--atrio); }
+.hm-feixe__cor--cerne{ fill:var(--cerne); }
+
+/* !important: no celular, .hm-panel > * força a largura toda */
+.hm-feixe > .hm-feixe__txt{
+  position:relative; z-index:1;
+  grid-column:5 / 8 !important; grid-row:1 !important;
+  display:grid; grid-template-rows:var(--hz) auto; align-content:start;
+  min-width:0; padding:0 var(--g);
+}
+.hm-feixe__id{ grid-row:1; align-self:end; min-width:0; }
+.hm-feixe .hm-fit{ white-space:nowrap; }
+.hm-feixe__tag{
+  margin:0 0 calc(var(--u) * 2);
+  font-family:var(--f-micro); font-size:.612rem; font-weight:600; line-height:1.3;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--hero-paper);
+}
+.hm--dossie .hm-feixe .hm-name{
+  margin:0; padding:0;
+  font-size:4.2vw; line-height:.95; letter-spacing:-.045em;
+  text-align:left; white-space:nowrap; color:var(--hero-paper);
+}
+.hm-feixe .hm-canal{
+  grid-row:2; align-self:start;
+  --rot:6.75rem;
+  padding:calc(var(--u) * 5) 0 calc(var(--u) * 5);
+}
+.hm-feixe .hm-canal dt{ color:var(--hero-paper); }
+.hm-feixe .hm-canal dd a{ color:var(--hero-paper); text-decoration-color:rgba(252,252,252,.34); }
+.hm-feixe .hm-canal dd a:hover,
+.hm-feixe .hm-canal dd a:focus-visible{ text-decoration-color:var(--hero-paper); }
+.hm-feixe .hm-canal dd a:focus-visible{ outline-color:var(--hero-paper); }
+.hm-feixe .hm-canal dd i{ color:var(--hero-paper); }
+
+/* composição alta (retrato): o texto sobe ao alto, da coluna 2 à 8, e a
+   esteira ocupa a parte de baixo */
+.hm-feixe__l{ display:inline; }
+
+/* composição larga: rótulo e valor sempre lado a lado; em bloco estreito,
+   a coluna de rótulos e o corpo cedem antes de o valor quebrar */
+@media not all and (max-aspect-ratio:10/11){
+  .hm-feixe .hm-canal__r{
+    grid-template-columns:var(--rot) minmax(0, 1fr); column-gap:18px; align-items:baseline;
+  }
+  .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:0; }
+  @container (max-width:24rem){
+    .hm-feixe .hm-canal__r{ grid-template-columns:4.5rem minmax(0, 1fr); column-gap:14px; }
+    .hm-feixe .hm-canal dd{ font-size:.9375rem; }
+  }
+}
+/* até 1100px, o texto usa também meia margem à direita, como a base do
+   hero anterior */
+@media not all and (max-aspect-ratio:10/11){
+  @media (max-width:1100px){
+    .hm-feixe > .hm-feixe__txt{ grid-column:5 / 9 !important; padding-right:calc(var(--cell) * .5); }
+  }
+  @media (max-height:520px){
+    .hm-feixe__tag{ margin-bottom:var(--u); }
+    .hm-feixe .hm-canal{ padding:calc(var(--u) * 3) 0 calc(var(--u) * 2); }
+  }
+}
+@media (max-aspect-ratio:10/11){
+  /* da coluna 3 à 8: o leque, que converge em 2c, nunca alcança o texto */
+  .hm-feixe > .hm-feixe__txt{
+    grid-column:3 / 9 !important;
+    grid-template-rows:auto auto;
+    padding:calc(var(--u) * 7) var(--g) 0;
+  }
+  .hm-feixe__l{ display:block; }
+  .hm--dossie .hm-feixe .hm-name{ font-size:13vw; line-height:.92; }
+  .hm-feixe .hm-canal{ padding:calc(var(--u) * 4) 0 calc(var(--u) * 4); }
+  .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:10px; }
+}
+
+/* ---------- cordão: recolhido durante o hero ----------
+   Na home, o cordão sai do fluxo e fica fixo no topo; enquanto o hero está
+   na tela (html.hm-veu, arco-home.js), sobe para fora dela. Some do olhar,
+   não do teclado: o foco num link do cordão o traz de volta. Fora da home,
+   ou sem JS, nada muda. */
+html.hm-veu-on:has(.view[data-view="home"][data-active="true"]) .rail{
+  position:fixed; top:0; left:0; right:0;
+  transition:transform var(--slow) var(--ease);
+}
+html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not(:focus-within){
+  transform:translateY(-100%);
+}
+@media (prefers-reduced-motion:reduce){
+  html.hm-veu-on:has(.view[data-view="home"][data-active="true"]) .rail{ transition:none; }
+}
+
+/* ---------- fundos que escondiam a retícula ----------
+   Blocos no próprio papel da página deixavam a retícula em buracos; ficam
+   transparentes. Cabeçalhos presos (que cobrem o que rola por baixo) e
+   rótulos sobre filetes mantêm o fundo. */
+.hm-fr__r,
+.hm-ficha,
+.hm-fund{ background:transparent; }
