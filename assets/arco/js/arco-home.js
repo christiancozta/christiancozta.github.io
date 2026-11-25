@@ -6,7 +6,7 @@
    3) navegação interna: painéis, competências e verbetes, sem hover;
    4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
    5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice;
-   7) hero: o feixe (prisma e esteira) e o cordão recolhido durante o hero.
+   7) hero: o feixe (feixes e esteira) e o cordão recolhido durante o hero.
    A casca (cordão, views, histórico) continua em arco-shell.js.
    ========================================================================== */
 (() => {
@@ -238,10 +238,11 @@
 
   /* ---------- 7. hero: o feixe ----------
      A mecânica é a da esteira do ATRIO (atrio.js: drawStaticRunway, draw,
-     tick), levada a um ponto de fuga deslocado: o prisma. Unidades:
+     tick), levada a um ponto de fuga deslocado: o fim da esteira, onde as
+     faixas se fecham num triângulo que faz as vezes de prisma. Unidades:
        c  = macrocoluna (largura / 8), a mesma de --cell;
        v  = c / 5, a unidade só visual da retícula de 40 colunas (--vu).
-     O prisma pousa em (2c, horizonte); o horizonte fica a m·v da base (m
+     O ponto de fuga pousa em (2c, horizonte); o horizonte fica a m·v da base (m
      inteiro), como o do ATRIO fica em múltiplos da unidade. As faixas da
      esteira são as colunas de v contadas a partir de x = 0: na base do hero,
      cada divisão longitudinal cai sobre uma linha da retícula, que continua
@@ -250,7 +251,7 @@
      base, e o quadrado da esteira encontra o quadrado da retícula. O corte
      é uma faixa #2C2C2C que vai da direita da tela até a borda esquerda do
      feixe: sobre o fundo, invisível; sobre o branco, corta.
-     Abertura (uma vez): os feixes entram pela esquerda até o prisma; o
+     Abertura (uma vez): os feixes entram pela esquerda até a ponta da esteira; o
      branco nasce dele, já dividido em faixas; os cortes avançam da direita
      para a esquerda; depois, a esteira corre. Movimento reduzido: o desenho
      final, parado (fase 0, quando a fileira da base pousa na linha da base).
@@ -263,7 +264,6 @@
     const faixas = svg.querySelector(".hm-feixe__faixas");
     const cortes = svg.querySelector(".hm-feixe__cortes");
     const cores = [...svg.querySelectorAll(".hm-feixe__cor")];
-    const prisma = svg.querySelector(".hm-feixe__prisma");
     const id = hero.querySelector(".hm-feixe__id");
     const txt = hero.querySelector(".hm-feixe__txt");
     const nomeEl = hero.querySelector(".hm-name");
@@ -272,8 +272,15 @@
     const alto = matchMedia("(max-aspect-ratio:10/11)");
     const anima = !reduce;
     const ROW_MS = 3200;                              /* uma fileira por período */
-    const T = {cor:[0, 760], luz:[520, 820], corte:[1180, 1200]};
-    const fim = T.corte[0] + T.corte[1] + 480;
+    /* corte: [início, duração de cada fileira, defasagem entre a primeira e
+       a última]. A frente desce em "\": a fileira de cima começa antes, a da
+       base por último. */
+    const T = {cor:[0, 760], luz:[520, 820], corte:[1180, 1700, 1500]};
+    const fim = T.corte[0] + T.corte[1] + T.corte[2] + 400;
+    /* os cortes vivem da metade da profundidade da esteira para baixo (r0);
+       acima disso o branco segue só com as faixas. Entram aos poucos, num
+       trecho de rampa, para que a fileira que desce não surja de repente. */
+    const R0 = .5, RAMPA = .12;
     const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
     const p2 = n => n.toFixed(2);
     let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
@@ -325,8 +332,7 @@
       const xL = -nL * v, xR = kR * v;
       const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
       const g = Math.max(1, Math.round(v / 24));      /* espessura do corte na base */
-      const s = Math.max(14, v * 1.5);                /* lado do prisma */
-      G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, s, largo};
+      G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, largo};
       hero.style.setProperty("--hz", p2(py) + "px");
       svg.setAttribute("viewBox", `0 0 ${p2(W)} ${p2(H)}`);
       estatico = "";
@@ -344,11 +350,11 @@
     }
 
     /* um ponto da borda esquerda (x = 0, altura y), prolongado para fora da
-       tela sobre a linha que vai ao prisma: as bordas não deixam frestas */
+       tela sobre a linha que vai ao ponto de fuga: as bordas não deixam frestas */
     const fora = y => p2(y + (y - G.py) * 2 / G.px);
 
     function desenhaEstatico(t){
-      const {H, v, px, py, xL, xR, nL, kR, Ye, g, s} = G;
+      const {H, v, px, py, xL, xR, nL, kR, Ye, g} = G;
       /* 1. os nove feixes, contíguos: cada um vai do seu topo até o fim do
          leque, e o seguinte o cobre; assim a junta é cor sobre cor */
       const fx = px * ease((t - T.cor[0]) / T.cor[1]);
@@ -358,7 +364,7 @@
         const a = yOf(j), atx = y => p2(y + (py - y) * fx / px);
         path.setAttribute("d", `M-2,${fora(a)}L${p2(fx)},${atx(a)}L${p2(fx)},${atx(Ye)}L-2,${fora(Ye)}Z`);
       });
-      /* 2. o branco nasce do prisma: alcance k de 0 a 1 */
+      /* 2. o branco nasce do ponto de fuga: alcance k de 0 a 1 */
       const k = ease((t - T.luz[0]) / T.luz[1]);
       if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); }
       else {
@@ -367,16 +373,13 @@
         luz.setAttribute("d", k < 1
           ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
           : `M${p2(px)},${p2(py)}L${p2(xR)},${p2(H)}L-2,${p2(H)}L-2,${fora(yOf(8))}Z`);
-        /* divisões longitudinais: do prisma até x = j·v na base, largura g
+        /* divisões longitudinais: do ponto de fuga até x = j·v na base, largura g
            na base e proporcional à profundidade (triângulo com vértice no
-           prisma). A borda esquerda não leva divisão: é a junta com as cores */
+           ponto de fuga). A borda esquerda não leva divisão: é a junta com as cores */
         const d = [];
         for (let j = -nL + 1; j < kR; j++) d.push(`M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`);
         faixas.setAttribute("d", d.join(""));
       }
-      /* 3. o prisma: triângulo equilátero com o baricentro no ponto de fuga */
-      const R = s / Math.sqrt(3), r = R / 2;
-      prisma.setAttribute("d", `M${p2(px)},${p2(py - R)}L${p2(px + s / 2)},${p2(py + r)}L${p2(px - s / 2)},${p2(py + r)}Z`);
     }
 
     /* 4. os cortes transversais, na perspectiva do ATRIO */
@@ -388,14 +391,16 @@
         const r = m / (m + n - fase);
         if (r > 1) continue;
         const y = py + D * r;
-        /* mais perto do prisma que isto, as fileiras viram cinza: param */
+        /* acima da metade da profundidade, nenhum corte */
+        if (r < R0) break;
         if (D * (r - m / (m + n + 1 - fase)) < 1.2) break;
-        const e = g * r * r;
-        if (e < .04) break;
+        const surge = Math.min(1, (r - R0) / RAMPA);
+        const e = g * r * r * surge * surge * (3 - 2 * surge);
+        if (e < .04) continue;
         const dir = px + (xR - px) * r + 1, esq = Math.max(0, px + (xL - px) * r);
-        /* a frente do corte: da borda direita do branco à esquerda; as
-           fileiras mais distantes começam um pouco depois */
-        const u = ease((t - T.corte[0] - (1 - r) * 420) / (T.corte[1] - 420));
+        /* a frente do corte: da borda direita do branco à esquerda; a
+           fileira de cima entra primeiro e a frente desce em "\" */
+        const u = ease((t - T.corte[0] - (r - R0) / (1 - R0) * T.corte[2]) / T.corte[1]);
         if (u <= 0) continue;
         const x0 = dir - (dir - esq + 1) * u;
         d.push(`M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`);
