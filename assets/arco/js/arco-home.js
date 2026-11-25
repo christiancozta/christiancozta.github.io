@@ -283,7 +283,7 @@
     /* os cortes vivem da metade da profundidade da esteira para baixo (r0);
        acima disso o branco segue só com as faixas. Entram aos poucos, num
        trecho de rampa, para que a fileira que desce não surja de repente. */
-    const R0 = .5, RAMPA = .12;
+    const R0 = .5, RAMPA = .12, MAX = 1.82; // projeção excedente do ATRIO
     const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
     const p2 = n => n.toFixed(2);
     let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
@@ -314,10 +314,9 @@
     }
 
     function mede(){
-      const W = hero.clientWidth;
       const largo = !alto.matches;
       ajustaNome(largo);
-      const H = hero.clientHeight;
+      const {width: W, height: H} = svg.getBoundingClientRect();
       if (!(W > 0 && H > 0)){ G = null; return; }
       const c = W / 8, v = c / 5;
       let m = Math.max(6, Math.round((largo ? .5 : .36) * H / v));
@@ -337,7 +336,7 @@
       const g = 1;                                    /* espessura na base: a da retícula */
       G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, largo};
       hero.style.setProperty("--hz", p2(py) + "px");
-      svg.setAttribute("viewBox", `0 0 ${p2(W)} ${p2(H)}`);
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
       estatico = "";
       nome();
     }
@@ -369,13 +368,14 @@
       });
       /* 2. o branco nasce do ponto de fuga: alcance k de 0 a 1 */
       const k = ease((t - T.luz[0]) / T.luz[1]);
+      const alcance = k < 1 ? k : MAX;
       if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); faixasM?.setAttribute("d", ""); }
       else {
-        const at = (x, y) => `${p2(px + (x - px) * k)},${p2(py + (y - py) * k)}`;
+        const at = (x, y) => `${p2(px + (x - px) * alcance)},${p2(py + (y - py) * alcance)}`;
         /* inteiro, o branco também passa sob o último feixe colorido */
         luz.setAttribute("d", k < 1
           ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
-          : `M${p2(px)},${p2(py)}L${p2(xR)},${p2(H)}L-2,${p2(H)}L-2,${fora(yOf(8))}Z`);
+          : `M${p2(px)},${p2(py)}L${at(xR, H)}L-2,${p2(py + (H - py) * MAX)}L-2,${fora(yOf(8))}Z`);
         /* divisões longitudinais: do ponto de fuga até x = j·v na base, largura g
            na base e proporcional à profundidade (triângulo com vértice no
            ponto de fuga). A borda esquerda não leva divisão: é a junta com as cores */
@@ -399,7 +399,7 @@
       const d = [], dM = [];
       for (let n = 0; n < 400; n++){
         const r = m / (m + n - fase);
-        if (r > 1) continue;
+        if (r > MAX) continue;
         const y = py + D * r;
         /* acima da metade da profundidade, nenhum corte */
         if (r < R0) break;
@@ -410,7 +410,7 @@
         const dir = px + (xR - px) * r + 1, esq = Math.max(0, px + (xL - px) * r);
         /* a frente do corte: da borda direita do branco à esquerda; a
            fileira de cima entra primeiro e a frente desce em "\" */
-        const u = ease((t - T.corte[0] - (r - R0) / (1 - R0) * T.corte[2]) / T.corte[1]);
+        const u = ease((t - T.corte[0] - (Math.min(r, 1) - R0) / (1 - R0) * T.corte[2]) / T.corte[1]);
         if (u <= 0) continue;
         const x0 = dir - (dir - esq + 1) * u;
         const faixa = `M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`;
@@ -703,6 +703,7 @@
 
   const schedule = () => { if (!raf) raf = requestAnimationFrame(() => layout()); };
   addEventListener("resize", schedule, {passive:true});
+  window.visualViewport?.addEventListener("resize", schedule, {passive:true});
   stacked.addEventListener?.("change", () => layout(true));
   document.fonts?.ready.then(() => { layout(true); landOnHash(); });
   addEventListener("load", () => { layout(true); landOnHash(); });
