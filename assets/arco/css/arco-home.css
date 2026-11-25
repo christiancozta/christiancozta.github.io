@@ -1486,10 +1486,22 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 @media (max-width:900px){
   .hm-fund-faixa .hm-d__f{ flex-direction:column; align-items:center; }
 }
+/* CERNE em coluna única (25/11/2026): sob o título, as lentes (fileira 3,
+   assets/cerne/css/cerne-lentes.css); depois a ficha, com os três blocos
+   lado a lado e a origem por baixo; o Fundamento e a faixa fecham. A fileira
+   do Fundamento completa o quadrado (data-sobra="5"). */
 @media (min-width:901px){
-  .hm-proj--cerne{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
-  .hm-proj--cerne .hm-fund{ grid-column:2 / 8; grid-row:4; }
-  .hm-proj--cerne .hm-fund-faixa{ grid-row:5; }
+  .hm-proj--cerne{ grid-template-rows:repeat(6, minmax(var(--row), auto)); }
+  .hm-proj--cerne .hm-trilho{ grid-column:2 / 8; grid-row:4; }
+  .hm-proj--cerne .hm-ficha{
+    display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+    column-gap:calc(var(--g) * 2); row-gap:calc(var(--u) * 2.25);
+    padding:var(--g);
+  }
+  .hm-proj--cerne .hm-origem{ grid-column:1 / -1; }
+  .hm-proj--cerne .hm-origem .hm-narr{ max-width:65ch; }
+  .hm-proj--cerne .hm-fund{ grid-column:2 / 8; grid-row:5; }
+  .hm-proj--cerne .hm-fund-faixa{ grid-row:6; }
   .hm-proj--cerne::after{ display:none; }
 }
 

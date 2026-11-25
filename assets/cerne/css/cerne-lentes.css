@@ -1,0 +1,73 @@
+/* ==========================================================================
+   CERNE: as lentes (o foróptero) no painel AI Governance da home
+   --------------------------------------------------------------------------
+   Três cores: tinta (#2C2C2C) no corpo, papel (#FCFCFC) nas janelas e o
+   azul do CERNE (#4F6BFF) só no que entra em foco, na pergunta e, em
+   repouso, em volta do olho. As janelas são HTML sobre o desenho, no mesmo
+   sistema de coordenadas (viewBox 720 × 380); o texto acompanha a largura
+   do aparelho (cqw). Andamento em assets/cerne/js/cerne-lentes.js.
+   ========================================================================== */
+.cl{
+  margin:0; padding:var(--g, 16px) var(--g, 16px) calc(var(--u, 8px) * 3);
+  color:#2C2C2C;
+}
+@media (min-width:901px){
+  .hm-proj--cerne .cl{ grid-column:2 / 8; grid-row:3; align-self:start; }
+}
+.cl__inst{
+  position:relative; width:100%; max-width:1040px; margin:0 auto;
+  aspect-ratio:720 / 380; container-type:inline-size;
+}
+.cl__corpo{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.cl__escala line{ stroke-opacity:.3; }
+.cl__escala .cl__marca{ stroke-opacity:.6; }
+[data-cl-ponteiro]{ transition:transform .3s ease; }
+
+/* janelas: centros em (190, 200) e (530, 200), raio 86 */
+.cl__jan{
+  position:absolute; top:30%; width:23.889%; height:45.263%;
+  border-radius:50%; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; transition:background-color .4s ease;
+}
+.cl__jan--e{ left:14.444%; }
+.cl__jan--d{ left:61.667%; }
+
+.cl__q, .cl__sec{ font-family:var(--f-micro, "Martian Mono", monospace); font-weight:700; line-height:1; color:#4F6BFF; }
+.cl__q{ font-size:9cqw; transition:opacity .3s ease; }
+.cl__sec{ font-size:4.6cqw; }
+.cl__sec:empty{ display:none; }
+
+.cl__olho{ width:62%; height:auto; display:block; }
+.cl__txt{
+  --cl-blur:0px;
+  margin:0; padding:0 15%;
+  font-family:var(--f-body, "Schibsted Grotesk", sans-serif); font-size:1.45cqw; line-height:1.45;
+  filter:blur(var(--cl-blur)); transition:filter .3s ease;
+  text-decoration:underline 2px transparent; text-underline-offset:3px;
+}
+.cl__txt.is-foco{ text-decoration-color:#4F6BFF; }
+.cl__txt:empty{ display:none; }
+
+/* repouso: olho sobre o azul, interrogação à esquerda */
+.cl[data-estado="repouso"] .cl__jan--d{ background:#4F6BFF; }
+.cl:not([data-estado="repouso"]) .cl__olho{ display:none; }
+/* em rodada, a interrogação esmaece até haver um trecho; com ele, dá lugar ao § */
+.cl[data-estado="rodada"] .cl__q{ opacity:.2; }
+.cl__jan--e:has(.cl__sec:not(:empty)) .cl__q{ display:none; }
+
+/* o aparelho é o botão */
+.cl__gatilho{
+  position:absolute; left:4%; top:4%; width:92%; height:92%;
+  margin:0; padding:0; border:0; border-radius:24px; background:transparent; cursor:pointer;
+}
+.cl__gatilho:disabled{ cursor:default; }
+.cl__gatilho:focus-visible{ outline:2px solid #4F6BFF; outline-offset:4px; }
+
+@keyframes cl-pulso{ 0%, 100%{ opacity:1; } 50%{ opacity:.35; } }
+.cl[data-estado="repouso"] .cl__play{ animation:cl-pulso 2.4s ease-in-out infinite; }
+.cl:not([data-estado="repouso"]) .cl__play{ opacity:.25; }
+
+@media (prefers-reduced-motion:reduce){
+  .cl *{ animation:none!important; transition:none!important; }
+}
