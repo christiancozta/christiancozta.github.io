@@ -261,8 +261,11 @@
     const svg = hero && hero.querySelector(".hm-feixe__svg");
     if (!svg) return null;
     const luz = svg.querySelector(".hm-feixe__luz");
-    const faixas = svg.querySelector(".hm-feixe__faixas");
-    const cortes = svg.querySelector(".hm-feixe__cortes");
+    const faixas = svg.querySelector(".hm-feixe__faixas:not(.hm-feixe__faixas--maior)");
+    const faixasM = svg.querySelector(".hm-feixe__faixas--maior");
+    const cortes = svg.querySelector(".hm-feixe__cortes:not(.hm-feixe__cortes--maior)");
+    const cortesM = svg.querySelector(".hm-feixe__cortes--maior");
+    const maior = j => ((j % 5) + 5) % 5 === 0;     /* linha de macrocoluna */
     const cores = [...svg.querySelectorAll(".hm-feixe__cor")];
     const id = hero.querySelector(".hm-feixe__id");
     const txt = hero.querySelector(".hm-feixe__txt");
@@ -331,7 +334,7 @@
       const kR = largo ? 20 : 30;                    /* borda direita: 4c ou 6c */
       const xL = -nL * v, xR = kR * v;
       const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
-      const g = Math.max(1, Math.round(v / 24));      /* espessura do corte na base */
+      const g = 1;                                    /* espessura na base: a da retícula */
       G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, largo};
       hero.style.setProperty("--hz", p2(py) + "px");
       svg.setAttribute("viewBox", `0 0 ${p2(W)} ${p2(H)}`);
@@ -366,7 +369,7 @@
       });
       /* 2. o branco nasce do ponto de fuga: alcance k de 0 a 1 */
       const k = ease((t - T.luz[0]) / T.luz[1]);
-      if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); }
+      if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); faixasM?.setAttribute("d", ""); }
       else {
         const at = (x, y) => `${p2(px + (x - px) * k)},${p2(py + (y - py) * k)}`;
         /* inteiro, o branco também passa sob o último feixe colorido */
@@ -376,17 +379,24 @@
         /* divisões longitudinais: do ponto de fuga até x = j·v na base, largura g
            na base e proporcional à profundidade (triângulo com vértice no
            ponto de fuga). A borda esquerda não leva divisão: é a junta com as cores */
-        const d = [];
-        for (let j = -nL + 1; j < kR; j++) d.push(`M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`);
+        const d = [], dM = [];
+        for (let j = -nL + 1; j < kR; j++){
+          const tri = `M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`;
+          d.push(tri);
+          if (maior(j)) dM.push(tri);
+        }
         faixas.setAttribute("d", d.join(""));
+        faixasM?.setAttribute("d", dM.join(""));
       }
     }
 
     /* 4. os cortes transversais, na perspectiva do ATRIO */
-    function desenhaCortes(t, fase){
+    /* ciclo: quantas fileiras já passaram; n + ciclo numera cada fileira de
+       modo estável enquanto ela desce, e a cada cinco vem a linha maior */
+    function desenhaCortes(t, fase, ciclo = 0){
       const {W, H, v, m, D, px, py, xL, xR, g} = G;
-      if (t < T.corte[0]){ cortes.setAttribute("d", ""); return; }
-      const d = [];
+      if (t < T.corte[0]){ cortes.setAttribute("d", ""); cortesM?.setAttribute("d", ""); return; }
+      const d = [], dM = [];
       for (let n = 0; n < 400; n++){
         const r = m / (m + n - fase);
         if (r > 1) continue;
@@ -403,9 +413,12 @@
         const u = ease((t - T.corte[0] - (r - R0) / (1 - R0) * T.corte[2]) / T.corte[1]);
         if (u <= 0) continue;
         const x0 = dir - (dir - esq + 1) * u;
-        d.push(`M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`);
+        const faixa = `M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`;
+        d.push(faixa);
+        if (maior(n + ciclo)) dM.push(faixa);
       }
       cortes.setAttribute("d", d.join(""));
+      cortesM?.setAttribute("d", dM.join(""));
     }
 
     function quadro(now){
@@ -416,7 +429,7 @@
       if (t >= fim) abertura = false;
       const chave = abertura ? "" : "fim";
       if (abertura || estatico !== chave){ desenhaEstatico(t); estatico = chave; }
-      desenhaCortes(t, anima ? (now / ROW_MS) % 1 : 0);
+      desenhaCortes(t, anima ? (now / ROW_MS) % 1 : 0, anima ? Math.floor(now / ROW_MS) : 0);
       if (anima && visivel) loop = requestAnimationFrame(quadro);
     }
     const roda = () => { if (!loop && G) loop = requestAnimationFrame(quadro); };

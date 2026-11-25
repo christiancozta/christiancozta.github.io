@@ -1524,8 +1524,13 @@ html.hm-veu-on .hm--dossie .hm-feixe{ min-height:100svh; }
   width:100%; height:100%; display:block; pointer-events:none;
 }
 .hm-feixe__luz{ fill:var(--hero-paper); }
+/* faixas e cortes no tom da retícula da página: a linha menor em --grid-min
+   e, a cada macrocoluna (e a cada cinco fileiras), a maior somada a ela,
+   como as duas camadas do fundo da home. Sobre o #2C2C2C, invisíveis. */
 .hm-feixe__faixas,
-.hm-feixe__cortes{ fill:var(--hero-ink); }
+.hm-feixe__cortes{ fill:var(--grid-min); }
+.hm-feixe__faixas--maior,
+.hm-feixe__cortes--maior{ fill:var(--grid); }
 .hm-feixe__cor--echo{ fill:var(--echo); }
 .hm-feixe__cor--atrio{ fill:var(--atrio); }
 .hm-feixe__cor--cerne{ fill:var(--cerne); }
