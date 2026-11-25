@@ -409,14 +409,10 @@ input, textarea { caret-color: var(--tinta); }
 .a4::after { bottom: 0; left: 0; background: linear-gradient(45deg, transparent 50%, #DCD8CF 50%, #ECE9E3 64%, #F7F5F1); box-shadow: 4px -4px 7px -4px rgba(44, 44, 44, .2); }
 
 /* Prendedor: laca preta presa à borda de cima, hastes de aço deitadas sobre a folha. */
-.clipe { position: absolute; z-index: 3; top: -12px; left: clamp(20px, 5vw, 92px); width: 132px; transform: rotate(-2.4deg); transform-origin: 50% 0; text-decoration: none; transition: transform .6s var(--mola); }
-.clipe-svg { display: block; width: 132px; height: 152px; overflow: visible; filter: drop-shadow(0 7px 9px rgba(44, 44, 44, .2)) drop-shadow(0 1px 1.5px rgba(44, 44, 44, .32)); transition: filter .6s var(--mola); }
-.clipe-arame { fill: none; stroke: url(#clipe-aco); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
-.clipe-t { position: absolute; left: 0; top: 0; width: 132px; height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-top: 6px; color: var(--ambar); pointer-events: none; }
-.clipe-t b { margin-right: -.1em; font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
-.clipe-t b + b { margin-right: -.1em; font-size: 15px; font-weight: 700; letter-spacing: .1em; }
-.clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg); }
-.clipe:hover .clipe-svg { filter: drop-shadow(0 10px 12px rgba(44, 44, 44, .22)) drop-shadow(0 2px 2px rgba(44, 44, 44, .3)); }
+/* Grampo de grampeador: deitado na diagonal sobre o canto de cima, à esquerda, rente ao papel (sombra curta). */
+.clipe { position: absolute; z-index: 3; top: 30px; left: clamp(22px, 4.2vw, 64px); width: 72px; transform: rotate(-34deg); transform-origin: 50% 50%; text-decoration: none; }
+.clipe-svg { display: block; width: 72px; height: 20px; overflow: visible; filter: drop-shadow(0 .8px .5px rgba(44, 44, 44, .42)) drop-shadow(0 1.5px 1.5px rgba(44, 44, 44, .12)); }
+.grampo-furo { fill: rgba(44, 44, 44, .32); }
 .clipe:focus-visible { outline: 1.5px solid var(--ambar); outline-offset: 4px; }
 
 /* Carimbo da busca: redondo, de cartório (anel grosso, filete, texto em volta, lupa ao centro), em tinta,
@@ -1024,8 +1020,7 @@ details.corr .ci { margin-top: 10px; padding: 10px 14px; background: var(--surfa
   .gav-c { flex-direction: column; align-items: flex-start; gap: 20px; margin-left: var(--chave); padding: 20px 16px 22px; }
   .gav-pgs img { width: min(30vw, 120px); }
   .gav-txt { padding-right: 0; }
-  .clipe { top: -8px; left: 14px; transform: rotate(-2.4deg) scale(.62); transform-origin: 0 0; }
-  .clipe:hover, .clipe:focus-visible { transform: translateY(-2px) rotate(-2.4deg) scale(.62); }
+  .clipe { top: 18px; left: 12px; transform: rotate(-34deg) scale(.8); }
   /* Celular: prendedor, selo e carimbo numa faixa só, acima do título: o selo ao lado do prendedor, o carimbo à direita. */
   :root { --carimbo: 78px; --selo-topo: 16px; }
   .carimbos { top: calc(var(--selo-topo) + (var(--selo) - var(--carimbo)) / 2); right: calc(var(--orelha) + 10px); }
@@ -1197,7 +1192,7 @@ html.vitrine, html.vitrine body { background: transparent; }
 html.vitrine body { padding: 0; }
 html.vitrine .maco::before, html.vitrine .maco::after { display: none; }
 html.vitrine:not(.so-partitura) .a4 { min-height: 100vh; }
-html.vitrine .clipe { top: 0; }
+html.vitrine .clipe { top: 24px; }
 /* Ampliada no ARCO (tela cheia, vit-amplo): a folha de rosto numa medida de
    folha, ao centro, com o fundo escuro do ARCO em volta; aberta, a partitura
    ocupa a largura e rola por dentro. */
@@ -1236,6 +1231,5 @@ html.vitrine.empilha .voz .nm small { font-size: calc(9px * (1 + (var(--vz, 1) -
 html.vitrine .rosto-sub { display: none; }
 .vit-def { margin-top: 20px; text-align: left; }
 .vit-def-t { text-align: center; font: 700 9.5px/1.7 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta); }
-.vit-def-t > span { position: relative; display: inline-block; } /* o centro é só do texto: a flecha fica de fora */
-.vit-def-seta { position: absolute; left: -26px; top: 1px; width: 22px; height: 34px; overflow: visible; fill: none; stroke: var(--ambar); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.vit-def-t > span { position: relative; display: inline-block; }
 .vit-def-x { margin-top: 14px; font: 300 15px/1.5 'Shantell Sans', var(--f-text); color: var(--grafite); text-wrap: pretty; }

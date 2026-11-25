@@ -6,7 +6,8 @@
    2) retícula: fileiras em múltiplos de --row, painel em quadrados inteiros;
    3) navegação interna: painéis, competências e verbetes, sem hover;
    4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
-   5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice.
+   5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice;
+   7) hero: o feixe (feixes e esteira) e o cordão recolhido durante o hero.
    A casca (cordão, views, histórico) continua em arco-shell.js.
    ========================================================================== */
 (() => {
@@ -236,6 +237,208 @@
     }
   }
 
+  /* ---------- 7. hero: o feixe ----------
+     A mecânica é a da esteira do ATRIO (atrio.js: drawStaticRunway, draw,
+     tick), levada a um ponto de fuga deslocado: o fim da esteira, onde as
+     faixas se fecham num triângulo que faz as vezes de prisma. Unidades:
+       c  = macrocoluna (largura / 8), a mesma de --cell;
+       v  = c / 5, a unidade só visual da retícula de 40 colunas (--vu).
+     O ponto de fuga pousa em (2c, horizonte); o horizonte fica a m·v da base (m
+     inteiro), como o do ATRIO fica em múltiplos da unidade. As faixas da
+     esteira são as colunas de v contadas a partir de x = 0: na base do hero,
+     cada divisão longitudinal cai sobre uma linha da retícula, que continua
+     pelos painéis abaixo. Os cortes transversais seguem a perspectiva do
+     ATRIO, r = m / (m + n − fase): com d0 = m, a última fileira mede v na
+     base, e o quadrado da esteira encontra o quadrado da retícula. O corte
+     é uma faixa #2C2C2C que vai da direita da tela até a borda esquerda do
+     feixe: sobre o fundo, invisível; sobre o branco, corta.
+     Abertura (uma vez): os feixes entram pela esquerda até a ponta da esteira; o
+     branco nasce dele, já dividido em faixas; os cortes avançam da direita
+     para a esquerda; depois, a esteira corre. Movimento reduzido: o desenho
+     final, parado (fase 0, quando a fileira da base pousa na linha da base).
+     Fora da tela, o laço para. */
+  const feixe = (() => {
+    const hero = home.querySelector(".hm-feixe");
+    const svg = hero && hero.querySelector(".hm-feixe__svg");
+    if (!svg) return null;
+    const luz = svg.querySelector(".hm-feixe__luz");
+    const faixas = svg.querySelector(".hm-feixe__faixas");
+    const cortes = svg.querySelector(".hm-feixe__cortes");
+    const cores = [...svg.querySelectorAll(".hm-feixe__cor")];
+    const id = hero.querySelector(".hm-feixe__id");
+    const txt = hero.querySelector(".hm-feixe__txt");
+    const nomeEl = hero.querySelector(".hm-name");
+    const fitLine = nomeEl && nomeEl.querySelector(".hm-fit");
+    const linhas = fitLine ? [...fitLine.querySelectorAll(".hm-feixe__l")] : [];
+    const alto = matchMedia("(max-aspect-ratio:10/11)");
+    const anima = !reduce;
+    const ROW_MS = 3200;                              /* uma fileira por período */
+    /* corte: [início, duração de cada fileira, defasagem entre a primeira e
+       a última]. A frente desce em "\": a fileira de cima começa antes, a da
+       base por último. */
+    const T = {cor:[0, 760], luz:[520, 820], corte:[1180, 1700, 1500]};
+    const fim = T.corte[0] + T.corte[1] + T.corte[2] + 400;
+    /* os cortes vivem da metade da profundidade da esteira para baixo (r0);
+       acima disso o branco segue só com as faixas. Entram aos poucos, num
+       trecho de rampa, para que a fileira que desce não surja de repente. */
+    const R0 = .5, RAMPA = .12;
+    const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
+    const p2 = n => n.toFixed(2);
+    let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
+
+    /* baseline do nome: sonda de largura zero, como em raiseTitles, na
+       última linha */
+    let bl = null;
+    if (fitLine){
+      bl = document.createElement("span");
+      bl.setAttribute("aria-hidden", "true");
+      bl.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+      (linhas[linhas.length - 1] || fitLine).append(bl);
+    }
+
+    /* o nome ocupa a largura exata do seu bloco, como os títulos (fit):
+       numa linha na composição larga; em duas na alta, pela mais longa, sem
+       passar de 8,5% da altura da tela */
+    function ajustaNome(largo){
+      if (!nomeEl || !fitLine) return;
+      nomeEl.style.removeProperty("font-size");
+      const room = nomeEl.clientWidth;
+      const els = largo || !linhas.length ? [fitLine] : linhas;
+      const widest = Math.max(...els.map(l => l.getBoundingClientRect().width));
+      if (!(room > 0 && widest > 0)) return;
+      let fs = parseFloat(getComputedStyle(nomeEl).fontSize) * room / widest * .995;
+      if (!largo) fs = Math.min(fs, innerHeight * .085);
+      nomeEl.style.fontSize = p2(fs) + "px";
+    }
+
+    function mede(){
+      const W = hero.clientWidth;
+      const largo = !alto.matches;
+      ajustaNome(largo);
+      const H = hero.clientHeight;
+      if (!(W > 0 && H > 0)){ G = null; return; }
+      const c = W / 8, v = c / 5;
+      let m = Math.max(6, Math.round((largo ? .5 : .36) * H / v));
+      /* na composição alta, o horizonte desce, em v inteiros, até ficar
+         pelo menos 2v abaixo do texto */
+      if (!largo && txt && txt.lastElementChild){
+        const fundo = txt.lastElementChild.getBoundingClientRect().bottom - hero.getBoundingClientRect().top;
+        m = Math.max(6, Math.min(m, Math.floor((H - fundo - 2 * v) / v)));
+      }
+      const D = m * v, py = H - D, px = 2 * c;
+      /* borda esquerda do branco: uma linha de faixa (x = −nL·v na base),
+         escolhida para cruzar a borda da tela a ~55% da profundidade */
+      const nL = Math.max(1, Math.round(px * (1 / .55 - 1) / v));
+      const kR = largo ? 20 : 30;                    /* borda direita: 4c ou 6c */
+      const xL = -nL * v, xR = kR * v;
+      const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
+      const g = Math.max(1, Math.round(v / 24));      /* espessura do corte na base */
+      G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, largo};
+      hero.style.setProperty("--hz", p2(py) + "px");
+      svg.setAttribute("viewBox", `0 0 ${p2(W)} ${p2(H)}`);
+      estatico = "";
+      nome();
+    }
+
+    /* o nome pousa a linha de base no horizonte (composição larga) */
+    function nome(){
+      if (!id) return;
+      id.style.transform = "";
+      if (!G || !G.largo || !bl) return;
+      const y = bl.getBoundingClientRect().top - hero.getBoundingClientRect().top;
+      const d = G.py - y;
+      if (Math.abs(d) > .25) id.style.transform = `translateY(${p2(d)}px)`;
+    }
+
+    /* um ponto da borda esquerda (x = 0, altura y), prolongado para fora da
+       tela sobre a linha que vai ao ponto de fuga: as bordas não deixam frestas */
+    const fora = y => p2(y + (y - G.py) * 2 / G.px);
+
+    function desenhaEstatico(t){
+      const {H, v, px, py, xL, xR, nL, kR, Ye, g} = G;
+      /* 1. os nove feixes, contíguos: cada um vai do seu topo até o fim do
+         leque, e o seguinte o cobre; assim a junta é cor sobre cor */
+      const fx = px * ease((t - T.cor[0]) / T.cor[1]);
+      const yOf = j => Ye * j / 9;
+      cores.forEach((path, j) => {
+        if (fx <= 0){ path.setAttribute("d", ""); return; }
+        const a = yOf(j), atx = y => p2(y + (py - y) * fx / px);
+        path.setAttribute("d", `M-2,${fora(a)}L${p2(fx)},${atx(a)}L${p2(fx)},${atx(Ye)}L-2,${fora(Ye)}Z`);
+      });
+      /* 2. o branco nasce do ponto de fuga: alcance k de 0 a 1 */
+      const k = ease((t - T.luz[0]) / T.luz[1]);
+      if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); }
+      else {
+        const at = (x, y) => `${p2(px + (x - px) * k)},${p2(py + (y - py) * k)}`;
+        /* inteiro, o branco também passa sob o último feixe colorido */
+        luz.setAttribute("d", k < 1
+          ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
+          : `M${p2(px)},${p2(py)}L${p2(xR)},${p2(H)}L-2,${p2(H)}L-2,${fora(yOf(8))}Z`);
+        /* divisões longitudinais: do ponto de fuga até x = j·v na base, largura g
+           na base e proporcional à profundidade (triângulo com vértice no
+           ponto de fuga). A borda esquerda não leva divisão: é a junta com as cores */
+        const d = [];
+        for (let j = -nL + 1; j < kR; j++) d.push(`M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`);
+        faixas.setAttribute("d", d.join(""));
+      }
+    }
+
+    /* 4. os cortes transversais, na perspectiva do ATRIO */
+    function desenhaCortes(t, fase){
+      const {W, H, v, m, D, px, py, xL, xR, g} = G;
+      if (t < T.corte[0]){ cortes.setAttribute("d", ""); return; }
+      const d = [];
+      for (let n = 0; n < 400; n++){
+        const r = m / (m + n - fase);
+        if (r > 1) continue;
+        const y = py + D * r;
+        /* acima da metade da profundidade, nenhum corte */
+        if (r < R0) break;
+        if (D * (r - m / (m + n + 1 - fase)) < 1.2) break;
+        const surge = Math.min(1, (r - R0) / RAMPA);
+        const e = g * r * r * surge * surge * (3 - 2 * surge);
+        if (e < .04) continue;
+        const dir = px + (xR - px) * r + 1, esq = Math.max(0, px + (xL - px) * r);
+        /* a frente do corte: da borda direita do branco à esquerda; a
+           fileira de cima entra primeiro e a frente desce em "\" */
+        const u = ease((t - T.corte[0] - (r - R0) / (1 - R0) * T.corte[2]) / T.corte[1]);
+        if (u <= 0) continue;
+        const x0 = dir - (dir - esq + 1) * u;
+        d.push(`M${p2(x0)},${p2(y)}H${p2(W)}V${p2(y + e)}H${p2(x0)}Z`);
+      }
+      cortes.setAttribute("d", d.join(""));
+    }
+
+    function quadro(now){
+      loop = 0;
+      if (!G) return;
+      if (!t0) t0 = now;
+      const t = abertura ? now - t0 : Infinity;
+      if (t >= fim) abertura = false;
+      const chave = abertura ? "" : "fim";
+      if (abertura || estatico !== chave){ desenhaEstatico(t); estatico = chave; }
+      desenhaCortes(t, anima ? (now / ROW_MS) % 1 : 0);
+      if (anima && visivel) loop = requestAnimationFrame(quadro);
+    }
+    const roda = () => { if (!loop && G) loop = requestAnimationFrame(quadro); };
+
+    /* o cordão: recolhido enquanto o hero está na tela */
+    const html = document.documentElement;
+    html.classList.add("hm-veu-on", "hm-veu");
+    if ("IntersectionObserver" in window){
+      new IntersectionObserver(([e]) => {
+        visivel = e.isIntersecting;
+        html.classList.toggle("hm-veu", visivel);
+        if (visivel) roda();
+      }, {threshold:0}).observe(hero);
+    }
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && visivel) roda(); });
+
+    return {
+      mede(){ mede(); if (!anima || !abertura) estatico = ""; roda(); }
+    };
+  })();
+
   let raf = 0, lastWidth = 0, lastRow = 0;
   function layout(force = false){
     raf = 0;
@@ -246,6 +449,7 @@
     scoreFit();
     snapAll();
     ancora();
+    feixe?.mede();
     lockFigures();
     alignTabs();
     raiseTitles();
@@ -493,7 +697,7 @@
   layout(true);
 
   /* ---------- 3. navegação interna ---------- */
-  const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering"};
+  const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering", cerne:"ai-governance"};
   const isHomeTarget = id => {
     const el = id && document.getElementById(id);
     return el && home.contains(el) ? el : null;
@@ -674,134 +878,6 @@
     apply();
     lexBar.hidden = false;
   }
-  /* ---------- 6. busca do hero: do termo da vaga à prova ----------
-     Lê os verbetes do próprio lastro (termo, tradução, variantes e
-     competências) e devolve a competência que o termo nomeia, com o número
-     que a prova e os caminhos até a obra e até o verbete. Sem JS, o bloco
-     fica só com o caminho para o lastro inteiro. */
-  const busca = document.getElementById("busca");
-  if (busca && lex){
-    const vivo = busca.querySelector(".hm-busca__vivo");
-    const inp = busca.querySelector(".hm-busca__i");
-    const exs = [...busca.querySelectorAll(".hm-busca__ex button")];
-    const out = busca.querySelector(".hm-busca__r");
-    const dobra = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
-    const limpa = s => (s || "").replace(/\s+/g, " ").trim();
-    const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c]));
-    /* competência → a prova (copy a fechar com o autor) */
-    const PROVA = {
-      "KPI and performance management": {chip:"rastro", tag:"TRACE", n:"60.4%", l:"team finalization rate", go:"rastro"},
-      "Knowledge management": {chip:"echo", tag:"ECHO", n:"2,758", l:"catalogued headnotes", go:"legal-operations"},
-      "Process mapping and design": {chip:"echo", tag:"ECHO", n:"102 → 10", l:"subjects into locators", go:"legal-operations"},
-      "Content governance and controlled language": {chip:"echo", tag:"ECHO", n:"631", l:"precedent themes", go:"legal-operations"},
-      "Data and corpus engineering": {chip:"atrio", tag:"ATRIO", n:"115,114", l:"unique case records", go:"legal-engineering"},
-      "Decision orchestration": {chip:"atrio", tag:"ATRIO", n:"31", l:"routes in the ATRIO API", go:"legal-engineering"},
-      "Adversarial evaluation": {chip:"cerne", tag:"CERNE", n:"17", l:"rounds on real rulings", go:"ai-governance"},
-      "Privacy by Design": {chip:"atrio", tag:"ATRIO", n:"AES-256-GCM", l:"cipher in the ATRIO API", go:"legal-engineering"},
-      "Traceability": {chip:"rastro", tag:"TRACE", n:"46", l:"figures with source or calculation", go:"rastro"},
-      "Controlled text generation": {chip:"atrio", tag:"ATRIO", n:"188", l:"automated tests", go:"legal-engineering"}
-    };
-    /* nomes de área: o recrutador digita a frente, não a prática. Não são
-       verbetes do lastro; respondem com a frente inteira e as suas provas.
-       Três frentes; a controladoria (e jurimetria) responde com Legal Operations. */
-    const FRENTES = [
-      {termo:"Legal Operations", trad:"Operações jurídicas",
-       comps:["Process mapping and design", "KPI and performance management", "Knowledge management", "Traceability"],
-       tb:"Legal Ops, Operações Jurídicas, Controladoria Jurídica, Legal Controllership, Jurimetria, Legal Data Analytics",
-       al:["legal operations", "legal operation", "legal ops", "legalops", "operacoes juridicas", "operacao juridica", "gestao juridica",
-           "controladoria juridica", "controladoria", "legal controllership", "controller juridico", "jurimetria", "legal data analytics", "legal analytics", "data analytics", "analise de dados juridicos"],
-       nota:["controladoria", "controllership", "controller"],
-       provas:[{chip:"echo", tag:"ECHO", n:"102 → 10", l:"subjects into locators"}, {chip:"rastro", tag:"TRACE", n:"−29.8 pp", l:"cases above the 30-day ceiling"}],
-       go:"legal-operations"},
-      {termo:"AI Governance & Evaluation", trad:"Governança e avaliação de IA jurídica",
-       comps:["Adversarial evaluation", "Decision orchestration", "Traceability"],
-       tb:"Legal AI Evaluation & Governance, Governança de IA",
-       al:["ai governance & evaluation", "ai governance and evaluation", "ai evaluation & governance", "legal ai evaluation & governance", "legal ai evaluation", "legal ai governance", "governanca de ia", "governanca de ia juridica", "avaliacao de ia"],
-       provas:[{chip:"cerne", tag:"CERNE", n:"17", l:"rounds on real rulings"}, {chip:"atrio", tag:"ATRIO", n:"188", l:"automated tests"}],
-       go:"ai-governance"}
-    ];
-    const frenteDe = q => FRENTES.find(f => f.al.some(a => a === q || q.includes(a) || (q.length >= 6 && a.startsWith(q))));
-    const verbetes = [...lex.querySelectorAll(".lex__e")].map(e => {
-      const termo = limpa(e.querySelector(".lex__t")?.textContent);
-      const trad = limpa(e.querySelector(".lex__p .arx-sr")?.textContent);
-      const comps = [...e.querySelectorAll(".lex__k")].map(k => limpa(k.textContent));
-      const tb = limpa(e.querySelector(".lex__v")?.textContent).replace(/^(?:tb\.|aka)\s*/, "").replace(/\.$/, "");
-      return {id:e.id, termo, trad, comps, tb, ft:dobra(termo), fx:dobra([termo, trad, tb, comps.join(" ")].join(" "))};
-    });
-    const total = verbetes.length;
-    const nota = q => verbetes.map(v => {
-      let n = 0;
-      if (v.ft === q) n = 4;
-      else if (v.ft.startsWith(q)) n = 3;
-      else if (v.ft.includes(q)) n = 2;
-      else if (v.fx.includes(q)) n = 1;
-      else if (q.split(" ").every(t => v.fx.includes(t))) n = .5;
-      return [n, v];
-    }).filter(([n]) => n > 0).sort((a, b) => b[0] - a[0]).map(([, v]) => v);
-    const vazio = out.innerHTML;
-    let ultima = "";
-    function mostra(q){
-      const fq = dobra(q);
-      exs.forEach(b => b.setAttribute("aria-pressed", String(dobra(b.dataset.q) === fq)));
-      if (fq === ultima) return;
-      ultima = fq;
-      if (!fq){ out.innerHTML = vazio; return requestAnimationFrame(() => layout()); }
-      const achados = nota(fq);
-      const fr = frenteDe(fq);
-      if (fr && !achados.some(v => v.ft === fq || v.ft.startsWith(fq))){
-        out.innerHTML = `
-        <p class="hm-busca__lbl">Area</p>
-        <p class="hm-busca__termo">${esc(fr.termo)}<span class="hm-busca__tr">${esc(fr.trad)}</span></p>
-        <p class="hm-busca__lbl">Competencies demonstrated</p>
-        <p class="hm-busca__comp hm-busca__comp--lista">${fr.comps.map(esc).join("; ")}</p>
-        <p class="hm-busca__tb">Also read as ${esc(fr.tb)}.</p>
-        ${fr.nota && fr.nota.some(a => fq.includes(a)) ? `<p class="hm-busca__tb">In legal controllership, the financial side (e-billing, spend management, matter budgeting) is declared out of scope. <a href="#fronteira" data-hm-go>See the boundary</a></p>` : ""}
-        <div class="hm-busca__prova">
-          <div class="hm-busca__ns">${fr.provas.map(p => `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>`).join("")}</div>
-          <p class="hm-busca__acoes"><a class="hm-cta" href="#${fr.go}" data-hm-go>See the proof</a><a class="hm-busca__lx" href="#frentes" data-hm-go>See the areas</a></p>
-        </div>`;
-        return requestAnimationFrame(() => layout());
-      }
-      if (!achados.length){
-        out.innerHTML = `<p class="hm-busca__vazio">No entry for “${esc(q.trim())}”. The grounding gathers ${total} market terms. <a href="#repertorio" data-hm-go>Open the grounding</a></p>`;
-        return requestAnimationFrame(() => layout());
-      }
-      const v = achados[0];
-      const comp = v.comps.find(c => PROVA[c]);
-      const p = comp ? PROVA[comp] : null;
-      const comps = v.comps.length ? v.comps.map(esc).join("; ") : "Cross-cutting principle, present in all three works";
-      const mais = achados.length > 1
-        ? `<button type="button" class="hm-busca__mais" data-q="${esc(q.trim())}">See the ${achados.length} entries in the grounding</button>`
-        : `<a class="hm-busca__lx" href="#${v.id}" data-hm-term>See it in the grounding</a>`;
-      out.innerHTML = `
-        <p class="hm-busca__lbl">Entry</p>
-        <p class="hm-busca__termo">${esc(v.termo)}${v.trad ? `<span class="hm-busca__tr">${esc(v.trad)}</span>` : ""}</p>
-        <p class="hm-busca__lbl">Competency demonstrated</p>
-        <p class="hm-busca__comp">${comps}</p>
-        ${v.tb ? `<p class="hm-busca__tb">Also read as ${esc(v.tb.replace(/;\s*/g, ", "))}.</p>` : ""}
-        <div class="hm-busca__prova">
-          ${p ? `<p class="hm-busca__n"><span class="hm-chip hm-chip--${p.chip}">${p.tag}</span><b>${esc(p.n)}</b><span>${esc(p.l)}</span></p>` : ""}
-          <p class="hm-busca__acoes">${p ? `<a class="hm-cta" href="#${p.go}" data-hm-go>See the proof</a>` : ""}${mais}</p>
-        </div>`;
-      requestAnimationFrame(() => layout());
-    }
-    let espera = 0;
-    inp.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(() => mostra(inp.value), 140); });
-    inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); clearTimeout(espera); mostra(inp.value); } });
-    exs.forEach(b => b.addEventListener("click", () => { inp.value = b.dataset.q; clearTimeout(espera); mostra(b.dataset.q); }));
-    /* vários verbetes: o lastro abre filtrado pela mesma busca */
-    out.addEventListener("click", e => {
-      const b = e.target instanceof Element ? e.target.closest(".hm-busca__mais") : null;
-      if (!b || !lexBar) return;
-      const li = lexBar.querySelector(".lexf__i");
-      li.value = b.dataset.q;
-      li.dispatchEvent(new Event("input", {bubbles:true}));
-      go("repertorio", {focus:li});
-    });
-    vivo.hidden = false;
-    if (exs[0]){ inp.value = exs[0].dataset.q; mostra(exs[0].dataset.q); }
-  }
-
   /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
   home.addEventListener("toggle", e => {
     const panel = e.target instanceof Element ? e.target.closest(".hm-panel") : null;

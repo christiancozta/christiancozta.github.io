@@ -1175,18 +1175,19 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
 .hm-fr__c{ display:flex; flex-direction:column; gap:.4rem; min-width:0; }
 .hm-fr__f{
   font-family:var(--f-display); font-weight:800; letter-spacing:-.025em;
-  font-size:clamp(1.0625rem, 1.25vw, 1.3125rem); line-height:1.15;
+  font-size:clamp(1.25rem, 1.6vw, 1.625rem); line-height:1.15;
 }
 .hm-fr__d{ font-size:.875rem; line-height:1.5; max-width:46ch; }
-/* a área leva uma faixa na cor do projeto, baixa, sem cobrir a altura da
-   letra: o mesmo marca-texto do número da vitrine do ECHO */
+/* a área leva uma faixa chapada na cor do projeto, assentada na base: cobre
+   o pé das letras e passa um pouco abaixo da linha de base (nunca o meio da
+   letra, que a faria ler como tachado) */
 .hm-fr__mk{
   text-decoration-line:underline; text-decoration-style:solid; text-decoration-color:var(--mk);
-  text-decoration-thickness:.3em; text-underline-offset:-.42em; text-decoration-skip-ink:none;
+  text-decoration-thickness:.26em; text-underline-offset:-.1em; text-decoration-skip-ink:none;
 }
-.hm-fr__mk--echo{ --mk:rgba(255, 182, 39, .82); }
-.hm-fr__mk--atrio{ --mk:rgba(217, 79, 45, .72); }
-.hm-fr__mk--cerne{ --mk:rgba(79, 107, 255, .66); }
+.hm-fr__mk--echo{ --mk:var(--echo); }
+.hm-fr__mk--atrio{ --mk:var(--atrio); }
+.hm-fr__mk--cerne{ --mk:var(--cerne); }
 .hm-fr__n{ display:flex; flex-direction:column; gap:.135rem; padding-top:.1rem; }
 .hm-fr__n b{ font-family:var(--f-display); font-weight:800; font-size:1.35rem; line-height:1.05; letter-spacing:-.03em; }
 .hm-fr__n span{ font-size:.75rem; line-height:1.35; color:rgba(44,44,44,.84); }
@@ -1533,7 +1534,7 @@ html.hm-veu-on .hm--dossie .hm-feixe{ min-height:100svh; }
 .hm-feixe > .hm-feixe__txt{
   position:relative; z-index:1;
   grid-column:5 / 8 !important; grid-row:1 !important;
-  display:grid; grid-template-rows:var(--hz) auto; align-content:start;
+  display:grid; grid-template-rows:var(--hz) auto auto; align-content:start;
   min-width:0; padding:0 var(--g);
 }
 .hm-feixe__id{ grid-row:1; align-self:end; min-width:0; }
@@ -1548,8 +1549,44 @@ html.hm-veu-on .hm--dossie .hm-feixe{ min-height:100svh; }
   font-size:4.2vw; line-height:.95; letter-spacing:-.045em;
   text-align:left; white-space:nowrap; color:var(--hero-paper);
 }
-.hm-feixe .hm-canal{
+/* as três frentes, sob o nome: cada uma sublinhada na cor do seu feixe,
+   o fio assentado um pouco abaixo da linha de base */
+.hm-feixe__fr{
   grid-row:2; align-self:start;
+  display:flex; flex-wrap:wrap; gap:.5rem 1.5rem;
+  margin:0; padding:calc(var(--u) * 2.5) 0 0; list-style:none;
+}
+.hm-feixe__f{
+  font-family:var(--f-display); font-weight:700; letter-spacing:-.015em;
+  font-size:clamp(1rem, 1.2vw, 1.25rem); line-height:1.2; white-space:nowrap;
+  color:var(--hero-paper);
+  text-decoration-line:underline; text-decoration-color:var(--fc);
+  text-decoration-thickness:.14em; text-underline-offset:.22em; text-decoration-skip-ink:none;
+}
+.hm-feixe__f--echo{ --fc:var(--echo); }
+.hm-feixe__f--atrio{ --fc:var(--atrio); }
+.hm-feixe__f--cerne{ --fc:var(--cerne); }
+
+/* idioma: o cordão some no hero, então a troca vem para o alto dele, na
+   mesma letra e no mesmo lugar do idioma do cordão */
+.hm-feixe > .hm-feixe__lang{
+  position:absolute; z-index:2; top:1.2rem; right:var(--pad, 1.5rem); left:auto;
+  display:flex; align-items:baseline; gap:.36rem; margin:0;
+  font-family:var(--f-micro); font-size:.594rem; font-weight:600; line-height:1;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--hero-paper);
+}
+.hm-feixe__lang a{
+  display:inline-flex; align-items:center; min-height:44px; min-width:24px; justify-content:center;
+  margin:-15px 0; color:var(--hero-paper);
+  text-decoration:underline; text-decoration-color:rgba(252,252,252,.34); text-underline-offset:.3em;
+}
+.hm-feixe__lang a:hover,
+.hm-feixe__lang a:focus-visible{ text-decoration-color:var(--hero-paper); }
+.hm-feixe__lang a:focus-visible{ outline:1px solid var(--hero-paper); outline-offset:2px; }
+.hm-feixe__lang i{ font-style:normal; font-weight:400; }
+
+.hm-feixe .hm-canal{
+  grid-row:3; align-self:start;
   --rot:6.75rem;
   padding:calc(var(--u) * 5) 0 calc(var(--u) * 5);
 }
@@ -1585,18 +1622,20 @@ html.hm-veu-on .hm--dossie .hm-feixe{ min-height:100svh; }
   @media (max-height:520px){
     .hm-feixe__tag{ margin-bottom:var(--u); }
     .hm-feixe .hm-canal{ padding:calc(var(--u) * 3) 0 calc(var(--u) * 2); }
+    .hm-feixe__fr{ padding-top:calc(var(--u) * 1.5); }
   }
 }
 @media (max-aspect-ratio:10/11){
   /* da coluna 3 à 8: o leque, que converge em 2c, nunca alcança o texto */
   .hm-feixe > .hm-feixe__txt{
     grid-column:3 / 9 !important;
-    grid-template-rows:auto auto;
+    grid-template-rows:auto auto auto;
     padding:calc(var(--u) * 7) var(--g) 0;
   }
   .hm-feixe__l{ display:block; }
   .hm--dossie .hm-feixe .hm-name{ font-size:13vw; line-height:.92; }
   .hm-feixe .hm-canal{ padding:calc(var(--u) * 4) 0 calc(var(--u) * 4); }
+  .hm-feixe__fr{ flex-direction:column; gap:.55rem; padding-top:calc(var(--u) * 2.5); }
   .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:10px; }
 }
 
