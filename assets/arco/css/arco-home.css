@@ -45,16 +45,16 @@
   --row:calc(var(--cell) / 2);
   --paper:#FCFCFC;
   --ink:#2C2C2C;
-  --grid:rgba(44,44,44,.07);
+  --grid:rgba(44,44,44,.09);
   /* retícula visual (nov/2026): 40 colunas, cinco por macrocoluna, em
      quadrados de --vu. É só desenho: a composição continua em --cell e
      --row, e nada pousa em --vu. Como no CERNE, a linha maior (--grid) e a
      menor (--grid-min) dizem as duas escalas sem que uma governe a outra. */
   --vu:calc(var(--cell) / 5);
-  --grid-min:rgba(44,44,44,.05);
+  --grid-min:rgba(44,44,44,.06);
   /* a linha maior é desenhada sobre a menor: o acréscimo (--grid-mais) é o
-     que leva os 5% da menor aos 7% de --grid (1 − 0,93 / 0,95 ≈ 0,021) */
-  --grid-mais:rgba(44,44,44,.021);
+     que leva os 6% da menor aos 9% de --grid (1 − 0,91 / 0,94 ≈ 0,031915) */
+  --grid-mais:rgba(44,44,44,.0319148936170213);
   --rule:rgba(44,44,44,.2);
   --soft:rgba(44,44,44,.66);
   --echo:#FFB627;
@@ -1545,9 +1545,9 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   width:100%; height:100%; display:block; pointer-events:none;
 }
 .hm-feixe__luz{ fill:var(--hero-paper); }
-/* faixas e cortes no tom da retícula da página: a linha menor a 5%
+/* faixas e cortes no tom da retícula da página: a linha menor a 6%
    (--grid-min) e, a cada macrocoluna (e a cada cinco fileiras), o acréscimo
-   que a leva a 7%, como as duas camadas do fundo da home. Sobre o #2C2C2C,
+   que a leva a 9%, como as duas camadas do fundo da home. Sobre o #2C2C2C,
    invisíveis. */
 .hm-feixe__faixas,
 .hm-feixe__cortes{ fill:var(--grid-min); }
