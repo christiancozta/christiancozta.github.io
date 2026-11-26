@@ -61,9 +61,9 @@
   let retY = 0, lastHero = 0;
   const heroH = () => heroRoot?.getBoundingClientRect().height || 0;
   function ancora(){
-    const c = home.clientWidth / 8, h = heroH();
+    const h = heroH();
     lastHero = h;
-    retY = 0; // o corpo começa na costura; sua origem agora é a própria base da hero
+    retY = 0; // origem do corpo = costura da hero
     home.style.setProperty("--ret-y", retY.toFixed(2) + "px");
   }
 
@@ -288,6 +288,7 @@
     const R0 = .5, RAMPA = .12, MAX = 1.82; // projeção excedente do ATRIO
     const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
     const p2 = n => n.toFixed(2);
+    const geo = n => String(n);
     let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
 
     /* baseline do nome: sonda de largura zero, como em raiseTitles, na
@@ -320,7 +321,7 @@
       ajustaNome(largo);
       const {width: W, height: H} = svg.getBoundingClientRect();
       if (!(W > 0 && H > 0)){ G = null; return; }
-      const c = W / 8, v = c / 5;
+      const c = home.getBoundingClientRect().width / 8, v = c / 5;
       let m = Math.max(6, Math.round((largo ? .5 : .36) * H / v));
       /* na composição alta, o horizonte desce, em v inteiros, até ficar
          pelo menos 2v abaixo do texto */
@@ -373,7 +374,7 @@
       const alcance = k < 1 ? k : MAX;
       if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); faixasM?.setAttribute("d", ""); }
       else {
-        const at = (x, y) => `${p2(px + (x - px) * alcance)},${p2(py + (y - py) * alcance)}`;
+        const at = (x, y) => `${geo(px + (x - px) * alcance)},${geo(py + (y - py) * alcance)}`;
         /* inteiro, o branco também passa sob o último feixe colorido */
         luz.setAttribute("d", k < 1
           ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
@@ -456,7 +457,12 @@
   let raf = 0, lastWidth = 0, lastRow = 0;
   function layout(force = false){
     raf = 0;
-    const w = home.clientWidth, r = rowPx();
+    const w = home.getBoundingClientRect().width;
+    if (!(w > 0)) return;
+    const unit = `${w / 8}px`;
+    home.style.setProperty("--hm-shared-cell", unit);
+    heroRoot?.style.setProperty("--hm-shared-cell", unit);
+    const r = rowPx();
     if (!force && w === lastWidth && r === lastRow && Math.abs(heroH() - lastHero) < .5) return;
     lastWidth = w; lastRow = r;
     fit();
@@ -471,7 +477,7 @@
   /* ---------- linhas da retícula visível ----------
      A retícula visível é um quadrado de lado = largura / 8, contínuo desde o
      topo da home. Estas funções só pousam elementos nas suas linhas. */
-  const cellPx = () => home.clientWidth / 8;
+  const cellPx = () => home.getBoundingClientRect().width / 8;
   /* altura medida a partir da origem da retícula, não do topo da home */
   const yIn = el => el.getBoundingClientRect().bottom - home.getBoundingClientRect().top - retY;
 
