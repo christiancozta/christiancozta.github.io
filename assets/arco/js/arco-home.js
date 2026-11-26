@@ -13,7 +13,8 @@
   "use strict";
   const home = document.getElementById("hm");
   if (!home) return;
-  const panels = [...home.querySelectorAll(".hm-panel")];
+  const heroRoot = document.getElementById("autoria");
+  const panels = [heroRoot, ...home.querySelectorAll(".hm-panel")].filter(Boolean);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const stacked = matchMedia("(max-width:900px)");
 
@@ -57,11 +58,11 @@
      (--ret-y): uma linha cai na base do hero, e os painéis seguintes, em
      quadrados inteiros, seguem sobre as linhas. */
   let retY = 0, lastHero = 0;
-  const heroH = () => home.querySelector(".hm-autoria")?.getBoundingClientRect().height || 0;
+  const heroH = () => heroRoot?.getBoundingClientRect().height || 0;
   function ancora(){
     const c = home.clientWidth / 8, h = heroH();
     lastHero = h;
-    retY = c > 0 ? ((h % c) + c) % c : 0;
+    retY = 0; // o corpo começa na costura; sua origem agora é a própria base da hero
     home.style.setProperty("--ret-y", retY.toFixed(2) + "px");
   }
 
@@ -257,7 +258,7 @@
      final, parado (fase 0, quando a fileira da base pousa na linha da base).
      Fora da tela, o laço para. */
   const feixe = (() => {
-    const hero = home.querySelector(".hm-feixe");
+    const hero = heroRoot;
     const svg = hero && hero.querySelector(".hm-feixe__svg");
     if (!svg) return null;
     const luz = svg.querySelector(".hm-feixe__luz");
@@ -454,13 +455,6 @@
   let raf = 0, lastWidth = 0, lastRow = 0;
   function layout(force = false){
     raf = 0;
-    const hero = home.querySelector(".hm-feixe");
-    if (hero){
-      const vv = window.visualViewport;
-      const height = Math.max(window.innerHeight, document.documentElement.clientHeight,
-        vv && Math.abs(vv.scale - 1) < .01 ? vv.height : 0);
-      if (height > 0) hero.style.setProperty("--hm-hero-viewport", `${Math.ceil(height)}px`);
-    }
     const w = home.clientWidth, r = rowPx();
     if (!force && w === lastWidth && r === lastRow && Math.abs(heroH() - lastHero) < .5) return;
     lastWidth = w; lastRow = r;
@@ -710,7 +704,11 @@
 
   const schedule = () => { if (!raf) raf = requestAnimationFrame(() => layout()); };
   addEventListener("resize", schedule, {passive:true});
-  window.visualViewport?.addEventListener("resize", schedule, {passive:true});
+  if ("ResizeObserver" in window && heroRoot) new ResizeObserver(schedule).observe(heroRoot);
+  const homeView = home.closest(".view");
+  if (homeView && "MutationObserver" in window) new MutationObserver(() => {
+    if (homeView.dataset.active === "true") layout(true);
+  }).observe(homeView, {attributes:true, attributeFilter:["data-active"]});
   stacked.addEventListener?.("change", () => layout(true));
   document.fonts?.ready.then(() => { layout(true); landOnHash(); });
   addEventListener("load", () => { layout(true); landOnHash(); });
@@ -720,7 +718,7 @@
   const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering", cerne:"ai-governance"};
   const isHomeTarget = id => {
     const el = id && document.getElementById(id);
-    return el && home.contains(el) ? el : null;
+    return el && (home.contains(el) || heroRoot?.contains(el)) ? el : null;
   };
   function go(id, {push = true, focus = null} = {}){
     const target = isHomeTarget(id);
