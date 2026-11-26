@@ -1533,7 +1533,13 @@ a.hm-cta--linha:hover{ background:var(--ink); color:var(--paper); }
   background:var(--hero-ink); color:var(--hero-paper);
 }
 /* com o cordão recolhido durante o hero, o hero ocupa a tela inteira */
-html.hm-veu-on .hm--dossie .hm-feixe{ height:100svh; height:100dvh; min-height:0; }
+/* A abertura cobre também a área sob as barras sobrepostas do Safari.
+   A viewport grande é o piso; JS complementa quando a área medida é maior. */
+html.hm-veu-on .hm--dossie .hm-feixe{
+  height:100dvh;
+  height:max(100lvh, var(--hm-hero-viewport, 0px));
+  min-height:0;
+}
 .hm--dossie .hm-feixe::before{ display:none; }
 
 .hm-feixe__svg{

@@ -455,6 +455,13 @@
   let raf = 0, lastWidth = 0, lastRow = 0;
   function layout(force = false){
     raf = 0;
+    const hero = home.querySelector(".hm-feixe");
+    if (hero){
+      const vv = window.visualViewport;
+      const height = Math.max(window.innerHeight, document.documentElement.clientHeight,
+        vv && Math.abs(vv.scale - 1) < .01 ? vv.height : 0);
+      if (height > 0) hero.style.setProperty("--hm-hero-viewport", `${Math.ceil(height)}px`);
+    }
     const w = home.clientWidth, r = rowPx();
     if (!force && w === lastWidth && r === lastRow && Math.abs(heroH() - lastHero) < .5) return;
     lastWidth = w; lastRow = r;
