@@ -316,9 +316,36 @@
       nomeEl.style.fontSize = p2(fs) + "px";
     }
 
+    /* Alinhamento medido após as fontes: fim de Portfólio = início da ficha.
+       As três frentes mantêm uma só linha e cedem de corpo apenas se preciso. */
+    function ajustaIdentidade(largo){
+      if (!txt) return;
+      txt.style.removeProperty("--hm-identity-offset");
+      txt.style.removeProperty("--hm-headline-size");
+      if (!largo) return;
+      const anchor = txt.querySelector(".hm-feixe__tag-anchor");
+      const contact = txt.querySelector(".hm-canal dt");
+      const fr = txt.querySelector(".hm-feixe__fr");
+      if (anchor && contact){
+        const offset = contact.getBoundingClientRect().left - anchor.getBoundingClientRect().right;
+        txt.style.setProperty("--hm-identity-offset", `${offset}px`);
+      }
+      if (!fr) return;
+      const items = [...fr.querySelectorAll(".hm-feixe__f")];
+      if (!items.length) return;
+      const gap = parseFloat(getComputedStyle(fr).columnGap) || 0;
+      const room = fr.getBoundingClientRect().width - gap * (items.length - 1);
+      const demand = items.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
+      if (room > 0 && demand > room){
+        const fs = parseFloat(getComputedStyle(items[0]).fontSize);
+        txt.style.setProperty("--hm-headline-size", `${fs * room / demand * .995}px`);
+      }
+    }
+
     function mede(){
       const largo = !alto.matches;
       if (txt) txt.style.transform = "";
+      ajustaIdentidade(largo);
       ajustaNome(largo);
       const {width: W, height: H} = svg.getBoundingClientRect();
       if (!(W > 0 && H > 0)){ G = null; return; }
@@ -354,10 +381,11 @@
       const origin = svg.getBoundingClientRect();
       const blocks = [id, txt.querySelector(".hm-feixe__fr"), txt.querySelector(".hm-canal")].filter(Boolean);
       const rects = blocks.map(el => el.getBoundingClientRect());
-      const left = Math.min(...rects.map(r => r.left)) - origin.left;
-      const bottom = Math.max(...rects.map(r => r.bottom)) - origin.top;
-      const edge = G.py + G.D * Math.max(0, Math.min(1, (left-G.px)/(G.xR-G.px)));
-      const shift = Math.max(2*G.v, bottom-edge+G.v);
+      const shift = Math.max(2*G.v, ...rects.map(r => {
+        const left = r.left-origin.left;
+        const edge = G.py + G.D * Math.max(0, Math.min(1, (left-G.px)/(G.xR-G.px)));
+        return r.bottom-origin.top-edge+G.v;
+      }));
       txt.style.transform = `translateY(-${shift}px)`;
     }
 

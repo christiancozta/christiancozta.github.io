@@ -1634,8 +1634,11 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   .hm-feixe .hm-canal__r{
     grid-template-columns:var(--rot) minmax(0, 1fr); column-gap:var(--contact-gap, 18px); align-items:baseline;
   }
-  /* Identidade e headlines no eixo dos valores, não dos rótulos. */
-  .hm-feixe__id, .hm-feixe__fr{ margin-left:calc(var(--rot, 6.75rem) + var(--contact-gap, 18px)); }
+  /* O fim de «Portfólio» pousa no início dos rótulos dos contatos.
+     Nome e frentes compartilham o mesmo eixo à esquerda da ficha. */
+  .hm-feixe__id, .hm-feixe__fr{ margin-left:var(--hm-identity-offset, 0px); }
+  .hm-feixe__fr{ flex-wrap:nowrap; column-gap:clamp(8px, 1.2vw, 24px); }
+  .hm-feixe__fr .hm-feixe__f{ flex:none; font-size:var(--hm-headline-size, clamp(1rem, 1.2vw, 1.25rem)); }
   .hm-feixe > .hm-feixe__txt{ --rot:6.75rem; grid-column:5 / 9 !important; padding-right:var(--cell); }
   .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:0; }
   @media (max-width:1100px){
