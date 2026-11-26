@@ -4,8 +4,8 @@
    abaixo, duas colunas: à esquerda (dois quadrados), a registradora e a
    folha, que desce inteira; à direita (quatro quadrados), a mesa: o
    tabuleiro 8 x 8 em perspectiva, vista de frente, com o relógio de xadrez
-   e o seletor dos módulos de pé sobre a borda do fundo. Peças e rótulos
-   ficam de pé nas casas.
+   e o seletor dos módulos de pé sobre a borda do fundo. As peças ficam de
+   pé nas casas; os rótulos, deitados à frente delas.
    Sob o palco, as folhas guardadas. Andamento em assets/atrio/js/jornada.js.
    Tinta e papel do site; na vez da IA, a hachura das casas escuras toma o
    accent do ATRIO.
@@ -112,10 +112,14 @@
    corte embaixo. Sai da fenda (y 150 de 190 no desenho). */
 .aj-papel{
   --fura:18px;
-  position:relative; z-index:3; flex:1; min-height:0; overflow:hidden;
+  position:relative; z-index:3; flex:none; min-height:0; overflow:hidden;
   width:calc(var(--reg-w) * .8); align-self:center;
   margin-top:calc(var(--reg-w) * -.1);
-  padding:16px calc(var(--fura) + 8px) 0;
+  /* nasce recolhida e cresce com a impressão (jornada.js); o teto é o ponto
+     de corte, bem antes da borda do tabuleiro */
+  height:80px; max-height:clamp(224px, calc(var(--cell) * 1.5), 336px);
+  padding:16px calc(var(--fura) + 8px) 14px;
+  transition:height .24s cubic-bezier(.32,.72,0,1);
   background-color:var(--paper);
   background-image:
     linear-gradient(rgba(44,44,44,.16), rgba(44,44,44,0) 14px),
@@ -141,8 +145,19 @@
 .aj-papel::before{ left:0; background-position:0 0, 100% 0; }
 .aj-papel::after{ right:0; background-position:0 0, 0 0; }
 .aj-rolo{ position:relative; z-index:2; padding:0 2px; }
-.aj-rolo.is-corte{ animation:aj-corte .52s cubic-bezier(.5,0,.75,0) forwards; }
-@keyframes aj-corte{ to{ transform:translateY(110%) rotate(-1.5deg); opacity:0; } }
+.aj-papel.is-recolhida{ height:20px; }
+.aj-papel.is-recolhida .aj-rolo{ visibility:hidden; }
+/* o pedaço cortado se solta da fenda e cai, girando de leve */
+.aj-papel--caida{
+  position:absolute; z-index:1; pointer-events:none; transition:none;
+  transform-origin:50% 0;
+  animation:aj-cai .85s cubic-bezier(.55,0,.75,.2) forwards;
+}
+@keyframes aj-cai{
+  0%{ transform:translateY(0) rotate(0); }
+  16%{ transform:translateY(5px) rotate(-.6deg); }
+  100%{ transform:translateY(55%) rotate(-5deg); opacity:0; }
+}
 
 .aj-cab{ margin:0 0 10px; padding-bottom:6px; border-bottom:1px solid var(--ink); font-size:.56rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
 .aj-e{ margin:0 0 12px; }
@@ -316,17 +331,20 @@
 .aj-peca{ transition:transform .7s cubic-bezier(.16, 1, .3, 1), opacity .5s cubic-bezier(.32,.72,0,1); }
 /* sombra de contato, deitada na casa, sob a base da peça */
 .aj-peca::before{
-  content:""; position:absolute; left:14%; right:14%; top:45%; height:26%; border-radius:50%;
+  content:""; position:absolute; left:14%; right:14%; top:41%; height:26%; border-radius:50%;
   background:radial-gradient(closest-side, rgba(44,44,44,.46), rgba(44,44,44,.16) 62%, transparent);
 }
 .aj-peca.is-anda .aj-peca__f{ animation:aj-ergue .7s cubic-bezier(.32,.72,0,1); }
 .aj-peca.is-anda::before{ animation:aj-sombra .7s cubic-bezier(.32,.72,0,1); }
 .aj-peca--rival .aj-peca__f{ animation:aj-entra .8s cubic-bezier(.32,.72,0,1) both; }
-@keyframes aj-ergue{ 40%{ transform:rotateX(calc(var(--aj-th) * -1)) translateY(-34%); } }
-@keyframes aj-sombra{ 40%{ transform:scale(.6); opacity:.45; } }
+@keyframes aj-ergue{
+  0%, 100%{ transform:rotateX(calc(var(--aj-th) * -1)) translateY(0); }
+  45%{ transform:rotateX(calc(var(--aj-th) * -1)) translateY(-16%); }
+}
+@keyframes aj-sombra{ 45%{ transform:scale(.8); opacity:.6; } }
 @keyframes aj-entra{ from{ transform:rotateX(calc(var(--aj-th) * -1)) translateY(-70%); opacity:0; } }
 .aj-peca__f{
-  position:absolute; left:20%; width:60%; bottom:42%; aspect-ratio:1;
+  position:absolute; left:20%; width:60%; bottom:46%; aspect-ratio:1;
   transform-origin:50% 100%; transform:rotateX(calc(var(--aj-th) * -1));
 }
 .aj-peca__f img{ display:block; width:100%; height:100%; }
@@ -335,14 +353,18 @@
 .aj-peca[hidden]{ display:none; }
 .aj-peca.is-saida{ opacity:0; }
 .aj-tag__f{
-  position:absolute; left:4%; right:4%; bottom:4%;
-  transform-origin:50% 100%; transform:rotateX(calc(var(--aj-th) * -1));
+  /* deitado na casa, impresso no tabuleiro como as coordenadas: a peça,
+     de pé logo atrás, aparece inteira */
+  position:absolute; left:4%; right:4%; bottom:5%;
   display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:.2em .4em;
   padding:.2em .3em; background:var(--paper); box-shadow:inset 0 0 0 1px rgba(44,44,44,.8); text-align:center;
   font-size:clamp(.48rem, 1.55cqw, .7rem); font-weight:600; letter-spacing:.03em; text-transform:uppercase; line-height:1.15;
 }
 .aj-tag__f b{ font-weight:700; color:var(--aj-acc); }
 .aj-tag--descartada .aj-tag__f{ color:rgba(44,44,44,.45); text-decoration:line-through; }
+/* o rótulo se imprime na casa depois que a peça pousa */
+.aj-tag{ animation:aj-rotulo .45s cubic-bezier(.32,.72,0,1) .55s both; }
+@keyframes aj-rotulo{ from{ opacity:0; } }
 
 /* ---------- a vez do humano: o trecho do caso e a escolha, sob a mesa ---------- */
 .aj-vez{
@@ -486,7 +508,8 @@
   .aj-peca, .aj-casa[data-esc]::after, .aj-relogio__sombra, .aj-relogio__veu, .aj-relogio__anel, .aj-relogio__poco img, .aj-mod img, .aj-mod__n, .aj-mod__n::before, .aj-mod__n::after, .aj-imp__led, .aj-imp__cara{ transition:none; }
   .aj-relogio__seg, .aj-relogio__botao::before, .aj-peca__f, .aj-peca::before, .aj-casa[data-rota]::before,
   .aj[data-imprime="true"] .aj-imp__led, .aj[data-imprime="true"] .aj-imp__giro{ animation:none !important; }
-  .aj[data-imprime="true"] .aj-imp__cabeca, .aj-rolo.is-corte{ animation:none; }
+  .aj[data-imprime="true"] .aj-imp__cabeca, .aj-papel--caida, .aj-tag{ animation:none; }
+  .aj-papel{ transition:none; }
   .aj-troca__l s{ animation:none; background-size:100% 2.5px; color:rgba(44,44,44,.5); }
   .aj-troca__seta, .aj-troca__l b{ animation:none; opacity:1; }
 }

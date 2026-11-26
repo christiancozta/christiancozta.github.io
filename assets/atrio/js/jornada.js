@@ -355,30 +355,62 @@
     ajustaArq();
   }
 
+  /* a folha sai da fenda em linhas: a altura acompanha o que já foi impresso,
+     em passos de uma linha do quadriculado (16px), até o teto; o que passa
+     do teto é cortado antes de imprimir */
+  const LINHA = 16;
+  const medidas = () => {
+    const cs = getComputedStyle(papel);
+    return { pad: parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom), teto: parseFloat(cs.maxHeight) || Infinity, base: parseFloat(cs.minHeight) || 0 };
+  };
+  const excede = () => { const m = medidas(); return rolo.offsetHeight + m.pad > m.teto + 1; };
+  let aposCorte = false;                    // depois do corte, a folha nova volta curta de uma vez
+  function ajustaPapel(seco) {
+    seco = seco || aposCorte;
+    aposCorte = false;
+    const m = medidas();
+    const alvo = Math.min(m.teto, Math.max(m.base, Math.ceil((rolo.offsetHeight + m.pad) / LINHA) * LINHA));
+    if (seco) papel.style.transition = "none";
+    papel.style.height = alvo + "px";
+    if (seco) { void papel.offsetHeight; papel.style.transition = ""; }
+  }
+  /* antes do jogo, a folha fica recolhida na fenda: só a ponta serrilhada */
+  function recolhe() {
+    papel.style.transition = "none";
+    papel.style.height = "";
+    papel.classList.add("is-recolhida");
+    void papel.offsetHeight;
+    papel.style.transition = "";
+  }
+
   function corta(instantaneo) {
     const velhos = [...rolo.children];
     const fica = velhos.pop();               // a entrada que não coube segue para a folha nova
     guarda(velhos.map((n) => n.cloneNode(true)).filter((n) => !n.classList.contains("aj-cab")));
     if (!instantaneo && !reduz.matches) {
-      const cai = rolo.cloneNode(true);
-      cai.lastElementChild?.remove();
-      Object.assign(cai.style, { position: "absolute", left: "20px", right: "20px", top: "12px" });
-      cai.classList.add("is-corte");
-      papel.classList.add("is-corte");
-      papel.append(cai);
-      setTimeout(() => { cai.remove(); papel.classList.remove("is-corte"); }, 520);
+      /* o pedaço impresso se solta da registradora e cai */
+      const cai = papel.cloneNode(true);
+      cai.removeAttribute("aria-label");
+      cai.setAttribute("aria-hidden", "true");
+      cai.querySelector(".aj-rolo")?.lastElementChild?.remove();
+      cai.classList.add("aj-papel--caida");
+      Object.assign(cai.style, { left: papel.offsetLeft + "px", top: papel.offsetTop + "px", width: papel.offsetWidth + "px", height: papel.offsetHeight + "px", margin: 0 });
+      papel.after(cai);
+      setTimeout(() => cai.remove(), 900);
     }
     velhos.forEach((n) => n.remove());
     nFolha++;
     rolo.prepend(cabecalho());
+    aposCorte = true;
     return fica;
   }
 
-  /* põe a entrada no rolo; se a folha passa do tabuleiro, corta antes */
+  /* põe a entrada no rolo (já medida com o texto inteiro); se a folha passaria
+     do teto, corta antes */
   function coloca(el, instantaneo) {
     el.style.visibility = "hidden";
     rolo.append(el);
-    if (papel.scrollHeight > papel.clientHeight + 1 && rolo.children.length > 2) corta(instantaneo);
+    if (excede() && rolo.children.length > 2) corta(instantaneo);
     el.style.visibility = "";
   }
 
@@ -386,13 +418,16 @@
   const espera = (ms, g) => new Promise((res, rej) => setTimeout(() => (g === geracao ? res() : rej(PARA)), reduz.matches ? Math.min(ms, 60) : ms));
   const PARA = Symbol("para");
 
-  async function digita(el, texto, g, instantaneo) {
-    if (instantaneo || reduz.matches) { el.textContent = texto; return; }
+  /* imprime caractere a caractere; a folha avança a cada linha nova */
+  async function digita(el, texto, g, instantaneo, ritmo = 26) {
+    if (instantaneo || reduz.matches) { el.textContent = texto; ajustaPapel(instantaneo); return; }
+    papel.classList.remove("is-recolhida");
     el.dataset.digita = "";
     raiz.dataset.imprime = "true";
-    for (let i = 1; i <= texto.length; i += 2) {
+    for (let i = 1; i <= texto.length; i++) {
       el.textContent = texto.slice(0, i);
-      await espera(14, g);
+      ajustaPapel();
+      await espera(texto[i - 1] === " " ? ritmo * .6 : ritmo, g);
     }
     el.textContent = texto;
     delete el.dataset.digita;
@@ -457,13 +492,19 @@
     if (!instantaneo) painel("ia", { k: U.k.ia, bate: "" });
     poeVez("ia", j);
     poeStatus(T.status.ia);
+    /* a IA pensa: o mostrador corre e as casas tomam o accent antes do lance */
+    if (!instantaneo) await espera(1300, g);
     lanceIA(k, j);
+    if (!instantaneo) await espera(650, g);
     const { e, t } = entradaIA(k, j);
+    t.textContent = j.ia;                    // mede a entrada inteira antes de imprimir
     coloca(e, instantaneo);
+    t.textContent = "";
+    if (!instantaneo) { ajustaPapel(); await espera(260, g); }
     await digita(t, j.ia, g, instantaneo);
     if (!instantaneo) anuncia(j.ia);
     if (!instantaneo) {
-      await espera(420, g);
+      await espera(900, g);
       const e = ESC[k];
       const semEscolha = !e || !e.opcoes;
       liberado = semEscolha;
@@ -487,11 +528,13 @@
       s.style.cssText = "all:unset";
       h.append(s);
       e.append(h);
-      if (papel.scrollHeight > papel.clientHeight + 1 && rolo.children.length > 2) {
+      s.textContent = j.humano;
+      if (excede() && rolo.children.length > 2) {
         rolo.lastElementChild.remove();
         coloca(e, instantaneo);
       }
-      await digita(s, j.humano, g, instantaneo);
+      s.textContent = "";
+      await digita(s, j.humano, g, instantaneo, 22);
       if (!instantaneo) anuncia(T.rotulos.humano + ": " + j.humano);
     }
   }
@@ -504,6 +547,7 @@
     p.className = "aj-e__fim";
     p.innerHTML = '<a href="#ai-governance" data-hm-go>' + esc(T.arquivo.cerne) + "</a>";
     coloca(p, false);
+    ajustaPapel();
     btnMinuta.hidden = false;
     lnkCerne.hidden = false;
     anuncia(T.status.fim);
@@ -515,7 +559,7 @@
       for (let k = desde; k < J.length; k++) {
         await passo(k, g, false);
         if (g !== geracao) return;
-        await espera(380, g);
+        await espera(500, g);
       }
       fim();
     } catch (err) { if (err !== PARA) throw err; }
@@ -526,10 +570,11 @@
     aguarda = null;
     raiz.dataset.imprime = "false";
     rolo.replaceChildren();
-    papel.querySelectorAll(".is-corte").forEach((n) => n.remove());
-    papel.classList.remove("is-corte");
+    raiz.querySelectorAll(".aj-papel--caida").forEach((n) => n.remove());
     nFolha = 1; guardadas = 0;
     rolo.append(cabecalho());
+    papel.classList.remove("is-recolhida");
+    ajustaPapel();
     folhasEl.replaceChildren();
     const v = document.createElement("p");
     v.className = "aj-folhas__vazio";
@@ -616,6 +661,7 @@
 
   /* ---------- estado inicial ---------- */
   zera();
+  recolhe();
   poeMod("atrio");
   poeConta(0);
   poeVez("pronto");
