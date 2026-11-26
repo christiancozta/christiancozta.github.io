@@ -145,8 +145,8 @@ const MARCAS = [
 ];
 /* ECHO, 20/11/2026: a partitura fica só com documentos do método.
    Intro guarda o Roteiro de Entrevistas, ad lib.: o diagnóstico veio antes do método e
-   soa fora do compasso. Índice e Memória passam ao rosto; as ferramentas seguem para o
-   RATIO e continuam abrindo pelos endereços próprios (#calendario, #fundamentos...).
+   soa fora do compasso. Índice e Memória passam ao rosto; as ferramentas ficam no ECHO,
+   fora da partitura, abrindo pelos endereços próprios (#calendario, #fundamentos...).
    Harmonia mantida: I e III em Dó maior, II em Lá menor (a Matriz de Papéis devolve o Lá:
    a admissibilidade é o portão supervisionado), IV suspende (Fá, Sol, Dó: o Fá agora é da
    Matriz de Competências) e a coda resolve em Dó, com o Controle de Produtividade no Mi
@@ -172,7 +172,7 @@ const NAIPES = [
     { id: 'controle', sub: 'Planilha', notas: [[5, 28]], pdf: 'controle' }] }
 ];
 /* Fora da partitura, mas com endereço: o rosto aponta para Índice e Memória, e as
-   ferramentas seguem acessíveis pelos links já publicados até ganharem lugar no RATIO. */
+   ferramentas, que permanecem no ECHO, abrem pelos links já publicados. */
 const FORA = [
   { n: 'Intro', vozes: [
     { id: 'indice', sub: 'Abertura', marca: 'ad lib.', pdf: 'pdf-indice' },
