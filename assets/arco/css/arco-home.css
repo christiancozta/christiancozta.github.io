@@ -1614,7 +1614,7 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 
 .hm-feixe .hm-canal{
   grid-row:3; align-self:start;
-  --rot:6.75rem;
+  --rot:inherit;
   padding:calc(var(--u) * 5) 0 calc(var(--u) * 5);
 }
 .hm-feixe .hm-canal dt{ color:var(--hero-paper); }
@@ -1632,11 +1632,14 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
    a coluna de rótulos e o corpo cedem antes de o valor quebrar */
 @media not all and (max-aspect-ratio:10/11){
   .hm-feixe .hm-canal__r{
-    grid-template-columns:var(--rot) minmax(0, 1fr); column-gap:18px; align-items:baseline;
+    grid-template-columns:var(--rot) minmax(0, 1fr); column-gap:var(--contact-gap, 18px); align-items:baseline;
   }
+  /* Identidade e headlines no eixo dos valores, não dos rótulos. */
+  .hm-feixe__id, .hm-feixe__fr{ margin-left:calc(var(--rot, 6.75rem) + var(--contact-gap, 18px)); }
+  .hm-feixe > .hm-feixe__txt{ --rot:6.75rem; grid-column:5 / 9 !important; padding-right:var(--cell); }
   .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:0; }
-  @container (max-width:24rem){
-    .hm-feixe .hm-canal__r{ grid-template-columns:4.5rem minmax(0, 1fr); column-gap:14px; }
+  @media (max-width:1100px){
+    .hm-feixe > .hm-feixe__txt{ --rot:4.5rem; --contact-gap:14px; }
     .hm-feixe .hm-canal dd{ font-size:.9375rem; }
   }
 }

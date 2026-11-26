@@ -318,6 +318,7 @@
 
     function mede(){
       const largo = !alto.matches;
+      if (txt) txt.style.transform = "";
       ajustaNome(largo);
       const {width: W, height: H} = svg.getBoundingClientRect();
       if (!(W > 0 && H > 0)){ G = null; return; }
@@ -330,28 +331,34 @@
         m = Math.max(6, Math.min(m, Math.floor((H - fundo - 2 * v) / v)));
       }
       const D = m * v, py = H - D, px = 2 * c;
-      /* borda esquerda do branco: uma linha de faixa (x = −nL·v na base),
-         escolhida para cruzar a borda da tela a ~55% da profundidade */
-      const nL = Math.max(1, Math.round(px * (1 / .55 - 1) / v));
-      const kR = 40;                               /* base inteira: 8c, desktop e mobile */
-      const xL = -nL * v, xR = kR * v;
-      const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
+      /* Os dois raios extremos encontram exatamente os vértices da base.
+         A extensão além da hero é recortada, como no ATRIO. */
+      const kR = 40;
+      const xL = 0, xR = kR * v;
+      const Ye = H;
       const g = 1;                                    /* espessura na base: a da retícula */
-      G = {W, H, c, v, m, D, px, py, xL, xR, nL, kR, Ye, g, largo};
+      G = {W, H, c, v, m, D, px, py, xL, xR, kR, Ye, g, largo};
       hero.style.setProperty("--hz", p2(py) + "px");
       svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
       estatico = "";
       nome();
     }
 
-    /* o nome pousa a linha de base no horizonte (composição larga) */
+    /* O bloco inteiro sobe: sua base deve ficar acima da diagonal branca
+       no eixo mais à esquerda do texto. O horizonte não se move. */
     function nome(){
-      if (!id) return;
-      id.style.transform = "";
-      if (!G || !G.largo || !bl) return;
-      const y = bl.getBoundingClientRect().top - hero.getBoundingClientRect().top;
-      const d = G.py - y;
-      if (Math.abs(d) > .25) id.style.transform = `translateY(${p2(d)}px)`;
+      if (!txt) return;
+      txt.style.transform = "";
+      if (id) id.style.transform = "";
+      if (!G || !G.largo) return;
+      const origin = svg.getBoundingClientRect();
+      const blocks = [id, txt.querySelector(".hm-feixe__fr"), txt.querySelector(".hm-canal")].filter(Boolean);
+      const rects = blocks.map(el => el.getBoundingClientRect());
+      const left = Math.min(...rects.map(r => r.left)) - origin.left;
+      const bottom = Math.max(...rects.map(r => r.bottom)) - origin.top;
+      const edge = G.py + G.D * Math.max(0, Math.min(1, (left-G.px)/(G.xR-G.px)));
+      const shift = Math.max(2*G.v, bottom-edge+G.v);
+      txt.style.transform = `translateY(-${shift}px)`;
     }
 
     /* um ponto da borda esquerda (x = 0, altura y), prolongado para fora da
@@ -359,7 +366,7 @@
     const fora = y => p2(y + (y - G.py) * 2 / G.px);
 
     function desenhaEstatico(t){
-      const {H, v, px, py, xL, xR, nL, kR, Ye, g} = G;
+      const {H, v, px, py, xL, xR, kR, Ye, g} = G;
       /* 1. os nove feixes, contíguos: cada um vai do seu topo até o fim do
          leque, e o seguinte o cobre; assim a junta é cor sobre cor */
       const fx = px * ease((t - T.cor[0]) / T.cor[1]);
@@ -375,16 +382,13 @@
       if (k <= 0){ luz.setAttribute("d", ""); faixas.setAttribute("d", ""); faixasM?.setAttribute("d", ""); }
       else {
         const at = (x, y) => `${geo(px + (x - px) * alcance)},${geo(py + (y - py) * alcance)}`;
-        /* inteiro, o branco também passa sob o último feixe colorido */
-        luz.setAttribute("d", k < 1
-          ? `M${p2(px)},${p2(py)}L${at(xR, H)}L${at(xL, H)}Z`
-          : `M${p2(px)},${p2(py)}L${at(xR, H)}L-2,${p2(py + (H - py) * MAX)}L-2,${fora(yOf(8))}Z`);
+        luz.setAttribute("d", `M${geo(px)},${geo(py)}L${at(xR, H)}L${at(xL, H)}Z`);
         /* divisões longitudinais: do ponto de fuga até x = j·v na base, largura g
            na base e proporcional à profundidade (triângulo com vértice no
            ponto de fuga). A borda esquerda não leva divisão: é a junta com as cores */
         const d = [], dM = [];
-        for (let j = -nL + 1; j < kR; j++){
-          const tri = `M${p2(px)},${p2(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`;
+        for (let j = 0; j < kR; j++){
+          const tri = `M${geo(px)},${geo(py)}L${at(j * v, H)}L${at(j * v + g, H)}Z`;
           d.push(tri);
           if (maior(j)) dM.push(tri);
         }
