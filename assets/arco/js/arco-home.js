@@ -332,7 +332,7 @@
       /* borda esquerda do branco: uma linha de faixa (x = −nL·v na base),
          escolhida para cruzar a borda da tela a ~55% da profundidade */
       const nL = Math.max(1, Math.round(px * (1 / .55 - 1) / v));
-      const kR = largo ? 20 : 30;                    /* borda direita: 4c ou 6c */
+      const kR = 40;                               /* base inteira: 8c, desktop e mobile */
       const xL = -nL * v, xR = kR * v;
       const Ye = py + D * px / (px - xL);             /* encontro com a borda da tela */
       const g = 1;                                    /* espessura na base: a da retícula */
