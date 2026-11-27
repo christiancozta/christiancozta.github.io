@@ -1764,7 +1764,7 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 .hm-fr--v2 .hm-fr__d{ padding-top:.2rem; }
 
 .hm-fr__ms{
-  --pauta:30px;
+  --pauta:26px;
   list-style:none; margin:0; padding:0;
   display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); row-gap:14px;
 }
@@ -1845,7 +1845,7 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 .hm-fr__r--atrio :is(.hm-fr__p, .hm-fr__dd, .hm-fr__mm){ display:grid; min-width:0; }
 .hm-fr__r--atrio :is(.hm-fr__p, .hm-fr__dd, .hm-fr__mm) > .hm-st{ grid-area:1 / 1; align-self:start; }
 .hm-fr--v2 .hm-fr__r--atrio .hm-fr__p > .hm-st{ justify-self:center; }
-.hm-fr__r--atrio .hm-st{ transition:opacity var(--slow) var(--ease), visibility 0s; }
+.hm-fr__r--atrio .hm-st{ transition:opacity var(--slow) var(--ease) var(--slow), visibility 0s linear var(--slow); }
 .hm-fr__r--atrio .hm-st:not(.is-on){
   opacity:0; visibility:hidden;
   transition:opacity var(--slow) var(--ease), visibility 0s linear var(--slow);
@@ -1882,18 +1882,50 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 }
 /* CERNE: marca e números em Azonix, em peso maior (negrito sintetizado,
    a fonte tem peso único) */
-.hm .hm-fr__nm .hm-wm--cerne,
 .hm .hm-fr__ms--cerne b{
   font-family:"Azonix", "Science Gothic", var(--f-display); font-weight:700;
   font-synthesis:weight; letter-spacing:.02em;
   -webkit-text-stroke:.035em currentColor; paint-order:stroke fill;
 }
-.hm .hm-fr__nm .hm-wm--cerne{ font-size:1.25rem; }
-.hm .hm-fr__ms--cerne b{ font-size:calc(var(--pauta) * 1.02); }
-.hm .hm-fr__ms:not(.hm-fr__ms--echo) .hm-fr__ml{
-  font-family:var(--f-body); font-style:normal; font-weight:300; font-size:.8125rem;
+.hm .hm-fr__nm .hm-wm--cerne{
+  font-family:"Azonix", "Science Gothic", var(--f-display); font-weight:400;
+  font-size:1.25rem; letter-spacing:.02em;
 }
+.hm .hm-fr__ms--cerne b{ font-size:calc(var(--pauta) * 1.02); }
 
 /* as áreas das frentes sem o traço: a cor do projeto fica no ≠, no
    marca-texto dos números e nas tags */
 .hm-fr--v2 .hm-fr__mk{ text-decoration:none; }
+
+/* a distinção também troca em sequência: a que sai some antes de a próxima
+   entrar, para não sobrepor dois pares na mesma célula */
+.hm-fr--v2 .hm-ds.is-alt .hm-d.is-on{
+  transition:opacity var(--slow) var(--ease) var(--slow), visibility 0s linear var(--slow);
+}
+
+/* legendas dos números: Martian Mono 500, semiexpandida, em todas as frentes */
+.hm .hm-fr__ms .hm-fr__ml{
+  font-family:"Martian Mono", ui-monospace, monospace; font-style:normal;
+  font-weight:500; font-stretch:112.5%; font-size:.625rem; line-height:1.4; letter-spacing:0;
+  margin-top:.4rem;
+}
+
+/* ATRIO, RATIO e TROIA: o número num retângulo cheio, na mesma cor e
+   transparência do marca-texto, com respiro curto */
+.hm-fr__ms:is(.hm-fr__ms--atrio, .hm-fr__ms--ratio, .hm-fr__ms--troia) b span{
+  background:var(--hl); padding:.08em .22em .04em;
+}
+
+/* CERNE: o número circulado à mão, como numa folha; três traçados, para que
+   nenhum círculo repita o outro */
+.hm-fr__ms--cerne b span{ position:relative; background:none; padding:0 .12em; }
+.hm-fr__ms--cerne b span::before{
+  content:""; position:absolute; inset:-.3em -.42em -.26em -.4em; pointer-events:none;
+  background:no-repeat center / 100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M12 34C8 14 40 4 66 6C90 8 98 26 90 42C80 56 36 60 16 50C4 44 6 28 22 18' fill='none' stroke='rgba(79,107,255,.55)' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+.hm-fr__ms--cerne li:nth-child(3n+2) b span::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M20 10C50 0 92 8 94 30C96 50 60 58 32 54C8 50 2 30 14 18C22 10 40 6 52 8' fill='none' stroke='rgba(79,107,255,.55)' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
+.hm-fr__ms--cerne li:nth-child(3n) b span::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M8 30C6 12 44 2 72 8C94 14 98 40 80 50C60 60 22 58 10 44C4 36 10 24 30 16' fill='none' stroke='rgba(79,107,255,.55)' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+}
