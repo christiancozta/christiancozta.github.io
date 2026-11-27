@@ -1577,8 +1577,9 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   font-size:4.2vw; line-height:.95; letter-spacing:-.045em;
   text-align:left; white-space:nowrap; color:var(--hero-paper);
 }
-/* as três frentes, sob o nome: cada uma sublinhada na cor do seu feixe,
-   o fio assentado um pouco abaixo da linha de base */
+/* as três frentes, sob o nome: cada uma marcada na cor do seu feixe, com
+   o traço das frentes do painel seguinte (.hm-fr__mk), que corta o pé das
+   letras */
 .hm-feixe__fr{
   grid-row:2; align-self:start;
   display:flex; flex-wrap:wrap; gap:.5rem 1.5rem;
@@ -1588,16 +1589,16 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   font-family:var(--f-display); font-weight:700; letter-spacing:-.015em;
   font-size:calc(clamp(1rem, 1.2vw, 1.25rem) * var(--hm-ks, 1)); line-height:1.2; white-space:nowrap;
   color:var(--hero-paper);
-  text-decoration-line:underline; text-decoration-color:var(--fc);
-  text-decoration-thickness:.14em; text-underline-offset:.22em; text-decoration-skip-ink:none;
+  text-decoration-line:underline; text-decoration-style:solid; text-decoration-color:var(--fc);
+  text-decoration-thickness:.26em; text-underline-offset:-.1em; text-decoration-skip-ink:none;
 }
 .hm-feixe__f--echo{ --fc:var(--echo); }
 .hm-feixe__f--atrio{ --fc:var(--atrio); }
 .hm-feixe__f--cerne{ --fc:var(--cerne); }
 
 /* a síntese, entre as frentes e os contatos: corpo de texto, e as três
-   palavras-eixo marcadas na cor do feixe, com o mesmo traço de marca-texto
-   das frentes do painel seguinte (.hm-fr__mk) */
+   palavras-eixo marcadas na cor do feixe, na mesma posição do traço das
+   frentes (.hm-fr__mk), mas mais fino, para o corpo de texto */
 .hm-feixe__bio{
   grid-row:3; align-self:start;
   margin:0; padding:calc(var(--u) * 3.5) 0 0; max-width:56ch;
@@ -1607,7 +1608,7 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 }
 .hm-feixe__m{
   text-decoration-line:underline; text-decoration-style:solid; text-decoration-color:var(--fc);
-  text-decoration-thickness:.26em; text-underline-offset:-.1em; text-decoration-skip-ink:none;
+  text-decoration-thickness:.16em; text-underline-offset:-.06em; text-decoration-skip-ink:none;
 }
 .hm-feixe__m--echo{ --fc:var(--echo); }
 .hm-feixe__m--atrio{ --fc:var(--atrio); }
