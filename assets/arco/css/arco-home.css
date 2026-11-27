@@ -1561,15 +1561,16 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 .hm-feixe > .hm-feixe__txt{
   position:relative; z-index:1;
   grid-column:5 / 8 !important; grid-row:1 !important;
-  display:grid; grid-template-rows:var(--hz) auto auto; align-content:start;
+  display:grid; grid-template-rows:var(--hz) auto auto auto; align-content:start;
   min-width:0; padding:0 var(--g);
 }
 .hm-feixe__id{ grid-row:1; align-self:end; min-width:0; }
 .hm-feixe .hm-fit{ white-space:nowrap; }
 .hm-feixe__tag{
   margin:0 0 calc(var(--u) * 2);
-  font-family:var(--f-micro); font-size:.612rem; font-weight:600; line-height:1.3;
+  font-family:var(--f-micro); font-weight:600; line-height:1.3;
   letter-spacing:.16em; text-transform:uppercase; color:var(--hero-paper);
+  font-size:calc(.612rem * var(--hm-k, 1));
 }
 .hm-feixe.hm--dossie .hm-name{
   margin:0; padding:0;
@@ -1585,7 +1586,7 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 }
 .hm-feixe__f{
   font-family:var(--f-display); font-weight:700; letter-spacing:-.015em;
-  font-size:clamp(1rem, 1.2vw, 1.25rem); line-height:1.2; white-space:nowrap;
+  font-size:calc(clamp(1rem, 1.2vw, 1.25rem) * var(--hm-k, 1)); line-height:1.2; white-space:nowrap;
   color:var(--hero-paper);
   text-decoration-line:underline; text-decoration-color:var(--fc);
   text-decoration-thickness:.14em; text-underline-offset:.22em; text-decoration-skip-ink:none;
@@ -1593,6 +1594,23 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 .hm-feixe__f--echo{ --fc:var(--echo); }
 .hm-feixe__f--atrio{ --fc:var(--atrio); }
 .hm-feixe__f--cerne{ --fc:var(--cerne); }
+
+/* a síntese, entre as frentes e os contatos: corpo de texto, e as três
+   palavras-eixo sublinhadas na cor do feixe correspondente */
+.hm-feixe__bio{
+  grid-row:3; align-self:start;
+  margin:0; padding:calc(var(--u) * 3.5) 0 0; max-width:56ch;
+  font-family:var(--f-body); font-weight:400; letter-spacing:0;
+  font-size:calc(clamp(.9375rem, 1.02vw, 1.0625rem) * var(--hm-k, 1)); line-height:1.55;
+  text-wrap:pretty; color:var(--hero-paper);
+}
+.hm-feixe__m{
+  text-decoration-line:underline; text-decoration-color:var(--fc);
+  text-decoration-thickness:.14em; text-underline-offset:.24em; text-decoration-skip-ink:none;
+}
+.hm-feixe__m--echo{ --fc:var(--echo); }
+.hm-feixe__m--atrio{ --fc:var(--atrio); }
+.hm-feixe__m--cerne{ --fc:var(--cerne); }
 
 /* idioma: o cordão some no hero, então a troca vem para o alto dele, na
    mesma letra e no mesmo lugar do idioma do cordão */
@@ -1613,11 +1631,14 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 .hm-feixe__lang i{ font-style:normal; font-weight:400; }
 
 .hm-feixe .hm-canal{
-  grid-row:3; align-self:start;
+  grid-row:4; align-self:start;
   --rot:inherit;
   padding:calc(var(--u) * 5) 0 calc(var(--u) * 5);
 }
 .hm-feixe .hm-canal dt{ color:var(--hero-paper); }
+/* corpos dos contatos sob o mesmo fator de ajuste do hero (--hm-k) */
+.hm-feixe.hm--dossie .hm-canal dt{ font-size:calc(.6875rem * var(--hm-k, 1)); }
+.hm-feixe .hm-canal dd{ font-size:calc(clamp(1rem, 1.15vw, 1.125rem) * var(--hm-k, 1)); }
 .hm-feixe .hm-canal dd a{ color:var(--hero-paper); text-decoration-color:rgba(252,252,252,.34); }
 .hm-feixe .hm-canal dd a:hover,
 .hm-feixe .hm-canal dd a:focus-visible{ text-decoration-color:var(--hero-paper); }
@@ -1637,13 +1658,16 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   /* O fim de «Portfólio» pousa no início dos rótulos dos contatos.
      Nome e frentes compartilham o mesmo eixo à esquerda da ficha. */
   .hm-feixe__id, .hm-feixe__fr{ margin-left:var(--hm-identity-offset, 0px); }
+  /* a síntese no eixo intermediário: a meio caminho entre o da identidade
+     e o dos rótulos dos contatos */
+  .hm-feixe__bio{ margin-left:calc(var(--hm-identity-offset, 0px) / 2); }
   .hm-feixe__fr{ flex-wrap:nowrap; column-gap:clamp(8px, 1.2vw, 24px); }
-  .hm-feixe__fr .hm-feixe__f{ flex:none; font-size:var(--hm-headline-size, clamp(1rem, 1.2vw, 1.25rem)); }
+  .hm-feixe__fr .hm-feixe__f{ flex:none; font-size:calc(var(--hm-headline-size, clamp(1rem, 1.2vw, 1.25rem)) * var(--hm-k, 1)); }
   .hm-feixe > .hm-feixe__txt{ --rot:6.75rem; grid-column:5 / 9 !important; padding-right:var(--cell); }
   .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:0; }
   @media (max-width:1100px){
     .hm-feixe > .hm-feixe__txt{ --rot:4.5rem; --contact-gap:14px; }
-    .hm-feixe .hm-canal dd{ font-size:.9375rem; }
+    .hm-feixe .hm-canal dd{ font-size:calc(.9375rem * var(--hm-k, 1)); }
   }
 }
 /* até 1100px, o texto usa também meia margem à direita, como a base do
@@ -1656,20 +1680,24 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
     .hm-feixe__tag{ margin-bottom:var(--u); }
     .hm-feixe .hm-canal{ padding:calc(var(--u) * 3) 0 calc(var(--u) * 2); }
     .hm-feixe__fr{ padding-top:calc(var(--u) * 1.5); }
+    .hm-feixe__bio{ padding-top:calc(var(--u) * 2); }
   }
 }
 @media (max-aspect-ratio:10/11){
   /* da coluna 3 à 8: o leque, que converge em 2c, nunca alcança o texto */
   .hm-feixe > .hm-feixe__txt{
     grid-column:3 / 9 !important;
-    grid-template-rows:auto auto auto;
-    padding:calc(var(--u) * 7) var(--g) 0;
+    grid-template-rows:auto auto auto auto;
+    padding:max(calc(var(--u) * 7 * var(--hm-k, 1)), 3rem) var(--g) 0;
   }
   .hm-feixe__l{ display:block; }
   .hm-feixe.hm--dossie .hm-name{ font-size:13vw; line-height:.92; }
-  .hm-feixe .hm-canal{ padding:calc(var(--u) * 4) 0 calc(var(--u) * 4); }
-  .hm-feixe__fr{ flex-direction:column; gap:.55rem; padding-top:calc(var(--u) * 2.5); }
-  .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:10px; }
+  /* no aperto, os respiros cedem com os corpos (--hm-k, arco-home.js) */
+  .hm-feixe__tag{ margin-bottom:calc(var(--u) * 2 * var(--hm-k, 1)); }
+  .hm-feixe .hm-canal{ padding:calc(var(--u) * 4 * var(--hm-k, 1)) 0; }
+  .hm-feixe__fr{ flex-direction:column; gap:calc(.55rem * var(--hm-k, 1)); padding-top:calc(var(--u) * 2.5 * var(--hm-k, 1)); }
+  .hm-feixe__bio{ padding-top:calc(var(--u) * 3.5 * var(--hm-k, 1)); }
+  .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:calc(10px * var(--hm-k, 1)); }
 }
 
 /* ---------- cordão: recolhido durante o hero ----------

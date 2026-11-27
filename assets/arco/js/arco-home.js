@@ -288,7 +288,7 @@
     const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
     const p2 = n => n.toFixed(2);
     const geo = n => String(n);
-    let G = null, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
+    let G = null, K = 1, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
 
     /* baseline do nome: sonda de largura zero, como em raiseTitles, na
        última linha */
@@ -312,7 +312,7 @@
       if (!(room > 0 && widest > 0)) return;
       let fs = parseFloat(getComputedStyle(nomeEl).fontSize) * room / widest * .995;
       if (!largo) fs = Math.min(fs, innerHeight * .085);
-      nomeEl.style.fontSize = p2(fs) + "px";
+      nomeEl.style.fontSize = p2(fs * K) + "px";
     }
 
     /* Alinhamento medido após as fontes: fim de Portfólio = início da ficha.
@@ -337,17 +337,45 @@
       const demand = items.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
       if (room > 0 && demand > room){
         const fs = parseFloat(getComputedStyle(items[0]).fontSize);
-        txt.style.setProperty("--hm-headline-size", `${fs * room / demand * .995}px`);
+        txt.style.setProperty("--hm-headline-size", `${fs * room / demand * .995 / K}px`);
       }
     }
 
+    /* Quando o texto não cabe (na composição larga, o bloco sobe além do
+       alto do hero; na alta, empurra a esteira abaixo do mínimo de 6v),
+       todos os corpos cedem juntos, pelo fator K (--hm-k), até 0,6. */
     function mede(){
+      K = 1;
+      for (let i = 0; i < 6; i++){
+        if (txt) txt.style.setProperty("--hm-k", K.toFixed(3));
+        const sobra = arma();
+        if (!sobra || !(sobra.falta > .5) || K <= .6) break;
+        K = Math.max(.6, K * Math.max(.75, (sobra.h - sobra.falta) / sobra.h));
+      }
+    }
+
+    function folga(){
+      if (!G || !txt) return null;
+      const pri = txt.firstElementChild, ult = txt.lastElementChild;
+      if (!pri || !ult) return null;
+      const top = hero.getBoundingClientRect().top;
+      const ini = pri.getBoundingClientRect().top - top;
+      const fundo = ult.getBoundingClientRect().bottom - top;
+      if (G.largo){
+        const lang = hero.querySelector(".hm-feixe__lang");
+        const teto = Math.max(G.v * 2, lang ? lang.getBoundingClientRect().bottom - top + G.v : 0);
+        return {falta: teto - ini, h: fundo - ini};
+      }
+      return {falta: fundo - (G.H - 8 * G.v), h: fundo - ini};
+    }
+
+    function arma(){
       const largo = !alto.matches;
       if (txt) txt.style.transform = "";
       ajustaIdentidade(largo);
       ajustaNome(largo);
       const {width: W, height: H} = svg.getBoundingClientRect();
-      if (!(W > 0 && H > 0)){ G = null; return; }
+      if (!(W > 0 && H > 0)){ G = null; return null; }
       const c = home.getBoundingClientRect().width / 8, v = c / 5;
       let m = Math.max(6, Math.round((largo ? .5 : .36) * H / v));
       /* na composição alta, o horizonte desce, em v inteiros, até ficar
@@ -368,6 +396,7 @@
       svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
       estatico = "";
       nome();
+      return folga();
     }
 
     /* O bloco inteiro sobe: sua base deve ficar acima da diagonal branca
@@ -378,7 +407,7 @@
       if (id) id.style.transform = "";
       if (!G || !G.largo) return;
       const origin = svg.getBoundingClientRect();
-      const blocks = [id, txt.querySelector(".hm-feixe__fr"), txt.querySelector(".hm-canal")].filter(Boolean);
+      const blocks = [id, txt.querySelector(".hm-feixe__fr"), txt.querySelector(".hm-feixe__bio"), txt.querySelector(".hm-canal")].filter(Boolean);
       const rects = blocks.map(el => el.getBoundingClientRect());
       const shift = Math.max(2*G.v, ...rects.map(r => {
         const left = r.left-origin.left;
