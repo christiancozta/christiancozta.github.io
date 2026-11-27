@@ -108,7 +108,7 @@
 <script src="../assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="../assets/arco/js/arco-shell.en.js?v=20261124-marca" defer></script>
 <script src="../assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261127-elipse">
+<link rel="stylesheet" href="../assets/arco/css/arco-home.css?v=20261127-ancoras">
 <script src="../assets/arco/js/arco-home.en.js?v=20261127-estados" defer></script>
 <link rel="stylesheet" href="../assets/atrio/css/jornada.css?v=20261125-jornada6">
 <script src="../assets/atrio/js/jornada-dados.js?v=20261125-jornada4" defer></script>
@@ -159,9 +159,9 @@
             </div>
             <!-- as três frentes: cada uma sublinhada na cor do seu feixe -->
             <ul class="hm-feixe__fr" aria-label="Areas of practice">
-              <li class="hm-feixe__f hm-feixe__f--echo">Legal Operations</li>
-              <li class="hm-feixe__f hm-feixe__f--atrio">Legal Engineering</li>
-              <li class="hm-feixe__f hm-feixe__f--cerne">AI Governance &amp; Evaluation</li>
+              <li class="hm-feixe__f hm-feixe__f--echo"><a class="hm-feixe__go" href="#legal-operations" data-anchor="legal-operations">Legal Operations</a></li>
+              <li class="hm-feixe__f hm-feixe__f--atrio"><a class="hm-feixe__go" href="#legal-engineering" data-anchor="legal-engineering">Legal Engineering</a></li>
+              <li class="hm-feixe__f hm-feixe__f--cerne"><a class="hm-feixe__go" href="#ai-governance" data-anchor="ai-governance">AI Governance &amp; Evaluation</a></li>
             </ul>
             <!-- a síntese: entre as frentes e os contatos, num eixo intermediário;
                  método, arquitetura e auditoria sublinhados nas cores dos feixes -->
@@ -189,7 +189,7 @@
       <div class="rail__nav">
         <button class="rail__link" type="button" data-view="home" aria-current="true">Path</button>
 
-        <button class="rail__link" type="button" data-view="echo">ECHO</button>
+        <button class="rail__link" type="button" data-anchor="legal-operations" data-proj="echo">ECHO</button>
         <div class="rail__sec" data-sec="echo" data-on="false">
           <div>
             <button class="rail__seclink" type="button" data-child="echo" data-target="preliminares">Preliminaries</button>
@@ -198,9 +198,9 @@
           </div>
         </div>
 
-        <button class="rail__link" type="button" data-view="atrio">ATRIO</button>
+        <button class="rail__link" type="button" data-anchor="legal-engineering" data-proj="atrio">ATRIO</button>
         <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-aj-ir="ratio">RATIO</button>
-        <button class="rail__link rail__link--child rail__link--off" type="button" disabled aria-disabled="true">TROIA</button>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-aj-ir="troia">TROIA</button>
 
         <button class="rail__link" type="button" data-anchor="ai-governance" data-proj="cerne">CERNE</button>
       </div>
@@ -242,7 +242,7 @@
             <li class="hm-fr__r">
               <div class="hm-fr__p"><a class="hm-fr__nm" href="#legal-operations" data-hm-go aria-label="ECHO: see the case"><img class="hm-fr__ic" src="../assets/echo/brand/echo-logo.svg" alt="" width="56" height="56"><span>ECHO</span></a></div>
               <div class="hm-fr__c">
-                <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--echo">Legal Operations</span></p>
+                <p class="hm-fr__f"><a class="hm-fr__go" href="#legal-operations" data-hm-go><span class="hm-fr__mk hm-fr__mk--echo">Legal Operations</span></a></p>
                 <div class="hm-ds hm-fr__ds" data-proj="echo">
                   <ol class="hm-ds__l" aria-label="Distinction">
                       <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">reproduce</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">define</span></p></li>
@@ -264,7 +264,7 @@
                 <a class="hm-st hm-fr__nm hm-fr__nm--atr" data-proj="troia" href="#legal-engineering" data-hm-go aria-label="TROIA: see the case"><img class="hm-fr__ic" src="../assets/atrio/brand/troia-simbolo.svg" alt="" width="56" height="56"><span class="hm-wm">T<em>R</em>OIA</span></a>
               </div>
               <div class="hm-fr__c">
-                <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--atrio">Legal Engineering</span></p>
+                <p class="hm-fr__f"><a class="hm-fr__go" href="#legal-engineering" data-hm-go><span class="hm-fr__mk hm-fr__mk--atrio">Legal Engineering</span></a></p>
                 <div class="hm-ds hm-fr__ds" data-proj="atrio">
                   <ol class="hm-ds__l" aria-label="Distinctions">
                     <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegate</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">govern</span></p></li>
@@ -306,7 +306,7 @@
             <li class="hm-fr__r">
               <div class="hm-fr__p"><a class="hm-fr__nm" href="#ai-governance" data-hm-go aria-label="CERNE: see the case"><img class="hm-fr__ic" src="../assets/cerne/brand/cerne-simbolo.svg" alt="" width="56" height="56"><span class="hm-wm hm-wm--cerne">CERNE</span></a></div>
               <div class="hm-fr__c">
-                <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--cerne">AI Governance &amp; Evaluation</span></p>
+                <p class="hm-fr__f"><a class="hm-fr__go" href="#ai-governance" data-hm-go><span class="hm-fr__mk hm-fr__mk--cerne">AI Governance &amp; Evaluation</span></a></p>
                 <div class="hm-ds hm-fr__ds" data-proj="cerne">
                   <ol class="hm-ds__l" aria-label="Distinction">
                       <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">confront</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">audit</span></p></li>
@@ -765,7 +765,7 @@
         <!-- 06 — LASTRO: do termo à prova -->
         <section class="hm-panel hm-lastro" id="lastro" aria-labelledby="t-lastro">
           <h2 class="hm-title" id="t-lastro" data-fit="titulo"><span class="hm-fit">Grounding</span></h2>
-          <p class="hm-lede">The vocabulary the market uses to name legal operations, entry by entry, each linked to the competencies that demonstrate it in ECHO, ATRIO, or CERNE.</p>
+          <p class="hm-lede">The vocabulary the market uses to name legal operations, entry by entry, each linked to the competencies that demonstrate it in <a href="#legal-operations" data-hm-go>ECHO</a>, <a href="#legal-engineering" data-hm-go>ATRIO</a>, or <a href="#ai-governance" data-hm-go>CERNE</a>.</p>
 
           <div class="hm-corr">
             <p class="hm-corr__h" aria-hidden="true"><span>Demonstrated competency</span><span>Proof</span><span>Market terms</span></p>
