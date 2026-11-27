@@ -289,7 +289,7 @@
     const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : 1 - Math.pow(1 - u, 3);
     const p2 = n => n.toFixed(2);
     const geo = n => String(n);
-    let G = null, K = 1, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
+    let G = null, K = 1, KS = 1, t0 = 0, loop = 0, visivel = true, abertura = anima, estatico = "";
 
     /* baseline do nome: sonda de largura zero, como em raiseTitles, na
        última linha */
@@ -338,20 +338,38 @@
       const demand = items.reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
       if (room > 0 && demand > room){
         const fs = parseFloat(getComputedStyle(items[0]).fontSize);
-        txt.style.setProperty("--hm-headline-size", `${fs * room / demand * .995 / K}px`);
+        txt.style.setProperty("--hm-headline-size", `${fs * room / demand * .995 / KS}px`);
       }
     }
 
     /* Quando o texto não cabe (na composição larga, o bloco sobe além do
        alto do hero; na alta, empurra a esteira abaixo do mínimo de 6v),
-       todos os corpos cedem juntos, pelo fator K (--hm-k), até 0,6. */
+       o texto cede, e só então. Na larga, o bloco primeiro se alarga para a
+       direita (data-aperto); depois o nome e os respiros cedem pelo fator K
+       (--hm-k, até 0,5), e os corpos menores, só uma fração dele (KS,
+       --hm-ks, 0,8), para que frentes, síntese e contatos sigam legíveis;
+       só em telas mínimas estes descem até 0,6. */
     function mede(){
-      K = 1;
-      for (let i = 0; i < 6; i++){
-        if (txt) txt.style.setProperty("--hm-k", K.toFixed(3));
+      K = 1; KS = 1;
+      hero.removeAttribute("data-aperto");
+      for (let i = 0; i < 8; i++){
+        if (txt){
+          txt.style.setProperty("--hm-k", K.toFixed(3));
+          txt.style.setProperty("--hm-ks", KS.toFixed(3));
+        }
         const sobra = arma();
-        if (!sobra || !(sobra.falta > .5) || K <= .6) break;
-        K = Math.max(.6, K * Math.max(.75, (sobra.h - sobra.falta) / sobra.h));
+        if (!sobra || !(sobra.falta > .5)) break;
+        if (sobra.largo && !hero.hasAttribute("data-aperto")){
+          hero.setAttribute("data-aperto", "");
+          continue;
+        }
+        if (K > .5){
+          K = Math.max(.5, K * Math.max(.75, (sobra.h - sobra.falta * 1.6) / sobra.h));
+          KS = 1 - (1 - K) * .4;
+        } else if (KS > .6){
+          /* último recurso, em telas mínimas: os corpos menores cedem também */
+          KS = Math.max(.6, KS * Math.max(.85, (sobra.h - sobra.falta * 2) / sobra.h));
+        } else break;
       }
     }
 
@@ -365,9 +383,9 @@
       if (G.largo){
         const lang = hero.querySelector(".hm-feixe__lang");
         const teto = Math.max(G.v * 2, lang ? lang.getBoundingClientRect().bottom - top + G.v : 0);
-        return {falta: teto - ini, h: fundo - ini};
+        return {falta: teto - ini, h: fundo - ini, largo: true};
       }
-      return {falta: fundo - (G.H - 8 * G.v), h: fundo - ini};
+      return {falta: fundo - (G.H - 8 * G.v), h: fundo - ini, largo: false};
     }
 
     function arma(){

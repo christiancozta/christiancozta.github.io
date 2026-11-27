@@ -1570,7 +1570,7 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   margin:0 0 calc(var(--u) * 2);
   font-family:var(--f-micro); font-weight:600; line-height:1.3;
   letter-spacing:.16em; text-transform:uppercase; color:var(--hero-paper);
-  font-size:calc(.612rem * var(--hm-k, 1));
+  font-size:calc(.612rem * var(--hm-ks, 1));
 }
 .hm-feixe.hm--dossie .hm-name{
   margin:0; padding:0;
@@ -1586,7 +1586,7 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 }
 .hm-feixe__f{
   font-family:var(--f-display); font-weight:700; letter-spacing:-.015em;
-  font-size:calc(clamp(1rem, 1.2vw, 1.25rem) * var(--hm-k, 1)); line-height:1.2; white-space:nowrap;
+  font-size:calc(clamp(1rem, 1.2vw, 1.25rem) * var(--hm-ks, 1)); line-height:1.2; white-space:nowrap;
   color:var(--hero-paper);
   text-decoration-line:underline; text-decoration-color:var(--fc);
   text-decoration-thickness:.14em; text-underline-offset:.22em; text-decoration-skip-ink:none;
@@ -1596,17 +1596,18 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
 .hm-feixe__f--cerne{ --fc:var(--cerne); }
 
 /* a síntese, entre as frentes e os contatos: corpo de texto, e as três
-   palavras-eixo sublinhadas na cor do feixe correspondente */
+   palavras-eixo marcadas na cor do feixe, com o mesmo traço de marca-texto
+   das frentes do painel seguinte (.hm-fr__mk) */
 .hm-feixe__bio{
   grid-row:3; align-self:start;
   margin:0; padding:calc(var(--u) * 3.5) 0 0; max-width:56ch;
   font-family:var(--f-body); font-weight:400; letter-spacing:0;
-  font-size:calc(clamp(.9375rem, 1.02vw, 1.0625rem) * var(--hm-k, 1)); line-height:1.55;
+  font-size:calc(clamp(.9375rem, 1.02vw, 1.0625rem) * var(--hm-ks, 1)); line-height:1.55;
   text-wrap:pretty; color:var(--hero-paper);
 }
 .hm-feixe__m{
-  text-decoration-line:underline; text-decoration-color:var(--fc);
-  text-decoration-thickness:.14em; text-underline-offset:.24em; text-decoration-skip-ink:none;
+  text-decoration-line:underline; text-decoration-style:solid; text-decoration-color:var(--fc);
+  text-decoration-thickness:.26em; text-underline-offset:-.1em; text-decoration-skip-ink:none;
 }
 .hm-feixe__m--echo{ --fc:var(--echo); }
 .hm-feixe__m--atrio{ --fc:var(--atrio); }
@@ -1636,9 +1637,9 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   padding:calc(var(--u) * 5) 0 calc(var(--u) * 5);
 }
 .hm-feixe .hm-canal dt{ color:var(--hero-paper); }
-/* corpos dos contatos sob o mesmo fator de ajuste do hero (--hm-k) */
-.hm-feixe.hm--dossie .hm-canal dt{ font-size:calc(.6875rem * var(--hm-k, 1)); }
-.hm-feixe .hm-canal dd{ font-size:calc(clamp(1rem, 1.15vw, 1.125rem) * var(--hm-k, 1)); }
+/* corpos dos contatos sob o fator de ajuste dos corpos menores (--hm-ks) */
+.hm-feixe.hm--dossie .hm-canal dt{ font-size:calc(.6875rem * var(--hm-ks, 1)); }
+.hm-feixe .hm-canal dd{ font-size:calc(clamp(1rem, 1.15vw, 1.125rem) * var(--hm-ks, 1)); }
 .hm-feixe .hm-canal dd a{ color:var(--hero-paper); text-decoration-color:rgba(252,252,252,.34); }
 .hm-feixe .hm-canal dd a:hover,
 .hm-feixe .hm-canal dd a:focus-visible{ text-decoration-color:var(--hero-paper); }
@@ -1661,13 +1662,20 @@ html:has(body > .hm-feixe):has(.view[data-view="home"][data-active="true"]) body
   /* a síntese no eixo intermediário: a meio caminho entre o da identidade
      e o dos rótulos dos contatos */
   .hm-feixe__bio{ margin-left:calc(var(--hm-identity-offset, 0px) / 2); }
+  /* no aperto (data-aperto, arco-home.js), o bloco avança sobre a margem
+     direita, a síntese usa a largura toda e os respiros cedem com o nome */
+  .hm-feixe[data-aperto] > .hm-feixe__txt{ padding-right:calc(var(--cell) * .25); }
+  .hm-feixe[data-aperto] .hm-feixe__bio{ max-width:none; padding-top:calc(var(--u) * 3.5 * var(--hm-k, 1)); }
+  .hm-feixe[data-aperto] .hm-feixe__tag{ margin-bottom:calc(var(--u) * 2 * var(--hm-k, 1)); }
+  .hm-feixe[data-aperto] .hm-feixe__fr{ padding-top:calc(var(--u) * 2.5 * var(--hm-k, 1)); }
+  .hm-feixe[data-aperto] .hm-canal{ padding:calc(var(--u) * 5 * var(--hm-k, 1)) 0; }
   .hm-feixe__fr{ flex-wrap:nowrap; column-gap:clamp(8px, 1.2vw, 24px); }
-  .hm-feixe__fr .hm-feixe__f{ flex:none; font-size:calc(var(--hm-headline-size, clamp(1rem, 1.2vw, 1.25rem)) * var(--hm-k, 1)); }
+  .hm-feixe__fr .hm-feixe__f{ flex:none; font-size:calc(var(--hm-headline-size, clamp(1rem, 1.2vw, 1.25rem)) * var(--hm-ks, 1)); }
   .hm-feixe > .hm-feixe__txt{ --rot:6.75rem; grid-column:5 / 9 !important; padding-right:var(--cell); }
   .hm-feixe .hm-canal__r + .hm-canal__r{ margin-top:0; }
   @media (max-width:1100px){
     .hm-feixe > .hm-feixe__txt{ --rot:4.5rem; --contact-gap:14px; }
-    .hm-feixe .hm-canal dd{ font-size:calc(.9375rem * var(--hm-k, 1)); }
+    .hm-feixe .hm-canal dd{ font-size:calc(.9375rem * var(--hm-ks, 1)); }
   }
 }
 /* até 1100px, o texto usa também meia margem à direita, como a base do
