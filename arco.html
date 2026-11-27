@@ -107,7 +107,7 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261124-marca" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261127-traco">
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261127-feixes">
 <script src="assets/arco/js/arco-home.js?v=20261127-aperto" defer></script>
 <link rel="stylesheet" href="assets/atrio/css/jornada.css?v=20261125-jornada6">
 <script src="assets/atrio/js/jornada-dados.js?v=20261125-jornada4" defer></script>
@@ -234,62 +234,75 @@
       <div class="hm hm--dossie" id="hm">
 
 
-        <!-- FRENTES: as três frentes, na ordem dos painéis. Na primeira coluna,
-             a distinção do projeto que prova a frente; depois o projeto, a área
-             com a sua descrição, um número e o caminho até o caso. Em Legal
-             Engineering, as distinções do ATRIO, do RATIO e da TROIA se alternam
-             (arco-home.js); com RATIO ou TROIA na vez, um fio desce do ATRIO até
-             o módulo. A controladoria (prazo, fila, finalização) integra Legal
-             Operations; o Rastro é seção, não projeto, e não leva tag. -->
+        <!-- FRENTES: as três frentes, uma linha cada, como sumário executivo. O
+             símbolo e o projeto (caminho até o caso); a área sobre a distinção;
+             o método; os números em pauta. Em Legal Engineering, as distinções
+             do ATRIO, do RATIO e da TROIA se alternam (arco-home.js); com RATIO
+             ou TROIA na vez, um fio desce do ATRIO até o módulo. A controladoria
+             (prazo, fila, finalização) integra Legal Operations; o Rastro é
+             seção, não projeto, e não leva tag. -->
         <section class="hm-panel hm-frentes" id="frentes" aria-labelledby="t-frentes">
           <h2 class="hm-title" id="t-frentes" data-fit="titulo"><span class="hm-fit">Três feixes</span></h2>
-          <ol class="hm-fr" aria-label="Frentes de atuação">
+          <ol class="hm-fr hm-fr--v2" aria-label="Frentes de atuação">
             <li class="hm-fr__r">
-              <div class="hm-ds hm-fr__ds" data-proj="echo">
-                <ol class="hm-ds__l" aria-label="Distinção">
-                  <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">acervo</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">procedimento</span></p><p class="hm-d__f">Havia acervo, havia prazo, havia colegiado. Não havia procedimento.</p></li>
-                </ol>
-              </div>
-              <p class="hm-fr__p"><span class="hm-chip hm-chip--echo">ECHO</span></p>
+              <div class="hm-fr__p"><a class="hm-fr__nm" href="#legal-operations" data-hm-go aria-label="ECHO: ver o caso"><img class="hm-fr__ic" src="assets/echo/brand/echo-logo.svg" alt="" width="28" height="28"><span>ECHO</span></a></div>
               <div class="hm-fr__c">
                 <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--echo">Legal Operations</span></p>
-                <p class="hm-fr__d">Metodologia de gabinete de alto volume e controladoria de prazo, fila e finalização, com fonte ou cálculo declarado em cada figura.</p>
-              </div>
-              <p class="hm-fr__n"><b>+16,2 p.p.</b><span>taxa de finalização</span></p>
-              <p class="hm-fr__a"><a href="#legal-operations" data-hm-go>Ver o caso</a></p>
-            </li>
-            <li class="hm-fr__r">
-              <div class="hm-ds hm-fr__ds" data-proj="atrio">
-                <ol class="hm-ds__l" aria-label="Distinções">
-                  <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">governar</span></p><p class="hm-d__f">Antes de delegar o jurídico, é preciso governar seu raciocínio.</p></li>
-                  <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">redigir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">formular</span></p><p class="hm-d__f">A pendência nasce dentro do texto.</p></li>
-                </ol>
-                <div class="hm-ds__sel" role="group" aria-label="Escolher distinção" hidden>
-                  <button type="button" aria-pressed="false" aria-label="delegar ≠ governar"></button>
-                  <button type="button" aria-pressed="false" aria-label="redigir ≠ formular"></button>
+                <div class="hm-ds hm-fr__ds" data-proj="echo">
+                  <ol class="hm-ds__l" aria-label="Distinção">
+                      <li class="hm-d" data-proj="echo"><p class="hm-d__par"><span class="hm-d__a">reproduzir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">definir</span></p></li>
+                  </ol>
                 </div>
               </div>
-              <p class="hm-fr__p"><span class="hm-chip hm-chip--atrio">ATRIO</span><span class="hm-fr__elo" aria-hidden="true"><i class="hm-fr__fio"></i><span class="hm-chip hm-chip--mod"></span></span></p>
-              <div class="hm-fr__c">
-                <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--atrio">Legal Engineering</span></p>
-                <p class="hm-fr__d">Arquitetura de governança do raciocínio jurídico mediado por IA, com corpus e API próprios.</p>
-              </div>
-              <p class="hm-fr__n"><b>31 rotas</b><span>188 testes automatizados</span></p>
-              <p class="hm-fr__a"><a href="#legal-engineering" data-hm-go>Ver o caso</a></p>
+              <p class="hm-fr__d">Metodologia de operação jurídica para estruturação institucional de gabinete recursal.</p>
+              <ul class="hm-fr__ms hm-fr__ms--echo" aria-label="Números do ECHO">
+                  <li><b><span>2.758</span></b><span class="hm-fr__ml">assuntos do ementário</span></li>
+                  <li><b><span>1.192</span></b><span class="hm-fr__ml">processos triados</span></li>
+                  <li><b><span>90,2%</span></b><span class="hm-fr__ml">102 assuntos em 10 categorias</span></li>
+                  <li><b><span>631</span></b><span class="hm-fr__ml">temas de precedentes</span></li>
+              </ul>
             </li>
             <li class="hm-fr__r">
-              <div class="hm-ds hm-fr__ds" data-proj="cerne">
-                <ol class="hm-ds__l" aria-label="Distinção">
-                  <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">produzir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">verificar</span></p><p class="hm-d__f">O problema já não estava na capacidade de produzir, mas na de verificar.</p></li>
-                </ol>
+              <div class="hm-fr__p"><a class="hm-fr__nm" href="#legal-engineering" data-hm-go aria-label="ATRIO: ver o caso"><img class="hm-fr__ic" src="assets/atrio/brand/atrio-rei.svg" alt="" width="28" height="28"><span>ATRIO</span></a><span class="hm-fr__elo" aria-hidden="true"><i class="hm-fr__fio"></i><span class="hm-chip hm-chip--mod"></span></span></div>
+              <div class="hm-fr__c">
+                <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--atrio">Legal Engineering</span></p>
+                <div class="hm-ds hm-fr__ds" data-proj="atrio">
+                  <ol class="hm-ds__l" aria-label="Distinções">
+                      <li class="hm-d" data-proj="atrio"><p class="hm-d__par"><span class="hm-d__a">delegar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">governar</span></p></li>
+                      <li class="hm-d" data-proj="ratio"><p class="hm-d__par"><span class="hm-d__a">redigir</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">decidir</span></p></li>
+                      <li class="hm-d" data-proj="troia"><p class="hm-d__par"><span class="hm-d__a">verificar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">confrontar</span></p></li>
+                  </ol>
+                  <div class="hm-ds__sel" role="group" aria-label="Escolher distinção" hidden>
+                      <button type="button" aria-pressed="false" aria-label="delegar ≠ governar"></button>
+                      <button type="button" aria-pressed="false" aria-label="redigir ≠ decidir"></button>
+                      <button type="button" aria-pressed="false" aria-label="verificar ≠ confrontar"></button>
+                  </div>
+                </div>
               </div>
-              <p class="hm-fr__p"><span class="hm-chip hm-chip--cerne">CERNE</span></p>
+              <p class="hm-fr__d">Arquitetura de governança do raciocínio jurídico mediado por IA, implantada em gabinete recursal mediante autorização judicial.</p>
+              <ul class="hm-fr__ms hm-fr__ms--atrio" aria-label="Números do ATRIO">
+                  <li><b><span>115.114</span></b><span class="hm-fr__ml">julgados no corpus</span></li>
+                  <li><b><span>10 min</span></b><span class="hm-fr__ml">primeira minuta (mediana)</span></li>
+                  <li><b><span>3</span></b><span class="hm-fr__ml">trilhas processuais</span></li>
+                  <li><b><span>18</span></b><span class="hm-fr__ml">fases do fluxo de redação</span></li>
+              </ul>
+            </li>
+            <li class="hm-fr__r">
+              <div class="hm-fr__p"><a class="hm-fr__nm" href="#ai-governance" data-hm-go aria-label="CERNE: ver o caso"><img class="hm-fr__ic" src="assets/cerne/brand/cerne-simbolo.svg" alt="" width="28" height="28"><span>CERNE</span></a></div>
               <div class="hm-fr__c">
                 <p class="hm-fr__f"><span class="hm-fr__mk hm-fr__mk--cerne">AI Governance &amp; Evaluation</span></p>
-                <p class="hm-fr__d">Auditoria do raciocínio jurídico produzido por IA, em atos judiciais reais.</p>
+                <div class="hm-ds hm-fr__ds" data-proj="cerne">
+                  <ol class="hm-ds__l" aria-label="Distinção">
+                      <li class="hm-d" data-proj="cerne"><p class="hm-d__par"><span class="hm-d__a">confrontar</span> <span class="hm-d__x">≠</span> <span class="hm-d__b">auditar</span></p></li>
+                  </ol>
+                </div>
               </div>
-              <p class="hm-fr__n"><b>17 rodadas</b><span>67 perguntas entregues</span></p>
-              <p class="hm-fr__a"><a href="#ai-governance" data-hm-go>Ver o caso</a></p>
+              <p class="hm-fr__d">Auditoria do raciocínio jurídico produzido por IA, em atos judiciais reais.</p>
+              <ul class="hm-fr__ms hm-fr__ms--cerne" aria-label="Números do CERNE">
+                  <li><b><span>17</span></b><span class="hm-fr__ml">rodadas</span></li>
+                  <li><b><span>67</span></b><span class="hm-fr__ml">perguntas entregues</span></li>
+                  <li><b><span>11</span></b><span class="hm-fr__ml">lentes de auditoria</span></li>
+              </ul>
             </li>
           </ol>
         </section>

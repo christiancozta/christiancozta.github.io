@@ -1732,3 +1732,89 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 .hm-fr__r,
 .hm-ficha,
 .hm-fund{ background:transparent; }
+
+/* ---------- três feixes, v2 (27/11/2026) ----------
+   Sumário executivo das três frentes, numa linha cada: o símbolo e o projeto
+   (caminho até o caso), a área sobre a distinção, o método e os números em
+   pauta, dois por sistema, como na folha de rosto do ECHO (play.css,
+   .vit-nums): sem os rótulos, que passam à legenda; o marca-texto na cor do
+   projeto. Na linha do ATRIO, o fio desce do nome até o módulo da vez. */
+.hm-fr--v2 .hm-fr__r{
+  grid-template-columns:minmax(9rem, 1.4fr) minmax(0, 3fr) minmax(0, 3.2fr) minmax(0, 3.8fr);
+  gap:var(--u) calc(var(--g) * 1.5);
+  padding:calc(var(--u) * 2.5) var(--g);
+}
+.hm-fr--v2 .hm-fr__p{ align-items:flex-start; justify-self:start; padding-top:.15rem; }
+.hm-fr__nm{ display:inline-flex; align-items:center; gap:.6rem; min-height:44px; margin-top:-8px; color:var(--ink); text-decoration:none; }
+.hm-fr__ic{ display:block; flex:none; width:28px; height:28px; }
+.hm .hm-fr__nm span{
+  font-family:"Bodoni Moda", Didot, "Bodoni 72", Georgia, serif; font-weight:900;
+  font-size:1.65rem; line-height:1; letter-spacing:.01em;
+}
+.hm-fr__nm:hover span, .hm-fr__nm:focus-visible span{ text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.16em; }
+.hm-fr__nm:focus-visible{ outline:1px solid var(--ink); outline-offset:3px; }
+.hm-fr--v2 .hm-fr__elo{ align-items:flex-start; }
+.hm-fr--v2 .hm-fr__fio{ margin-left:13.5px; height:1.1rem; }
+.hm-fr--v2 .hm-fr__c{ gap:.55rem; }
+.hm-fr--v2 .hm-fr__ds .hm-d__par{ font-size:clamp(1.05rem, 1.3vw, 1.3rem); }
+.hm-fr--v2 .hm-fr__ds .hm-ds__sel{ margin:0 0 0 -9px; }
+.hm-fr--v2 .hm-fr__d{ padding-top:.2rem; }
+
+.hm-fr__ms{
+  --pauta:30px;
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); row-gap:14px;
+}
+.hm-fr__ms li{ position:relative; min-width:0; padding:0 12px; }
+.hm-fr__ms li::before{
+  content:""; position:absolute; left:0; top:calc(var(--pauta) * .14);
+  width:1px; height:calc(var(--pauta) + 1px); background:var(--ink);
+}
+.hm-fr__ms li::after{
+  content:""; position:absolute; left:0; right:0; top:calc(var(--pauta) * .14); height:var(--pauta); pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
+}
+.hm-fr__ms li:nth-child(2n)::after{
+  height:calc(var(--pauta) + 1px); border-right:3px solid var(--ink);
+  background:
+    linear-gradient(to left, transparent 3px, var(--ink) 3px 4px, transparent 4px),
+    repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
+}
+/* sistema com número ímpar de compassos: o último fecha com a barra dupla */
+.hm-fr__ms li:last-child:nth-child(odd)::after{
+  height:calc(var(--pauta) + 1px); border-right:3px solid var(--ink);
+  background:
+    linear-gradient(to left, transparent 3px, var(--ink) 3px 4px, transparent 4px),
+    repeating-linear-gradient(to bottom, rgba(44,44,44,.16) 0 1px, transparent 1px calc((var(--pauta) - 1px) / 4));
+}
+.hm .hm-fr__ms b{
+  position:relative; z-index:1; display:block; white-space:nowrap;
+  font:900 calc(var(--pauta) * 1.12)/1.04 "Bodoni Moda", Didot, "Bodoni 72", Georgia, serif;
+  letter-spacing:-.01em; color:var(--ink); font-variant-numeric:lining-nums;
+}
+.hm-fr__ms b span{
+  padding:0 .05em;
+  background:linear-gradient(transparent 58%, var(--hl) 58%, var(--hl) 76%, transparent 76%);
+  -webkit-box-decoration-break:clone; box-decoration-break:clone;
+}
+.hm .hm-fr__ml{
+  display:block; margin-top:.3rem;
+  font:italic 400 .875rem/1.3 "Bodoni Moda", Didot, "Bodoni 72", Georgia, serif; color:var(--ink);
+}
+.hm-fr__ms--echo{ --hl:rgba(255,182,39,.82); }
+.hm-fr__ms--atrio{ --hl:rgba(217,79,45,.38); }
+.hm-fr__ms--cerne{ --hl:rgba(79,107,255,.32); }
+
+@media (min-width:901px) and (max-width:1180px){
+  .hm-fr--v2 .hm-fr__r{ grid-template-columns:minmax(8rem, 1fr) minmax(0, 2.6fr) minmax(0, 3fr); }
+  .hm-fr--v2 .hm-fr__ms{ grid-column:2 / -1; max-width:30rem; }
+}
+@media (max-width:900px){
+  .hm-fr--v2 .hm-fr__r{ grid-template-columns:minmax(0, 1fr); row-gap:calc(var(--u) * 1.5); padding:calc(var(--u) * 3) 0; }
+  .hm-fr--v2 .hm-fr__p,
+  .hm-fr--v2 .hm-fr__c,
+  .hm-fr--v2 .hm-fr__d,
+  .hm-fr--v2 .hm-fr__ms{ grid-column:1; grid-row:auto; justify-self:stretch; }
+  .hm-fr--v2 .hm-fr__p{ justify-self:start; }
+  .hm-fr--v2 .hm-fr__ds .hm-d__par{ font-size:clamp(1.1rem, 5.2vw, 1.4rem); }
+}
