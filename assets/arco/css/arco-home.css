@@ -1839,7 +1839,7 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
    terracota, os módulos em papel com letra e borda terracota; a da vez em
    opacidade plena. Marca em Science Gothic 600, segunda letra no accent.
    Números na letra de cada um: Science Gothic (ATRIO, RATIO, TROIA),
-   Martian Mono (CERNE); a Bodoni e a pauta ficam com o ECHO. */
+   Azonix (CERNE); a Bodoni e a pauta ficam com o ECHO. */
 /* os três estados ocupam a mesma célula: a linha guarda a altura do maior e
    não salta a cada troca; só o da vez aparece */
 .hm-fr__r--atrio :is(.hm-fr__p, .hm-fr__dd, .hm-fr__mm){ display:grid; min-width:0; }
@@ -1880,10 +1880,16 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 .hm .hm-fr__ms:is(.hm-fr__ms--atrio, .hm-fr__ms--ratio, .hm-fr__ms--troia) b{
   font-family:"Science Gothic", var(--f-display); font-weight:600; letter-spacing:-.01em;
 }
+/* CERNE: marca e números em Azonix, em peso maior (negrito sintetizado,
+   a fonte tem peso único) */
+.hm .hm-fr__nm .hm-wm--cerne,
 .hm .hm-fr__ms--cerne b{
-  font-family:"Martian Mono", ui-monospace, monospace; font-weight:600;
-  font-size:calc(var(--pauta) * 1.02); letter-spacing:-.04em;
+  font-family:"Azonix", "Science Gothic", var(--f-display); font-weight:700;
+  font-synthesis:weight; letter-spacing:.02em;
+  -webkit-text-stroke:.035em currentColor; paint-order:stroke fill;
 }
+.hm .hm-fr__nm .hm-wm--cerne{ font-size:1.25rem; }
+.hm .hm-fr__ms--cerne b{ font-size:calc(var(--pauta) * 1.02); }
 .hm .hm-fr__ms:not(.hm-fr__ms--echo) .hm-fr__ml{
   font-family:var(--f-body); font-style:normal; font-weight:300; font-size:.8125rem;
 }
