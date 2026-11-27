@@ -1816,15 +1816,80 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 
 @media (min-width:901px) and (max-width:1180px){
   .hm-fr--v2 .hm-fr__r{ grid-template-columns:minmax(8rem, 1fr) minmax(0, 2.6fr) minmax(0, 3fr); }
-  .hm-fr--v2 .hm-fr__ms{ grid-column:2 / -1; max-width:30rem; }
+  .hm-fr--v2 .hm-fr__ms, .hm-fr--v2 .hm-fr__mm{ grid-column:2 / -1; max-width:30rem; }
 }
 @media (max-width:900px){
   .hm-fr--v2 .hm-fr__r{ grid-template-columns:minmax(0, 1fr); row-gap:calc(var(--u) * 1.5); padding:calc(var(--u) * 3) 0; }
   .hm-fr--v2 .hm-fr__p,
   .hm-fr--v2 .hm-fr__c,
   .hm-fr--v2 .hm-fr__d,
-  .hm-fr--v2 .hm-fr__ms{ grid-column:1; grid-row:auto; justify-self:stretch; }
+  .hm-fr--v2 .hm-fr__ms,
+  .hm-fr--v2 .hm-fr__dd,
+  .hm-fr--v2 .hm-fr__mm{ grid-column:1; grid-row:auto; justify-self:stretch; }
   .hm-fr--v2 .hm-fr__p{ justify-self:start; align-items:flex-start; }
   .hm-fr--v2 .hm-fr__nm{ align-items:flex-start; }
+  .hm-fr--v2 .hm-fr__r--atrio .hm-fr__p > .hm-st{ justify-self:start; }
   .hm-fr--v2 .hm-fr__ds .hm-d__par{ font-size:clamp(1.1rem, 5.2vw, 1.4rem); }
 }
+
+/* ---------- Legal Engineering em três estados: ATRIO, RATIO, TROIA ----------
+   A linha inteira troca com a distinção (arco-home.js): símbolo, marca,
+   método e números. Sem JS, fica o ATRIO e as distinções descem em lista.
+   As tags, em linha, sob a distinção, escolhem o estado: o ATRIO chapado em
+   terracota, os módulos em papel com letra e borda terracota; a da vez em
+   opacidade plena. Marca em Science Gothic 600, segunda letra no accent.
+   Números na letra de cada um: Science Gothic (ATRIO, RATIO), Azonix
+   (TROIA), Martian Mono (CERNE); a Bodoni e a pauta ficam com o ECHO. */
+/* os três estados ocupam a mesma célula: a linha guarda a altura do maior e
+   não salta a cada troca; só o da vez aparece */
+.hm-fr__r--atrio :is(.hm-fr__p, .hm-fr__dd, .hm-fr__mm){ display:grid; min-width:0; }
+.hm-fr__r--atrio :is(.hm-fr__p, .hm-fr__dd, .hm-fr__mm) > .hm-st{ grid-area:1 / 1; align-self:start; }
+.hm-fr--v2 .hm-fr__r--atrio .hm-fr__p > .hm-st{ justify-self:center; }
+.hm-fr__r--atrio .hm-st{ transition:opacity var(--slow) var(--ease), visibility 0s; }
+.hm-fr__r--atrio .hm-st:not(.is-on){
+  opacity:0; visibility:hidden;
+  transition:opacity var(--slow) var(--ease), visibility 0s linear var(--slow);
+}
+@media (prefers-reduced-motion: reduce){ .hm-fr__r--atrio .hm-st{ transition:none; } }
+.hm .hm-fr__nm .hm-wm{
+  font-family:"Science Gothic", var(--f-display); font-weight:600;
+  font-size:1.4rem; line-height:1; letter-spacing:.03em;
+}
+.hm-wm em{ font-style:normal; color:var(--atrio); }
+
+.hm-fr--v2 .hm-fr__ds .hm-ds__sel--tags{ display:flex; flex-wrap:nowrap; gap:6px; margin:.6rem 0 0; }
+.hm-fr--v2 .hm-fr__ds .hm-ds__sel--tags[hidden]{ display:none; }
+.hm-ds__sel .hm-tag{
+  width:auto; height:auto; min-height:30px; padding:.3em .62em .26em; cursor:pointer;
+  display:inline-flex; align-items:center;
+  font-family:var(--f-micro); font-size:.54rem; font-weight:700; line-height:1.3;
+  letter-spacing:.12em; text-transform:uppercase; white-space:nowrap;
+  border:1px solid var(--atrio); opacity:.42;
+  transition:opacity var(--fast) var(--ease);
+}
+.hm-ds__sel .hm-tag::before{ content:none; }
+.hm-ds__sel .hm-tag--atrio{ background:var(--atrio); color:#FCFCFC; }
+.hm-ds__sel .hm-tag--mod{ background:var(--paper); color:var(--atrio); }
+.hm-ds__sel .hm-tag[aria-pressed="true"], .hm-ds__sel .hm-tag:hover{ opacity:1; }
+.hm-ds__sel .hm-tag:focus-visible{ outline:1px solid var(--ink); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){ .hm-ds__sel .hm-tag{ transition:none; } }
+
+.hm-fr__ms--ratio, .hm-fr__ms--troia{ --hl:rgba(217,79,45,.55); }
+.hm .hm-fr__ms:is(.hm-fr__ms--atrio, .hm-fr__ms--ratio) b{
+  font-family:"Science Gothic", var(--f-display); font-weight:600; letter-spacing:-.01em;
+}
+.hm .hm-fr__ms--troia b{
+  font-family:"Azonix", "Science Gothic", var(--f-display); font-weight:400;
+  font-size:calc(var(--pauta) * .98); letter-spacing:.01em;
+}
+.hm .hm-fr__ms--cerne b{
+  font-family:"Martian Mono", ui-monospace, monospace; font-weight:600;
+  font-size:calc(var(--pauta) * 1.02); letter-spacing:-.04em;
+}
+.hm .hm-fr__ms:not(.hm-fr__ms--echo) .hm-fr__ml{
+  font-family:var(--f-body); font-style:normal; font-weight:300; font-size:.8125rem;
+}
+
+/* as áreas das frentes sem o traço: a cor do projeto fica no ≠, no
+   marca-texto dos números e nas tags */
+.hm-fr--v2 .hm-fr__mk{ text-decoration:none; }

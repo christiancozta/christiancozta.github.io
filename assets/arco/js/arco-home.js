@@ -100,8 +100,10 @@
      Onde há mais de uma (Legal Engineering: ATRIO, RATIO, TROIA), sem JS a
      série aparece inteira; com JS, uma por vez, trocando a cada 3,5 s; para
      sob o ponteiro ou o foco, com a aba escondida e com movimento reduzido.
-     Quem escolhe no seletor assume: a troca para. Com RATIO ou TROIA na vez,
-     o fio desce da tag ATRIO até a tag do módulo (.hm-fr__elo). */
+     Quem escolhe numa tag assume: a troca para e só volta depois de um bom
+     tempo (ESPERA). Na linha do ATRIO, a linha inteira acompanha a vez:
+     símbolo, marca, método e números (.hm-st). */
+  const ESPERA = 45000;
   const MODULOS = {ratio:"RATIO", troia:"TROIA"};
   home.querySelectorAll(".hm-ds").forEach(ds => {
     const itens = [...ds.querySelectorAll(".hm-d")];
@@ -111,13 +113,15 @@
     const linha = ds.closest(".hm-fr__r");
     const elo = linha && linha.querySelector(".hm-fr__elo");
     const eloTag = elo && elo.querySelector(".hm-chip--mod");
-    let atual = 0, timer = 0, escolhido = false, sobre = false;
+    const estados = linha ? [...linha.querySelectorAll(".hm-st")] : [];
+    let atual = 0, timer = 0, volta = 0, escolhido = false, sobre = false;
     const mostra = k => {
       atual = k;
       const proj = itens[k].dataset.proj || "";
       ds.dataset.proj = proj;
       itens.forEach((el, n) => el.classList.toggle("is-on", n === k));
       botoes.forEach((b, n) => b.setAttribute("aria-pressed", String(n === k)));
+      estados.forEach(el => el.classList.toggle("is-on", el.dataset.proj === proj));
       if (elo){
         const mod = MODULOS[proj];
         if (mod) eloTag.textContent = mod;
@@ -130,7 +134,11 @@
       if (reduce || escolhido || sobre || document.hidden) return;
       timer = setInterval(() => mostra((atual + 1) % itens.length), 3500);
     };
-    botoes.forEach((b, n) => b.addEventListener("click", () => { escolhido = true; para(); mostra(n); }));
+    botoes.forEach((b, n) => b.addEventListener("click", () => {
+      escolhido = true; para(); mostra(n);
+      clearTimeout(volta);
+      volta = setTimeout(() => { escolhido = false; roda(); }, ESPERA);
+    }));
     /* a pausa vale para a linha inteira da frente: ler a área ou o elo não
        deixa a distinção trocar */
     const alvo = linha || ds;
