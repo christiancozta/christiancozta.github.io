@@ -2087,9 +2087,12 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
    LEGAL OPERATIONS: ficha em três colunas e o playbook inteiro (27/11/2026)
    --------------------------------------------------------------------------
    A ficha segue as demais seções: três blocos lado a lado (colunas 2 a 7).
-   Abaixo, em coluna única e de ponta a ponta, o playbook oficial (play.html
-   ?inteira), na altura útil da tela, com duas abas no estilo das do rastro:
-   Partitura e Montador (assets/arco/js/arco-partitura.js).
+   Abaixo, em coluna única, o playbook oficial (play.html?inteira), com duas
+   abas no estilo das do rastro: Partitura e Montador (arco-partitura.js).
+   Medida: a mesma da demonstração ATRIO, RATIO e TROIA (repouso.css, .ld e
+   .ld-sup): colunas 2 a 7 (uma célula de margem de cada lado; no celular, a
+   folga --g) e a altura útil da tela, abaixo do cordão, contando as abas.
+   A folha rola dentro do quadro, como a demonstração.
    ========================================================================== */
 .hm-proj--echo{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
 .hm-proj--echo::after{ content:none; }
@@ -2102,21 +2105,20 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
   }
   .hm-proj--echo .hm-part{ grid-column:1 / -1; grid-row:4; }
 }
-.hm-part{ min-width:0; padding-top:calc(var(--u) * 4); }
+.hm-part{ --part-abas:44px; min-width:0; padding-top:calc(var(--u) * 4); }
 .hm-part__top{
-  display:flex; align-items:flex-end;
-  margin:0 calc(var(--cell) + var(--g)); border-bottom:1px solid #2C2C2C;
+  display:flex; align-items:flex-end; min-height:var(--part-abas);
+  margin:0 var(--cell); border-bottom:1px solid #2C2C2C;
+  scroll-margin-top:var(--rail-h, 0px);
 }
-.hm-part__q{ position:relative; background:#2C2C2C; padding-bottom:clamp(1rem, 2.2vw, 2rem); }
+.hm-part__q{ position:relative; margin:0 var(--cell); background:#2C2C2C; }
 .hm-part__frame{
-  display:block; width:100%; border:0;
-  height:calc(100svh - var(--rail-h, 0px));
-  min-height:560px;
-  background:#2C2C2C;
+  display:block; width:100%; border:0; background:#2C2C2C;
+  height:calc(100vh - var(--rail-h, 0px) - var(--part-abas) - 1px);
+  height:calc(100dvh - var(--rail-h, 0px) - var(--part-abas) - 1px);
 }
 @media (max-width:900px){
   .hm-part{ padding-top:calc(var(--u) * 2); }
-  .hm-part__top{ margin:0 var(--g); }
+  .hm-part__top, .hm-part__q{ margin:0 var(--g); }
   .hm-part__top .hm-tabs{ flex:1 1 auto; }
-  .hm-part__frame{ height:calc(100svh - var(--rail-h, 0px) - 44px); min-height:480px; }
 }

@@ -4,9 +4,8 @@
    Templates; Montador a abre (play.html#templates). Se a camada for fechada
    por dentro ("Voltar à partitura", Esc), a aba acompanha, pela classe
    com-camada do corpo do quadro (mesma origem). Setas trocam de aba.
-   Altura: o quadro cresce até a altura da folha inteira, sem rolagem dentro
-   da rolagem; sem JS, vale a altura útil da tela (CSS). Ao trocar de aba,
-   o quadro sobe ao alto da tela, sob a barra. */
+   Medida: a da demonstração ATRIO, RATIO e TROIA (CSS). Ao trocar de aba,
+   as abas sobem ao alto da tela, sob o cordão, e o quadro ocupa o resto. */
 (() => {
   "use strict";
   const raiz = document.querySelector("[data-hm-partitura]");
@@ -41,23 +40,10 @@
 
   const railH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h")) || 0;
   const sobe = () => {
-    const y = raiz.getBoundingClientRect().top - railH();
+    const topo = raiz.querySelector(".hm-part__top") || raiz;
+    const y = topo.getBoundingClientRect().top - railH();
     if (Math.abs(y) > 4) window.scrollBy({ top:y, behavior:matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   };
-
-  /* a folha inteira: o quadro mede o que a página mostra; para poder
-     diminuir (ao estreitar a janela), volta antes à altura do CSS */
-  let medindo = 0;
-  function mede(){
-    const d = doc();
-    if (!d || !d.documentElement) return;
-    quadro.style.height = "";
-    const h = Math.ceil(d.documentElement.scrollHeight);
-    if (h > quadro.clientHeight) quadro.style.height = h + "px";
-    /* a home refaz as fileiras do painel pelo evento toggle (arco-home.js) */
-    raiz.dispatchEvent(new Event("toggle"));
-  }
-  const pedeMedida = () => { cancelAnimationFrame(medindo); medindo = requestAnimationFrame(mede); };
 
   abas.forEach((a, i) => {
     a.addEventListener("click", () => { mostra(a.dataset.vista); sobe(); });
@@ -72,16 +58,11 @@
   function liga(){
     const d = doc();
     if (!d || !d.body) return;
-    pedeMedida();
-    d.fonts?.ready.then(pedeMedida);
-    setTimeout(pedeMedida, 900);
     new MutationObserver(() => {
       marca(d.body.classList.contains("com-camada") ? "montador" : "partitura");
     }).observe(d.body, { attributes:true, attributeFilter:["class"] });
     if (pendente){ const v = pendente; pendente = null; setTimeout(() => mostra(v), 60); }
   }
   quadro.addEventListener("load", liga);
-  let largura = innerWidth;
-  window.addEventListener("resize", () => { if (innerWidth !== largura){ largura = innerWidth; pedeMedida(); } }, { passive:true });
   if (pronto()) liga();
 })();
