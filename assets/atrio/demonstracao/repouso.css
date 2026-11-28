@@ -32,7 +32,11 @@
 .ld-gatilho{
   appearance:none; -webkit-appearance:none;
   display:flex; flex-direction:column; align-items:center;
-  width:clamp(280px, calc(var(--cell) * 2.1), 440px);
+  /* tão proeminente quanto o foróptero do CERNE: a gravura do relógio tem a
+     mesma altura do aparelho. O foróptero ocupa a composição menos a folga
+     (até 1040px), na proporção 720 × 380; o relógio, 1376 × 970.
+     0,748682 = (380 / 720) × (1376 / 970) */
+  width:calc(min(100% - var(--g, 16px) * 2, 1040px) * .748682);
   margin:0; padding:0; border:0; background:none; color:var(--ink);
   font:inherit; cursor:default;
   -webkit-tap-highlight-color:transparent;
@@ -108,7 +112,7 @@
   .hm-proj--atrio{ grid-template-rows:none; }
   .hm-proj--atrio .hm-ficha.ld-ficha{ grid-column:1 / -1; grid-row:auto; padding:calc(var(--u) * 3) var(--g); }
   .ld-repouso{ grid-column:1 / -1; grid-row:auto; padding:var(--g) var(--g) calc(var(--g) * 2); }
-  .ld-gatilho{ width:min(64%, 340px); }
+  .ld-gatilho{ width:calc(min(100%, 1040px) * .748682); }
   .ld-relogio__placa{ display:none; }
   .ld{ margin:0 var(--g); }
 }

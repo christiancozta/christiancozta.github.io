@@ -4,7 +4,7 @@ Substitui a jornada gamificada (tabuleiro, peças, registradora, escolhas certas
 
 ## Repouso
 
-- Só o relógio de xadrez do RATIO, na gravura de sempre (corpo, mostradores e botões preservados), centrado nas colunas 2 a 7 do painel `#legal-engineering`. O relógio inteiro é um `<button>`; abaixo dele, a indicação funcional "Iniciar demonstração", que só aparece quando o acionador está pronto.
+- Só o relógio de xadrez do RATIO, na gravura de sempre (corpo, mostradores e botões preservados), centrado nas colunas 2 a 7 do painel `#legal-engineering`. Tem a mesma proeminência do foróptero do CERNE: a gravura tem a mesma altura do aparelho em qualquer largura (largura do relógio = largura do foróptero × 380/720 × 1376/970). O relógio inteiro é um `<button>`; abaixo dele, a indicação funcional "Iniciar demonstração", que só aparece quando o acionador está pronto.
 - A superfície (`#demonstracao`) é um `div` vazio com `hidden`, logo após o painel: sem altura, linha ou espaço reservado.
 - Arquivos carregados com a página: `assets/atrio/demonstracao/repouso.css` e `gatilho.js` (módulo ES, cerca de 8 KB sem compressão). Nada mais.
 
