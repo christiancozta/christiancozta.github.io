@@ -29,6 +29,12 @@ Decisões de implementação:
 - Movimento reduzido: nada se desloca, a superfície abre sem animação, os textos aparecem inteiros e as pausas de leitura permanecem.
 - Revelação por palavras inteiras, 5 por segundo, com pausa maior depois de pontuação. A montagem da minuta (RI_05) lê ementa e dispositivo no ritmo de leitura e monta os demais parágrafos em ritmo acelerado.
 
+## Rastro
+
+"rastro", na frase de chegada do atalho, abre o registro das passagens na própria superfície, no lugar do palco (Esc ou "Voltar à reprodução" retornam). São 12 passagens, a estrutura da execução registrada: ATRIO (entrada, pseudonimização), RATIO (RI_01 a RI_06), TROIA (três lentes, encaminhamento). Cada uma traz o ator e o que ele registrou: o módulo, o humano, os julgadores e o estado. O conteúdo vem só dos outputs registrados; não há horários, hashes nem versões, que o site não tem, e a nota de limite diz isso. No ATRIO, o registro original usava a taxonomia anterior (PESSOA_01, EMPRESA_01); o rastro aplica a vigente (PARTE_01, CPARTE_PJ_01) e declara a troca.
+
+Os arquivos originais da execução (`estado_do_caso.md`, RI_01 a RI_06, `troia/resultado_troia.md`) ainda não estão no site. Quando houver versões públicas e pseudonimizadas, basta colocá-las em `assets/data/lastro/` e listá-las em `arquivos` (`dados.js`), com `{ rotulo, href }`; o rastro passa a ligá-las no lugar de "ainda não publicados".
+
 ## Registros visuais
 
 - Documentos (recurso, minuta, trechos citados): papel `#FCFCFC`, tinta.

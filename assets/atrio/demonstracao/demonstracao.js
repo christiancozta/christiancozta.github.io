@@ -16,7 +16,7 @@
    - Movimento reduzido: nada se desloca; textos aparecem inteiros; as pausas
      de leitura permanecem, e os controles dão acesso a todos os outputs.
    ========================================================================== */
-import D from "./dados.js?v=20261128-desg";
+import D from "./dados.js?v=20261128-rastro";
 
 const PARA = Symbol("para");
 const ACC = "#A63A23";
@@ -42,12 +42,15 @@ function h(tag, attrs, ...filhos) {
   for (const f of filhos.flat()) if (f != null && f !== false) el.append(f instanceof Node ? f : document.createTextNode(f));
   return el;
 }
+/* só as etiquetas da taxonomia de pseudonimização (identificadores de fase,
+   como RI_01, ficam como texto) */
+const ETIQUETAS = new Set(Object.values(D.dados).map((d) => d.etiqueta));
 const ETIQUETA = /^([A-Z]+(?:_[A-Z]+)*_\d{2})(.*)$/;
 const etiqueta = (t) => h("span", { class: "ld-tag" }, t);
 /* uma palavra: texto, ou etiqueta de pseudonimização seguida da pontuação */
 function palavra(w) {
   const m = w.match(ETIQUETA);
-  if (!m) return document.createTextNode(w);
+  if (!m || !ETIQUETAS.has(m[1])) return document.createTextNode(w);
   const f = document.createDocumentFragment();
   f.append(etiqueta(m[1]));
   if (m[2]) f.append(m[2]);
@@ -856,6 +859,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   }
   /* executa o passo k animado e segue sozinho até o fim */
   async function roda(k, reconstroi) {
+    fechaRastro(false);
     const g = ++ger;
     tempo.aborta();
     continua = null;
@@ -879,6 +883,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   }
   /* mostra o passo k concluído, sem animação (pausado ou movimento manual) */
   async function mostraPronto(k) {
+    fechaRastro(false);
     ++ger;
     tempo.aborta();
     await prepara(k);
@@ -908,14 +913,78 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     const bCerne = h("button", { type: "button", class: "ld-acao ld-acao--link" }, F.cerne);
     bCerne.addEventListener("click", () => fecha("ai-governance"));
     const box = h("div", { class: "ld-fimbox" },
-      nota ? h("p", { class: "ld-saltado" }, U.saltado) : null,
+      nota ? h("p", { class: "ld-saltado" }, U.saltado[0],
+        h("button", { type: "button", class: "ld-saltado__a", "aria-label": RT.abrir, onclick: (e) => abreRastro(e.currentTarget) }, U.saltado[1]),
+        U.saltado[2]) : null,
       h("p", { class: "ld-quem" }, F.titulo),
       h("div", { class: "ld-fimbox__a" }, bMin, bCerne),
       h("p", { class: "ld-fimbox__n" }, F.cerneNota));
     S.main.firstElementChild?.append(box);
     mostra(S.main, box, null);
-    if (nota) anuncia(U.saltado);
+    if (nota) anuncia(U.saltado.join(""));
   }
+  /* ---------- o rastro: as passagens registradas, em ordem, com o ator ----------
+     Abre na própria superfície, no lugar do palco (que fica intacto por baixo).
+     Só conteúdo registrado: o que cada módulo e cada humano registrou em cada
+     passagem; nenhum horário, hash ou versão que o site não tenha. */
+  const RT = L.rastro;
+  let rastroEl = null, rastroDe = null;
+  function txt(el, t) {
+    String(t).split(/[ \t\n]+/).filter(Boolean).forEach((w, i) => { if (i) el.append(" "); el.append(palavra(w)); });
+    return el;
+  }
+  function montaRastro() {
+    const passagens = [];
+    RT.atrio.forEach((a) => passagens.push({ mod: "ATRIO", nome: a.nome, e: [["ia", "ATRIO", a.ia], ["hum", U.humano, a.humano]] }));
+    R.fasesDados.forEach((f) => passagens.push({ mod: "RATIO", nome: f.id + " · " + f.nome, e: [["ia", U.ia + " · RATIO", f.ia], ["hum", U.humano, f.humano]] }));
+    T.lentesDados.forEach((l) => {
+      const p = D.julgadores[l.id].map((j) => j.filter(Boolean).length);
+      passagens.push({ mod: "TROIA", nome: l.nome, e: [
+        ["ia", "TROIA", l.contra],
+        ["jg", RT.julgadores, T.julgador(1) + ": " + T.placar(p[0], 3) + " · " + T.julgador(2) + ": " + T.placar(p[1], 3)],
+        ["est", RT.estado, T.estados[l.estado]]] });
+    });
+    const E = T.encaminhamento;
+    passagens.push({ mod: "TROIA", nome: E.nome, e: [["ia", "TROIA", E.ia], ["hum", U.humano, E.humano]] });
+
+    const lista = h("ol", { class: "ld-rastro__l" }, passagens.map((p, i) => h("li", null,
+      h("span", { class: "ld-rastro__n" }, dois(i + 1)),
+      h("div", { class: "ld-rastro__p" },
+        h("p", { class: "ld-rastro__nome" }, h("span", null, p.mod), p.nome),
+        p.e.map(([tipo, quem, t]) => h("p", { class: "ld-rastro__e", "data-tipo": tipo },
+          h("span", { class: "ld-rastro__q" }, quem), txt(h("span", { class: "ld-rastro__t" }), t)))))));
+    const arq = D.arquivos.length
+      ? h("ul", { class: "ld-rastro__arq" }, D.arquivos.map((a) => h("li", null, h("a", { href: new URL("../../../" + a.href, import.meta.url).href, target: "_blank", rel: "noopener" }, a.rotulo))))
+      : null;
+    const tit = h("h3", { class: "ld-fase__t", id: "ld-rastro-t", tabindex: "-1" }, RT.caso);
+    const voltar = h("button", { type: "button", class: "ld-acao", onclick: () => fechaRastro(true) }, RT.voltar);
+    return h("section", { class: "ld-rastro", "aria-labelledby": "ld-rastro-t" },
+      h("div", { class: "ld-rastro__cab" },
+        h("div", null, h("p", { class: "ld-fase__id" }, RT.titulo), tit,
+          h("p", { class: "ld-rastro__sub" }, RT.execucao + " " + D.execucao + " · " + T.contrato + " · " + D.registroData[en ? "en" : "pt"])),
+        voltar),
+      lista,
+      h("div", { class: "ld-rastro__pe" },
+        h("p", { class: "ld-rastro__lim" }, RT.limite),
+        h("p", { class: "ld-rastro__lim" }, h("b", null, RT.arquivos + ": "), arq ? "" : RT.semArquivos),
+        arq));
+  }
+  function abreRastro(origem) {
+    rastroDe = origem || null;
+    if (!rastroEl) rastroEl = montaRastro();
+    casca.insertBefore(rastroEl, pe);
+    casca.classList.add("is-rastro");
+    rastroEl.scrollTop = 0;
+    rastroEl.querySelector("#ld-rastro-t").focus({ preventScroll: true });
+    anuncia(RT.titulo + " · " + RT.caso);
+  }
+  function fechaRastro(foca) {
+    if (!casca.classList.contains("is-rastro")) return;
+    casca.classList.remove("is-rastro");
+    rastroEl.remove();
+    if (foca && rastroDe?.isConnected) rastroDe.focus({ preventScroll: true });
+  }
+
   function desgoverna() {
     if (modo === "fim") return;
     S?.root.classList.remove("is-leitura");
@@ -966,7 +1035,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const alvo = e.target;
     const campo = alvo.closest("button, a, [tabindex='0']") && alvo !== casca;
-    if (e.key === "Escape") { e.preventDefault(); fecha(); }
+    if (e.key === "Escape") { e.preventDefault(); if (casca.classList.contains("is-rastro")) fechaRastro(true); else fecha(); }
     else if ((e.key === " " || e.key === "k") && !campo) { e.preventDefault(); alterna(); }
     else if (e.key === "ArrowRight" && !alvo.closest(".ld-min")) { e.preventDefault(); passoRel(1); }
     else if (e.key === "ArrowLeft" && !alvo.closest(".ld-min")) { e.preventDefault(); passoRel(-1); }

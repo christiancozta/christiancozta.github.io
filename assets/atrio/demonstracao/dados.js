@@ -125,6 +125,11 @@ export default {
   trechos: TRECHOS,
   julgadores: JULGADORES,
   execucao: "EXE-20261125T1346140300-rodar-3b68957a",
+  registroData: { pt: "25/11/2026", en: "25 Nov 2026" },
+  /* Arquivos originais da execução, em versão pública e pseudonimizada, quando
+     publicados (em assets/data/lastro/): { rotulo, href } com href relativo à
+     raiz do site. Vazio: o rastro diz que ainda não foram publicados. */
+  arquivos: [],
 
   pt: {
     ui: {
@@ -134,7 +139,7 @@ export default {
       pausar: "Pausar", retomar: "Retomar", avancar: "Avançar", retroceder: "Retroceder",
       encerrar: "Encerrar", recomecar: "Recomeçar",
       desgovernar: "Desgovernar", desgovernarRot: "Desgovernar: ir ao estado final",
-      saltado: "Percurso saltado. O rastro permanece.",
+      saltado: ["Percurso saltado. O ", "rastro", " permanece."],
       teclas: "Espaço pausa ou retoma; setas avançam e retrocedem; Esc encerra.",
       percurso: "Percurso da demonstração",
       ia: "IA", humano: "Humano",
@@ -143,6 +148,21 @@ export default {
       carregando: "Carregando a demonstração",
       falha: "Não foi possível carregar a demonstração.",
       etapa: "Etapa"
+    },
+    rastro: {
+      titulo: "Rastro",
+      caso: "Caso 0012345",
+      execucao: "Execução",
+      voltar: "Voltar à reprodução",
+      abrir: "Abrir o rastro da execução",
+      limite: "Reconstrução das passagens a partir dos outputs registrados da execução: ordem, módulo, fase, ator e o que cada um registrou. Não inclui horários, hashes nem versões. A taxonomia de pseudonimização segue a vigente (PARTE_01, CPARTE_PJ_01).",
+      arquivos: "Arquivos originais da execução",
+      semArquivos: "ainda não publicados.",
+      julgadores: "Julgadores", estado: "Estado",
+      atrio: [
+        { nome: "Entrada", ia: "Recurso, sentença, certidão e contrarrazões do caso 0012345.", humano: "Recebe as peças." },
+        { nome: "Pseudonimização", ia: "O recorrente vira PARTE_01 e o banco vira CPARTE_PJ_01; outros cinco tipos de dado recebem etiqueta. A lista de volta fica no cofre, segregado no backend.", humano: "Confere a troca." }
+      ]
     },
     atrio: {
       linha: "Entrada e pseudonimização",
@@ -272,7 +292,7 @@ export default {
       pausar: "Pause", retomar: "Resume", avancar: "Forward", retroceder: "Back",
       encerrar: "Close", recomecar: "Restart",
       desgovernar: "Ungovern", desgovernarRot: "Ungovern: go to the final state",
-      saltado: "Path skipped. The trace remains.",
+      saltado: ["Path skipped. The ", "trace", " remains."],
       teclas: "Space pauses or resumes; arrow keys move forward and back; Esc closes.",
       percurso: "Demonstration path",
       ia: "AI", humano: "Human",
@@ -281,6 +301,21 @@ export default {
       carregando: "Loading the demonstration",
       falha: "The demonstration could not be loaded.",
       etapa: "Step"
+    },
+    rastro: {
+      titulo: "Trace",
+      caso: "Case 0012345",
+      execucao: "Execution",
+      voltar: "Back to the replay",
+      abrir: "Open the execution trace",
+      limite: "Passages reconstructed from the execution's recorded outputs: order, module, phase, actor and what each recorded. It does not include times, hashes or versions. The pseudonymization taxonomy follows the current one (PARTE_01, CPARTE_PJ_01).",
+      arquivos: "Original execution files",
+      semArquivos: "not yet published.",
+      julgadores: "Judges", estado: "State",
+      atrio: [
+        { nome: "Intake", ia: "Appeal, judgment, certificate and response brief of case 0012345.", humano: "Receives the filings." },
+        { nome: "Pseudonymization", ia: "The appellant becomes PARTE_01 and the bank becomes CPARTE_PJ_01; five other data types get labels. The list back stays in the vault, kept apart in the backend.", humano: "Checks the swap." }
+      ]
     },
     atrio: {
       linha: "Intake and pseudonymization",
