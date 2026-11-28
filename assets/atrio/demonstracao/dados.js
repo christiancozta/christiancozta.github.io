@@ -272,7 +272,7 @@ export default {
         nome: "Encaminhamento",
         ia: "A legalidade resiste. A divisão em metade fica instável. A TROIA contraria a minuta, mas não a decide: a conclusão é do julgador humano.",
         humano: "Encaminha a minuta ao CERNE, para auditoria.",
-        distincao: "Contrariar ≠ auditar."
+        distincao: "Confrontar ≠ auditar."
       },
       fim: {
         titulo: "Fim da reprodução",

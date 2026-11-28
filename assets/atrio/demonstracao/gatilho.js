@@ -8,7 +8,7 @@
      3. só com a expansão concluída e os recursos carregados a reprodução começa.
    Ao encerrar, a superfície recolhe pelo movimento inverso e some.
    ========================================================================== */
-const V = "20261128-rastro";
+const V = "20261128-feixes";
 const raiz = document.querySelector("[data-ld]");
 const gatilho = document.querySelector("[data-ld-gatilho]");
 
