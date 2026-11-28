@@ -1,31 +1,48 @@
-// Integridade de "Do termo à prova" (arco.html e en/arco.html): o data-proj de cada
-// verbete, que alimenta o filtro por projeto, tem de bater com as competências que ele
-// cita; a versão EN tem de ter os mesmos verbetes, na mesma ordem.
+// Integridade do Lastro (arco.html e en/arco.html): índice relacional
+// competência → termo de mercado → projeto e evidência.
+// - dez competências, cada uma com projeto (data-p) e lista própria de termos;
+// - todo termo citado tem um bloco de evidência, e todo bloco é alcançável;
+// - cada evidência traz uma tag de projeto e um texto;
+// - a versão EN tem a mesma estrutura, na mesma ordem, com as mesmas tags.
 // Rodar: node scripts/check-correspondencias.mjs
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 
-const VERBETES = 48;
+const COMPETENCIAS = 10;
+const PROJETOS = new Set(["data", "echo", "atrio", "cerne"]);
+const TAGS = new Set(["echo", "atrio", "ratio", "troia", "cerne"]);
 
 function check(file) {
   const html = readFileSync(new URL(`../${file}`, import.meta.url), "utf8");
-  const entries = [...html.matchAll(/<p class="lex__e"[\s\S]*?<\/p>/g)].map(m => m[0]);
-  assert.equal(entries.length, VERBETES, `${file}: ${VERBETES} verbetes`);
+  const comps = [...html.matchAll(/<button class="lx__i" type="button" data-c="(c\d\d)" data-p="(\w+)"/g)];
+  assert.equal(comps.length, COMPETENCIAS, `${file}: ${COMPETENCIAS} competências`);
 
-  return entries.map(e => {
-    const id = e.match(/id="([^"]+)"/)[1];
-    const projs = new Set([...e.matchAll(/lex__k--(data|echo|atrio)/g)].map(m => m[1]));
-    if (e.includes("lex__all")) ["data", "echo", "atrio"].forEach(p => projs.add(p));
-    const transversal = e.includes("lex__c") || e.includes("lex__all");
-
-    // o transversal não cita competência própria: vive no "princípio transversal" e no data-proj
-    const tokens = e.match(/data-proj="([^"]*)"/)[1].split(" ").filter(Boolean);
-    assert.deepEqual(new Set(tokens), new Set([...projs, ...(transversal ? ["transversal"] : [])]), `${file} ${id}: data-proj`);
-    return `${id}:${tokens.join(" ")}`;
+  const termos = new Set();
+  const estrutura = comps.map(([, c, p]) => {
+    assert.ok(PROJETOS.has(p), `${file} ${c}: projeto ${p}`);
+    const lista = html.match(new RegExp(`<ol class="lx__l" id="lx-${c}" data-of="${c}" data-p="${p}"[^>]*>([\\s\\S]*?)</ol>`));
+    assert.ok(lista, `${file} ${c}: lista de termos`);
+    const ts = [...lista[1].matchAll(/data-t="([^"]+)"/g)].map(m => m[1]);
+    assert.ok(ts.length, `${file} ${c}: ao menos um termo`);
+    ts.forEach(t => termos.add(t));
+    return `${c}:${p}:${ts.join(",")}`;
   });
+
+  const evs = [...html.matchAll(/<div class="lx__ev" id="lx-([^"]+)"[^>]*>([\s\S]*?)\n\s*<\/div>/g)];
+  const comEv = new Set(evs.map(m => m[1]));
+  assert.deepEqual([...termos].filter(t => !comEv.has(t)), [], `${file}: termos sem evidência`);
+  assert.deepEqual([...comEv].filter(t => !termos.has(t)), [], `${file}: evidências sem termo`);
+  evs.forEach(([, t, corpo]) => {
+    const tags = [...corpo.matchAll(/<div class="lx__e"><span class="lx__tag lx__tag--(\w+)">[^<]+<\/span><p>[^<]+<\/p><\/div>/g)].map(m => m[1]);
+    assert.ok(tags.length, `${file} ${t}: ao menos uma evidência`);
+    assert.equal(tags.length, (corpo.match(/class="lx__e"/g) || []).length, `${file} ${t}: evidência fora do formato tag + texto`);
+    tags.forEach(g => assert.ok(TAGS.has(g), `${file} ${t}: tag ${g}`));
+    estrutura.push(`${t}:${tags.join(",")}`);
+  });
+  return estrutura;
 }
 
 const pt = check("arco.html");
 const en = check("en/arco.html");
-assert.deepEqual(en, pt, "en/arco.html: verbetes ou projetos diferem do PT");
-console.log(`ok — ${pt.length} verbetes coerentes em PT e EN`);
+assert.deepEqual(en, pt, "en/arco.html: estrutura do Lastro difere do PT");
+console.log(`ok: ${COMPETENCIAS} competências e ${pt.length - COMPETENCIAS} termos com evidência, coerentes em PT e EN`);

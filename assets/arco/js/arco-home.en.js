@@ -4,8 +4,8 @@
    --------------------------------------------------------------------------
    1) ajuste tipográfico: nome, tese e títulos ocupam a largura exata do bloco;
    2) retícula: fileiras em múltiplos de --row, painel em quadrados inteiros;
-   3) navegação interna: painéis, competências e verbetes, sem hover;
-   4) índice "Do termo à prova": busca, filtro por projeto e recolhimento no celular;
+   3) navegação interna: painéis e vistas;
+   4) Lastro: índice relacional (competência → termo → evidência) e busca;
    5) Rastro: abas (índice, finalização, fila) e tags de leitura do índice;
    7) hero: o feixe (feixes e esteira) e o cordão recolhido durante o hero.
    A casca (cordão, views, histórico) continua em arco-shell.js.
@@ -815,7 +815,6 @@
   layout(true);
 
   /* ---------- 3. navegação interna ---------- */
-  const PANEL_OF = {data:"rastro", echo:"legal-operations", atrio:"legal-engineering", cerne:"ai-governance"};
   const isHomeTarget = id => {
     const el = id && document.getElementById(id);
     return el && (home.contains(el) || heroRoot?.contains(el)) ? el : null;
@@ -857,31 +856,6 @@
       else if (!viewLink.dataset.view) location.hash = view;
       return;
     }
-    const term = el.closest("a[data-hm-term]");
-    if (term){
-      event.preventDefault();
-      const id = term.getAttribute("href").slice(1);
-      const entry = document.getElementById(id);
-      if (entry?.hidden) clearIndex();
-      if (entry?.dataset.open === "false") setOpen(entry, true);
-      home.querySelectorAll(".lex__e.is-target").forEach(e => e.classList.remove("is-target"));
-      entry?.classList.add("is-target");
-      go(id, {focus:entry});
-      return;
-    }
-    const comp = el.closest("[data-arx-comp]");
-    if (comp && PANEL_OF[comp.dataset.arxComp]){
-      event.stopPropagation();
-      go(PANEL_OF[comp.dataset.arxComp]);
-    }
-  });
-  home.addEventListener("keydown", event => {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    const comp = event.target instanceof Element ? event.target.closest("[data-arx-comp][role='button']") : null;
-    if (!comp || !PANEL_OF[comp.dataset.arxComp]) return;
-    event.preventDefault();
-    event.stopPropagation();
-    go(PANEL_OF[comp.dataset.arxComp]);
   });
 
   /* A troca de idioma leva ao mesmo painel no outro idioma. */
@@ -897,104 +871,163 @@
       link.href = target.href;
     }, {capture:true}));
 
-  /* ---------- 4. índice: busca, filtro e recolhimento ---------- */
-  const lex = document.getElementById("eq-dicionario");
-  const lexBar = home.querySelector(".lexf");
-  const narrow = matchMedia("(max-width:900px)");
-  let clearIndex = () => {};
-  function setOpen(e, open){
-    e.dataset.open = String(open);
-    e.querySelector(".lex__t")?.setAttribute("aria-expanded", String(open));
-  }
-  if (lex && lexBar){
-    const entries = [...lex.querySelectorAll(".lex__e")];
-    const letters = [...lex.querySelectorAll(".lex__l")];
-    const chips = [...lexBar.querySelectorAll("[data-lexf]")];
-    const input = lexBar.querySelector(".lexf__i");
-    const status = document.getElementById("lexf-status");
-    const empty = home.querySelector(".lexf__vazio");
-    const lastro = document.getElementById("lastro");
-    const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-    const text = new Map(entries.map(e => [e, fold(e.textContent)]));
-    let proj = "";
+  /* ---------- 4. Lastro: índice relacional ----------
+     Competência → termo de mercado → projeto e evidência, em três colunas que
+     abrem da esquerda para a direita. A competência abre os seus termos; o
+     termo, a evidência. O item escolhido mantém o desenho do hover enquanto a
+     coluna seguinte estiver aberta (.is-on), para que o percurso se reconstrua
+     sem o cursor; outra competência recolhe a evidência e troca os termos.
+     A busca atua sobre as mesmas colunas: só competência, uma coluna; termos,
+     duas; termo inequívoco, três, com a evidência revelada. Um termo ligado a
+     mais de uma competência marca todas. O accent da segunda coluna vem da
+     competência pela qual se chegou ao termo (data-p). No celular, a lista
+     desce sob a competência e a evidência sob o termo. */
+  const lx = home.querySelector("[data-lx]");
+  const lxInput = home.querySelector(".lx-q__i");
+  if (lx && lxInput){
+    const lastro = lx.closest(".hm-panel");
+    const col2 = lx.querySelector(".lx__c--2");
+    const col3 = lx.querySelector(".lx__c--3");
+    const compBtns = [...lx.querySelectorAll(".lx__c--1 .lx__i")];
+    const compOf = new Map(compBtns.map(b => [b.dataset.c, b]));
+    const lists = new Map([...col2.querySelectorAll(".lx__l")].map(l => [l.dataset.of, l]));
+    const evs = new Map([...col3.querySelectorAll(".lx__ev")].map(e => [e.dataset.of, e]));
+    const busca = lists.get("busca");
+    const status = document.getElementById("lx-status");
+    const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
+    const name = el => el.querySelector(".lx__n").textContent.trim();
 
-    const inProj = (e, p) => !p || e.dataset.proj.split(" ").includes(p);
-    const apply = () => {
-      const q = fold(input.value.trim());
-      const hit = e => text.get(e).includes(q);
-      let shown = 0;
-      entries.forEach(e => {
-        const on = inProj(e, proj) && hit(e);
-        e.hidden = !on;
-        if (on) shown++;
-      });
-      letters.forEach(l => {
-        let n = l.nextElementSibling, any = false;
-        while (n && !n.classList.contains("lex__l")){ if (n.matches(".lex__e") && !n.hidden) any = true; n = n.nextElementSibling; }
-        l.hidden = !any;
-      });
-      chips.forEach(c => { c.querySelector(".lexf__c").textContent = entries.filter(e => inProj(e, c.dataset.lexf) && hit(e)).length; });
-      empty.hidden = shown > 0;
-      status.textContent = shown ? `${shown} of ${entries.length} entries` : "No entries in this selection";
-      if (lastro) snap(lastro);
-    };
-    clearIndex = () => {
-      input.value = "";
-      proj = "";
-      chips.forEach(c => c.setAttribute("aria-pressed", String(c === chips[0])));
-      apply();
-    };
-
-    chips.forEach(chip => chip.addEventListener("click", () => {
-      proj = chip.dataset.lexf;
-      chips.forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
-      apply();
-    }));
-    /* buscando, o motivo do acerto pode estar na parte recolhida: abre; limpando, fecha */
-    input.addEventListener("input", () => {
-      const q = Boolean(input.value.trim());
-      entries.forEach(e => { if (e.dataset.open) setOpen(e, q); });
-      apply();
-    });
-    empty.querySelector(".lexf__limpa").addEventListener("click", () => {
-      clearIndex();
-      input.focus();
-    });
-
-    /* recolhimento: só no celular; no desktop o verbete fica inteiro */
-    const setNarrow = () => {
-      entries.forEach(e => {
-        const t = e.querySelector(".lex__t");
-        if (narrow.matches){
-          e.dataset.open = "false";
-          t.setAttribute("role", "button");
-          t.setAttribute("tabindex", "0");
-          t.setAttribute("aria-expanded", "false");
-        } else {
-          delete e.dataset.open;
-          ["role", "tabindex", "aria-expanded"].forEach(a => t.removeAttribute(a));
+    /* termos: nome, equivalente, sinônimos e as competências que os citam */
+    const terms = new Map();
+    lists.forEach((list, cid) => {
+      if (list === busca) return;
+      list.querySelectorAll(".lx__i").forEach(btn => {
+        const id = btn.dataset.t;
+        if (!terms.has(id)){
+          const k = evs.get(id)?.dataset.k || "";
+          terms.set(id, {id, btn, name:fold(name(btn)), pt:fold(k.split(";")[0]), keys:fold(name(btn) + "; " + k), comps:[]});
         }
+        terms.get(id).comps.push(cid);
       });
-      if (lastro) snap(lastro);
-    };
-    lex.addEventListener("click", ev => {
-      const e = ev.target.closest(".lex__e[data-open]");
-      if (!e || ev.target.closest(".lex__k")) return;
-      setOpen(e, e.dataset.open !== "true");
-      if (lastro) snap(lastro);
     });
-    lex.addEventListener("keydown", ev => {
-      const t = ev.target.closest(".lex__t[role='button']");
-      if (!t || (ev.key !== "Enter" && ev.key !== " ")) return;
+
+    let sel = {c:null, t:null};
+    const projOf = cid => compOf.get(cid)?.dataset.p || "";
+    const hitsFor = q => [...terms.values()].filter(t => t.keys.includes(q)).sort((x, y) => x.name.localeCompare(y.name));
+
+    /* lista da busca: termos encontrados, cada um com o accent da competência de chegada */
+    function fill(hits, via){
+      busca.replaceChildren(...hits.map(t => {
+        const li = document.createElement("li");
+        const b = t.btn.cloneNode(true);
+        b.dataset.p = projOf(via || t.comps[0]);
+        b.classList.remove("is-on");
+        li.append(b);
+        return li;
+      }));
+    }
+
+    /* no celular, cada abertura desce sob o item que a abriu */
+    function place(listEl, anchor, term){
+      lists.forEach(l => { if (l.parentElement !== col2) col2.append(l); });
+      evs.forEach(e => { if (e.parentElement !== col3) col3.append(e); });
+      if (!stacked.matches) return;
+      if (listEl && anchor) compOf.get(anchor).parentElement.append(listEl);
+      const tb = term && listEl?.querySelector(`.lx__i[data-t="${term}"]`);
+      if (tb) tb.parentElement.append(evs.get(term));
+    }
+
+    function render(){
+      const q = fold(lxInput.value);
+      let listEl = null, path = [], live = null, hits = [];
+      if (!q){
+        if (sel.c){ listEl = lists.get(sel.c); path = [sel.c]; }
+      } else {
+        hits = hitsFor(q);
+        live = new Set(compBtns.filter(b => fold(name(b)).includes(q)).map(b => b.dataset.c));
+        hits.forEach(t => t.comps.forEach(c => live.add(c)));
+        if (sel.c){
+          const own = hits.filter(t => t.comps.includes(sel.c));
+          if (own.length){ fill(own, sel.c); listEl = busca; }
+          else listEl = lists.get(sel.c);
+          path = [sel.c];
+        } else if (hits.length){
+          fill(hits, null);
+          listEl = busca;
+          if (sel.t) path = terms.get(sel.t).comps;
+        }
+      }
+      const term = sel.t && listEl?.querySelector(`.lx__i[data-t="${sel.t}"]`) ? sel.t : null;
+      if (!term) sel.t = null;
+
+      compBtns.forEach(b => {
+        const on = Boolean(listEl) && path.includes(b.dataset.c);
+        b.classList.toggle("is-on", on);
+        b.setAttribute("aria-expanded", String(on));
+        b.classList.toggle("is-fora", Boolean(live) && !live.has(b.dataset.c));
+      });
+      lists.forEach(l => { l.hidden = l !== listEl; });
+      listEl?.querySelectorAll(".lx__i").forEach(b => {
+        const on = b.dataset.t === term;
+        b.classList.toggle("is-on", on);
+        b.setAttribute("aria-expanded", String(on));
+      });
+      evs.forEach((e, id) => { e.hidden = id !== term; });
+      place(listEl, path.length === 1 ? path[0] : null, term);
+
+      if (!q) status.textContent = "";
+      else if (!live.size) status.textContent = "No match";
+      else status.textContent = `${live.size} ${live.size === 1 ? "competency" : "competencies"}, ${hits.length} ${hits.length === 1 ? "term" : "terms"}`;
+      snap(lastro);
+    }
+
+    lx.addEventListener("click", ev => {
+      const b = ev.target instanceof Element ? ev.target.closest(".lx__i") : null;
+      if (!b) return;
+      if (b.dataset.c){
+        /* de novo na mesma, recolhe; na busca, o termo inequívoco cede à competência escolhida */
+        sel = sel.c === b.dataset.c ? {c:null, t:null} : {c:b.dataset.c, t:null};
+      } else if (b.dataset.t){
+        sel.t = sel.t === b.dataset.t ? null : b.dataset.t;
+      }
+      render();
+      /* a lista da busca é refeita: o foco volta ao mesmo termo */
+      if (b.dataset.t && !b.isConnected) lx.querySelector(`.lx__l:not([hidden]) .lx__i[data-t="${b.dataset.t}"]`)?.focus();
+    });
+    /* Esc recolhe a última coluna aberta e devolve o foco a quem a abriu */
+    lx.addEventListener("keydown", ev => {
+      if (ev.key !== "Escape") return;
+      const q = fold(lxInput.value);
+      if (sel.t){
+        const id = sel.t;
+        sel.t = null; render();
+        lx.querySelector(`.lx__l:not([hidden]) .lx__i[data-t="${id}"]`)?.focus();
+      } else if (sel.c){
+        const id = sel.c;
+        sel.c = null; render();
+        compOf.get(id)?.focus();
+      } else if (q){ lxInput.focus(); return; }
+      else return;
       ev.preventDefault();
-      const e = t.closest(".lex__e");
-      setOpen(e, e.dataset.open !== "true");
-      if (lastro) snap(lastro);
     });
-    narrow.addEventListener?.("change", setNarrow);
-    setNarrow();
-    apply();
-    lexBar.hidden = false;
+
+    lxInput.addEventListener("input", () => {
+      sel = {c:null, t:null};
+      const q = fold(lxInput.value);
+      if (q){
+        const hits = hitsFor(q);
+        const exact = hits.length === 1 ? hits[0] : hits.find(t => t.name === q || t.pt === q);
+        if (exact) sel.t = exact.id;
+      }
+      render();
+    });
+    lxInput.addEventListener("keydown", ev => {
+      if (ev.key !== "Escape" || !lxInput.value) return;
+      ev.preventDefault();
+      lxInput.value = "";
+      lxInput.dispatchEvent(new Event("input"));
+    });
+    stacked.addEventListener?.("change", render);
   }
   /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
   home.addEventListener("toggle", e => {

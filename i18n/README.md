@@ -28,7 +28,7 @@ Fora do escopo: `atrio-dentro.html` (linkada pelo ARCO; o leitor EN chega à ver
 ## Decisões editoriais
 - Troca de idioma só no ARCO, porque só os links do ARCO são divulgados (inclusive com âncora). O seletor do ARCO preserva a view: em `arco.html#atrio`, EN leva a `en/arco.html#atrio`, que já abre o ATRIO em inglês. As páginas dos projetos não têm seletor próprio; a correspondência entre idiomas fica nos metadados hreflang.
 - Documentos vinculados (fichas técnicas e manuais do ATRIO, bases do PLAY, arquivos de lastro do DATA) permanecem em português. A interface que os apresenta é traduzida.
-- Léxico "Do termo à prova": o termo de mercado (já em inglês) é mantido; o equivalente português entre colchetes permanece, como marca bilíngue, com `lang="pt-BR"` na versão acessível. Sinônimos portugueses que só repetiam o equivalente foram retirados da lista "aka"; os demais foram traduzidos. **Revisar.**
+- Lastro (índice relacional, nov/2026): o termo de mercado (já em inglês) é mantido; competências e evidências são traduzidas. Equivalentes portugueses e sinônimos dos termos ficam só em `data-k`, como chaves da busca, e não se traduzem. Nomes de módulos e de arquivos (RI_04, 02_GUIA_ESTILO_V4, PARTE_01) permanecem.
 - Números e datas seguem o glossário do CV: `16,18 p.p.` → `16.18 pp`; `1.192` → `1,192`; `dez/2025` → `Dec 2025`; datas completas como `26 Aug 2026`.
 - CERNE: ato → ruling; dúvida → doubt; achado/afastado → finding/dismissed; crivo → screening; rodada → round; mineração → mining; embargos (de declaração) → motion for clarification; quem responde pelo ato → whoever answers for the ruling; Lastro/Rastro/Responsabilidade → Grounding/Trace/Accountability; selos Correspondência/Não alcançado/Fora do teste → Match/Not reached/Outside the test. **Revisar**, em especial a manutenção das perguntas do CERNE em português.
 - DATA: despacho → order e voto → opinion também nos gráficos; recorte → scope (TIMEFRAME só no tooltip do ARCO, onde é período); mês de borda/integral → edge/full month; saneamento por extinção → clean-up by dismissal.
@@ -53,7 +53,7 @@ Comandos:
 - `node i18n/build.mjs`: gera tudo. Não grava nada enquanto faltar tradução.
 - `node i18n/build.mjs --check`: falha se faltar tradução, se houver chave órfã (texto PT que mudou ou saiu) ou se algum gerado estiver defasado. Rodar antes de cada commit que toque uma página PT.
 - `node i18n/build.mjs --pending`: lista em JSON as unidades PT sem tradução.
-- `node scripts/check-correspondencias.mjs`: coerência do léxico e paridade de verbetes entre PT e EN.
+- `node scripts/check-correspondencias.mjs`: coerência do Lastro (competências, termos e evidências) e paridade entre PT e EN.
 
 Para incluir uma página, acrescente-a em `i18n/pages.json` com seu catálogo e os scripts que carregam texto de interface.
 
