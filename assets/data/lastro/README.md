@@ -40,7 +40,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 | 76,5% com tese firmada | derivada | `precedentes_publico.xlsx` |
 | 245 códigos, 9 matérias, 3 ramos e 10 situações | direta | `precedentes_publico.xlsx` |
 | 115.114 registros únicos | direta | `diagnostico_corpus_publico.md` |
-| 23 rotas e 188 testes | declarada/agregada | `operacao_atrio_publica.md` |
+| 31 rotas, 33 operações HTTP e 188 testes | declarada/agregada | `operacao_atrio_publica.md` |
 | 11,1 min de mediana e 12,2 min de média por rodada do CERNE | derivada | `cerne_rodadas_derivada.csv` |
 | 37,6 s de crivo por dúvida | derivada | `cerne_rodadas_derivada.csv` |
 | 218 dúvidas, 11 afastadas, 67 perguntas | direta | `cerne_rodadas_derivada.csv` |
@@ -51,7 +51,7 @@ Este diretório reúne derivados públicos mínimos das fontes usadas nas métri
 
 O derivado público permite recalcular as figuras agregadas cuja contagem foi preservada. O teste de abril sem entrantes é publicado como resultado agregado (60,11%) porque as linhas individualizadas necessárias à recomposição foram excluídas por privacidade; o teste dos seis servidores preserva somente a contagem final de recuos. Os tempos de fila também são publicados apenas como agregados, sem linhas individuais. O hash SHA-256 comprova que uma determinada sequência de bytes corresponde à fonte usada, mas não autentica a extração perante o sistema de origem.
 
-A contagem de 23 rotas registra a versão corrente confirmada pelo autor; o código-fonte completo necessário para recontagem independente não integra este derivado público. O lastro, portanto, documenta a declaração sem apresentá-la como verificação externa autônoma.
+A contagem de 31 rotas (33 operações HTTP) e 188 testes registra a versão corrente confirmada pelo autor; os antigos 23 caminhos sob `/v1` e 175 testes eram de uma versão anterior do ATRIO e não valem mais; o código-fonte completo necessário para recontagem independente não integra este derivado público. O lastro, portanto, documenta a declaração sem apresentá-la como verificação externa autônoma.
 
 ## Exclusões de privacidade
 
