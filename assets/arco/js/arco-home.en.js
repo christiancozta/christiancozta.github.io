@@ -193,8 +193,7 @@
       });
       pick(0);
     }
-    /* uma só linha de reticências, ao fim da tabela: revela todos os demais
-       indicadores e vira flecha para recolher */
+    /* A seta no fim da tabela mostra ou recolhe os indicadores adicionais. */
     rastro.querySelectorAll(".hm-ix__more button").forEach(b => b.addEventListener("click", () => {
       const t = b.closest("table");
       const aberto = !t.classList.contains("is-open");
