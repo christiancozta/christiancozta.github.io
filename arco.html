@@ -109,8 +109,8 @@
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261128-revisao">
 <script src="assets/arco/js/arco-home.js?v=20261128-partitura" defer></script>
-<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-buril">
-<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-confrontar"></script>
+<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-foroptero">
+<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-foroptero"></script>
 <link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261128-buril">
 <script src="assets/cerne/js/cerne-lentes.js?v=20261128-buril" defer></script>
 <script src="assets/arco/js/arco-origem.js?v=20261127-resultado" defer></script>
@@ -471,10 +471,14 @@
                 <svg class="cl__olho" viewBox="268 392 168 94" focusable="false"><path d="M280 439.8C288 428 298.7 418.5 311.3 411.9C323.8 405.2 337.8 401.8 352 401.8C366.2 401.8 380.2 405.2 392.7 411.9C405.3 418.5 416 428 424 439.8C416 451.5 405.3 461.1 392.7 467.7C380.2 474.3 366.2 477.8 352 477.8C337.8 477.8 323.8 474.3 311.3 467.7C298.7 461.1 288 451.5 280 439.8Z" fill="#FCFCFC"/><circle cx="352" cy="439.8" r="24" fill="#2C2C2C"/></svg>
                 <p class="cl__txt" data-cl-txt></p>
               </div>
-              <button class="cl__gatilho" type="button" data-cl-play data-ld-ir="cerne" aria-label="Iniciar a rodada do CERNE" hidden></button>
+              <button class="cl__gatilho" type="button" data-cl-play data-ld-ir="cerne" aria-controls="demonstracao-cerne" aria-expanded="false" aria-label="Iniciar a rodada do CERNE" hidden></button>
             </div>
             <p class="cl__rotulo" data-cl-rotulo aria-hidden="true">Iniciar a rodada</p>
             <p class="arx-sr" role="status" data-cl-status></p>
+            <!-- Superfície da rodada do CERNE: a mesma da jornada do ATRIO, com a mesma
+                 dinâmica (sem altura até o clique; desce logo abaixo do foróptero e desloca o
+                 que vem depois). Abrir uma fecha a outra (assets/atrio/demonstracao/gatilho.js). -->
+            <div class="ld ld--cerne" id="demonstracao-cerne" data-ld-cerne hidden></div>
           </figure>
           <div class="hm-trilho">
             <div class="hm-lado">

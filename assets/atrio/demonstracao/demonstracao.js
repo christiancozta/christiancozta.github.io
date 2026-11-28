@@ -116,7 +116,7 @@ class Tempo {
   get ativo() { return this.timers.size > 0 || this.anims.size > 0; }
 }
 
-export function cria({ raiz, sup, en, inicio, fecha }) {
+export function cria({ raiz, sup, en, inicio, fecha, troca }) {
   const L = en ? D.en : D.pt;
   const U = L.ui;
   const tempo = new Tempo();
@@ -842,6 +842,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   };
 
   let S = null, atual = -1, completo = false, modo = "tocando", continua = null, porAuto = false;
+  let segSup = null;   /* o segmento desta superfície: jornada ou cerne */
 
   function cabecalho(k) {
     const p = PASSOS[k];
@@ -1035,6 +1036,13 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   /* ---------- controles ---------- */
   function vai(k, o = {}) {
     k = Math.max(0, Math.min(N - 1, k));
+    /* a jornada e o CERNE descem em superfícies próprias (gatilho.js): pedir o
+       outro segmento fecha esta e abre a outra, no ponto pedido */
+    if (troca && segSup && (k >= CERNE0 ? "cerne" : "jornada") !== segSup) {
+      const cap = PASSOS[k].cap;
+      troca(cap + (k > inicioDe(cap) ? "@" + (k - inicioDe(cap)) : ""));
+      return;
+    }
     S?.root.classList.remove("is-leitura");
     if (modo === "pausado") { mostraPronto(k); return; }
     poeModo("tocando");
@@ -1106,6 +1114,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     return Math.min(segFim(i0), i0 + (parseInt(n, 10) || 0));
   };
   const k0 = ponto(inicio);
+  segSup = k0 >= CERNE0 ? "cerne" : "jornada";
   poeModo("tocando");
   roda(k0, true);
 

@@ -1,33 +1,45 @@
 /* ==========================================================================
-   Legal Engineering: o acionador da demonstração (módulo ES).
-   Em repouso, só isto: liga o relógio do RATIO à superfície vazia (#demonstracao).
+   Legal Engineering e AI Governance: o acionador da demonstração (módulo ES).
+   Em repouso, só isto: liga cada aparelho à sua superfície vazia.
+     · relógio do RATIO (e RATIO/TROIA no cordão) → #demonstracao, a jornada
+       ATRIO → RATIO → TROIA, logo abaixo do painel Legal Engineering;
+     · foróptero do CERNE → #demonstracao-cerne, a rodada do CERNE, logo
+       abaixo do foróptero, no painel AI Governance.
+   Só uma superfície fica aberta: abrir uma fecha a outra antes. O fim da
+   TROIA, que encaminha a minuta ao CERNE, também troca de superfície.
    Nada da demonstração é carregado nem inicializado antes do clique. No clique:
      1. pede, em paralelo, o motor, os dados (import()) e o estilo da demonstração;
-     2. a superfície grafite desce a partir da base do painel, empurrando o que
-        vem depois, enquanto a página enquadra a superfície na viewport;
+     2. a superfície desce a partir do aparelho, empurrando o que vem depois,
+        enquanto a página enquadra a superfície na viewport;
      3. só com a expansão concluída e os recursos carregados a reprodução começa.
    Ao encerrar, a superfície recolhe pelo movimento inverso e some.
    ========================================================================== */
-const V = "20261128-confrontar";
-const raiz = document.querySelector("[data-ld]");
-const gatilho = document.querySelector("[data-ld-gatilho]");
+const V = "20261128-foroptero";
+const SUP = {
+  jornada: { raiz: document.querySelector("[data-ld]"), gatilho: document.querySelector("[data-ld-gatilho]") },
+  cerne: { raiz: document.querySelector("[data-ld-cerne]"), gatilho: document.querySelector("[data-cl-play]") }
+};
 
-if (raiz && gatilho) {
+if (SUP.jornada.raiz && SUP.jornada.gatilho) {
   const EN = (document.documentElement.lang || "").toLowerCase().startsWith("en");
   const TXT = EN
-    ? { carregando: "Loading the demonstration", falha: "The demonstration could not be loaded.", regiao: "Legal Engineering demonstration" }
-    : { carregando: "Carregando a demonstração", falha: "Não foi possível carregar a demonstração.", regiao: "Demonstração de Legal Engineering" };
+    ? { carregando: "Loading the demonstration", falha: "The demonstration could not be loaded.", jornada: "Legal Engineering demonstration", cerne: "CERNE round" }
+    : { carregando: "Carregando a demonstração", falha: "Não foi possível carregar a demonstração.", jornada: "Demonstração de Legal Engineering", cerne: "Rodada do CERNE" };
   const reduz = matchMedia("(prefers-reduced-motion: reduce)");
-  const home = raiz.closest(".hm") || document.body;
+  const home = SUP.jornada.raiz.closest(".hm") || document.body;
   const EASE = "cubic-bezier(.65,0,.35,1)";
+  /* sem a superfície própria (página antiga), o CERNE desce na da jornada */
+  const segDe = (inicio) => (String(inicio || "").startsWith("cerne") && SUP.cerne.raiz ? "cerne" : "jornada");
 
   let estado = "repouso";          // repouso | abrindo | aberta | fechando
+  let seg = null;                  // superfície aberta: jornada | cerne
   let modulo = null;               // promessa do motor (com dados e estilo)
   let ctrl = null;                 // controle devolvido pelo motor
   let sup = null;
+  const raizDe = () => SUP[seg]?.raiz;
 
   /* ---------- carga sob demanda ---------- */
-  /* o estilo da jornada e o do 4º estado (CERNE), na mesma carga */
+  /* o estilo da jornada e o do CERNE, na mesma carga */
   const estilo = (nome) => new Promise((res, rej) => {
     const href = new URL("./" + nome + ".css?v=" + V, import.meta.url).href;
     const ja = document.querySelector('link[data-ld-css="' + nome + '"]');
@@ -50,54 +62,71 @@ if (raiz && gatilho) {
     const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--rail-h"));
     return Number.isFinite(v) ? v : 0;
   };
-  /* o lado do quadrado da retícula (largura da home / 8, como em arco-home.js):
-     a superfície mede uma viewport útil; o espaço que ela ocupa na página
-     fecha em quadrados inteiros, para que o painel seguinte pouse numa linha */
+  /* o lado do quadrado da retícula (largura da home / 8, como em arco-home.js).
+     A jornada fica entre painéis: o espaço que ela ocupa fecha em quadrados
+     inteiros, para que o painel seguinte pouse numa linha. A do CERNE fica
+     dentro do painel, e quem fecha os quadrados é o próprio painel. */
   const cell = () => home.getBoundingClientRect().width / 8 || 1;
   const fechaQuadrado = () => {
     if (!sup) return 0;
-    const h = sup.offsetHeight, c = cell();
+    const h = sup.offsetHeight;
+    if (seg === "cerne") return h;
+    const c = cell();
     return Math.ceil((h - .5) / c) * c;
   };
+  /* painel em que a superfície está (a do CERNE): durante o movimento, as
+     fileiras da grade ficam livres; depois, o painel volta a fechar em quadrados */
+  const painel = (r) => (r && r !== SUP.jornada.raiz ? r.closest(".hm-panel") : null);
+  const solta = (r) => { const p = painel(r); if (p) p.style.gridTemplateRows = ""; };
+  const mede = (r) => { if (painel(r)) r.dispatchEvent(new CustomEvent("arco:medida", { bubbles: true })); };
   const ajusta = () => {
-    if (estado !== "aberta" || !sup) return;
-    raiz.style.paddingBottom = Math.max(0, fechaQuadrado() - sup.offsetHeight) + "px";
+    const r = raizDe();
+    if (estado !== "aberta" || !sup || !r) return;
+    r.style.paddingBottom = Math.max(0, fechaQuadrado() - sup.offsetHeight) + "px";
+    mede(r);
   };
   addEventListener("resize", () => requestAnimationFrame(ajusta), { passive: true });
 
   const rola = (y) => scrollTo({ top: Math.max(0, y), behavior: reduz.matches ? "instant" : "smooth" });
+  const visivel = (el) => { const b = el.getBoundingClientRect(); return b.bottom > 0 && b.top < innerHeight; };
 
   /* ---------- abrir ---------- */
   async function abre(inicio) {
-    if (estado === "aberta") {
+    const alvo = segDe(inicio);
+    if (estado === "aberta" && seg === alvo) {
       /* já aberta (pelo cordão): vai ao capítulo e reenquadra a superfície */
       if (inicio && ctrl) ctrl.vai(inicio);
-      rola(raiz.getBoundingClientRect().top + scrollY - railH());
+      rola(raizDe().getBoundingClientRect().top + scrollY - railH());
       return;
     }
+    if (estado === "aberta") await fecha(null, { troca: true });
     if (estado !== "repouso") return;
     estado = "abrindo";
+    seg = alvo;
+    const { raiz, gatilho } = SUP[seg];
     const carga = carrega();
     gatilho.setAttribute("aria-expanded", "true");
 
     raiz.hidden = false;
-    raiz.setAttribute("aria-label", TXT.regiao);
+    raiz.setAttribute("aria-label", TXT[seg]);
     sup = document.createElement("div");
     sup.className = "ld-sup";
     /* o CERNE desce já sem o grafite: a retícula da home é o fundo da folha */
-    if (String(inicio || "").startsWith("cerne")) sup.dataset.cap = "cerne";
+    if (seg === "cerne" || String(inicio || "").startsWith("cerne")) sup.dataset.cap = "cerne";
     raiz.replaceChildren(sup);
-    const alvo = fechaQuadrado();
+    solta(raiz);
+    const altura = fechaQuadrado();
 
     /* enquadra a superfície e a faz descer ao mesmo tempo */
     rola(raiz.getBoundingClientRect().top + scrollY - railH());
-    const desce = raiz.animate([{ height: "0px" }, { height: alvo + "px" }],
+    const desce = raiz.animate([{ height: "0px" }, { height: altura + "px" }],
       { duration: reduz.matches ? 0 : 950, easing: EASE, fill: "forwards" });
     try { await desce.finished; } catch (_) { /* cancelada */ }
     raiz.style.height = "";
-    raiz.style.paddingBottom = Math.max(0, alvo - sup.offsetHeight) + "px";
+    raiz.style.paddingBottom = Math.max(0, altura - sup.offsetHeight) + "px";
     desce.cancel();
     estado = "aberta";
+    mede(raiz);
 
     let aviso = null;
     const lento = setTimeout(() => {
@@ -112,8 +141,11 @@ if (raiz && gatilho) {
       const m = await carga;
       clearTimeout(lento);
       aviso?.remove();
-      if (estado !== "aberta") return;
-      ctrl = m.cria({ raiz, sup, en: EN, inicio, fecha });
+      if (estado !== "aberta" || raizDe() !== raiz) return;
+      /* troca: quando a reprodução pede o outro segmento (o fim da TROIA
+         encaminha a minuta ao CERNE), esta superfície fecha e a outra abre */
+      ctrl = m.cria({ raiz, sup, en: EN, inicio, fecha, troca: (ini) => setTimeout(() => abre(ini), 0) });
+      mede(raiz);
     } catch (err) {
       clearTimeout(lento);
       if (!aviso) { aviso = document.createElement("p"); aviso.className = "ld-aviso"; aviso.setAttribute("role", "status"); sup.append(aviso); }
@@ -127,44 +159,55 @@ if (raiz && gatilho) {
     }
   }
 
-  /* ---------- fechar: o movimento inverso ---------- */
-  async function fecha(destino) {
+  /* ---------- fechar: o movimento inverso ----------
+     Encerrar devolve a página ao aparelho que abriu a superfície. Na troca
+     (abrir a outra), a página não rola: quem enquadra é a abertura seguinte;
+     se a superfície que fecha está fora da tela, recolhe sem animação. */
+  async function fecha(destino, { troca = false } = {}) {
     if (estado !== "aberta") return;
     estado = "fechando";
+    const { raiz, gatilho } = SUP[seg];
     ctrl?.destroi();
     ctrl = null;
     const h = raiz.offsetHeight;
     raiz.style.paddingBottom = "";
-    const alvoEl = destino ? document.getElementById(destino) : null;
-    if (alvoEl) {
+    solta(raiz);
+    const alvoEl = !troca && seg === "jornada" && destino ? document.getElementById(destino) : null;
+    if (troca) {
+      /* nada: a abertura seguinte enquadra a outra superfície */
+    } else if (alvoEl) {
       /* o destino fica abaixo da superfície: a posição dele depois do recolhimento */
       rola(alvoEl.getBoundingClientRect().top + scrollY - h - railH());
     } else {
-      const r = gatilho.getBoundingClientRect();
+      const ap = seg === "cerne" ? (gatilho.closest(".cl__inst") || gatilho) : gatilho;
+      const r = ap.getBoundingClientRect();
       const util = innerHeight - railH();
       rola(r.top + scrollY - railH() - Math.max(0, (util - r.height) / 2));
     }
+    const instante = reduz.matches || (troca && !visivel(raiz));
     const sobe = raiz.animate([{ height: h + "px" }, { height: "0px" }],
-      { duration: reduz.matches ? 0 : 800, easing: EASE, fill: "forwards" });
+      { duration: instante ? 0 : 800, easing: EASE, fill: "forwards" });
     try { await sobe.finished; } catch (_) { /* cancelada */ }
     raiz.hidden = true;
     raiz.replaceChildren();
     raiz.style.height = "";
     sobe.cancel();
+    mede(raiz);
     sup = null;
     gatilho.setAttribute("aria-expanded", "false");
     estado = "repouso";
-    if (!alvoEl) gatilho.focus({ preventScroll: true });
+    seg = null;
+    if (!troca && !alvoEl) gatilho.focus({ preventScroll: true });
   }
 
-  gatilho.addEventListener("click", () => {
-    if (estado === "repouso") abre();
-    else if (estado === "aberta") ctrl?.foca();
+  SUP.jornada.gatilho.addEventListener("click", () => {
+    if (estado === "aberta" && seg === "jornada") ctrl?.foca();
+    else abre();
   });
   /* RATIO e TROIA no cordão, e o foróptero do CERNE: abrem a demonstração já
      no capítulo (ou no passo, "cerne@3") lido no momento do clique */
   document.querySelectorAll("[data-ld-ir]").forEach((b) => b.addEventListener("click", () => {
     setTimeout(() => abre(b.dataset.ldIr), 0);
   }));
-  gatilho.dataset.ldPronto = "";
+  SUP.jornada.gatilho.dataset.ldPronto = "";
 }

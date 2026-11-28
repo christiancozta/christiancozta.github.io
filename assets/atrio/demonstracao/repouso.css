@@ -138,3 +138,10 @@
 .ld-gatilho[data-ld-pronto]:hover .ld-gatilho__rotulo,
 .ld-gatilho:focus-visible .ld-gatilho__rotulo{ background:var(--ink, #2C2C2C); color:var(--paper, #FCFCFC); }
 @media (prefers-reduced-motion: reduce){ .ld-gatilho__rotulo{ transition:none; } }
+
+/* Superfície da rodada do CERNE (28/11/2026): logo abaixo do foróptero, na
+   mesma largura da jornada (colunas 2 a 7 da retícula). O foróptero tem o
+   respiro de --g dos lados; a superfície o devolve para alinhar com a da
+   jornada. No celular, as duas já ficam a --g das bordas. */
+.cl .ld--cerne{ margin:calc(var(--u, 8px) * 3) calc(-1 * var(--g, 16px)) 0; text-align:left; }
+@media (max-width:900px){ .cl .ld--cerne{ margin-inline:0; } }
