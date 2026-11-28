@@ -163,13 +163,14 @@
 /* o anel persistente sai */
 .ld-gatilho[data-ld-pronto] .ld-relogio__botao[data-dono="humano"]::before{ content:none; animation:none; }
 
-/* a seta: grafite translúcido, movimento curto; o ângulo vem de gatilho.js */
+/* a seta: grafite translúcido, movimento curto, reta sobre o botão */
 .ld-gatilho__seta{
-  --a:var(--ld-seta-ang, 40deg);
+  --a:90deg;   /* reta, para baixo; o prumo (left) vem de gatilho.js */
   position:absolute; left:calc(100% + 14px); top:50%;
   width:42px; height:26px; pointer-events:none; opacity:0;
   transform:translateY(-50%) rotate(var(--a));
 }
+.ld-gatilho__seta[hidden]{ display:none; }
 .ld-gatilho__seta svg{ display:block; width:100%; height:100%; fill:#2C2C2C; }
 .ld-gatilho[data-ld-pronto]:not([data-ld-apertado]):not([aria-expanded="true"]) .ld-gatilho__seta{
   animation:ld-seta 1.9s cubic-bezier(.32,.72,0,1) infinite;

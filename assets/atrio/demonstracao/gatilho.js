@@ -14,7 +14,7 @@
      3. só com a expansão concluída e os recursos carregados a reprodução começa.
    Ao encerrar, a superfície recolhe pelo movimento inverso e some.
    ========================================================================== */
-const V = "20261128-seta";
+const V = "20261128-seta-reta";
 const SUP = {
   jornada: { raiz: document.querySelector("[data-ld]"), gatilho: document.querySelector("[data-ld-gatilho]") },
   cerne: { raiz: document.querySelector("[data-ld-cerne]"), gatilho: document.querySelector("[data-cl-play]") }
@@ -210,22 +210,28 @@ if (SUP.jornada.raiz && SUP.jornada.gatilho) {
   document.querySelectorAll("[data-ld-ir]").forEach((b) => b.addEventListener("click", () => {
     setTimeout(() => abre(b.dataset.ldIr), 0);
   }));
-  /* a seta à direita de "Iniciar demonstração" aponta para o botão do humano:
-     o ângulo depende da largura do relógio, então é medido aqui */
+  /* a seta à direita de "Iniciar demonstração" desce reta sobre o botão do
+     humano: no prumo do centro dele ou, se o prumo cai sobre o rótulo, logo
+     à direita do rótulo, ainda sobre o botão; fora do botão, não entra */
   const seta = SUP.jornada.gatilho.querySelector(".ld-gatilho__seta");
   const tecla = SUP.jornada.gatilho.querySelector('.ld-relogio__botao[data-dono="humano"]');
   const topo = SUP.jornada.gatilho.querySelector(".ld-gatilho__topo");
   const aponta = () => {
     if (!seta || !tecla || !topo) return;
     const t = topo.getBoundingClientRect(), k = tecla.getBoundingClientRect();
-    const sx = t.right + 14 + 21, sy = t.top + t.height / 2;
-    const kx = k.left + k.width / 2, ky = k.top + k.height * .3;
-    SUP.jornada.gatilho.style.setProperty("--ld-seta-ang", (Math.atan2(ky - sy, kx - sx) * 180 / Math.PI).toFixed(1) + "deg");
+    const w = seta.offsetWidth || 42;
+    const x = Math.max(k.left + k.width / 2 - t.left - w / 2, t.width + 10);
+    seta.style.left = Math.round(x) + "px";
+    seta.hidden = t.left + x + w / 2 > k.right - k.width * .2;
   };
   if (seta) {
     aponta();
-    if ("ResizeObserver" in window) new ResizeObserver(aponta).observe(SUP.jornada.gatilho);
-    else addEventListener("resize", aponta, { passive: true });
+    /* o rótulo muda de largura quando a fonte chega: mede de novo */
+    if ("ResizeObserver" in window) {
+      const ro = new ResizeObserver(aponta);
+      ro.observe(SUP.jornada.gatilho); ro.observe(topo);
+    } else addEventListener("resize", aponta, { passive: true });
+    document.fonts?.ready.then(aponta);
   }
   SUP.jornada.gatilho.dataset.ldPronto = "";
 }
