@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Legal Engineering em repouso (27/11/2026)
+   Só o relógio de xadrez do RATIO, na gravura de sempre: corpo, mostradores
+   (IA, Humano) e os dois botões. O relógio inteiro é o acionador; abaixo dele,
+   a indicação funcional "Iniciar demonstração", que só aparece quando o
+   acionador está pronto (gatilho.js). A superfície (.ld) não tem altura,
+   linha nem espaço reservado antes do clique. O resto da demonstração
+   (demonstracao.css) é carregado sob demanda.
+   ========================================================================== */
+.hm-proj--atrio{ grid-template-rows:repeat(4, minmax(var(--row), auto)); }
+.hm-proj--atrio::after{ display:none; }
+
+@media (min-width:901px){
+  .hm-proj--atrio .hm-ficha.ld-ficha{
+    grid-column:2 / 8; grid-row:3; align-self:start;
+    display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+    column-gap:calc(var(--g) * 2); row-gap:calc(var(--u) * 2.25);
+    padding:var(--g);
+  }
+  .hm-proj--atrio .hm-ficha.ld-ficha .hm-origem{ grid-column:1 / -1; }
+  .hm-proj--atrio .hm-ficha.ld-ficha .hm-origem .hm-narr{ max-width:65ch; }
+}
+
+/* ---------- o relógio, centrado na composição (colunas 2 a 7) ---------- */
+.ld-repouso{
+  --ld-acc:var(--atrio, #D94F2D);
+  grid-column:2 / 8; grid-row:4; align-self:start;
+  display:flex; justify-content:center;
+  padding:var(--row) 0 calc(var(--row) * .75);
+  min-width:0;
+}
+.ld-gatilho{
+  appearance:none; -webkit-appearance:none;
+  display:flex; flex-direction:column; align-items:center;
+  width:clamp(280px, calc(var(--cell) * 2.1), 440px);
+  margin:0; padding:0; border:0; background:none; color:var(--ink);
+  font:inherit; cursor:default;
+  -webkit-tap-highlight-color:transparent;
+}
+.ld-gatilho[data-ld-pronto]{ cursor:pointer; }
+.ld-gatilho:focus{ outline:none; }
+.ld-gatilho:focus-visible .ld-relogio__inst{ outline:2px solid var(--ld-acc); outline-offset:6px; }
+.ld-relogio{ display:flex; flex-direction:column; align-items:center; width:100%; }
+
+/* ---------- relógio de xadrez: a gravura do RATIO (desenho preservado) ---------- */
+.ld-relogio__placa{
+  display:flex; justify-content:space-between; align-items:baseline;
+  width:100%; margin-bottom:.9rem; padding:0 1.5% .45rem; box-shadow:inset 0 -1px 0 var(--ink);
+}
+.ld-relogio__marca{ font:650 clamp(.8rem, 1.05vw, 1.2rem)/1 "Science Gothic", var(--f-display, sans-serif); letter-spacing:.02em; }
+.ld-relogio__marca em{ font-style:normal; color:var(--ld-acc); }
+.ld-relogio__inst{ position:relative; display:block; width:100%; aspect-ratio:1376 / 970; }
+.ld-relogio__corpo, .ld-relogio__mostra{ position:absolute; inset:0; width:100%; height:100%; }
+.ld-relogio__corpo{ clip-path:inset(15.85% 0 0); }
+.ld-relogio__mostra{ overflow:visible; }
+.ld-relogio__mostra text{ text-anchor:middle; fill:var(--ink); stroke:var(--paper); stroke-width:18px; stroke-linejoin:round; paint-order:stroke; }
+.ld-relogio__quem{ font:500 34px var(--f-micro, monospace); letter-spacing:.14em; text-transform:uppercase; }
+.ld-relogio__estado{ font:800 58px var(--f-display, system-ui, sans-serif); letter-spacing:-.035em; }
+.ld-relogio__botao{ position:absolute; top:0; width:14.898%; height:16%; }
+.ld-relogio__botao[data-dono="ia"]{ left:21.58%; }
+.ld-relogio__botao[data-dono="humano"]{ left:63.37%; }
+.ld-relogio__botao::after{
+  content:""; position:absolute; top:81.8%; left:0; width:100%; height:20%;
+  background:url("../ratio/relogio-corpo.webp") 49.96% 13.53% / 671.22% auto no-repeat; pointer-events:none;
+}
+.ld-relogio__poco{ position:absolute; inset:0 0 18.2%; overflow:hidden; }
+.ld-relogio__poco img{ display:block; width:100%; height:100%; transition:transform .22s cubic-bezier(.32,.72,0,1); }
+/* o botão do humano chama a mão: um anel de accent que se abre e some */
+.ld-gatilho[data-ld-pronto] .ld-relogio__botao[data-dono="humano"]::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:max(108%, 44px); aspect-ratio:1; transform:translate(-50%, -50%);
+  border-radius:50%; box-shadow:0 0 0 2px var(--ld-acc);
+  animation:ld-chama 2.2s cubic-bezier(.32,.72,0,1) infinite;
+}
+@keyframes ld-chama{
+  0%{ transform:translate(-50%, -50%) scale(.7); opacity:0; }
+  25%{ opacity:.9; }
+  100%{ transform:translate(-50%, -50%) scale(1.12); opacity:0; }
+}
+.ld-gatilho[data-ld-pronto]:hover .ld-relogio__botao[data-dono="humano"] .ld-relogio__poco img{ transform:translateY(9%); }
+.ld-gatilho[data-ld-pronto]:active .ld-relogio__botao[data-dono="humano"] .ld-relogio__poco img,
+.ld-gatilho[aria-expanded="true"] .ld-relogio__botao[data-dono="humano"] .ld-relogio__poco img{ transform:translateY(27%); }
+.ld-gatilho[aria-expanded="true"] .ld-relogio__botao[data-dono="humano"]::before{ animation:none; opacity:0; }
+
+/* ---------- indicação funcional ---------- */
+.ld-gatilho__rotulo{
+  margin-top:1.1rem;
+  font-family:var(--f-micro, ui-monospace, monospace); font-size:.558rem; font-weight:600;
+  line-height:1.3; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--soft, rgba(44,44,44,.66));
+  transition:color .3s cubic-bezier(.32,.72,0,1);
+}
+.ld-gatilho:not([data-ld-pronto]) .ld-gatilho__rotulo{ visibility:hidden; }
+.ld-gatilho[data-ld-pronto]:hover .ld-gatilho__rotulo,
+.ld-gatilho:focus-visible .ld-gatilho__rotulo{ color:var(--ink); }
+
+/* ---------- a superfície: nada visível antes do clique ---------- */
+.ld{ position:relative; margin:0 var(--cell); overflow:hidden; }
+.ld[hidden]{ display:none; }
+/* o mínimo para descer: uma viewport útil (abaixo do cordão), grafite translúcido,
+   sem borda, sombra nem arredondamento; o conteúdo vem com demonstracao.css */
+.ld-sup{
+  position:relative; height:calc(100vh - var(--rail-h, 0px)); height:calc(100dvh - var(--rail-h, 0px));
+  background:rgba(44,44,44,.96); color:#FCFCFC;
+}
+
+@media (max-width:900px){
+  .hm-proj--atrio{ grid-template-rows:none; }
+  .hm-proj--atrio .hm-ficha.ld-ficha{ grid-column:1 / -1; grid-row:auto; padding:calc(var(--u) * 3) var(--g); }
+  .ld-repouso{ grid-column:1 / -1; grid-row:auto; padding:var(--g) var(--g) calc(var(--g) * 2); }
+  .ld-gatilho{ width:min(64%, 340px); }
+  .ld-relogio__placa{ display:none; }
+  .ld{ margin:0 var(--g); }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ld-relogio__poco img, .ld-gatilho__rotulo{ transition:none; }
+  .ld-gatilho[data-ld-pronto] .ld-relogio__botao[data-dono="humano"]::before{ animation:none; opacity:.9; transform:translate(-50%, -50%); }
+}

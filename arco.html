@@ -109,9 +109,8 @@
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261127-ancoras">
 <script src="assets/arco/js/arco-home.js?v=20261127-estados" defer></script>
-<link rel="stylesheet" href="assets/atrio/css/jornada.css?v=20261125-jornada6">
-<script src="assets/atrio/js/jornada-dados.js?v=20261125-jornada4" defer></script>
-<script src="assets/atrio/js/jornada.js?v=20261125-jornada6" defer></script>
+<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261127-demo">
+<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261127-demo"></script>
 <link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261125-lentes">
 <script src="assets/cerne/js/cerne-lentes.js?v=20261125-lentes" defer></script>
 </head>
@@ -198,8 +197,8 @@
         </div>
 
         <button class="rail__link" type="button" data-anchor="legal-engineering" data-proj="atrio">ATRIO</button>
-        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-aj-ir="ratio">RATIO</button>
-        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-aj-ir="troia">TROIA</button>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-ld-ir="ratio">RATIO</button>
+        <button class="rail__link rail__link--child" type="button" data-anchor="legal-engineering" data-ld-ir="troia">TROIA</button>
 
         <button class="rail__link" type="button" data-anchor="ai-governance" data-proj="cerne">CERNE</button>
       </div>
@@ -360,10 +359,10 @@
           </div>
         </section>
 
-        <!-- 03 — LEGAL ENGINEERING / ATRIO: disposição invertida; área no título, tese na ficha -->
+        <!-- 03 — LEGAL ENGINEERING / ATRIO: área no título, tese na ficha; abaixo, em repouso, o relógio do RATIO -->
         <section class="hm-panel hm-proj hm-proj--atrio" id="legal-engineering" aria-labelledby="t-atrio">
           <h2 class="hm-title hm-title--area" id="t-atrio" data-fit="titulo"><span class="hm-fit">Legal Engineering</span></h2>
-          <div class="hm-ficha aj-ficha">
+          <div class="hm-ficha ld-ficha">
               <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">redigir <span class="hm-ne">≠</span> formular</h3><p>Uma mudança súbita nos indicadores mostrou a produção acelerando em descompasso com o método, como apontava a esteira de correções.</p></div>
               <div class="hm-ficha__b"><h3>O sistema</h3><p>O ATRIO governa o raciocínio jurídico mediado por IA, entre memória, formulação, confronto e proteção de dados. A decisão segue humana.</p></div>
               <div class="hm-ficha__b"><h3>O que mediu</h3><p>Corpus de 115.114 registros processuais do TJPR e API com 31 rotas e 188 testes automatizados.</p></div>
@@ -376,58 +375,35 @@
           </div>
               </details>
           </div>
-          <!-- A jornada do caso 0012345: registradora, relógio e seletor; o tabuleiro 8 x 8
-               (uma casa, um quadrado da retícula); as folhas guardadas. Desenho em
-               assets/atrio/css/jornada.css; andamento em assets/atrio/js/jornada.js;
-               lances em assets/atrio/js/jornada-dados.js. -->
-          <div class="aj" data-aj data-vez="nenhuma" data-mod="atrio">
-            <div class="aj-reg">
-                <div class="aj-imp" aria-hidden="true"></div>
-                <div class="aj-papel" aria-label="Folha da registradora"><div class="aj-rolo"></div></div>
-              </div>
-            <div class="aj-palco">
-              <div class="aj-tab" aria-hidden="true"><div class="aj-plano"><div class="aj-casas"></div><svg class="aj-linhas" focusable="false"></svg><div class="aj-pecas"></div></div></div>
-              <figure class="aj-relogio">
-                <div class="aj-relogio__placa"><span class="aj-relogio__marca" aria-hidden="true">R<em>A</em>TIO</span><span class="aj-relogio__conta"></span></div>
-                <p class="aj-relogio__status"></p>
-                <div class="aj-relogio__inst">
-                  <img class="aj-relogio__corpo" src="assets/atrio/ratio/relogio-corpo.webp" alt="" width="1376" height="970" loading="lazy" decoding="async">
-                  <svg class="aj-relogio__mostra" viewBox="0 0 1376 970" focusable="false" aria-hidden="true">
-                    <defs><pattern id="aj-hachura" width="9" height="7" patternUnits="userSpaceOnUse"><rect width="9" height="1.7"/></pattern></defs>
-                    <g data-mostra="ia"><circle class="aj-relogio__veu" cx="399.5" cy="513.5" r="197"/><text class="aj-relogio__quem" x="399.5" y="482">IA</text><text class="aj-relogio__estado" x="399.5" y="562" data-aj-ia></text></g>
-                    <g data-mostra="humano"><circle class="aj-relogio__veu" cx="974.5" cy="513.5" r="197"/><text class="aj-relogio__quem" x="974.5" y="482">Humano</text><text class="aj-relogio__estado" x="974.5" y="562" data-aj-humano></text></g>
+          <!-- Repouso: o relógio de xadrez do RATIO, sem tabuleiro, peças ou jogo. O relógio
+               inteiro é o acionador da demonstração, que desce numa superfície logo abaixo
+               do painel (#demonstracao). Antes do clique só existem o acionador e o espaço
+               vazio da superfície; a demonstração (scripts, dados e estilos) é importada
+               sob demanda. Desenho em assets/atrio/demonstracao/repouso.css; acionamento
+               em assets/atrio/demonstracao/gatilho.js. -->
+          <div class="ld-repouso">
+            <button class="ld-gatilho" type="button" data-ld-gatilho aria-controls="demonstracao" aria-expanded="false">
+              <span class="ld-relogio" aria-hidden="true">
+                <span class="ld-relogio__placa"><span class="ld-relogio__marca">R<em>A</em>TIO</span></span>
+                <span class="ld-relogio__inst">
+                  <img class="ld-relogio__corpo" src="assets/atrio/ratio/relogio-corpo.webp" alt="" width="1376" height="970" loading="lazy" decoding="async">
+                  <svg class="ld-relogio__mostra" viewBox="0 0 1376 970" focusable="false">
+                    <g><text class="ld-relogio__quem" x="399.5" y="482">IA</text><text class="ld-relogio__estado" x="399.5" y="562">Pronta</text></g>
+                    <g><text class="ld-relogio__quem" x="974.5" y="482">Humano</text><text class="ld-relogio__estado" x="974.5" y="562">Começar</text></g>
                   </svg>
-                  <button class="aj-relogio__botao" type="button" data-dono="humano" disabled><span class="aj-relogio__poco"><img src="assets/atrio/ratio/relogio-botao.webp" alt="" width="205" height="127" loading="lazy" decoding="async"></span></button>
-                </div>
-              </figure>
-              <nav class="aj-sel" aria-label="Módulos do percurso">
-                <button class="aj-mod" type="button" data-mod="atrio"><img src="assets/atrio/brand/atrio-rei.svg?v=20261125-jornada4" alt="" width="38" height="38" decoding="async"><span class="aj-mod__n">AT<em>R</em>IO</span></button>
-                <button class="aj-mod" type="button" data-mod="ratio"><img src="assets/atrio/brand/ratio-rainha.svg?v=20261125-jornada4" alt="" width="38" height="38" decoding="async"><span class="aj-mod__n">R<em>A</em>TIO</span></button>
-                <button class="aj-mod" type="button" data-mod="troia"><img src="assets/atrio/brand/troia-cavalo.svg?v=20261125-jornada4" alt="" width="38" height="38" decoding="async"><span class="aj-mod__n">TROIA</span></button>
-              </nav>
-            </div>
-            <section class="aj-vez" data-estado="pronto" aria-labelledby="aj-vez-k">
-              <p class="aj-vez__k" id="aj-vez-k"></p>
-              <figure class="aj-vez__trecho"><figcaption class="aj-vez__peca"></figcaption><blockquote class="aj-vez__q"></blockquote></figure>
-              <div class="aj-vez__lado">
-                <p class="aj-vez__p"></p>
-                <div class="aj-vez__ops" role="group" aria-labelledby="aj-vez-k"></div>
-                <p class="aj-vez__dica" role="alert"></p>
-                <button class="aj-acao aj-acao--cheia aj-vez__bate" type="button"></button>
-              </div>
-            </section>
-            <div class="aj-arq">
-              <details><summary><span>Folhas guardadas<span class="aj-arq__n">0</span></span></summary><div class="aj-folhas"></div></details>
-              <div class="aj-acoes"><button class="aj-acao aj-acao--cheia" type="button" data-aj-minuta hidden>Ver a minuta</button><a class="aj-acao aj-acao--link" href="#ai-governance" data-hm-go data-aj-cerne hidden>Ir ao CERNE</a></div>
-            </div>
-            <p class="arx-sr aj-vivo" role="status" aria-live="polite"></p>
-            <dialog class="aj-minuta" aria-labelledby="aj-minuta-t">
-              <div class="aj-minuta__h"><h3 id="aj-minuta-t">Minuta do RATIO · caso 0012345</h3><button class="aj-acao aj-acao--cheia" type="button" data-aj-fecha>Fechar</button></div>
-              <p class="aj-minuta__nota">Texto validado na RI_06. Caso fictício.</p>
-              <div class="aj-minuta__t" lang="pt-BR"></div>
-            </dialog>
+                  <span class="ld-relogio__botao" data-dono="ia"><span class="ld-relogio__poco"><img src="assets/atrio/ratio/relogio-botao.webp" alt="" width="205" height="127" loading="lazy" decoding="async"></span></span>
+                  <span class="ld-relogio__botao" data-dono="humano"><span class="ld-relogio__poco"><img src="assets/atrio/ratio/relogio-botao.webp" alt="" width="205" height="127" loading="lazy" decoding="async"></span></span>
+                </span>
+              </span>
+              <span class="ld-gatilho__rotulo">Iniciar demonstração</span>
+            </button>
           </div>
         </section>
+
+        <!-- Superfície da demonstração: sem altura, sem linha e sem espaço reservado até o
+             clique no relógio. Desce a partir da base do painel, nas margens da página, e
+             desloca o que vem depois. ATRIO → RATIO → TROIA numa só jornada. -->
+        <div class="ld" id="demonstracao" data-ld hidden></div>
 
         <!-- 04 — AI GOVERNANCE & EVALUATION / CERNE: em coluna única. Sob o título,
              as lentes (o foróptero), sem texto em volta; depois a ficha, em três
