@@ -100,8 +100,9 @@
    O corpo deixa de ser SVG chapado e passa a ser gravura, no mesmo buril do
    relógio do RATIO (assets/cerne/fonte/foroptero.py gera as duas
    resoluções): linhas de largura variável, peças em comum com o relógio
-   (botão de rebites, botões serrilhados, trilho de minutos). O azul do
-   olho já vem gravado na imagem; a janela da direita fica transparente.
+   (botão de rebites, botões serrilhados, trilho de minutos). Em volta do
+   olho, o azul é liso: a pele da esfinge, como no ícone do CERNE. Ele vem
+   na própria imagem; a janela da direita fica transparente.
    Na janela da esquerda, no lugar da interrogação, passam os trechos da
    minuta que levaram aos achados, com o parágrafo de origem.
    ========================================================================== */
@@ -135,3 +136,12 @@ img.cl__corpo{ object-fit:contain; pointer-events:none; user-select:none; }
   .cl__frase{ display:none; }
   .cl__par{ font-size:6.4cqw; font-weight:700; letter-spacing:0; }
 }
+
+/* Ordem das outras áreas (28/11/2026): ficha em três blocos logo abaixo do
+   título (fileira 3), o foróptero na fileira 4, com a indicação acima dele,
+   centrada. */
+@media (min-width:901px){
+  .hm-proj--cerne .hm-trilho{ grid-row:3; }
+  .hm-proj--cerne .cl{ grid-row:4; }
+}
+.cl__rotulo{ margin:0 auto 1.1rem; }
