@@ -14,7 +14,7 @@
    Cada passo se executa animado (ctx animado) ou de uma vez (ctx
    instantâneo), como os demais capítulos. Conteúdo: dados-cerne.js.
    ========================================================================== */
-import C from "./dados-cerne.js?v=20261128-cerne";
+import C from "./dados-cerne.js?v=20261128-confrontar";
 
 const SVGNS = "http://www.w3.org/2000/svg";
 const MOLA = "cubic-bezier(.32,.72,0,1)";

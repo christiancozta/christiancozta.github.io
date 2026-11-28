@@ -386,7 +386,7 @@ export default {
   ],
   "selo": "CERNE {versao} · {eid} · {data}",
   "seloOcioso": "CERNE {versao} · aguardando o ato",
-  "distincao": "contrariar ≠ auditar",
+  "distincao": "confrontar ≠ auditar",
   "passos": [
    "Admissibilidade",
    "Segmentação",
@@ -596,7 +596,7 @@ export default {
   ],
   "selo": "CERNE {versao} · {eid} · {data}",
   "seloOcioso": "CERNE {versao} · awaiting the ruling",
-  "distincao": "contest ≠ audit",
+  "distincao": "confront ≠ audit",
   "passos": [
    "Admissibility",
    "Segmentation",

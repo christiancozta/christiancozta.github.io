@@ -19,8 +19,8 @@
    - Movimento reduzido: nada se desloca; textos aparecem inteiros; as pausas
      de leitura permanecem, e os controles dão acesso a todos os outputs.
    ========================================================================== */
-import D from "./dados.js?v=20261128-cerne";
-import { cerne, WM_CERNE } from "./cerne.js?v=20261128-cerne";
+import D from "./dados.js?v=20261128-confrontar";
+import { cerne, WM_CERNE } from "./cerne.js?v=20261128-confrontar";
 
 const PARA = Symbol("para");
 const ACC = "#A63A23";

@@ -425,7 +425,7 @@ export default {
         nome: "Referral",
         ia: "Legality holds. The half split is unstable. TROIA contests the draft, but does not decide it: the conclusion belongs to the human judge.",
         humano: "Sends the draft to CERNE, for audit.",
-        distincao: "Contest ≠ audit."
+        distincao: "Confront ≠ audit."
       },
       fim: {
         titulo: "End of the replay",
