@@ -293,134 +293,123 @@
 
 })();
 
-/* ---- Indicador de progresso de rolagem ---- */
+/* ---- Duplo mínimo: filete global de navegação (2 CSS px) ---- */
+const arcoDuploCss = (embedded = false) => {
+  const rail = embedded ? '#arco-child-scrollbar' : '#progress-rail';
+  const thumb = embedded ? '.arco-child-scrollbar__fill' : '.progress-rail__fill';
+  const root = embedded ? 'html[data-arco-embedded="true"]' : 'html';
+  const native = `${root}{scrollbar-width:none!important;-ms-overflow-style:none!important}
+${root}::-webkit-scrollbar,${root} body::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}`;
+  return `${native}
+${rail}{
+  position:fixed;top:0;bottom:0;right:0;width:12px;
+  z-index:2147483000;pointer-events:auto;overflow:hidden;
+  background:transparent;cursor:default;
+}
+${rail}[hidden]{display:none!important}
+${rail}::before{
+  content:"";position:absolute;top:0;bottom:0;right:0;width:.5px;
+  background:#CFCFCF;pointer-events:none;
+}
+${rail} ${thumb}{
+  position:absolute;top:0;right:1.5px;left:auto;width:.5px;height:0;
+  background:#2C2C2C;transform:none;box-shadow:none;
+  transition:none!important;pointer-events:none;
+}
+${rail} .progress-rail__track,${rail} .progress-rail__head,${rail} .progress-rail__mark{display:none!important}
+${rail}[data-mode="echo"],${rail}[data-mode="atrio"]{top:0;bottom:0;right:0}
+@media(max-width:719px), (pointer:coarse), (forced-colors:active){
+  ${rail}{display:none!important}
+  ${root}{scrollbar-width:auto!important;-ms-overflow-style:auto!important}
+  ${root}::-webkit-scrollbar,${root} body::-webkit-scrollbar{width:initial!important;height:initial!important;display:initial!important}
+}`;
+};
+
+function arcoDuploMetrics(win,doc){
+  const root=doc.scrollingElement || doc.documentElement;
+  const viewport=root.clientHeight || win.innerHeight;
+  const height=root.scrollHeight;
+  const max=Math.max(0,height-viewport);
+  const fraction=height>0 ? Math.min(1,viewport/height) : 1;
+  const ratio=max>0 ? Math.min(1,Math.max(0,root.scrollTop/max)) : 0;
+  return {root,max,fraction,ratio};
+}
+function arcoDuploPaint(win,doc,rail,fill){
+  const {max,fraction,ratio}=arcoDuploMetrics(win,doc);
+  rail.hidden=max<=0;
+  fill.style.height=(fraction*100)+'%';
+  fill.style.top=(ratio*(1-fraction)*100)+'%';
+  fill.style.transform='none';
+}
+function arcoDuploDrag(win,doc,rail,fill){
+  let drag=null;
+  const seek=(event)=>{
+    const {root,max,fraction}=arcoDuploMetrics(win,doc);
+    const rect=rail.getBoundingClientRect();
+    const travel=rect.height*(1-fraction);
+    if(!drag||travel<=0||max<=0)return;
+    const ratio=Math.max(0,Math.min(1,(event.clientY-rect.top-drag.offset)/travel));
+    root.scrollTop=ratio*max;
+  };
+  const down=(event)=>{
+    if(event.button!==0||event.pointerType==='touch')return;
+    const thumb=fill.getBoundingClientRect();
+    const onThumb=event.clientY>=thumb.top&&event.clientY<=thumb.bottom;
+    drag={id:event.pointerId,offset:onThumb?event.clientY-thumb.top:thumb.height/2};
+    event.preventDefault();
+    rail.setPointerCapture(event.pointerId);
+    seek(event);
+  };
+  const move=(event)=>{if(drag?.id===event.pointerId)seek(event);};
+  const stop=(event)=>{if(drag?.id===event.pointerId)drag=null;};
+  rail.addEventListener('pointerdown',down);
+  rail.addEventListener('pointermove',move);
+  rail.addEventListener('pointerup',stop);
+  rail.addEventListener('pointercancel',stop);
+  rail.addEventListener('lostpointercapture',stop);
+  return ()=>{
+    rail.removeEventListener('pointerdown',down);
+    rail.removeEventListener('pointermove',move);
+    rail.removeEventListener('pointerup',stop);
+    rail.removeEventListener('pointercancel',stop);
+    rail.removeEventListener('lostpointercapture',stop);
+  };
+}
+
 (() => {
   "use strict";
-  /* Indicador único: um só componente físico, quatro gramáticas.
-     percurso -> rail estrutural da home
-     echo     -> rastro contínuo (fio + carga + ponto-cabeça), sem marcação
-     atrio    -> indicador do próprio ATRIO, idêntico no direto e no iframe
-     neutro   -> rail sem marcação (Repertório)
-     O scroll permanece nativo: aqui só se lê scrollTop. */
-  const rail = document.getElementById("progress-rail");
-  const fill = document.getElementById("progress-rail-fill");
-  const head = document.getElementById("progress-rail-head");
-  if(!rail || !fill) return;
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches) rail.dataset.motion = "off";
-
-  let raf = 0, bound = null;
-
-  const activeView = () =>
-    document.querySelector('.view[data-active="true"]')?.dataset.view || "home";
-
-  /* O ECHO mantém a gramática existente: o hospedeiro desenha seu rastro e
-     desliga apenas as barras concorrentes desse filho. O ATRIO se autogoverna. */
-  function dressEchoChild(doc){
-    if(!doc || doc.getElementById("arco-child-scroll")) return;
-    const st = doc.createElement("style");
-    st.id = "arco-child-scroll";
-    st.textContent = "html{scrollbar-width:none;-ms-overflow-style:none}" +
-      "html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}" +
-      ".echo-trace{display:none}";
-    (doc.head || doc.documentElement).appendChild(st);
-  }
-
-  /* alvo de leitura: documento hospedeiro na home, documento do filho nas views
-     de iframe (o palco do filho tem 100dvh e não rola no hospedeiro) */
-  function target(){
-    const view = activeView();
-    if(view === "home") return {win:window, doc:document};
-    const frame = document.querySelector('.view[data-active="true"] iframe');
-    try{
-      const doc = frame && frame.contentDocument;
-      if(doc && doc.documentElement && doc.readyState !== "loading"){
-        if(view === "echo") dressEchoChild(doc);
-        return {win:frame.contentWindow, doc};
-      }
-    }catch(e){ /* sem acesso: cai no hospedeiro */ }
-    return {win:window, doc:document};
-  }
-
-  function metrics(t){
-    const el = t.doc.scrollingElement || t.doc.documentElement;
-    return {el, max: Math.max(0, el.scrollHeight - t.win.innerHeight)};
-  }
-
-  function mode(){
-    const view = activeView();
-    if(view === "echo") return "echo";
-    if(view === "atrio") return "atrio";
-    return rail.dataset.pref === "neutro" ? "neutro" : "percurso";
-  }
-
-  function paint(){
-    raf = 0;
-    const t = target();
-    const {el, max} = metrics(t);
-    const progress = max > 0 ? Math.min(1, Math.max(0, el.scrollTop / max)) : 0;
-    const pct = (progress * 100).toFixed(3) + "%";
-    fill.style.transform = `scaleY(${progress.toFixed(5)})`;
-    if(head) head.style.top = pct;
-    rail.style.visibility = max > 0 ? "visible" : "hidden";
-  }
-
-  const schedule = () => { if(!raf) raf = requestAnimationFrame(paint); };
-  const remeasure = () => schedule();
-
-  /* liga os listeners ao escopo que realmente rola na view ativa */
-  function bind(){
-    const t = target();
-    if(bound && bound.win === t.win) return;
-    if(bound){
-      bound.win.removeEventListener("scroll", schedule);
-      bound.win.removeEventListener("resize", remeasure);
+  const rail=document.getElementById('progress-rail');
+  const fill=document.getElementById('progress-rail-fill');
+  if(!rail||!fill)return;
+  const style=document.createElement('style');
+  style.id='arco-duplo-minimo';
+  style.textContent=arcoDuploCss();
+  document.head.appendChild(style);
+  let raf=0;
+  const paint=()=>{
+    raf=0;
+    if(document.querySelector('.view[data-active="true"]')?.dataset.view!=='home'){
+      rail.hidden=true;
+      return;
     }
-    bound = t;
-    t.win.addEventListener("scroll", schedule, {passive:true});
-    t.win.addEventListener("resize", remeasure, {passive:true});
+    arcoDuploPaint(window,document,rail,fill);
+  };
+  const schedule=()=>{if(!raf)raf=requestAnimationFrame(paint);};
+  arcoDuploDrag(window,document,rail,fill);
+  addEventListener('scroll',schedule,{passive:true});
+  addEventListener('resize',schedule,{passive:true});
+  addEventListener('load',schedule);
+  document.fonts?.ready.then(schedule);
+  const observer=new MutationObserver(schedule);
+  document.querySelectorAll('.view').forEach(view=>observer.observe(view,{attributes:true,attributeFilter:['data-active']}));
+  if(typeof ResizeObserver==='function'){
+    const resize=new ResizeObserver(schedule);
+    resize.observe(document.body);
+    resize.observe(document.documentElement);
   }
-
-  function sync(){
-    rail.dataset.mode = mode();
-    rail.dataset.field = activeView() === "home" ? "light" : "dark";
-    rail.dataset.ready = "true";
-    bind();
-    remeasure();
-  }
-
-  /* mudança real de view: observada no atributo, sem tocar no roteador */
-  const vo = new MutationObserver(() => sync());
-  document.querySelectorAll(".view").forEach(v =>
-    vo.observe(v, {attributes:true, attributeFilter:["data-active"]}));
-
-  /* Repertório é seção da home, não view: o cordão só troca a gramática */
-  document.querySelectorAll(".rail__link[data-view]").forEach(el =>
-    el.addEventListener("click", () => { rail.dataset.pref = ""; sync(); }));
-  document.querySelectorAll("[data-anchor]").forEach(el =>
-    el.addEventListener("click", () => { rail.dataset.pref = "neutro"; sync(); }));
-
-  document.querySelectorAll(".view iframe").forEach(f =>
-    f.addEventListener("load", () => { bound = null; sync(); }));
-
-  /* altura real do documento mudou (accordion, gaveta, fontes): remede uma vez.
-     O observador olha o body, e as marcas vivem num overlay fixo, então nada
-     que este código escreve realimenta a medição. */
-  if(typeof ResizeObserver === "function" && document.body){
-    let seen = 0;
-    new ResizeObserver(() => {
-      const h = document.body.scrollHeight;
-      if(h === seen) return;
-      seen = h;
-      remeasure();
-    }).observe(document.body);
-  }
-
-  addEventListener("resize", remeasure, {passive:true});
-  addEventListener("load", remeasure);
-  document.fonts?.ready.then(remeasure);
-  sync();
+  rail.dataset.ready='true';
+  schedule();
 })();
-
 
 /* Camada de comprovação: um tooltip compartilhado por todas as métricas. */
 (() => {
@@ -543,12 +532,6 @@
   const homeView = document.querySelector('.view[data-view="home"]');
   const stage = document.querySelector('.stage');
   const childStates = new WeakMap();
-  const childProgressInk = {
-    echo:'#2C2C2C',
-    play:'#FFB627',
-    atrio:'#D94F2D',
-    cerne:'#4F6BFF'
-  };
 
   cleanupPreviousEndcap();
   installHostProgressOverride();
@@ -740,20 +723,17 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
       previous.win.removeEventListener('resize',previous.schedule);
       previous.resizeObserver?.disconnect();
       previous.cleanupObserver?.disconnect();
+      previous.disposeDrag?.();
     }
 
     installChildScrollbarStyle(view,doc);
     const progress = ensureChildScrollbar(view,doc);
+    const disposeDrag = arcoDuploDrag(win,doc,progress.rail,progress.fill);
 
     let raf = 0;
     const update = () => {
       raf = 0;
-      const root = doc.scrollingElement || doc.documentElement;
-      if (!root || !progress?.rail || !progress?.fill) return;
-      const max = Math.max(0,root.scrollHeight - win.innerHeight);
-      const ratio = max > 0 ? Math.min(1,Math.max(0,root.scrollTop / max)) : 0;
-      progress.fill.style.transform = `scaleY(${ratio})`;
-      progress.rail.hidden = max <= 1;
+      arcoDuploPaint(win,doc,progress.rail,progress.fill);
     };
     const schedule = () => {
       if (raf) return;
@@ -788,7 +768,7 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
       win.setTimeout(() => cleanupObserver?.disconnect(),4000);
     }
 
-    childStates.set(frame,{win,doc,schedule,resizeObserver,cleanupObserver});
+    childStates.set(frame,{win,doc,schedule,resizeObserver,cleanupObserver,disposeDrag});
     schedule();
     [60,260,900,2200].forEach(delay => win.setTimeout(scheduleCleanup,delay));
   }
@@ -798,40 +778,13 @@ ${embedded ? 'html[data-arco-embedded="true"] footer.page-footer{display:none!im
     if (!style){
       style = doc.createElement('style');
       style.id = 'arco-child-scrollbar-style';
-      style.textContent = `
-html[data-arco-embedded="true"]{
-  scrollbar-width:none!important;
-  -ms-overflow-style:none!important;
-}
-html[data-arco-embedded="true"]::-webkit-scrollbar,
-html[data-arco-embedded="true"] body::-webkit-scrollbar{
-  width:0!important;height:0!important;display:none!important;
-}
+      style.textContent = arcoDuploCss(true) + `
 html[data-arco-embedded="true"] .atrio-progress,
 html[data-arco-embedded="true"] .echo-trace{
   display:none!important;
-}
-.arco-child-scrollbar{
-  position:fixed;top:0;right:2px;bottom:0;z-index:2147483000;
-  width:2px;overflow:hidden;pointer-events:none;
-  background:rgba(128,128,128,.24);
-}
-.arco-child-scrollbar__fill{
-  position:absolute;inset:0 0 auto 0;width:100%;height:100%;
-  transform:scaleY(0);transform-origin:50% 0;
-  background:var(--arco-child-progress-ink,#2C2C2C);
-  box-shadow:0 0 0 .5px rgba(252,252,252,.52);
-  will-change:transform;
-}
-@media(max-width:760px){
-  .arco-child-scrollbar{right:1px;width:2px}
-}
-@media(prefers-reduced-motion:reduce){
-  .arco-child-scrollbar__fill{transition:none!important}
 }`;
       doc.head.appendChild(style);
     }
-    doc.documentElement.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#2C2C2C');
   }
 
   function ensureChildScrollbar(view,doc){
@@ -844,7 +797,6 @@ html[data-arco-embedded="true"] .echo-trace{
       rail.innerHTML = '<span class="arco-child-scrollbar__fill"></span>';
       doc.body.appendChild(rail);
     }
-    rail.style.setProperty('--arco-child-progress-ink',childProgressInk[view] || '#2C2C2C');
     return {rail,fill:rail.querySelector('.arco-child-scrollbar__fill')};
   }
 
