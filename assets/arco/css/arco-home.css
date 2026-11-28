@@ -1941,3 +1941,146 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 .hm-fr__go:hover, .hm-fr__go:focus-visible{ text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.16em; }
 .hm-lede a[data-hm-go]{ position:relative; z-index:2; color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.16em; text-decoration-color:rgba(44,44,44,.35); }
 .hm-lede a[data-hm-go]:hover{ text-decoration-color:currentColor; }
+
+/* ==========================================================================
+   RESULTADO E ORIGEM (27/11/2026)
+   --------------------------------------------------------------------------
+   Ao fim de cada caso, depois do demonstrativo: à esquerda, o número grande
+   na letra da sua frente (Bodoni no ECHO, Science Gothic no ATRIO, Martian
+   Mono no CERNE), sem accent, porque o resultado é do ARCO; abaixo dele, a
+   legenda em Martian Mono. Ao lado, a citação em Mozilla Text, corpo grande
+   e itálico, e, na linha de baixo, um fio (mais longo que um travessão)
+   que começa no alinhamento da citação e leva a "Conheça a origem", que
+   abre a origem num modal (assets/arco/js/arco-origem.js).
+   ========================================================================== */
+.hm-res{
+  display:grid; grid-template-columns:minmax(0, 2fr) minmax(0, 4fr);
+  column-gap:calc(var(--g) * 2); row-gap:calc(var(--u) * 4);
+  align-items:start;
+  padding:calc(var(--u) * 7) var(--g) calc(var(--u) * 7);
+}
+.hm-res__m{ margin:0; min-width:0; }
+.hm .hm-res__n{
+  display:block; white-space:nowrap;
+  font-size:clamp(3.4rem, 6.4vw, 6.6rem); line-height:.92;
+  color:var(--ink); font-variant-numeric:lining-nums; font-feature-settings:"lnum";
+}
+.hm .hm-res--echo .hm-res__n{ font-family:"Bodoni Moda", Didot, "Bodoni 72", Georgia, serif; font-weight:900; letter-spacing:-.015em; }
+.hm .hm-res--atrio .hm-res__n{ font-family:"Science Gothic", var(--f-display); font-weight:600; letter-spacing:-.02em; }
+.hm .hm-res--cerne .hm-res__n{ font-family:"Martian Mono", ui-monospace, monospace; font-weight:200; font-stretch:100%; letter-spacing:-.05em; }
+.hm .hm-res__l{
+  display:block; max-width:30ch; margin-top:calc(var(--u) * 1.75);
+  font-family:"Martian Mono", ui-monospace, monospace; font-style:normal;
+  font-weight:400; font-stretch:112.5%; font-size:.6875rem; line-height:1.5; letter-spacing:0;
+  color:var(--ink);
+}
+.hm-res__c{ min-width:0; }
+.hm-res__q{ margin:0; padding:0; border:0; }
+.hm .hm-res__q p{
+  margin:0;
+  font-family:var(--f-body); font-weight:400; font-style:italic;
+  font-size:clamp(1.35rem, 2.6vw, 2.7rem); line-height:1.16; letter-spacing:-.022em;
+  color:var(--ink); text-wrap:balance;
+}
+.hm-res__o{
+  display:flex; align-items:center; gap:1.1rem;
+  margin:calc(var(--u) * 3) 0 0;
+}
+.hm-res__o::before{
+  content:""; flex:none; width:clamp(3.5rem, 6vw, 6rem); height:1px; background:var(--ink);
+}
+.hm .hm-res__go{
+  appearance:none; -webkit-appearance:none;
+  min-height:44px; margin:0; padding:0; border:0; background:none; cursor:pointer;
+  font-family:var(--f-micro); font-size:.6875rem; font-weight:600; font-stretch:87.5%;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.32em;
+  text-decoration-color:rgba(44,44,44,.35);
+}
+.hm .hm-res__go:hover{ text-decoration-color:currentColor; }
+.hm .hm-res__go:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
+/* "Errar não é só humano.": como na página do CERNE, o "não" e o "só"
+   entram depois, quando o bloco chega à tela. Sem JS ou com movimento
+   reduzido, a frase já aparece inteira (o script só arma a animação). */
+.hm-res__q .hm-ins{ display:inline-grid; grid-template-columns:1fr; vertical-align:bottom; }
+.hm-res__q .hm-ins > span{ min-width:0; overflow:hidden; white-space:nowrap; }
+.hm-res__q .hm-ins em{ display:inline-block; padding-left:.24em; font-style:italic; color:var(--cerne); }
+.hm-res--cerne.is-armada .hm-ins{ grid-template-columns:0fr; }
+.hm-res--cerne.is-armada .hm-ins em{ opacity:0; }
+.hm-res--cerne.is-vista .hm-ins--1{ animation:hm-abre .9s var(--ease) 1.2s forwards; }
+.hm-res--cerne.is-vista .hm-ins--1 em{ animation:hm-fundo 1.1s var(--ease) 1.5s forwards; }
+.hm-res--cerne.is-vista .hm-ins--2{ animation:hm-abre .9s var(--ease) 2.7s forwards; }
+.hm-res--cerne.is-vista .hm-ins--2 em{ animation:hm-fundo 1.1s var(--ease) 3s forwards; }
+@keyframes hm-abre{ to{ grid-template-columns:1fr; } }
+@keyframes hm-fundo{
+  from{ opacity:0; transform:translateY(.3em) scale(.6); filter:blur(10px); }
+  to{ opacity:1; transform:none; filter:blur(0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .hm-res--cerne .hm-ins{ grid-template-columns:1fr!important; animation:none!important; }
+  .hm-res--cerne .hm-ins em{ opacity:1!important; animation:none!important; }
+}
+
+/* posição nos painéis (desktop): colunas 2 a 7, como as fichas */
+.hm-fecho{ box-shadow:none; grid-template-rows:auto; }
+@media (min-width:901px){
+  .hm-proj--echo .hm-res{ grid-column:2 / 8; grid-row:4; }
+  .hm-fecho .hm-res{ grid-column:2 / 8; grid-row:1; }
+  .hm-proj--cerne{ grid-template-rows:repeat(7, minmax(var(--row), auto)); }
+  .hm-proj--cerne .hm-res{ grid-column:2 / 8; grid-row:5; }
+  .hm-proj--cerne .hm-fund{ grid-row:6; }
+  .hm-proj--cerne .hm-fund-faixa{ grid-row:7; }
+}
+@media (max-width:900px){
+  .hm-res{ grid-template-columns:minmax(0, 1fr); padding:calc(var(--u) * 5) var(--g); }
+  .hm .hm-res__n{ font-size:clamp(3.2rem, 17vw, 4.8rem); }
+  .hm .hm-res__q p{ font-size:clamp(1.35rem, 6.4vw, 1.8rem); }
+}
+
+/* ---------- modal da origem ---------- */
+.hm-mod{
+  width:min(44rem, calc(100vw - 2 * var(--g, 16px)));
+  max-height:min(86vh, 52rem);
+  margin:auto; padding:0;
+  border:1px solid var(--ink); border-radius:0;
+  background:var(--paper); color:var(--ink);
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+  overflow:auto; overscroll-behavior:contain;
+}
+.hm-mod::backdrop{ background:rgba(44,44,44,.58); }
+.hm-mod__h{
+  position:sticky; top:0; z-index:1;
+  display:flex; align-items:center; justify-content:space-between; gap:var(--g);
+  padding:calc(var(--u) * 1.25) calc(var(--g) * 1.5);
+  background:var(--paper); box-shadow:inset 0 -1px 0 var(--rule);
+}
+.hm-mod--echo .hm-mod__h{ border-top:3px solid var(--echo); }
+.hm-mod--atrio .hm-mod__h{ border-top:3px solid var(--atrio); }
+.hm-mod--cerne .hm-mod__h{ border-top:3px solid var(--cerne); }
+.hm-mod__k, .hm-mod__x{
+  margin:0;
+  font-family:"Martian Mono", ui-monospace, monospace; font-size:.6875rem; font-weight:600;
+  font-stretch:87.5%; letter-spacing:.1em; text-transform:uppercase; color:var(--ink);
+}
+.hm-mod__x{
+  appearance:none; -webkit-appearance:none;
+  min-height:44px; padding:0; border:0; background:none; cursor:pointer;
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.32em;
+  text-decoration-color:rgba(44,44,44,.35);
+}
+.hm-mod__x:hover{ text-decoration-color:currentColor; }
+.hm-mod__x:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+.hm-mod__narr{
+  padding:calc(var(--u) * 4) calc(var(--g) * 1.5) calc(var(--u) * 5);
+  font-family:"Mozilla Text", "Schibsted Grotesk", system-ui, sans-serif; font-weight:300;
+  font-size:1rem; line-height:1.62;
+}
+.hm-mod__narr p{ margin:0 0 1em; max-width:62ch; }
+.hm-mod__narr p:last-child{
+  margin:calc(var(--u) * 3) 0 0;
+  font-weight:400; font-style:italic; font-size:1.3rem; line-height:1.3; letter-spacing:-.015em;
+  text-wrap:balance;
+}
+/* sem trava de rolagem: esconder a barra mudaria a largura da retícula
+   (--sbw) e deslocaria a página por baixo do modal */
