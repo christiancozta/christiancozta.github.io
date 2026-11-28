@@ -8,7 +8,7 @@
      3. só com a expansão concluída e os recursos carregados a reprodução começa.
    Ao encerrar, a superfície recolhe pelo movimento inverso e some.
    ========================================================================== */
-const V = "20261128-feixes";
+const V = "20261128-cerne";
 const raiz = document.querySelector("[data-ld]");
 const gatilho = document.querySelector("[data-ld-gatilho]");
 
@@ -27,18 +27,19 @@ if (raiz && gatilho) {
   let sup = null;
 
   /* ---------- carga sob demanda ---------- */
-  const estilo = () => new Promise((res, rej) => {
-    const href = new URL("./demonstracao.css?v=" + V, import.meta.url).href;
-    const ja = document.querySelector('link[data-ld-css]');
+  /* o estilo da jornada e o do 4º estado (CERNE), na mesma carga */
+  const estilo = (nome) => new Promise((res, rej) => {
+    const href = new URL("./" + nome + ".css?v=" + V, import.meta.url).href;
+    const ja = document.querySelector('link[data-ld-css="' + nome + '"]');
     if (ja) return res();
     const l = document.createElement("link");
-    l.rel = "stylesheet"; l.href = href; l.dataset.ldCss = "";
+    l.rel = "stylesheet"; l.href = href; l.dataset.ldCss = nome;
     l.onload = () => res(); l.onerror = () => { l.remove(); rej(new Error("css")); };
     document.head.append(l);
   });
   const carrega = () => {
     if (!modulo) {
-      modulo = Promise.all([import("./demonstracao.js?v=" + V), estilo()]).then(([m]) => m);
+      modulo = Promise.all([import("./demonstracao.js?v=" + V), estilo("demonstracao"), estilo("cerne")]).then(([m]) => m);
       modulo.catch(() => { modulo = null; });
     }
     return modulo;
@@ -83,6 +84,8 @@ if (raiz && gatilho) {
     raiz.setAttribute("aria-label", TXT.regiao);
     sup = document.createElement("div");
     sup.className = "ld-sup";
+    /* o CERNE desce já sem o grafite: a retícula da home é o fundo da folha */
+    if (String(inicio || "").startsWith("cerne")) sup.dataset.cap = "cerne";
     raiz.replaceChildren(sup);
     const alvo = fechaQuadrado();
 
@@ -102,7 +105,7 @@ if (raiz && gatilho) {
       aviso.className = "ld-aviso";
       aviso.setAttribute("role", "status");
       aviso.textContent = TXT.carregando;
-      aviso.style.cssText = "margin:0;padding:24px;font:600 .62rem/1.3 'Martian Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:rgba(252,252,252,.62)";
+      aviso.style.cssText = "margin:0;padding:24px;font:600 .62rem/1.3 'Martian Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:inherit;opacity:.62";
       sup.append(aviso);
     }, 120);
     try {
@@ -114,11 +117,11 @@ if (raiz && gatilho) {
     } catch (err) {
       clearTimeout(lento);
       if (!aviso) { aviso = document.createElement("p"); aviso.className = "ld-aviso"; aviso.setAttribute("role", "status"); sup.append(aviso); }
-      aviso.style.cssText = "margin:0;padding:24px;font:600 .62rem/1.3 'Martian Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#FCFCFC";
+      aviso.style.cssText = "margin:0;padding:24px;font:600 .62rem/1.3 'Martian Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:inherit";
       aviso.textContent = TXT.falha;
       const b = document.createElement("button");
       b.type = "button"; b.textContent = "×"; b.setAttribute("aria-label", EN ? "Close" : "Encerrar");
-      b.style.cssText = "margin:0 24px;min-width:44px;min-height:44px;border:0;background:none;color:#FCFCFC;font:400 1.4rem/1 sans-serif;cursor:pointer";
+      b.style.cssText = "margin:0 24px;min-width:44px;min-height:44px;border:0;background:none;color:inherit;font:400 1.4rem/1 sans-serif;cursor:pointer";
       b.addEventListener("click", () => fecha());
       sup.append(b);
     }
@@ -158,7 +161,8 @@ if (raiz && gatilho) {
     if (estado === "repouso") abre();
     else if (estado === "aberta") ctrl?.foca();
   });
-  /* RATIO e TROIA no cordão: abrem a demonstração já no capítulo do módulo */
+  /* RATIO e TROIA no cordão, e o foróptero do CERNE: abrem a demonstração já
+     no capítulo (ou no passo, "cerne@3") lido no momento do clique */
   document.querySelectorAll("[data-ld-ir]").forEach((b) => b.addEventListener("click", () => {
     setTimeout(() => abre(b.dataset.ldIr), 0);
   }));

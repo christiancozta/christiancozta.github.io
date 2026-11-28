@@ -1,4 +1,4 @@
-# Demonstração de Legal Engineering (ATRIO → RATIO → TROIA)
+# Demonstração de Legal Engineering (ATRIO → RATIO → TROIA) e o 4º estado (CERNE)
 
 Substitui a jornada gamificada (tabuleiro, peças, registradora, escolhas certas e erradas). A metáfora fica no repouso; o raciocínio assume o movimento.
 
@@ -19,7 +19,7 @@ Decisões de implementação:
 
 - A superfície mede uma viewport útil, `100dvh − --rail-h`: o cordão fixo cobriria o topo de uma superfície de `100dvh`. O espaço que ela ocupa na página fecha em quadrados inteiros da retícula (`padding-bottom` calculado), para que o painel do CERNE continue pousando numa linha.
 - A superfície fica fora da grade do painel: `arco-home.js` fixa as fileiras dos painéis em pixels (`snap`), e uma superfície dentro da grade transbordaria.
-- RATIO e TROIA no cordão (`data-ld-ir`) abrem a demonstração já no capítulo correspondente.
+- RATIO e TROIA no cordão (`data-ld-ir`) abrem a demonstração já no capítulo correspondente. O foróptero do painel AI Governance também: `data-ld-ir="cerne"` (ou `"cerne@3"`, para retomar um passo), lido no momento do clique.
 
 ## Reprodução (`demonstracao.js`)
 
@@ -52,7 +52,19 @@ Os arquivos originais da execução (`estado_do_caso.md`, RI_01 a RI_06, `troia/
 - O cofre representa a custódia das correspondências e a pasta de backend, a segregação. Não há imagem de cadeado nem menção a criptografia.
 - Recurso e minuta ficam em português também na versão inglesa (`lang="pt-BR"`), como peças do processo.
 
+## 4º estado: o CERNE (`cerne.js`, `cerne.css`, `dados-cerne.js`)
+
+A mesma superfície, com linguagem própria e sem ligação no menu: o percurso ATRIO → RATIO → TROIA some do cabeçalho, a linha do tempo é outra (6 passos, contador próprio, Retroceder, Desgovernar e Recomeçar presos ao segmento) e o grafite dá lugar à retícula da home, que passa a ser o fundo.
+
+- Entradas: o foróptero do painel AI Governance (`assets/cerne/js/cerne-lentes.js`) e, no fim da TROIA, "Continuar a rodada no CERNE". Encerrar no CERNE devolve a página ao painel AI Governance.
+- Indicação do foróptero: "Iniciar a rodada" ou "Continuar a rodada". Continua quando a jornada concluiu a TROIA ou quando a rodada ficou no meio; nesse caso, o clique retoma o passo. A demonstração avisa onde está pelo evento `ld:estado` (`{ cap, k, fim }`); o foróptero guarda só nesta aba (`sessionStorage`, chave `arco.cerne.rodada`).
+- Desenho: o da tela oficial do CERNE 5 (`cerne5_ui`), com a tradução de cor da `cerne.html` pública e a tipografia do ARCO. Trilho "Rodada em acompanhamento" (status, cinco etapas com lâmpadas, contagens, ato examinado); impressora em peças; folha contínua que sai etapa por etapa (dobra que abre, 900 ms, mola), com carro e tracionadores que giram com o comprimento da folha; serrilha e tesoura no fim; a distinção "contrariar ≠ auditar" fora da folha, sobre a retícula. Gramática distinta da oficial: furos quadrados nas margens de tração, sem raio nos cartões, Martian Mono nos rótulos e números, Cabinet Grotesk nos títulos, Schibsted Grotesk nos textos.
+- Cor: tinta #2C2C2C, papel #FCFCFC; azul do CERNE (#4F6BFF) onde há operação; amarelo #E8A628 só no achado (texto em #8A5B00).
+- Passos: Admissibilidade, Segmentação, Formação (as 12 unidades, uma a uma), Tribunal (os 10 candidatos, na ordem do registro), Consolidação (tiras por parágrafo, marcas em 7, 8 e 12) e "O que ficou de pé?" (três perguntas com eixos e "o que enfrentar", contrato da fonte, contagens e legenda, ficha de execução, serrilha).
+- Conteúdo: episódio `0012345-20261128-002759` (CERNE 5.1.0, cânone congelado, grau 1), registro e vista oficial exportados em `ATRIO\JORNADA\0012345\cerne`. Fora do site, por confidencialidade do método: argumentos de auditoria e contraposição, razões do decisor, prompts, sementes e modelos. HOLD e ABORT não aparecem; o estado público é achado ou afastado.
+- Rastro: cinco passagens do CERNE (13 a 17) depois das da TROIA.
+
 ## Pendente
 
-- Wireframes próprios de TROIA e CERNE. A TROIA atual segue a direção do handoff (alternância, divergência, estabilidade, encaminhamento) e pode ser refeita sem mexer no motor: basta trocar `montaTroia` e os passos de `passosTroia`.
-- CERNE permanece autônomo. No fim da reprodução, a nota explicita que a demonstração do CERNE examina atos reais, não este caso.
+- Wireframe próprio da TROIA. A atual segue a direção do handoff (alternância, divergência, estabilidade, encaminhamento) e pode ser refeita sem mexer no motor: basta trocar `montaTroia` e os passos de `passosTroia`.
+- Copy do 4º estado e da indicação do foróptero a fechar com Christian antes de publicar em `main`.

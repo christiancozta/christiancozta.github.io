@@ -1,7 +1,10 @@
 /* ==========================================================================
    Legal Engineering: a demonstração (módulo ES, importado só no clique).
    ATRIO → RATIO → TROIA numa só superfície, em reprodução automática de uma
-   execução registrada (caso 0012345, fictício). Nada aqui é inferência em
+   execução registrada (caso 0012345, fictício). O CERNE é o 4º estado da
+   mesma superfície, com linguagem própria (cerne.js): fora do percurso e
+   com linha do tempo separada; chega-se a ele pelo foróptero da home ou
+   pelo fim da TROIA. Nada aqui é inferência em
    tempo real: os outputs vêm de dados.js e são revelados por palavras
    inteiras, no ritmo de leitura.
 
@@ -16,7 +19,8 @@
    - Movimento reduzido: nada se desloca; textos aparecem inteiros; as pausas
      de leitura permanecem, e os controles dão acesso a todos os outputs.
    ========================================================================== */
-import D from "./dados.js?v=20261128-feixes";
+import D from "./dados.js?v=20261128-cerne";
+import { cerne, WM_CERNE } from "./cerne.js?v=20261128-cerne";
 
 const PARA = Symbol("para");
 const ACC = "#A63A23";
@@ -59,8 +63,8 @@ function palavra(w) {
 const solta = (p) => { p?.catch?.(() => {}); };
 const conta = (t) => String(t).split(/\s+/).filter(Boolean).length;
 const dois = (n) => String(n).padStart(2, "0");
-const WM = { atrio: "A<em>T</em>RIO", ratio: "R<em>A</em>TIO", troia: "T<em>R</em>OIA" };
-const NOME = { atrio: "ATRIO", ratio: "RATIO", troia: "TROIA" };
+const WM = { atrio: "A<em>T</em>RIO", ratio: "R<em>A</em>TIO", troia: "T<em>R</em>OIA", cerne: WM_CERNE };
+const NOME = { atrio: "ATRIO", ratio: "RATIO", troia: "TROIA", cerne: "CERNE" };
 
 /* ícones dos controles (traço do site, sem ornamento) */
 const ICO = {
@@ -130,7 +134,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   const bVolta = bt("volta", ICO.volta, U.retroceder, () => passoRel(-1));
   const bToca = bt("toca", ICO.pausa, U.pausar, () => alterna());
   const bSegue = bt("segue", ICO.segue, U.avancar, () => passoRel(1));
-  const bFecha = bt("fecha", ICO.fecha, U.encerrar, () => fecha());
+  const bFecha = bt("fecha", ICO.fecha, U.encerrar, () => encerra());
   /* Desgovernar: o atalho que salta o percurso e pousa no estado final. A
      chegada diz o que o atalho não apaga: o rastro de cada passagem. */
   const bDesg = h("button", { type: "button", class: "ld-desg", "aria-label": U.desgovernarRot, title: U.desgovernarRot, onclick: () => desgoverna() }, U.desgovernar);
@@ -803,16 +807,39 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   const passosTroia = T.lentesDados.map((_, k) => passoLente(k)).concat([passoEncaminha]);
 
   /* ======================================================================
+     CERNE · 4º estado, linguagem própria (cerne.js)
+     ====================================================================== */
+  const CE = cerne({ h, en, mostra });
+  function montaCerne() {
+    const S2 = CE.monta();
+    palco.replaceChildren(S2.root);
+    return S2;
+  }
+
+  /* ======================================================================
      Linha do tempo
      ====================================================================== */
   const PASSOS = [
     ...passosAtrio.map((faz, k) => ({ cap: "atrio", faz, n: dois(k + 1), nome: A.etapas[k][0], linha: A.linha })),
     ...passosRatio.map((faz, k) => ({ cap: "ratio", faz, n: R.fasesDados[k].id, nome: R.fasesDados[k].nome, linha: R.linha })),
-    ...passosTroia.map((faz, k) => ({ cap: "troia", faz, n: k < T.lentesDados.length ? dois(k + 1) : "→", nome: k < T.lentesDados.length ? T.lentesDados[k].nome : T.encaminhamento.nome, linha: T.linha }))
+    ...passosTroia.map((faz, k) => ({ cap: "troia", faz, n: k < T.lentesDados.length ? dois(k + 1) : "→", nome: k < T.lentesDados.length ? T.lentesDados[k].nome : T.encaminhamento.nome, linha: T.linha })),
+    ...CE.passos.map((faz, k) => ({ cap: "cerne", faz, n: k < CE.passos.length - 1 ? dois(k + 1) : "→", nome: CE.nomes[k], linha: CE.linha }))
   ];
   const N = PASSOS.length;
-  const MONTA = { atrio: montaAtrio, ratio: montaRatio, troia: montaTroia };
+  const MONTA = { atrio: montaAtrio, ratio: montaRatio, troia: montaTroia, cerne: montaCerne };
   const inicioDe = (cap) => PASSOS.findIndex((p) => p.cap === cap);
+  /* dois segmentos, sem ligação no menu: a jornada (ATRIO → TROIA) e o CERNE */
+  const CERNE0 = inicioDe("cerne");
+  const segIni = (k) => (k >= CERNE0 ? CERNE0 : 0);
+  const segFim = (k) => (k >= CERNE0 ? N - 1 : CERNE0 - 1);
+  /* encerrar no CERNE devolve a página ao painel de onde a rodada partiu */
+  const encerra = () => fecha(PASSOS[atual]?.cap === "cerne" ? "ai-governance" : undefined);
+  /* o estado da reprodução, para o rótulo do foróptero (iniciar ou continuar) */
+  const avisa = () => {
+    if (atual < 0) return;
+    const cap = PASSOS[atual].cap;
+    document.dispatchEvent(new CustomEvent("ld:estado", { detail: { cap, k: atual - segIni(atual), fim: modo === "fim" } }));
+  };
 
   let S = null, atual = -1, completo = false, modo = "tocando", continua = null, porAuto = false;
 
@@ -832,7 +859,8 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
       if (b.dataset.cap === p.cap) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
       b.dataset.feito = inicioDe(b.dataset.cap) < inicioDe(p.cap) ? "1" : "0";
     });
-    contador.textContent = U.etapa + " " + dois(k + 1) + " / " + dois(N);
+    contador.textContent = U.etapa + " " + dois(k - segIni(k) + 1) + " / " + dois(segFim(k) - segIni(k) + 1);
+    avisa();
   }
   function poeModo(m) {
     modo = m;
@@ -843,6 +871,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     bToca.title = rot;
     bSegue.disabled = m === "fim";
     bDesg.disabled = m === "fim";
+    if (m === "fim") avisa();
   }
 
   /* monta a cena do passo k, aplica de uma vez os anteriores do capítulo */
@@ -875,7 +904,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     } catch (e) { if (e !== PARA) throw e; }
   }
   async function segue(k, g) {
-    if (k >= N - 1) { termina(); return; }
+    if (k >= segFim(k)) { termina(); return; }
     try {
       if (PASSOS[k + 1].cap !== PASSOS[k].cap) { await transicao(g); if (g !== ger) return; roda(k + 1, true); }
       else roda(k + 1, false);
@@ -891,7 +920,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     atual = k; completo = true;
     cabecalho(k);
     anunciaPasso(k);
-    if (k >= N - 1) { termina(); return; }
+    if (k >= segFim(k)) { termina(); return; }
     continua = () => { const g = ++ger; segue(k, g); };
   }
   const anunciaPasso = (k) => anuncia(NOME[PASSOS[k].cap] + " · " + PASSOS[k].n + " · " + PASSOS[k].nome);
@@ -902,6 +931,15 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     poeModo("fim");
     const nota = saltado;
     saltado = false;
+    if (S && S.cap === "cerne") {
+      if (nota) {
+        CE.saltado(S, h("p", { class: "ld-saltado" }, U.saltado[0],
+          h("button", { type: "button", class: "ld-saltado__a", "aria-label": RT.abrir, onclick: (e) => abreRastro(e.currentTarget) }, U.saltado[1]),
+          U.saltado[2]));
+        anuncia(U.saltado.join(""));
+      }
+      return;
+    }
     if (!S || S.cap !== "troia" || S.root.querySelector(".ld-fimbox")) return;
     const F = T.fim;
     const bMin = h("button", { type: "button", class: "ld-acao" }, F.minuta);
@@ -911,7 +949,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
       if (lendo) S.minTxt.focus({ preventScroll: true });
     });
     const bCerne = h("button", { type: "button", class: "ld-acao ld-acao--link" }, F.cerne);
-    bCerne.addEventListener("click", () => fecha("ai-governance"));
+    bCerne.addEventListener("click", () => vai(CERNE0));
     const box = h("div", { class: "ld-fimbox" },
       nota ? h("p", { class: "ld-saltado" }, U.saltado[0],
         h("button", { type: "button", class: "ld-saltado__a", "aria-label": RT.abrir, onclick: (e) => abreRastro(e.currentTarget) }, U.saltado[1]),
@@ -946,6 +984,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     });
     const E = T.encaminhamento;
     passagens.push({ mod: "TROIA", nome: E.nome, e: [["ia", "TROIA", E.ia], ["hum", U.humano, E.humano]] });
+    CE.rastro.forEach((r) => passagens.push({ mod: "CERNE", nome: r.nome, e: [["ia", "CERNE", r.ia]] }));
 
     const lista = h("ol", { class: "ld-rastro__l" }, passagens.map((p, i) => h("li", null,
       h("span", { class: "ld-rastro__n" }, dois(i + 1)),
@@ -990,7 +1029,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     S?.root.classList.remove("is-leitura");
     porAuto = false;
     saltado = true;
-    mostraPronto(N - 1);
+    mostraPronto(segFim(atual < 0 ? 0 : atual));
   }
 
   /* ---------- controles ---------- */
@@ -1004,11 +1043,11 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   function passoRel(d) {
     if (d > 0) {
       if (modo === "fim") return;
-      if (atual >= N - 1) { mostraPronto(N - 1); return; }
+      if (atual >= segFim(atual)) { mostraPronto(segFim(atual)); return; }
       vai(atual + 1);
     } else {
       if (modo === "fim") poeModo("tocando");
-      vai(atual - 1);
+      vai(Math.max(segIni(atual), atual - 1));
     }
   }
   function vaiCap(cap) { vai(inicioDe(cap)); }
@@ -1026,7 +1065,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     else tempo.retoma();
   }
   function alterna() {
-    if (modo === "fim") { poeModo("tocando"); roda(0, true); return; }
+    if (modo === "fim") { poeModo("tocando"); roda(segIni(atual), true); return; }
     if (modo === "pausado") retoma(); else pausa(false);
   }
 
@@ -1035,7 +1074,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     const alvo = e.target;
     const campo = alvo.closest("button, a, [tabindex='0']") && alvo !== casca;
-    if (e.key === "Escape") { e.preventDefault(); if (casca.classList.contains("is-rastro")) fechaRastro(true); else fecha(); }
+    if (e.key === "Escape") { e.preventDefault(); if (casca.classList.contains("is-rastro")) fechaRastro(true); else encerra(); }
     else if ((e.key === " " || e.key === "k") && !campo) { e.preventDefault(); alterna(); }
     else if (e.key === "ArrowRight" && !alvo.closest(".ld-min")) { e.preventDefault(); passoRel(1); }
     else if (e.key === "ArrowLeft" && !alvo.closest(".ld-min")) { e.preventDefault(); passoRel(-1); }
@@ -1059,12 +1098,19 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
 
   /* começa: depois da expansão e da carga (garantidas pelo acionador) */
   casca.focus({ preventScroll: true });
-  const k0 = inicio && inicioDe(inicio) >= 0 ? inicioDe(inicio) : 0;
+  /* início: um capítulo ("troia"), ou o CERNE num passo ("cerne@3", retomada) */
+  const ponto = (ini) => {
+    const [cap, n] = String(ini || "").split("@");
+    const i0 = inicioDe(cap);
+    if (i0 < 0) return 0;
+    return Math.min(segFim(i0), i0 + (parseInt(n, 10) || 0));
+  };
+  const k0 = ponto(inicio);
   poeModo("tocando");
   roda(k0, true);
 
   return {
-    vai: (cap) => vaiCap(cap),
+    vai: (ini) => vai(ponto(ini)),
     foca: () => casca.focus({ preventScroll: true }),
     destroi() {
       ++ger;

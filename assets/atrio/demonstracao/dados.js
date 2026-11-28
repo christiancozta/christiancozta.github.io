@@ -278,8 +278,8 @@ export default {
         titulo: "Fim da reprodução",
         minuta: "Ler a minuta",
         voltar: "Voltar ao confronto",
-        cerne: "Ir ao CERNE",
-        cerneNota: "O CERNE é autônomo. A demonstração dele, logo abaixo, examina atos judiciais reais, não este caso."
+        cerne: "Continuar a rodada no CERNE",
+        cerneNota: "A minuta segue inteira para o CERNE, que a audita sem receber o resultado da TROIA."
       }
     }
   },
@@ -431,8 +431,8 @@ export default {
         titulo: "End of the replay",
         minuta: "Read the draft",
         voltar: "Back to the confrontation",
-        cerne: "Go to CERNE",
-        cerneNota: "CERNE is autonomous. Its demonstration, just below, examines real judicial rulings, not this case."
+        cerne: "Continue the round in CERNE",
+        cerneNota: "The whole draft goes on to CERNE, which audits it without receiving TROIA's result."
       }
     }
   }

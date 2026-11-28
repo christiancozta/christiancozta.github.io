@@ -2,8 +2,8 @@
    CERNE: as lentes (o foróptero) no painel AI Governance da home
    --------------------------------------------------------------------------
    Três cores: tinta (#2C2C2C) no corpo, papel (#FCFCFC) nas janelas e o
-   azul do CERNE (#4F6BFF) só no que entra em foco, na pergunta e, em
-   repouso, em volta do olho. As janelas são HTML sobre o desenho, no mesmo
+   azul do CERNE (#4F6BFF) na pergunta e, em repouso, em volta do olho.
+   O aparelho é o botão da rodada (4º estado da demonstração). As janelas são HTML sobre o desenho, no mesmo
    sistema de coordenadas (viewBox 720 × 380); o texto acompanha a largura
    do aparelho (cqw). Andamento em assets/cerne/js/cerne-lentes.js.
    ========================================================================== */
@@ -63,6 +63,17 @@
 }
 .cl__gatilho:disabled{ cursor:default; }
 .cl__gatilho:focus-visible{ outline:2px solid #4F6BFF; outline-offset:4px; }
+
+/* indicação funcional: o que o clique faz (iniciar ou continuar a rodada) */
+.cl__rotulo{
+  margin:1.1rem 0 0; text-align:center; cursor:pointer;
+  font-family:var(--f-micro, "Martian Mono", monospace); font-size:.558rem; font-weight:600;
+  line-height:1.3; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--soft, rgba(44,44,44,.66));
+  transition:color .3s cubic-bezier(.32,.72,0,1);
+}
+.cl:not([data-pronto]) .cl__rotulo{ visibility:hidden; }
+.cl:has(.cl__gatilho:hover) .cl__rotulo, .cl:has(.cl__gatilho:focus-visible) .cl__rotulo, .cl__rotulo:hover{ color:#2C2C2C; }
 
 @keyframes cl-pulso{ 0%, 100%{ opacity:1; } 50%{ opacity:.35; } }
 .cl[data-estado="repouso"] .cl__play{ animation:cl-pulso 2.4s ease-in-out infinite; }

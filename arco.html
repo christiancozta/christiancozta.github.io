@@ -109,10 +109,10 @@
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261128-medida">
 <script src="assets/arco/js/arco-home.js?v=20261127-estados" defer></script>
-<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-relogio">
-<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-feixes"></script>
-<link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261125-lentes">
-<script src="assets/cerne/js/cerne-lentes.js?v=20261125-lentes" defer></script>
+<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-cerne">
+<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-cerne"></script>
+<link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261128-rodada">
+<script src="assets/cerne/js/cerne-lentes.js?v=20261128-rodada" defer></script>
 <script src="assets/arco/js/arco-origem.js?v=20261127-resultado" defer></script>
 <script src="assets/arco/js/arco-partitura.js?v=20261128-medida" defer></script>
 </head>
@@ -398,7 +398,8 @@
 
         <!-- Superfície da demonstração: sem altura, sem linha e sem espaço reservado até o
              clique no relógio. Desce a partir da base do painel, nas margens da página, e
-             desloca o que vem depois. ATRIO → RATIO → TROIA numa só jornada. -->
+             desloca o que vem depois. ATRIO → RATIO → TROIA numa só jornada; o CERNE é o 4º estado,
+             com linguagem própria, aberto pelo foróptero do painel AI Governance. -->
         <div class="ld" id="demonstracao" data-ld hidden></div>
 
         <!-- Resultado do ATRIO: depois da demonstração, num painel próprio, para que
@@ -418,10 +419,12 @@
              blocos lado a lado, o Fundamento e a faixa. -->
         <section class="hm-panel hm-proj hm-proj--cerne" data-sobra="6" id="ai-governance" aria-labelledby="t-cerne">
           <h2 class="hm-title hm-title--area" id="t-cerne" data-fit="titulo"><span class="hm-fit">AI Governance &amp; Evaluation</span></h2>
-          <!-- CERNE: as lentes. O foróptero, sem texto em volta, logo abaixo do título e
-               em coluna única. O próprio aparelho é o botão que reproduz uma rodada
-               registrada (um caso, por ora). Desenho em assets/cerne/css/cerne-lentes.css;
-               andamento em assets/cerne/js/cerne-lentes.js. -->
+          <!-- CERNE: as lentes. O foróptero, logo abaixo do título e em coluna única.
+               O próprio aparelho é o botão: abre a rodada do caso 0012345 no 4º estado
+               da demonstração (#demonstracao, logo acima), com linguagem própria; a
+               indicação abaixo dele diz se o clique inicia ou continua a rodada.
+               Desenho em assets/cerne/css/cerne-lentes.css; acionamento em
+               assets/cerne/js/cerne-lentes.js e assets/atrio/demonstracao/gatilho.js. -->
           <figure class="cl" data-cl data-estado="repouso">
             <div class="cl__inst">
               <svg class="cl__corpo" viewBox="0 0 720 380" aria-hidden="true" focusable="false">
@@ -517,8 +520,9 @@
                 <svg class="cl__olho" viewBox="268 392 168 94" focusable="false"><path d="M280 439.8C288 428 298.7 418.5 311.3 411.9C323.8 405.2 337.8 401.8 352 401.8C366.2 401.8 380.2 405.2 392.7 411.9C405.3 418.5 416 428 424 439.8C416 451.5 405.3 461.1 392.7 467.7C380.2 474.3 366.2 477.8 352 477.8C337.8 477.8 323.8 474.3 311.3 467.7C298.7 461.1 288 451.5 280 439.8Z" fill="#FCFCFC"/><circle cx="352" cy="439.8" r="24" fill="#2C2C2C"/></svg>
                 <p class="cl__txt" data-cl-txt></p>
               </div>
-              <button class="cl__gatilho" type="button" data-cl-play aria-label="Reproduzir uma rodada registrada do CERNE" hidden></button>
+              <button class="cl__gatilho" type="button" data-cl-play data-ld-ir="cerne" aria-label="Iniciar a rodada do CERNE" hidden></button>
             </div>
+            <p class="cl__rotulo" data-cl-rotulo aria-hidden="true">Iniciar a rodada</p>
             <p class="arx-sr" role="status" data-cl-status></p>
           </figure>
           <div class="hm-trilho">

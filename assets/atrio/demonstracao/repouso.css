@@ -106,7 +106,10 @@
 .ld-sup{
   position:relative; height:calc(100vh - var(--rail-h, 0px)); height:calc(100dvh - var(--rail-h, 0px));
   background:rgba(44,44,44,.96); color:#FCFCFC;
+  transition:background-color .9s cubic-bezier(.65,0,.35,1), color .9s cubic-bezier(.65,0,.35,1);
 }
+/* o 4º estado (CERNE) não tem grafite: a retícula da home é o fundo da folha */
+.ld-sup[data-cap="cerne"]{ background:transparent; color:#2C2C2C; }
 
 @media (max-width:900px){
   .hm-proj--atrio{ grid-template-rows:none; }
