@@ -659,15 +659,27 @@ html.hm-amplo{ overflow:hidden; }
    pela qual se chegou ao termo. A seleção persiste enquanto a coluna
    seguinte estiver aberta, para que o percurso se leia sem o cursor.
    ========================================================================== */
-.lx-q{ grid-column:6 / 8; grid-row:2; align-self:end; padding:0 var(--g) calc(var(--u) * 1.5); }
+/* a busca fica acima do título, que divide a mesma fileira e cobriria o
+   campo; tem o corpo das listas e um filete cheio, para pesar como entrada */
+.lx-q{
+  grid-column:6 / 8; grid-row:2; align-self:end;
+  position:relative; z-index:2;
+  padding:0 var(--g) calc(var(--u) * 1.5);
+}
 .lx-q__i{
   appearance:none; -webkit-appearance:none; width:100%;
-  min-height:2.025rem; padding:0 .09rem;
-  border:0; border-bottom:1px solid rgba(44,44,44,.32); border-radius:0; background:transparent;
-  font-family:var(--f-body); font-size:.774rem; color:var(--ink); caret-color:var(--ink);
+  min-height:2.7rem; padding:0 1.8rem 0 0;
+  border:0; border-bottom:2px solid #2C2C2C; border-radius:0; background:transparent;
+  font-family:var(--f-display); font-weight:600; font-size:.9rem; letter-spacing:-.01em;
+  color:#2C2C2C; caret-color:#2C2C2C; cursor:text;
 }
-.lx-q__i::placeholder{ color:var(--soft); }
-.lx-q__i:focus{ outline:none; border-bottom-color:var(--ink); box-shadow:0 1px 0 var(--ink); }
+.lx-q__i::placeholder{ color:rgba(44,44,44,.6); font-weight:500; }
+.lx-q__i:focus{ outline:none; box-shadow:0 1px 0 #2C2C2C; }
+.lx-q__lupa{
+  position:absolute; right:var(--g); bottom:calc(var(--u) * 1.5 + .72rem);
+  width:1.08rem; height:1.08rem; pointer-events:none;
+  fill:none; stroke:#2C2C2C; stroke-width:2.2; stroke-linecap:square;
+}
 .lx-q__i::-webkit-search-cancel-button{ -webkit-appearance:none; }
 
 .lx{
@@ -715,7 +727,9 @@ html.hm-amplo{ overflow:hidden; }
   .lx__i:hover{ background:var(--lx-bg); color:var(--lx-fg); }
 }
 
-/* terceira coluna: só a tag e, abaixo, o texto, na mesma margem esquerda */
+/* terceira coluna: só a tag e, abaixo, o texto, na mesma margem esquerda;
+   o papel cobre a retícula sob a evidência, como nas listas */
+.lx__ev{ background:#FCFCFC; }
 .lx__e{ padding:calc(var(--u) * 1.25) var(--g) calc(var(--u) * 1.5); border-bottom:1px solid rgba(44,44,44,.14); }
 .lx__e p{
   margin:var(--u) 0 0;

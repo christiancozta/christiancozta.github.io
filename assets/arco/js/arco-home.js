@@ -829,9 +829,13 @@
      o ponto de pouso é refeito, sem animação e só enquanto o leitor não rolou */
   let landings = 0, userScrolled = false;
   ["wheel", "touchmove", "keydown"].forEach(t => addEventListener(t, () => { userScrolled = true; }, {once:true, passive:true}));
+  /* âncoras dos verbetes do antigo dicionário (#iax-11, #pro-03…): o Lastro
+     as resolve abrindo o termo nas três colunas (seção 4) */
+  let lastroHash = () => null;
   function landOnHash(){
     if (landings++ > 1 || userScrolled) return;
-    const target = isHomeTarget(decodeURIComponent(location.hash.slice(1)));
+    const h = decodeURIComponent(location.hash.slice(1));
+    const target = isHomeTarget(h) || lastroHash(h);
     if (target) target.scrollIntoView({block:"start", behavior:"instant"});
   }
 
@@ -1041,6 +1045,22 @@
       lxInput.dispatchEvent(new Event("input"));
     });
     stacked.addEventListener?.("change", render);
+
+    /* verbete antigo no endereço: abre o termo pela primeira competência que o
+       cita, com a evidência revelada, e devolve o índice como destino */
+    lastroHash = h => {
+      const t = terms.get(String(h).replace(/^lx-/, ""));
+      if (!t) return null;
+      lxInput.value = "";
+      sel = {c:t.comps[0], t:t.id};
+      render();
+      return lx;
+    };
+    addEventListener("hashchange", () => {
+      const alvo = lastroHash(decodeURIComponent(location.hash.slice(1)));
+      alvo?.scrollIntoView({block:"start", behavior: reduce ? "instant" : "smooth"});
+    });
+    lastroHash(decodeURIComponent(location.hash.slice(1)));
   }
   /* a origem recolhida muda a altura da obra: o painel refaz as fileiras */
   home.addEventListener("toggle", e => {

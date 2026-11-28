@@ -19,7 +19,7 @@ Decisões de implementação:
 
 - A superfície mede uma viewport útil, `100dvh − --rail-h`: o cordão fixo cobriria o topo de uma superfície de `100dvh`. O espaço que ela ocupa na página fecha em quadrados inteiros da retícula (`padding-bottom` calculado), para que o painel do CERNE continue pousando numa linha.
 - A superfície fica fora da grade do painel: `arco-home.js` fixa as fileiras dos painéis em pixels (`snap`), e uma superfície dentro da grade transbordaria.
-- RATIO e TROIA no cordão (`data-ld-ir`) abrem a demonstração já no capítulo correspondente. O foróptero do painel AI Governance também: `data-ld-ir="cerne"` (ou `"cerne@3"`, para retomar um passo), lido no momento do clique.
+- No cordão, RATIO e TROIA levam à âncora de Legal Engineering (`#legal-engineering`), como os demais projetos levam às suas áreas-mãe; não abrem a demonstração. O foróptero do painel AI Governance abre o capítulo do CERNE: `data-ld-ir="cerne"` (ou `"cerne@3"`, para retomar um passo), lido no momento do clique. O motor continua aceitando `data-ld-ir="ratio"` e `"troia"`.
 
 ## Reprodução (`demonstracao.js`)
 

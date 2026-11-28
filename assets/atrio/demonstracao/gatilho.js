@@ -205,7 +205,7 @@ if (SUP.jornada.raiz && SUP.jornada.gatilho) {
     if (estado === "aberta" && seg === "jornada") ctrl?.foca();
     else abre();
   });
-  /* RATIO e TROIA no cordão, e o foróptero do CERNE: abrem a demonstração já
+  /* o foróptero do CERNE (e qualquer data-ld-ir): abre a demonstração já
      no capítulo (ou no passo, "cerne@3") lido no momento do clique */
   document.querySelectorAll("[data-ld-ir]").forEach((b) => b.addEventListener("click", () => {
     setTimeout(() => abre(b.dataset.ldIr), 0);

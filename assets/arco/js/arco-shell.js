@@ -261,12 +261,15 @@
   addEventListener("resize", setScrollbarW);
   setScrollbarW();
 
-  /* ---- Âncoras internas da home (Correspondências no cordão) ----
-     Não é view: volta para a home e desce até a seção. */
+  /* ---- Âncoras internas da home (os projetos no cordão) ----
+     Não é view: volta para a home, desce até o painel da área-mãe e deixa a
+     âncora no endereço (#legal-operations, #legal-engineering, #ai-governance). */
   document.querySelectorAll("[data-anchor]").forEach(el =>
     el.addEventListener("click", () => {
-      show("home");
-      const target = document.getElementById(el.dataset.anchor);
+      const id = el.dataset.anchor;
+      show("home", {push:false});
+      if (location.hash !== "#" + id) history.pushState({view:"home"}, "", "#" + id);
+      const target = document.getElementById(id);
       target?.scrollIntoView({block:"start", behavior: reduce ? "auto" : "smooth"});
     }));
 

@@ -2293,9 +2293,14 @@ body{
    ATRIO/TROIA em campo cheio com papel; ECHO/PLAY em âmbar com tinta.
    Hover e corrente falam a mesma língua; o corrente apenas permanece. */
 .rail .rail__link[data-view="echo"],
-.rail .rail__link[data-view="play"]{ --tone:var(--echo); --tone-ink:var(--ink); }
+.rail .rail__link[data-view="play"],
+.rail .rail__link[data-proj="echo"]{ --tone:var(--echo); --tone-ink:var(--ink); }
 .rail .rail__link[data-view="atrio"],
-.rail .rail__link[data-child="atrio"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
+.rail .rail__link[data-child="atrio"],
+.rail .rail__link[data-proj="atrio"]{ --tone:var(--atrio); --tone-ink:var(--paper); }
+/* RATIO e TROIA, integrantes do ATRIO: o mesmo território, invertido (papel
+   com letra no accent), para que a mãe e os filhos não se confundam */
+.rail .rail__nav .rail__link--child{ --tone:var(--paper); --tone-ink:var(--atrio); }
 /* CERNE: marca própria (24/11/2026), azul com papel */
 .rail .rail__link[data-view="cerne"],
 .rail .rail__link[data-proj="cerne"]{ --tone:var(--cerne); --tone-ink:var(--paper); }
@@ -2348,6 +2353,12 @@ body{
 .rail .rail__nav:has(> :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) > :is([data-view="atrio"],[data-child="atrio"]):not(:hover):not([aria-current="true"]){
   color:var(--tone);
 }
+.rail .rail__nav:has(> :is([data-proj="atrio"],.rail__link--child):is(:hover,:focus-visible)) > :is([data-proj="atrio"],.rail__link--child):not(:hover):not([aria-current="true"]){
+  color:var(--atrio);
+}
+.rail .rail__nav:has(> :is([data-proj="atrio"],.rail__link--child):is(:hover,:focus-visible)) > .rail__link--child::before{
+  background:var(--atrio);
+}
 .rail .rail__nav:has(> :is([data-view="echo"],[data-view="play"]):is(:hover,:focus-visible)) > [data-view="play"]::before,
 .rail .rail__nav:has(> :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) > .rail__link--child:is([data-child="atrio"],.rail__link--off)::before{
   background:var(--tone);
@@ -2389,9 +2400,9 @@ body{
   /* a legenda responde ao projeto sob o ponteiro; o filho fala pela mãe.
      Em repouso, o lugar fica vazio. A altura não muda: nada pula. */
   .rail__kicker::before{ font-size:.468rem; letter-spacing:.12em; }
-  .rail:has(.rail__nav > :is([data-view="echo"],[data-view="atrio"],[data-child="atrio"],[data-proj="cerne"]):is(:hover,:focus-visible)) .rail__kicker{ border-left-color:var(--hair-inv); }
-  .rail:has(.rail__nav > [data-view="echo"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
-  .rail:has(.rail__nav > :is([data-view="atrio"],[data-child="atrio"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Engineering"; }
+  .rail:has(.rail__nav > :is([data-view="echo"],[data-view="atrio"],[data-child="atrio"],[data-proj],.rail__link--child):is(:hover,:focus-visible)) .rail__kicker{ border-left-color:var(--hair-inv); }
+  .rail:has(.rail__nav > :is([data-view="echo"],[data-proj="echo"]):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Operations"; }
+  .rail:has(.rail__nav > :is([data-view="atrio"],[data-child="atrio"],[data-proj="atrio"],.rail__link--child):is(:hover,:focus-visible)) .rail__kicker::before{ content:"Legal Engineering"; }
   .rail:has(.rail__nav > [data-proj="cerne"]:is(:hover,:focus-visible)) .rail__kicker::before{ content:"AI Governance & Evaluation"; }
   .rail__index{ justify-self:center; }
   .rail__end{
