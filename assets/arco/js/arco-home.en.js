@@ -95,6 +95,12 @@
     panel.style.gridTemplateRows = units.map(u => u * r + "px").join(" ");
   }
   const snapAll = () => panels.forEach(snap);
+  /* um quadro que muda de altura sozinho (a partitura do ECHO) pede ao seu
+     painel que volte a fechar em quadrados inteiros */
+  document.addEventListener("arco:medida", e => {
+    const p = e.target.closest?.(".hm-panel");
+    if (p) snap(p);
+  });
 
   /* ---------- frentes: distinções em alternância ----------
      Cada frente traz, na primeira coluna, a distinção do projeto que a prova.

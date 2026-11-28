@@ -4,8 +4,15 @@
    Templates; Montador a abre (play.html#templates). Se a camada for fechada
    por dentro ("Voltar à partitura", Esc), a aba acompanha, pela classe
    com-camada do corpo do quadro (mesma origem). Setas trocam de aba.
-   Medida: a da demonstração ATRIO, RATIO e TROIA (CSS). Ao trocar de aba,
-   as abas sobem ao alto da tela, sob o cordão, e o quadro ocupa o resto. */
+   Medida (28/11/2026): na partitura, o quadro tem a altura da própria folha,
+   inteira e sem rolagem interna; a página é que rola. A folha (.a4) tem
+   altura mínima de uma tela, que aqui se desliga (classe altura-livre no
+   documento do quadro, mesma origem), para que ela tenha só a altura do que
+   contém. Quando o PLAY abre uma camada de tela inteira (montador, parte,
+   leitor, busca), o quadro volta à altura da tela (CSS) e sobe ao alto,
+   sob o cordão. A cada mudança de altura, o painel volta a fechar em
+   quadrados inteiros da retícula (evento arco:medida, em arco-home.js).
+   Ao trocar de aba, as abas sobem ao alto da tela, sob o cordão. */
 (() => {
   "use strict";
   const raiz = document.querySelector("[data-hm-partitura]");
@@ -55,12 +62,57 @@
     });
   });
 
+  /* ---------- medida: a partitura inteira ---------- */
+  const emCamada = d => {
+    const h = d.documentElement.classList, b = d.body.classList;
+    if (h.contains("com-parte") || h.contains("com-leitor") || b.contains("com-camada")) return true;
+    const ov = d.querySelector(".overlay");
+    return !!(ov && !ov.hidden && ov.getClientRects().length);
+  };
+  let rafM = 0, ultima = -1;
+  function mede(){
+    rafM = 0;
+    const d = doc();
+    if (!d || !d.body) return;
+    let alvo = "";
+    if (emCamada(d)){
+      d.documentElement.classList.remove("altura-livre");
+      if (quadro.style.height) sobe();
+    } else {
+      d.documentElement.classList.add("altura-livre");
+      /* duas passadas: o rosto da folha tem folgas em vh, que mudam com a altura do quadro */
+      for (let i = 0; i < 3; i++){
+        const h = Math.ceil(d.body.offsetHeight);
+        if (!h || Math.abs(h - quadro.clientHeight) <= 1) break;
+        quadro.style.height = h + "px";
+      }
+      alvo = quadro.style.height;
+    }
+    if (!alvo) quadro.style.height = "";
+    const agora = quadro.offsetHeight;
+    if (agora !== ultima){ ultima = agora; raiz.dispatchEvent(new CustomEvent("arco:medida", { bubbles:true })); }
+  }
+  const agenda = () => { if (!rafM) rafM = requestAnimationFrame(mede); };
+  addEventListener("resize", agenda, { passive:true });
+
   function liga(){
     const d = doc();
     if (!d || !d.body) return;
+    if (!d.getElementById("arco-altura-livre")){
+      const s = d.createElement("style");
+      s.id = "arco-altura-livre";
+      s.textContent = "html.altura-livre .a4{min-height:0}";
+      d.head.append(s);
+    }
     new MutationObserver(() => {
       marca(d.body.classList.contains("com-camada") ? "montador" : "partitura");
+      agenda();
     }).observe(d.body, { attributes:true, attributeFilter:["class"] });
+    new MutationObserver(agenda).observe(d.documentElement, { attributes:true, attributeFilter:["class"] });
+    new MutationObserver(agenda).observe(d.body, { subtree:true, attributes:true, attributeFilter:["hidden"] });
+    if ("ResizeObserver" in window) new ResizeObserver(agenda).observe(d.body);
+    d.fonts?.ready.then(agenda);
+    agenda();
     if (pendente){ const v = pendente; pendente = null; setTimeout(() => mostra(v), 60); }
   }
   quadro.addEventListener("load", liga);
