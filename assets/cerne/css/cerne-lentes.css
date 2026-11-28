@@ -94,3 +94,44 @@
 }
 .cl:has(.cl__gatilho:hover) .cl__rotulo, .cl:has(.cl__gatilho:focus-visible) .cl__rotulo, .cl__rotulo:hover{ background:#2C2C2C; color:#FCFCFC; }
 @media (prefers-reduced-motion: reduce){ .cl__rotulo{ transition:none; } }
+
+/* ==========================================================================
+   Foróptero em gravura (28/11/2026)
+   O corpo deixa de ser SVG chapado e passa a ser gravura, no mesmo buril do
+   relógio do RATIO (assets/cerne/fonte/foroptero.py gera as duas
+   resoluções): linhas de largura variável, peças em comum com o relógio
+   (botão de rebites, botões serrilhados, trilho de minutos). O azul do
+   olho já vem gravado na imagem; a janela da direita fica transparente.
+   Na janela da esquerda, no lugar da interrogação, passam os trechos da
+   minuta que levaram aos achados, com o parágrafo de origem.
+   ========================================================================== */
+img.cl__corpo{ object-fit:contain; pointer-events:none; user-select:none; }
+.cl[data-estado="repouso"] .cl__jan--d{ background:transparent; }
+
+.cl__trechos{ position:relative; width:72%; height:62%; }
+.cl__trecho{
+  position:absolute; inset:0; margin:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.9cqw;
+  opacity:0; transform:translateY(1.2cqw);
+  transition:opacity .9s cubic-bezier(.32,.72,0,1), transform .9s cubic-bezier(.32,.72,0,1);
+}
+.cl__trecho.is-on{ opacity:1; transform:none; }
+.cl__trecho.is-sai{ opacity:0; transform:translateY(-1.2cqw); }
+.cl__par{
+  font-family:var(--f-micro, "Martian Mono", monospace); font-weight:600;
+  font-size:max(10px, 1.05cqw); letter-spacing:.08em; line-height:1; color:#4F6BFF;
+}
+.cl__frase{
+  font-family:var(--f-body, "Mozilla Text", serif); font-style:italic; font-weight:400;
+  font-size:max(11px, 1.62cqw); line-height:1.38; color:#2C2C2C; text-wrap:balance;
+  text-decoration:underline 1px #4F6BFF; text-underline-offset:.28em; text-decoration-skip-ink:auto;
+}
+@media (prefers-reduced-motion: reduce){
+  .cl__trecho{ transition:none; transform:none; }
+}
+/* aparelho estreito (celular): a janela não comporta a frase; fica o
+   parágrafo de origem, no corpo em que antes ficava a interrogação */
+@container (max-width: 560px){
+  .cl__frase{ display:none; }
+  .cl__par{ font-size:6.4cqw; font-weight:700; letter-spacing:0; }
+}

@@ -1,8 +1,9 @@
 /* ==========================================================================
    CERNE: as lentes (o foróptero) no painel AI Governance da home
    --------------------------------------------------------------------------
-   Em repouso: a interrogação na janela esquerda e o olho da esfinge na
-   direita, sobre o azul do CERNE. O próprio aparelho é o botão: abre a
+   Em repouso: na janela esquerda passam os trechos da minuta que levaram
+   aos achados (§ 7, § 8 e § 12 do caso 0012345); na direita, o olho da
+   esfinge, sobre o azul do CERNE gravado no corpo do aparelho. O próprio aparelho é o botão: abre a
    rodada do caso 0012345 no 4º estado da demonstração (#demonstracao), com
    linguagem própria. Quem liga o botão à superfície é o acionador da
    demonstração (assets/atrio/demonstracao/gatilho.js), pelo atributo
@@ -60,6 +61,34 @@
   });
 
   rot?.addEventListener('click', () => play.click());
+
+  /* Janela da esquerda: os trechos da minuta que levaram aos achados passam
+     um de cada vez, a cada 4,2 s. Param fora da tela, com a aba escondida e
+     com movimento reduzido (fica o primeiro). Sem JS, só o primeiro aparece. */
+  const trechos = [...fig.querySelectorAll('.cl__trecho')];
+  const reduz = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  if (trechos.length > 1) {
+    let atual = 0, timer = 0, visivel = false;
+    const passa = () => {
+      const sai = trechos[atual];
+      atual = (atual + 1) % trechos.length;
+      sai.classList.remove('is-on');
+      sai.classList.add('is-sai');
+      setTimeout(() => sai.classList.remove('is-sai'), 950);
+      trechos[atual].classList.add('is-on');
+    };
+    const roda = () => {
+      clearInterval(timer); timer = 0;
+      if (!visivel || document.hidden || reduz?.matches) return;
+      timer = setInterval(passa, 4200);
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => { visivel = es.some((e) => e.isIntersecting); roda(); }).observe(fig);
+    } else { visivel = true; roda(); }
+    document.addEventListener('visibilitychange', roda);
+    reduz?.addEventListener?.('change', roda);
+  }
+
   pinta();
   play.hidden = false;
   fig.dataset.pronto = '';
