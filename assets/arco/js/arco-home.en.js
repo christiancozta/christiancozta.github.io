@@ -928,13 +928,24 @@
     }
 
     /* no celular, cada abertura desce sob o item que a abriu */
+    /* e, para não haver excesso, os irmãos recolhem: aberta uma competência,
+       as outras saem; aberto um termo, os outros também (.is-foco, .is-aberto) */
     function place(listEl, anchor, term){
       lists.forEach(l => { if (l.parentElement !== col2) col2.append(l); });
       evs.forEach(e => { if (e.parentElement !== col3) col3.append(e); });
-      if (!stacked.matches) return;
-      if (listEl && anchor) compOf.get(anchor).parentElement.append(listEl);
-      const tb = term && listEl?.querySelector(`.lx__i[data-t="${term}"]`);
-      if (tb) tb.parentElement.append(evs.get(term));
+      lx.querySelectorAll(".is-aberto").forEach(li => li.classList.remove("is-aberto"));
+      const nest = stacked.matches && Boolean(listEl && anchor);
+      lx.classList.toggle("is-foco-c", nest);
+      lx.classList.toggle("is-foco-t", nest && Boolean(term));
+      if (!nest) return;
+      const li = compOf.get(anchor).parentElement;
+      li.classList.add("is-aberto");
+      li.append(listEl);
+      const tb = term && listEl.querySelector(`.lx__i[data-t="${term}"]`);
+      if (tb){
+        tb.parentElement.classList.add("is-aberto");
+        tb.parentElement.append(evs.get(term));
+      }
     }
 
     function render(){
@@ -984,6 +995,8 @@
     lx.addEventListener("click", ev => {
       const b = ev.target instanceof Element ? ev.target.closest(".lx__i") : null;
       if (!b) return;
+      /* no celular, os irmãos recolhem: o item tocado fica onde estava na tela */
+      const antes = stacked.matches ? b.getBoundingClientRect().top : null;
       if (b.dataset.c){
         /* de novo na mesma, recolhe; na busca, o termo inequívoco cede à competência escolhida */
         sel = sel.c === b.dataset.c ? {c:null, t:null} : {c:b.dataset.c, t:null};
@@ -991,6 +1004,7 @@
         sel.t = sel.t === b.dataset.t ? null : b.dataset.t;
       }
       render();
+      if (antes !== null && b.isConnected) scrollBy(0, b.getBoundingClientRect().top - antes);
       /* a lista da busca é refeita: o foco volta ao mesmo termo */
       if (b.dataset.t && !b.isConnected) lx.querySelector(`.lx__l:not([hidden]) .lx__i[data-t="${b.dataset.t}"]`)?.focus();
     });
