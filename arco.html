@@ -107,13 +107,14 @@
 <script src="assets/arco/js/arco-analytics.js?v=20261113-a" defer></script>
 <script src="assets/arco/js/arco-shell.js?v=20261124-marca" defer></script>
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
-<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261127-resultado">
+<link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261127-partitura">
 <script src="assets/arco/js/arco-home.js?v=20261127-estados" defer></script>
 <link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-relogio">
 <script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-rastro"></script>
 <link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261125-lentes">
 <script src="assets/cerne/js/cerne-lentes.js?v=20261125-lentes" defer></script>
 <script src="assets/arco/js/arco-origem.js?v=20261127-resultado" defer></script>
+<script src="assets/arco/js/arco-partitura.js?v=20261127-partitura" defer></script>
 </head>
 <body>
 
@@ -329,25 +330,27 @@
           </ol>
         </section>
 
-        <!-- 02 — LEGAL OPERATIONS / ECHO: a área no título; a tese abre a ficha. O playbook (vitrine) no campo da esquerda; a
-             narrativa numa coluna sobre papel, entre os meios das colunas vizinhas.
-             A folha de rosto do playbook é a única entrada do ECHO na home. -->
-        <section class="hm-panel hm-proj hm-proj--vit hm-proj--echo" id="legal-operations" aria-labelledby="t-echo">
+        <!-- 02 — LEGAL OPERATIONS / ECHO: a área no título; a ficha em três blocos lado a lado,
+             como nas demais seções; abaixo, em coluna única e largura inteira, o playbook
+             oficial (play.html, não a vitrine), em duas abas: a partitura e o montador.
+             As abas só trocam a vista do mesmo quadro (assets/arco/js/arco-partitura.js). -->
+        <section class="hm-panel hm-proj hm-proj--echo" id="legal-operations" aria-labelledby="t-echo">
           <h2 class="hm-title hm-title--area" id="t-echo" data-fit="titulo"><span class="hm-fit">Legal Operations</span></h2>
-          <div class="hm-trilho">
-            <div class="hm-lado">
-              <div class="hm-ficha">
+          <div class="hm-ficha hm-ficha--tres">
               <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">acervo <span class="hm-ne hm-ne--echo">≠</span> procedimento</h3><p>Na instância recursal havia acervo, prazo e colegiado, mas nenhum procedimento instituído nem tradição a que recorrer.</p></div>
               <div class="hm-ficha__b"><h3>O sistema</h3><p>O ECHO, desenhado em 30 dias: entrada, classificação, distribuição, verificação, produção e memória do gabinete, em materiais reutilizáveis.</p></div>
               <div class="hm-ficha__b"><h3>O que ficou</h3><p>O modelo passou ao gabinete que sucedeu na operação. Cada número da folha tem fonte ou cálculo declarado no <a href="#rastro" data-hm-go>rastro</a>.</p></div>
-            </div>
-            </div>
           </div>
-          <!-- ECHO: o playbook na vitrine (play.html?vitrine). A folha de rosto, os
-               números e o Explorar são da própria página; aqui, só o quadro, na
-               altura útil da tela (arco-home.js), com altura própria sem JS. -->
-          <div class="hm-score">
-            <iframe class="hm-score__frame" src="play.html?vitrine" title="ECHO: playbook da metodologia" loading="lazy"></iframe>
+          <div class="hm-part" data-hm-partitura>
+            <div class="hm-part__top">
+              <div class="hm-tabs" role="tablist" aria-label="Playbook do ECHO">
+                <button type="button" role="tab" id="echo-tab-partitura" aria-controls="echo-playbook" aria-selected="true" data-vista="partitura">Partitura</button>
+                <button type="button" role="tab" id="echo-tab-montador" aria-controls="echo-playbook" aria-selected="false" tabindex="-1" data-vista="montador">Montador</button>
+              </div>
+            </div>
+            <div class="hm-part__q" id="echo-playbook" role="tabpanel" aria-labelledby="echo-tab-partitura">
+              <iframe class="hm-part__frame" src="play.html?inteira" title="ECHO: playbook da metodologia" loading="lazy"></iframe>
+            </div>
           </div>
           <!-- Resultado: o número é do ARCO (sem accent); a citação fecha a origem,
                que se abre no modal (#origem-echo). -->

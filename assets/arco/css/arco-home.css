@@ -2025,7 +2025,7 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 /* posição nos painéis (desktop): colunas 2 a 7, como as fichas */
 .hm-fecho{ box-shadow:none; grid-template-rows:auto; }
 @media (min-width:901px){
-  .hm-proj--echo .hm-res{ grid-column:2 / 8; grid-row:4; }
+  .hm-proj--echo .hm-res{ grid-column:2 / 8; grid-row:5; }
   .hm-fecho .hm-res{ grid-column:2 / 8; grid-row:1; }
   .hm-proj--cerne{ grid-template-rows:repeat(7, minmax(var(--row), auto)); }
   .hm-proj--cerne .hm-res{ grid-column:2 / 8; grid-row:5; }
@@ -2084,3 +2084,41 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
 }
 /* sem trava de rolagem: esconder a barra mudaria a largura da retícula
    (--sbw) e deslocaria a página por baixo do modal */
+
+/* ==========================================================================
+   LEGAL OPERATIONS: ficha em três colunas e o playbook inteiro (27/11/2026)
+   --------------------------------------------------------------------------
+   A ficha segue as demais seções: três blocos lado a lado (colunas 2 a 7).
+   Abaixo, em coluna única e de ponta a ponta, o playbook oficial (play.html
+   ?inteira), na altura útil da tela, com duas abas no estilo das do rastro:
+   Partitura e Montador (assets/arco/js/arco-partitura.js).
+   ========================================================================== */
+.hm-proj--echo{ grid-template-rows:repeat(5, minmax(var(--row), auto)); }
+.hm-proj--echo::after{ content:none; }
+@media (min-width:901px){
+  .hm-proj--echo .hm-ficha--tres{
+    grid-column:2 / 8; grid-row:3; align-self:start;
+    display:grid; grid-template-columns:repeat(3, minmax(0, 1fr));
+    column-gap:calc(var(--g) * 2); row-gap:calc(var(--u) * 2.25);
+    padding:var(--g); background:none;
+  }
+  .hm-proj--echo .hm-part{ grid-column:1 / -1; grid-row:4; }
+}
+.hm-part{ min-width:0; padding-top:calc(var(--u) * 4); }
+.hm-part__top{
+  display:flex; align-items:flex-end;
+  margin:0 calc(var(--cell) + var(--g)); border-bottom:1px solid #2C2C2C;
+}
+.hm-part__q{ position:relative; background:#2C2C2C; padding-bottom:clamp(1rem, 2.2vw, 2rem); }
+.hm-part__frame{
+  display:block; width:100%; border:0;
+  height:calc(100svh - var(--rail-h, 0px));
+  min-height:560px;
+  background:#2C2C2C;
+}
+@media (max-width:900px){
+  .hm-part{ padding-top:calc(var(--u) * 2); }
+  .hm-part__top{ margin:0 var(--g); }
+  .hm-part__top .hm-tabs{ flex:1 1 auto; }
+  .hm-part__frame{ height:calc(100svh - var(--rail-h, 0px) - 44px); min-height:480px; }
+}
