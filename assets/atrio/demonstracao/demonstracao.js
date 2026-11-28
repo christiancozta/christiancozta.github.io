@@ -16,7 +16,7 @@
    - Movimento reduzido: nada se desloca; textos aparecem inteiros; as pausas
      de leitura permanecem, e os controles dão acesso a todos os outputs.
    ========================================================================== */
-import D from "./dados.js?v=20261127-demo";
+import D from "./dados.js?v=20261128-desg";
 
 const PARA = Symbol("para");
 const ACC = "#A63A23";
@@ -128,7 +128,11 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   const bToca = bt("toca", ICO.pausa, U.pausar, () => alterna());
   const bSegue = bt("segue", ICO.segue, U.avancar, () => passoRel(1));
   const bFecha = bt("fecha", ICO.fecha, U.encerrar, () => fecha());
-  const ctl = h("div", { class: "ld-ctl", role: "group", "aria-label": U.teclas }, bVolta, bToca, bSegue, bFecha);
+  /* Desgovernar: o atalho que salta o percurso e pousa no estado final. A
+     chegada diz o que o atalho não apaga: o rastro de cada passagem. */
+  const bDesg = h("button", { type: "button", class: "ld-desg", "aria-label": U.desgovernarRot, title: U.desgovernarRot, onclick: () => desgoverna() }, U.desgovernar);
+  const ctl = h("div", { class: "ld-ctl", role: "group", "aria-label": U.teclas },
+    h("div", { class: "ld-ctl__ic" }, bVolta, bToca, bSegue, bFecha), bDesg);
   const cab = h("header", { class: "ld-cab" },
     h("div", { class: "ld-cab__id" }, wm, h("div", null, titulo, opLinha)),
     percurso, ctl);
@@ -835,6 +839,7 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     bToca.setAttribute("aria-label", rot);
     bToca.title = rot;
     bSegue.disabled = m === "fim";
+    bDesg.disabled = m === "fim";
   }
 
   /* monta a cena do passo k, aplica de uma vez os anteriores do capítulo */
@@ -886,9 +891,12 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
   }
   const anunciaPasso = (k) => anuncia(NOME[PASSOS[k].cap] + " · " + PASSOS[k].n + " · " + PASSOS[k].nome);
 
+  let saltado = false;
   function termina() {
     continua = null;
     poeModo("fim");
+    const nota = saltado;
+    saltado = false;
     if (!S || S.cap !== "troia" || S.root.querySelector(".ld-fimbox")) return;
     const F = T.fim;
     const bMin = h("button", { type: "button", class: "ld-acao" }, F.minuta);
@@ -900,11 +908,20 @@ export function cria({ raiz, sup, en, inicio, fecha }) {
     const bCerne = h("button", { type: "button", class: "ld-acao ld-acao--link" }, F.cerne);
     bCerne.addEventListener("click", () => fecha("ai-governance"));
     const box = h("div", { class: "ld-fimbox" },
+      nota ? h("p", { class: "ld-saltado" }, U.saltado) : null,
       h("p", { class: "ld-quem" }, F.titulo),
       h("div", { class: "ld-fimbox__a" }, bMin, bCerne),
       h("p", { class: "ld-fimbox__n" }, F.cerneNota));
     S.main.firstElementChild?.append(box);
     mostra(S.main, box, null);
+    if (nota) anuncia(U.saltado);
+  }
+  function desgoverna() {
+    if (modo === "fim") return;
+    S?.root.classList.remove("is-leitura");
+    porAuto = false;
+    saltado = true;
+    mostraPronto(N - 1);
   }
 
   /* ---------- controles ---------- */

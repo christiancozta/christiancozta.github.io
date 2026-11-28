@@ -69,7 +69,23 @@
 .ld-per__b[aria-current]{ color:var(--ld-b); box-shadow:inset 0 -2px 0 var(--ld-acc); }
 .ld-per__b:hover{ color:var(--ld-b); }
 
-.ld-ctl{ display:flex; justify-content:flex-end; gap:2px; }
+.ld-ctl{ display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.ld-ctl__ic{ display:flex; justify-content:flex-end; gap:2px; }
+/* Desgovernar: abaixo dos ícones, em texto mono pequeno, sem moldura */
+.ld-desg{
+  appearance:none; min-height:28px; padding:0 10px; border:0; background:none; cursor:pointer;
+  font:600 .5rem/1 var(--ld-mono); letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ld-s); text-decoration:underline; text-decoration-color:rgba(252,252,252,.3);
+  text-underline-offset:.45em; transition:color .2s ease, text-decoration-color .2s ease;
+}
+.ld-desg:hover{ color:var(--ld-b); text-decoration-color:var(--ld-acc); }
+.ld-desg:disabled{ opacity:.32; cursor:default; text-decoration:none; }
+/* a chegada pelo atalho */
+.ld-saltado{
+  display:flex; align-items:center; gap:.7em; margin-bottom:1.1rem;
+  font:600 .54rem/1.4 var(--ld-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--ld-b);
+}
+.ld-saltado::before{ content:""; flex:none; width:7px; height:7px; background:var(--ld-acc); }
 /* só Pausar/Retomar leva o nome à vista; os demais, ícone com nome acessível */
 .ld-ctl__b:not([data-ctl="toca"]) .ld-ctl__t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 .ld-ctl__b{ flex:none; position:relative; white-space:nowrap; }
@@ -333,14 +349,16 @@
 @media (max-width:900px){
   /* marca e controles na primeira linha; a operação e o percurso abaixo */
   .ld-cab{
-    grid-template-columns:minmax(0, 1fr) auto; grid-template-areas:"wm ctl" "op op" "per per";
+    grid-template-columns:minmax(0, 1fr) auto; grid-template-areas:"wm ctl" "op op" "per desg";
     row-gap:4px; padding:10px 0 8px;
   }
   .ld-cab__id, .ld-cab__id > div{ display:contents; }
   .ld-wm{ grid-area:wm; font-size:1.2rem; }
   .ld-cab__op{ grid-area:op; margin-top:4px; }
   .ld-cab__linha{ display:none; }
-  .ld-ctl{ grid-area:ctl; }
+  .ld-ctl{ display:contents; }
+  .ld-ctl__ic{ grid-area:ctl; }
+  .ld-desg{ grid-area:desg; align-self:center; justify-self:end; padding-right:8px; }
   .ld-per{ grid-area:per; margin-left:-6px; }
   .ld-per__b{ min-height:36px; }
   .ld-per li + li::before{ width:16px; }
@@ -381,5 +399,5 @@
 }
 
 @media (prefers-reduced-motion:reduce){
-  .ld-per__b, .ld-ctl__b, .ld-d, .ld-fases__b, .ld-min__trecho, .ld-acao{ transition:none; }
+  .ld-per__b, .ld-ctl__b, .ld-desg, .ld-d, .ld-fases__b, .ld-min__trecho, .ld-acao{ transition:none; }
 }

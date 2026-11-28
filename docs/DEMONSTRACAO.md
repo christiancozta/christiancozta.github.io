@@ -25,7 +25,7 @@ Decisões de implementação:
 
 - Linha do tempo única de 19 passos: ATRIO (9), RATIO (6 fases), TROIA (3 lentes e encaminhamento). Cada passo se executa animado ou de uma vez; ir a um passo remonta a cena do capítulo e aplica de uma vez os anteriores. Avançar, Retroceder, o percurso no cabeçalho e os índices de fases e lentes dão sempre o mesmo estado.
 - `Tempo`: todos os intervalos e Web Animations passam por ele. Pausar congela os dois; encerrar cancela tudo. A reprodução pausa sozinha fora de vista (aba oculta ou superfície com menos de 30% visível) e retoma ao voltar, se a pausa foi automática.
-- Controles: Retroceder, Pausar/Retomar (Recomeçar no fim), Avançar, Encerrar. Teclado dentro da superfície: Espaço, setas, Esc. Em pausa, Avançar e Retroceder mostram cada passo concluído.
+- Controles: Retroceder, Pausar/Retomar (Recomeçar no fim), Avançar, Encerrar. Abaixo dos ícones, "Desgovernar" (nome acessível "Desgovernar: ir ao estado final") salta ao estado final, com todas as etapas concluídas; a chegada diz "Percurso saltado. O rastro permanece." (EN: "Ungovern"; "Path skipped. The trace remains."). A ironia é deliberada: o atalho pula o percurso, mas o estado final continua inteiramente governado, e os índices de fases e lentes guardam o rastro de cada passagem. Teclado dentro da superfície: Espaço, setas, Esc. Em pausa, Avançar e Retroceder mostram cada passo concluído.
 - Movimento reduzido: nada se desloca, a superfície abre sem animação, os textos aparecem inteiros e as pausas de leitura permanecem.
 - Revelação por palavras inteiras, 5 por segundo, com pausa maior depois de pontuação. A montagem da minuta (RI_05) lê ementa e dispositivo no ritmo de leitura e monta os demais parágrafos em ritmo acelerado.
 
