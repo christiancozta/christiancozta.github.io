@@ -124,3 +124,17 @@
   .ld-relogio__poco img, .ld-gatilho__rotulo{ transition:none; }
   .ld-gatilho[data-ld-pronto] .ld-relogio__botao[data-dono="humano"]::before{ animation:none; opacity:.9; transform:translate(-50%, -50%); }
 }
+
+/* Revisão de interface (28/11/2026): a indicação funcional passa a ter
+   desenho de botão (fio, respiro, 11px em tinta plena), para que o leitor
+   saiba que o relógio inteiro se aciona. O botão continua sendo o relógio;
+   o rótulo é só a parte que se lê como tal. */
+.ld-gatilho__rotulo{
+  display:inline-flex; align-items:center; min-height:32px;
+  padding:.5em 1.1em .45em; border:1px solid currentColor;
+  font-size:.6875rem; color:var(--ink, #2C2C2C);
+  transition:color .3s cubic-bezier(.32,.72,0,1), background-color .3s cubic-bezier(.32,.72,0,1);
+}
+.ld-gatilho[data-ld-pronto]:hover .ld-gatilho__rotulo,
+.ld-gatilho:focus-visible .ld-gatilho__rotulo{ background:var(--ink, #2C2C2C); color:var(--paper, #FCFCFC); }
+@media (prefers-reduced-motion: reduce){ .ld-gatilho__rotulo{ transition:none; } }

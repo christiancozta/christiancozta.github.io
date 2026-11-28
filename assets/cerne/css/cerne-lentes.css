@@ -82,3 +82,15 @@
 @media (prefers-reduced-motion:reduce){
   .cl *{ animation:none!important; transition:none!important; }
 }
+
+/* Revisão de interface (28/11/2026): a indicação funcional passa a ter
+   desenho de botão (fio, respiro, 11px em tinta plena), na mesma letra do
+   "Iniciar demonstração" do RATIO. O clique continua no aparelho e no rótulo. */
+.cl__rotulo{
+  display:flex; align-items:center; width:max-content; min-height:32px;
+  margin:1.1rem auto 0; padding:.5em 1.1em .45em; border:1px solid currentColor;
+  font-size:.6875rem; color:#2C2C2C;
+  transition:color .3s cubic-bezier(.32,.72,0,1), background-color .3s cubic-bezier(.32,.72,0,1);
+}
+.cl:has(.cl__gatilho:hover) .cl__rotulo, .cl:has(.cl__gatilho:focus-visible) .cl__rotulo, .cl__rotulo:hover{ background:#2C2C2C; color:#FCFCFC; }
+@media (prefers-reduced-motion: reduce){ .cl__rotulo{ transition:none; } }

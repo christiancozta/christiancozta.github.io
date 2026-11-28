@@ -2122,3 +2122,28 @@ html.hm-veu-on.hm-veu:has(.view[data-view="home"][data-active="true"]) .rail:not
   .hm-part__top, .hm-part__q{ margin:0 var(--g); }
   .hm-part__top .hm-tabs{ flex:1 1 auto; }
 }
+
+/* ==========================================================================
+   Revisão de interface (28/11/2026)
+   ========================================================================== */
+
+/* Foco no hero escuro. A regra geral (:focus-visible com var(--ink)) some
+   sobre o fundo #2C2C2C do hero; aqui o contorno passa a ser o papel.
+   :focus-visible só aparece para quem navega por teclado: o ponteiro e o
+   toque não veem contorno nenhum, e a composição do hero não muda. */
+.hm-feixe :is(a, button, summary, [tabindex]):focus-visible{
+  outline:2px solid var(--hero-paper); outline-offset:3px;
+}
+
+/* Seletores ATRIO, RATIO e TROIA na faixa "Três feixes". Antes: corpo de
+   .54rem e opacidade .42 nos não escolhidos (contraste ~1,9:1). Agora: corpo
+   de 11px, tinta plena em todos; a escolha se marca por um anel, não por
+   esmaecimento. O ATRIO mantém fundo e letra próprios. */
+.hm-ds__sel .hm-tag{ font-size:.6875rem; opacity:1; }
+.hm-ds__sel .hm-tag[aria-pressed="true"]{ box-shadow:0 0 0 2px var(--paper), 0 0 0 3px var(--atrio); }
+.hm-ds__sel .hm-tag--mod:hover{ background:rgba(217,79,45,.08); }
+@media (prefers-reduced-motion: reduce){ .hm-ds__sel .hm-tag{ transition:none; } }
+
+/* Léxico: alinhado à esquerda. O justificado em colunas estreitas abria
+   vãos entre as palavras ("Mapea- mento"). */
+.hm-lex .lex__e{ text-align:left; }

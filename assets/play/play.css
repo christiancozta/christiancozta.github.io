@@ -348,7 +348,7 @@
   --f-text: 'Instrument Sans', system-ui, sans-serif;
   /* geometria */
   --g: clamp(16px, 4.4vw, 72px);
-  --nomes: clamp(150px, 15vw, 232px);
+  --nomes: clamp(204px, 15vw, 232px); /* piso de 204px: "Controle de Produtividade", o nome mais longo, cabe sem invadir a chave do naipe */
   --parte-l: 118px;
   --chave: 26px;
   --borda: clamp(12px, 3vw, 48px);      /* base de tinta nas laterais da folha */
@@ -500,10 +500,11 @@ input, textarea { caret-color: var(--tinta); }
 /* Dobra do alto à direita: um botão sem marca nem cursor próprio, sobre a orelha (troca a música). */
 .dobra { position: absolute; z-index: 4; top: 0; right: 0; width: calc(var(--orelha) + 10px); height: calc(var(--orelha) + 10px); padding: 0; border: 0; background: none; cursor: default; -webkit-tap-highlight-color: transparent; }
 .dobra:focus { outline: none; }
-.pt { display: inline-flex; align-items: center; gap: 7px; font: 400 10.5px/1 var(--mono); letter-spacing: .04em; color: var(--cinza); white-space: nowrap; }
+/* ver | baixar: tinta plena e 11,5px (antes 10,5px a 55% de tinta, ~3,4:1); alvo de 24px de altura */
+.pt { display: inline-flex; align-items: center; gap: 7px; font: 400 11.5px/1 var(--mono); letter-spacing: .04em; color: var(--tinta); white-space: nowrap; }
 .pt i { font-style: normal; color: var(--fio); }
-.pt button { border: 0; background: none; padding: 4px 0; font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }
-.pt a { padding: 4px 0; text-decoration: none; }
+.pt button { display: inline-flex; align-items: center; min-height: 24px; border: 0; background: none; padding: 4px 2px; font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }
+.pt a { display: inline-flex; align-items: center; min-height: 24px; padding: 4px 2px; text-decoration: none; }
 .pt button, .pt a { transition: color .4s var(--mola), box-shadow .4s var(--mola); }
 .pt button:hover, .pt a:hover, .pt :focus-visible { color: var(--tinta); box-shadow: inset 0 -1px 0 var(--ambar); }
 
