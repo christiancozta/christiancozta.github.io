@@ -151,12 +151,12 @@ for cx, cy, lado in ((190, 200, "e"), (530, 200, "d")):
     ring_lines = np.maximum(cov_ring(cx, cy, 86, 87.2), cov_ring(cx, cy, 91.8, 93))
     paint(c_tr, np.maximum(mark, ring_lines))
 
-    # janela: papel (à esquerda) ou campo azul gravado (à direita, o olho)
+    # janela: papel (à esquerda) ou azul liso (à direita, a pele da esfinge, sob o olho)
     c_win = cov_disc(cx, cy, 86)
     if lado == "e":
         paint(c_win, np.zeros_like(ink))
     else:
-        paint(c_win, hatch(y, .74, P * 1.25), 1.0)
+        paint(c_win, np.ones_like(ink), 1.0)   # azul liso: a pele da esfinge, como no ícone do CERNE
 
     # contorno externo
     paint(contour(c_body, 2.2), np.ones_like(ink))

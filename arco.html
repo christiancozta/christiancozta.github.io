@@ -109,9 +109,9 @@
 <script src="assets/arco/js/arco-rail-final.js?v=20261118-kit" defer></script>
 <link rel="stylesheet" href="assets/arco/css/arco-home.css?v=20261128-revisao">
 <script src="assets/arco/js/arco-home.js?v=20261128-partitura" defer></script>
-<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-foroptero">
-<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-foroptero"></script>
-<link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261128-buril">
+<link rel="stylesheet" href="assets/atrio/demonstracao/repouso.css?v=20261128-seta">
+<script type="module" src="assets/atrio/demonstracao/gatilho.js?v=20261128-seta"></script>
+<link rel="stylesheet" href="assets/cerne/css/cerne-lentes.css?v=20261128-seta">
 <script src="assets/cerne/js/cerne-lentes.js?v=20261128-buril" defer></script>
 <script src="assets/arco/js/arco-origem.js?v=20261127-resultado" defer></script>
 <script src="assets/arco/js/arco-partitura.js?v=20261128-inteira" defer></script>
@@ -405,8 +405,13 @@
                em assets/atrio/demonstracao/gatilho.js. -->
           <div class="ld-repouso">
             <button class="ld-gatilho" type="button" data-ld-gatilho aria-controls="demonstracao" aria-expanded="false">
+              <span class="ld-gatilho__topo">
+                <span class="ld-gatilho__rotulo">Iniciar demonstração</span>
+                <!-- seta de grafite, à direita do rótulo, apontando para o botão do humano;
+                     o ângulo vem de gatilho.js (--ld-seta-ang), conforme a largura do relógio -->
+                <span class="ld-gatilho__seta" aria-hidden="true"><svg viewBox="0 0 64 40" focusable="false"><path d="M2 14.5 H38 V3 L62 20 L38 37 V25.5 H2 Z"/></svg></span>
+              </span>
               <span class="ld-relogio" aria-hidden="true">
-                <span class="ld-relogio__placa"><span class="ld-relogio__marca">R<em>A</em>TIO</span></span>
                 <span class="ld-relogio__inst">
                   <img class="ld-relogio__corpo" src="assets/atrio/ratio/relogio-corpo.webp?v=20261128-buril" alt="" width="1376" height="970" loading="lazy" decoding="async">
                   <svg class="ld-relogio__mostra" viewBox="0 0 1376 970" focusable="false">
@@ -417,7 +422,6 @@
                   <span class="ld-relogio__botao" data-dono="humano"><span class="ld-relogio__poco"><img src="assets/atrio/ratio/relogio-botao.webp?v=20261128-buril" alt="" width="205" height="127" loading="lazy" decoding="async"></span></span>
                 </span>
               </span>
-              <span class="ld-gatilho__rotulo">Iniciar demonstração</span>
             </button>
           </div>
         </section>
@@ -440,20 +444,30 @@
           </div>
         </div>
 
-        <!-- 04 — AI GOVERNANCE & EVALUATION / CERNE: em coluna única. Sob o título,
-             as lentes (o foróptero), sem texto em volta; depois a ficha, em três
-             blocos lado a lado, o Fundamento e a faixa. -->
+        <!-- 04 — AI GOVERNANCE & EVALUATION / CERNE: na ordem das outras áreas. Sob o
+             título, a ficha em três blocos lado a lado; depois o foróptero, com a
+             indicação acima dele; por fim, o resultado, o Fundamento e a faixa. -->
         <section class="hm-panel hm-proj hm-proj--cerne" data-sobra="6" id="ai-governance" aria-labelledby="t-cerne">
           <h2 class="hm-title hm-title--area" id="t-cerne" data-fit="titulo"><span class="hm-fit">AI Governance &amp; Evaluation</span></h2>
-          <!-- CERNE: as lentes. O foróptero, logo abaixo do título e em coluna única.
-               O próprio aparelho é o botão: abre a rodada do caso 0012345 no 4º estado
-               da demonstração (#demonstracao, logo acima), com linguagem própria; a
-               indicação abaixo dele diz se o clique inicia ou continua a rodada.
-               Desenho em assets/cerne/css/cerne-lentes.css; acionamento em
-               assets/cerne/js/cerne-lentes.js e assets/atrio/demonstracao/gatilho.js. -->
+          <div class="hm-trilho">
+            <div class="hm-lado">
+              <div class="hm-ficha">
+              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">confrontar <span class="hm-ne hm-ne--cerne">≠</span> auditar</h3><p>A produção acelerou e a fila de correções passou a concentrar o custo de revisar raciocínios mediados por IA.</p></div>
+              <div class="hm-ficha__b"><h3>O sistema</h3><p>Lentes independentes examinam premissas, inferências e fundamentos do ato, antes que a fluência do texto oculte a falha.</p></div>
+              <div class="hm-ficha__b"><h3>O que mediu</h3><p>15 de 17 atos concluídos na primeira tentativa. Em 9 de 12 atos, ao menos uma pergunta sobre ponto embargável; em 7, sobre o ponto depois corrigido.</p></div>
+            </div>
+            </div>
+          </div>
+          <!-- CERNE: as lentes (o foróptero), abaixo da ficha. O próprio aparelho é o
+               botão: abre a rodada do caso 0012345 na superfície logo abaixo dele
+               (#demonstracao-cerne); a indicação acima diz se o clique inicia ou
+               continua a rodada. Desenho em assets/cerne/css/cerne-lentes.css;
+               acionamento em assets/cerne/js/cerne-lentes.js e
+               assets/atrio/demonstracao/gatilho.js. -->
           <figure class="cl" data-cl data-estado="repouso">
+            <p class="cl__rotulo" data-cl-rotulo aria-hidden="true">Iniciar a rodada</p>
             <div class="cl__inst">
-              <img class="cl__corpo" src="assets/cerne/img/foroptero-1x.webp?v=20261128-buril" srcset="assets/cerne/img/foroptero-1x.webp?v=20261128-buril 1080w, assets/cerne/img/foroptero-2x.webp?v=20261128-buril 2160w" sizes="(min-width: 1100px) 1040px, 100vw" width="1080" height="570" alt="" loading="lazy" decoding="async">
+              <img class="cl__corpo" src="assets/cerne/img/foroptero-1x.webp?v=20261128-liso" srcset="assets/cerne/img/foroptero-1x.webp?v=20261128-liso 1080w, assets/cerne/img/foroptero-2x.webp?v=20261128-liso 2160w" sizes="(min-width: 1100px) 1040px, 100vw" width="1080" height="570" alt="" loading="lazy" decoding="async">
               <div class="cl__jan cl__jan--e" aria-hidden="true">
                 <!-- Trechos da minuta do caso 0012345 que levaram aos achados (parágrafos 7, 8 e 12),
                      tal como registrados em assets/atrio/demonstracao/dados-cerne.js. Ficam em
@@ -473,22 +487,12 @@
               </div>
               <button class="cl__gatilho" type="button" data-cl-play data-ld-ir="cerne" aria-controls="demonstracao-cerne" aria-expanded="false" aria-label="Iniciar a rodada do CERNE" hidden></button>
             </div>
-            <p class="cl__rotulo" data-cl-rotulo aria-hidden="true">Iniciar a rodada</p>
             <p class="arx-sr" role="status" data-cl-status></p>
             <!-- Superfície da rodada do CERNE: a mesma da jornada do ATRIO, com a mesma
                  dinâmica (sem altura até o clique; desce logo abaixo do foróptero e desloca o
                  que vem depois). Abrir uma fecha a outra (assets/atrio/demonstracao/gatilho.js). -->
             <div class="ld ld--cerne" id="demonstracao-cerne" data-ld-cerne hidden></div>
           </figure>
-          <div class="hm-trilho">
-            <div class="hm-lado">
-              <div class="hm-ficha">
-              <div class="hm-ficha__b hm-ficha__b--tese"><h3 class="hm-tese">confrontar <span class="hm-ne hm-ne--cerne">≠</span> auditar</h3><p>A produção acelerou e a fila de correções passou a concentrar o custo de revisar raciocínios mediados por IA.</p></div>
-              <div class="hm-ficha__b"><h3>O sistema</h3><p>Lentes independentes examinam premissas, inferências e fundamentos do ato, antes que a fluência do texto oculte a falha.</p></div>
-              <div class="hm-ficha__b"><h3>O que mediu</h3><p>15 de 17 atos concluídos na primeira tentativa. Em 9 de 12 atos, ao menos uma pergunta sobre ponto embargável; em 7, sobre o ponto depois corrigido.</p></div>
-            </div>
-            </div>
-          </div>
           <div class="hm-res hm-res--cerne">
             <p class="hm-res__m"><b class="hm-res__n">+23%</b><span class="hm-res__l">de vazão, métrica acompanhada ao longo da trajetória até revelar a necessidade de governar o raciocínio</span></p>
             <div class="hm-res__c">

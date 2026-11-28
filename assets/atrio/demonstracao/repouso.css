@@ -145,3 +145,56 @@
    jornada. No celular, as duas já ficam a --g das bordas. */
 .cl .ld--cerne{ margin:calc(var(--u, 8px) * 3) calc(-1 * var(--g, 16px)) 0; text-align:left; }
 @media (max-width:900px){ .cl .ld--cerne{ margin-inline:0; } }
+
+/* ==========================================================================
+   Relógio sem placa (28/11/2026)
+   Sai a placa (RATIO e o fio); o relógio sobe e o respiro diminui. A
+   indicação "Iniciar demonstração" vem para cima do relógio, centrada; à
+   direita dela, uma seta de grafite translúcida aparece, avança um pouco e
+   some, apontando para o botão do humano, que sobe e desce até ser
+   apertado. O anel de accent em volta do botão sai.
+   ========================================================================== */
+.ld-repouso{ padding:calc(var(--u, 8px) * 2) 0 calc(var(--row) * .5); }
+.ld-relogio__placa{ display:none; }
+
+.ld-gatilho__topo{ position:relative; display:block; width:max-content; max-width:100%; margin:0 auto 1.1rem; }
+.ld-gatilho__topo .ld-gatilho__rotulo{ margin:0; }
+
+/* o anel persistente sai */
+.ld-gatilho[data-ld-pronto] .ld-relogio__botao[data-dono="humano"]::before{ content:none; animation:none; }
+
+/* a seta: grafite translúcido, movimento curto; o ângulo vem de gatilho.js */
+.ld-gatilho__seta{
+  --a:var(--ld-seta-ang, 40deg);
+  position:absolute; left:calc(100% + 14px); top:50%;
+  width:42px; height:26px; pointer-events:none; opacity:0;
+  transform:translateY(-50%) rotate(var(--a));
+}
+.ld-gatilho__seta svg{ display:block; width:100%; height:100%; fill:#2C2C2C; }
+.ld-gatilho[data-ld-pronto]:not([data-ld-apertado]):not([aria-expanded="true"]) .ld-gatilho__seta{
+  animation:ld-seta 1.9s cubic-bezier(.32,.72,0,1) infinite;
+}
+@keyframes ld-seta{
+  0%{ opacity:0; transform:translateY(-50%) rotate(var(--a)) translateX(-7px); }
+  30%{ opacity:.62; }
+  70%{ opacity:.62; transform:translateY(-50%) rotate(var(--a)) translateX(3px); }
+  100%{ opacity:0; transform:translateY(-50%) rotate(var(--a)) translateX(6px); }
+}
+
+/* o botão do humano sobe e desce, no compasso da seta, até ser apertado */
+.ld-gatilho[data-ld-pronto]:not([data-ld-apertado]):not([aria-expanded="true"]):not(:hover) .ld-relogio__botao[data-dono="humano"] .ld-relogio__poco img{
+  animation:ld-tecla 1.9s cubic-bezier(.45,0,.35,1) infinite;
+}
+@keyframes ld-tecla{
+  0%, 30%, 100%{ transform:translateY(0); }
+  62%{ transform:translateY(14%); }
+}
+
+/* sem espaço à direita do rótulo (celular estreito), a seta não entra */
+@media (max-width:520px){ .ld-gatilho__seta{ display:none; } }
+
+@media (prefers-reduced-motion:reduce){
+  .ld-gatilho__seta{ animation:none !important; }
+  .ld-gatilho[data-ld-pronto]:not([data-ld-apertado]):not([aria-expanded="true"]) .ld-gatilho__seta{ opacity:.5; }
+  .ld-relogio__botao[data-dono="humano"] .ld-relogio__poco img{ animation:none !important; }
+}

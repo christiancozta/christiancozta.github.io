@@ -14,7 +14,7 @@
      3. só com a expansão concluída e os recursos carregados a reprodução começa.
    Ao encerrar, a superfície recolhe pelo movimento inverso e some.
    ========================================================================== */
-const V = "20261128-foroptero";
+const V = "20261128-seta";
 const SUP = {
   jornada: { raiz: document.querySelector("[data-ld]"), gatilho: document.querySelector("[data-ld-gatilho]") },
   cerne: { raiz: document.querySelector("[data-ld-cerne]"), gatilho: document.querySelector("[data-cl-play]") }
@@ -103,6 +103,7 @@ if (SUP.jornada.raiz && SUP.jornada.gatilho) {
     if (estado !== "repouso") return;
     estado = "abrindo";
     seg = alvo;
+    if (seg === "jornada") SUP.jornada.gatilho.dataset.ldApertado = "";
     const { raiz, gatilho } = SUP[seg];
     const carga = carrega();
     gatilho.setAttribute("aria-expanded", "true");
@@ -209,5 +210,22 @@ if (SUP.jornada.raiz && SUP.jornada.gatilho) {
   document.querySelectorAll("[data-ld-ir]").forEach((b) => b.addEventListener("click", () => {
     setTimeout(() => abre(b.dataset.ldIr), 0);
   }));
+  /* a seta à direita de "Iniciar demonstração" aponta para o botão do humano:
+     o ângulo depende da largura do relógio, então é medido aqui */
+  const seta = SUP.jornada.gatilho.querySelector(".ld-gatilho__seta");
+  const tecla = SUP.jornada.gatilho.querySelector('.ld-relogio__botao[data-dono="humano"]');
+  const topo = SUP.jornada.gatilho.querySelector(".ld-gatilho__topo");
+  const aponta = () => {
+    if (!seta || !tecla || !topo) return;
+    const t = topo.getBoundingClientRect(), k = tecla.getBoundingClientRect();
+    const sx = t.right + 14 + 21, sy = t.top + t.height / 2;
+    const kx = k.left + k.width / 2, ky = k.top + k.height * .3;
+    SUP.jornada.gatilho.style.setProperty("--ld-seta-ang", (Math.atan2(ky - sy, kx - sx) * 180 / Math.PI).toFixed(1) + "deg");
+  };
+  if (seta) {
+    aponta();
+    if ("ResizeObserver" in window) new ResizeObserver(aponta).observe(SUP.jornada.gatilho);
+    else addEventListener("resize", aponta, { passive: true });
+  }
   SUP.jornada.gatilho.dataset.ldPronto = "";
 }
